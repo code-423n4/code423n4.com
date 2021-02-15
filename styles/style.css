@@ -1,27 +1,32 @@
 body {
     background-color: black;
 }
+
 div.copy {
     vertical-align: bottom;
     display: inline-block;
     margin-top: 150px;
     margin-left: 20%;
 }
+
 img {
     max-width: 50%;
-    max-height: 50%;  
-    top:100px;
-    bottom:0;
+    max-height: 50%;
+    top: 100px;
+    bottom: 0;
     display: block;
 }
-h1{
+
+h1 {
     color: white;
     font-family: 'Roboto', sans-serif;
 }
-p{
+
+p {
     color: white;
     font-family: 'Roboto', sans-serif;
 }
+
 .button {
     border: none;
     border-radius: 3em;
@@ -30,13 +35,15 @@ p{
     font-size: 1em;
     padding: 1em 2em;
     width: auto;
-  }
+    font-family: 'Roboto', sans-serif;
+    text-decoration: none;
+}
+
 .cta-button {
     background-color: #324ab2;
     color: #fff !important;
 }
+
 .cta-button:hover {
     background-color: #5b6aa9;
 }
-  
-    
