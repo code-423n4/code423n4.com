@@ -8,10 +8,11 @@ div.copy {
     margin-top: 150px;
     margin-left: 20%;
     line-height: 1.5;
+    margin-right: 20%;
 }
 
 img {
-    max-width: 50%;
+    max-width: 60%;
     max-height: 50%;
     top: 100px;
     bottom: 0;
