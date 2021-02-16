@@ -34,6 +34,15 @@ b {
     letter-spacing: 2px;
 }
 
+a {
+    text-decoration: none;
+    color: #fff
+}
+
+a:hover {
+    color: #ff4000;
+}
+
 .button {
     border: none;
     border-radius: 3em;
@@ -53,4 +62,19 @@ b {
 
 .cta-button:hover {
     background-color: #ff4000;
+}
+
+div.copy div.text {
+    position: absolute;
+    bottom: 0px;
+    right: 0;
+    left: 0;
+    text-align: center;
+    letter-spacing: 2px;
+    color: #fff !important;
+    text-decoration: none !important;
+}
+
+.link:hover {
+    color: #ff4000;
 }
