@@ -12,7 +12,7 @@ div.copy {
 }
 
 img {
-    max-width: 80%;
+    max-width: 100%;
     max-height: 50%;
     top: 100px;
     bottom: 0;
@@ -52,5 +52,5 @@ b {
 }
 
 .cta-button:hover {
-    background-color: #324ab2;
+    background-color: #ff4000;
 }
