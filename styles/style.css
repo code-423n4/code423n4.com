@@ -7,6 +7,7 @@ div.copy {
     display: inline-block;
     margin-top: 150px;
     margin-left: 20%;
+    line-height: 1.5;
 }
 
 img {
@@ -23,8 +24,13 @@ h1 {
 }
 
 p {
-    color: white;
+    color: #FFFFFFaa;
     font-family: 'Roboto', sans-serif;
+}
+
+b {
+    color: #fff;
+    letter-spacing: 2px;
 }
 
 .button {
