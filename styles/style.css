@@ -237,6 +237,42 @@ a:hover {
 p {
   margin-top: 0;
 }
+.wardens {
+  margin-top: 5px;
+}
+.wardens a {
+  width: 40px;
+  height: 40px;
+  margin: 5px 5px 0 0;
+  display: inline-block;
+}
+
+.wardens a {
+  border: 2px solid #fff;
+  border-radius: 100%;
+  width: 40px;
+  height: 40px;
+  text-align: center;
+}
+.wardens img {
+  width: 100%;
+  height: 100%;
+  border-radius: 100%;
+}
+.wardens span {
+  margin: 0;
+  padding: 0;
+}
+/* 
+.wardens h6 {
+  width: 40px;
+  height: 40px;
+  margin: 0;
+  padding: 0;
+  background-color: #fff;
+  border-radius: 100%;
+  display: inline-block;
+} */
 
 #countdown h5 {
   font-size: 25px;
@@ -392,14 +428,6 @@ footer a:hover {
 
   .definitions div:last-child {
     margin-right: 0px;
-  }
-
-  .active-contests .wrapper-sponsor {
-    margin-bottom: 40px;
-  }
-
-  .active-contests {
-    padding: 20px;
   }
 
   .active-contests h4 {
