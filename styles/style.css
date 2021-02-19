@@ -322,6 +322,20 @@ footer a:hover {
   border-bottom: 0px;
 }
 
+/* HACK: temporary until the header nav is added */
+
+.logo img {
+  margin: 5px auto;
+  display: block;
+  position: static;
+  left: auto;
+}
+.hero {
+  margin-top: 100px;
+}
+
+/* END HACK */
+
 @media (max-width: 600px) {
   body {
     background-color: black;
