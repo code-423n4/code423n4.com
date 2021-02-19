@@ -65,7 +65,7 @@ nav a {
 
 .hero {
   max-width: 1200px;
-  margin: 150px 10% 0 10%;
+  margin: 150px auto 0 auto;
   display: block;
 }
 
@@ -85,9 +85,8 @@ section:first-of-type {
 
 .wrapper-main {
   vertical-align: bottom;
-  display: inline-block;
   max-width: 1200px;
-  margin: 20px 10%;
+  margin: 20px auto;
   line-height: 1.5;
 }
 
