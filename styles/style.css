@@ -1,5 +1,16 @@
 body {
   background-color: black;
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  z-index: -1;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 100vw;
+  height: 100vh;
   background-image: repeating-linear-gradient(
       0deg,
       rgba(255, 255, 255, 0.13),
@@ -15,18 +26,6 @@ body {
       rgba(51, 0, 101, 1) 100%
     );
 }
-
-/* body::after {
-  content: "";
-  position: fixed;
-  z-index: -1;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  width: 100vw;
-  height: 100vh;
-
-} */
 
 header {
   padding: 5px;
@@ -229,18 +228,28 @@ a:hover {
   background: rgba(51, 0, 101, 0.3);
   box-shadow: 0 -1px 0px #5e507133, 0 1px 0px rgba(0, 0, 0, 0.2);
   padding: 20px 20px 10px 20px;
+  grid-template-columns: 100px 1fr;
+  display: grid;
 }
 
-.active-contests h4 {
+.active-contests h4,
+p {
   margin-top: 0;
 }
-.activec-contests p {
-  margin-bottom: 0;
+
+#countdown h5 {
+  display: inline-block;
+  margin-bottom: 10px;
 }
 
-.logo-sponsor {
-  float: left;
-  margin: 10px 20px 10px 0;
+.hours::after,
+.minutes::after {
+  content: ":";
+  margin-left: 10px;
+}
+
+.wrapper-sponsor {
+  margin: 10px 10px 10px 0;
   width: 80px;
 }
 
@@ -308,20 +317,6 @@ footer a:hover {
   border-bottom: 0px;
 }
 
-/* HACK: temporary until the header nav is added */
-
-.logo img {
-  margin: 5px auto;
-  display: block;
-  position: static;
-  left: auto;
-}
-.hero {
-  margin-top: 100px;
-}
-
-/* END HACK */
-
 @media (max-width: 600px) {
   body {
     background-color: black;
@@ -380,7 +375,7 @@ footer a:hover {
     margin-right: 0px;
   }
 
-  .active-contests .logo-sponsor {
+  .active-contests .wrapper-sponsor {
     margin-bottom: 40px;
   }
 

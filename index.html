@@ -22,11 +22,11 @@
         <a class="logo" href="/">
           <img src="images/C4-banner.png" alt="Code 423n4" />
         </a>
-        <!-- <nav>
+        <nav>
           <a href="/compete">Compete</a>
           <a href="/sponsor">Sponsor</a>
           <a href="/join">Join</a>
-        </nav> -->
+        </nav>
       </div>
       <div class="hero">
         <h1>
@@ -57,7 +57,7 @@
           </div>
         </div>
         <div class="active-contests">
-          <div class="logo-sponsor">
+          <div class="wrapper-sponsor">
             <svg viewBox="0 0 359 283" fill="none">
               <path
                 fill="#FCECDB"
@@ -65,19 +65,33 @@
               ></path>
             </svg>
           </div>
-          <h4>
-            The
-            <a href="https://slingshot.finance">Slingshot Finance</a> contest is
-            live now.
-          </h4>
-          <p>
-            Read the
-            <a
-              href="https://medium.com/@scott_lew_is/slingshot-finance-sponsors-20-000-usdc-guaranteed-distribution-bounty-pool-for-code-432n4s-first-789514a8dc99"
-              >announcement here</a
-            >. To get involved,
-            <a href="https://discord.gg/EY5dvm3evD">join our Discord server</a>.
-          </p>
+          <div class="wrapper-contest-content">
+            <h4>
+              The
+              <a href="https://slingshot.finance">Slingshot Finance</a> contest
+              is live
+            </h4>
+            <div id="countdown">
+              <h5 class="wrapper-days">
+                <span class="days"></span>
+                days +
+              </h5>
+              <h5 class="wrapper-time">
+                <span class="hours"></span>
+                <span class="minutes"></span>
+                <span class="seconds"></span>
+              </h5>
+            </div>
+            <p>
+              Read the
+              <a
+                href="https://medium.com/@scott_lew_is/slingshot-finance-sponsors-20-000-usdc-guaranteed-distribution-bounty-pool-for-code-432n4s-first-789514a8dc99"
+                >announcement here</a
+              >. To get involved,
+              <a href="https://discord.gg/EY5dvm3evD">join our Discord server</a
+              >.
+            </p>
+          </div>
         </div>
       </section>
 
@@ -98,5 +112,50 @@
       <a href="https://discord.gg/EY5dvm3evD">Discord</a>
       <a href="https://github.com/code-423n4/">GitHub</a>
     </footer>
+
+    <script>
+      function getTimeRemaining(endtime) {
+        const total = Date.parse(endtime) - Date.parse(new Date());
+        const seconds = Math.floor((total / 1000) % 60);
+        const minutes = Math.floor((total / 1000 / 60) % 60);
+        const hours = Math.floor((total / (1000 * 60 * 60)) % 24);
+        const days = Math.floor(total / (1000 * 60 * 60 * 24));
+
+        return {
+          total,
+          days,
+          hours,
+          minutes,
+          seconds,
+        };
+      }
+
+      function initializeClock(id, endtime) {
+        const clock = document.getElementById(id);
+        const daysSpan = clock.querySelector(".days");
+        const hoursSpan = clock.querySelector(".hours");
+        const minutesSpan = clock.querySelector(".minutes");
+        const secondsSpan = clock.querySelector(".seconds");
+
+        function updateClock() {
+          const t = getTimeRemaining(endtime);
+
+          daysSpan.innerHTML = t.days;
+          hoursSpan.innerHTML = ("0" + t.hours).slice(-2);
+          minutesSpan.innerHTML = ("0" + t.minutes).slice(-2);
+          secondsSpan.innerHTML = ("0" + t.seconds).slice(-2);
+
+          if (t.total <= 0) {
+            clearInterval(timeinterval);
+          }
+        }
+
+        updateClock();
+        const timeinterval = setInterval(updateClock, 1000);
+      }
+
+      const deadline = "February 21 2021 23:59:59 UTC";
+      initializeClock("countdown", deadline);
+    </script>
   </body>
 </html>
