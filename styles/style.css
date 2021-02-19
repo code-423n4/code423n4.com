@@ -28,7 +28,7 @@ body::after {
 }
 
 header {
-  padding: 5px;
+  padding: 5px 20px;
 }
 
 .logo img {
@@ -342,6 +342,10 @@ footer a:hover {
     background-image: none;
   }
 
+  header {
+    padding: 5px 0 0 0;
+  }
+
   .hero {
     margin: 60px 10px 0 10px;
   }
@@ -379,6 +383,7 @@ footer a:hover {
     display: block;
     margin: 0 0 20px 0;
     padding: 0;
+    background-color: transparent;
   }
 
   .definitions h3,
