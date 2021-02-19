@@ -1,10 +1,8 @@
 body {
-    background-color: black;
-    background-image: repeating-linear-gradient( 0deg, rgba(255, 255, 255, 0.13), rgba(255, 255, 255, 0.13) 1px, rgba(50, 05, 50, 0.15) 1px, 1px, rgba(50, 50, 50, 0.15) 2px), linear-gradient( 167deg, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) 60%, rgba(51, 0, 101, 1) 100%);
+  background-color: black;
 }
 
-
-/* body::after {
+body::after {
   content: "";
   position: fixed;
   z-index: -1;
@@ -13,77 +11,89 @@ body {
   bottom: 0;
   width: 100vw;
   height: 100vh;
-
-} */
+  background-image: repeating-linear-gradient(
+      0deg,
+      rgba(255, 255, 255, 0.13),
+      rgba(255, 255, 255, 0.13) 1px,
+      rgba(50, 05, 50, 0.15) 1px,
+      1px,
+      rgba(50, 50, 50, 0.15) 2px
+    ),
+    linear-gradient(
+      167deg,
+      rgba(0, 0, 0, 1) 0%,
+      rgba(0, 0, 0, 1) 60%,
+      rgba(51, 0, 101, 1) 100%
+    );
+}
 
 header {
-    padding: 5px;
+  padding: 5px;
 }
 
 .logo img {
-    width: 130px;
-    display: inline-block;
-    margin: 5px 30px 5px 5px;
-    position: absolute;
-    left: 5px;
+  width: 130px;
+  display: inline-block;
+  margin: 5px 30px 5px 5px;
+  position: absolute;
+  left: 5px;
 }
 
 .wrapper-nav {
-    position: relative;
-    right: 5px;
+  position: relative;
+  right: 5px;
 }
 
 header nav {
-    position: absolute;
-    right: 5px;
-    text-align: right;
-    display: block;
-    vertical-align: top;
-    padding: 5px 0;
+  position: absolute;
+  right: 5px;
+  text-align: right;
+  display: block;
+  vertical-align: top;
+  padding: 5px 0;
 }
 
 nav a {
-    text-align: right;
-    margin: 0 10px;
-    display: inline-block;
-    color: white;
-    font-weight: 800;
-    font-family: "Roboto", sans-serif;
-    text-transform: uppercase;
+  text-align: right;
+  margin: 0 10px;
+  display: inline-block;
+  color: white;
+  font-weight: 800;
+  font-family: "Roboto", sans-serif;
+  text-transform: uppercase;
 }
 
 .hero {
-    max-width: 1200px;
-    margin: 150px 10% 0 10%;
-    display: block;
+  max-width: 1200px;
+  margin: 150px 10% 0 10%;
+  display: block;
 }
 
 .hero h1 {
-    font-size: 80px;
-    text-shadow: 0 7px rgba(51, 0, 101, 1);
-    margin: 0 0 60px 0;
+  font-size: 80px;
+  text-shadow: 0 7px rgba(51, 0, 101, 1);
+  margin: 0 0 60px 0;
 }
 
 .hero h1 span {
-    display: inline-block;
+  display: inline-block;
 }
 
 section:first-of-type {
-    margin-top: 0;
+  margin-top: 0;
 }
 
 .wrapper-main {
-    vertical-align: bottom;
-    display: inline-block;
-    max-width: 1200px;
-    margin: 20px 10%;
-    line-height: 1.5;
+  vertical-align: bottom;
+  display: inline-block;
+  max-width: 1200px;
+  margin: 20px 10%;
+  line-height: 1.5;
 }
 
 section {
-    margin: 80px 0;
+  margin: 80px 0;
 }
-
 
 /* img {
   max-width: 100%;
@@ -94,296 +104,318 @@ section {
 } */
 
 h1 {
-    color: white;
-    font-weight: 800;
-    font-family: "Roboto", sans-serif;
+  color: white;
+  font-weight: 800;
+  font-family: "Roboto", sans-serif;
 }
 
 h2 {
-    color: #fff;
-    font-size: 20px;
-    font-family: "Roboto", sans-serif;
-    text-align: center;
+  color: #fff;
+  font-size: 20px;
+  font-family: "Roboto", sans-serif;
+  text-align: center;
 }
 
 h4 {
-    color: #fff;
-    font-size: 25px;
-    font-family: "Roboto", sans-serif;
-    margin-bottom: 0;
-    font-weight: 200;
+  color: #fff;
+  font-size: 25px;
+  font-family: "Roboto", sans-serif;
+  margin-bottom: 0;
+  font-weight: 200;
 }
 
 h4 a {
-    font-weight: 800;
+  font-weight: 800;
 }
 
 h5 {
-    font-size: 30px;
-    color: #fff;
-    line-height: 1.5;
-    font-family: "Roboto", sans-serif;
-    font-weight: 200;
-    margin: 0 0 20px 0;
+  font-size: 30px;
+  color: #fff;
+  line-height: 1.5;
+  font-family: "Roboto", sans-serif;
+  font-weight: 200;
+  margin: 0 0 20px 0;
 }
 
 article h2 {
-    margin-top: 60px;
-    color: #fff;
-    /* letter-spacing: 2px; */
-    border-bottom: 1px solid #222;
-    padding-bottom: 10px;
-    text-transform: uppercase;
-    font: 1.3rem Inconsolata, monospace;
+  margin-top: 60px;
+  color: #fff;
+  /* letter-spacing: 2px; */
+  border-bottom: 1px solid #222;
+  padding-bottom: 10px;
+  text-transform: uppercase;
+  font: 1.3rem Inconsolata, monospace;
 }
 
 article h2::before {
-    content: "> ";
+  content: "> ";
 }
 
 article h3 {
-    margin-top: 20px;
-    color: #fff;
-    font-family: "Roboto", sans-serif;
-    font: 1.3rem Inconsolata, monospace;
+  margin-top: 20px;
+  color: #fff;
+  font-family: "Roboto", sans-serif;
+  font: 1.3rem Inconsolata, monospace;
 }
 
 p,
 li {
-    color: #ffffffaa;
-    font-family: "Roboto", sans-serif;
+  color: #ffffffaa;
+  font-family: "Roboto", sans-serif;
 }
 
 li span {
-    color: #fff;
+  color: #fff;
 }
-
 li span::before {
-    content: "(";
-    color: #ffffff33;
+  content: "(";
+  color: #ffffff33;
 }
-
 li span::after {
-    content: ")";
-    color: #ffffff33;
+  content: ")";
+  color: #ffffff33;
 }
 
 ul {
-    margin-bottom: 30px;
+  margin-bottom: 30px;
 }
 
 code {
-    color: #ffffffaa;
-    font-size: 18px;
+  color: #ffffffaa;
+  font-size: 18px;
 }
 
 strong {
-    color: #ffffff;
-    font-weight: normal;
+  color: #ffffff;
+  font-weight: normal;
 }
 
 a {
-    text-decoration: none;
-    color: #fff;
+  text-decoration: none;
+  color: #fff;
 }
 
 a:hover {
-    color: #ff4000;
-    border-bottom: 1px solid #ff4000;
+  color: #ff4000;
+  border-bottom: 1px solid #ff4000;
 }
 
 .definitions {
-    grid-template-columns: 1fr 1fr 1fr;
-    display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  display: grid;
 }
 
 .definitions div {
-    background: rgba(0, 0, 0, 0.3);
-    border-radius: 10px;
-    padding: 10px 20px;
-    margin: 0 10px 10px 0;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+  padding: 10px 20px;
+  margin: 0 10px 10px 0;
 }
-
 .definitions div:last-child {
-    margin-right: 0;
+  margin-right: 0;
 }
 
 .definitions h3 {
-    color: #ffffff;
-    font-family: "Roboto", sans-serif;
-    font-weight: 800;
-    text-transform: uppercase;
+  color: #ffffff;
+  font-family: "Roboto", sans-serif;
+  font-weight: 800;
+  text-transform: uppercase;
 }
 
 .active-contests {
-    margin-top: 40px;
-    border-radius: 10px;
-    background: rgba(51, 0, 101, 0.3);
-    box-shadow: 0 -1px 0px #5e507133, 0 1px 0px rgba(0, 0, 0, 0.2);
-    padding: 20px 20px 10px 20px;
+  margin-top: 40px;
+  border-radius: 10px;
+  background: rgba(51, 0, 101, 0.3);
+  box-shadow: 0 -1px 0px #5e507133, 0 1px 0px rgba(0, 0, 0, 0.2);
+  padding: 20px 20px 10px 20px;
+  grid-template-columns: 100px 1fr;
+  display: grid;
 }
 
-.active-contests h4 {
-    margin-top: 0;
+.active-contests h4,
+p {
+  margin-top: 0;
 }
 
-.activec-contests p {
-    margin-bottom: 0;
+#countdown h5 {
+  font-size: 25px;
+  display: inline-block;
+  margin: 10px 0;
 }
 
-.logo-sponsor {
-    float: left;
-    margin: 10px 20px 10px 0;
-    width: 80px;
+#countdown h5 span {
+  font-weight: 400;
+}
+
+.hours::after,
+.minutes::after {
+  content: ":";
+  margin-left: 5px;
+}
+
+.wrapper-sponsor {
+  margin: 10px 10px 10px 0;
+  width: 80px;
 }
 
 .button {
-    border: none;
-    border-radius: 5px;
-    box-shadow: 2px 2px 2px rgba(116, 116, 116, 0);
-    display: inline-block;
-    font-size: 1em;
-    padding: 1em 2em;
-    width: auto;
-    font-family: "Roboto", sans-serif;
-    text-decoration: none;
+  border: none;
+  border-radius: 5px;
+  box-shadow: 2px 2px 2px rgba(116, 116, 116, 0);
+  display: inline-block;
+  font-size: 1em;
+  padding: 1em 2em;
+  width: auto;
+  font-family: "Roboto", sans-serif;
+  text-decoration: none;
 }
 
 .cta-button {
-    background-color: #8000ff;
-    color: #fff;
-    text-transform: uppercase;
+  background-color: #8000ff;
+  color: #fff;
+  text-transform: uppercase;
 }
 
 .cta-button:hover {
-    background-color: #ff4000;
-    border-bottom: 0px;
+  background-color: #ff4000;
+  border-bottom: 0px;
 }
 
 footer {
-    text-align: center;
-    padding-bottom: 50px;
+  text-align: center;
+  padding-bottom: 50px;
 }
 
 footer a,
 footer span {
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    text-decoration: none;
-    font-family: "Roboto", sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  text-decoration: none;
+  font-family: "Roboto", sans-serif;
 }
 
 footoer span::after,
 footer a::after {
-    color: #ffffff33;
-    padding: 0 5px;
+  color: #ffffff33;
+  padding: 0 5px;
 }
 
 footer span::after,
 footer a:nth-child(-n + 3)::after {
-    content: " // ";
+  content: " // ";
 }
 
 footer span::after {
-    content: " »» ";
+  content: " »» ";
 }
 
 footer span {
-    color: #ffffff33;
+  color: #ffffff33;
 }
 
 footer a:link {
-    color: #fff;
+  color: #fff;
 }
 
 footer a:hover {
-    color: #ff4000 !important;
-    border-bottom: 0px;
+  color: #ff4000 !important;
+  border-bottom: 0px;
 }
-
 
 /* HACK: temporary until the header nav is added */
 
 .logo img {
-    margin: 5px auto;
-    display: block;
-    position: static;
-    left: auto;
+  margin: 5px auto;
+  display: block;
+  position: static;
+  left: auto;
 }
-
 .hero {
-    margin-top: 100px;
+  margin-top: 100px;
 }
-
 
 /* END HACK */
 
 @media (max-width: 600px) {
-    body {
-        background-color: black;
-        background-image: none;
-    }
-    .hero {
-        margin: 60px 10px 0 10px;
-    }
-    section {
-        margin: 80px 0;
-    }
-    .logo img {
-        margin: 5px auto;
-        display: block;
-        position: static;
-        left: auto;
-    }
-    .hero h1 {
-        font-size: 60px;
-        margin-bottom: 40px;
-    }
-    .wrapper-main {
-        margin: 10px;
-    }
-    h5 {
-        font-size: 20px;
-        margin-bottom: 20px;
-    }
-    .definitions {
-        display: block;
-        margin: 0;
-    }
-    .definitions div {
-        display: block;
-        margin: 0 0 20px 0;
-        padding: 0;
-    }
-    .definitions h3,
-    p {
-        font-size: 16px;
-        display: inline;
-    }
-    .definitions p {
-        text-transform: lowercase;
-    }
-    .definitions div:last-child {
-        margin-right: 0px;
-    }
-    .active-contests .logo-sponsor {
-        margin-bottom: 40px;
-    }
-    .active-contests {
-        padding: 20px;
-    }
-    .active-contests h4 {
-        color: #fff;
-        font-size: 18px;
-        font-family: "Roboto", sans-serif;
-        margin-bottom: 10px;
-        font-weight: 200;
-    }
-    .active-contests p {
-        font-size: 15px;
-        padding-bottom: 30px;
-    }
-    footer span {
-        display: none;
-    }
+  body {
+    background-color: black;
+    background-image: none;
+  }
+
+  .hero {
+    margin: 60px 10px 0 10px;
+  }
+
+  section {
+    margin: 80px 0;
+  }
+
+  .logo img {
+    margin: 5px auto;
+    display: block;
+    position: static;
+    left: auto;
+  }
+  .hero h1 {
+    font-size: 60px;
+    margin-bottom: 40px;
+  }
+
+  .wrapper-main {
+    margin: 10px;
+  }
+
+  h5 {
+    font-size: 20px;
+    margin-bottom: 20px;
+  }
+
+  .definitions {
+    display: block;
+    margin: 0;
+  }
+
+  .definitions div {
+    display: block;
+    margin: 0 0 20px 0;
+    padding: 0;
+  }
+
+  .definitions h3,
+  p {
+    font-size: 16px;
+    display: inline;
+  }
+  .definitions p {
+    text-transform: lowercase;
+  }
+
+  .definitions div:last-child {
+    margin-right: 0px;
+  }
+
+  .active-contests .wrapper-sponsor {
+    margin-bottom: 40px;
+  }
+
+  .active-contests {
+    padding: 20px;
+  }
+
+  .active-contests h4 {
+    color: #fff;
+    font-size: 18px;
+    font-family: "Roboto", sans-serif;
+    font-weight: 200;
+  }
+  #countdown h5 {
+    font-size: 15px;
+  }
+  .active-contests p {
+    font-size: 15px;
+    padding-bottom: 30px;
+  }
+  footer span {
+    display: none;
+  }
 }
