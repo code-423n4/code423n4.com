@@ -238,14 +238,19 @@ p {
 }
 
 #countdown h5 {
+  font-size: 25px;
   display: inline-block;
-  margin-bottom: 10px;
+  margin: 10px 0;
+}
+
+#countdown h5 span {
+  font-weight: 400;
 }
 
 .hours::after,
 .minutes::after {
   content: ":";
-  margin-left: 10px;
+  margin-left: 5px;
 }
 
 .wrapper-sponsor {
@@ -387,8 +392,10 @@ footer a:hover {
     color: #fff;
     font-size: 18px;
     font-family: "Roboto", sans-serif;
-    margin-bottom: 10px;
     font-weight: 200;
+  }
+  #countdown h5 {
+    font-size: 15px;
   }
   .active-contests p {
     font-size: 15px;
