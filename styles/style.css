@@ -65,7 +65,7 @@ nav a {
 
 .hero {
   max-width: 1200px;
-  margin: 150px auto 0 auto;
+  margin: 150px 10% 0 10%;
   display: block;
 }
 
@@ -75,14 +75,19 @@ nav a {
   margin: 0 0 60px 0;
 }
 
+.hero h1 span {
+  display: inline-block;
+}
+
 section:first-of-type {
   margin-top: 0;
 }
 
 .wrapper-main {
   vertical-align: bottom;
+  display: inline-block;
   max-width: 1200px;
-  margin: 20px auto;
+  margin: 20px 10%;
   line-height: 1.5;
 }
 
@@ -188,6 +193,7 @@ strong {
 a {
   text-decoration: none;
   color: #fff;
+  border-bottom: 1px solid transparent;
 }
 
 a:hover {
@@ -317,20 +323,6 @@ footer a:hover {
   border-bottom: 0px;
 }
 
-/* HACK: temporary until the header nav is added */
-
-.logo img {
-  margin: 5px auto;
-  display: block;
-  position: static;
-  left: auto;
-}
-.hero {
-  margin-top: 100px;
-}
-
-/* END HACK */
-
 @media (max-width: 600px) {
   body {
     background-color: black;
@@ -341,20 +333,24 @@ footer a:hover {
     padding: 5px 0 0 0;
   }
 
-  .hero {
-    margin: 60px 10px 0 10px;
-  }
-
-  section {
-    margin: 80px 0;
+  header nav {
+    position: static;
+    right: auto;
+    text-align: center;
   }
 
   .logo img {
-    margin: 5px auto;
+    width: 200px;
+    margin: 5px auto 10px auto;
     display: block;
     position: static;
     left: auto;
   }
+
+  .hero {
+    margin: 60px 10px 0 10px;
+  }
+
   .hero h1 {
     font-size: 60px;
     margin-bottom: 40px;
@@ -362,6 +358,10 @@ footer a:hover {
 
   .wrapper-main {
     margin: 10px;
+  }
+
+  section {
+    margin: 80px 0;
   }
 
   h5 {
