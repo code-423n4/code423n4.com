@@ -7,46 +7,46 @@ module.exports = {
   },
   plugins: [
     `gatsby-plugin-react-helmet`,
-    {
-      resolve: `gatsby-source-filesystem`,
-      options: {
-        path: `${__dirname}/data/orgs`,
-        name: `orgs`,
-        ignore: ["README.*"],
-      },
-    },
-    {
-      resolve: `gatsby-source-filesystem`,
-      options: {
-        path: `${__dirname}/data/people`,
-        name: `people`,
-        ignore: ["README.*"],
-      },
-    },
-    {
-      resolve: `gatsby-source-filesystem`,
-      options: {
-        path: `${__dirname}/data/contests`,
-        name: `contests`,
-        ignore: ["README.*"],
-      },
-    },
-    {
-      resolve: `gatsby-source-filesystem`,
-      options: {
-        path: `${__dirname}/data/findings`,
-        name: `findings`,
-        ignore: ["README.*"],
-      },
-    },
-    {
-      resolve: "gatsby-source-filesystem",
-      options: {
-        path: `${__dirname}/content`,
-        name: "pages",
-        ignore: ["**/README.*"],
-      },
-    },
+    // {
+    //   resolve: `gatsby-source-filesystem`,
+    //   options: {
+    //     path: `${__dirname}/data/orgs`,
+    //     name: `orgs`,
+    //     ignore: ["README.*"],
+    //   },
+    // },
+    // {
+    //   resolve: `gatsby-source-filesystem`,
+    //   options: {
+    //     path: `${__dirname}/data/people`,
+    //     name: `people`,
+    //     ignore: ["README.*"],
+    //   },
+    // },
+    // {
+    //   resolve: `gatsby-source-filesystem`,
+    //   options: {
+    //     path: `${__dirname}/data/contests`,
+    //     name: `contests`,
+    //     ignore: ["README.*"],
+    //   },
+    // },
+    // {
+    //   resolve: `gatsby-source-filesystem`,
+    //   options: {
+    //     path: `${__dirname}/data/findings`,
+    //     name: `findings`,
+    //     ignore: ["README.*"],
+    //   },
+    // },
+    // {
+    //   resolve: "gatsby-source-filesystem",
+    //   options: {
+    //     path: `${__dirname}/content`,
+    //     name: "pages",
+    //     ignore: ["**/README.*"],
+    //   },
+    // },
     {
       resolve: `gatsby-transformer-remark`,
       options: {
