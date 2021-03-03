@@ -294,6 +294,10 @@ p {
   width: 80px;
 }
 
+.wrapper-sponsor img {
+  width: 100%;
+}
+
 .button {
   border: none;
   border-radius: 5px;
