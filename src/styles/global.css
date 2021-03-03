@@ -273,14 +273,19 @@ p {
   display: inline-block;
 } */
 
-#countdown h5 {
+.countdown h5 {
   font-size: 25px;
   display: inline-block;
   margin: 10px 0;
 }
 
-#countdown h5 span {
+.countdown h5 span {
   font-weight: 400;
+}
+
+.hours::before {
+  content: "";
+  margin-left: 5px;
 }
 
 .hours::after,
@@ -439,7 +444,7 @@ footer a:hover {
     font-family: "Roboto", sans-serif;
     font-weight: 200;
   }
-  #countdown h5 {
+  .countdown h5 {
     font-size: 15px;
   }
   .active-contests p {
