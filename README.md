@@ -15,9 +15,9 @@
 **Site data** is found in 📁 **data** subfolders:
 
 - 📁 **people**
-- 📁 _orgs_
-- 📁 _contests_
-- 📁 \*\*
+- 📁 **orgs**
+- 📁 **contests**
+- 📁 **findings**
 
 Because there are data relationships to be maintained, it's best to edit data using Netlify CMS.
 
