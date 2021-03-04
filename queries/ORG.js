@@ -3,6 +3,7 @@ fragment OrgDetails on OrgsJson {
   fields {
     slug
   }
+  id
   name
   link
   image
@@ -13,6 +14,6 @@ fragment OrgDetails on OrgsJson {
     ...FindingDetails
   }
 }
-`
+`;
 
-export default ORG
+export default ORG;

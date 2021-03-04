@@ -3,9 +3,10 @@ fragment ContestDetails on ContestsJson {
   fields {
     slug
   }
-  sponsors {
+  sponsor {
     ...OrgDetails
   }
+  id
   details
   active
   start_time
@@ -20,6 +21,6 @@ fragment ContestDetails on ContestsJson {
     ...AwardsDetails
   }
 }
-`
+`;
 
-export default CONTEST
+export default CONTEST;
