@@ -1,0 +1,11 @@
+{
+  "sponsor": {
+    "image": "",
+    "name": "Slingshot Finance",
+    "link": "https://slingshot.finance"
+  },
+  "details": "Slingshot Finance is a thing.",
+  "active": false,
+  "start_time": "March 1 2021 0:0:0 UTC",
+  "end_time": "March 3 2021 23:59:59 UTC"
+}
