@@ -7,6 +7,7 @@ fragment PersonDetails on PeopleJson {
     findings_total
     findings_per_contest
   }
+  id
   name
   link
   image
@@ -15,6 +16,6 @@ fragment PersonDetails on PeopleJson {
   findings {
   }
 }
-`
+`;
 
-export default PERSON
+export default PERSON;
