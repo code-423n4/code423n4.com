@@ -23,14 +23,14 @@ module.exports = {
     //     ignore: ["README.*"],
     //   },
     // },
-    // {
-    //   resolve: `gatsby-source-filesystem`,
-    //   options: {
-    //     path: `${__dirname}/data/contests`,
-    //     name: `contests`,
-    //     ignore: ["README.*"],
-    //   },
-    // },
+    {
+      resolve: `gatsby-source-filesystem`,
+      options: {
+        path: `${__dirname}/data/contests`,
+        name: `contests`,
+        ignore: ["README.*"],
+      },
+    },
     // {
     //   resolve: `gatsby-source-filesystem`,
     //   options: {
@@ -54,6 +54,13 @@ module.exports = {
           `gatsby-remark-copy-linked-files`,
           `gatsby-remark-smartypants`,
         ],
+      },
+    },
+    `gatsby-transformer-json`,
+    {
+      resolve: `gatsby-source-filesystem`,
+      options: {
+        path: `${__dirname}/data/`,
       },
     },
     `gatsby-transformer-sharp`,
