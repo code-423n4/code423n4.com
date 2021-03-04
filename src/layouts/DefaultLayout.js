@@ -1,6 +1,6 @@
 import React from "react";
 import Helmet from "react-helmet";
-import Nav from "../components/Nav";
+import Footer from "../components/content/Footer";
 
 export default (props) => {
   const {
@@ -50,7 +50,10 @@ export default (props) => {
         </title>
         <body className={bodyClass} />
       </Helmet>
-      <main>{children}</main>
+      <main>
+        {children}
+        <Footer />
+      </main>
     </>
   );
 };
