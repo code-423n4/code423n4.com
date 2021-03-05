@@ -6,15 +6,13 @@ fragment PersonDetails on PeopleJson {
     award_per_contest
     findings_total
     findings_per_contest
+    contests
+    findings
   }
   id
   name
   link
   image
-  contests {
-  }
-  findings {
-  }
 }
 `;
 
