@@ -47,15 +47,25 @@ export const pageQuery = graphql`
       edges {
         node {
           id
+          details
+          active
+          start_time
+          end_time
           sponsor {
             name
             image
             link
           }
-          details
-          active
-          start_time
-          end_time
+          wardens {
+            name
+            image
+            link
+          }
+          judges {
+            name
+            image
+            link
+          }
         }
       }
     }
