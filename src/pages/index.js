@@ -41,14 +41,15 @@ export default SiteIndex;
 export const pageQuery = graphql`
   query {
     contests: allContestsJson(
-      filter: { active: { eq: true } }
-      sort: { fields: end_time, order: ASC }
+      filter: { hide: { ne: true } }
+      sort: { fields: end_time, order: DESC }
     ) {
       edges {
         node {
           id
+          title
           details
-          active
+          hide
           start_time
           end_time
           sponsor {
