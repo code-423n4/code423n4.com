@@ -1,15 +1,15 @@
 const ContestsJson = `
 type ContestsJson implements Node {
   id:             String
-  sponsors:       [ OrgsJson ] @link(by: "id", from: "sponsors")
+  sponsor:        OrgsJson @link(by: "name", from: "sponsor")
   title:          String
   details:        String
   active:         Boolean  
   start_time:     Date
   end_time:       Date  
-  wardens:        [ PeopleJson ] @link(by: "id", from: "people")
-  judges:         [ PeopleJson ] @link(by: "id", from: "people")
-  awards:         [ AwardsJson ] @link(by: "id", from: "awards")
+  wardens:        [ PeopleJson ] @link(by: "name", from: "people")
+  judges:         [ PeopleJson ] @link(by: "name", from: "people")
+  findings:       [ FindingsJson ] @link(by: "id", from: "findings")
 }`;
 
 export default ContestsJson;

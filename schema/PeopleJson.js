@@ -1,6 +1,5 @@
 const PeopleJson = `
 type PeopleJson implements Node {
-  id:             String
   name:           String
   link:           String
   image:          String
