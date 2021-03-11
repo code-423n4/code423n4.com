@@ -1,9 +1,27 @@
 # ⚠️ Editing data
 
-You can edit this data manually, but note that there are foreignkey relationships between objects.
+You can edit this data manually or using netlify cms.
 
-Editing data using netlify cms is easier and less likely to cause errors.
+Note that the name field is used to created foreignkey relationships between objects.
 
-You can find netlify cms at
+Example 1:
 
-`{domain.tld}/admin`
+```json samczsun.json
+{
+  "image": "/images/people/samczsun.jpg",
+  "name": "samczsun",
+  "link": "https://twitter.com/samczsun"
+}
+```
+
+Example 2:
+
+```json pizzapete.json
+{
+  "image": "/images/people/pizzapete.jpg",
+  "name": "Pizza Pete",
+  "link": "https://pizzapete.com/ismyfavoritewebsite"
+}
+```
+
+You can find netlify cms at `{domain.tld}/admin`
