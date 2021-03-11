@@ -9,7 +9,6 @@ fragment PersonDetails on PeopleJson {
     contests
     findings
   }
-  id
   name
   link
   image

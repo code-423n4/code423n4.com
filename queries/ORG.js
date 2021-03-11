@@ -3,7 +3,6 @@ fragment OrgDetails on OrgsJson {
   fields {
     slug
   }
-  id
   name
   link
   image
