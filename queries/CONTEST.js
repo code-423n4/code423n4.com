@@ -10,7 +10,6 @@ fragment ContestDetails on ContestsJson {
   id
   title
   details
-  active
   start_time
   end_time
   wardens {
@@ -19,6 +18,7 @@ fragment ContestDetails on ContestsJson {
   judges {
     ...PersonDetails
   }
+  hide
 }
 `;
 
