@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link href="styles/style.css" rel="stylesheet" />
+    <meta charset="utf-8" />
+    <title>Code 423n4</title>
+    <link
+      rel="shortcut icon"
+      type="image/jpg"
+      href="images/favicon-32x32.png"
+    />
+  </head>
+
+  <body class="internal">
+    <header>
+      <div class="wrapper-nav">
+        <a class="logo" href="/">
+          <img src="images/C4-banner.png" alt="Code 423n4" />
+        </a>
+        <nav>
+          <a href="/rules">Rules</a>
+          <a href="/contests">Contests</a>
+          <a href="/join">Join</a>
+        </nav>
+      </div>
+    </header>
+    <div class="wrapper-main">
+      <h1>Judging Criteria</h1>
+      <p>
+        C4 strives to ensure a deliberate and transparent process for reviewing
+        and judging submissions.
+      </p>
+      <p>
+        After a contest, reports will be reviewed and categorized. Final reports
+        will be added to the
+        <a href="https://github.com/code-423n4/code-contests/tree/main/contests"
+          >C4 github contest directory</a
+        >. Results will then be shared on the C4 Discord and winners will be
+        announced <a href="https://twitter.com/code423n4">on Twitter</a>.
+      </p>
+
+      <h2>Scoring</h2>
+      <p>
+        The scoring system has two primary goals: rewarding Wardens for finding
+        unique bugs and hardening C4 code contests to sybil attacks. A secondary
+        goal of the scoring system is to incentivize contestants to form squads
+        and encourage coordination.
+      </p>
+
+      <h2>Estimating Risk</h2>
+      <p>
+        C4 judges refer to the standard model as presented in the OWASP approach
+        to risk analysis where:
+      </p>
+      <p><code>Risk = Likelihood * Impact</code></p>
+      <p>The Warden's submission should include:</p>
+      <ul>
+        <li>proposed risk classification</li>
+        <li>threat agent involved</li>
+        <li>attack method(s) used</li>
+        <li>vulnerabilities involved</li>
+        <li>speculated impact of a successful exploit</li>
+      </ul>
+      <p>
+        The measurement of risk will be partially based on the rating submitted
+        by the Warden, but is also subject to the judge's discretion. Should the
+        judge determine a particular bug to be a lower risk than the Warden
+        rated, this judgement will include a thorough case justifying the
+        downgraded measurement.
+      </p>
+      <h3>Risk Categories</h3>
+      <p>Bugs are divided into 3 risk categories:</p>
+      <ul>
+        <li>Low</li>
+        <li>Medium</li>
+        <li>High</li>
+      </ul>
+
+      <h2>Estimating Likelihood</h2>
+      <p>
+        The first set of factors are related to the threat agent involved. The
+        goal here is to estimate the likelihood of a successful attack by this
+        group of threat agents. Use the worst-case threat agent.
+      </p>
+      <p>
+        <strong>Skill Level</strong> — How technically skilled is this group of
+        threat agents?
+      </p>
+      <ul>
+        <li>No technical skills <span>1</span></li>
+        <li>Some technical skills <span>3</span></li>
+        <li>Advanced computer user <span>5</span></li>
+        <li>Network and programming skills <span>6</span></li>
+        <li>Security penetration skills <span>9</span></li>
+      </ul>
+      <p>
+        <strong>Motive</strong> — How motivated is this group of threat agents
+        to find and exploit this vulnerability?
+      </p>
+      <ul>
+        <li>Low or no reward <span>1</span></li>
+        <li>Possible reward <span>4</span></li>
+        <li>High reward <span>9</span></li>
+      </ul>
+      <p>
+        <strong>Opportunity</strong> — What resources and opportunities are
+        required for this group of threat agents to find and exploit this
+        vulnerability?
+      </p>
+      <ul>
+        <li>Full access or expensive resources required <span>0</span></li>
+        <li>Special access or resources required <span>4</span></li>
+        <li>Some access or resources required <span>7</span></li>
+        <li>No access or resources required <span>9</span></li>
+      </ul>
+      <p><strong>Size</strong> — How large is this group of threat agents?</p>
+      <ul>
+        <li>Developers <span>2</span></li>
+        <li>System administrators <span>2</span></li>
+        <li>Intranet users <span>4</span></li>
+        <li>Partners <span>5</span></li>
+        <li>Authenticated users <span>6</span></li>
+        <li>Anonymous Internet users <span>9</span></li>
+      </ul>
+
+      <h2>Estimating Vulnerability</h2>
+      <p>
+        The next set of factors are related to the vulnerability involved. The
+        goal here is to estimate the likelihood of the particular vulnerability
+        involved being discovered and exploited. Assume the threat agent
+        selected above.
+      </p>
+      <p>
+        <strong>Ease of Discovery</strong> — How easy is it for this group of
+        threat agents to discover this vulnerability?
+      </p>
+      <ul>
+        <li>Practically impossible <span>1</span></li>
+        <li>Difficult <span>3</span></li>
+        <li>Easy <span>7</span></li>
+        <li>Automated tools available <span>9</span></li>
+      </ul>
+      <p>
+        <strong>Ease of Exploit</strong> — How easy is it for this group of
+        threat agents to actually exploit this vulnerability?
+      </p>
+      <ul>
+        <li>Theoretical <span>1</span></li>
+        <li>Difficult <span>3</span></li>
+        <li>Easy <span>5</span></li>
+        <li>Automated tools available <span>9</span></li>
+      </ul>
+      <p>
+        <strong>Awareness</strong> — How well known is this vulnerability to
+        this group of threat agents?
+      </p>
+      <ul>
+        <li>Unknown <span>1</span></li>
+        <li>Hidden <span>4</span></li>
+        <li>Obvious <span>6</span></li>
+        <li>Public knowledge <span>9</span></li>
+      </ul>
+
+      <h2>Estimating Impact</h2>
+      <p>
+        The goal is to estimate the magnitude of the impact on the system if the
+        vulnerability were to be exploited.
+      </p>
+      <p>
+        <strong>Loss of Access</strong> — How likely is it that a specific
+        requests can be overridden?
+      </p>
+      <ul>
+        <li>Minimal non-sensitive data disclosed <span>2</span></li>
+        <li>Minimal critical data disclosed <span>6</span></li>
+        <li>Extensive non-sensitive data disclosed <span>6</span></li>
+        <li>Extensive critical data disclosed <span>7</span></li>
+        <li>All data disclosed <span>9</span></li>
+      </ul>
+      <p>
+        <strong>Loss of Funds</strong> — Can funds be stolen or removed without
+        the knowledge of the owner?
+      </p>
+      <ul>
+        <li>
+          This is a critical bug with that warrants the highest rating
+          <span>9</span>.
+        </li>
+      </ul>
+      <p>
+        <strong>Loss of Availability</strong> — How much service could be lost
+        and how vital is it?
+      </p>
+      <ul>
+        <li>Minimal secondary services interrupted <span>1</span></li>
+        <li>Minimal primary services interrupted <span>5</span></li>
+        <li>Extensive secondary services interrupted <span>5</span></li>
+        <li>Extensive primary services interrupted <span>7</span></li>
+        <li>All services completely lost <span>9</span></li>
+      </ul>
+      <h3>High-Level Considerations</h3>
+      <p>
+        <strong>Malicious Input Handling</strong> — Are function parameters
+        passed in a safe and predictable manner?
+      </p>
+      <p>
+        <strong>Arithmetic</strong> — Are mathematical operations and variable
+        values handled in a predictable and safe manner?
+      </p>
+      <p>
+        <strong>Gas Limitations</strong> — Is the use of gas optimized in a way
+        that prevents unecessary losses?
+      </p>
+
+      <h2>Duplicate Submissions</h2>
+      <p>
+        Should the same bug be submitted by multiple Wardens, Judges have the
+        discretion to place these bugs into the same bucket, in which case, the
+        award will be shared among those who submitted.
+      </p>
+      <h2>Credits</h2>
+      <p>
+        The C4 judging criteria references the
+        <a
+          href="https://owasp.org/www-community/OWASP_Risk_Rating_Methodology"
+          rel="nofollow"
+          >OWASP Risk Rating Methodology</a
+        >
+        to score the severity and relevence of submitted reports from C4
+        Wardens.
+      </p>
+    </div>
+    <footer>
+      <a href="https://twitter.com/code423n4">Twitter</a>
+      <a href="https://discord.gg/EY5dvm3evD">Discord</a>
+      <a href="https://github.com/code-423n4/">GitHub</a>
+    </footer>
+  </body>
+</html>
