@@ -20,7 +20,7 @@ const getTimeRemaining = (endtime) => {
   }
 };
 
-const Countdown = ({ deadline }) => {
+const Countdown = ({ state, start, end }) => {
   const [timeLeft, setTimeLeft] = useState(getTimeRemaining());
 
   useEffect(() => {
@@ -30,7 +30,17 @@ const Countdown = ({ deadline }) => {
     return () => clearTimeout(timer);
   });
 
-  const t = getTimeRemaining(deadline);
+  let t;
+
+  if (state === "soon") {
+    // calculate countdown to start
+    t = getTimeRemaining(start);
+  }
+  if (state === "active") {
+    // calculate countdown to end time
+    t = getTimeRemaining(end);
+  }
+
   const days = t.days;
   const hh = ("0" + t.hours).slice(-2);
   const mm = ("0" + t.minutes).slice(-2);
@@ -44,7 +54,8 @@ const Countdown = ({ deadline }) => {
       <h5 className="wrapper-time">
         <span className="hours">{hh}</span>{" "}
         <span className="minutes">{mm}</span>{" "}
-        <span className="seconds">{ss}</span> left
+        <span className="seconds">{ss}</span>
+        {state === "soon" ? " until contest starts" : " left"}
       </h5>
     </div>
   );

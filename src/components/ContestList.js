@@ -2,7 +2,6 @@ import React from "react";
 import Contest from "./Contest";
 
 const ContestList = ({ contests }) => {
-  console.log(contests);
   return (
     <>
       {contests.map((contest) => (
