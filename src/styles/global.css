@@ -232,6 +232,17 @@ a:hover {
   display: grid;
 }
 
+.wrapper-contest.soon {
+  background: rgba(51, 0, 101, 0.3);
+}
+
+.wrapper-contest.active {
+  background: rgba(51, 0, 101, 0.3);
+}
+.wrapper-contest.completed {
+  opacity: 0.5;
+}
+
 .wrapper-contest h4,
 p {
   margin-top: 0;
