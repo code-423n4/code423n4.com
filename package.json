@@ -9,6 +9,7 @@
     "@babel/preset-react": "^7.12.13",
     "@babel/register": "^7.13.8",
     "@ncwidgets/id": "^0.8.1",
+    "esm": "^3.2.25",
     "gatsby": "^3.0.4",
     "gatsby-image": "^3.0.0",
     "gatsby-plugin-gatsby-cloud": "^2.0.0",
