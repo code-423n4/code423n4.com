@@ -1,15 +1,24 @@
 import React from "react";
 import { graphql } from "gatsby";
-import { flatten, find } from "lodash";
+import { merge } from "lodash";
 import DefaultLayout from "../layouts/DefaultLayout";
+import LeaderboardTable from "../components/LeaderboardTable";
 
-export default function Leaderboard({ data }) {
+const riskCount = (findingSet, riskLevel) => {
+  return findingSet.reduce((total, finding) => finding.node.risk === riskLevel ? total + 1 : total + 0, 0)
+}
+
+const getAwardTotal = (findingSet) => {
+  return findingSet.reduce((total, finding) => finding.node.award > 0 ? total + finding.node.award : total + 0, 0);
+}
+
+const Leaderboard = ({ data }) => {
   console.log(data);
   const findings = data.findings.edges;
   const people = data.people.edges;
   
   const getTotalAwards = (handle) => {
-    // filter down to just this handle's rewards
+    // filter down to this handle's rewards
     const handleFindings = findings.filter((finding) => {
       if (finding.node.handle) {
         return finding.node.handle.handle === handle;
@@ -17,25 +26,19 @@ export default function Leaderboard({ data }) {
     })
     
     // then total up handleAwards by risk and money
+    const lowRisk = riskCount(handleFindings, "1");
+    const medRisk = riskCount(handleFindings, "2");
+    const highRisk = riskCount(handleFindings, "3");
+    const allFindings = lowRisk + medRisk + highRisk; 
+    const awardTotal = getAwardTotal(handleFindings);
     
-    let lowRisk = handleFindings.reduce((total, finding) => finding.node.risk === "1" ? total + 1 : total + 0, 0)
-    let medRisk = handleFindings.reduce((total, finding) => finding.node.risk === "2" ? total + 1 : total + 0, 0)
-    let highRisk = handleFindings.reduce((total, finding) => finding.node.risk === "3" ? total + 1 : total + 0, 0)
-    let allFindings = lowRisk + medRisk + highRisk
-    let awardTotal = handleFindings.reduce((total, finding) => finding.node.award > 0 ? total + finding.node.award : total + 0, 0)
-    console.log(handle,'»', 'low:', lowRisk, 'med:', medRisk, 'high:', highRisk, 'findings:', allFindings, 'awards:', awardTotal);
-    // }
-    
-    const totaledResults = {
+    return {
       lowRisk,
       medRisk,
       highRisk,
       allFindings,
       awardTotal
     }
-    
-    // then return that object for each handle
-    return totaledResults;
   }
   
   let resultData = [];
@@ -43,22 +46,24 @@ export default function Leaderboard({ data }) {
   for (const person of people) {
     let p = person.node
     if (!resultData[p.handle]) {
-      resultData.push(
-        { 
-          "handle": p.handle, 
-          "image": p.image, 
-          "link": p.link, 
-          "results": getTotalAwards(p.handle) 
-        }
-      );
+      const personData = {
+        "handle": p.handle, 
+        "image": p.image, 
+        "link": p.link
+      }
+      const personResults = getTotalAwards(p.handle);
+      const combinedData = merge(personData, personResults)
+      resultData.push(combinedData);
     }
   }
   
-  const peopleJson = <pre><code>{JSON.stringify(resultData,null,2)}</code></pre>
+  // const peopleJson = <pre><code>{JSON.stringify(resultData,null,2)}</code></pre>
   return (
     <DefaultLayout title="Leaderboard" bodyClass="leaderboard">
       <div className="wrapper-main">
-        <section>{peopleJson}</section>
+        <section>
+          <LeaderboardTable results={resultData} />
+        </section>
       </div>
     </DefaultLayout>
   );
@@ -88,3 +93,5 @@ export const query = graphql`
     }
   }
 `;
+
+export default Leaderboard;

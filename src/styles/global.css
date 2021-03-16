@@ -378,6 +378,21 @@ footer a:hover {
   border-bottom: 0px;
 }
 
+table {
+  color: #fff;
+  font-family: sans-serif;
+  border-spacing: 0;
+}
+th {
+  margin: 0;
+  padding: 10px 30px;
+}
+td {
+  margin: 0;
+  outline: 1px solid #555;
+  padding: 10px 30px;
+}
+
 @media (max-width: 600px) {
   body {
     background-color: black;
