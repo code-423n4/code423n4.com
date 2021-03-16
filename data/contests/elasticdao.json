@@ -4,7 +4,5 @@
   "end_time": "2021-03-12T17:27:39.625Z",
   "title": "ElasticDAO contest",
   "sponsor": "ElasticDAO",
-  "id": "2",
-  "wardens": ["samczsun"],
-  "judges": ["zscole"]
+  "contestid": 2
 }

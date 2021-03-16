@@ -4,7 +4,5 @@
   "end_time": "2021-03-10T18:15:14.625Z",
   "title": "Slingshot Finance",
   "sponsor": "Slingshot Finance",
-  "id": "1",
-  "wardens": ["samczsun"],
-  "judges": ["zscole"]
+  "contestid": 1
 }

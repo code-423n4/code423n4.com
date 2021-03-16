@@ -10,7 +10,7 @@ export default function Leaderboard({ data }) {
   
   const getTotalAwards = (handle) => {
     // filter down to just this handle's rewards
-    var handleFindings = findings.filter((finding) => {
+    const handleFindings = findings.filter((finding) => {
       if (finding.node.handle) {
         return finding.node.handle.handle === handle;
       } else return;
@@ -21,20 +21,29 @@ export default function Leaderboard({ data }) {
     let lowRisk = handleFindings.reduce((total, finding) => finding.node.risk === "1" ? total + 1 : total + 0, 0)
     let medRisk = handleFindings.reduce((total, finding) => finding.node.risk === "2" ? total + 1 : total + 0, 0)
     let highRisk = handleFindings.reduce((total, finding) => finding.node.risk === "3" ? total + 1 : total + 0, 0)
-    let awards = handleFindings.reduce((total, finding) => finding.node.award > 0 ? total + finding.node.award : total + 0, 0)
-    console.log(handle,'»', 'lowrisk:', lowRisk, 'medrisk:', medRisk, 'highrisk:', highRisk, 'awards:', awards);
+    let allFindings = lowRisk + medRisk + highRisk
+    let awardTotal = handleFindings.reduce((total, finding) => finding.node.award > 0 ? total + finding.node.award : total + 0, 0)
+    console.log(handle,'»', 'low:', lowRisk, 'med:', medRisk, 'high:', highRisk, 'findings:', allFindings, 'awards:', awardTotal);
     // }
     
+    const totaledResults = {
+      lowRisk,
+      medRisk,
+      highRisk,
+      allFindings,
+      awardTotal
+    }
+    
     // then return that object for each handle
-    return handleFindings;
+    return totaledResults;
   }
   
-  let groupedResults = [];
+  let resultData = [];
   
   for (const person of people) {
     let p = person.node
-    if (!groupedResults[p.handle]) {
-      groupedResults.push(
+    if (!resultData[p.handle]) {
+      resultData.push(
         { 
           "handle": p.handle, 
           "image": p.image, 
@@ -45,12 +54,11 @@ export default function Leaderboard({ data }) {
     }
   }
   
-  const peopleJson = <pre><code>{JSON.stringify(people,null,2)}</code></pre>
-  const findingsJson = <pre><code>{JSON.stringify(findings,null,2)}</code></pre>
+  const peopleJson = <pre><code>{JSON.stringify(resultData,null,2)}</code></pre>
   return (
     <DefaultLayout title="Leaderboard" bodyClass="leaderboard">
       <div className="wrapper-main">
-        <section>{peopleJson} {findingsJson}</section>
+        <section>{peopleJson}</section>
       </div>
     </DefaultLayout>
   );
