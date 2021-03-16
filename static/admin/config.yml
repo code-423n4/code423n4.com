@@ -106,11 +106,11 @@ collections:
   - name: findings
     label: Findings
     label_singular: Findings
-    slug: "{{title}}"
+    slug: "contest-{{contest}}-"
     folder: "data/findings"
     media_folder: "{{media_folder}}/findings"
     public_folder: "{{public_folder}}/findings"
-    identifier_field: "title"
+    identifier_field: "id"
     create: true
     extension: json
     fields:
@@ -125,14 +125,6 @@ collections:
           valueField: "id",
           displayFields: ["title"],
         }
-      - { name: title, label: Title, required: true }
-      - {
-          name: description,
-          label: Description,
-          widget: markdown,
-          required: false,
-        }
-      - { name: type, label: Type, required: false }
       - {
           name: severity,
           label: Severity,

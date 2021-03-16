@@ -8,4 +8,4 @@ type OrgsJson implements Node {
   findings:       [ FindingsJson ] @link(by: "id", from: "findings")
 }`
 
-export default OrgsJson
+export default OrgsJson;

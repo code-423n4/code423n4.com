@@ -1,8 +1,8 @@
-# ⚠️ Editing data
+# ⚠️ Editing people data
 
 You can edit this data manually or using netlify cms.
 
-Note that the name field is used to created foreignkey relationships between objects.
+Note that the name field is used to create foreignkey relationships between objects.
 
 Example 1:
 
