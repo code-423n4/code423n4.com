@@ -1,15 +1,12 @@
 const FINDING = `
 fragment FindingDetails on OrgsJson {
   id
-  title
-  description
-  type
-  severity
+  risk
   award
   contest {
     ...ContestDetails
   }
-  wardens {
+  handle {
     ...PersonDetails
   }
 }

@@ -1,6 +1,7 @@
 const PeopleJson = `
 type PeopleJson implements Node {
   name:           String
+  handle:         String
   link:           String
   image:          String
   contests:       [ ContestsJson ] @link(by: "id", from: "contests")
