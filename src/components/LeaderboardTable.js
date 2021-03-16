@@ -3,6 +3,7 @@ import { map, pick } from "lodash";
 import { useTable, useSortBy } from 'react-table'
 
 const LeaderboardTable = ({results}) => {
+  console.log(results)
 
   const columns = React.useMemo(
     () => [
@@ -16,6 +17,14 @@ const LeaderboardTable = ({results}) => {
           {
             Header: "Winnings",
             accessor: "awardTotal"
+          },
+          {
+            Header: "Findings",
+            accessor: "allFindings"
+          },
+          {
+            Header: "High Risk",
+            accessor: "highRisk"
           }
         ]
       },

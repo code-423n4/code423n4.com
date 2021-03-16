@@ -53,7 +53,9 @@ const Leaderboard = ({ data }) => {
       }
       const personResults = getTotalAwards(p.handle);
       const combinedData = merge(personData, personResults)
-      resultData.push(combinedData);
+      if (personResults.allFindings > 0) {
+        resultData.push(combinedData);
+      } 
     }
   }
   
