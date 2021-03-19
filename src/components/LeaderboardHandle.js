@@ -1,24 +1,37 @@
 import React from "react";
+import Avatar from "react-avatar";
 
 const LeaderboardHandle = ({ handle, image, link, members }) => {
-  // TODO: handle teams
-  console.log(handle, image, link, members);
-
   return (
-    <div className="wrapper-competitor">
-      {image ? <img src={image} alt={handle} /> : ""}
-      <span>{handle}</span>
+    <div className="wrapper-competitor" key={handle}>
       {members ? (
         <div className="wrapper-members">
+          <span className="teamname">{handle}</span>
           {members.map((member) => (
-            <div className="member">
-              <img src={member.image} alt={member.handle} />
+            <div className="member" key={member.handle}>
+              {member.image ? (
+                <Avatar
+                  src={member.image}
+                  name={handle}
+                  size="30px"
+                  round="30px"
+                />
+              ) : (
+                ""
+              )}
               <span>{member.handle}</span>
             </div>
           ))}
         </div>
       ) : (
-        ""
+        <>
+          {image ? (
+            <Avatar src={image} name={handle} size="30px" round="30px" />
+          ) : (
+            ""
+          )}
+          <span>{handle}</span>
+        </>
       )}
     </div>
   );
