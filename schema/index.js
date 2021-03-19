@@ -1,10 +1,10 @@
-import PeopleJson from "./PeopleJson";
+import HandlesJson from "./HandlesJson";
 import OrgsJson from "./OrgsJson";
 import ContestsJson from "./ContestsJson";
 import FindingsJson from "./FindingsJson";
 
 const SchemaCustomization = `
-${PeopleJson}
+${HandlesJson}
 ${OrgsJson}
 ${ContestsJson}
 ${FindingsJson}

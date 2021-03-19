@@ -13,10 +13,10 @@ fragment ContestDetails on ContestsJson {
   start_time
   end_time
   wardens {
-    ...PersonDetails
+    ...HandleDetails
   }
   judges {
-    ...PersonDetails
+    ...HandleDetails
   }
   hide
 }

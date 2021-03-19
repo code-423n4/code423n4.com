@@ -7,7 +7,7 @@ fragment FindingDetails on OrgsJson {
     ...ContestDetails
   }
   handle {
-    ...PersonDetails
+    ...HandleDetails
   }
 }
 `;

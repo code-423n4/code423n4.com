@@ -12,12 +12,7 @@ fragment HandleDetails on HandlesJson {
   name
   link
   image
-  members {
-    name
-    handle
-    image
-    link
-  }
+  members
 }
 `;
 

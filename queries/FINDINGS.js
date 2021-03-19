@@ -6,6 +6,6 @@ people: allFindingsJson {
     }
   }
 }
-`
+`;
 
-export default FINDINGS
+export default FINDINGS;

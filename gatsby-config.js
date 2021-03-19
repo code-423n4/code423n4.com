@@ -18,8 +18,8 @@ module.exports = {
     {
       resolve: `gatsby-source-filesystem`,
       options: {
-        path: `${__dirname}/data/people`,
-        name: `people`,
+        path: `${__dirname}/data/handles`,
+        name: `handles`,
         ignore: ["README.*"],
       },
     },

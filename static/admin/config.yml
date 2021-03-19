@@ -16,8 +16,8 @@ slug:
 
 collections:
   - name: people
-    label: People
-    label_singular: Person
+    label: Handles
+    label_singular: Handle
     slug: "{{name}}"
     folder: "data/people"
     media_folder: "{{media_folder}}/people"
