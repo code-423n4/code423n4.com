@@ -6,8 +6,8 @@ type ContestsJson implements Node {
   details:        String
   start_time:     Date
   end_time:       Date  
-  wardens:        [ PeopleJson ] @link(by: "name", from: "people")
-  judges:         [ PeopleJson ] @link(by: "name", from: "people")
+  wardens:        [ HandlesJson ] @link(by: "name", from: "people")
+  judges:         [ HandlesJson ] @link(by: "name", from: "people")
   findings:       [ FindingsJson ] @link(by: "id", from: "findings")
   hide:           Boolean
 }`;

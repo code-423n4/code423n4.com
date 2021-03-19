@@ -6,6 +6,6 @@ people: allOrgsJson {
     }
   }
 }
-`
+`;
 
-export default ORGS
+export default ORGS;
