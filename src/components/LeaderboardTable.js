@@ -4,7 +4,6 @@ import { useTable, useSortBy } from "react-table";
 import LeaderboardHandle from "./LeaderboardHandle";
 
 const LeaderboardTable = ({ results }) => {
-  // TODO: handle teams
   const columns = React.useMemo(
     () => [
       {
