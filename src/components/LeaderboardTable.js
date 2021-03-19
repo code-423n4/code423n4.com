@@ -72,6 +72,9 @@ const LeaderboardTable = ({ results }) => {
                 }
               >
                 {column.render("Header")}
+                <span className="sort-direction">
+                  {column.isSorted ? (column.isSortedDesc ? " ▼" : " ▲") : ""}
+                </span>
               </th>
             ))}
           </tr>
