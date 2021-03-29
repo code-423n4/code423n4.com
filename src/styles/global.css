@@ -294,7 +294,7 @@ p {
 
 .countdown h5 .wrapper-time {
   display: inline-block;
-  margin: 0;
+  margin: 0 5px 0 0;
 }
 
 .wrapper-time span {
