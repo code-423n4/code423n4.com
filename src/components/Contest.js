@@ -14,7 +14,6 @@ const Contest = ({ contest }) => {
   } = contest;
 
   const t = getDates(start_time, end_time);
-  console.log("---", getDates(start_time, end_time));
 
   return (
     <div className={"wrapper-contest " + t.state}>

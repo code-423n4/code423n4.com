@@ -6,7 +6,6 @@ import { getTimeRemaining, getDates, getTimeState } from "../utils/time";
 
 export default function Contests({ data }) {
   const contests = data.contests.edges;
-  console.log("contests", contests);
 
   // TODO: group contests by date
   // TODO: set contest state based on grouping
