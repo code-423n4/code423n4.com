@@ -3,6 +3,7 @@ type ContestsJson implements Node {
   contestid:      Int
   sponsor:        OrgsJson @link(by: "name", from: "sponsor")
   title:          String
+  amount:         String
   details:        String
   start_time:     Date
   end_time:       Date  

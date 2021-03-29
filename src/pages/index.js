@@ -46,6 +46,7 @@ export const query = graphql`
           hide
           start_time
           end_time
+          amount
           sponsor {
             name
             image

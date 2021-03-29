@@ -7,7 +7,7 @@ const LeaderboardTable = ({ results }) => {
   const columns = React.useMemo(
     () => [
       {
-        Header: "C4 Leaderboard",
+        Header: "Leaderboard",
         columns: [
           {
             Header: "Competitor",

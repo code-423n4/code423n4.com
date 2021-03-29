@@ -390,7 +390,7 @@ table {
   border-style: hidden;
   font-family: "Space Mono", monospace;
   font-weight: 400;
-  margin: 10px auto;
+  margin: 80px auto;
 }
 th {
   margin: 0;
@@ -415,6 +415,10 @@ table td {
   font-size: 12px;
 }
 
+table th {
+  color: #fff;
+}
+
 th:first-child .sort-direction {
   display: none;
 }
@@ -430,7 +434,7 @@ thead tr:first-of-type th {
 
 .sort-direction {
   position: absolute;
-  right: 5px;
+  right: 10px;
 }
 
 .member + .member {
