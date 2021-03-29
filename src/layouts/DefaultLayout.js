@@ -1,6 +1,7 @@
 import React from "react";
 import Helmet from "react-helmet";
 import Footer from "../components/content/Footer";
+import Nav from "../components/content/Nav";
 
 export default (props) => {
   const {
@@ -44,6 +45,10 @@ export default (props) => {
           href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
           rel="stylesheet"
         />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Space+Mono&display=swap"
+          rel="stylesheet"
+        />
         <title>
           {pageTitle ? `${pageTitle} — ` : ""}
           Code 423n4
@@ -51,6 +56,9 @@ export default (props) => {
         <body className={bodyClass} />
       </Helmet>
       <main>
+        <header>
+          <Nav />
+        </header>
         {children}
         <Footer />
       </main>

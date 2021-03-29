@@ -222,6 +222,9 @@ a:hover {
   text-transform: uppercase;
 }
 
+.wrapper-contest-set {
+}
+
 .wrapper-contest {
   margin-top: 40px;
   border-radius: 10px;
@@ -240,7 +243,7 @@ a:hover {
   background: rgba(51, 0, 101, 0.3);
 }
 .wrapper-contest.completed {
-  opacity: 0.5;
+  opacity: 0.8;
 }
 
 .wrapper-contest h4,
@@ -285,9 +288,9 @@ p {
 } */
 
 .countdown h5 {
-  font-size: 25px;
+  font-size: 20px;
   display: inline-block;
-  margin: 10px 0;
+  margin: 0px 0 10px 0;
 }
 
 .countdown h5 span {
@@ -312,6 +315,7 @@ p {
 
 .wrapper-sponsor img {
   width: 100%;
+  border-radius: 100%;
 }
 
 .button {
@@ -338,6 +342,7 @@ p {
 }
 
 footer {
+  margin-top: 100px;
   text-align: center;
   padding-bottom: 50px;
 }
@@ -379,18 +384,66 @@ footer a:hover {
 }
 
 table {
-  color: #fff;
+  color: #d7c7ef;
   font-family: sans-serif;
-  border-spacing: 0;
+  border-collapse: collapse;
+  border-style: hidden;
+  font-family: "Space Mono", monospace;
+  font-weight: 400;
+  margin: 10px auto;
 }
 th {
   margin: 0;
-  padding: 10px 30px;
+  padding: 10px;
+  font-size: 12px;
+  min-width: 60px;
 }
-td {
+th[role="columnheader"] {
+  text-align: left;
+}
+thead tr:first-of-type th {
+  text-align: center;
+}
+thead tr:nth-of-type(2) th:nth-of-type(1) {
+  padding-left: 40px;
+}
+
+table td {
   margin: 0;
-  outline: 1px solid #555;
-  padding: 10px 30px;
+  border: 1px solid rgba(146, 129, 171, 0.2);
+  padding: 10px;
+  font-size: 12px;
+}
+
+th:first-child .sort-direction {
+  display: none;
+}
+
+th {
+  position: relative;
+}
+
+thead tr:first-of-type th {
+  font-size: 30px;
+  font-family: "Roboto", sans-serif;
+}
+
+.sort-direction {
+  position: absolute;
+  right: 5px;
+}
+
+.member + .member {
+  margin-top: 10px;
+}
+.teamname {
+  display: block;
+  margin: 0 0 5px 30px;
+  padding-bottom: 5px;
+  border-bottom: 1px solid rgba(146, 129, 171, 0.2);
+}
+.sb-avatar {
+  margin-right: 10px;
 }
 
 @media (max-width: 600px) {
@@ -408,13 +461,35 @@ td {
     right: auto;
     text-align: center;
   }
-
+  th {
+    min-width: 50px;
+  }
+  th:nth-of-type(5),
+  td:nth-of-type(5),
+  th:nth-of-type(6),
+  td:nth-of-type(6) {
+    display: none;
+  }
+  td:nth-of-type(4),
+  th:nth-of-type(4) {
+    border-right: 0px;
+  }
+  table .sb-avatar,
+  table .teamname {
+    display: none !important;
+  }
+  thead tr:nth-of-type(2) th:nth-of-type(1) {
+    text-align: left;
+  }
   .logo img {
-    width: 200px;
+    width: 150px;
     margin: 5px auto 10px auto;
     display: block;
     position: static;
     left: auto;
+  }
+  header {
+    margin-bottom: 20px;
   }
 
   .hero {
@@ -452,16 +527,19 @@ td {
   }
 
   .definitions h3,
-  p {
+  .definitions p {
     font-size: 16px;
     display: inline;
   }
   .definitions p {
     text-transform: lowercase;
   }
-
   .definitions div:last-child {
     margin-right: 0px;
+  }
+
+  .wrapper-contest {
+    margin-top: 10px;
   }
 
   .wrapper-contest h4 {
@@ -475,7 +553,7 @@ td {
   }
   .wrapper-contest p {
     font-size: 15px;
-    padding-bottom: 30px;
+    margin: 10px 0;
   }
   footer span {
     display: none;
