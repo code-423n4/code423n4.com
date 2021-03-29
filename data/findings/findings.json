@@ -1,278 +1,1070 @@
 [
   {
     "contest": 1,
-    "handle": "cmichel",
-    "risk": "2",
-    "award": 200
-  },
-  {
-    "contest": 1,
-    "handle": "cmichel",
+    "handle": "pocotiempo",
+    "finding": "H-01",
     "risk": "3",
-    "award": 300
+    "pie": 10,
+    "split": 1,
+    "slice": 10,
+    "awardCoin": "USDC",
+    "award": 5702.87995437696,
+    "awardUSD": "5702.88"
   },
   {
     "contest": 1,
-    "handle": "cmichel",
+    "handle": "pocotiempo",
+    "finding": "L-02",
     "risk": "1",
-    "award": 100
+    "pie": 0.81,
+    "split": 3,
+    "slice": 0.27,
+    "awardCoin": "USDC",
+    "award": 153.97775876817795,
+    "awardUSD": "153.98"
   },
   {
     "contest": 1,
-    "handle": "cmichel",
-    "risk": "1",
-    "award": 100
-  },
-  {
-    "contest": 1,
-    "handle": "cmichel",
-    "risk": "1",
-    "award": 100
-  },
-  {
-    "contest": 1,
-    "handle": "cmichel",
-    "risk": "1",
-    "award": 100
-  },
-  {
-    "contest": 1,
-    "handle": "cmichel",
-    "risk": "1",
-    "award": 100
-  },
-  {
-    "contest": 1,
-    "handle": "gpersoon",
-    "risk": "1",
-    "award": 100
-  },
-  {
-    "contest": 1,
-    "handle": "gpersoon",
-    "risk": "1",
-    "award": 100
-  },
-  {
-    "contest": 1,
-    "handle": "gpersoon",
-    "risk": "1",
-    "award": 100
-  },
-  {
-    "contest": 1,
-    "handle": "gpersoon",
-    "risk": "1",
-    "award": 100
-  },
-  {
-    "contest": 1,
-    "handle": "gpersoon",
-    "risk": "1",
-    "award": 100
-  },
-  {
-    "contest": 1,
-    "handle": "gpersoon",
-    "risk": "1",
-    "award": 100
-  },
-  {
-    "contest": 1,
-    "handle": "gpersoon",
-    "risk": "1",
-    "award": 100
-  },
-  {
-    "contest": 1,
-    "handle": "gpersoon",
-    "risk": "1",
-    "award": 100
-  },
-  {
-    "contest": 1,
-    "handle": "gpersoon",
-    "risk": "1",
-    "award": 100
-  },
-  {
-    "contest": 1,
-    "handle": "gpersoon",
-    "risk": "1",
-    "award": 100
-  },
-  {
-    "contest": 1,
-    "handle": "gpersoon",
-    "risk": "1",
-    "award": 100
-  },
-  {
-    "contest": 1,
-    "handle": "gpersoon",
-    "risk": "1",
-    "award": 100
-  },
-  {
-    "contest": 1,
-    "handle": "gpersoon",
-    "risk": "1",
-    "award": 100
-  },
-  {
-    "contest": 1,
-    "handle": "janbro",
+    "handle": "pocotiempo",
+    "finding": "M-01",
     "risk": "2",
-    "award": 200
+    "pie": 2.43,
+    "split": 3,
+    "slice": 0.81,
+    "awardCoin": "USDC",
+    "award": 461.9332763045338,
+    "awardUSD": "461.93"
   },
   {
     "contest": 1,
-    "handle": "janbro",
-    "risk": "1",
-    "award": 100
-  },
-  {
-    "contest": 1,
-    "handle": "ncitron",
+    "handle": "pocotiempo",
+    "finding": "M-02",
     "risk": "2",
-    "award": 200
+    "pie": 2.43,
+    "split": 3,
+    "slice": 0.81,
+    "awardCoin": "USDC",
+    "award": 461.9332763045338,
+    "awardUSD": "461.93"
   },
   {
     "contest": 1,
-    "handle": "ncitron",
-    "risk": "3",
-    "award": 300
+    "handle": "pocotiempo",
+    "finding": "M-05",
+    "risk": "2",
+    "pie": 3,
+    "split": 1,
+    "slice": 3,
+    "awardCoin": "USDC",
+    "award": 1710.8639863130882,
+    "awardUSD": "1710.86"
   },
   {
     "contest": 1,
-    "handle": "ncitron",
+    "handle": "pocotiempo",
+    "finding": "N-01",
+    "risk": "0",
+    "awardCoin": "USDC",
+    "awardUSD": "NaN"
+  },
+  {
+    "contest": 1,
+    "handle": "pauliax",
+    "finding": "G-06",
+    "risk": "g",
+    "pie": 1,
+    "split": 1,
+    "slice": 1,
+    "awardCoin": "USDC",
+    "award": 425.53191489361706,
+    "awardUSD": "425.53"
+  },
+  {
+    "contest": 1,
+    "handle": "pauliax",
+    "finding": "L-04",
     "risk": "1",
-    "award": 100
+    "pie": 0.9,
+    "split": 2,
+    "slice": 0.45,
+    "awardCoin": "USDC",
+    "award": 256.6295979469632,
+    "awardUSD": "256.63"
   },
   {
     "contest": 1,
-    "handle": "ncitron",
+    "handle": "pauliax",
+    "finding": "L-06",
     "risk": "1",
-    "award": 100
+    "pie": 0.9,
+    "split": 2,
+    "slice": 0.45,
+    "awardCoin": "USDC",
+    "award": 256.6295979469632,
+    "awardUSD": "256.63"
+  },
+  {
+    "contest": 1,
+    "handle": "pauliax",
+    "finding": "L-07",
+    "risk": "1",
+    "pie": 1,
+    "split": 1,
+    "slice": 1,
+    "awardCoin": "USDC",
+    "award": 570.287995437696,
+    "awardUSD": "570.29"
+  },
+  {
+    "contest": 1,
+    "handle": "pauliax",
+    "finding": "L-08",
+    "risk": "1",
+    "pie": 1,
+    "split": 1,
+    "slice": 1,
+    "awardCoin": "USDC",
+    "award": 570.287995437696,
+    "awardUSD": "570.29"
+  },
+  {
+    "contest": 1,
+    "handle": "pauliax",
+    "finding": "L-09",
+    "risk": "1",
+    "pie": 1,
+    "split": 1,
+    "slice": 1,
+    "awardCoin": "USDC",
+    "award": 570.287995437696,
+    "awardUSD": "570.29"
+  },
+  {
+    "contest": 1,
+    "handle": "pauliax",
+    "finding": "L-10",
+    "risk": "1",
+    "pie": 1,
+    "split": 1,
+    "slice": 1,
+    "awardCoin": "USDC",
+    "award": 570.287995437696,
+    "awardUSD": "570.29"
+  },
+  {
+    "contest": 1,
+    "handle": "pauliax",
+    "finding": "M-04",
+    "risk": "2",
+    "pie": 2.7,
+    "split": 2,
+    "slice": 1.35,
+    "awardCoin": "USDC",
+    "award": 769.8887938408897,
+    "awardUSD": "769.89"
+  },
+  {
+    "contest": 1,
+    "handle": "pauliax",
+    "finding": "N-01",
+    "risk": "0",
+    "awardCoin": "USDC",
+    "awardUSD": "NaN"
+  },
+  {
+    "contest": 1,
+    "handle": "onewayfunction",
+    "finding": "G-01",
+    "risk": "g",
+    "pie": 0.9,
+    "split": 2,
+    "slice": 0.45,
+    "awardCoin": "USDC",
+    "award": 191.4893617021277,
+    "awardUSD": "191.49"
+  },
+  {
+    "contest": 1,
+    "handle": "onewayfunction",
+    "finding": "G-02",
+    "risk": "g",
+    "pie": 0.9,
+    "split": 2,
+    "slice": 0.45,
+    "awardCoin": "USDC",
+    "award": 191.4893617021277,
+    "awardUSD": "191.49"
+  },
+  {
+    "contest": 1,
+    "handle": "onewayfunction",
+    "finding": "G-03",
+    "risk": "g",
+    "pie": 0.9,
+    "split": 2,
+    "slice": 0.45,
+    "awardCoin": "USDC",
+    "award": 191.4893617021277,
+    "awardUSD": "191.49"
+  },
+  {
+    "contest": 1,
+    "handle": "onewayfunction",
+    "finding": "G-04",
+    "risk": "g",
+    "pie": 1,
+    "split": 1,
+    "slice": 1,
+    "awardCoin": "USDC",
+    "award": 425.53191489361706,
+    "awardUSD": "425.53"
+  },
+  {
+    "contest": 1,
+    "handle": "onewayfunction",
+    "finding": "L-12",
+    "risk": "1",
+    "pie": 1,
+    "split": 1,
+    "slice": 1,
+    "awardCoin": "USDC",
+    "award": 570.287995437696,
+    "awardUSD": "570.29"
+  },
+  {
+    "contest": 1,
+    "handle": "onewayfunction",
+    "finding": "N-01",
+    "risk": "0",
+    "awardCoin": "USDC",
+    "awardUSD": "NaN"
   },
   {
     "contest": 1,
     "handle": "nedodn",
+    "finding": "G-03",
+    "risk": "g",
+    "pie": 0.9,
+    "split": 2,
+    "slice": 0.45,
+    "awardCoin": "USDC",
+    "award": 191.4893617021277,
+    "awardUSD": "191.49"
+  },
+  {
+    "contest": 1,
+    "handle": "nedodn",
+    "finding": "M-03",
+    "risk": "2",
+    "pie": 3,
+    "split": 1,
+    "slice": 3,
+    "awardCoin": "USDC",
+    "award": 1710.8639863130882,
+    "awardUSD": "1710.86"
+  },
+  {
+    "contest": 1,
+    "handle": "ncitron",
+    "finding": "L-04",
+    "risk": "1",
+    "pie": 0.9,
+    "split": 2,
+    "slice": 0.45,
+    "awardCoin": "USDC",
+    "award": 256.6295979469632,
+    "awardUSD": "256.63"
+  },
+  {
+    "contest": 1,
+    "handle": "ncitron",
+    "finding": "L-05",
+    "risk": "1",
+    "pie": 1,
+    "split": 1,
+    "slice": 1,
+    "awardCoin": "USDC",
+    "award": 570.287995437696,
+    "awardUSD": "570.29"
+  },
+  {
+    "contest": 1,
+    "handle": "ncitron",
+    "finding": "M-02",
+    "risk": "2",
+    "pie": 2.43,
+    "split": 3,
+    "slice": 0.81,
+    "awardCoin": "USDC",
+    "award": 461.9332763045338,
+    "awardUSD": "461.93"
+  },
+  {
+    "contest": 1,
+    "handle": "janbro",
+    "finding": "G-02",
+    "risk": "g",
+    "pie": 0.9,
+    "split": 2,
+    "slice": 0.45,
+    "awardCoin": "USDC",
+    "award": 191.4893617021277,
+    "awardUSD": "191.49"
+  },
+  {
+    "contest": 1,
+    "handle": "janbro",
+    "finding": "M-01",
+    "risk": "2",
+    "pie": 2.43,
+    "split": 3,
+    "slice": 0.81,
+    "awardCoin": "USDC",
+    "award": 461.9332763045338,
+    "awardUSD": "461.93"
+  },
+  {
+    "contest": 1,
+    "handle": "janbro",
+    "finding": "M-02",
+    "risk": "2",
+    "pie": 2.43,
+    "split": 3,
+    "slice": 0.81,
+    "awardCoin": "USDC",
+    "award": 461.9332763045338,
+    "awardUSD": "461.93"
+  },
+  {
+    "contest": 1,
+    "handle": "gpersoon",
+    "finding": "L-02",
+    "risk": "1",
+    "pie": 0.81,
+    "split": 3,
+    "slice": 0.27,
+    "awardCoin": "USDC",
+    "award": 153.97775876817795,
+    "awardUSD": "153.98"
+  },
+  {
+    "contest": 1,
+    "handle": "gpersoon",
+    "finding": "L-03",
+    "risk": "1",
+    "pie": 0.9,
+    "split": 2,
+    "slice": 0.45,
+    "awardCoin": "USDC",
+    "award": 256.6295979469632,
+    "awardUSD": "256.63"
+  },
+  {
+    "contest": 1,
+    "handle": "gpersoon",
+    "finding": "L-06",
+    "risk": "1",
+    "pie": 0.9,
+    "split": 2,
+    "slice": 0.45,
+    "awardCoin": "USDC",
+    "award": 256.6295979469632,
+    "awardUSD": "256.63"
+  },
+  {
+    "contest": 1,
+    "handle": "gpersoon",
+    "finding": "L-11",
+    "risk": "1",
+    "pie": 1,
+    "split": 1,
+    "slice": 1,
+    "awardCoin": "USDC",
+    "award": 570.287995437696,
+    "awardUSD": "570.29"
+  },
+  {
+    "contest": 1,
+    "handle": "gpersoon",
+    "finding": "M-04",
+    "risk": "2",
+    "pie": 2.7,
+    "split": 2,
+    "slice": 1.35,
+    "awardCoin": "USDC",
+    "award": 769.8887938408897,
+    "awardUSD": "769.89"
+  },
+  {
+    "contest": 1,
+    "handle": "gpersoon",
+    "finding": "N-01",
+    "risk": "0",
+    "awardCoin": "USDC",
+    "awardUSD": "NaN"
+  },
+  {
+    "contest": 1,
+    "handle": "gpersoon",
+    "finding": "N-03",
+    "risk": "0",
+    "awardCoin": "USDC",
+    "awardUSD": "NaN"
+  },
+  {
+    "contest": 1,
+    "handle": "cmichel",
+    "finding": "G-01",
+    "risk": "g",
+    "pie": 0.9,
+    "split": 2,
+    "slice": 0.45,
+    "awardCoin": "USDC",
+    "award": 191.4893617021277,
+    "awardUSD": "191.49"
+  },
+  {
+    "contest": 1,
+    "handle": "cmichel",
+    "finding": "L-01",
+    "risk": "1",
+    "pie": 1,
+    "split": 1,
+    "slice": 1,
+    "awardCoin": "USDC",
+    "award": 570.287995437696,
+    "awardUSD": "570.29"
+  },
+  {
+    "contest": 1,
+    "handle": "cmichel",
+    "finding": "L-02",
+    "risk": "1",
+    "pie": 0.81,
+    "split": 3,
+    "slice": 0.27,
+    "awardCoin": "USDC",
+    "award": 153.97775876817795,
+    "awardUSD": "153.98"
+  },
+  {
+    "contest": 1,
+    "handle": "cmichel",
+    "finding": "L-03",
+    "risk": "1",
+    "pie": 0.9,
+    "split": 2,
+    "slice": 0.45,
+    "awardCoin": "USDC",
+    "award": 256.6295979469632,
+    "awardUSD": "256.63"
+  },
+  {
+    "contest": 1,
+    "handle": "cmichel",
+    "finding": "M-01",
+    "risk": "2",
+    "pie": 2.43,
+    "split": 3,
+    "slice": 0.81,
+    "awardCoin": "USDC",
+    "award": 461.9332763045338,
+    "awardUSD": "461.93"
+  },
+  {
+    "contest": 1,
+    "handle": "cmichel",
+    "finding": "N-01",
+    "risk": "0",
+    "awardCoin": "USDC",
+    "awardUSD": "NaN"
+  },
+  {
+    "contest": 2,
+    "handle": "cmichel",
+    "finding": "H-01",
     "risk": "3",
-    "award": 300
+    "pie": 10,
+    "split": 1,
+    "slice": 10,
+    "awardCoin": "ETH",
+    "award": 1.873167807738056,
+    "awardUSD": "3371.70"
   },
   {
-    "contest": 1,
-    "handle": "onewayfunction",
-    "risk": "1",
-    "award": 100
-  },
-  {
-    "contest": 1,
-    "handle": "onewayfunction",
-    "risk": "1",
-    "award": 100
-  },
-  {
-    "contest": 1,
-    "handle": "onewayfunction",
-    "risk": "1",
-    "award": 100
-  },
-  {
-    "contest": 1,
-    "handle": "onewayfunction",
-    "risk": "2",
-    "award": 200
-  },
-  {
-    "contest": 1,
-    "handle": "onewayfunction",
-    "risk": "1",
-    "award": 100
-  },
-  {
-    "contest": 1,
-    "handle": "pauliax",
-    "risk": "1",
-    "award": 100
-  },
-  {
-    "contest": 1,
-    "handle": "pauliax",
-    "risk": "2",
-    "award": 200
-  },
-  {
-    "contest": 1,
-    "handle": "pauliax",
-    "risk": "4",
-    "award": 400
-  },
-  {
-    "contest": 1,
-    "handle": "pauliax",
-    "risk": "1",
-    "award": 100
-  },
-  {
-    "contest": 1,
-    "handle": "pauliax",
-    "risk": "1",
-    "award": 100
-  },
-  {
-    "contest": 1,
-    "handle": "pauliax",
-    "risk": "1",
-    "award": 100
-  },
-  {
-    "contest": 1,
-    "handle": "pauliax",
-    "risk": "1",
-    "award": 100
-  },
-  {
-    "contest": 1,
-    "handle": "pauliax",
-    "risk": "2",
-    "award": 200
-  },
-  {
-    "contest": 1,
-    "handle": "pauliax",
-    "risk": "1",
-    "award": 100
-  },
-  {
-    "contest": 1,
-    "handle": "pauliax",
-    "risk": "1",
-    "award": 100
-  },
-  {
-    "contest": 1,
-    "handle": "pocotiempo",
-    "risk": "2",
-    "award": 200
-  },
-  {
-    "contest": 1,
-    "handle": "pocotiempo",
+    "contest": 2,
+    "handle": "cmichel",
+    "finding": "H-02",
     "risk": "3",
-    "award": 300
+    "pie": 10,
+    "split": 1,
+    "slice": 10,
+    "awardCoin": "ETH",
+    "award": 1.873167807738056,
+    "awardUSD": "3371.70"
   },
   {
-    "contest": 1,
-    "handle": "pocotiempo",
-    "risk": "2",
-    "award": 200
-  },
-  {
-    "contest": 1,
-    "handle": "pocotiempo",
+    "contest": 2,
+    "handle": "cmichel",
+    "finding": "H-03",
     "risk": "3",
-    "award": 300
+    "pie": 10,
+    "split": 1,
+    "slice": 10,
+    "awardCoin": "ETH",
+    "award": 1.873167807738056,
+    "awardUSD": "3371.70"
+  },
+  {
+    "contest": 2,
+    "handle": "cmichel",
+    "finding": "H-04",
+    "risk": "3",
+    "pie": 10,
+    "split": 1,
+    "slice": 10,
+    "awardCoin": "ETH",
+    "award": 1.873167807738056,
+    "awardUSD": "3371.70"
+  },
+  {
+    "contest": 2,
+    "handle": "cmichel",
+    "finding": "H-05",
+    "risk": "3",
+    "pie": 6.561000000000002,
+    "split": 5,
+    "slice": 1.3122000000000003,
+    "awardCoin": "ETH",
+    "award": 0.24579707973138773,
+    "awardUSD": "442.43"
+  },
+  {
+    "contest": 2,
+    "handle": "cmichel",
+    "finding": "L-01",
+    "risk": "1",
+    "pie": 1,
+    "split": 1,
+    "slice": 1,
+    "awardCoin": "ETH",
+    "award": 0.1873167807738056,
+    "awardUSD": "337.17"
+  },
+  {
+    "contest": 2,
+    "handle": "cmichel",
+    "finding": "L-02",
+    "risk": "1",
+    "pie": 0.9,
+    "split": 2,
+    "slice": 0.45,
+    "awardCoin": "ETH",
+    "award": 0.08429255134821251,
+    "awardUSD": "151.73"
+  },
+  {
+    "contest": 2,
+    "handle": "cmichel",
+    "finding": "L-03",
+    "risk": "1",
+    "pie": 1,
+    "split": 1,
+    "slice": 1,
+    "awardCoin": "ETH",
+    "award": 0.1873167807738056,
+    "awardUSD": "337.17"
+  },
+  {
+    "contest": 2,
+    "handle": "cmichel",
+    "finding": "L-04",
+    "risk": "1",
+    "pie": 1,
+    "split": 1,
+    "slice": 1,
+    "awardCoin": "ETH",
+    "award": 0.1873167807738056,
+    "awardUSD": "337.17"
+  },
+  {
+    "contest": 2,
+    "handle": "cmichel",
+    "finding": "L-09",
+    "risk": "1",
+    "pie": 1,
+    "split": 1,
+    "slice": 1,
+    "awardCoin": "ETH",
+    "award": 0.1873167807738056,
+    "awardUSD": "337.17"
+  },
+  {
+    "contest": 2,
+    "handle": "cmichel",
+    "finding": "M-01",
+    "risk": "2",
+    "pie": 2.7,
+    "split": 2,
+    "slice": 1.35,
+    "awardCoin": "ETH",
+    "award": 0.2528776540446376,
+    "awardUSD": "455.18"
+  },
+  {
+    "contest": 2,
+    "handle": "cmichel",
+    "finding": "M-05",
+    "risk": "2",
+    "pie": 3,
+    "split": 1,
+    "slice": 3,
+    "awardCoin": "ETH",
+    "award": 0.5619503423214168,
+    "awardUSD": "1011.51"
+  },
+  {
+    "contest": 2,
+    "handle": "gpersoon",
+    "finding": "H-05",
+    "risk": "3",
+    "pie": 6.561000000000002,
+    "split": 5,
+    "slice": 1.3122000000000003,
+    "awardCoin": "ETH",
+    "award": 0.24579707973138773,
+    "awardUSD": "442.43"
+  },
+  {
+    "contest": 2,
+    "handle": "gpersoon",
+    "finding": "L-05",
+    "risk": "1",
+    "pie": 1,
+    "split": 1,
+    "slice": 1,
+    "awardCoin": "ETH",
+    "award": 0.1873167807738056,
+    "awardUSD": "337.17"
+  },
+  {
+    "contest": 2,
+    "handle": "gpersoon",
+    "finding": "L-06",
+    "risk": "1",
+    "pie": 1,
+    "split": 1,
+    "slice": 1,
+    "awardCoin": "ETH",
+    "award": 0.1873167807738056,
+    "awardUSD": "337.17"
+  },
+  {
+    "contest": 2,
+    "handle": "gpersoon",
+    "finding": "L-08",
+    "risk": "1",
+    "pie": 0.81,
+    "split": 3,
+    "slice": 0.27,
+    "awardCoin": "ETH",
+    "award": 0.05057553080892751,
+    "awardUSD": "91.04"
+  },
+  {
+    "contest": 2,
+    "handle": "gpersoon",
+    "finding": "L-12",
+    "risk": "1",
+    "pie": 1,
+    "split": 1,
+    "slice": 1,
+    "awardCoin": "ETH",
+    "award": 0.1873167807738056,
+    "awardUSD": "337.17"
+  },
+  {
+    "contest": 2,
+    "handle": "gpersoon",
+    "finding": "G-06",
+    "risk": "g",
+    "pie": 1,
+    "split": 1,
+    "slice": 1,
+    "awardCoin": "ETH",
+    "award": 0.2941176470588235,
+    "awardUSD": "529.41"
+  },
+  {
+    "contest": 2,
+    "handle": "janbro",
+    "finding": "H-05",
+    "risk": "3",
+    "pie": 6.561000000000002,
+    "split": 5,
+    "slice": 1.3122000000000003,
+    "awardCoin": "ETH",
+    "award": 0.24579707973138773,
+    "awardUSD": "442.43"
+  },
+  {
+    "contest": 2,
+    "handle": "janbro",
+    "finding": "L-07",
+    "risk": "1",
+    "pie": 1,
+    "split": 1,
+    "slice": 1,
+    "awardCoin": "ETH",
+    "award": 0.1873167807738056,
+    "awardUSD": "337.17"
+  },
+  {
+    "contest": 2,
+    "handle": "janbro",
+    "finding": "L-10",
+    "risk": "1",
+    "pie": 1,
+    "split": 1,
+    "slice": 1,
+    "awardCoin": "ETH",
+    "award": 0.1873167807738056,
+    "awardUSD": "337.17"
+  },
+  {
+    "contest": 2,
+    "handle": "ncitron",
+    "finding": "H-05",
+    "risk": "3",
+    "pie": 6.561000000000002,
+    "split": 5,
+    "slice": 1.3122000000000003,
+    "awardCoin": "ETH",
+    "award": 0.24579707973138773,
+    "awardUSD": "442.43"
+  },
+  {
+    "contest": 2,
+    "handle": "pauliax",
+    "finding": "H-08",
+    "risk": "3",
+    "pie": 10,
+    "split": 1,
+    "slice": 10,
+    "awardCoin": "ETH",
+    "award": 1.873167807738056,
+    "awardUSD": "3371.70"
+  },
+  {
+    "contest": 2,
+    "handle": "pauliax",
+    "finding": "H-05",
+    "risk": "3",
+    "pie": 6.561000000000002,
+    "split": 5,
+    "slice": 1.3122000000000003,
+    "awardCoin": "ETH",
+    "award": 0.24579707973138773,
+    "awardUSD": "442.43"
+  },
+  {
+    "contest": 2,
+    "handle": "pauliax",
+    "finding": "H-07",
+    "risk": "3",
+    "pie": 8.100000000000001,
+    "split": 3,
+    "slice": 2.7000000000000006,
+    "awardCoin": "ETH",
+    "award": 0.5057553080892753,
+    "awardUSD": "910.36"
+  },
+  {
+    "contest": 2,
+    "handle": "pauliax",
+    "finding": "L-02",
+    "risk": "1",
+    "pie": 0.9,
+    "split": 2,
+    "slice": 0.45,
+    "awardCoin": "ETH",
+    "award": 0.08429255134821251,
+    "awardUSD": "151.73"
+  },
+  {
+    "contest": 2,
+    "handle": "pauliax",
+    "finding": "L-08",
+    "risk": "1",
+    "pie": 0.81,
+    "split": 3,
+    "slice": 0.27,
+    "awardCoin": "ETH",
+    "award": 0.05057553080892751,
+    "awardUSD": "91.04"
+  },
+  {
+    "contest": 2,
+    "handle": "pauliax",
+    "finding": "M-02",
+    "risk": "2",
+    "pie": 2.7,
+    "split": 2,
+    "slice": 1.35,
+    "awardCoin": "ETH",
+    "award": 0.2528776540446376,
+    "awardUSD": "455.18"
+  },
+  {
+    "contest": 2,
+    "handle": "pauliax",
+    "finding": "N-01",
+    "risk": "0",
+    "awardCoin": "ETH",
+    "awardUSD": "NaN"
+  },
+  {
+    "contest": 2,
+    "handle": "pauliax",
+    "finding": "N-02",
+    "risk": "0",
+    "awardCoin": "ETH",
+    "awardUSD": "NaN"
+  },
+  {
+    "contest": 2,
+    "handle": "pauliax",
+    "finding": "G-01",
+    "risk": "g",
+    "pie": 0.9,
+    "split": 2,
+    "slice": 0.45,
+    "awardCoin": "ETH",
+    "award": 0.1323529411764706,
+    "awardUSD": "238.24"
+  },
+  {
+    "contest": 2,
+    "handle": "pauliax",
+    "finding": "G-02",
+    "risk": "g",
+    "pie": 1,
+    "split": 1,
+    "slice": 1,
+    "awardCoin": "ETH",
+    "award": 0.2941176470588235,
+    "awardUSD": "529.41"
+  },
+  {
+    "contest": 2,
+    "handle": "pauliax",
+    "finding": "G-03",
+    "risk": "g",
+    "pie": 1,
+    "split": 1,
+    "slice": 1,
+    "awardCoin": "ETH",
+    "award": 0.2941176470588235,
+    "awardUSD": "529.41"
+  },
+  {
+    "contest": 2,
+    "handle": "pauliax",
+    "finding": "G-04",
+    "risk": "g",
+    "pie": 1,
+    "split": 1,
+    "slice": 1,
+    "awardCoin": "ETH",
+    "award": 0.2941176470588235,
+    "awardUSD": "529.41"
+  },
+  {
+    "contest": 2,
+    "handle": "pauliax",
+    "finding": "G-05",
+    "risk": "g",
+    "pie": 0.9,
+    "split": 2,
+    "slice": 0.45,
+    "awardCoin": "ETH",
+    "award": 0.1323529411764706,
+    "awardUSD": "238.24"
+  },
+  {
+    "contest": 2,
+    "handle": "pocotiempo",
+    "finding": "H-06",
+    "risk": "3",
+    "pie": 10,
+    "split": 1,
+    "slice": 10,
+    "awardCoin": "ETH",
+    "award": 1.873167807738056,
+    "awardUSD": "3371.70"
+  },
+  {
+    "contest": 2,
+    "handle": "pocotiempo",
+    "finding": "H-07",
+    "risk": "3",
+    "pie": 8.100000000000001,
+    "split": 3,
+    "slice": 2.7000000000000006,
+    "awardCoin": "ETH",
+    "award": 0.5057553080892753,
+    "awardUSD": "910.36"
+  },
+  {
+    "contest": 2,
+    "handle": "pocotiempo",
+    "finding": "L-08",
+    "risk": "1",
+    "pie": 0.81,
+    "split": 3,
+    "slice": 0.27,
+    "awardCoin": "ETH",
+    "award": 0.05057553080892751,
+    "awardUSD": "91.04"
+  },
+  {
+    "contest": 2,
+    "handle": "pocotiempo",
+    "finding": "L-11",
+    "risk": "1",
+    "pie": 1,
+    "split": 1,
+    "slice": 1,
+    "awardCoin": "ETH",
+    "award": 0.1873167807738056,
+    "awardUSD": "337.17"
+  },
+  {
+    "contest": 2,
+    "handle": "pocotiempo",
+    "finding": "M-03",
+    "risk": "2",
+    "pie": 3,
+    "split": 1,
+    "slice": 3,
+    "awardCoin": "ETH",
+    "award": 0.5619503423214168,
+    "awardUSD": "1011.51"
+  },
+  {
+    "contest": 2,
+    "handle": "pocotiempo",
+    "finding": "M-04",
+    "risk": "2",
+    "pie": 3,
+    "split": 1,
+    "slice": 3,
+    "awardCoin": "ETH",
+    "award": 0.5619503423214168,
+    "awardUSD": "1011.51"
+  },
+  {
+    "contest": 2,
+    "handle": "pocotiempo",
+    "finding": "M-06",
+    "risk": "2",
+    "pie": 3,
+    "split": 1,
+    "slice": 3,
+    "awardCoin": "ETH",
+    "award": 0.5619503423214168,
+    "awardUSD": "1011.51"
+  },
+  {
+    "contest": 2,
+    "handle": "pocotiempo",
+    "finding": "M-07",
+    "risk": "2",
+    "pie": 3,
+    "split": 1,
+    "slice": 3,
+    "awardCoin": "ETH",
+    "award": 0.5619503423214168,
+    "awardUSD": "1011.51"
+  },
+  {
+    "contest": 2,
+    "handle": "pocotiempo",
+    "finding": "N-01",
+    "risk": "0",
+    "awardCoin": "ETH",
+    "awardUSD": "NaN"
+  },
+  {
+    "contest": 2,
+    "handle": "pocotiempo",
+    "finding": "G-01",
+    "risk": "g",
+    "pie": 0.9,
+    "split": 2,
+    "slice": 0.45,
+    "awardCoin": "ETH",
+    "award": 0.1323529411764706,
+    "awardUSD": "238.24"
+  },
+  {
+    "contest": 2,
+    "handle": "pocotiempo",
+    "finding": "G-05",
+    "risk": "g",
+    "pie": 0.9,
+    "split": 2,
+    "slice": 0.45,
+    "awardCoin": "ETH",
+    "award": 0.1323529411764706,
+    "awardUSD": "238.24"
+  },
+  {
+    "contest": 2,
+    "handle": "s1m0",
+    "finding": "H-07",
+    "risk": "3",
+    "pie": 8.100000000000001,
+    "split": 3,
+    "slice": 2.7000000000000006,
+    "awardCoin": "ETH",
+    "award": 0.5057553080892753,
+    "awardUSD": "910.36"
+  },
+  {
+    "contest": 2,
+    "handle": "s1m0",
+    "finding": "M-01",
+    "risk": "2",
+    "pie": 2.7,
+    "split": 2,
+    "slice": 1.35,
+    "awardCoin": "ETH",
+    "award": 0.2528776540446376,
+    "awardUSD": "455.18"
+  },
+  {
+    "contest": 2,
+    "handle": "s1m0",
+    "finding": "M-02",
+    "risk": "2",
+    "pie": 2.7,
+    "split": 2,
+    "slice": 1.35,
+    "awardCoin": "ETH",
+    "award": 0.2528776540446376,
+    "awardUSD": "455.18"
+  },
+  {
+    "contest": 2,
+    "handle": "s1m0",
+    "finding": "G-07",
+    "risk": "g",
+    "pie": 1,
+    "split": 1,
+    "slice": 1,
+    "awardCoin": "ETH",
+    "award": 0.2941176470588235,
+    "awardUSD": "529.41"
   }
 ]

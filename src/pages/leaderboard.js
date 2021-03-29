@@ -15,13 +15,14 @@ const riskCount = (findingSet, riskLevel) => {
 const getAwardTotal = (findingSet) => {
   return findingSet.reduce(
     (total, finding) =>
-      finding.node.award > 0 ? total + finding.node.award : total + 0,
+      Number(finding.node.awardUSD) > 0
+        ? total + Number(finding.node.awardUSD)
+        : total + 0,
     0
   );
 };
 
 const Leaderboard = ({ data }) => {
-  console.log(data);
   const findings = data.findings.edges;
   const handles = data.handles.edges;
 
@@ -30,6 +31,9 @@ const Leaderboard = ({ data }) => {
     const handleFindings = findings.filter((finding) => {
       if (finding.node.handle) {
         return finding.node.handle.handle === handle;
+      }
+      if (finding.node && finding.node.handle === null) {
+        return console.error(`Missing handle profile json`, finding.node);
       } else return;
     });
 
@@ -37,13 +41,17 @@ const Leaderboard = ({ data }) => {
     const lowRisk = riskCount(handleFindings, "1");
     const medRisk = riskCount(handleFindings, "2");
     const highRisk = riskCount(handleFindings, "3");
-    const allFindings = lowRisk + medRisk + highRisk;
-    const awardTotal = getAwardTotal(handleFindings);
+    const nonCrit = riskCount(handleFindings, "0");
+    const gasOptz = riskCount(handleFindings, "g");
+    const allFindings = lowRisk + medRisk + highRisk + nonCrit + gasOptz;
+    const awardTotal = getAwardTotal(handleFindings).toLocaleString("en-US");
 
     return {
       lowRisk,
       medRisk,
       highRisk,
+      nonCrit,
+      gasOptz,
       allFindings,
       awardTotal,
     };
@@ -73,9 +81,7 @@ const Leaderboard = ({ data }) => {
   return (
     <DefaultLayout title="Leaderboard" bodyClass="leaderboard">
       <div className="wrapper-main">
-        <section>
-          <LeaderboardTable results={resultData} />
-        </section>
+        <LeaderboardTable results={resultData} />
       </div>
     </DefaultLayout>
   );
@@ -90,6 +96,8 @@ export const query = graphql`
             handle
           }
           award
+          awardUSD
+          split
           risk
         }
       }

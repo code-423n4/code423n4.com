@@ -1,6 +1,6 @@
 import path from "path";
 import SchemaCustomization from "./schema";
-import GraphQLQueries from "./queries";
+// import GraphQLQueries from "./queries";
 
 // const _ = require("lodash")
 // const remark = require("remark")
