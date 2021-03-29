@@ -19,7 +19,7 @@ const Contest = ({ contest }) => {
   return (
     <div className={"wrapper-contest " + t.state}>
       <div className="wrapper-sponsor">
-        <a className="sponsor-logo" href={sponsor.link}>
+        <a href={sponsor.link}>
           <img src={sponsor.image} alt={sponsor.name} />
         </a>
       </div>
