@@ -16,7 +16,7 @@ export default function SiteIndex({ data }) {
           <Definitions />
           {contests ? <ContestList contests={contests} /> : ""}
         </section>
-        <section>
+        <section className="center">
           <h5>Want to learn more?</h5>
           <div className="button-wrapper">
             <a
