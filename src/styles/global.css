@@ -554,6 +554,10 @@ thead tr:first-of-type th {
     font-size: 16px;
     display: inline;
   }
+
+  .definitions h3 {
+    margin-right: 5px;
+  }
   .definitions p {
     text-transform: lowercase;
   }
