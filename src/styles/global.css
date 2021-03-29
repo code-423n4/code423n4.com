@@ -322,6 +322,11 @@ p {
   border-radius: 100%;
 }
 
+.center {
+  text-align: center;
+  margin: 10px auto;
+}
+
 .button {
   border: none;
   border-radius: 5px;
@@ -359,7 +364,7 @@ footer span {
   font-family: "Roboto", sans-serif;
 }
 
-footoer span::after,
+footer span::after,
 footer a::after {
   color: #ffffff33;
   padding: 0 5px;
