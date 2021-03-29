@@ -24,7 +24,6 @@ const left = (total) => {
 
 const getTimeRemaining = (endtime) => {
   const total = Date.parse(endtime) - Date.parse(new Date());
-  // console.log("total", total);
   if (total > 0) {
     return {
       total: total,
