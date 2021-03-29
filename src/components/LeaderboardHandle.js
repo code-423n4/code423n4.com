@@ -13,8 +13,8 @@ const LeaderboardHandle = ({ handle, image, link, members }) => {
                 <Avatar
                   src={member.image}
                   name={handle}
-                  size="30px"
-                  round="30px"
+                  size="20px"
+                  round="20px"
                 />
               ) : (
                 ""
@@ -26,7 +26,7 @@ const LeaderboardHandle = ({ handle, image, link, members }) => {
       ) : (
         <>
           {image ? (
-            <Avatar src={image} name={handle} size="30px" round="30px" />
+            <Avatar src={image} name={handle} size="20px" round="20px" />
           ) : (
             ""
           )}

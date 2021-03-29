@@ -7,11 +7,12 @@ const LeaderboardTable = ({ results }) => {
   const columns = React.useMemo(
     () => [
       {
-        Header: "Leaderboard",
+        Header: "C4 Leaderboard",
         columns: [
           {
             Header: "Competitor",
             accessor: "handle",
+            defaultCanSort: false,
             Cell: (props) => (
               <LeaderboardHandle
                 handle={props.row.original.handle}
@@ -22,24 +23,29 @@ const LeaderboardTable = ({ results }) => {
             ),
           },
           {
-            Header: "Winnings",
+            Header: "USD",
             accessor: "awardTotal",
+            sortDescFirst: true,
           },
           {
-            Header: "Findings",
+            Header: "All",
             accessor: "allFindings",
+            sortDescFirst: true,
           },
           {
-            Header: "High Risk",
+            Header: "High",
             accessor: "highRisk",
+            sortDescFirst: true,
           },
           {
-            Header: "Medium Risk",
+            Header: "Med",
             accessor: "medRisk",
+            sortDescFirst: true,
           },
           {
-            Header: "Low Risk",
-            accessor: "lowRisk",
+            Header: "Gas",
+            accessor: "gasOptz",
+            sortDescFirst: true,
           },
         ],
       },
@@ -53,7 +59,21 @@ const LeaderboardTable = ({ results }) => {
     headerGroups,
     rows,
     prepareRow,
-  } = useTable({ columns, data: results }, useSortBy);
+  } = useTable(
+    {
+      columns,
+      data: results,
+      initialState: {
+        sortBy: [
+          {
+            id: "awardTotal",
+            desc: true,
+          },
+        ],
+      },
+    },
+    useSortBy
+  );
 
   return (
     <table {...getTableProps()}>
@@ -71,10 +91,10 @@ const LeaderboardTable = ({ results }) => {
                     : ""
                 }
               >
-                {column.render("Header")}
                 <span className="sort-direction">
                   {column.isSorted ? (column.isSortedDesc ? " ▼" : " ▲") : ""}
                 </span>
+                {column.render("Header")}
               </th>
             ))}
           </tr>
