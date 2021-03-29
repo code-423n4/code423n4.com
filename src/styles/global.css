@@ -1,5 +1,6 @@
 body {
   background-color: black;
+  margin: 40px;
 }
 
 body::after {
@@ -28,25 +29,24 @@ body::after {
 }
 
 header {
-  padding: 5px 20px;
+  padding: 5px 0px;
 }
 
 .logo img {
   width: 130px;
   display: inline-block;
-  margin: 5px 30px 5px 5px;
+  margin: 5px 30px 5px 0px;
   position: absolute;
-  left: 5px;
+  left: 0px;
 }
 
 .wrapper-nav {
   position: relative;
-  right: 5px;
 }
 
 header nav {
   position: absolute;
-  right: 5px;
+  right: 0px;
   text-align: right;
   display: block;
   vertical-align: top;
@@ -469,6 +469,7 @@ thead tr:first-of-type th {
   body {
     background-color: black;
     background-image: none;
+    margin: 0;
   }
 
   header {
@@ -516,12 +517,12 @@ thead tr:first-of-type th {
   }
 
   .hero {
-    margin: 60px 10px 0 10px;
+    margin: 40px 10px 0 10px;
   }
 
   .hero h1 {
-    font-size: 60px;
-    margin-bottom: 40px;
+    font-size: 40px;
+    margin-bottom: 20px;
   }
 
   .wrapper-main {
