@@ -1,26 +1,7 @@
 import React, { useEffect, useState } from "react";
+import { getTimeRemaining, getDates } from "../utils/time";
 
-const getTimeRemaining = (endtime) => {
-  const total = Date.parse(endtime) - Date.parse(new Date());
-  if (total > 0) {
-    return {
-      days: Math.floor(total / (1000 * 60 * 60 * 24)),
-      seconds: Math.floor((total / 1000) % 60),
-      minutes: Math.floor((total / 1000 / 60) % 60),
-      hours: Math.floor((total / (1000 * 60 * 60)) % 24),
-    };
-  } else {
-    return {
-      total: 0,
-      days: 0,
-      hours: 0,
-      minutes: 0,
-      seconds: 0,
-    };
-  }
-};
-
-const Countdown = ({ state, start, end }) => {
+const Countdown = ({ start, end }) => {
   const [timeLeft, setTimeLeft] = useState(getTimeRemaining());
 
   useEffect(() => {
@@ -30,32 +11,27 @@ const Countdown = ({ state, start, end }) => {
     return () => clearTimeout(timer);
   });
 
-  let t;
+  const t = getDates(start, end);
 
-  if (state === "soon") {
-    // calculate countdown to start
-    t = getTimeRemaining(start);
-  }
-  if (state === "active") {
-    // calculate countdown to end time
-    t = getTimeRemaining(end);
-  }
+  let tLeft;
 
-  const days = t.days;
-  const hh = ("0" + t.hours).slice(-2);
-  const mm = ("0" + t.minutes).slice(-2);
-  const ss = ("0" + t.seconds).slice(-2);
+  if (t.state === "soon") {
+    tLeft = getTimeRemaining(start);
+  }
+  if (t.state === "active") {
+    tLeft = getTimeRemaining(end);
+  }
 
   return (
     <div className="countdown">
       <h5 className="wrapper-days">
-        <span className="days">{days}</span> days +{" "}
+        <span className="days">{tLeft.days}</span> days +{" "}
       </h5>
       <h5 className="wrapper-time">
-        <span className="hours">{hh}</span>{" "}
-        <span className="minutes">{mm}</span>{" "}
-        <span className="seconds">{ss}</span>
-        {state === "soon" ? " until contest starts" : " left"}
+        <span className="hours">{tLeft.hh}</span>{" "}
+        <span className="minutes">{tLeft.mm}</span>{" "}
+        <span className="seconds">{tLeft.ss}</span>
+        {t.state === "soon" ? " until contest starts" : " until contests ends"}
       </h5>
     </div>
   );

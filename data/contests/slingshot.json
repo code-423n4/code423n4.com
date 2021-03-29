@@ -1,8 +1,9 @@
 {
   "details": "Slingshot is a decentralized trading platform.",
-  "start_time": "2021-03-08T18:15:14.615Z",
-  "end_time": "2021-03-10T18:15:14.625Z",
-  "title": "Slingshot Finance",
+  "start_time": "2021-02-17T00:00:00.000Z",
+  "end_time": "2021-02-22T23:59:00.000Z",
+  "title": "Slingshot Finance contest",
   "sponsor": "Slingshot Finance",
-  "contestid": 1
+  "contestid": 1,
+  "hide": true
 }

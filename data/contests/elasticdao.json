@@ -1,8 +1,9 @@
 {
   "details": "ElasticDAO is an experiment in fair governance.",
-  "start_time": "2021-03-11T08:00:00.000Z",
-  "end_time": "2021-03-12T17:27:39.625Z",
+  "start_time": "2021-02-25T00:00:00.000Z",
+  "end_time": "2021-03-03T23:59:00.000Z",
   "title": "ElasticDAO contest",
   "sponsor": "ElasticDAO",
-  "contestid": 2
+  "contestid": 2,
+  "hide": true
 }
