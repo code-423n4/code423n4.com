@@ -289,12 +289,16 @@ p {
 
 .countdown h5 {
   font-size: 20px;
-  display: inline-block;
-  margin: 0px 0 10px 0;
+  margin: 0 0 10px 0;
 }
 
-.countdown h5 span {
-  font-weight: 400;
+.countdown h5 .wrapper-time {
+  display: inline-block;
+  margin: 0;
+}
+
+.wrapper-time span {
+  font-weight: 600;
 }
 
 .hours::before {
@@ -394,8 +398,6 @@ table {
 }
 th {
   margin: 0;
-  padding: 10px;
-  font-size: 12px;
   min-width: 60px;
 }
 th[role="columnheader"] {
@@ -411,6 +413,11 @@ thead tr:nth-of-type(2) th:nth-of-type(1) {
 table td {
   margin: 0;
   border: 1px solid rgba(146, 129, 171, 0.2);
+  padding: 10px;
+}
+
+table td,
+table th {
   padding: 10px;
   font-size: 12px;
 }
@@ -450,6 +457,14 @@ thead tr:first-of-type th {
   margin-right: 10px;
 }
 
+@media (min-width: 850px) {
+  table td,
+  table th {
+    padding: 20px;
+    font-size: 15px;
+  }
+}
+
 @media (max-width: 600px) {
   body {
     background-color: black;
@@ -464,6 +479,10 @@ thead tr:first-of-type th {
     position: static;
     right: auto;
     text-align: center;
+    font-size: 12px;
+  }
+  .wrapper-nav {
+    right: 0;
   }
   th {
     min-width: 50px;

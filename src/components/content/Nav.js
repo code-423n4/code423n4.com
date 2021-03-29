@@ -7,7 +7,7 @@ const Nav = () => {
         <img src="/images/C4-banner.png" alt="Code 423n4" />
       </a>
       <nav>
-        <a href="https://github.com/code-423n4/code-contests">Compete</a>
+        <a href="/leaderboard">Leaderboard</a>
         <a href="https://github.com/code-423n4/code-contests/blob/main/SPONSOR_INFO.md">
           Sponsor
         </a>

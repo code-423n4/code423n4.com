@@ -24,14 +24,20 @@ const Countdown = ({ start, end }) => {
 
   return (
     <div className="countdown">
-      <h5 className="wrapper-days">
-        <span className="days">{tLeft.days}</span> days +{" "}
-      </h5>
-      <h5 className="wrapper-time">
-        <span className="hours">{tLeft.hh}</span>{" "}
-        <span className="minutes">{tLeft.mm}</span>{" "}
-        <span className="seconds">{tLeft.ss}</span>
-        {t.state === "soon" ? " until contest starts" : " until contests ends"}
+      <h5>
+        <span className="wrapper-time">
+          <span className="days">{tLeft.days}</span> days +{" "}
+        </span>
+        <span className="wrapper-time">
+          <span className="hours">{tLeft.hh}</span>{" "}
+          <span className="minutes">{tLeft.mm}</span>{" "}
+          <span className="seconds">{tLeft.ss}</span>
+        </span>
+        <span className="wrapper-time">
+          {t.state === "soon"
+            ? " until contest starts"
+            : " until contests ends"}
+        </span>
       </h5>
     </div>
   );
