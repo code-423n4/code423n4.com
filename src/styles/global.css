@@ -372,6 +372,7 @@ footer {
   margin-top: 100px;
   text-align: center;
   padding-bottom: 50px;
+  width: 100%;
 }
 
 footer a,
@@ -413,6 +414,7 @@ footer a:hover {
 footer span:last-of-type {
   display: block;
   margin-top: 10px;
+  word-break: break-all;
 }
 
 footer span:last-of-type::after {
