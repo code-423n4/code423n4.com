@@ -225,6 +225,17 @@ a {
 
 a:hover {
   color: #ff4000;
+}
+
+p a:hover, 
+li a:hover, 
+h1 a:hover, 
+h2 a:hover, 
+h3 a:hover, 
+h4 a:hover, 
+h5 a:hover,
+h6 a:hover,
+blockquote a:hover {
   border-bottom: 1px solid #ff4000;
 }
 
