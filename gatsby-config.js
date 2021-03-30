@@ -12,7 +12,6 @@ module.exports = {
       options: {
         path: `${__dirname}/data/orgs`,
         name: `orgs`,
-        ignore: ["README.*"],
       },
     },
     {
@@ -20,7 +19,6 @@ module.exports = {
       options: {
         path: `${__dirname}/data/handles`,
         name: `handles`,
-        ignore: ["README.*"],
       },
     },
     {
@@ -28,7 +26,6 @@ module.exports = {
       options: {
         path: `${__dirname}/data/contests`,
         name: `contests`,
-        ignore: ["README.*"],
       },
     },
     {
@@ -36,15 +33,13 @@ module.exports = {
       options: {
         path: `${__dirname}/data/findings/findings.json`,
         name: `findings`,
-        ignore: ["README.*"],
       },
     },
     {
       resolve: "gatsby-source-filesystem",
       options: {
         path: `${__dirname}/content`,
-        name: "pages",
-        ignore: ["README.*"],
+        name: `pages`,
       },
     },
     {
@@ -65,13 +60,13 @@ module.exports = {
     },
     `gatsby-transformer-sharp`,
     `gatsby-plugin-sharp`,
-    {
-      resolve: `gatsby-plugin-netlify-cms`,
-      options: {
-        manualInit: true,
-        modulePath: `${__dirname}/src/cms/cms.js`,
-        htmlTitle: "code423n4.com admin",
-      },
-    },
+    // {
+    //   resolve: `gatsby-plugin-netlify-cms`,
+    //   options: {
+    //     manualInit: true,
+    //     modulePath: `${__dirname}/src/cms/cms.js`,
+    //     htmlTitle: "code423n4.com admin",
+    //   },
+    // },
   ],
 };

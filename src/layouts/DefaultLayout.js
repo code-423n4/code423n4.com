@@ -3,7 +3,7 @@ import Helmet from "react-helmet";
 import Footer from "../components/content/Footer";
 import Nav from "../components/content/Nav";
 
-export default (props) => {
+const DefaultLayout = (props) => {
   const {
     pageDescription,
     pageTitle,
@@ -65,3 +65,5 @@ export default (props) => {
     </>
   );
 };
+
+export default DefaultLayout;
