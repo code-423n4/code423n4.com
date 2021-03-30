@@ -1,25 +1,40 @@
 import React from "react";
 import Countdown from "./Countdown";
+import { getDates } from "../utils/time";
 
 const Contest = ({ contest }) => {
-  const { sponsor, details, end_time } = contest;
+  const {
+    sponsor,
+    title,
+    amount,
+    details,
+    start_time,
+    end_time,
+    wardens,
+    judges,
+  } = contest;
+
+  const t = getDates(start_time, end_time);
 
   return (
-    <div className="wrapper-contest">
+    <div className={"wrapper-contest " + t.state}>
       <div className="wrapper-sponsor">
-        <a className="sponsor-logo" href={sponsor.link}>
+        <a href={sponsor.link}>
           <img src={sponsor.image} alt={sponsor.name} />
         </a>
       </div>
       <div className="wrapper-contest-content">
         <h4>
-          <a className="sponsor-name" href={sponsor.link}>
-            {sponsor.name}
-          </a>{" "}
-          contest
+          {amount ? amount : ""} {title}
         </h4>
-        <Countdown deadline={end_time} />
         <p>{details}</p>
+        {t.state === "soon" || t.state === "active" ? (
+          <Countdown state={t.state} start={start_time} end={end_time} />
+        ) : (
+          <p>
+            Contest ran {t.startDay}—{t.endDay}
+          </p>
+        )}
       </div>
     </div>
   );

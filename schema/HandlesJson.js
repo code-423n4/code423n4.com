@@ -1,10 +1,12 @@
-const PeopleJson = `
-type PeopleJson implements Node {
+const HandlesJson = `
+type HandlesJson implements Node {
   name:           String
+  handle:         String
   link:           String
   image:          String
   contests:       [ ContestsJson ] @link(by: "id", from: "contests")
   findings:       [ FindingsJson ] @link(by: "id", from: "findings")
-}`
+  members:        [ HandlesJson ] @link(by: "handle", from: "members")
+}`;
 
-export default PeopleJson
+export default HandlesJson;

@@ -1,9 +1,11 @@
 const FindingsJson = `
 type FindingsJson implements Node {
-  contest:       ContestJson @link(by: "id", from: "contest")
-  recipient:     [ PeopleJson ] @link(by: "id", from: "people")
-  type:          String
-  award:         Int
-}`
+  contest:       ContestsJson @link(by: "contestid", from: "contest")
+  handle:        HandlesJson @link(by: "handle", from: "handle")
+  risk:          String
+  split:         Int
+  award:         Float
+  awardUSD:      Float
+}`;
 
-export default FindingsJson
+export default FindingsJson;
