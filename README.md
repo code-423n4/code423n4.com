@@ -1,4 +1,4 @@
-# C4 website (work in progress)
+# C4 website
 
 - Built with [Gatsby](https://www.gatsbyjs.com/docs/)
 - Hosted on Netlify
