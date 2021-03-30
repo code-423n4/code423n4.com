@@ -2,7 +2,7 @@
 title: "Submission Policy"
 ---
 
-# :red_circle: C4 Submission Policy
+# Submission Policy
 
 - [1. Overview](#1-overview)
 - [2. Code Contest Guidelines](#2-code-contest-guidelines)
@@ -10,21 +10,22 @@ title: "Submission Policy"
 - [4. Unauthorized Test Methods](#4-unauthorized-test-methods)
 - [5. Questions](#5-questions)
 - [6. Authorization](#6-authorization) 
+
 # 1. :fast_forward: Overview
 Code 423nA is an open organization committed to ensuring the security of decentralized protocols and protecting the information of our sponsors and participants. This policy is intended to provide C4 Wardens (security researchers) clear guidelines for participating in code contests (bug bounties) while conducting vulnerability discovery activities. 
   
 The following policy conveys C4's preferences in how to submit discovered vulnerabilities to the organization and describes what systems and types of research are covered under this policy, how to share vulnerability reports, and the length of time we expect Wardens to wait prior to publicly disclosing vulnerabilities.  
   
-When participating in C4 code contests, please contact an organizer in the [C4 Discord](https://discord.gg/EY5dvm3evD) and formally submit any bug bounties to submissions@code423n4.com using the official [submission template](SUBMISSION_TEMPLATE.md). 
+When participating in C4 code contests, please contact an organizer in the [C4 Discord](https://discord.gg/EY5dvm3evD) and formally submit any bug bounties to submissions@code423n4.com using the official [submission template](/submission-template). 
 
-> :shipit: Reports can be submitted at any point prior to stop time for a given contest. The details for each code contest can be found in the [contests](contests/README.md) directory.
+> :shipit: Reports can be submitted at any point prior to stop time for a given contest. The details for each code contest can be found in the repo for that contest.
 
 # 2. :woman_teacher: Code Contest Guidelines
 Under this policy, code contests covers activities in which you:  
 
 - Register as a C4 Warden within an individual capacity or as part of a team.  
   
-- Submit your bug report within a single document or email using the provided [submission template](SUBMISSION_TEMPLATE.md). 
+- Submit your bug report within a single document or email using the provided [submission template](/submission-template). 
   
 - Make every effort to avoid privacy violations, degradation of user experience, disruption to production systems, and destruction or manipulation of data, especially in regard to funds.
   
@@ -39,7 +40,7 @@ In the event that you encounter a critical vulnerability that the sponsor projec
 > Publicly disclosing any information prior to the end of a code competition is grounds for immediate forfeit of award and disqualification from any future C4 events and activities.
 
 # 3. :clipboard: Submitting A Report
-C4 accepts vulnerability reports via submissions@code423n4.com. Reports should be formatted based on the [provided template](SUBMISSION_TEMPLATE.md). Reports may be submitted anonymously. If you share contact information, we will acknowledge receipt of your report prior to the end of the code contest or within 3 business days, whichever comes first.
+C4 accepts vulnerability reports via submissions@code423n4.com. Reports should be formatted based on the [provided template](/submission-template). Reports may be submitted anonymously. If you share contact information, we will acknowledge receipt of your report prior to the end of the code contest or within 3 business days, whichever comes first.
 
 We do not support PGP-encrypted emails. For particularly sensitive information, please place your submission through the [C4 Discord](https://discord.gg/EY5dvm3evD) by DM'ing a C4 organizer. 
 
@@ -49,7 +50,7 @@ In order to help us triage and prioritize submissions, please ensure that your r
 
 - Consolidate multiple bug findings within a single document.
 
-- Are submitted through email to submissions@code423n4.com and conform to the [provided template](SUBMISSION_TEMPLATE.md).
+- Are submitted through email to submissions@code423n4.com and conform to the [provided template](/submission-template).
 
 - Describe the location the vulnerability was discovered and the potential impact of exploitation.
 

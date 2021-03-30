@@ -19,6 +19,7 @@
     "gatsby-plugin-react-helmet": "^4.0.0",
     "gatsby-plugin-sharp": "^3.0.1",
     "gatsby-remark-copy-linked-files": "^3.0.0",
+    "gatsby-remark-emojis": "^0.4.3",
     "gatsby-remark-smartypants": "^3.0.0",
     "gatsby-source-filesystem": "^3.0.0",
     "gatsby-transformer-json": "^3.0.0",
