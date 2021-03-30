@@ -9,10 +9,8 @@ const Nav = () => {
       </Link>
       <nav>
         <Link to="/leaderboard">Leaderboard</Link>
-        <a href="https://github.com/code-423n4/code-contests/blob/main/SPONSOR_INFO.md">
-          Sponsor
-        </a>
-        <a href="https://discord.gg/EY5dvm3evD">Join</a>
+        <Link to="/compete">Compete</Link>
+        <Link to="/sponsor">Sponsor</Link>
       </nav>
     </div>
   );
