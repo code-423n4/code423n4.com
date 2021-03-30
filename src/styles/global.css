@@ -410,6 +410,15 @@ footer a:hover {
   border-bottom: 0px;
 }
 
+footer span:last-of-type {
+  display: block;
+  margin-top: 10px;
+}
+
+footer span:last-of-type::after {
+  content: "";
+}
+
 table {
   color: #d7c7ef;
   font-family: sans-serif;
