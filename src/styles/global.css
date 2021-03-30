@@ -104,7 +104,6 @@ h2 {
   color: #fff;
   font-size: 20px;
   font-family: "Roboto", sans-serif;
-  text-align: center;
 }
 
 h4 {
@@ -128,23 +127,62 @@ h5 {
   margin: 0 0 20px 0;
 }
 
-article h2 {
-  margin-top: 60px;
-  color: #fff;
-  border-bottom: 1px solid #222;
-  padding-bottom: 10px;
-  text-transform: uppercase;
-  font: 1.3rem "Space Mono", monospace;
+article {
+  max-width: 800px;
+  line-height: 1.3;
+  margin: 100px auto;
 }
 
-article h2::before {
-  content: "> ";
+article p, 
+article li,
+article blockquote {
+  font-family: "Roboto", sans-serif;
+  line-height: 1.5;
+  font-size: 18px;
+  color: rgba(255,255,255,.7);
+}
+
+article li {
+  margin-bottom: 10px;
+}
+
+article h1 {
+  font-size: 40px;
+}
+
+article h2 {
+  
 }
 
 article h3 {
-  margin-top: 20px;
+  
+}
+
+article h4 {
+  
+}
+
+article h5 {
+  
+}
+
+article h2 {
+  margin-top: 60px;
   color: #fff;
-  font: 1.3rem "Space Mono", monospace;
+  border-bottom: 1px solid #443658;
+  padding-bottom: 10px;
+  text-transform: uppercase;
+  font: 1.4rem "Space Mono", monospace;
+}
+
+/* article h2::before {
+  content: "> ";
+} */
+
+article h3 {
+  margin-top: 40px;
+  color: #fff;
+  font: 1.2rem "Space Mono", monospace;
 }
 
 p,
@@ -397,7 +435,8 @@ thead tr:nth-of-type(2) th:nth-of-type(1) {
 
 table td {
   margin: 0;
-  border: 1px solid rgba(146, 129, 171, 0.2);
+  /* border: 1px solid rgba(146, 129, 171, 0.2); */
+  border: 1px solid #443658;
   padding: 10px;
 }
 
@@ -436,7 +475,8 @@ thead tr:first-of-type th {
   display: block;
   margin: 0 0 5px 30px;
   padding-bottom: 5px;
-  border-bottom: 1px solid rgba(146, 129, 171, 0.2);
+  /* border-bottom: 1px solid rgba(146, 129, 171, 0.2); */
+  border-bottom: 1px solid #443658;
 }
 .sb-avatar {
   margin-right: 10px;

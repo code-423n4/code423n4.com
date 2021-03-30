@@ -31,7 +31,7 @@ title: "Judging Criteria"
 # 1. Submission Review Process
 C4 strives to ensure a deliberate and transparent process for reviewing and judging submissions. 
 
-At the end of a given contest period, all reports will be reviewed and categorized based on criteria. Pending sponsor review, final reports will be added to the appropriate [contests](contests/README.md) directory within this repository. Results will then be shared on the C4 Discord and winners will be announced on the [C4 Twitter](https://twitter.com/code423n4).
+At the end of a given contest period, all reports will be reviewed and categorized based on criteria. Pending sponsor review, final reports will be shared publicly. Results will then be shared on the C4 Discord and winners will be announced on the [C4 Twitter](https://twitter.com/code423n4).
 
 > Reports are also judged based on grammar, conciseness, and formatting.
 

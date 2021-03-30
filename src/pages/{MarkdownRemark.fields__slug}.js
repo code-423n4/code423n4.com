@@ -7,10 +7,11 @@ function PageTemplate({ data }) {
   console.log(data);
   return (
     <DefaultLayout title={page.frontmatter.title} bodyClass="page">
-      <article>
-        <h1>{page.frontmatter.title}</h1>
-        <div dangerouslySetInnerHTML={{ __html: page.html }} />
-      </article>
+      <div className="wrapper-main">
+        <article>
+          <div dangerouslySetInnerHTML={{ __html: page.html }} />
+        </article>
+      </div>
     </DefaultLayout>
   );
 }
