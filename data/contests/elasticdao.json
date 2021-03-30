@@ -1,11 +1,9 @@
 {
-  "sponsor": {
-    "image": "",
-    "name": "Elastic DAO",
-    "link": "https://twitter.com/elasticdao"
-  },
-  "details": "Elastic DAO is a thing.",
-  "active": true,
-  "start_time": "March 1 2021 0:0:0 UTC",
-  "end_time": "March 8 2021 23:59:59 UTC"
+  "details": "ElasticDAO is an experiment in fair governance.",
+  "start_time": "2021-02-25T00:00:00.000Z",
+  "end_time": "2021-03-03T23:59:00.000Z",
+  "title": "ElasticDAO contest",
+  "sponsor": "ElasticDAO",
+  "contestid": 2,
+  "hide": true
 }
