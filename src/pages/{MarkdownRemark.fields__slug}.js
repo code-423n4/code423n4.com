@@ -7,12 +7,12 @@ function PageTemplate({ data }) {
   console.log(data);
   return (
     <DefaultLayout title={page.frontmatter.title} bodyClass="page">
-      <div>
+      <article>
         <h1>{page.frontmatter.title}</h1>
         <div dangerouslySetInnerHTML={{ __html: page.html }} />
-      </div>
+      </article>
     </DefaultLayout>
-  )
+  );
 }
 
 export const query = graphql`
@@ -24,6 +24,6 @@ export const query = graphql`
       html
     }
   }
-`
+`;
 
 export default PageTemplate;
