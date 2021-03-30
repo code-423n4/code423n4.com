@@ -1,9 +1,9 @@
 # C4 website (work in progress)
 
 - Built with [Gatsby](https://www.gatsbyjs.com/docs/)
-- 🔜 _Hosted on Netlify_
-- 🔜 _Auto-deploys on merge to `main`_
-- 🔜 _Site content editable via GitHub or Netlify CMS_
+- Hosted on Netlify
+- Auto-deploys on merge to `main`
+- Site content and data editable on GitHub
 
 ## Editing content
 
@@ -14,12 +14,14 @@
 
 **Site data** is found in 📁 **data** subfolders:
 
-- 📁 **people**
-- 📁 **orgs**
 - 📁 **contests**
 - 📁 **findings**
+- 📁 **handles**
+- 📁 **orgs**
 
-Because there are data relationships to be maintained, it's best to edit data using Netlify CMS.
+Note that `handles` allows for us to have team data as well as individual people.
+
+Note there are data relationships to be maintained.
 
 ## Develop
 
@@ -30,6 +32,4 @@ npm start
 
 ## Design
 
-CSS is in `src/styles` for now.
-
-We may break it up into components alongside React modules.
+CSS is in `src/styles`
