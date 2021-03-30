@@ -41,7 +41,7 @@ Bugs are divided into three risk categories:
 For more details regarding scoring, please refer to the [judging criteria](/judging-criteria).
 
 ## Rewards  
-Wardens are awarded shares for bugs discovered and those shares give the owner a pro rata piece of the pot.  
+Wardens are awarded shares for bugs discovered and those shares give the owner a pro rata piece of the pot after the 20% org fee covering judging, reporting, and organizing.
   
 **Low Risk Bounty Shares**    
 `1 * (0.9 ^ discovery count) / discovery count`  
