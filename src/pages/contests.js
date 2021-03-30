@@ -22,7 +22,7 @@ export default function Contests({ data }) {
 
 export const query = graphql`
   query {
-    contests: allContestsJson(sort: { fields: end_time, order: DESC }) {
+    contests: allContestsJson(sort: { fields: end_time, order: ASC }) {
       edges {
         node {
           id
