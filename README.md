@@ -1,3 +1,35 @@
+# Register as a warden
+
+Registering as a warden allows you to be listed on our [leaderboard](https://code423n4.com/leaderboard). It's possible to do this step asynchronously from submitting a bug for a contest.
+
+**Fork this repo and create a PR:**
+
+1. Add a JSON file for yourself at [data/handles](https://github.com/code-423n4/code423n4.com/tree/main/data/handles):
+
+```json
+{
+  "handle": "maurelian",
+  "image": "/images/people/maurelian.jpg",
+  "link": "https://twitter.com/maurelian_"
+}
+```
+
+2. If you're registering a team, add the individual handles of the team members like so:
+
+```json
+{
+  "image": "",
+  "handle": "pocotiempo",
+  "members": ["maurelian", "0xRajeev", "mariano"]
+}
+```
+
+The handle your issues are submitted under will determine where awards will go, so it's possible to be part of a team on some contests and _also_ compete as an individual on other contests.
+
+3. Add the file for your image at [static/images/people](https://github.com/code-423n4/code423n4.com/tree/main/static/images/people)
+
+---
+
 # C4 website
 
 - Built with [Gatsby](https://www.gatsbyjs.com/docs/)
