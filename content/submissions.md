@@ -11,14 +11,14 @@ title: "Submission Policy"
 - [5. Questions](#5-questions)
 - [6. Authorization](#6-authorization) 
 
-# 1. :fast_forward: Overview
+# 1. Overview
 Code 423nA is an open organization committed to ensuring the security of decentralized protocols and protecting the information of our sponsors and participants. This policy is intended to provide C4 Wardens (security researchers) clear guidelines for participating in code contests (bug bounties) while conducting vulnerability discovery activities. 
   
 The following policy conveys C4's preferences in how to submit discovered vulnerabilities to the organization and describes what systems and types of research are covered under this policy, how to share vulnerability reports, and the length of time we expect Wardens to wait prior to publicly disclosing vulnerabilities.  
   
-When participating in C4 code contests, please contact an organizer in the [C4 Discord](https://discord.gg/EY5dvm3evD) and formally submit any bug bounties to submissions@code423n4.com using the submission form provided in Discord. 
+When participating in C4 code contests, please contact an organizer in the [C4 Discord](https://discord.gg/EY5dvm3evD) and formally submit any bug bounties using the submission form provided in Discord. 
 
-> :shipit: Reports can be submitted at any point prior to stop time for a given contest. The details for each code contest can be found in the [contests](contests/README.md) directory.
+> Reports can be submitted at any point prior to stop time for a given contest. The details for each code contest can be found in the contest repo.
 
 # 2. :woman_teacher: Code Contest Guidelines
 Under this policy, code contests covers activities in which you:  
@@ -39,7 +39,7 @@ In the event that you encounter a critical vulnerability that the sponsor projec
 
 > Publicly disclosing any information prior to the end of a code competition is grounds for immediate forfeit of award and disqualification from any future C4 events and activities.
 
-# 3. :clipboard: Submitting A Report
+# 3. Submitting A Report
 C4 accepts vulnerability reports via the contest submission form.
 
 We do not support PGP-encrypted emails. For particularly sensitive information, please place your submission through the [C4 Discord](https://discord.gg/EY5dvm3evD) by DM'ing a C4 organizer. 
@@ -58,7 +58,7 @@ In order to help us triage and prioritize submissions, please ensure that your r
 
 - Are written in English, if possible.
 
-# 4. :no_good: Unauthorized Test Methods
+# 4. Unauthorized Test Methods
 The following methods are not authorized means of testing within C4 code contests:
 
 - Testing exploits on mainnet. 
@@ -67,10 +67,10 @@ The following methods are not authorized means of testing within C4 code contest
 
 - Physical testing (e.g. office access, open doors, tailgating), social engineering (e.g. phishing, vishing), or any other non-technical vulnerability testing.
 
-# 5. :question: Questions
+# 5. Questions
 Questions regarding this policy can be addressed in the `#questions` channel on the [C4 Discord](https://discord.gg/Dr6p5KDCdG). We also invite you to contact us with suggestions for improving this policy.
 
-# 6. :ok_hand: Authorization
+# 6. Authorization
 If you make a good faith effort to comply with this policy during your security research, C4, its affiliates, and sponsors will consider your research to be authorized.  
 
 The C4 community will work with you to understand and resolve any issues quickly, and C4, its affiliates, and sponsors will not recommend or pursue legal action related to your research. 
