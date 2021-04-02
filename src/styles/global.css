@@ -133,13 +133,13 @@ article {
   margin: 100px auto;
 }
 
-article p, 
+article p,
 article li,
 article blockquote {
   font-family: "Roboto", sans-serif;
   line-height: 1.5;
   font-size: 18px;
-  color: rgba(255,255,255,.7);
+  color: rgba(255, 255, 255, 0.7);
 }
 
 article li {
@@ -151,19 +151,15 @@ article h1 {
 }
 
 article h2 {
-  
 }
 
 article h3 {
-  
 }
 
 article h4 {
-  
 }
 
 article h5 {
-  
 }
 
 article h2 {
@@ -227,12 +223,12 @@ a:hover {
   color: #ff4000;
 }
 
-p a:hover, 
-li a:hover, 
-h1 a:hover, 
-h2 a:hover, 
-h3 a:hover, 
-h4 a:hover, 
+p a:hover,
+li a:hover,
+h1 a:hover,
+h2 a:hover,
+h3 a:hover,
+h4 a:hover,
 h5 a:hover,
 h6 a:hover,
 blockquote a:hover {
@@ -502,6 +498,9 @@ thead tr:first-of-type th {
 }
 .sb-avatar {
   margin-right: 10px;
+}
+pre {
+  overflow-x: scroll;
 }
 
 @media (min-width: 850px) {
