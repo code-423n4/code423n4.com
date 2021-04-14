@@ -31,7 +31,7 @@ Since the goal of each participant is to find any vulnerabilities rather than al
 **Opportunity**  
 *Experienced researchers* can showcase their talent in C4 by focusing on their area of expertise and identifying unique exploits for higher rewards. Because everyone who finds a vulnerabilities is compensated from the pool, C4 also enables *beginners* to get paid while they learn and build a reputation within the community.
 
-<h2 name="how-it-works">How does this work?</h2>
+<h2 id="how-it-works">How does this work?</h2>
 
 **How we collaborate with sponsors**  
 If you are interested in sponsoring a contest, we will create a private repo for you to share your current smart contracts and answer a few questions about the scope you'd like wardens to focus on. One of our team members will assess your contracts for size and complexity and suggest a minimum pot size.
