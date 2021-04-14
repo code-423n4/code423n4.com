@@ -20,7 +20,7 @@ When participating in C4 code contests, please contact an organizer in the [C4 D
 
 > Reports can be submitted at any point prior to stop time for a given contest. The details for each code contest can be found in the contest repo.
 
-# 2. :woman_teacher: Code Contest Guidelines
+# 2. Code Contest Guidelines
 Under this policy, code contests covers activities in which you:  
 
 - Register as a C4 Warden within an individual capacity or as part of a team.  
