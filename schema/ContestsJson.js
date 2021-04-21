@@ -5,6 +5,7 @@ type ContestsJson implements Node {
   title:          String
   amount:         String
   details:        String
+  repo:           String
   start_time:     Date
   end_time:       Date  
   wardens:        [ HandlesJson ] @link(by: "name", from: "people")

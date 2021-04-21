@@ -373,6 +373,7 @@ p {
 .cta-button:hover {
   background-color: #ff4000;
   border-bottom: 0px;
+  color: #fff;
 }
 
 footer {
@@ -501,6 +502,9 @@ thead tr:first-of-type th {
 }
 pre {
   overflow-x: scroll;
+}
+
+.contest-repo {
 }
 
 @media (min-width: 850px) {
