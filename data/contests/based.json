@@ -5,5 +5,6 @@
   "title": "Based Loans contest",
   "sponsor": "Based Loans",
   "contestid": 6,
-  "amount": "$30k USDC"
+  "amount": "$30k USDC",
+  "repo": "https://github.com/code-423n4/basedloans"
 }

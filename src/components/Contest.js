@@ -10,6 +10,7 @@ const Contest = ({ contest }) => {
     details,
     start_time,
     end_time,
+    repo,
     wardens,
     judges,
   } = contest;
@@ -34,6 +35,13 @@ const Contest = ({ contest }) => {
           <p>
             Contest ran {t.startDay}—{t.endDay}
           </p>
+        )}
+        {t.state === "active" && repo ? (
+          <a href={repo} className="contest-repo button cta-button">
+            Contest details
+          </a>
+        ) : (
+          ""
         )}
       </div>
     </div>

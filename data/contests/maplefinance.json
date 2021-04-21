@@ -5,5 +5,6 @@
   "title": "Maple Finance contest",
   "sponsor": "Maple Finance",
   "contestid": 4,
-  "amount": "$100,000 USDC"
+  "amount": "$100,000 USDC",
+  "repo": "https://github.com/code-423n4/maple"
 }
