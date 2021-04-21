@@ -364,6 +364,11 @@ p {
   text-decoration: none;
 }
 
+.button-small {
+  font-size: 1em;
+  padding: 0.5em 1em;
+}
+
 .cta-button {
   background-color: #8000ff;
   color: #fff;

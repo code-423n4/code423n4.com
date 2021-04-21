@@ -37,7 +37,10 @@ const Contest = ({ contest }) => {
           </p>
         )}
         {t.state === "active" && repo ? (
-          <a href={repo} className="contest-repo button cta-button">
+          <a
+            href={repo}
+            className="contest-repo button button-small cta-button"
+          >
             Contest details
           </a>
         ) : (
