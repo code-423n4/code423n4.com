@@ -2,31 +2,7 @@
 title: "Judging Criteria"
 ---
 
-# C4 Code Contest Judging Criteria
-
-- [1. Submission Review Process](#1-submission-review-process)
-- [2. Duplicate Submissions](#2-duplicate-submissions)
-- [3. Scoring](#3-scoring)
-- [4. High-Level Considerations](#4-high-level-considerations)
-  - [4.1. Malicious Input Handling](#41-malicious-input-handling)
-  - [4.2. Arithmetic](#42-arithmetic)
-  - [4.3. Gas Limitations](#43-gas-limitations)
-- [5. Estimating Risk](#5-estimating-risk)
-  - [5.1. Risk Categories](#51-risk-categories)
-- [6. Estimating Likelihood](#6-estimating-likelihood)
-  - [6.1. Skill Level](#61-skill-level)
-  - [6.2. Motive](#62-motive)
-  - [6.3. Opportunity](#63-opportunity)
-- [7. Estimating Vulnerability](#7-estimating-vulnerability)
-  - [7.1. Ease of Discovery](#71-ease-of-discovery)
-  - [7.2. Ease of Exploit](#72-ease-of-exploit)
-  - [7.3. Awareness](#73-awareness)
-- [8. Estimating Impact](#8-estimating-impact)
-  - [8.1. Loss of Access](#81-loss-of-access)
-  - [8.2. Loss of Funds](#82-loss-of-funds)
-  - [8.3. Loss of Availability](#83-loss-of-availability)
-- [9. Credits](#9-credits)
-
+# Contest Judging Criteria
 
 # 1. Submission Review Process
 C4 strives to ensure a deliberate and transparent process for reviewing and judging submissions. 
