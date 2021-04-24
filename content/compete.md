@@ -16,18 +16,9 @@ Stay up to date with new contests by [following C4 on Twitter](https://twitter.c
 
 There are three actors in Code 423n4:
 
-**WARDENS**  
-Wardens hunt for bugs in the smart contracts of decentralized protocols.  
-  
-To participate in a code contest as a C4 Warden, join the [C4 Discord](https://discord.gg/EY5dvm3evD) to register or join a team. 
-
-**SPONSORS**  
-[Sponsors](/sponsor) create bounty pools to attract wardens to their contests.
-  
-**JUDGES**  
-Judges are responsible for allocating bounty pools to wardens based on their performance. 
-
-To participate in C4 as a Judge, please contact a C4 Organizer in the Discord.
+- **Wardens** hunt for bugs in the smart contracts of decentralized protocols. To participate in a code contest as a C4 Warden, join the [C4 Discord](https://discord.gg/EY5dvm3evD) to register or join a team. 
+- **[Sponsors](/sponsor)** create bounty pools to attract wardens to their contests.
+- **Judges** are responsible for allocating bounty pools to wardens based on their performance. To participate in C4 as a Judge, please contact a C4 Organizer in the Discord.
 
 ## Scoring
 The scoring system has two primary goals: rewarding contestants for finding unique bugs and making the contest resistant to [sybil attacks](https://en.wikipedia.org/wiki/Sybil_attack). A secondary goal of the scoring system is to incentivize contestants to form squads and encourage coordination.
