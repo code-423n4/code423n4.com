@@ -10,36 +10,43 @@ module.exports = {
     {
       resolve: `gatsby-source-filesystem`,
       options: {
-        path: `${__dirname}/data/orgs`,
+        path: `${__dirname}/_data/orgs`,
         name: `orgs`,
       },
     },
     {
       resolve: `gatsby-source-filesystem`,
       options: {
-        path: `${__dirname}/data/handles`,
+        path: `${__dirname}/_data/handles`,
         name: `handles`,
       },
     },
     {
       resolve: `gatsby-source-filesystem`,
       options: {
-        path: `${__dirname}/data/contests`,
+        path: `${__dirname}/_data/contests`,
         name: `contests`,
       },
     },
     {
       resolve: `gatsby-source-filesystem`,
       options: {
-        path: `${__dirname}/data/findings/findings.json`,
+        path: `${__dirname}/_data/findings/findings.json`,
         name: `findings`,
       },
     },
     {
       resolve: "gatsby-source-filesystem",
       options: {
-        path: `${__dirname}/content`,
+        path: `${__dirname}/_content`,
         name: `pages`,
+      },
+    },
+    {
+      resolve: "gatsby-source-filesystem",
+      options: {
+        path: `${__dirname}/_reports`,
+        name: `reports`,
       },
     },
     {
@@ -49,29 +56,29 @@ module.exports = {
           `gatsby-remark-copy-linked-files`,
           `gatsby-remark-smartypants`,
           {
-            resolve: 'gatsby-remark-emojis',
+            resolve: "gatsby-remark-emojis",
             options: {
               // Deactivate the plugin globally (default: true)
-              active : true,
+              active: true,
               // Add a custom css class
-              class  : 'emoji-icon',
+              class: "emoji-icon",
               // In order to avoid pattern mismatch you can specify
               // an escape character which will be prepended to the
               // actual pattern (e.g. `#:poop:`).
               // escapeCharacter : '\\', // (default: '')
               // Select the size (available size: 16, 24, 32, 64)
-              size   : 64,
+              size: 64,
               // Add custom styles
-              styles : {
-                display      : 'inline',
-                margin       : '0',
-                'margin-top' : '1px',
-                position     : 'relative',
-                top          : '5px',
-                width        : '25px'
-              }
-            }
-          }
+              styles: {
+                display: "inline",
+                margin: "0",
+                "margin-top": "1px",
+                position: "relative",
+                top: "5px",
+                width: "25px",
+              },
+            },
+          },
         ],
       },
     },
@@ -79,7 +86,7 @@ module.exports = {
     {
       resolve: `gatsby-source-filesystem`,
       options: {
-        path: `${__dirname}/data/`,
+        path: `${__dirname}/_data/`,
       },
     },
     `gatsby-transformer-sharp`,
