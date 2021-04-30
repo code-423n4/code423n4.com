@@ -1,0 +1,10 @@
+{
+  "details": "A community-owned protocol for NFT index funds",
+  "start_time": "2021-05-05T00:00:00.000Z",
+  "end_time": "2021-05-11T23:59:00.000Z",
+  "title": "NFTX contest",
+  "sponsor": "NFTX",
+  "contestid": 8,
+  "amount": "$66,000 USDC",
+  "repo": "https://github.com/code-423n4/2021-05-nftx"
+}
