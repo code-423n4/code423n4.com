@@ -91,6 +91,16 @@ module.exports = {
     },
     `gatsby-transformer-sharp`,
     `gatsby-plugin-sharp`,
+    {
+      resolve: `gatsby-plugin-mdx`,
+      options: {
+        extensions: [`.mdx`],
+        defaultLayouts: {
+          reports: require.resolve("./src/layouts/ReportLayout.js"),
+          default: require.resolve("./src/layouts/DefaultLayout.js"),
+        },
+      },
+    },
     // {
     //   resolve: `gatsby-plugin-netlify-cms`,
     //   options: {
