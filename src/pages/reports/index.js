@@ -8,7 +8,7 @@ export default function ReportIndex({ data }) {
   console.log("reports", data);
 
   return (
-    <DefaultLayout title="Code 423n4" bodyClass="landing">
+    <DefaultLayout pageTitle="Security Audit Reports" bodyClass="report-page">
       <div className="wrapper-main">
         <section>
           {reports ? (

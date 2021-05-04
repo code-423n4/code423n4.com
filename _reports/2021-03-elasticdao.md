@@ -8,8 +8,4 @@ contest: 2
 altUrl: "https://ipfs.io/ipfs/QmU7JQUCuciGJ9EVApWnPvBCy32eYQnREDFGsxoyDR6w3j?filename=Code%20423n4%20ElasticDAO%20Findings%20and%20Analysis.pdf"
 ---
 
-![ElasticDAO](/images/orgs/elasticdao.png)
-
-# ElasticDAO Contest<br/>Findings & Analysis Report
-
 [PDF report](https://ipfs.io/ipfs/QmU7JQUCuciGJ9EVApWnPvBCy32eYQnREDFGsxoyDR6w3j?filename=Code%20423n4%20ElasticDAO%20Findings%20and%20Analysis.pdf)
