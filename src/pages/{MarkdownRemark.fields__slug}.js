@@ -4,7 +4,7 @@ import DefaultLayout from "../layouts/DefaultLayout";
 
 function PageTemplate({ data }) {
   const page = data.markdownRemark;
-  
+
   return (
     <DefaultLayout title={page.frontmatter.title} bodyClass="page">
       <div className="wrapper-main">

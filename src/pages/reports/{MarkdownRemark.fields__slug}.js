@@ -1,18 +1,37 @@
 import * as React from "react";
 import { graphql } from "gatsby";
-import DefaultLayout from "../../layouts/ReportLayout";
+import ReportLayout from "../../layouts/ReportLayout";
 
-function PageTemplate({ data }) {
+function ReportPageTemplate({ data }) {
   const page = data.markdownRemark;
 
   return (
-    <DefaultLayout title={page.frontmatter.title} bodyClass="page">
+    <ReportLayout
+      preview=""
+      pageDescription=""
+      pageTitle={page.frontmatter.title}
+      bodyClass="report-page page"
+    >
       <div className="wrapper-main">
         <article>
-          <div dangerouslySetInnerHTML={{ __html: page.html }} />
+          <img
+            className="report-sponsor-logo"
+            src={page.frontmatter.sponsor.image}
+            alt={page.frontmatter.sponsor.name}
+          />
+          <div className="report-header">
+            <h1>
+              {page.frontmatter.title} <br /> Findings & Analysis Report
+            </h1>
+            <h4>{page.frontmatter.date}</h4>
+          </div>
+          <div
+            className="report-contents"
+            dangerouslySetInnerHTML={{ __html: page.html }}
+          />
         </article>
       </div>
-    </DefaultLayout>
+    </ReportLayout>
   );
 }
 
@@ -21,10 +40,14 @@ export const query = graphql`
     markdownRemark(id: { eq: $id }) {
       frontmatter {
         title
+        date
+        sponsor {
+          image
+        }
       }
       html
     }
   }
 `;
 
-export default PageTemplate;
+export default ReportPageTemplate;

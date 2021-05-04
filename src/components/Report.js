@@ -16,6 +16,7 @@ const Report = ({ report }) => {
   const { name, link, image } = sponsor;
   const { start_time, end_time, amount, details } = contest;
   const t = getDates(start_time, end_time);
+  const reportUrl = `/reports/${slug}`;
 
   return (
     <div className={"wrapper-contest " + t.state}>
@@ -41,7 +42,7 @@ const Report = ({ report }) => {
           </a>
         ) : (
           <a
-            href={slug}
+            href={reportUrl}
             className="contest-repo button button-small cta-button"
           >
             Contest report

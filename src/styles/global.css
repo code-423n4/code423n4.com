@@ -512,6 +512,19 @@ pre {
 .contest-repo {
 }
 
+.report-contents h1 {
+  border-top: 3px solid #443658;
+  margin-top: 40px;
+  padding-top: 40px;
+}
+
+.report-sponsor-logo {
+  width: 100px;
+  border-radius: 100%;
+  float: right;
+  margin: 0 0 20px 20px;
+}
+
 @media (min-width: 850px) {
   table td,
   table th {
@@ -578,6 +591,10 @@ pre {
   .hero h1 {
     font-size: 40px;
     margin-bottom: 20px;
+  }
+
+  h1 {
+    font-size: 32px !important;
   }
 
   .wrapper-main {
