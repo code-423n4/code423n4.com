@@ -4,7 +4,6 @@ import ReportLayout from "../../layouts/ReportLayout";
 
 function ReportPageTemplate({ data }) {
   const page = data.markdownRemark;
-  console.log("page", page);
 
   return (
     <ReportLayout

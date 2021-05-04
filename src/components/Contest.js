@@ -15,8 +15,6 @@ const Contest = ({ contest }) => {
     judges,
   } = contest;
 
-  console.log("contest", contest);
-
   const t = getDates(start_time, end_time);
 
   return (
