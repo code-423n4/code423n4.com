@@ -4,6 +4,7 @@ import ReportLayout from "../../layouts/ReportLayout";
 
 function ReportPageTemplate({ data }) {
   const page = data.markdownRemark;
+  console.log("page", page);
 
   return (
     <ReportLayout
@@ -14,11 +15,15 @@ function ReportPageTemplate({ data }) {
     >
       <div className="wrapper-main">
         <article>
-          <img
-            className="report-sponsor-logo"
-            src={page.frontmatter.sponsor.image}
-            alt={page.frontmatter.sponsor.name}
-          />
+          {page.frontmatter.sponsor ? (
+            <img
+              className="report-sponsor-logo"
+              src={page.frontmatter.sponsor.image}
+              alt={page.frontmatter.sponsor.name}
+            />
+          ) : (
+            ""
+          )}
           <div className="report-header">
             <h1>
               {page.frontmatter.title} <br /> Findings & Analysis Report
@@ -43,6 +48,7 @@ export const query = graphql`
         date
         sponsor {
           image
+          name
         }
       }
       html
