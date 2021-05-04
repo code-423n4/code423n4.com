@@ -66,8 +66,10 @@ const getDates = (starttime, endtime) => {
   }
 
   const startMonth = monthNames[new Date(starttime).getMonth()];
+  const startYear = new Date(starttime).getFullYear();
   const startDate = new Date(starttime).getDate();
   const endMonth = monthNames[new Date(endtime).getMonth()];
+  const endYear = new Date(endtime).getFullYear();
   const endDate = new Date(endtime).getDate();
 
   const t = {
@@ -81,6 +83,8 @@ const getDates = (starttime, endtime) => {
     endDate,
     startDay: `${startMonth} ${startDate}`,
     endDay: `${endMonth} ${endDate}`,
+    startYear,
+    endYear,
   };
 
   return t;
