@@ -3,8 +3,9 @@ import { graphql } from "gatsby";
 import DefaultLayout from "../../layouts/DefaultLayout";
 import ReportList from "../../components/ReportList";
 
-export default function SiteIndex({ data }) {
+export default function ReportIndex({ data }) {
   const reports = data.reports.edges;
+  console.log("reports", data);
 
   return (
     <DefaultLayout title="Code 423n4" bodyClass="landing">
