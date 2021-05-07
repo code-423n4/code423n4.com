@@ -6,5 +6,6 @@
   "sponsor": "Based Loans",
   "contestid": 6,
   "amount": "$30,000 USDC",
-  "repo": "https://github.com/code-423n4/basedloans"
+  "repo": "https://github.com/code-423n4/basedloans",
+  "hide": true
 }
