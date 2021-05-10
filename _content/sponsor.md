@@ -43,10 +43,13 @@ As a sponsor, you are responsible for setting the amount of your contest pool (a
 Many contests create a separate pool for finding gas optimizations. Previous sponsors have used a fifth or tenth of the total pot for this reward. Some projects do not wish to create a separate incentive for gas optimizations. Code 423n4 lets each project decide whether to create this pool.
 
 **Org fee**  
-There is a required 20% fee on top of the determined contest pool, which goes to the C4 org to cover the costs of judging, reporting, and organizing contests.
+There is a 20% fee on top of the determined contest pool, which goes to the C4 org to cover the costs of judging, reporting, and organizing contests.
+
+**Sponsor tokens**
+Sponsors are free to 'sweeten the pot' with their own token _on top of_ the core contest pool (stablecoin / Eth). The org takes a 40% fee on sponsor tokens.
 
 **Contest scheduling**  
-Contests start Wednesday 00:00:00 UTC and end Tuesday 23:59 UTC. We schedule contests after reviewing the codebase, providing a suggested minimum, and receiving contest funding. Due to high demand, we cannot make any scheduling guarantees until these steps have been completed. Code 423n4 is currently unable to run multiple contests simultaneously, but we intend to begin concurrent contests as soon as possible.
+Contests start Wednesday 00:00:00 UTC and end Tuesday 23:59 UTC. We schedule contests after reviewing the codebase, providing a suggested minimum, and receiving contest funding. Due to high demand, we cannot make any scheduling guarantees until these steps have been completed, and once a contest has been scheduled, we are unable to move it on our calendar.
 
 ## 🤝 Step by step pre-contest process
 
