@@ -45,7 +45,7 @@ Many contests create a separate pool for finding gas optimizations. Previous spo
 **Org fee**  
 There is a 20% fee on top of the determined contest pool, which goes to the C4 org to cover the costs of judging, reporting, and organizing contests.
 
-**Sponsor tokens**
+**Sponsor tokens**  
 Sponsors are free to 'sweeten the pot' with their own token _on top of_ the core contest pool (stablecoin / Eth). The org takes a 40% fee on sponsor tokens.
 
 **Contest scheduling**  
