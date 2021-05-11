@@ -100,9 +100,10 @@ h1 {
   font-family: "Roboto", sans-serif;
 }
 
-h2 {
+h2,
+h2 code {
   color: #fff;
-  font-size: 20px;
+  /* font-size: 20px; */
   font-family: "Roboto", sans-serif;
 }
 
@@ -205,7 +206,8 @@ ul {
 
 code {
   color: #ffffffaa;
-  font-size: 18px;
+  font-size: inherit;
+  font-family: inherit;
 }
 
 strong {
