@@ -32,8 +32,6 @@ export const query = graphql`
         node {
           frontmatter {
             title
-            image
-            link
             slug
             findings
             altUrl
