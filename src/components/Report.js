@@ -26,19 +26,17 @@ const Report = ({ report }) => {
         </a>
       </div>
       <div className="wrapper-contest-content">
-        <h4>
-          {amount ? amount : ""} {title}
-        </h4>
-        <p>{details}</p>
+        <h4>{sponsor.name}</h4>
         <p>
           {t.startDay} — {t.endDay} {t.endYear}
         </p>
+
         {altUrl ? (
           <a
             href={altUrl}
             className="contest-repo button button-small cta-button"
           >
-            Contest details
+            Contest report
           </a>
         ) : (
           <a

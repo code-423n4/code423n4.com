@@ -11,11 +11,14 @@ export default function ReportIndex({ data }) {
     <DefaultLayout pageTitle="Security Audit Reports" bodyClass="report-page">
       <div className="wrapper-main">
         <section>
-          {reports ? (
-            <ReportList reports={reports} />
-          ) : (
-            "No reports yet. You can add one in the `_reports` directory."
-          )}
+          <h1 className="audit-header">Audit Reports</h1>
+          <div className="wrapper-report">
+            {reports ? (
+              <ReportList reports={reports} />
+            ) : (
+              "No reports yet. You can add one in the `_reports` directory."
+            )}
+          </div>
         </section>
       </div>
     </DefaultLayout>
