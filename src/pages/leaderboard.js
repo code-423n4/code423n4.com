@@ -106,11 +106,23 @@ export const query = graphql`
       edges {
         node {
           handle
-          image
+          image {
+            childImageSharp {
+              resize(width: 40) {
+                src
+              }
+            }
+          }
           link
           members {
             handle
-            image
+            image {
+              childImageSharp {
+                resize(width: 40) {
+                  src
+                }
+              }
+            }
             link
           }
         }

@@ -6,7 +6,13 @@ import * as styles from "./WardenField.module.scss";
 const WardenOptionLabel = ({ value, image }) => {
   return (
     <div className={styles.OptionContainer}>
-      <img src={image} />
+      <img
+        src={
+          image
+            ? image.childImageSharp.resize.src
+            : "https://placekitten.com/g/64/64"
+        }
+      />
       <span>{value}</span>
     </div>
   );

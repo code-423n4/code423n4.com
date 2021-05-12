@@ -96,12 +96,18 @@ const FormStatus = {
 
 const wardensQuery = graphql`
   query Wardens {
-    allHandlesJson {
+    allHandlesJson(sort: { fields: handle, order: ASC }) {
       edges {
         node {
           id
           handle
-          image
+          image {
+            childImageSharp {
+              resize(width: 64, quality: 90) {
+                src
+              }
+            }
+          }
         }
       }
     }
