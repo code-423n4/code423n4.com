@@ -21,27 +21,7 @@ const queries = {
           id
           contestid
           title
-          details
-          hide
-          start_time
-          end_time
-          amount
-          repo
-          sponsor {
-            name
-            image
-            link
-          }
-          wardens {
-            name
-            image
-            link
-          }
-          judges {
-            name
-            image
-            link
-          }
+          start_time(formatString: "YYYY-MM")
         }
       }
     }
@@ -93,7 +73,7 @@ exports.createPages = async ({ graphql, actions }) => {
   const formTemplate = path.resolve("./src/layouts/ReportForm.js");
   contests.data.contests.edges.forEach((contest) => {
     createPage({
-      path: `/${contest.node.contestid}-${slugify(contest.node.title)}`,
+      path: `/${contest.node.start_time}-${slugify(contest.node.title)}/submit`,
       component: formTemplate,
       context: {
         contestId: contest.node.contestid,
