@@ -1,0 +1,10 @@
+{
+  "repo": "https://github.com/code-423n4/reporter",
+  "details": "A sample contest for testing purposes",
+  "start_time": "2021-01-01T00:00:00.000Z",
+  "end_time": "2999-01-01T00:00:00.000Z",
+  "title": "Sample Contest",
+  "sponsor": "C4",
+  "contestid": 999999,
+  "amount": "$0 USDC"
+}

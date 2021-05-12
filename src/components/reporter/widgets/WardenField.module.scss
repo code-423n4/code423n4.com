@@ -1,0 +1,16 @@
+.OptionContainer {
+  display: flex;
+  align-items: center;
+  min-height: 32px;
+
+  & img {
+    width: 32px;
+    border-radius: 32px;
+    margin-right: 16px;
+  }
+
+  & span {
+    flex: 1;
+    font-family: inherit;
+  }
+}

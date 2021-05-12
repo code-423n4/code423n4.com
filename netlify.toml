@@ -1,0 +1,11 @@
+[build]
+  base = "/"
+  publish = "build/"
+  command = "npm run build"
+  functions = "functions/"
+  environment = { YARN_VERSION = "1.22.10" }
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
