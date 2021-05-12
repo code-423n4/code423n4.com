@@ -12,7 +12,7 @@ const WardenOptionLabel = ({ value, image }) => {
   );
 };
 
-const WardenField = ({ label, helptext, options, onChange }) => {
+const WardenField = ({ label, helptext, options, onChange, fieldState }) => {
   const handleChange = useCallback(
     ({ value }) => {
       onChange({ target: { name: "handle", value } });
@@ -25,6 +25,7 @@ const WardenField = ({ label, helptext, options, onChange }) => {
       <label className={baseStyles.Label}>{label}</label>
       <p className={baseStyles.Help}>{helptext}</p>
       <Select
+        value={options.find((o) => o.value === fieldState) || undefined}
         formatOptionLabel={WardenOptionLabel}
         options={options}
         onChange={handleChange}
