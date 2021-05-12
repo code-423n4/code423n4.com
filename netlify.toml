@@ -1,6 +1,6 @@
 [build]
   base = "/"
-  publish = "build/"
+  publish = "public/"
   command = "npm run build"
   functions = "functions/"
   environment = { YARN_VERSION = "1.22.10" }
