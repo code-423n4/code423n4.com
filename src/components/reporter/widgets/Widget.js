@@ -50,6 +50,7 @@ const Widget = (props) => {
       helptext={helptext}
       onChange={handleChange}
       options={options}
+      fieldState={fieldState[name]}
     />
   );
 
