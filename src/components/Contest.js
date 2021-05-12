@@ -11,8 +11,6 @@ const Contest = ({ contest }) => {
     start_time,
     end_time,
     repo,
-    wardens,
-    judges,
   } = contest;
 
   const t = getDates(start_time, end_time);

@@ -38,16 +38,6 @@ export const query = graphql`
             image
             link
           }
-          wardens {
-            name
-            image
-            link
-          }
-          judges {
-            name
-            image
-            link
-          }
         }
       }
     }
