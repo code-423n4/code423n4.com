@@ -1,5 +1,53 @@
+import path from "path";
 import SchemaCustomization from "./schema";
 import { createFilePath } from "gatsby-source-filesystem";
+
+function slugify(text) {
+  return text
+    .toString()
+    .toLowerCase()
+    .replace(/\s+/g, "-") // Replace spaces with -
+    .replace(/[^\w\-]+/g, "") // Remove all non-word chars
+    .replace(/\-\-+/g, "-") // Replace multiple - with single -
+    .replace(/^-+/, "") // Trim - from start of text
+    .replace(/-+$/, ""); // Trim - from end of text
+}
+
+const queries = {
+  contests: `query {
+    contests: allContestsJson(sort: { fields: end_time, order: ASC }) {
+      edges {
+        node {
+          id
+          contestid
+          title
+          details
+          hide
+          start_time
+          end_time
+          amount
+          repo
+          sponsor {
+            name
+            image
+            link
+          }
+          wardens {
+            name
+            image
+            link
+          }
+          judges {
+            name
+            image
+            link
+          }
+        }
+      }
+    }
+  }
+`,
+};
 
 exports.createSchemaCustomization = (helpers) => {
   const { actions } = helpers;
@@ -12,7 +60,7 @@ exports.createSchemaCustomization = (helpers) => {
 };
 
 exports.onCreateNode = ({ node, getNode, actions }) => {
-  const { createNodeField } = actions
+  const { createNodeField } = actions;
   if (node.internal.type === `MarkdownRemark`) {
     const value = createFilePath({ node, getNode });
     const parent = getNode(node.parent);
@@ -28,12 +76,28 @@ exports.onCreateNode = ({ node, getNode, actions }) => {
       node,
       name: `collection`,
       value: parent.sourceInstanceName,
-    })
-    
+    });
+
     createNodeField({
       node,
       name: `slug`,
       value: slug,
-    })
+    });
   }
-}
+};
+
+exports.createPages = async ({ graphql, actions }) => {
+  const { createPage } = actions;
+
+  let contests = await graphql(queries.contests);
+  const formTemplate = path.resolve("./src/layouts/ReportForm.js");
+  contests.data.contests.edges.forEach((contest) => {
+    createPage({
+      path: `/${contest.node.contestid}-${slugify(contest.node.title)}`,
+      component: formTemplate,
+      context: {
+        contestId: contest.node.contestid,
+      },
+    });
+  });
+};
