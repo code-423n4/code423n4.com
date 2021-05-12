@@ -58,8 +58,8 @@ Note there are data relationships to be maintained.
 ## Develop
 
 ```
-npm i
-npm start
+yarn
+yarn start
 ```
 
 ## Design
