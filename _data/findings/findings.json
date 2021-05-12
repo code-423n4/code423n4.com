@@ -1,7 +1,7 @@
 [
   {
     "contest": 1,
-    "handle": "pocotiempo",
+    "handle": "0xRajeev",
     "finding": "H-01",
     "risk": "3",
     "pie": 10,
@@ -13,7 +13,7 @@
   },
   {
     "contest": 1,
-    "handle": "pocotiempo",
+    "handle": "0xRajeev",
     "finding": "L-02",
     "risk": "1",
     "pie": 0.81,
@@ -25,7 +25,7 @@
   },
   {
     "contest": 1,
-    "handle": "pocotiempo",
+    "handle": "0xRajeev",
     "finding": "M-01",
     "risk": "2",
     "pie": 2.43,
@@ -37,7 +37,7 @@
   },
   {
     "contest": 1,
-    "handle": "pocotiempo",
+    "handle": "0xRajeev",
     "finding": "M-02",
     "risk": "2",
     "pie": 2.43,
@@ -49,7 +49,7 @@
   },
   {
     "contest": 1,
-    "handle": "pocotiempo",
+    "handle": "0xRajeev",
     "finding": "M-05",
     "risk": "2",
     "pie": 3,
@@ -61,7 +61,7 @@
   },
   {
     "contest": 1,
-    "handle": "pocotiempo",
+    "handle": "0xRajeev",
     "finding": "N-01",
     "risk": "0",
     "awardCoin": "USDC",
@@ -893,7 +893,7 @@
   },
   {
     "contest": 2,
-    "handle": "pocotiempo",
+    "handle": "0xRajeev",
     "finding": "H-06",
     "risk": "3",
     "pie": 10,
@@ -905,7 +905,7 @@
   },
   {
     "contest": 2,
-    "handle": "pocotiempo",
+    "handle": "maurelian",
     "finding": "H-07",
     "risk": "3",
     "pie": 8.100000000000001,
@@ -917,7 +917,7 @@
   },
   {
     "contest": 2,
-    "handle": "pocotiempo",
+    "handle": "maurelian",
     "finding": "L-08",
     "risk": "1",
     "pie": 0.81,
@@ -929,7 +929,7 @@
   },
   {
     "contest": 2,
-    "handle": "pocotiempo",
+    "handle": "0xRajeev",
     "finding": "L-11",
     "risk": "1",
     "pie": 1,
@@ -941,7 +941,7 @@
   },
   {
     "contest": 2,
-    "handle": "pocotiempo",
+    "handle": "0xRajeev",
     "finding": "M-03",
     "risk": "2",
     "pie": 3,
@@ -953,7 +953,7 @@
   },
   {
     "contest": 2,
-    "handle": "pocotiempo",
+    "handle": "0xRajeev",
     "finding": "M-04",
     "risk": "2",
     "pie": 3,
@@ -965,7 +965,7 @@
   },
   {
     "contest": 2,
-    "handle": "pocotiempo",
+    "handle": "maurelian",
     "finding": "M-06",
     "risk": "2",
     "pie": 3,
@@ -977,7 +977,7 @@
   },
   {
     "contest": 2,
-    "handle": "pocotiempo",
+    "handle": "maurelian",
     "finding": "M-07",
     "risk": "2",
     "pie": 3,
@@ -989,7 +989,7 @@
   },
   {
     "contest": 2,
-    "handle": "pocotiempo",
+    "handle": "0xRajeev",
     "finding": "N-01",
     "risk": "0",
     "awardCoin": "ETH",
@@ -997,7 +997,7 @@
   },
   {
     "contest": 2,
-    "handle": "pocotiempo",
+    "handle": "maurelian",
     "finding": "G-01",
     "risk": "g",
     "pie": 0.9,
@@ -1009,7 +1009,7 @@
   },
   {
     "contest": 2,
-    "handle": "pocotiempo",
+    "handle": "0xRajeev",
     "finding": "G-05",
     "risk": "g",
     "pie": 0.9,
