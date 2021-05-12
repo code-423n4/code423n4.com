@@ -36,6 +36,13 @@ const WardenField = ({ label, helptext, options, onChange, fieldState }) => {
         options={options}
         onChange={handleChange}
       />
+      <p>
+        <small>
+          Don't see your handle here? Submit a pull request{" "}
+          <a href="https://github.com/code-423n4/code423n4.com">here</a> to
+          register.
+        </small>
+      </p>
     </div>
   );
 };
