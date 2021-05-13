@@ -24,19 +24,11 @@
 
 .Text {
   width: calc(100% - 20px);
-  border: 1px solid #ddd;
   margin-bottom: 40px;
-
-  @media (prefers-color-scheme: dark) {
-    background-color: #333;
-    color: #fff;
-    border: 1px solid #777;
-  }
 }
 
 .Select {
   width: 100%;
-  border: 1px solid #ddd;
   margin-bottom: 40px;
 }
 
