@@ -35,6 +35,8 @@ const WardenField = ({ label, helptext, options, onChange, fieldState }) => {
         formatOptionLabel={WardenOptionLabel}
         options={options}
         onChange={handleChange}
+        className={styles.ReactSelect}
+        classNamePrefix="react-select"
       />
       <p>
         <small>
