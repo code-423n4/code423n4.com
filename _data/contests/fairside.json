@@ -1,0 +1,10 @@
+{
+  "details": "Fairside Network",
+  "start_time": "2021-05-20T00:00:00.000Z",
+  "end_time": "2021-05-26T23:59:00.000Z",
+  "title": "Fairside contest",
+  "sponsor": "Fairside",
+  "contestid": 10,
+  "amount": "$40,000 USDC",
+  "repo": "https://github.com/code-423n4/2021-05-fairside"
+}
