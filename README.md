@@ -4,7 +4,7 @@ Registering as a warden allows you to be listed on our [leaderboard](https://cod
 
 **Fork this repo and create a PR:**
 
-1. Add a JSON file for yourself at [data/handles](https://github.com/code-423n4/code423n4.com/tree/main/data/handles):
+1. Add a JSON file for yourself at [\_data/handles](https://github.com/code-423n4/code423n4.com/tree/main/_data/handles):
 
 ```json
 {
