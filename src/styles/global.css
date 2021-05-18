@@ -92,7 +92,12 @@ section:first-of-type {
 
 .wrapper-report {
   display: block;
+  max-width: 900px;
   margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(390px, 1fr));
+  grid-gap: 20px;
+  align-items: stretch;
 }
 
 @media screen and (min-width: 800px) {
@@ -111,7 +116,6 @@ section:first-of-type {
 
 .wrapper-report .wrapper-contest {
   display: inline-grid;
-  min-width: 350px;
   margin: 20px;
 }
 
@@ -292,7 +296,7 @@ blockquote a:hover {
   border-radius: 10px;
   background: rgba(51, 0, 101, 0.3);
   box-shadow: 0 -1px 0px #5e507133, 0 1px 0px rgba(0, 0, 0, 0.2);
-  padding: 20px 20px 10px 20px;
+  padding: 20px;
   grid-template-columns: 100px 1fr;
   display: grid;
 }
@@ -308,10 +312,13 @@ blockquote a:hover {
   opacity: 0.8;
 }
 
-.wrapper-contest h4,
-p {
+.wrapper-contest h4, p {
   margin-top: 0;
 }
+.wrapper-contest p {
+  margin-bottom: .8em;
+}
+
 .wardens {
   margin-top: 5px;
 }
