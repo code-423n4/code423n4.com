@@ -1,5 +1,5 @@
 {
-  "image": "/images/people/cmichel.png",
+  "image": "./avatars/cmichel.png",
   "handle": "cmichel",
   "link": "https://twitter.com/cmichelio"
 }

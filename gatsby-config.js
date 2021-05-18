@@ -109,5 +109,6 @@ module.exports = {
     //     htmlTitle: "code423n4.com admin",
     //   },
     // },
+    `gatsby-plugin-sass`,
   ],
 };

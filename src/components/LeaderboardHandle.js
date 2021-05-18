@@ -10,25 +10,30 @@ const LeaderboardHandle = ({ handle, image, link, members }) => {
           {members.map((member) => (
             <div className="member" key={member.handle}>
               <a href={member.link}>
-              {member.image ? (
-                <Avatar
-                  src={member.image}
-                  name={handle}
-                  size="20px"
-                  round="20px"
-                />
-              ) : (
-                ""
-              )}
-              <span>{member.handle}</span>
+                {member.image ? (
+                  <Avatar
+                    src={member.image.childImageSharp.resize.src}
+                    name={handle}
+                    size="20px"
+                    round="20px"
+                  />
+                ) : (
+                  ""
+                )}
+                <span>{member.handle}</span>
               </a>
             </div>
           ))}
         </div>
       ) : (
-        <a href={link} >
+        <a href={link}>
           {image ? (
-            <Avatar src={image} name={handle} size="20px" round="20px" />
+            <Avatar
+              src={image.childImageSharp.resize.src}
+              name={handle}
+              size="20px"
+              round="20px"
+            />
           ) : (
             ""
           )}
