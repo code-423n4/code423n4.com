@@ -1,6 +1,5 @@
 {
-    "handle": "heiho1",
-    "image": "/images/people/heiho1.png",
-    "link": "https://github.com/heiho1"
+  "handle": "heiho1",
+  "image": "./avatars/heiho1.png",
+  "link": "https://github.com/heiho1"
 }
-  

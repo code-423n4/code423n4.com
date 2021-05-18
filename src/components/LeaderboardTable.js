@@ -26,6 +26,16 @@ const LeaderboardTable = ({ results }) => {
             Header: "USD",
             accessor: "awardTotal",
             sortDescFirst: true,
+            Cell: (props) => {
+              return (
+                <span>
+                  {props.value.toLocaleString("en-US", {
+                    style: "currency",
+                    currency: "USD",
+                  })}
+                </span>
+              );
+            },
           },
           {
             Header: "All",

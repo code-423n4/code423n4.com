@@ -1,5 +1,5 @@
 {
-    "handle": "a_delamo",
-    "image": "/images/people/a_delamo.jpeg",
-    "link": "https://twitter.com/a_delamo"
-  }
+  "handle": "a_delamo",
+  "image": "./avatars/a_delamo.jpeg",
+  "link": "https://twitter.com/a_delamo"
+}
