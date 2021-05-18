@@ -6,5 +6,6 @@
   "sponsor": "NFTX",
   "contestid": 8,
   "amount": "$66,000 USDC",
-  "repo": "https://github.com/code-423n4/2021-05-nftx"
+  "repo": "https://github.com/code-423n4/2021-05-nftx",
+  "hide": true
 }
