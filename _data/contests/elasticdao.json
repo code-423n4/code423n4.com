@@ -5,5 +5,7 @@
   "title": "ElasticDAO contest",
   "sponsor": "ElasticDAO",
   "contestid": 2,
-  "hide": true
+  "hide": true,
+  "repo": "https://github.com/code-423n4/2021-03-elasticdao",
+  "findingsRepo": "https://github.com/code-423n4/2021-03-elasticdao-findings"
 }

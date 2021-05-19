@@ -6,5 +6,6 @@
   "sponsor": "FairSide",
   "contestid": 10,
   "amount": "$40,000 USDC",
-  "repo": "https://github.com/code-423n4/2021-05-fairside"
+  "repo": "https://github.com/code-423n4/2021-05-fairside",
+  "findingsRepo": "https://github.com/code-423n4/2021-05-fairside-findings"
 }
