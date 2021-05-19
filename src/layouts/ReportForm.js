@@ -6,7 +6,7 @@ const ReportForm = (props) => {
   return (
     <div>
       <Form
-        repoUrl={props.data.contestsJson.repo}
+        repoUrl={props.data.contestsJson.findingsRepo}
         contest={props.data.contestsJson.title}
         sponsor={props.data.contestsJson.sponsor.name}
       />
@@ -23,7 +23,7 @@ export const pageQuery = graphql`
       contestid
       start_time
       end_time
-      repo
+      findingsRepo
       sponsor {
         name
       }

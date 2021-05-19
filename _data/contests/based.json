@@ -7,5 +7,6 @@
   "contestid": 6,
   "amount": "$30,000 USDC",
   "repo": "https://github.com/code-423n4/basedloans",
+  "findingsRepo": "https://github.com/code-423n4/2021-04-basedloans-findings",
   "hide": true
 }
