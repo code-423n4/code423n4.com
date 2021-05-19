@@ -38,11 +38,12 @@ const WardenField = ({ label, helptext, options, onChange, fieldState }) => {
         className={styles.ReactSelect}
         classNamePrefix="react-select"
       />
-      <p>
+      <p className={baseStyles.Help}>
         <small>
-          Don't see your handle here? Submit a pull request{" "}
-          <a href="https://github.com/code-423n4/code423n4.com">here</a> to
-          register.
+          Don't see your handle here?{" "}
+          <a href="https://github.com/code-423n4/code423n4.com">
+            Submit a pull request here to register.
+          </a>
         </small>
       </p>
     </div>
