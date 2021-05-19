@@ -6,5 +6,7 @@
   "sponsor": "Marginswap",
   "contestid": 3,
   "amount": "$50,000 USDC",
-  "hide": true
+  "hide": true,
+  "repo": "https://github.com/code-423n4/2021-04-marginswap",
+  "findingsRepo": "https://github.com/code-423n4/2021-04-marginswap-findings"
 }
