@@ -6,9 +6,9 @@ const ReportForm = (props) => {
   return (
     <div>
       <Form
-        repoUrl={props.data.contestsJson.findingsRepo}
-        contest={props.data.contestsJson.title}
-        sponsor={props.data.contestsJson.sponsor.name}
+        repoUrl={props.data.contestsCsv.findingsRepo}
+        contest={props.data.contestsCsv.title}
+        sponsor={props.data.contestsCsv.sponsor.name}
       />
     </div>
   );
