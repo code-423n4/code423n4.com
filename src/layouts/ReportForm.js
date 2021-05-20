@@ -18,7 +18,7 @@ export default ReportForm;
 
 export const pageQuery = graphql`
   query ContestsById($contestId: Int) {
-    contestsJson(contestid: { eq: $contestId }) {
+    contestsCsv(contestid: { eq: $contestId }) {
       title
       contestid
       start_time
