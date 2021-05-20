@@ -6,6 +6,7 @@ type ContestsJson implements Node {
   amount:         String
   details:        String
   repo:           String
+  findingsRepo:   String
   start_time:     Date @dateformat
   end_time:       Date @dateformat
   wardens:        [ HandlesJson ] @link(by: "name", from: "people")

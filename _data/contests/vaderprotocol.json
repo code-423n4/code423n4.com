@@ -7,5 +7,6 @@
   "contestid": 5,
   "amount": "27 ETH + 1000 VETH",
   "repo": "https://github.com/code-423n4/2021-04-vader",
+  "findingsRepo": "https://github.com/code-423n4/2021-04-vader-findings",
   "hide": true
 }
