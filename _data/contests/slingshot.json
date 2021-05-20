@@ -5,5 +5,7 @@
   "title": "Slingshot Finance contest",
   "sponsor": "Slingshot Finance",
   "contestid": 1,
-  "hide": true
+  "hide": true,
+  "repo": "https://github.com/code-423n4/2021-02-slingshot",
+  "findingsRepo": "https://github.com/code-423n4/2021-02-slingshot-findings"
 }
