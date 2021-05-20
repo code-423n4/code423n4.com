@@ -3,6 +3,40 @@
 const { readFile, stat } = require("fs/promises");
 const path = require("path");
 const glob = require("tiny-glob");
+const csv = require("csvtojson");
+
+async function getUniqueHandles() {
+  const handles = await glob("./_data/handles/*.json");
+  const uniqueHandles = new Set();
+  for (const handleFile of handles) {
+    const blob = await readFile(handleFile);
+    let parsedHandle;
+    try {
+      parsedHandle = JSON.parse(blob);
+    } catch (err) {
+      console.error(`Unable to parse JSON file at ${handleFile}`);
+      continue;
+    }
+
+    uniqueHandles.add(parsedHandle.handle);
+  }
+
+  return uniqueHandles;
+}
+
+async function getUniqueContestIds() {
+  const contests = await csv({
+    colParser: {
+      contestid: "number",
+    },
+  }).fromFile("./_data/contests/contests.csv");
+  const uniqueContestIds = new Set();
+  for (const parsedContest of contests) {
+    uniqueContestIds.add(parsedContest.contestid);
+  }
+
+  return uniqueContestIds;
+}
 
 // Validate handles.
 async function validateHandles() {
@@ -50,14 +84,165 @@ async function validateHandles() {
 
   if (!passedValidation) {
     throw new Error(
-      "Handle validation failed. See above log for more information"
+      "❌  Handle validation failed. See above log for more information."
     );
   }
+
+  console.log("✅  Handle validation passed!");
+}
+
+async function validateOrganizations() {
+  const orgs = await glob("./_data/orgs/*.json");
+  let passedValidation = true;
+  for (const orgFile of orgs) {
+    const blob = await readFile(orgFile);
+    let parsedOrg;
+    try {
+      parsedOrg = JSON.parse(blob);
+    } catch (err) {
+      console.error(`Unable to parse JSON file at ${orgFile}`);
+      passedValidation = false;
+      continue;
+    }
+
+    if (!Object.prototype.hasOwnProperty.call(parsedOrg, "image")) {
+      console.error(`Unable to find key "image" in ${orgFile}`);
+      passedValidation = false;
+      continue;
+    }
+
+    try {
+      await stat(path.resolve(`static${parsedOrg.image}`));
+    } catch (err) {
+      console.error(
+        `Unable to read file from "image" key in ${orgFile}. Does "${parsedOrg.image}" exist?`
+      );
+      passedValidation = false;
+    }
+  }
+
+  if (!passedValidation) {
+    throw new Error(
+      "❌  Organization validation failed. See above log for more information."
+    );
+  }
+
+  console.log("✅  Organization validation passed!");
+}
+
+async function validateContests() {
+  let passedValidation = true;
+
+  const contests = await csv().fromFile("./_data/contests/contests.csv");
+  const orgs = await glob("./_data/orgs/*.json");
+
+  const registeredOrganizations = new Set();
+  for (const orgFile of orgs) {
+    const blob = await readFile(orgFile);
+    let parsedOrg;
+    try {
+      parsedOrg = JSON.parse(blob);
+    } catch (err) {
+      console.error(`Unable to parse JSON file at ${orgFile}`);
+      passedValidation = false;
+      continue;
+    }
+
+    registeredOrganizations.add(parsedOrg.name);
+  }
+
+  const existingContestIds = new Set();
+  for (const parsedContest of contests) {
+    // Check that contest.sponsor is a registered organization.
+    if (!registeredOrganizations.has(parsedContest.sponsor)) {
+      console.error(
+        `Contest at ${contestFile} uses unknown organization: ${parsedContest.sponsor}`
+      );
+      passedValidation = false;
+      continue;
+    }
+
+    // Check that contest.contestid is unique.
+    if (existingContestIds.has(parsedContest.contestid)) {
+      console.error(
+        `Contest at ${contestFile} uses duplicate contestid: ${parsedContest.contestid}`
+      );
+      passedValidation = false;
+      continue;
+    } else {
+      existingContestIds.add(parsedContest.contestid);
+    }
+  }
+
+  if (!passedValidation) {
+    throw new Error(
+      "❌  Contests validation failed. See above log for more information."
+    );
+  }
+
+  console.log("✅  Contest validation passed!");
+}
+
+async function validateFindings() {
+  let passedValidation = true;
+  const findingsFile = "./_data/findings/findings.json";
+  const blob = await readFile(findingsFile);
+  let parsedFindings;
+  try {
+    parsedFindings = JSON.parse(blob);
+  } catch (err) {
+    console.error(`Unable to parse JSON file at ${findingsFile}`);
+    passedValidation = false;
+  }
+
+  const uniqueHandles = await getUniqueHandles();
+  const uniqueContestIds = await getUniqueContestIds();
+
+  const unknownHandles = new Set();
+  const unknownContestIds = new Set();
+  for (const finding of parsedFindings) {
+    if (!uniqueHandles.has(finding.handle)) {
+      unknownHandles.add(finding.handle);
+      passedValidation = false;
+      continue;
+    }
+
+    if (!uniqueContestIds.has(finding.contest)) {
+      unknownContestIds.add(finding.contestid);
+      passedValidation = false;
+      continue;
+    }
+  }
+
+  if (unknownHandles.size > 0) {
+    console.error(`Found ${unknownHandles.size} unknown handles:`);
+    console.log(unknownHandles);
+  }
+
+  if (unknownContestIds.size > 0) {
+    console.error(`Found ${unknownContestIds.size} unknown contestids:`);
+    console.log(unknownContestIds);
+  }
+
+  if (!passedValidation) {
+    throw new Error(
+      "❌  Findings validation failed. See above log for more information."
+    );
+  }
+
+  console.log("✅  Findings validation passed!");
 }
 
 (async () => {
   try {
     await validateHandles();
+    await validateOrganizations();
+    await validateContests();
+    try {
+      await validateFindings();
+    } catch (err) {
+      console.log(err.message);
+    }
     console.log("Validation passed!");
   } catch (err) {
     console.error(err);

@@ -6,9 +6,9 @@ const ReportForm = (props) => {
   return (
     <div>
       <Form
-        repoUrl={props.data.contestsJson.findingsRepo}
-        contest={props.data.contestsJson.title}
-        sponsor={props.data.contestsJson.sponsor.name}
+        repoUrl={props.data.contestsCsv.findingsRepo}
+        contest={props.data.contestsCsv.title}
+        sponsor={props.data.contestsCsv.sponsor.name}
       />
     </div>
   );
@@ -18,7 +18,7 @@ export default ReportForm;
 
 export const pageQuery = graphql`
   query ContestsById($contestId: Int) {
-    contestsJson(contestid: { eq: $contestId }) {
+    contestsCsv(contestid: { eq: $contestId }) {
       title
       contestid
       start_time

@@ -1,3 +1,11 @@
+function csvDatetimeParser(item) {
+  return new Date(item);
+}
+
+function csvBooleanParser(item) {
+  return item === "True";
+}
+
 module.exports = {
   siteMetadata: {
     title: `code423n4.com`,
@@ -24,7 +32,7 @@ module.exports = {
     {
       resolve: `gatsby-source-filesystem`,
       options: {
-        path: `${__dirname}/_data/contests`,
+        path: `${__dirname}/_data/contests/contests.csv`,
         name: `contests`,
       },
     },
@@ -83,6 +91,17 @@ module.exports = {
       },
     },
     `gatsby-transformer-json`,
+    {
+      resolve: `gatsby-transformer-csv`,
+      options: {
+        colParser: {
+          contestid: `number`,
+          start_time: csvDatetimeParser,
+          end_time: csvDatetimeParser,
+          hide: csvBooleanParser,
+        },
+      },
+    },
     {
       resolve: `gatsby-source-filesystem`,
       options: {
