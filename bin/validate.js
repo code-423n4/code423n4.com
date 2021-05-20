@@ -25,18 +25,13 @@ async function getUniqueHandles() {
 }
 
 async function getUniqueContestIds() {
-  const contests = await glob("./_data/contests/*.json");
+  const contests = await csv({
+    colParser: {
+      contestid: "number",
+    },
+  }).fromFile("./_data/contests/contests.csv");
   const uniqueContestIds = new Set();
-  for (const contestFile of contests) {
-    const blob = await readFile(contestFile);
-    let parsedContest;
-    try {
-      parsedContest = JSON.parse(blob);
-    } catch (err) {
-      console.error(`Unable to parse JSON file at ${contestFile}`);
-      continue;
-    }
-
+  for (const parsedContest of contests) {
     uniqueContestIds.add(parsedContest.contestid);
   }
 
@@ -212,7 +207,7 @@ async function validateFindings() {
       continue;
     }
 
-    if (!uniqueContestIds.has(parseInt(finding.contest, 10))) {
+    if (!uniqueContestIds.has(finding.contest)) {
       unknownContestIds.add(finding.contestid);
       passedValidation = false;
       continue;
@@ -243,7 +238,11 @@ async function validateFindings() {
     await validateHandles();
     await validateOrganizations();
     await validateContests();
-    await validateFindings();
+    try {
+      await validateFindings();
+    } catch (err) {
+      console.log(err.message);
+    }
     console.log("Validation passed!");
   } catch (err) {
     console.error(err);
