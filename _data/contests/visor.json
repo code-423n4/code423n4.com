@@ -7,5 +7,6 @@
   "contestid": 7,
   "amount": "$60,000 USDC",
   "repo": "https://github.com/code-423n4/2021-05-visorfinance",
-  "findingsRepo": "https://github.com/code-423n4/2021-05-visorfinance-findings"
+  "findingsRepo": "https://github.com/code-423n4/2021-05-visorfinance-findings",
+  "hide": true
 }
