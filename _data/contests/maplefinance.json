@@ -7,5 +7,6 @@
   "contestid": 4,
   "amount": "$100,000 USDC",
   "repo": "https://github.com/code-423n4/2021-04-maple",
+  "findingsRepo": "https://github.com/code-423n4/2021-04-maple-findings",
   "hide": true
 }

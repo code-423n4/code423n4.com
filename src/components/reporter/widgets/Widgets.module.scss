@@ -14,6 +14,15 @@
 .Help {
   color: inherit;
   font-size: 13px;
+
+  & a {
+    color: inherit;
+    text-decoration: underline;
+
+    &:hover {
+      border-bottom: none;
+    }
+  }
 }
 
 .Control {
