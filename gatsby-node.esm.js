@@ -15,7 +15,7 @@ function slugify(text) {
 
 const queries = {
   contests: `query {
-    contests: allContestsJson(sort: { fields: end_time, order: ASC }) {
+    contests: allContestsCsv(sort: { fields: end_time, order: ASC }) {
       edges {
         node {
           id

@@ -34,7 +34,7 @@ export default function SiteIndex({ data }) {
 
 export const query = graphql`
   query {
-    contests: allContestsJson(
+    contests: allContestsCsv(
       filter: { hide: { ne: true } }
       sort: { fields: end_time, order: DESC }
     ) {

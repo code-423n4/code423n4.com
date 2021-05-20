@@ -11,7 +11,7 @@ const MarkdownRemark = `
     findings:     String
     date:         Date
     sponsor:      OrgsJson @link(by: "name", from: "sponsor")
-    contest:      ContestsJson @link(by: "contestid", from: "contest")
+    contest:      ContestsCsv @link(by: "contestid", from: "contest")
     hide:         Boolean
   }
 `;
