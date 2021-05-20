@@ -7,5 +7,6 @@
   "contestid": 8,
   "amount": "$45,000 USDC",
   "repo": "https://github.com/code-423n4/2021-05-88mph",
-  "findingsRepo": "https://github.com/code-423n4/2021-05-88mph-findings"
+  "findingsRepo": "https://github.com/code-423n4/2021-05-88mph-findings",
+  "hide": true
 }
