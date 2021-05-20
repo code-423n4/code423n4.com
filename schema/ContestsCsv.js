@@ -1,5 +1,5 @@
-const ContestsJson = `
-type ContestsJson implements Node {
+const ContestsCsv = `
+type ContestsCsv implements Node {
   contestid:      Int
   sponsor:        OrgsJson @link(by: "name", from: "sponsor")
   title:          String
@@ -15,4 +15,4 @@ type ContestsJson implements Node {
   hide:           Boolean
 }`;
 
-export default ContestsJson;
+export default ContestsCsv;
