@@ -3,6 +3,7 @@
 const { readFile, stat } = require("fs/promises");
 const path = require("path");
 const glob = require("tiny-glob");
+const csv = require("csvtojson");
 
 async function getUniqueHandles() {
   const handles = await glob("./_data/handles/*.json");
@@ -137,7 +138,7 @@ async function validateOrganizations() {
 async function validateContests() {
   let passedValidation = true;
 
-  const contests = await glob("./_data/contests/*.json");
+  const contests = await csv().fromFile("./_data/contests/contests.csv");
   const orgs = await glob("./_data/orgs/*.json");
 
   const registeredOrganizations = new Set();
@@ -156,17 +157,7 @@ async function validateContests() {
   }
 
   const existingContestIds = new Set();
-  for (const contestFile of contests) {
-    const blob = await readFile(contestFile);
-    let parsedContest;
-    try {
-      parsedContest = JSON.parse(blob);
-    } catch (err) {
-      console.error(`Unable to parse JSON file at ${contestFile}`);
-      passedValidation = false;
-      continue;
-    }
-
+  for (const parsedContest of contests) {
     // Check that contest.sponsor is a registered organization.
     if (!registeredOrganizations.has(parsedContest.sponsor)) {
       console.error(
