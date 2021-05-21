@@ -5,7 +5,7 @@ const ContestList = ({ contests }) => {
   return (
     <>
       {contests.reverse().map((contest) => (
-        <Contest contest={contest.node} key={contest.node.id} />
+        <Contest contest={contest} key={contest.node.id} />
       ))}
     </>
   );
