@@ -40,7 +40,13 @@ export const query = graphql`
             altUrl
             sponsor {
               id
-              image
+              image {
+                childImageSharp {
+                  resize(width: 160) {
+                    src
+                  }
+                }
+              }
               link
               name
             }
