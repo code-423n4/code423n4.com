@@ -22,7 +22,10 @@ const Report = ({ report }) => {
     <div className={"wrapper-contest " + t.state}>
       <div className="wrapper-sponsor">
         <a href={sponsor.link}>
-          <img src={sponsor.image} alt={sponsor.name} />
+          <img
+            src={sponsor.image.childImageSharp.resize.src}
+            alt={sponsor.name}
+          />
         </a>
       </div>
       <div className="wrapper-contest-content">
