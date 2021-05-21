@@ -35,7 +35,13 @@ export const query = graphql`
           repo
           sponsor {
             name
-            image
+            image {
+              childImageSharp {
+                resize(width: 160) {
+                  src
+                }
+              }
+            }
             link
           }
         }
