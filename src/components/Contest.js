@@ -2,7 +2,7 @@ import React from "react";
 import Countdown from "./Countdown";
 import { getDates } from "../utils/time";
 
-const Contest = ({ contest }) => {
+const Contest = ({ contest: { node } }) => {
   const {
     sponsor,
     title,
@@ -11,7 +11,9 @@ const Contest = ({ contest }) => {
     start_time,
     end_time,
     repo,
-  } = contest;
+    fields,
+  } = node;
+  const { submissionPath } = fields;
 
   const t = getDates(start_time, end_time);
 
@@ -43,6 +45,13 @@ const Contest = ({ contest }) => {
             className="contest-repo button button-small cta-button"
           >
             Contest details
+          </a>
+        ) : (
+          ""
+        )}
+        {t.state === "active" && submissionPath ? (
+          <a href={submissionPath} className="button button-small cta-button">
+            Submit Finding
           </a>
         ) : (
           ""
