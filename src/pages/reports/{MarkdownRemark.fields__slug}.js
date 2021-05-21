@@ -17,7 +17,7 @@ function ReportPageTemplate({ data }) {
           {page.frontmatter.sponsor ? (
             <img
               className="report-sponsor-logo"
-              src={page.frontmatter.sponsor.image}
+              src={page.frontmatter.sponsor.image.childImageSharp.resize.src}
               alt={page.frontmatter.sponsor.name}
             />
           ) : (
@@ -46,7 +46,13 @@ export const query = graphql`
         title
         date
         sponsor {
-          image
+          image {
+            childImageSharp {
+              resize(width: 200) {
+                src
+              }
+            }
+          }
           name
         }
       }
