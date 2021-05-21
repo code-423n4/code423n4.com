@@ -13,6 +13,16 @@ function slugify(text) {
     .replace(/-+$/, ""); // Trim - from end of text
 }
 
+function contestPermalink(contestNode) {
+  const startDate = new Date(contestNode.start_time);
+  const year = startDate.getFullYear();
+  const month = `${startDate.getMonth() + 1}`.padStart(2, "0");
+  const title = slugify(contestNode.title);
+  const submissionPath = `/${year}-${month}-${title}/submit`;
+
+  return submissionPath;
+}
+
 const queries = {
   contests: `query {
     contests: allContestsCsv(sort: { fields: end_time, order: ASC }) {
@@ -22,6 +32,9 @@ const queries = {
           contestid
           title
           start_time(formatString: "YYYY-MM")
+          fields {
+            submissionPath
+          }
         }
       }
     }
@@ -64,6 +77,14 @@ exports.onCreateNode = ({ node, getNode, actions }) => {
       value: slug,
     });
   }
+
+  if (node.internal.type === `ContestsCsv`) {
+    createNodeField({
+      node,
+      name: `submissionPath`,
+      value: contestPermalink(node),
+    });
+  }
 };
 
 exports.createPages = async ({ graphql, actions }) => {
@@ -73,7 +94,7 @@ exports.createPages = async ({ graphql, actions }) => {
   const formTemplate = path.resolve("./src/layouts/ReportForm.js");
   contests.data.contests.edges.forEach((contest) => {
     createPage({
-      path: `/${contest.node.start_time}-${slugify(contest.node.title)}/submit`,
+      path: contest.node.fields.submissionPath,
       component: formTemplate,
       context: {
         contestId: contest.node.contestid,
