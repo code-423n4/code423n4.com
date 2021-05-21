@@ -112,7 +112,7 @@ async function validateOrganizations() {
     }
 
     try {
-      await stat(path.resolve(`static${parsedOrg.image}`));
+      await stat(path.join(path.resolve("./_data/orgs"), parsedOrg.image));
     } catch (err) {
       console.error(
         `Unable to read file from "image" key in ${orgFile}. Does "${parsedOrg.image}" exist?`
