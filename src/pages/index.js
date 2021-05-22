@@ -59,6 +59,9 @@ export const query = graphql`
             }
             link
           }
+          fields {
+            submissionPath
+          }
         }
       }
     }

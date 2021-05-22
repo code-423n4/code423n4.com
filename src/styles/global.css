@@ -316,11 +316,12 @@ blockquote a:hover {
   opacity: 0.8;
 }
 
-.wrapper-contest h4, p {
+.wrapper-contest h4,
+p {
   margin-top: 0;
 }
 .wrapper-contest p {
-  margin-bottom: .8em;
+  margin-bottom: 0.8em;
 }
 
 .wardens {
@@ -400,6 +401,7 @@ blockquote a:hover {
   width: auto;
   font-family: "Roboto", sans-serif;
   text-decoration: none;
+  margin: 0.25rem 0.125rem;
 }
 
 .button-small {
