@@ -238,11 +238,7 @@ async function validateFindings() {
     await validateHandles();
     await validateOrganizations();
     await validateContests();
-    try {
-      await validateFindings();
-    } catch (err) {
-      console.log(err.message);
-    }
+    await validateFindings();
     console.log("Validation passed!");
   } catch (err) {
     console.error(err);
