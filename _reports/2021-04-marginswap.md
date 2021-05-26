@@ -60,7 +60,8 @@ Further information regarding the severity criteria referenced throughout the su
 
 # High Risk Findings
 
-## [[H-01] Re-entrancy bug allows inflating balance](https://github.com/code-423n4/marginswap-findings/issues/19)
+## [[H-01] Re-entrancy bug allows inflating balance](https://github.com/code-423n4/2021-04-marginswap-findings/issues/19)
+
 
 One can call the `MarginRouter.crossSwapExactTokensForTokens` function first with a fake contract disguised as a token pair:
 `crossSwapExactTokensForTokens(0.0001 WETH, 0, [ATTACKER_CONTRACT], [WETH, WBTC])`. When the amounts are computed by the `amounts = UniswapStyleLib.getAmountsOut(amountIn - fees, pairs, tokens);` call, the attacker contract returns fake reserves that yield 1 WBTC for the tiny input. The resulting amount is credited through `registerTrade`. Afterwards, `_swapExactT4T([0.0001 WETH, 1 WBTC], 0, [ATTACKER_CONTRACT], [WETH, WBTC])` is called with the fake pair and token amounts. At some point `_swap` is called, the starting balance is stored in `startingBalance`, and the attacker contract call allows a re-entrancy:
@@ -75,7 +76,7 @@ This allows someone to be credited multiples of the actual swap result. This can
 
 Recommend adding re-entrancy guards (from OpenZeppelin) to all external functions of `MarginRouter`. There might be several attack vectors of this function as the attacker controls many parameters. The idea of first doing an estimation with `UniswapStyleLib.getAmountsOut(amountIn - fees, pairs, tokens)` and updating the user with these estimated amounts, before doing the actual trade, feels quite vulnerable to me. Consider removing the estimation and only doing the actual trade first, then calling `registerTrade` with the actual trade amounts returned.
 
-## [[H-02] Missing `fromToken != toToken` check](https://github.com/code-423n4/marginswap-findings/issues/20)
+## [[H-02] Missing `fromToken != toToken` check](https://github.com/code-423n4/2021-04-marginswap-findings/issues/20)
 
 Attacker calls `MarginRouter.crossSwapExactTokensForTokens` with a fake pair and the same token[0] == token[1].
 `crossSwapExactTokensForTokens(1000 WETH, 0, [ATTACKER_CONTRACT], [WETH, WETH])`. When the amounts are computed by the `amounts = UniswapStyleLib.getAmountsOut(amountIn - fees, pairs, tokens);` call, the attacker contract returns fake reserves that yield 0 output. When `_swapExactT4T` is called, the funds are sent to the fake contract and doing nothing passes all checks in `_swap` call that follows because the `startingBalance` is stored _after_ the initial Fund withdraw to the pair.
@@ -103,7 +104,7 @@ At least, this attack is similar to a withdrawal which is supposed to only occur
 
 Recommend moving the fund withdrawal to the first pair **after** the `startingBalance` assignment. Check `fromToken != toToken` as cyclical trades (arbitrages) are likely not what margin traders are after. Consider if the same check is required for `registerTradeAndBorrow` / `adjustAmounts` functions.
 
-## [[H-03] Price feed can be manipulated](https://github.com/code-423n4/marginswap-findings/issues/21)
+## [[H-03] Price feed can be manipulated](https://github.com/code-423n4/2021-04-marginswap-findings/issues/21)
 
 Anyone can trigger an update to the price feed by calling `PriceAware.getCurrentPriceInPeg(token, inAmount, forceCurBlock=true)`.
 If the update window has passed, the price will be computed by simulating a Uniswap-like trade with the amounts.
@@ -111,7 +112,7 @@ This simulation uses the reserves of the Uniswap pairs which can be changed dras
 
 Recommend against using the Uniswap spot price as the real price. Uniswap itself warns against this and instead recommends implementing a [TWAP price oracle](https://uniswap.org/docs/v2/smart-contract-integration/building-an-oracle/) using the `price*CumulativeLast` variables.
 
-## [[H-04] Inconsistent usage of `applyInterest`](https://github.com/code-423n4/marginswap-findings/issues/64)
+## [[H-04] Inconsistent usage of `applyInterest`](https://github.com/code-423n4/2021-04-marginswap-findings/issues/64)
 
 It is unclear if the function `applyInterest` is supposed to return a new balance with the interest applied or only the accrued interest? There are various usages of it, some calls add the return value to the old amount:
 
@@ -132,7 +133,7 @@ This makes the code misbehave and return the wrong values for the balance and ac
 
 Recommend making it consistent in all cases when calling this function.
 
-## [[H-05] Wrong liquidation logic](https://github.com/code-423n4/marginswap-findings/issues/23)
+## [[H-05] Wrong liquidation logic](https://github.com/code-423n4/2021-04-marginswap-findings/issues/23)
 
 The `belowMaintenanceThreshold` function decides if a trader can be liquidated:
 
@@ -152,14 +153,14 @@ function belowMaintenanceThreshold(CrossMarginAccount storage account)
 
 The inequality in the last equation is wrong because it says the higher the holdings (margin + loan) compared to the loan, the higher the chance of being liquidated. The inverse equality was probably intended `return 100 * holdings <= liquidationThresholdPercent * loan;`. Users that shouldn't be liquidated can be liquidated, and users that should be liquidated cannot get liquidated.
 
-## [[H-06] Users are credited more tokens when paying back debt with `registerTradeAndBorrow`](https://github.com/code-423n4/marginswap-findings/issues/24)
+## [[H-06] Users are credited more tokens when paying back debt with `registerTradeAndBorrow`](https://github.com/code-423n4/2021-04-marginswap-findings/issues/24)
 
 The `registerTradeAndBorrow` is called with the results of a trade (`inAmount`, `outAmount`). It first tries to pay back any debt with the `outAmount`. However, the **full** `outAmount` is credited to the user again as a deposit in the `adjustAmounts(account, tokenFrom, tokenTo, sellAmount, outAmount);` call. As the user pays back their debt and is credited the same amount again, they are essentially credited twice the `outAmount`, making a profit of one `outAmount`. This can be withdrawn and the process can be repeated until the funds are empty.
 
 In the `adjustAmounts` call, it should only credit `outAmount - extinguishableDebt` as a deposit like in `registerDeposit`.
 The `registerDeposit` function correctly handles this case.
 
-## [[H-07] `account.holdsToken` is never set](https://github.com/code-423n4/marginswap-findings/issues/25)
+## [[H-07] `account.holdsToken` is never set](https://github.com/code-423n4/2021-04-marginswap-findings/issues/25)
 
 The `addHolding` function does not update the `account.holdsToken` map.
 
@@ -227,7 +228,7 @@ This inflated balance can then be withdrawn to steal all tokens.
 
 Recommend correctly setting the `account.holdsToken` map in `addHolding`.
 
-## [[H-08] Rewards cannot be withdrawn](https://github.com/code-423n4/marginswap-findings/issues/26)
+## [[H-08] Rewards cannot be withdrawn](https://github.com/code-423n4/2021-04-marginswap-findings/issues/26)
 
 The rewards for a recipient in `IncentiveDistribution.sol` are stored in the storage mapping indexed by recipient `accruedReward[recipient]` and the recipient is the actual margin trader account, see `updateAccruedReward`.
 
@@ -238,7 +239,7 @@ Nobody can withdraw the rewards.
 
 Recommend removing the ` isIncentiveReporter(msg.sender)` check from `withdrawReward` function.
 
-## [[H-09] lastUpdatedDay not initialized](https://github.com/code-423n4/marginswap-findings/issues/14)
+## [[H-09] lastUpdatedDay not initialized](https://github.com/code-423n4/2021-04-marginswap-findings/issues/14)
 
 The variable lastUpdatedDay in IncentiveDistribution.sol is not (properly) initialized. This means the function updateDayTotals will end up in a very large loop which will lead to an out of gas error. Even if the loop would end, the variable currentDailyDistribution would be updated very often. Thus updateDayTotals cannot be performed.
 
@@ -258,7 +259,7 @@ currentDailyDistribution = ....
 }
 #will result in an out of gas error
 
-## [[H-10] function buyBond charges msg.sender twice](https://github.com/code-423n4/marginswap-findings/issues/38)
+## [[H-10] function buyBond charges msg.sender twice](https://github.com/code-423n4/2021-04-marginswap-findings/issues/38)
 
 function buyBond transfers amount from msg.sender twice:
 Fund(fund()).depositFor(msg.sender, issuer, amount);
@@ -266,7 +267,7 @@ Fund(fund()).depositFor(msg.sender, issuer, amount);
 collectToken(issuer, msg.sender, amount);
 ```
 
-## [[H-11] Impossible to call withdrawReward fails due to run out of gas](https://github.com/code-423n4/marginswap-findings/issues/65)
+## [[H-11] Impossible to call withdrawReward fails due to run out of gas](https://github.com/code-423n4/2021-04-marginswap-findings/issues/65)
 
 The withdrawReward (https://github.com/code-423n4/marginswap/blob/main/contracts/IncentiveDistribution.sol#L224) fails due to the loop at https://github.com/code-423n4/marginswap/blob/main/contracts/IncentiveDistribution.sol#L269. Based on testing, the dayDiff would be 18724 and with a gasLimit of 9500000 it stops at iteration 270 due to the fact that lastUpdatedDay is not initialized so is 0. Other than that it could run out of gas also for the loop of allTranches (https://github.com/code-423n4/marginswap/blob/main/contracts/IncentiveDistribution.sol#L281) because it's an unbounded array.
 
@@ -278,7 +279,7 @@ I'm not sure of the logic behind the shrinking of the daily distribution but i t
 
 # Medium Risk Findings
 
-## [[M-01] No default `liquidationThresholdPercent`](https://github.com/code-423n4/marginswap-findings/issues/28)
+## [[M-01] No default `liquidationThresholdPercent`](https://github.com/code-423n4/2021-04-marginswap-findings/issues/28)
 
 The `IsolatedMarginTrading` contract does not define a default `liquidationThresholdPercent` which means it is set to 0. The `belowMaintenanceThreshold` function uses this value and anyone could be liquidated due to `100 * holdings >= liquidationThresholdPercent * loan = 0` being always true.
 
@@ -286,11 +287,11 @@ Anyone can be liquidated immediately. If the faulty `belowMaintenanceThreshold` 
 
 Recommend setting a default liquidation threshold like in `CrossMarginTrading` contracts.
 
-## [[M-02] Missing checks if pairs equal tokens](https://github.com/code-423n4/marginswap-findings/issues/29)
+## [[M-02] Missing checks if pairs equal tokens](https://github.com/code-423n4/2021-04-marginswap-findings/issues/29)
 
 The `UniswapStyleLib.getAmountsOut`, `PriceAware.setLiquidationPath` (and others) don't check that `path.length + 1 == tokens.length` which should always hold true. Also, it does not check that the tokens actually match the pair. It's easy to set faulty liquidation paths which then end up reverting the liquidation transactions.
 
-## [[M-03] No entry checks in crossSwap[Exact]TokensFor[Exact]Tokens](https://github.com/code-423n4/marginswap-findings/issues/4)
+## [[M-03] No entry checks in crossSwap[Exact]TokensFor[Exact]Tokens](https://github.com/code-423n4/2021-04-marginswap-findings/issues/4)
 
 The functions crossSwapTokensForExactTokens and crossSwapExactTokensForTokens of MarginRouter.sol do not check who is calling the function. They also do not check the contents of pairs and tokens nor do they check if the size of pairs and tokens is the same.
 
@@ -304,7 +305,7 @@ Recommend limiting who can call the functions. Perhaps whitelist contents of pai
 
 > This has merit: particularly the part about self-constructed pairs. We either need much more rigorous checks or a a process for vetting & approving pairs. The latter is likely more gas efficient.
 
-## [[M-04] maintainer can be pushed out](https://github.com/code-423n4/marginswap-findings/issues/5)
+## [[M-04] maintainer can be pushed out](https://github.com/code-423n4/2021-04-marginswap-findings/issues/5)
 
 The function liquidate (in both `CrossMarginLiquidation.sol` and `IsolatedMarginLiquidation.sol`) can be called by everyone. If an attacker calls this repeatedly then the maintainer will be punished and eventually be reported as maintainerIsFailing
 And then the attacker can take the payouts.
@@ -326,7 +327,7 @@ Recommend put authorization on who can call the liquidate function, review the m
 
 > Acknowledging feedback from @werg, but maintaining the reported risk level of `medium` since this has implications on token logic.
 
-## [[M-05] Several function have no entry check](https://github.com/code-423n4/marginswap-findings/issues/9)
+## [[M-05] Several function have no entry check](https://github.com/code-423n4/2021-04-marginswap-findings/issues/9)
 
 The following functions have no entry check or a trivial entry check:
 
@@ -359,7 +360,7 @@ Recommend checking the functions to see if they are completely risk free and add
 >
 > I will add comments to the effect. Thanks again
 
-## [[M-06] Users Can Drain Funds From MarginSwap By Making Undercollateralized Borrows If The Price Of A Token Has Moved More Than 10% Since The Last MarginSwap Borrow/Liquidation Involving Accounts Holding That Token.](https://github.com/code-423n4/marginswap-findings/issues/67)
+## [[M-06] Users Can Drain Funds From MarginSwap By Making Undercollateralized Borrows If The Price Of A Token Has Moved More Than 10% Since The Last MarginSwap Borrow/Liquidation Involving Accounts Holding That Token.](https://github.com/code-423n4/2021-04-marginswap-findings/issues/67)
 
 Users Can Drain Funds From MarginSwap By Making Undercollateralized Borrows If The Price Of A Token Has Moved More Than 10% Since The Last MarginSwap Borrow/Liquidation Involving Accounts Holding That Token.
 
@@ -398,19 +399,19 @@ The real solution here is to use UniswapV2/SushiSwap/UniswapV3's built in TWAP p
 >
 > also of course there are liquidators waiting in the wings to make their cut on underwater accounts and liquidators can update the price.
 
-## [[M-07] diffMaxMinRuntime gets default value of 0](https://github.com/code-423n4/marginswap-findings/issues/37)
+## [[M-07] diffMaxMinRuntime gets default value of 0](https://github.com/code-423n4/2021-04-marginswap-findings/issues/37)
 
 ` uint256 public diffMaxMinRuntime;`` This variable is never set nor updated so it gets a default value of 0.  `diffMaxMinRuntime` with 0 value is making the calculations that use it either always return 0 (when multiplying) or fail (when dividing) when calculating bucket indexes or sizes.
 
 Recommend setting the appropriate value for diffMaxMinRuntime and update it whenever min or max runtime variables change.
 
-## [[M-08] PriceAware uses prices from getAmountsOut](https://github.com/code-423n4/marginswap-findings/issues/39)
+## [[M-08] PriceAware uses prices from getAmountsOut](https://github.com/code-423n4/2021-04-marginswap-findings/issues/39)
 
 `getPriceFromAMM` relies on values returned from getAmountsOut which can be manipulated (e.g. with the large capital or the help of flash loans). The impact is reduced with UPDATE_MIN_PEG_AMOUNT and UPDATE_MAX_PEG_AMOUNT, however, it is not entirely eliminated.
 
 Uniswap v2 recommends using their TWAP oracle: https://uniswap.org/docs/v2/core-concepts/oracles/
 
-## [[M-09] Isolated margin contracts declare but do not set the value of liquidationThresholdPercent](https://github.com/code-423n4/marginswap-findings/issues/40)
+## [[M-09] Isolated margin contracts declare but do not set the value of liquidationThresholdPercent](https://github.com/code-423n4/2021-04-marginswap-findings/issues/40)
 
 CrossMarginTrading sets value of liquidationThresholdPercent in the constructor: `liquidationThresholdPercent = 110;` Isolated margin contracts declare but do not set the value of liquidationThresholdPercent.
 
@@ -424,7 +425,7 @@ This makes function belowMaintenanceThreshold to always return true unless a val
 // => holdings >= loan \* 1.1
 ```
 
-## [[M-10] Add a timelock to functions that set key variables](https://github.com/code-423n4/marginswap-findings/issues/70)
+## [[M-10] Add a timelock to functions that set key variables](https://github.com/code-423n4/2021-04-marginswap-findings/issues/70)
 
 Functions like `setLeveragePercent` and `setLiquidationThresholdPercent` for both [`IsolatedMarginTrading`](https://github.com/code-423n4/marginswap/blob/main/contracts/IsolatedMarginTrading.sol) and [`CrossMarginTrading`](https://github.com/code-423n4/marginswap/blob/main/contracts/CrossMarginTrading.sol) should be put behind a timelock because they would give more trust to users. Currently, the owner could call them whenever they want and a position could become liquidable from a block to the other.
 
@@ -438,20 +439,20 @@ Functions like `setLeveragePercent` and `setLiquidationThresholdPercent` for bot
 
 # Low Risk Findings
 
-## [[L-01] Events not indexed](https://github.com/code-423n4/marginswap-findings/issues/27)
+## [[L-01] Events not indexed](https://github.com/code-423n4/2021-04-marginswap-findings/issues/27)
 
 The `CrossDeposit`, `CrossTrade`, `CrossWithdraw`, `CrossBorrow`, `CrossOvercollateralizedBorrow` events in `MarginRouter` are not indexed. Off-chain scripts cannot efficiently filter these events.
 
 Recommend adding an index on important arguments like `trader`.
 
-## [[L-02] `getReserves` does not check if tokens match](https://github.com/code-423n4/marginswap-findings/issues/30)
+## [[L-02] `getReserves` does not check if tokens match](https://github.com/code-423n4/2021-04-marginswap-findings/issues/30)
 
 The `UniswapStyleLib.getReserves` function does not check if the tokens are the pair's underlying tokens.
 It blindly assumes that the tokens are in the wrong order if the first one does not match but they could also be completely different tokens.
 
 It could be the case that output amounts are computed for completely different tokens because a wrong pair was provided.
 
-## [[L-03] Role 9 in Roles.sol](https://github.com/code-423n4/marginswap-findings/issues/10)
+## [[L-03] Role 9 in Roles.sol](https://github.com/code-423n4/2021-04-marginswap-findings/issues/10)
 
 Roles.sol contains the following: `roles[msg.sender][9] = true;``
 
@@ -463,7 +464,7 @@ Recommend moving the constants from `Roles.sol` to `RoleAware.sol` and replace 9
 
 **[werg (Marginswap) confirmed](https://github.com/code-423n4/2021-04-marginswap-findings/issues/10#issuecomment-813037820)**
 
-## [[L-04] Multisig wallets can't be used for liquidate](https://github.com/code-423n4/marginswap-findings/issues/13)
+## [[L-04] Multisig wallets can't be used for liquidate](https://github.com/code-423n4/2021-04-marginswap-findings/issues/13)
 
 The function liquidate, which is defined in both `CrossMarginLiquidation.sol` and `IsolatedMarginLiquidation.sol`, includes the modifier noIntermediary. This modifier prevents the use of Multisig wallets.
 
@@ -471,7 +472,7 @@ If the maintainer happens to use a multisig wallet they might not experience any
 
 Recommend verifying if the prevention to use multisig wallets is intentional. In that case add a comment to the liquidate functions. If it is not intentional update the code so multisigs wallets can be supported.
 
-## [[L-05] Different solidity version in UniswapStyleLib.sol](https://github.com/code-423n4/marginswap-findings/issues/6)
+## [[L-05] Different solidity version in UniswapStyleLib.sol](https://github.com/code-423n4/2021-04-marginswap-findings/issues/6)
 
 The solidity version in UniswapStyleLib.sol (>=0.5.0) is different than the solidity version in the other contracts (e.g. ^0.8.0)
 Also math actions are present in the functions getAmountOut and getAmountIn that could easily lead to an underflow or division by 0; (note safemath is not used). Note: In solidity 0.8.0 safemath like protections are default.
@@ -481,10 +482,10 @@ The impact is low because UniswapStyleLib is a library and the solidity version 
 getAmountIn(3,1,1000) would give division by 0
 getAmountIn(1,1,1) will underflow denominator
 
-## [[L-06] sortTokens can be simplified](https://github.com/code-423n4/marginswap-findings/issues/7)
+## [[L-06] sortTokens can be simplified](https://github.com/code-423n4/2021-04-marginswap-findings/issues/7)
 
 The function sortTokens UniswapStyleLib.sol returns 2 values, but only the first return value is used:
-`MarginRouter.sol: (address token0, ) = UniswapStyleLib.sortTokens...`  
+`MarginRouter.sol: (address token0, ) = UniswapStyleLib.sortTokens...`
 `UniswapStyleLib.sol: (address token0, ) = sortTokens..`
 
 In both cases the used return value is compared to the first parameter of the function call. Conclusion: the function is only used to determine the smaller of the two tokens, not really to sort tokens.
@@ -504,7 +505,7 @@ return tokenA < tokenB;
 }
 ```
 
-## [[L-07] Duplicated Code In Admin.viewCurrentMaintenanceStaker()](https://github.com/code-423n4/marginswap-findings/issues/69)
+## [[L-07] Duplicated Code In Admin.viewCurrentMaintenanceStaker()](https://github.com/code-423n4/2021-04-marginswap-findings/issues/69)
 
 There are four lines of code that are duplicated in `viewCurrentMaintenanceStaker`.
 
@@ -532,7 +533,7 @@ staker = nextMaintenanceStaker[staker];
 currentStake = getMaintenanceStakerStake(staker);
 ```
 
-## [[L-08] Magic Numbers used in Admin.\_stake() When Constant Defined Above Can Be Used Instead](https://github.com/code-423n4/marginswap-findings/issues/71)
+## [[L-08] Magic Numbers used in Admin.\_stake() When Constant Defined Above Can Be Used Instead](https://github.com/code-423n4/2021-04-marginswap-findings/issues/71)
 
 Magic Numbers are used in `Admin.\_stake()`, which both obscure the purpose of the function and unnecessarily lead to potential error if the constants are changed during development. Since they are used to refer to a constant defined in RoleAware, and Admin inherits from RoleAware, then Admin can simply call that constant.
 
@@ -556,25 +557,25 @@ amount
 );
 ```
 
-## [[L-09] function initTranche should check that the share parameter is > 0](https://github.com/code-423n4/marginswap-findings/issues/35)
+## [[L-09] function initTranche should check that the share parameter is > 0](https://github.com/code-423n4/2021-04-marginswap-findings/issues/35)
 
 function `initTranche` should check that the "share" parameter is > 0, otherwise, it may be possible to initialize the same tranche again.
 
-## [[L-10] runtime > 1 hours error message discrepancy](https://github.com/code-423n4/marginswap-findings/issues/36)
+## [[L-10] runtime > 1 hours error message discrepancy](https://github.com/code-423n4/2021-04-marginswap-findings/issues/36)
 
 Here, the revert message says that the value needs to be at least 1 hour, however, the code allows value only above the 1 hour (> instead of >=):
 `require(runtime > 1 hours, "Min runtime needs to be at least 1 hour");`
 
 There is no real impact on security here, just a discrepancy between the check and message.
 
-## [[L-11] setLeveragePercent should check that new \_leveragePercent >= 100](https://github.com/code-423n4/marginswap-findings/issues/41)
+## [[L-11] setLeveragePercent should check that new \_leveragePercent >= 100](https://github.com/code-423n4/2021-04-marginswap-findings/issues/41)
 
 function `setLeveragePercent` should check that the `\_leveragePercent >= 100` so that this calculation will not fail later:
 `(leveragePercent - 100)`
 
 This variable can only be set by admin so as long as he sets the appropriate value it should be fine.
 
-## [[L-12] An erroneous constructor's argument could block the withdrawReward](https://github.com/code-423n4/marginswap-findings/issues/33)
+## [[L-12] An erroneous constructor's argument could block the withdrawReward](https://github.com/code-423n4/2021-04-marginswap-findings/issues/33)
 
 The constructor of [`IncentiveDistribution`](https://github.com/code-423n4/marginswap/blob/main/contracts/IncentiveDistribution.sol#L32) take as argument the address of MFI token but it doesn't check that is != address(0). Not worth an issue alone but `IncentiveDistribution` imports `IERC20.sol` and never uses it.
 
@@ -582,7 +583,7 @@ In case the address(0) is passed as argument the `withdrawReward` would fail and
 
 Deploy `IncentiveDistribution` with 0 as `\_MFI argument` and then call `withdrawReward`.
 
-## [[L-13] Not emitting event for important state changes](https://github.com/code-423n4/marginswap-findings/issues/61)
+## [[L-13] Not emitting event for important state changes](https://github.com/code-423n4/2021-04-marginswap-findings/issues/61)
 
 When changing state variables events are not emitted.
 
@@ -628,33 +629,33 @@ For events emitted by MarginRouter, recommend indexing the trader address to mak
 
 # Non-Critical Findings
 
-- [[N-01] Liquidations can be sandwich attacked](https://github.com/code-423n4/marginswap-findings/issues/22)
-- [[N-02] Unlocked Pragma](https://github.com/code-423n4/marginswap-findings/issues/31)
-- [[N-03] No function for TOKEN_ADMIN in RoleAware.sol](https://github.com/code-423n4/marginswap-findings/issues/11)
-- [[N-04] isStakePenalizer differtent than other functions in RoleAware.sol](https://github.com/code-423n4/marginswap-findings/issues/12)
-- [[N-05] Natspec comments not used in a consistent way](https://github.com/code-423n4/marginswap-findings/issues/15)
-- [[N-06] Function parameter named timestamp](https://github.com/code-423n4/marginswap-findings/issues/16)
-- [[N-07] Naming convention for internal functions not used consistently](https://github.com/code-423n4/marginswap-findings/issues/17)
-- [[N-08] Todo's left in code](https://github.com/code-423n4/marginswap-findings/issues/8)
-- [[N-09] The First User To Borrow a Particular Token Can Drain Funds In MarginSwap by Making An Undercollateralized Borrow Using Flash Loans](https://github.com/code-423n4/marginswap-findings/issues/66)
-- [[N-10] function crossWithdrawETH does not emit withdraw event](https://github.com/code-423n4/marginswap-findings/issues/34)
-- [[N-11] All caps indicates that the value should be constant](https://github.com/code-423n4/marginswap-findings/issues/42)
-- [[N-12] TODOs left in code](https://github.com/code-423n4/marginswap-findings/issues/43)
-- [[N-13] Consistent function names](https://github.com/code-423n4/marginswap-findings/issues/44)
-- [[N-14] Useless overflow comments](https://github.com/code-423n4/marginswap-findings/issues/45)
-- [[N-15] Variable is declared and initialized with different values](https://github.com/code-423n4/marginswap-findings/issues/46)
-- [[N-16] Code duplication in viewCurrentMaintenanceStaker](https://github.com/code-423n4/marginswap-findings/issues/47)
-- [[N-17] Misleading revert messages](https://github.com/code-423n4/marginswap-findings/issues/48)
-- [[N-18] setUpdateMaxPegAmount and setUpdateMinPegAmount do not check boundaries](https://github.com/code-423n4/marginswap-findings/issues/49)
-- [[N-22] Liquidators may be a subject of front-running attacks](https://github.com/code-423n4/marginswap-findings/issues/53)
+- [[N-01] Liquidations can be sandwich attacked](https://github.com/code-423n4/2021-04-marginswap-findings/issues/22)
+- [[N-02] Unlocked Pragma](https://github.com/code-423n4/2021-04-marginswap-findings/issues/31)
+- [[N-03] No function for TOKEN_ADMIN in RoleAware.sol](https://github.com/code-423n4/2021-04-marginswap-findings/issues/11)
+- [[N-04] isStakePenalizer differtent than other functions in RoleAware.sol](https://github.com/code-423n4/2021-04-marginswap-findings/issues/12)
+- [[N-05] Natspec comments not used in a consistent way](https://github.com/code-423n4/2021-04-marginswap-findings/issues/15)
+- [[N-06] Function parameter named timestamp](https://github.com/code-423n4/2021-04-marginswap-findings/issues/16)
+- [[N-07] Naming convention for internal functions not used consistently](https://github.com/code-423n4/2021-04-marginswap-findings/issues/17)
+- [[N-08] Todo's left in code](https://github.com/code-423n4/2021-04-marginswap-findings/issues/8)
+- [[N-09] The First User To Borrow a Particular Token Can Drain Funds In MarginSwap by Making An Undercollateralized Borrow Using Flash Loans](https://github.com/code-423n4/2021-04-marginswap-findings/issues/66)
+- [[N-10] function crossWithdrawETH does not emit withdraw event](https://github.com/code-423n4/2021-04-marginswap-findings/issues/34)
+- [[N-11] All caps indicates that the value should be constant](https://github.com/code-423n4/2021-04-marginswap-findings/issues/42)
+- [[N-12] TODOs left in code](https://github.com/code-423n4/2021-04-marginswap-findings/issues/43)
+- [[N-13] Consistent function names](https://github.com/code-423n4/2021-04-marginswap-findings/issues/44)
+- [[N-14] Useless overflow comments](https://github.com/code-423n4/2021-04-marginswap-findings/issues/45)
+- [[N-15] Variable is declared and initialized with different values](https://github.com/code-423n4/2021-04-marginswap-findings/issues/46)
+- [[N-16] Code duplication in viewCurrentMaintenanceStaker](https://github.com/code-423n4/2021-04-marginswap-findings/issues/47)
+- [[N-17] Misleading revert messages](https://github.com/code-423n4/2021-04-marginswap-findings/issues/48)
+- [[N-18] setUpdateMaxPegAmount and setUpdateMinPegAmount do not check boundaries](https://github.com/code-423n4/2021-04-marginswap-findings/issues/49)
+- [[N-22] Liquidators may be a subject of front-running attacks](https://github.com/code-423n4/2021-04-marginswap-findings/issues/53)
 
 # Gas Optimizations
 
-- [[G-01] Error codes](https://github.com/code-423n4/marginswap-findings/issues/54)
-- [[G-02] Same calculations are done twice](https://github.com/code-423n4/marginswap-findings/issues/55)
-- [[G-03] Unused variables](https://github.com/code-423n4/marginswap-findings/issues/56)
-- [[G-04] Only process value if amount is greater than 0](https://github.com/code-423n4/marginswap-findings/issues/57)
-- [[G-05] Not used imports](https://github.com/code-423n4/marginswap-findings/issues/58)
-- [[G-06] Extract storage variable to a memory variable](https://github.com/code-423n4/marginswap-findings/issues/59)
-- [[G-07] Do not send value if holdingsValue is 0](https://github.com/code-423n4/marginswap-findings/issues/60)
-- [[G-08] Useless addition of 0](https://github.com/code-423n4/marginswap-findings/issues/62)
+- [[G-01] Error codes](https://github.com/code-423n4/2021-04-marginswap-findings/issues/54)
+- [[G-02] Same calculations are done twice](https://github.com/code-423n4/2021-04-marginswap-findings/issues/55)
+- [[G-03] Unused variables](https://github.com/code-423n4/2021-04-marginswap-findings/issues/56)
+- [[G-04] Only process value if amount is greater than 0](https://github.com/code-423n4/2021-04-marginswap-findings/issues/57)
+- [[G-05] Not used imports](https://github.com/code-423n4/2021-04-marginswap-findings/issues/58)
+- [[G-06] Extract storage variable to a memory variable](https://github.com/code-423n4/2021-04-marginswap-findings/issues/59)
+- [[G-07] Do not send value if holdingsValue is 0](https://github.com/code-423n4/2021-04-marginswap-findings/issues/60)
+- [[G-08] Useless addition of 0](https://github.com/code-423n4/2021-04-marginswap-findings/issues/62)
