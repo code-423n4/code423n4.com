@@ -659,3 +659,11 @@ For events emitted by MarginRouter, recommend indexing the trader address to mak
 - [[G-06] Extract storage variable to a memory variable](https://github.com/code-423n4/2021-04-marginswap-findings/issues/59)
 - [[G-07] Do not send value if holdingsValue is 0](https://github.com/code-423n4/2021-04-marginswap-findings/issues/60)
 - [[G-08] Useless addition of 0](https://github.com/code-423n4/2021-04-marginswap-findings/issues/62)
+
+# Disclosures
+
+C4 is an open organization governed by participants in the community.
+
+C4 Contests incentivize the discovery of exploits, vulnerabilities, and bugs in smart contracts. Security researchers are rewarded at an increasing rate for finding higher risk issues. Contest submissions are judged by a knowledgeable security researcher and solidity developer and disclosed to sponsoring developers. C4 does not conduct formal verification regarding the provided code, but instead provides final verification.
+
+C4 does not provide any guarantee or warranty regarding the security of this project. All smart contract software should be used at the sole risk and responsibility of users.
