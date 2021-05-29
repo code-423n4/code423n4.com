@@ -617,9 +617,9 @@ Some constant values are difficult to read in one time because they have at lot 
 
 Recommend the following replacements:
 
-- 1000000e18 with 1_000_000e18
-- 4000000e18 with 4_000_000e18
-- 100000000e18 with 100_000_000e18
+- 1000000e18 with 1\_000\_000e18
+- 4000000e18 with 4\_000\_000e18
+- 100000000e18 with 100\_000\_000e18
 
 ### Comments:
 
