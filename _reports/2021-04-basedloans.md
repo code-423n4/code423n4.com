@@ -25,7 +25,7 @@ During the code contest outlined in this document, C4 conducted an analysis of B
 - [gpersoon](https://twitter.com/gpersoon)
 - [OxRajeev](https://twitter.com/0xRajeev)
 - [Thunder](https://twitter.com/SolidityDev)
-- [shw](https://twitter.com/x9453)
+- [shw](https://twitter.com/shw9453)
 - [toastedsteaksandwich](https://twitter.com/AshiqAmien)
 
 This contest was judged by [Cem](https://twitter.com/cemozer_).
