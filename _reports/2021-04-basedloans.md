@@ -694,3 +694,11 @@ It is recommended to emit an event indicating the old comp address, and the new 
 **[ghoul-sol (Based Loans) confirmed](https://github.com/code-423n4/2021-04-basedloans-findings/issues/13#issuecomment-832835787):**
 
 > Fixed as recommended.
+
+# Disclosures
+
+C4 is an open organization governed by participants in the community.
+
+C4 Contests incentivize the discovery of exploits, vulnerabilities, and bugs in smart contracts. Security researchers are rewarded at an increasing rate for finding higher risk issues. Contest submissions are judged by a knowledgeable security researcher and solidity developer and disclosed to sponsoring developers. C4 does not conduct formal verification regarding the provided code, but instead provides final verification.
+
+C4 does not provide any guarantee or warranty regarding the security of this project. All smart contract software should be used at the sole risk and responsibility of users.
