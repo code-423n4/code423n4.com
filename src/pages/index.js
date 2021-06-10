@@ -21,9 +21,9 @@ export default function SiteIndex({ data }) {
           <div className="button-wrapper">
             <a
               className="button cta-button"
-              href="https://medium.com/@scott_lew_is/introducing-code-432n4-f4a12d92a35d"
+              href="https://docs.code4rena.com"
             >
-              <strong>Read the intro post</strong>
+              <strong>Read the docs</strong>
             </a>
           </div>
         </section>
