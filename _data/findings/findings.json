@@ -7564,6 +7564,18 @@
     "awardUSD": 668.45
   },
   {
+    "contest": 6,
+    "handle": "GalloDaSballo",
+    "finding": "M-1",
+    "risk": "2",
+    "pie": 3,
+    "split": 1,
+    "slice": 3,
+    "award": 2005.3475935828874,
+    "awardCoin": "USDC",
+    "awardUSD": 2005.35
+  },
+  {
     "contest": 7,
     "handle": "0xRajeev",
     "finding": "N-01",
