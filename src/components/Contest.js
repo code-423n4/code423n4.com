@@ -11,6 +11,7 @@ const Contest = ({ contest: { node } }) => {
     start_time,
     end_time,
     repo,
+    findingsRepo,
     fields,
   } = node;
   const { submissionPath } = fields;
@@ -33,7 +34,7 @@ const Contest = ({ contest: { node } }) => {
         </h4>
         <p>{details}</p>
         {t.state === "soon" || t.state === "active" ? (
-          <Countdown state={t.state} start={start_time} end={end_time} />
+          <Countdown state={t.state} start={start_time} end={end_time} isPreview={findingsRepo === ""} />
         ) : (
           <p>
             Contest ran {t.startDay}—{t.endDay}
@@ -44,12 +45,12 @@ const Contest = ({ contest: { node } }) => {
             href={repo}
             className="contest-repo button button-small cta-button"
           >
-            Contest details
+            {`${findingsRepo === "" ? "Preview" : "View"} Contest`}
           </a>
         ) : (
           ""
         )}
-        {t.state === "active" && submissionPath ? (
+        {t.state === "active" && findingsRepo && submissionPath ? (
           <a href={submissionPath} className="button button-small cta-button">
             Submit Finding
           </a>
