@@ -32,6 +32,7 @@ const queries = {
           contestid
           title
           start_time(formatString: "YYYY-MM")
+          findingsRepo
           fields {
             submissionPath
           }
@@ -93,12 +94,14 @@ exports.createPages = async ({ graphql, actions }) => {
   let contests = await graphql(queries.contests);
   const formTemplate = path.resolve("./src/layouts/ReportForm.js");
   contests.data.contests.edges.forEach((contest) => {
-    createPage({
-      path: contest.node.fields.submissionPath,
-      component: formTemplate,
-      context: {
-        contestId: contest.node.contestid,
-      },
-    });
+    if (contest.node.findingsRepo) {
+      createPage({
+        path: contest.node.fields.submissionPath,
+        component: formTemplate,
+        context: {
+          contestId: contest.node.contestid,
+        },
+      });
+    }
   });
 };
