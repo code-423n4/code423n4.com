@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { getTimeRemaining, getDates } from "../utils/time";
 
-const Countdown = ({ start, end }) => {
+const Countdown = ({ start, end, isPreview }) => {
   const [timeLeft, setTimeLeft] = useState(getTimeRemaining());
+
+  const type = isPreview ? "preview" : "contest";
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -35,8 +37,8 @@ const Countdown = ({ start, end }) => {
         </span>
         <span className="wrapper-time">
           {t.state === "soon"
-            ? " until contest starts"
-            : " until contests ends"}
+            ? ` until ${type} starts`
+            : ` until ${type} ends`}
         </span>
       </h5>
     </div>

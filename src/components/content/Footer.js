@@ -5,7 +5,7 @@ const Footer = () => {
     <footer>
       <span>An open organization</span>
       <a href="https://twitter.com/code423n4">Twitter</a>
-      <a href="https://discord.gg/EY5dvm3evD">Discord</a>
+      <a href="https://discord.gg/code4rena">Discord</a>
       <a href="https://github.com/code-423n4/">GitHub</a>
       <span className="eth-address">
         <a href="https://etherscan.io/address/0xC2BC2F890067C511215F9463A064221577A53E10">
