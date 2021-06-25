@@ -48,6 +48,7 @@ export const query = graphql`
           end_time
           amount
           repo
+          findingsRepo
           sponsor {
             name
             image {
