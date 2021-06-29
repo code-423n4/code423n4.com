@@ -442,7 +442,7 @@ footer span {
 
 footer span::after,
 footer a::after {
-  color: #ffffff33;
+  color: #ffffff88;
   padding: 0 5px;
 }
 
@@ -456,7 +456,7 @@ footer span::after {
 }
 
 footer span {
-  color: #ffffff33;
+  color: #ffffff88;
 }
 
 footer a:link {
