@@ -44,6 +44,10 @@ header {
   left: 0px;
 }
 
+.logo:focus-visible img {
+  outline: 2px solid white;
+}
+
 .wrapper-nav {
   position: relative;
 }
