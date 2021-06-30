@@ -1,5 +1,5 @@
 ---
-sponsor: "meebits"
+sponsor: "LarvaLabs Meebits"
 slug: "2021-04-meebits"
 date: "2021-06-30"
 title: "Larva Labs Meebits"
