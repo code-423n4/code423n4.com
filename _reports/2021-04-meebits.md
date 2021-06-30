@@ -33,7 +33,7 @@ During the code contest outlined in this document, C4 conducted an analysis of L
 
 This contest was judged by [Joseph Delong](https://twitter.com/josephdelong).
 
-Final report assembled by [ninek](https://twitter.com/_ninek_).
+Final report assembled by [ninek](https://twitter.com/_ninek_) and [moneylegobatman](https://twitter.com/money_lego).
 
 # Summary
 
@@ -146,7 +146,7 @@ require(index > 0 && index <= TOKEN_LIMIT);
 
 ## [[H-05] NFT can be minted for free after sale ended](https://github.com/code-423n4/2021-04-meebits-findings/issues/75)
 
-The `getPrice()` return 0 after the sale ended and (```SALE_LIMIT - numSales```) NFT can be minted for free.
+The `getPrice()` function returned 0 after the sale ended and (```SALE_LIMIT - numSales```) NFT can be minted for free.
 
 Without documentation, it's not clear if this is the expected behavior or not. If it's unexpected, it is recommended to revert instead of returning 0. If it's expected behavior, it's possible to create a smart contract and claim all the remaining NFT front-running the regular users.
 
@@ -177,7 +177,7 @@ That said, [`_addNFToken`](https://github.com/code-423n4/2021-04-meebits/blob/2e
 
 Refactoring as suggested below will save gas, make code easier to read and prevent reverts in rare unfortunate occasions of clashes.
 
-Recommend not generating random IDs and instead use counters. It will make the code more predictable and easier to read, avoids clashing of IDs, reduces the need to track minted tokens.
+Recommend not generating random IDs and instead using counters. It makes the code more predictable and easier to read, avoids clashing of IDs, and reduces the need to track minted tokens.
 
 ## [[M-02] instead of `call()` , `transfer()` is used to withdraw the ether](https://github.com/code-423n4/2021-04-meebits-findings/issues/2)
 
@@ -203,7 +203,7 @@ Recommend using `call()` to send ETH.
 
 A typical/recommended contract structure has the variable declarations followed by events instead of the other way around. This affects readability/maintainability and may introduce/persist security issues.
 
-Consider restructuring the contract to place the variable declarations before events.
+Recommend considering restructuring the contract to place the variable declarations before events.
 
 ## [[L-01] Mint can be front-run](https://github.com/code-423n4/2021-04-meebits-findings/issues/20)
 
@@ -245,14 +245,14 @@ Recommend adding an event for `devMint` and emit at the end of `devMint()` funct
 
 ## [[L-05] SafeMath library asserts instead of reverts](https://github.com/code-423n4/2021-04-meebits-findings/issues/17)
 
-The implementation of SafeMath assert's instead of performing a `revert` on failure. An `assert` will consume all the transaction gas, whereas a `revert`/`require` releases the remaining gas to the transaction sender again. Usually, one wants to try to keep the gas cost for contract failures low and use `assert` only for invariants that should always be true.
+The implementation of SafeMath performs an `assert` instead of a `revert` on failure. An `assert` will consume all the transaction gas, whereas a `revert`/`require` releases the remaining gas to the transaction sender again. Usually, one wants to try to keep the gas cost for contract failures low and use `assert` only for invariants that should always be true.
 
 Recommend using `require` instead of `assert`.
 
 # Gas Optimizations
 ## [[G-00] Explicit initialization with zero not required for `numTokens`](https://github.com/code-423n4/2021-04-meebits-findings/issues/26)
 
-Explicit initialization with zero is not required for variable declaration of numTokens because uints are 0 by default. Removing this will reduce contract size and save a bit of gas.
+Explicit initialization with zero is not required for variable declaration of `numTokens` because uints are 0 by default. Removing this will reduce contract size and save a bit of gas.
 
 Recommend removing explicit initialization with zero.
 
