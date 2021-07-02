@@ -33,7 +33,7 @@ During the code contest outlined in this document, C4 conducted an analysis of L
 
 This contest was judged by [Joseph Delong](https://twitter.com/josephdelong).
 
-Final report assembled by [ninek](https://twitter.com/_ninek_).
+Final report assembled by [ninek](https://twitter.com/_ninek_) and [moneylegobatman](https://twitter.com/money_lego).
 
 # Summary
 
@@ -71,14 +71,14 @@ See [reference implementation](https://github.com/OpenZeppelin/openzeppelin-cont
 
 This will impact compatibility with NFT platforms that expect full conformity with ERC-721 specification.
 
-Recommend accepting 0 index by changing to “require(index >= 0 && index < TOKEN_LIMIT);”.
+Recommend accepting 0 index by changing to `require(index >= 0 && index < TOKEN_LIMIT);`.
 
 **[dangerousfood (Meebits) commented](https://github.com/code-423n4/2021-04-meebits-findings/issues/47#issuecomment-847429104):**
 > Beebots indexes by 1 for whatever reason
 
-## [[H-01] Signature malleability of EVM's ecrecover in `verify()`](https://github.com/code-423n4/2021-04-meebits-findings/issues/54)
+## [[H-01] Signature malleability of EVM's `ecrecover` in `verify()`](https://github.com/code-423n4/2021-04-meebits-findings/issues/54)
 
-EVM's ecrecover is susceptible to signature malleability, which allows replay attacks, but that is mitigated here by tracking accepted offers and canceling them (on L645) specifically to prevent replays. However, if any application logic changes, it might make signature malleability a risk for replay attacks.
+EVM's `ecrecover` is susceptible to signature malleability, which allows replay attacks, but that is mitigated here by tracking accepted offers and canceling them (on L645) specifically to prevent replays. However, if any application logic changes, it might make signature malleability a risk for replay attacks.
 
 See [reference](https://swcregistry.io/docs/SWC-117).
 
@@ -96,7 +96,7 @@ This can be exploited to transfer any NFT whose `idToOwner` is zero, including N
 
 Recommend an additional check be imposed within `verify` that ensures the signer is not the zero-address which will alleviate this check. For more details, consult the [EIP721 implementation by OpenZeppelin](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v3.4.0/contracts/cryptography/ECDSA.sol#L53-L71).
 
-## [[H-03] `Beebots.TradeValid()` Will Erroneously Return True When Maker Is Set To `Address(0)` and makerIds Are Set To The TokenIds of Unminted Beebot NFTs](https://github.com/code-423n4/2021-04-meebits-findings/issues/77)
+## [[H-03] `Beebots.TradeValid()` Will Erroneously Return True When Maker Is Set To `Address(0)` and `makerIds` Are Set To The `TokenIds` of Unminted Beebot NFTs](https://github.com/code-423n4/2021-04-meebits-findings/issues/77)
 
 `Beebots.TradeValid()` will erroneously return true when `maker` is set to `address(0)` and `makerIds` are set to the `tokenIds` of unminted beebot NFTs.
 
@@ -104,15 +104,15 @@ Recommend an additional check be imposed within `verify` that ensures the signer
 
 Finally, before an NFT has even been minted at all, it is assumed to have an owner of `address(0)` due to the `idToOwner` mapping being initialized to zero for all uninitialized slots, so an attacker can call `tradeValid()` with `maker` set to `address(0)` and `makerIds` set to the `tokenIds` of any unminted `nftIds`, and `tradeValid()` will erroneously return true.
 
-(1) `Beebots.verify()` returns true no matter what signature is given when signer is set to `address(0)`.
-(1a) `BeeBots.verify()` does not check to ensure that signer is not `address(0)`.
-(1b) This is a problem because ecrecover fails silently if the signature does not match and returns zero.
-(1c) So if an attacker passes in `address(0)` as the signer, then verify will return true no matter what signature is provided, since ecrecover will return `address(0)`, and the signer is `address(0)`, so verify will pass.
-(1d) This means that `BeeBots.tradeValid()` will erroneously return true when maker is set to `address(0)`.
-(2) Before an NFT has even been minted at all, it is assumed to have an owner of `address(0)` due to the `idToOwner` mapping being initialized to zero for all uninitialized slots
-(2a) Solidity initializes all mappings to 0 for all slots that have not yet been set.
-(2b) So for any NFT ID that has not yet been minted, the corresponding owner in the mapping `BeeBots.idToOwner` is `address(0)`, even though that NFT should not even exist.
-(2c) This means that an attacker can call `tradeValid()` with maker set to `address(0)` and makerIds set to any unminted nftIds, and `tradeValid()` will erroneously return true.
+* (1) `Beebots.verify()` returns true no matter what signature is given when signer is set to `address(0)`.
+  * (1a) `BeeBots.verify()` does not check to ensure that signer is not `address(0)`.
+  * (1b) This is a problem because `ecrecover` fails silently if the signature does not match and returns zero.
+  * (1c) So if an attacker passes in `address(0)` as the signer, then verify will return true no matter what signature is provided, since `ecrecover` will return `address(0)`, and the signer is `address(0)`, so verify will pass.
+  * (1d) This means that `BeeBots.tradeValid()` will erroneously return true when maker is set to `address(0)`.
+* (2) Before an NFT has even been minted at all, it is assumed to have an owner of `address(0)` due to the `idToOwner` mapping being initialized to zero for all uninitialized slots
+  * (2a) Solidity initializes all mappings to 0 for all slots that have not yet been set.
+  * (2b) So for any NFT ID that has not yet been minted, the corresponding owner in the mapping `BeeBots.idToOwner` is `address(0)`, even though that NFT should not even exist.
+  * (2c) This means that an attacker can call `tradeValid()` with maker set to `address(0)` and makerIds set to any unminted nftIds, and `tradeValid()` will erroneously return true.
 
 (1) Recommend adding this check to `Beebots.verify()`:
 ```require(signer != address(0), "Cannot verify signatures from 0x0");```
@@ -146,7 +146,7 @@ require(index > 0 && index <= TOKEN_LIMIT);
 
 ## [[H-05] NFT can be minted for free after sale ended](https://github.com/code-423n4/2021-04-meebits-findings/issues/75)
 
-The `getPrice()` return 0 after the sale ended and (```SALE_LIMIT - numSales```) NFT can be minted for free.
+The `getPrice()` function returned 0 after the sale ended and (```SALE_LIMIT - numSales```) NFT can be minted for free.
 
 Without documentation, it's not clear if this is the expected behavior or not. If it's unexpected, it is recommended to revert instead of returning 0. If it's expected behavior, it's possible to create a smart contract and claim all the remaining NFT front-running the regular users.
 
@@ -177,7 +177,7 @@ That said, [`_addNFToken`](https://github.com/code-423n4/2021-04-meebits/blob/2e
 
 Refactoring as suggested below will save gas, make code easier to read and prevent reverts in rare unfortunate occasions of clashes.
 
-Recommend not generating random IDs and instead use counters. It will make the code more predictable and easier to read, avoids clashing of IDs, reduces the need to track minted tokens.
+Recommend not generating random IDs and instead using counters. It makes the code more predictable and easier to read, avoids clashing of IDs, and reduces the need to track minted tokens.
 
 ## [[M-02] instead of `call()` , `transfer()` is used to withdraw the ether](https://github.com/code-423n4/2021-04-meebits-findings/issues/2)
 
@@ -203,7 +203,7 @@ Recommend using `call()` to send ETH.
 
 A typical/recommended contract structure has the variable declarations followed by events instead of the other way around. This affects readability/maintainability and may introduce/persist security issues.
 
-Consider restructuring the contract to place the variable declarations before events.
+Recommend considering restructuring the contract to place the variable declarations before events.
 
 ## [[L-01] Mint can be front-run](https://github.com/code-423n4/2021-04-meebits-findings/issues/20)
 
@@ -245,14 +245,14 @@ Recommend adding an event for `devMint` and emit at the end of `devMint()` funct
 
 ## [[L-05] SafeMath library asserts instead of reverts](https://github.com/code-423n4/2021-04-meebits-findings/issues/17)
 
-The implementation of SafeMath assert's instead of performing a `revert` on failure. An `assert` will consume all the transaction gas, whereas a `revert`/`require` releases the remaining gas to the transaction sender again. Usually, one wants to try to keep the gas cost for contract failures low and use `assert` only for invariants that should always be true.
+The implementation of SafeMath performs an `assert` instead of a `revert` on failure. An `assert` will consume all the transaction gas, whereas a `revert`/`require` releases the remaining gas to the transaction sender again. Usually, one wants to try to keep the gas cost for contract failures low and use `assert` only for invariants that should always be true.
 
 Recommend using `require` instead of `assert`.
 
 # Gas Optimizations
 ## [[G-00] Explicit initialization with zero not required for `numTokens`](https://github.com/code-423n4/2021-04-meebits-findings/issues/26)
 
-Explicit initialization with zero is not required for variable declaration of numTokens because uints are 0 by default. Removing this will reduce contract size and save a bit of gas.
+Explicit initialization with zero is not required for variable declaration of `numTokens` because uints are 0 by default. Removing this will reduce contract size and save a bit of gas.
 
 Recommend removing explicit initialization with zero.
 
