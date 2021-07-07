@@ -371,9 +371,8 @@ Recommend disallowing transfers from/to this address. Or better, track the total
 
 The `getEtherPrice` function in the contract `FSDNetwork` fetches the ETH price from a Chainlink aggregator using the `latestRoundData` function. However, there are no checks on `roundID` nor `timeStamp`, resulting in stale prices.
 
-Recommend adding checks on the return data with proper revert messages if the price is stale or the round is incomplete, for Example:
-
-"`Solidity
+Recommend adding checks on the return data with proper revert messages if the price is stale or the round is incomplete, for example:
+```Solidity
 (uint80 roundID, int256 price, , uint256 timeStamp, uint80 answeredInRound) = ETH_CHAINLINK.latestRoundData();
 require(answeredInRound >= roundID, "...");
 require(timeStamp != 0, "...");
