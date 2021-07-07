@@ -557,7 +557,7 @@ When purchasing a membership, the number of FSD tokens that a user should pay is
 2. The user purchases a membership by calling `purchaseMembership`. Since the price of FSD is relatively high, the user pays fewer FSD tokens for the membership fee than before.
 3. The user burns the previously minted FSD tokens, losing 3.5% of his capital for the tribute fees.
 
-Although the user pays for the 3.5% tribute fees, it is still possible to make a profit. Suppose that the price of FSD to ETH is `p_1` and `p_2` before and after minting, respectively. The user purchases a membership with `x` ETH `costShareBenefit` and uses `y' ETH to flash mint the FSD tokens. In a regular purchase, the user pays `0.04x / p_1` FSD tokens, equivalent to `0.04x` ETH. By performing flash mints and burns, the user pays `0.04x / p_2` FSD tokens, which is, in fact, equivalent to `0.04x * p_1 / p_2` ETH. He also pays `0.035y` ETH for tribute fees. The profit user made is `0.04x * (1 - p1 / p2) - 0.035y` (ETH), where `p2` and `y` are dependent to each other but independent to `x`. Thus, the profit can be positive if `costShareBenefit` is large enough.
+Although the user pays for the 3.5% tribute fees, it is still possible to make a profit. Suppose that the price of FSD to ETH is `p_1` and `p_2` before and after minting, respectively. The user purchases a membership with `x` ETH `costShareBenefit` and uses `y` ETH to flash mint the FSD tokens. In a regular purchase, the user pays `0.04x / p_1` FSD tokens, equivalent to `0.04x` ETH. By performing flash mints and burns, the user pays `0.04x / p_2` FSD tokens, which is, in fact, equivalent to `0.04x * p_1 / p_2` ETH. He also pays `0.035y` ETH for tribute fees. The profit user made is `0.04x * (1 - p1 / p2) - 0.035y` (ETH), where `p2` and `y` are dependent to each other but independent to `x`. Thus, the profit can be positive if `costShareBenefit` is large enough.
 
 The same vulnerability exists when a user opens a cost-share request, where the `bounty` to pay is calculated based on the current price of FSD tokens.
 
@@ -683,7 +683,7 @@ however they do call "return" at the end of the function. This is confusing for 
        return _castVote(signatory, proposalId, support);
     }
 ```
-recommend removing the "return" statements from `castVote` and `castVoteBySig`.
+Recommend removing the "return" statements from `castVote` and `castVoteBySig`.
 
 **[fairside-core (FairSide) confirmed](https://github.com/code-423n4/2021-05-fairside-findings/issues/10#issuecomment-852200367):**
  > Fixed in [PR#22](https://github.com/fairside-core/2021-05-fairside/pull/22).
