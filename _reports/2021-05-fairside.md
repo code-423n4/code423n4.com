@@ -120,7 +120,7 @@ The `TOTAL_GOVERNANCE_SCORE` is supposed to track the sum of the credit scores o
 
 In `ERC20ConvictionScore._updateConvictionScore`, when the user does not fulfill the governance criteria anymore and is therefore removed, the `governanceDelta` should be negative, but it's positive.
 
-```
+```solidity
 isGovernance[user] = false;
 governanceDelta = getPriorConvictionScore(
     user,
@@ -130,7 +130,7 @@ governanceDelta = getPriorConvictionScore(
 
 It then gets added to the new total:
 
-```
+```solidity
 uint224 totalGCSNew =
     add224(
         totalGCSOld,
@@ -175,7 +175,7 @@ Recommend using the solidity function `abs` to get the `_reserveDelta` absolute 
 
 In `ERC20ConvictionScore._updateConvictionScore`, when the user does not fulfill the governance criteria anymore, the `governanceDelta` is the old conviction score of the previous block.
 
-```
+```solidity
 isGovernance[user] = false;
 governanceDelta = getPriorConvictionScore(
     user,
@@ -217,7 +217,7 @@ The current implementation of the arctan formula in the contract `FairSideFormul
 
 The function `_arctan` misses two `abs` on the variable `a'. The correct implementation should be:
 
-```
+```solidity
 function _arctan(bytes16 a) private pure returns (bytes16) {
     return
         a.mul(PI_4).sub(
@@ -371,9 +371,8 @@ Recommend disallowing transfers from/to this address. Or better, track the total
 
 The `getEtherPrice` function in the contract `FSDNetwork` fetches the ETH price from a Chainlink aggregator using the `latestRoundData` function. However, there are no checks on `roundID` nor `timeStamp`, resulting in stale prices.
 
-Recommend adding checks on the return data with proper revert messages if the price is stale or the round is incomplete, for Example:
-
-"`Solidity
+Recommend adding checks on the return data with proper revert messages if the price is stale or the round is incomplete, for example:
+```Solidity
 (uint80 roundID, int256 price, , uint256 timeStamp, uint80 answeredInRound) = ETH_CHAINLINK.latestRoundData();
 require(answeredInRound >= roundID, "...");
 require(timeStamp != 0, "...");
@@ -391,7 +390,7 @@ In the function `purchaseMembership` of FSDNetwork.sol, when the membership is e
 This might lead to a `gracePeriod` that is lower than expected. It seems logical to also increase the `gracePeriod`.
 
 FSDNetwork.sol:
-```
+```Solidty
 function purchaseMembership(uint256 costShareBenefit) external {
      ...
       if (membership[msg.sender].creation == 0) {
@@ -558,7 +557,7 @@ When purchasing a membership, the number of FSD tokens that a user should pay is
 2. The user purchases a membership by calling `purchaseMembership`. Since the price of FSD is relatively high, the user pays fewer FSD tokens for the membership fee than before.
 3. The user burns the previously minted FSD tokens, losing 3.5% of his capital for the tribute fees.
 
-Although the user pays for the 3.5% tribute fees, it is still possible to make a profit. Suppose that the price of FSD to ETH is `p_1` and `p_2` before and after minting, respectively. The user purchases a membership with `x` ETH `costShareBenefit` and uses `y' ETH to flash mint the FSD tokens. In a regular purchase, the user pays `0.04x / p_1` FSD tokens, equivalent to `0.04x` ETH. By performing flash mints and burns, the user pays `0.04x / p_2` FSD tokens, which is, in fact, equivalent to `0.04x * p_1 / p_2` ETH. He also pays `0.035y` ETH for tribute fees. The profit user made is `0.04x * (1 - p1 / p2) - 0.035y` (ETH), where `p2` and `y` are dependent to each other but independent to `x`. Thus, the profit can be positive if `costShareBenefit` is large enough.
+Although the user pays for the 3.5% tribute fees, it is still possible to make a profit. Suppose that the price of FSD to ETH is `p_1` and `p_2` before and after minting, respectively. The user purchases a membership with `x` ETH `costShareBenefit` and uses `y` ETH to flash mint the FSD tokens. In a regular purchase, the user pays `0.04x / p_1` FSD tokens, equivalent to `0.04x` ETH. By performing flash mints and burns, the user pays `0.04x / p_2` FSD tokens, which is, in fact, equivalent to `0.04x * p_1 / p_2` ETH. He also pays `0.035y` ETH for tribute fees. The profit user made is `0.04x * (1 - p1 / p2) - 0.035y` (ETH), where `p2` and `y` are dependent to each other but independent to `x`. Thus, the profit can be positive if `costShareBenefit` is large enough.
 
 The same vulnerability exists when a user opens a cost-share request, where the `bounty` to pay is calculated based on the current price of FSD tokens.
 
@@ -604,7 +603,7 @@ Recommend forcing users to wait for (at least) a block to prevent flash minting 
 ## [[L-07] Check if variables are initialized](https://github.com/code-423n4/2021-05-fairside-findings/issues/59)
 
 A variable named `fairSideConviction` is set in the contract FSD function `setFairSideConviction`. However, functions that use this variable do not check that it is already initialized. For example, function `tokenizeConviction` in contract `ERC20ConvictionScore` may transfer tokens to the 0x0 address:
-   ```
+   ```solidty
    _transfer(msg.sender, address(fairSideConviction), locked);
    ```
 This will make these tokens inaccessible and basically burned. It would be better if the code explicitly checked before that ```address(fairSideConviction) != address(0)```
@@ -674,7 +673,7 @@ But it should be "... meant to be voted onchain".
 
 The functions `castVote` and  `castVoteBySig` of FairSideDAO.sol have no "returns" parameters,
 however they do call "return" at the end of the function. This is confusing for the readers of the code.
-```
+```solidity
  function castVote(uint256 proposalId, bool support) public {
         return _castVote(msg.sender, proposalId, support);
     }
@@ -684,7 +683,7 @@ however they do call "return" at the end of the function. This is confusing for 
        return _castVote(signatory, proposalId, support);
     }
 ```
-recommend removing the "return" statements from `castVote` and `castVoteBySig`.
+Recommend removing the "return" statements from `castVote` and `castVoteBySig`.
 
 **[fairside-core (FairSide) confirmed](https://github.com/code-423n4/2021-05-fairside-findings/issues/10#issuecomment-852200367):**
  > Fixed in [PR#22](https://github.com/fairside-core/2021-05-fairside/pull/22).
@@ -694,7 +693,7 @@ recommend removing the "return" statements from `castVote` and `castVoteBySig`.
 The function `purchaseMembership` of FSDNetwork.sol contains a variable that is very similar to a global variable. It's easy to confuse the two, possibly introducing errors in the future. These variables are `totalCostShareBenefit`, and `totalCostShareBenefits`.
 
 FSDNetwork.sol:
-```
+```solidity
    uint256 public totalCostShareBenefits;
   function purchaseMembership(uint256 costShareBenefit) external {
         uint256 totalCostShareBenefit = membership[msg.sender].availableCostShareBenefits.add(costShareBenefit);
@@ -790,7 +789,7 @@ Recommend summing up the for/against votes in the `votes` array of `validateVote
 
 In `ERC20ConvictionScore.sol`, we store
 
-```
+```solidity
     // Conviction score based on # of days multiplied by # of FSD & NFT
     // @notice A record of conviction score checkpoints for each account, by index
     mapping(address => mapping(uint32 => Checkpoint)) public checkpoints;
@@ -844,7 +843,7 @@ arctan_uint(1 * precision) ~ 574 Gas (with solidity 0.6.8)
 
 The implementation takes a different approach to floating points: it multiples all numbers by precision. The precision factor can be adjusted as long as all temporary variables stay below 2^256 (the max value of a uint)
 
-```
+```solidity
 pragma solidity 0.6.8;
 contract Test{
    uint constant precision=10**30;
