@@ -1,5 +1,5 @@
 ---
-sponsor: "fairside"
+sponsor: "FairSide"
 slug: "2021-05-fairside"
 date: "2021-07-07"
 title: "FairSide"
