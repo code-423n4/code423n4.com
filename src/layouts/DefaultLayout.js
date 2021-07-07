@@ -14,7 +14,12 @@ const DefaultLayout = (props) => {
   } = props;
   return (
     <>
-      <Helmet>
+      <Helmet 
+        htmlAttributes={{
+          lang: 'en',
+        }}
+      >
+        
         <meta charset="utf-8" />
         <meta httpEquiv="X-UA-Compatible" content="chrome-1" />
         <meta

@@ -6,9 +6,6 @@ import LeaderboardHandle from "./LeaderboardHandle";
 const LeaderboardTable = ({ results }) => {
   const columns = React.useMemo(
     () => [
-      {
-        Header: "Leaderboard",
-        columns: [
           {
             Header: "Competitor",
             accessor: "handle",
@@ -58,8 +55,6 @@ const LeaderboardTable = ({ results }) => {
             sortDescFirst: true,
           },
         ],
-      },
-    ],
     []
   );
 
