@@ -175,7 +175,7 @@ Recommend using the solidity function `abs` to get the `_reserveDelta` absolute 
 
 In `ERC20ConvictionScore._updateConvictionScore`, when the user does not fulfill the governance criteria anymore, the `governanceDelta` is the old conviction score of the previous block.
 
-```
+```solidity
 isGovernance[user] = false;
 governanceDelta = getPriorConvictionScore(
     user,
@@ -217,7 +217,7 @@ The current implementation of the arctan formula in the contract `FairSideFormul
 
 The function `_arctan` misses two `abs` on the variable `a'. The correct implementation should be:
 
-```
+```solidity
 function _arctan(bytes16 a) private pure returns (bytes16) {
     return
         a.mul(PI_4).sub(
@@ -673,7 +673,7 @@ But it should be "... meant to be voted onchain".
 
 The functions `castVote` and  `castVoteBySig` of FairSideDAO.sol have no "returns" parameters,
 however they do call "return" at the end of the function. This is confusing for the readers of the code.
-```
+```solidity
  function castVote(uint256 proposalId, bool support) public {
         return _castVote(msg.sender, proposalId, support);
     }
