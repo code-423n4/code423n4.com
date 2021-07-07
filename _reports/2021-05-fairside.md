@@ -120,7 +120,7 @@ The `TOTAL_GOVERNANCE_SCORE` is supposed to track the sum of the credit scores o
 
 In `ERC20ConvictionScore._updateConvictionScore`, when the user does not fulfill the governance criteria anymore and is therefore removed, the `governanceDelta` should be negative, but it's positive.
 
-```
+```solidity
 isGovernance[user] = false;
 governanceDelta = getPriorConvictionScore(
     user,
@@ -130,7 +130,7 @@ governanceDelta = getPriorConvictionScore(
 
 It then gets added to the new total:
 
-```
+```solidity
 uint224 totalGCSNew =
     add224(
         totalGCSOld,
@@ -390,7 +390,7 @@ In the function `purchaseMembership` of FSDNetwork.sol, when the membership is e
 This might lead to a `gracePeriod` that is lower than expected. It seems logical to also increase the `gracePeriod`.
 
 FSDNetwork.sol:
-```
+```Solidty
 function purchaseMembership(uint256 costShareBenefit) external {
      ...
       if (membership[msg.sender].creation == 0) {
@@ -603,7 +603,7 @@ Recommend forcing users to wait for (at least) a block to prevent flash minting 
 ## [[L-07] Check if variables are initialized](https://github.com/code-423n4/2021-05-fairside-findings/issues/59)
 
 A variable named `fairSideConviction` is set in the contract FSD function `setFairSideConviction`. However, functions that use this variable do not check that it is already initialized. For example, function `tokenizeConviction` in contract `ERC20ConvictionScore` may transfer tokens to the 0x0 address:
-   ```
+   ```solidty
    _transfer(msg.sender, address(fairSideConviction), locked);
    ```
 This will make these tokens inaccessible and basically burned. It would be better if the code explicitly checked before that ```address(fairSideConviction) != address(0)```
@@ -693,7 +693,7 @@ Recommend removing the "return" statements from `castVote` and `castVoteBySig`.
 The function `purchaseMembership` of FSDNetwork.sol contains a variable that is very similar to a global variable. It's easy to confuse the two, possibly introducing errors in the future. These variables are `totalCostShareBenefit`, and `totalCostShareBenefits`.
 
 FSDNetwork.sol:
-```
+```solidity
    uint256 public totalCostShareBenefits;
   function purchaseMembership(uint256 costShareBenefit) external {
         uint256 totalCostShareBenefit = membership[msg.sender].availableCostShareBenefits.add(costShareBenefit);
@@ -789,7 +789,7 @@ Recommend summing up the for/against votes in the `votes` array of `validateVote
 
 In `ERC20ConvictionScore.sol`, we store
 
-```
+```solidity
     // Conviction score based on # of days multiplied by # of FSD & NFT
     // @notice A record of conviction score checkpoints for each account, by index
     mapping(address => mapping(uint32 => Checkpoint)) public checkpoints;
@@ -843,7 +843,7 @@ arctan_uint(1 * precision) ~ 574 Gas (with solidity 0.6.8)
 
 The implementation takes a different approach to floating points: it multiples all numbers by precision. The precision factor can be adjusted as long as all temporary variables stay below 2^256 (the max value of a uint)
 
-```
+```solidity
 pragma solidity 0.6.8;
 contract Test{
    uint constant precision=10**30;
