@@ -44,6 +44,10 @@ header {
   left: 0px;
 }
 
+.logo:focus-visible img {
+  outline: 2px solid white;
+}
+
 .wrapper-nav {
   position: relative;
 }
@@ -448,7 +452,7 @@ footer span {
 
 footer span::after,
 footer a::after {
-  color: #ffffff33;
+  color: #ffffff88;
   padding: 0 5px;
 }
 
@@ -462,7 +466,7 @@ footer span::after {
 }
 
 footer span {
-  color: #ffffff33;
+  color: #ffffff88;
 }
 
 footer a:link {
@@ -491,7 +495,7 @@ table {
   border-style: hidden;
   font-family: "Space Mono", monospace;
   font-weight: 400;
-  margin: 80px auto;
+  margin: 40px auto;
 }
 th {
   margin: 0;
@@ -499,9 +503,6 @@ th {
 }
 th[role="columnheader"] {
   text-align: left;
-}
-thead tr:first-of-type th {
-  text-align: center;
 }
 thead tr:nth-of-type(2) th:nth-of-type(1) {
   padding-left: 40px;
@@ -530,11 +531,6 @@ th:first-child .sort-direction {
 
 th {
   position: relative;
-}
-
-thead tr:first-of-type th {
-  font-size: 30px;
-  font-family: "Roboto", sans-serif;
 }
 
 .sort-direction {
@@ -568,7 +564,7 @@ pre {
   padding-top: 40px;
 }
 
-h1.audit-header {
+h1.page-header {
   font-size: 40px;
   margin-top: 40px;
   padding-top: 40px;
