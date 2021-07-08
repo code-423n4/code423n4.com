@@ -140,8 +140,13 @@ h1 {
 h2,
 h2 code {
   color: #fff;
-  /* font-size: 20px; */
-  font-family: "Roboto", sans-serif;
+}
+
+h2 code {
+  font-family: inherit;
+  background-color: transparent;
+  border: 0px;
+  padding: 0px;
 }
 
 h4 {
@@ -242,9 +247,14 @@ ul {
 }
 
 code {
-  color: #ffffffaa;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "Cascadia Code",
+    Consolas, "Liberation Mono", "Courier New", monospace;
+  background-color: #ffffffaa;
+  color: black;
+  padding: 2px 4px;
+  border: 1px solid #000000aa;
+  border-radius: 4px;
   font-size: inherit;
-  font-family: inherit;
 }
 
 strong {
