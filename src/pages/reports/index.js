@@ -11,7 +11,7 @@ export default function ReportIndex({ data }) {
     <DefaultLayout pageTitle="Security Audit Reports" bodyClass="report-page">
       <div className="wrapper-main">
         <section>
-          <h1 className="audit-header">Audit Reports</h1>
+          <h1 className="page-header">Audit Reports</h1>
           <div className="wrapper-report">
             {reports ? (
               <ReportList reports={reports} />

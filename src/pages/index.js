@@ -36,7 +36,7 @@ export const query = graphql`
   query {
     contests: allContestsCsv(
       filter: { hide: { ne: true } }
-      sort: { fields: end_time, order: DESC }
+      sort: { fields: start_time, order: DESC }
     ) {
       edges {
         node {
