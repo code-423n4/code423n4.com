@@ -1,0 +1,29 @@
+.button {
+  border: none;
+  border-radius: 5px;
+  box-shadow: 2px 2px 2px rgba(116, 116, 116, 0);
+  display: inline-block;
+  font-size: 1em;
+  padding: 1em 2em;
+  width: auto;
+  font-family: "Roboto", sans-serif;
+  text-decoration: none;
+  margin: 0.25rem 0.125rem;
+}
+
+.button-small {
+  font-size: 1em;
+  padding: 0.5em 1em;
+}
+
+.cta-button {
+  background-color: #8000ff;
+  color: #fff;
+  text-transform: uppercase;
+}
+
+.cta-button:hover {
+  background-color: #ff4000;
+  border-bottom: 0px;
+  color: #fff;
+}
