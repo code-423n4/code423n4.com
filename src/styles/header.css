@@ -1,0 +1,66 @@
+header {
+  padding: 5px 0px;
+}
+
+.logo img {
+  width: 130px;
+  display: inline-block;
+  margin: 5px 30px 5px 0px;
+  position: absolute;
+  left: 0px;
+}
+
+.logo:focus-visible img {
+  outline: 2px solid white;
+}
+
+.wrapper-nav {
+  position: relative;
+}
+
+header nav {
+  position: absolute;
+  right: 0px;
+  text-align: right;
+  display: block;
+  vertical-align: top;
+  padding: 5px 0;
+}
+
+nav a {
+  text-align: right;
+  margin: 0 10px;
+  display: inline-block;
+  color: white;
+  font-weight: 800;
+  font-family: "Roboto", sans-serif;
+  text-transform: uppercase;
+}
+
+@media (max-width: 600px) {
+  header {
+    padding: 5px 0 0 0;
+  }
+  header nav {
+    position: static;
+    right: auto;
+    text-align: center;
+    font-size: 12px;
+  }
+  .wrapper-nav {
+    right: 0;
+  }
+  nav a {
+    margin: 0 5px;
+  }
+  .logo img {
+    width: 150px;
+    margin: 5px auto 10px auto;
+    display: block;
+    position: static;
+    left: auto;
+  }
+  header {
+    margin-bottom: 20px;
+  }
+}
