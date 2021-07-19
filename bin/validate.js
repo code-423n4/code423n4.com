@@ -91,6 +91,43 @@ async function validateHandles() {
   console.log("✅  Handle validation passed!");
 }
 
+// Validate teams.
+async function validateTeams() {
+  const uniqueHandles = await getUniqueHandles();
+  const handles = await glob("./_data/handles/*.json");
+  let passedValidation = true;
+  for (const handleFile of handles) {
+    const blob = await readFile(handleFile);
+    let parsedHandle;
+    try {
+      parsedHandle = JSON.parse(blob);
+    } catch (err) {
+      console.error(`Unable to parse JSON file at ${handleFile}`);
+      passedValidation = false;
+      continue;
+    }
+
+    if (Object.prototype.hasOwnProperty.call(parsedHandle, "members")) {
+      Array.prototype.forEach.call(parsedHandle.members, (member) => {
+        if (!uniqueHandles.has(member)) {
+          console.error(
+            `Team specified in ${handleFile} has unregistered handle: ${member}`
+          );
+          passedValidation = false;
+        }
+      });
+    }
+  }
+
+  if (!passedValidation) {
+    throw new Error(
+      "❌  Teams validation failed. See above log for more information."
+    );
+  }
+
+  console.log("✅  Handle validation passed!");
+}
+
 async function validateOrganizations() {
   const orgs = await glob("./_data/orgs/*.json");
   let passedValidation = true;
@@ -236,6 +273,7 @@ async function validateFindings() {
 (async () => {
   try {
     await validateHandles();
+    await validateTeams();
     await validateOrganizations();
     await validateContests();
     await validateFindings();
