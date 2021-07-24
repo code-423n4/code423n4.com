@@ -4,7 +4,7 @@ import Contest from "./Contest";
 const ContestList = ({ contests }) => {
   return (
     <>
-      {contests.reverse().map((contest) => (
+      {contests.map((contest) => (
         <Contest contest={contest} key={contest.node.id} />
       ))}
     </>
