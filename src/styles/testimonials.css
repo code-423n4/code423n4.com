@@ -19,7 +19,7 @@
 .twitter-tweet-rendered { 
   box-sizing: border-box;
   break-inside: avoid;
-  padding: 10px;
+  padding: 0 10px 20px;
   margin: 0 auto !important; /* Necessary to override Twitter styles */
 }
 
@@ -27,7 +27,7 @@
   box-sizing: border-box;
   break-inside: avoid;
   padding: 4em 10px;
-  margin: 10px;
+  margin: 0 10px 20px;
   max-width: 528px; /* To match Twitter's hard coded max-width for tweets */
   position: relative;
   display: flex;
