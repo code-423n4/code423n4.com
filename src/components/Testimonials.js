@@ -34,8 +34,8 @@ const Testimonials = () => (
         </figcaption>
       </figure>
       <TweetEmbed tweetId="1407460200316088321" />
-      <TweetEmbed tweetId="1400746871719710728" />
-      <TweetEmbed tweetId="1400747819259023360" />
+      <TweetEmbed tweetId="1400746871719710728" noConversation />
+      <TweetEmbed tweetId="1400747819259023360" noCards />
       <figure>
         <blockquote>
           <p>
