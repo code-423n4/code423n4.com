@@ -33,19 +33,8 @@ const Testimonials = () => (
           Jason<cite>Fairside</cite>
         </figcaption>
       </figure>
+      <TweetEmbed tweetId="1398424011336527873" noConversation />
       <TweetEmbed tweetId="1407460200316088321" />
-      <TweetEmbed tweetId="1400746871719710728" noConversation />
-      <TweetEmbed tweetId="1400747819259023360" noCards />
-      <figure>
-        <blockquote>
-          <p>
-            C4 contests attract new, unique and complicated projects so it is a perfect learning opportunity... Here projects seriously invest in their security so it is always a motivation to try my best to find bugs in their code.
-          </p>
-        </blockquote>
-        <figcaption>
-          Pauliax/Thunder<cite>C4 Warden</cite>
-        </figcaption>
-      </figure>
       <figure>
         <blockquote>
           <p>
@@ -57,6 +46,18 @@ const Testimonials = () => (
         </blockquote>
         <figcaption>
           Andrew<cite>Reality Cards</cite>
+        </figcaption>
+      </figure>
+      <TweetEmbed tweetId="1400746871719710728" noConversation />
+      <TweetEmbed tweetId="1400747819259023360" noCards />
+      <figure>
+        <blockquote>
+          <p>
+            C4 contests attract new, unique and complicated projects so it is a perfect learning opportunity... Here projects seriously invest in their security so it is always a motivation to try my best to find bugs in their code.
+          </p>
+        </blockquote>
+        <figcaption>
+          Pauliax/Thunder<cite>C4 Warden</cite>
         </figcaption>
       </figure>
     </div>
