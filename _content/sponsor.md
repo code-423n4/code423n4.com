@@ -68,5 +68,5 @@ Contests start Wednesday 00:00:00 UTC and end Tuesday 23:59 UTC. We schedule con
 
 Your work will play a role in developing a public report of the contest audit.
 
-- Sponsors review findings, identify duplicates, and provide commens as you confirm, acknowledge, or dispute wardens' findings (use labels for this).
+- Sponsors review findings, identify duplicates, and provide comments as you confirm, acknowledge, or dispute wardens' findings (use labels for this).
 - As your team works to mitigate issues, most sponsors will create a PR for each issue addressed in your codebase and link to it in the C4 finding issue and label the finding as resolved.
