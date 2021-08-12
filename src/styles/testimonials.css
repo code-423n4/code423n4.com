@@ -1,0 +1,87 @@
+.testimonials-header {
+  margin-bottom: 1em;
+}
+
+.testimonials {
+  column-count: 1;
+  column-gap: 0;
+  max-width: 1068px; /* Tweets have a maximum width, so we need to squish the container a bit to have them sit nicely together, not too far apart */
+  margin: 0 auto;
+}
+
+@media screen and (min-width: 800px) {
+  .testimonials {
+    column-count: 2;
+  }
+}
+
+
+.twitter-tweet-rendered { 
+  box-sizing: border-box;
+  break-inside: avoid;
+  padding: 0 10px 20px;
+  margin: 0 auto !important; /* Necessary to override Twitter styles */
+}
+
+.testimonials figure {
+  box-sizing: border-box;
+  break-inside: avoid;
+  padding: 4em 10px;
+  margin: 0 10px 20px;
+  max-width: 528px; /* To match Twitter's hard coded max-width for tweets */
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  background-image: linear-gradient(225deg, #350C5B 0%, #18052E 100%);
+  border: 1px solid #48335D;
+  border-radius: 10px;
+  color: white;
+
+  font-family: SpaceMono-Bold, monospace;
+  font-size: 20px;
+  letter-spacing: 0;
+}
+
+.testimonials figure + figure {
+  margin-top: 20px !important; /* margin collapse */
+}
+
+@media screen and (max-width: 800px) and (min-width: 576px) {
+  .testimonials figure {
+    margin: 0 auto;
+  }
+}
+
+.testimonials figure::after {
+  position: absolute;
+  content: '\201D'; /* right double quotation mark */
+  opacity: 0.08;
+  font-family: SpaceMono-Bold;
+  font-size: 180px;
+  color: #FFFFFF;
+  letter-spacing: 0;
+  bottom: 50px;
+  right: 40px;
+  line-height: 0;
+
+}
+
+.testimonials blockquote, .testimonials figcaption {
+  margin: 0;
+  padding: 0 2em;
+}
+
+.testimonials blockquote p {
+  font-family: inherit;
+  color: inherit;
+}
+
+.testimonials figcaption cite {
+  display: block;
+}
+
+.testimonials figcaption::before {
+  content: '\2014\2002'; /* emdash enspace */
+}

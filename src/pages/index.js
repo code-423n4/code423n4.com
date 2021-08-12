@@ -4,6 +4,7 @@ import DefaultLayout from "../layouts/DefaultLayout";
 import HeroIndex from "../components/content/HeroIndex";
 import Definitions from "../components/content/Definitions";
 import ContestList from "../components/ContestList";
+import Testimonials from "../components/Testimonials";
 
 export default function SiteIndex({ data }) {
   const contests = data.contests.edges;
@@ -15,6 +16,9 @@ export default function SiteIndex({ data }) {
         <section>
           <Definitions />
           {contests ? <ContestList contests={contests} /> : ""}
+        </section>
+        <section>
+          <Testimonials />
         </section>
         <section className="center">
           <h5>Want to learn more?</h5>
