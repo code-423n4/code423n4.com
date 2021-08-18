@@ -3,7 +3,7 @@ import { Link } from "gatsby";
 
 const Nav = () => {
   return (
-    <div className="wrapper-nav">
+    <header>
       <Link className="logo" to="/">
         <img src="/images/C4-banner.png" alt="Code 423n4" />
       </Link>
@@ -12,7 +12,7 @@ const Nav = () => {
         <Link to="/reports">Reports</Link>
         <a href="https://docs.code4rena.com">Docs</a>
       </nav>
-    </div>
+    </header>
   );
 };
 

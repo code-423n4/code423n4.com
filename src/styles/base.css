@@ -4,7 +4,8 @@ html {
 
 body {
   background-color: black;
-  margin: 40px;
+  padding: 0;
+  margin: 0;
 }
 
 body::after {
@@ -30,6 +31,10 @@ body::after {
       rgba(0, 0, 0, 1) 60%,
       rgba(51, 0, 101, 1) 100%
     );
+}
+
+main {
+  margin: 40px;
 }
 
 section {

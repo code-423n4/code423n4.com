@@ -6,24 +6,21 @@ header {
   width: 130px;
   display: inline-block;
   margin: 5px 30px 5px 0px;
-  position: absolute;
-  left: 0px;
 }
 
 .logo:focus-visible img {
   outline: 2px solid white;
 }
 
-.wrapper-nav {
-  position: relative;
+header {
+  display: flex;
+  justify-content: space-between;
+  margin: 40px 40px 0;
 }
 
 header nav {
-  position: absolute;
-  right: 0px;
   text-align: right;
   display: block;
-  vertical-align: top;
   padding: 5px 0;
 }
 
@@ -39,7 +36,7 @@ nav a {
 
 @media (max-width: 600px) {
   header {
-    padding: 5px 0 0 0;
+    padding: 15px 0 0 0;
   }
   header nav {
     position: static;
@@ -47,8 +44,8 @@ nav a {
     text-align: center;
     font-size: 12px;
   }
-  .wrapper-nav {
-    right: 0;
+  header {
+    flex-direction: column;
   }
   nav a {
     margin: 0 5px;
