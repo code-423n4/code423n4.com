@@ -12,31 +12,37 @@ export default function Contests({ data }) {
       <section className="cosmos-hero">
         <img src="/images/cosmos-logo.svg" class="cosmos-logo" alt="Cosmos" />
         <p>&mdash; on &mdash;</p>
-        <img src="/images/c4-logo.svg" class="c4-logo" alt="Code Arena" /> 
+        <img src="/images/c4-logo.svg" class="c4-logo" alt="Code Arena" />
       </section>
       <section className="cosmos-wrapper">
-        <h1>Code4rena Goes Cosmic</h1>
-        <p>We’re aiming to help level up the security of the entire Cosmos ecosystem using a rigorous process that increases the quality of audits by attracting and incentivizing a swarm of reviewers to find as many rare and high risk vulnerabilities as possible in short, focused windows.</p>
+        <h1>Audit contests on Cosmos</h1>
+        <p>
+          Code4rena contests incentivize finding as many rare and high risk
+          vulnerabilities as possible in a short, focused window.
+        </p>
+        <Definitions />
       </section>
-      <hr/>
+      <hr />
       <section className="cosmos-wrapper">
         <h2>Current Cosmos contests</h2>
         <section>{contests ? <ContestList contests={contests} /> : ""}</section>
       </section>
-
-      <section className="cosmos-wrapper">
-        <Definitions />
-      </section>
       <section className="cosmos-bkg">
         <div className="cosmos-wrapper">
-          <h2>Want to book your contest?</h2>
-          <p>We’re aiming to help level up the security of the entire Cosmos ecosystem using a rigorous process that increases the quality of audits by attracting and incentivizing a swarm of reviewers to find as many rare and high risk vulnerabilities as possible in short, focused windows.</p>
-          <a className="button cta-button" href="https://docs.code4rena.com">Read the docs</a>
+          <h2>Want to sponsor an audit contest for your project?</h2>
+          <p>
+            We’re booking new Cosmos contests now.{" "}
+            <a href="https://discord.gg/code4rena">Join our Discord</a> and say,
+            “I want to be a sponsor.”
+          </p>
+          <a className="button cta-button" href="https://docs.code4rena.com">
+            Read how C4 works »
+          </a>
         </div>
       </section>
     </DefaultLayout>
-  )
-} 
+  );
+}
 
 export const query = graphql`
   query {

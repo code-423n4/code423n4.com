@@ -31,19 +31,26 @@ const Contest = ({ contest: { node } }) => {
       </div>
       <div className="wrapper-contest-content">
         {league === "cosmos" ? (
-          <div class="contest-league">
-            <img src="/images/cosmos-icon.svg" alt="Cosmos Logo" />
-            Cosmos Contest
-          </div>
+          <a href="/cosmos">
+            <div class="contest-league">
+              <img src="/images/cosmos-icon.svg" alt="Cosmos Logo" />
+              Cosmos League
+            </div>
+          </a>
         ) : (
           ""
-        )} 
+        )}
         <h4>
           {amount ? amount : ""} {title}
         </h4>
         <p>{details}</p>
         {t.state === "soon" || t.state === "active" ? (
-          <Countdown state={t.state} start={start_time} end={end_time} isPreview={findingsRepo === ""} />
+          <Countdown
+            state={t.state}
+            start={start_time}
+            end={end_time}
+            isPreview={findingsRepo === ""}
+          />
         ) : (
           <p>
             Contest ran {t.startDay}—{t.endDay}
