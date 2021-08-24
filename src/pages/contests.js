@@ -29,6 +29,7 @@ export const query = graphql`
           title
           details
           hide
+          league
           start_time
           end_time
           amount

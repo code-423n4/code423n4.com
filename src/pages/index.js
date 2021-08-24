@@ -10,7 +10,7 @@ export default function SiteIndex({ data }) {
   const contests = data.contests.edges;
 
   return (
-    <DefaultLayout title="Code 423n4" bodyClass="landing">
+    <DefaultLayout pageTitle="Code 423n4" bodyClass="landing">
       <HeroIndex />
       <div className="wrapper-main">
         <section>
@@ -48,6 +48,7 @@ export const query = graphql`
           title
           details
           hide
+          league
           start_time
           end_time
           amount

@@ -6,6 +6,7 @@ const Contest = ({ contest: { node } }) => {
   const {
     sponsor,
     title,
+    league,
     amount,
     details,
     start_time,
@@ -29,6 +30,14 @@ const Contest = ({ contest: { node } }) => {
         </a>
       </div>
       <div className="wrapper-contest-content">
+        {league === "cosmos" ? (
+          <div class="contest-league">
+            <img src="/images/cosmos-icon.svg" alt="Cosmos Logo" />
+            Cosmos Contest
+          </div>
+        ) : (
+          ""
+        )} 
         <h4>
           {amount ? amount : ""} {title}
         </h4>
