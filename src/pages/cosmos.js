@@ -15,7 +15,7 @@ export default function Contests({ data }) {
         <img src="/images/c4-logo.svg" class="c4-logo" alt="Code Arena" />
       </section>
       <section className="cosmos-wrapper">
-        <h1>Audit contests on Cosmos</h1>
+        <h1>Audit contests for the Cosmos ecosystem</h1>
         <p>
           Code4rena contests incentivize finding as many rare and high risk
           vulnerabilities as possible in a short, focused window.
