@@ -12,7 +12,7 @@ export default function Contests({ data }) {
   // TODO: add to template in subsets (active / soon / recently completed)
 
   return (
-    <DefaultLayout title="Contests" bodyClass="">
+    <DefaultLayout pageTitle="Contests" bodyClass="">
       <div className="wrapper-main">
         <section>{contests ? <ContestList contests={contests} /> : ""}</section>
       </div>
@@ -29,6 +29,7 @@ export const query = graphql`
           title
           details
           hide
+          league
           start_time
           end_time
           amount

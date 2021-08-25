@@ -75,7 +75,7 @@ const Leaderboard = ({ data }) => {
   }, [data]);
 
   return (
-    <DefaultLayout title="Leaderboard" bodyClass="leaderboard">
+    <DefaultLayout pageTitle="Leaderboard" bodyClass="leaderboard">
       <div className="wrapper-main">
         <h1 className="page-header">Leaderboard</h1>
         <LeaderboardTable results={resultData} />

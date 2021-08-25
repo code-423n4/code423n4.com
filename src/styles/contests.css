@@ -169,7 +169,31 @@ pre {
   overflow-x: scroll;
 }
 
-.contest-repo {
+.contest-league {
+  background:rgba(0, 0, 0, 0.5);
+  color: white;
+  font-family: "Roboto", sans-serif;
+  font-size: 13px;
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 20px 5px 10px;
+  margin-bottom: 10px;
+  margin-left: 5px;
+  border-radius: 50px;
+}
+
+.contest-league img {
+  max-height: 20px;
+  padding-right: 5px;
+}
+
+
+@media (min-width: 600px) {
+  .contest-league {
+    float: right;
+    margin-bottom: 5px;
+    margin-left: 0;
+  }
 }
 
 @media (max-width: 600px) {

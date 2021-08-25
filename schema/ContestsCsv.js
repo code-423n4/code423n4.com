@@ -13,6 +13,7 @@ type ContestsCsv implements Node {
   judges:         [ HandlesJson ] @link(by: "name", from: "people")
   findings:       [ FindingsJson ] @link(by: "id", from: "findings")
   hide:           Boolean
+  league:         String
 }`;
 
 export default ContestsCsv;
