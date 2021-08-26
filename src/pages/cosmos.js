@@ -22,11 +22,15 @@ export default function Contests({ data }) {
         </p>
         <Definitions />
       </section>
-      <hr />
-      <section className="cosmos-wrapper">
-        <h2>Current Cosmos contests</h2>
-        <section>{contests ? <ContestList contests={contests} /> : ""}</section>
-      </section>
+      { contests ? 
+        <>
+          <hr />
+          <section className="cosmos-wrapper">
+            <h2>Current Cosmos contests</h2>
+            <section><ContestList contests={contests} /></section>
+          </section>
+        </>
+       : ""}
       <section className="cosmos-bkg">
         <div className="cosmos-wrapper">
           <h2>Want to sponsor an audit contest for your project?</h2>
