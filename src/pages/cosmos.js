@@ -22,7 +22,7 @@ export default function Contests({ data }) {
         </p>
         <Definitions />
       </section>
-      { contests ? 
+      {contests.length > 0 ? 
         <>
           <hr />
           <section className="cosmos-wrapper">
@@ -30,7 +30,7 @@ export default function Contests({ data }) {
             <section><ContestList contests={contests} /></section>
           </section>
         </>
-       : ""}
+       : null}
       <section className="cosmos-bkg">
         <div className="cosmos-wrapper">
           <h2>Want to sponsor an audit contest for your project?</h2>
