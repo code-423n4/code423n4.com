@@ -1,5 +1,5 @@
 ---
-sponsor: "visor"
+sponsor: "Visor"
 slug: "2021-05-visorfinance"
 date: "2021-08-30"
 title: "Visor Finance"
