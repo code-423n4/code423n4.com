@@ -3,9 +3,6 @@
   margin: 20px;
 }
 
-.wrapper-contest-set {
-}
-
 .wrapper-contest {
   margin-top: 40px;
   border-radius: 10px;
@@ -90,6 +87,14 @@ p {
 .wrapper-sponsor {
   margin: 10px 10px 10px 0;
   width: 80px;
+}
+
+.wrapper-contest .days-duration {
+  margin-bottom: 0;
+  font-size: 13px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1.1px;
 }
 
 .wrapper-sponsor img {

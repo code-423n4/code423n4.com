@@ -44,6 +44,7 @@ const Contest = ({ contest: { node } }) => {
           {amount ? amount : ""} {title}
         </h4>
         <p>{details}</p>
+        <p className="days-duration">{t.daysDuration} day contest</p>
         {t.state === "soon" || t.state === "active" ? (
           <Countdown
             state={t.state}
