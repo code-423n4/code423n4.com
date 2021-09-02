@@ -71,6 +71,7 @@ const getDates = (starttime, endtime) => {
   const endMonth = monthNames[new Date(endtime).getMonth()];
   const endYear = new Date(endtime).getFullYear();
   const endDate = new Date(endtime).getDate();
+  const daysDuration = Math.round((end - start) * 1/1000 * 1/60 * 1/60 * 1/24);
 
   const t = {
     state,
@@ -85,6 +86,7 @@ const getDates = (starttime, endtime) => {
     endDay: `${endMonth} ${endDate}`,
     startYear,
     endYear,
+    daysDuration,
   };
 
   return t;
