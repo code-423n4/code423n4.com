@@ -11,6 +11,7 @@
     "@mdx-js/mdx": "^1.6.22",
     "@mdx-js/react": "^1.6.22",
     "@ncwidgets/id": "^0.8.1",
+    "@netlify/functions": "^0.7.2",
     "@octokit/core": "^3.4.0",
     "clsx": "^1.1.1",
     "csvtojson": "^2.0.10",
@@ -46,7 +47,8 @@
     "react-select": "^4.3.1",
     "react-table": "^7.6.3",
     "react-twitter-widgets": "^1.10.0",
-    "sass": "^1.32.12"
+    "sass": "^1.32.12",
+    "typescript": "^4.4.2"
   },
   "devDependencies": {
     "prettier": "2.2.1",
