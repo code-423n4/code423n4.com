@@ -136,11 +136,11 @@ function getRiskFromLabels(
     } else if (labels[i].name === "1 (Low Risk)") {
       return "L";
     } else if (labels[i].name === "2 (Med Risk)") {
-      return "L";
+      return "M";
     } else if (labels[i].name === "3 (High Risk)") {
-      return "L";
+      return "H";
     } else if (labels[i].name === "G (Gas Optimization)") {
-      return "L";
+      return "G";
     }
   }
 
