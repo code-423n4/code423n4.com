@@ -179,6 +179,21 @@ pre {
   overflow-x: auto;
 }
 
+pre::-webkit-scrollbar-track {
+  border: none;
+  background-color: #645b6f;
+}
+
+pre::-webkit-scrollbar {
+  width: 10px;
+  background-color: #645b6f;
+}
+
+pre::-webkit-scrollbar-thumb {
+  background-color: #aca3b5;
+  width: 5px;
+}
+
 pre code {
   font-size: 0.9em;
   padding: 30px 20px;
