@@ -170,12 +170,9 @@ th {
 .sb-avatar {
   margin-right: 10px;
 }
-pre {
-  overflow-x: scroll;
-}
 
 .contest-league {
-  background:rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.5);
   color: white;
   font-family: "Roboto", sans-serif;
   font-size: 13px;
@@ -191,7 +188,6 @@ pre {
   max-height: 20px;
   padding-right: 5px;
 }
-
 
 @media (min-width: 600px) {
   .contest-league {
