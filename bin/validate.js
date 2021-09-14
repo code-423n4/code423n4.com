@@ -193,7 +193,7 @@ async function validateContests() {
     // Check that contest.sponsor is a registered organization.
     if (!registeredOrganizations.has(parsedContest.sponsor)) {
       console.error(
-        `Contest at ${contestFile} uses unknown organization: ${parsedContest.sponsor}`
+        `Contest uses unknown organization: ${parsedContest.sponsor}`
       );
       passedValidation = false;
       continue;
@@ -202,7 +202,7 @@ async function validateContests() {
     // Check that contest.contestid is unique.
     if (existingContestIds.has(parsedContest.contestid)) {
       console.error(
-        `Contest at ${contestFile} uses duplicate contestid: ${parsedContest.contestid}`
+        `Contest uses duplicate contestid: ${parsedContest.contestid}`
       );
       passedValidation = false;
       continue;
