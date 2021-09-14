@@ -51,9 +51,8 @@ h1 {
   font-family: "Roboto", sans-serif;
 }
 
-h2,
-h2 code {
-  color: #fff;
+h2 {
+  color: white;
 }
 
 h2 code {
@@ -161,14 +160,46 @@ ul {
 }
 
 code {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "Cascadia Code",
-    Consolas, "Liberation Mono", "Courier New", monospace;
-  background-color: #ffffffaa;
-  color: black;
-  padding: 2px 4px;
-  border: 1px solid #000000aa;
+  font-family: "Roboto Mono", monospace;
+  color: white;
+  background: #443b4e;
+  border: 1px solid #625b6a;
+  padding: 1px 8px;
+  margin: 1px;
   border-radius: 4px;
-  font-size: inherit;
+  font-size: 0.8em;
+  display: inline-block;
+}
+
+h2 code {
+  color: #fff;
+}
+
+pre {
+  overflow-x: auto;
+}
+
+pre::-webkit-scrollbar-track {
+  border: none;
+  background-color: #645b6f;
+}
+
+pre::-webkit-scrollbar {
+  width: 10px;
+  background-color: #645b6f;
+}
+
+pre::-webkit-scrollbar-thumb {
+  background-color: #aca3b5;
+  width: 5px;
+}
+
+pre code {
+  font-size: 0.9em;
+  padding: 30px 20px;
+  margin: 0;
+  min-width: 100%;
+  box-sizing: border-box;
 }
 
 strong {

@@ -14,12 +14,11 @@ const DefaultLayout = (props) => {
   } = props;
   return (
     <>
-      <Helmet 
+      <Helmet
         htmlAttributes={{
-          lang: 'en',
+          lang: "en",
         }}
       >
-        
         <meta charset="utf-8" />
         <meta httpEquiv="X-UA-Compatible" content="chrome-1" />
         <meta
@@ -45,16 +44,27 @@ const DefaultLayout = (props) => {
             content="https://code423n4/images/C4-banner.png"
           />
         )}
-        <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png" />
-        <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32.png" />
-        <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16.png" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" />
         <link
-          href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
-          rel="stylesheet"
+          rel="apple-touch-icon"
+          sizes="180x180"
+          href="/images/apple-touch-icon.png"
         />
         <link
-          href="https://fonts.googleapis.com/css2?family=Space+Mono&display=swap"
+          rel="icon"
+          type="image/png"
+          sizes="32x32"
+          href="/images/favicon-32.png"
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="16x16"
+          href="/images/favicon-16.png"
+        />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Roboto+Mono&family=Roboto:wght@400;700&family=Space+Mono&display=swap"
           rel="stylesheet"
         />
         <title>
@@ -65,8 +75,11 @@ const DefaultLayout = (props) => {
       </Helmet>
       <div class="message-bar">
         <p>
-        ✨ New!✨ &nbsp;C4 Cosmos league. First contest $100k+ audit of Gravity&nbsp;Bridge.&nbsp;
-          <a href="https://medium.com/code-423n4/code4rena-comes-to-cosmos-29269f4d13d">Read more »</a>
+          ✨ New!✨ &nbsp;C4 Cosmos league. First contest $100k+ audit of
+          Gravity&nbsp;Bridge.&nbsp;
+          <a href="https://medium.com/code-423n4/code4rena-comes-to-cosmos-29269f4d13d">
+            Read more »
+          </a>
         </p>
       </div>
       <Nav />
