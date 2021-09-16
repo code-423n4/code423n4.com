@@ -19,6 +19,10 @@
     color: inherit;
     text-align: center;
   }
+
+  & p {
+    color: inherit;
+  }
 }
 
 .Button {
@@ -31,6 +35,14 @@
 
   &:hover {
     cursor: pointer;
+  }
+
+  &:disabled {
+    opacity: 0.3;
+  }
+
+  &:disabled:hover {
+    cursor: not-allowed;
   }
 
   @media (prefers-color-scheme: dark) {
