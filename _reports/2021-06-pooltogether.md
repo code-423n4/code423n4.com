@@ -1,7 +1,7 @@
 ---
 sponsor: "PoolTogether"
 slug: "2021-06-pooltogether"
-date: "2021-09-15"
+date: "2021-09-16"
 title: "PoolTogether"
 findings: "https://github.com/code-423n4/2021-06-pooltogether-findings/issues"
 contest: 14

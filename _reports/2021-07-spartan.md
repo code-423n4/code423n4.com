@@ -1,8 +1,8 @@
 ---
-sponsor: "Spartan"
+sponsor: "Spartan Protocol"
 slug: "2021-07-spartan"
-date: "2021-09-15"
-title: "Spartan Protocol"
+date: "2021-09-16"
+title: "Spartan Protocol Contest"
 findings: "https://github.com/code-423n4/2021-07-spartan-findings/issues"
 contest: 20
 ---
