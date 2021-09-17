@@ -39,7 +39,7 @@ module.exports = {
     {
       resolve: `gatsby-source-filesystem`,
       options: {
-        path: `${__dirname}/_data/findings/findings.json`,
+        path: `${__dirname}/_data/findings/findings.csv`,
         name: `findings`,
       },
     },
