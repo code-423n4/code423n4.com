@@ -1,5 +1,5 @@
-const FindingsJson = `
-type FindingsJson implements Node {
+const FindingsCsv = `
+type FindingsCsv implements Node {
   contest:       ContestsCsv @link(by: "contestid", from: "contest")
   handle:        HandlesJson @link(by: "handle", from: "handle")
   risk:          String
@@ -8,4 +8,4 @@ type FindingsJson implements Node {
   awardUSD:      Float
 }`;
 
-export default FindingsJson;
+export default FindingsCsv;

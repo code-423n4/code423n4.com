@@ -4,7 +4,7 @@ type OrgsJson implements Node {
   link:           String
   description:    String
   contests:       [ ContestsCsv ] @link(by: "id", from: "contests")
-  findings:       [ FindingsJson ] @link(by: "id", from: "findings")
+  findings:       [ FindingsCsv ] @link(by: "id", from: "findings")
 }`;
 
 export default OrgsJson;

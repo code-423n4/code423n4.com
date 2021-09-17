@@ -11,7 +11,7 @@ type ContestsCsv implements Node {
   end_time:       Date @dateformat
   wardens:        [ HandlesJson ] @link(by: "name", from: "people")
   judges:         [ HandlesJson ] @link(by: "name", from: "people")
-  findings:       [ FindingsJson ] @link(by: "id", from: "findings")
+  findings:       [ FindingsCsv ] @link(by: "id", from: "findings")
   hide:           Boolean
   league:         String
 }`;
