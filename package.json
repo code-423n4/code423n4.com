@@ -36,6 +36,7 @@
     "gatsby-transformer-json": "^3.0.0",
     "gatsby-transformer-remark": "^3.0.0",
     "gatsby-transformer-sharp": "^3.4.0",
+    "jsonwebtoken": "^8.5.1",
     "mailgun-js": "^0.22.0",
     "netlify-cms-app": "^2.14.27",
     "prop-types": "^15.7.2",
@@ -51,6 +52,7 @@
     "typescript": "^4.4.2"
   },
   "devDependencies": {
+    "@types/jsonwebtoken": "^8.5.5",
     "prettier": "2.2.1",
     "tiny-glob": "^0.2.8"
   },

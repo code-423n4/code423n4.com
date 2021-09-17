@@ -1,5 +1,6 @@
 import { Handler } from "@netlify/functions";
 import { Octokit } from "@octokit/core";
+import jwt from "jsonwebtoken";
 
 const firstPageQuery = `
 query ($name: String!, $owner: String!) {
@@ -179,9 +180,24 @@ function simplifyData(
   };
 }
 
+function isAuthorized(jwtToken: string, requestedRepo: string): boolean {
+  try {
+    const verification = jwt.verify(jwtToken, process.env.JWT_SIGNING_TOKEN);
+    if (typeof verification === "string") {
+      return false;
+    }
+
+    const { repo } = verification;
+    return repo === requestedRepo;
+  } catch (err) {
+    console.error(err);
+    return false;
+  }
+}
+
 const handler: Handler = async (event, context) => {
   const { authorization } = event.headers;
-  if (!authorization || authorization !== process.env.EXPECTED_AUTH_HEADER) {
+  if (!authorization) {
     return {
       statusCode: 401,
       body: JSON.stringify({ error: "Authorization failed" }),
@@ -190,6 +206,12 @@ const handler: Handler = async (event, context) => {
 
   try {
     const { name } = JSON.parse(event.body) as { name: string };
+    if (!isAuthorized(authorization, name)) {
+      return {
+        statusCode: 401,
+        body: JSON.stringify({ error: "Authorization failed" }),
+      };
+    }
     const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
     const issues = await getAllIssues(octokit, name, "code-423n4");
     const response = issues
