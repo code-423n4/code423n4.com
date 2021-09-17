@@ -8,6 +8,7 @@
     "@babel/preset-env": "^7.13.9",
     "@babel/preset-react": "^7.12.13",
     "@babel/register": "^7.13.8",
+    "@hcaptcha/react-hcaptcha": "^0.3.7",
     "@mdx-js/mdx": "^1.6.22",
     "@mdx-js/react": "^1.6.22",
     "@ncwidgets/id": "^0.8.1",
@@ -35,8 +36,10 @@
     "gatsby-transformer-json": "^3.0.0",
     "gatsby-transformer-remark": "^3.0.0",
     "gatsby-transformer-sharp": "^3.4.0",
+    "hcaptcha": "^0.1.0",
     "mailgun-js": "^0.22.0",
     "netlify-cms-app": "^2.14.27",
+    "octokit-plugin-create-pull-request": "^3.9.3",
     "prop-types": "^15.7.2",
     "react": "^17.0.1",
     "react-avatar": "^3.10.0",
@@ -46,7 +49,8 @@
     "react-select": "^4.3.1",
     "react-table": "^7.6.3",
     "react-twitter-widgets": "^1.10.0",
-    "sass": "^1.32.12"
+    "sass": "^1.32.12",
+    "sharp": "0.28.2"
   },
   "devDependencies": {
     "prettier": "2.2.1",
