@@ -15,7 +15,7 @@ Code 432n4 (C4) is an open organization consisting of security researchers, audi
 
 A C4 code contest is an event in which community participants, referred to as Wardens, review, audit, or analyze smart contract logic in exchange for a bounty provided by sponsoring projects.
 
-During the code contest outlined in this document, C4 conducted an analysis of sponsorName smart contract system written in Solidity. The code contest took place between June 16—June 23.
+During the code contest outlined in this document, C4 conducted an analysis of PoolTogether smart contract system written in Solidity. The code contest took place between June 16—June 23.
 
 ## Wardens
 
