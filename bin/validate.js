@@ -222,11 +222,13 @@ async function validateContests() {
 
 async function validateFindings() {
   let passedValidation = true;
-  const findingsFile = "./_data/findings/findings.json";
-  const blob = await readFile(findingsFile);
   let parsedFindings;
   try {
-    parsedFindings = JSON.parse(blob);
+    parsedFindings = await csv({
+      colParser: {
+        contest: "number",
+      },
+    }).fromFile("./_data/findings/findings.csv");
   } catch (err) {
     console.error(`Unable to parse JSON file at ${findingsFile}`);
     passedValidation = false;
@@ -245,7 +247,7 @@ async function validateFindings() {
     }
 
     if (!uniqueContestIds.has(finding.contest)) {
-      unknownContestIds.add(finding.contestid);
+      unknownContestIds.add(finding.contest);
       passedValidation = false;
       continue;
     }
