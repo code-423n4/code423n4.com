@@ -1,7 +1,7 @@
 import React from "react";
 import Helmet from "react-helmet";
 import Footer from "../components/content/Footer";
-import Nav from "../components/content/Nav";
+import Header from "../components/content/Header";
 
 const DefaultLayout = (props) => {
   const {
@@ -82,7 +82,7 @@ const DefaultLayout = (props) => {
           </a>
         </p>
       </div>
-      <Nav />
+      <Header />
       <main>
         {children}
         <Footer />

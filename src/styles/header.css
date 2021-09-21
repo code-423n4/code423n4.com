@@ -13,14 +13,13 @@ header {
 }
 
 header {
-  display: flex;
-  justify-content: space-between;
   margin: 40px 40px 0;
 }
 
 header nav {
+  display: flex;
+  justify-content: space-between;
   text-align: right;
-  display: block;
   padding: 5px 0;
 }
 
@@ -34,30 +33,33 @@ nav a {
   text-transform: uppercase;
 }
 
+.hamburger {
+  display: none;
+}
+
 @media (max-width: 600px) {
   header {
-    padding: 15px 0 0 0;
+    padding: 15px 0 20px 0;
   }
-  header nav {
-    position: static;
-    right: auto;
-    text-align: center;
-    font-size: 12px;
-  }
-  header {
-    flex-direction: column;
-  }
-  nav a {
-    margin: 0 5px;
-  }
-  .logo img {
-    width: 150px;
-    margin: 5px auto 10px auto;
+  .hamburger {
     display: block;
-    position: static;
-    left: auto;
+    cursor: pointer;
+
+    background: none;
+    border: none;
   }
-  header {
-    margin-bottom: 20px;
+  .nav-links {
+    opacity: 0;
+    display: none;
+  }
+  nav.open {
+    background: #222;
+    height: 100vw;
+    position: absolute;
+  }
+  nav.open .nav-links {
+    opacity: 1;
+    display: block;
+    top: 50px;
   }
 }
