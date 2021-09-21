@@ -64,7 +64,7 @@ High-level considerations for vulnerabilities span the following key areas when 
 
 Further information regarding the severity criteria referenced throughout the submission review process, please refer to the documentation provided on [the C4 website](https://code423n4.com).
 
-# High Risk Findings
+# High Risk Findings (2)
 
 ## [[H-01] `findNewOwner` edgecase](https://github.com/code-423n4/2021-08-realitycards-findings/issues/27)
 _Submitted by gpersoon_
@@ -158,7 +158,7 @@ Recommend limiting the permission of the Uber Owner to something more manageable
 >
 > Without a multisig, I believe this absolutely qualifies as a high severity issue as a compromise of a single end user address compromises the entire system, with a multisig it potentially lowers the severity down to a medium, but its still a risk that is worth highlighting in the system and for the sponsor to scrutinize if there are indeed other mitigation paths that could be taken.
 
-# Medium Risk Findings (2)
+# Medium Risk Findings (3)
 
 ## [[M-01] Uninitialized Variable `marketWhitelist` in `RCTreasury.sol`](https://github.com/code-423n4/2021-08-realitycards-findings/issues/18)
 _Submitted by leastwood, also found by 0xsanson, gpersoon, hickuphh3 and JMukesh_
@@ -309,7 +309,7 @@ Recommend updating the code to something like the following:
  > Yep, this was a last minute untested addition.
 > In implementing your recommended fix I hit "Stack too deep" problems, so have split the function in two with one being internal. Firstly `getMarketInfo` will get the market addresses required and then `_getMarketInfo` will get the additional info required. This change has allowed me to remove the separate `marketResults` variable and pass the required number of results directly to `getMarketInfo`.
 
-**[Splidge (Reality Cards) resolved](https://github.com/code-423n4/2021-08-realitycards-findings/issues/14#issuecomment-914174309):**
+**[Splidge (Reality Cards) patched](https://github.com/code-423n4/2021-08-realitycards-findings/issues/14#issuecomment-914174309):**
  > Fixed [here](https://github.com/RealityCards/RealityCards-Contracts/commit/65e7ed4266ee6b329e134e3b392c5210b1e767b6)
 
 ## [[L-02] Return value of `erc20.approve` is unchecked](https://github.com/code-423n4/2021-08-realitycards-findings/issues/64)
