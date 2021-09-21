@@ -21,7 +21,6 @@ header nav {
   justify-content: space-between;
   text-align: right;
   padding: 5px 0;
-  transition: transform 0.5s, opacity 0.5s ease-out;
 }
 
 nav a {
@@ -63,6 +62,7 @@ nav a {
   }
   nav.open {
     background: #222222f2;
+    transition: all 0.3s ease-out;
 
     position: fixed;
     top: 0;
