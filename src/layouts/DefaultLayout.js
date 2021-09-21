@@ -75,8 +75,7 @@ const DefaultLayout = (props) => {
       </Helmet>
       <div class="message-bar">
         <p>
-          ✨ New!✨ &nbsp;C4 Cosmos league. First contest $100k+ audit of
-          Gravity&nbsp;Bridge.&nbsp;
+          ✨ New!✨ &nbsp;C4 Cosmos league
           <a href="https://medium.com/code-423n4/code4rena-comes-to-cosmos-29269f4d13d">
             Read more »
           </a>
