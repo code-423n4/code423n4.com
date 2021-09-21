@@ -70,6 +70,7 @@ nav a {
     right: 0;
     bottom: 0;
     z-index: 10;
+    overflow-y: auto;
 
     display: grid;
     grid-template-columns: 50% 50%;
