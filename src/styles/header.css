@@ -45,14 +45,18 @@ nav a {
 .hamburger * {
   transition: transform 0.5s, opacity 0.5s ease-out;
 }
-header nav * {
-  transition: padding 0.3s ease-out;
+header nav {
+  transition: all 0.3s ease-out;
 }
 
 @media (max-width: 760px) {
   header {
     margin: 0;
     padding: 0;
+  }
+  .logo {
+    flex: 1;
+    text-align: left;
   }
   .hamburger {
     display: block;
@@ -61,25 +65,25 @@ header nav * {
     background: none;
     border: none;
     justify-self: flex-end;
-    order: 3;
 
     margin-right: -15px;
   }
   .nav-links {
+    width: 100%;
+    /* display: block; */
+    top: 50px;
     opacity: 0;
-    height: 0;
     overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
   }
   header nav {
+    display: flex;
+    flex-wrap: wrap;
     padding: 40px 40px 0;
   }
   header nav.open {
     background: #222222f2;
-
-    display: grid;
-    grid-template-columns: 50% 50%;
-    grid-template-rows: 40px auto;
-
     padding: 40px;
   }
   header nav.open .logo {
@@ -88,16 +92,9 @@ header nav * {
   }
   header nav.open .nav-links {
     opacity: 1;
-    grid-column: 1 / 3;
-    display: block;
-    top: 50px;
-    height: auto;
+    max-height: 100vh;
   }
-  header .nav-links a {
-    padding: 0;
-    margin: 0;
-  }
-  header nav.open .nav-links a {
+  header nav .nav-links a {
     display: block;
     text-align: left;
     padding: 10px 0;
