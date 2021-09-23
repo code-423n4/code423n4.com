@@ -1,11 +1,12 @@
 :root {
   --cosmos-max-width: 900px;
-  --cosmos-bkg-color: #251B2E;
+  --cosmos-bkg-color: #251b2e;
   --cosmos-font-family: "Roboto", sans-serif;
 }
 
 .cosmos {
-  background: url('/images/cosmos-bkg-gradient.jpg') no-repeat top center var(--cosmos-bkg-color);
+  background: url("/images/cosmos-bkg-gradient.jpg") no-repeat top center
+    var(--cosmos-bkg-color);
   background-size: 300%;
 }
 
@@ -26,7 +27,12 @@
 .cosmos hr {
   border: 0;
   height: 2px;
-  background-image: -webkit-linear-gradient(left, var(--cosmos-bkg-color), #3C2B47, var(--cosmos-bkg-color));
+  background-image: -webkit-linear-gradient(
+    left,
+    var(--cosmos-bkg-color),
+    #3c2b47,
+    var(--cosmos-bkg-color)
+  );
   max-width: var(--cosmos-max-width);
 }
 
@@ -49,7 +55,7 @@
 .cosmos header {
   padding: 40px 40px 30px;
   margin: 0;
-  background: rgba(37,27,46,0.73);
+  background: rgba(37, 27, 46, 0.73);
 }
 
 .cosmos-logo {
@@ -74,7 +80,7 @@
 }
 
 .cosmos-bkg {
-  background: url('/images/cosmos-bkg.jpg') no-repeat top center;
+  background: url("/images/cosmos-bkg.jpg") no-repeat top center;
   background-size: cover;
   margin: 0;
   padding: 10px 0 20px;
@@ -83,16 +89,28 @@
 .cosmos h1 {
   font-size: 40px;
   font-weight: normal;
-  margin-bottom: .5em;
+  margin-bottom: 0.5em;
 }
 
 .cosmos h2 {
   font-size: 30px;
   font-weight: normal;
-  margin-bottom: .5em;
+  margin-bottom: 0.5em;
   font-family: var(--cosmos-font-family);
 }
 
 .cosmos p {
   line-height: 140%;
+}
+
+@media (max-width: 760px) {
+  .cosmos header {
+    padding: 0 0 30px;
+  }
+  .cosmos header.open {
+    padding: 0;
+  }
+  .cosmos header nav.open {
+    background: rgba(37, 27, 46, 0.6);
+  }
 }

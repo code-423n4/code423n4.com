@@ -32,7 +32,7 @@ const Header = () => {
   let navClass = mobileNavOpen ? "open" : null;
 
   return (
-    <header>
+    <header className={navClass}>
       <a class="visually-hidden focusable skip-link" href="#skip-link">
         Skip Navigation
       </a>
