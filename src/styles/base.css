@@ -34,7 +34,13 @@ body::after {
 }
 
 main {
-  margin: 40px;
+  margin: 10px;
+}
+
+@media (min-width: 1024px) {
+  main {
+    margin: 40px;
+  }
 }
 
 section {
