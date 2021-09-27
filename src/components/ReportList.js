@@ -3,7 +3,8 @@ import Report from "./Report";
 
 function sortByContestId(a, b) {
   return (
-    b.node.frontmatter.contest.contestid - a.node.frontmatter.contest.contestid
+    new Date(b.node.frontmatter.contest.start_time).getTime() -
+    new Date(a.node.frontmatter.contest.start_time).getTime()
   );
 }
 
