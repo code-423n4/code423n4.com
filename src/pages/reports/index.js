@@ -33,6 +33,7 @@ export const query = graphql`
     ) {
       edges {
         node {
+          id
           frontmatter {
             title
             slug
@@ -51,6 +52,7 @@ export const query = graphql`
               name
             }
             contest {
+              contestid
               end_time
               start_time
               title

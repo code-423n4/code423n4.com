@@ -1,6 +1,11 @@
 .wrapper-report .wrapper-contest {
   display: inline-grid;
-  margin: 20px;
+}
+
+@media (min-width: 1024px) {
+  .wrapper-report .wrapper-contest {
+    margin: 20px;
+  }
 }
 
 .wrapper-contest {
@@ -9,8 +14,26 @@
   background: rgba(51, 0, 101, 0.3);
   box-shadow: 0 -1px 0px #5e507133, 0 1px 0px rgba(0, 0, 0, 0.2);
   padding: 20px;
-  grid-template-columns: 100px 1fr;
+  grid-template-columns: 1fr;
   display: grid;
+}
+
+@media (min-width: 1024px) {
+  .wrapper-contest {
+    grid-template-columns: 100px 1fr;
+  }
+}
+
+.wrapper-contest .cta-button {
+  display: block;
+  text-align: center;
+}
+
+@media (min-width: 1024px) {
+  .wrapper-contest .cta-button {
+    display: inline;
+    text-align: left;
+  }
 }
 
 .wrapper-contest.soon {
@@ -85,8 +108,14 @@
 }
 
 .wrapper-sponsor {
-  margin: 10px 10px 10px 0;
+  margin: 0 auto;
   width: 80px;
+}
+
+@media (min-width: 1024px) {
+  .wrapper-sponsor {
+    margin: 10px 10px 10px 0;
+  }
 }
 
 .wrapper-contest .days-duration {
