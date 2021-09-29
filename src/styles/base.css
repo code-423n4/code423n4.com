@@ -264,6 +264,10 @@ iframe {
     font-size: 32px !important;
   }
 
+  main {
+    margin: 20px;
+  }
+
   .wrapper-main {
     margin: 10px;
   }
