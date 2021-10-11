@@ -28,6 +28,7 @@
   background-color: var(--main-purple);
 }
 
+.button:hover,
 .cta-button.primary:hover {
   background-color: rgba(var(--main-purple-rgb), 0.8);
   color: #fff;
