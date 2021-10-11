@@ -1,43 +1,43 @@
+:root {
+  --main-purple: #8424e2;
+  --light-purple: #a29ab6;
+  --hot-blue: #1a4bff;
+  --blue: #361ee0;
+
+  --background-purple: #160f29;
+  --secondary-background-purple: #292044;
+  --lightest-background-purple: #50426c; /* use white text */
+
+  --border-lightest-background: #71678a; /* border color. use with lightest background purple */
+
+  --text-headers: #fff;
+  --text-white: #fff;
+  --text-normal: #ffffffcc; /* cc = 80% */
+
+  /* these rgb color values should be identical to their pairs above */
+  /* use these to change opacity like this: `rgba(var(--main-purple-rgb), 0.8)` */
+  --main-purple-rgb: 132, 36, 226;
+}
+
+img {
+  max-width: 100%;
+}
+
 html {
   color-scheme: light dark;
 }
 
 body {
-  background-color: black;
+  background-color: var(--background-purple);
   padding: 0;
   margin: 0;
 }
 
-body::after {
-  content: "";
-  position: fixed;
-  z-index: -1;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  height: 100%;
-  background-image: repeating-linear-gradient(
-      0deg,
-      rgba(255, 255, 255, 0.13),
-      rgba(255, 255, 255, 0.13) 1px,
-      rgba(50, 05, 50, 0.15) 1px,
-      1px,
-      rgba(50, 50, 50, 0.15) 2px
-    ),
-    linear-gradient(
-      167deg,
-      rgba(0, 0, 0, 1) 0%,
-      rgba(0, 0, 0, 1) 60%,
-      rgba(51, 0, 101, 1) 100%
-    );
-}
-
 main {
-  margin: 10px;
+  margin: 40px;
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 600px) {
   main {
     margin: 40px;
   }
@@ -52,13 +52,13 @@ section:first-of-type {
 }
 
 h1 {
-  color: white;
+  color: var(--text-headers);
   font-weight: 800;
   font-family: "Roboto", sans-serif;
 }
 
 h2 {
-  color: white;
+  color: var(--text-headers);
 }
 
 h2 code {
@@ -69,7 +69,7 @@ h2 code {
 }
 
 h4 {
-  color: #fff;
+  color: var(--text-headers);
   font-size: 25px;
   font-family: "Roboto", sans-serif;
   margin-bottom: 0;
@@ -82,7 +82,7 @@ h4 a {
 
 h5 {
   font-size: 30px;
-  color: #fff;
+  color: var(--text-headers);
   line-height: 1.5;
   font-family: "Roboto", sans-serif;
   font-weight: 200;
@@ -101,7 +101,7 @@ article blockquote {
   font-family: "Roboto", sans-serif;
   line-height: 1.5;
   font-size: 18px;
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--text-normal);
 }
 
 article li {
@@ -126,8 +126,8 @@ article h5 {
 
 article h2 {
   margin-top: 60px;
-  color: #fff;
-  border-bottom: 1px solid #443658;
+  color: var(--text-headers);
+  border-bottom: 1px solid var(--secondary-background-purple);
   padding-bottom: 10px;
   text-transform: uppercase;
   font: 1.4rem "Space Mono", monospace;
@@ -139,13 +139,13 @@ article h2 {
 
 article h3 {
   margin-top: 40px;
-  color: #fff;
+  color: var(--text-headers);
   font: 1.2rem "Space Mono", monospace;
 }
 
 p,
 li {
-  color: #ffffffaa;
+  color: var(--text-normal);
   font-family: "Roboto", sans-serif;
 }
 
@@ -154,11 +154,11 @@ li span {
 }
 li span::before {
   content: "(";
-  color: #ffffff33;
+  color: var(--text-normal);
 }
 li span::after {
   content: ")";
-  color: #ffffff33;
+  color: var(--text-normal);
 }
 
 ul {
@@ -167,9 +167,9 @@ ul {
 
 code {
   font-family: "Roboto Mono", monospace;
-  color: white;
-  background: #443b4e;
-  border: 1px solid #625b6a;
+  color: var(--text-white);
+  background: var(--lightest-background-purple);
+  border: 1px solid var(--border-lightest-background);
   padding: 1px 8px;
   margin: 1px;
   border-radius: 4px;
@@ -185,18 +185,17 @@ pre {
   overflow-x: auto;
 }
 
-pre::-webkit-scrollbar-track {
-  border: none;
-  background-color: #645b6f;
-}
-
 pre::-webkit-scrollbar {
   width: 10px;
-  background-color: #645b6f;
+}
+
+pre::-webkit-scrollbar-track {
+  border: none;
+  background-color: var(--border-lightest-background);
 }
 
 pre::-webkit-scrollbar-thumb {
-  background-color: #aca3b5;
+  background-color: var(--light-purple);
   width: 5px;
 }
 
@@ -255,8 +254,6 @@ iframe {
 
 @media (max-width: 600px) {
   body {
-    background-color: black;
-    background-image: none;
     margin: 0;
   }
 
@@ -264,12 +261,8 @@ iframe {
     font-size: 32px !important;
   }
 
-  main {
-    margin: 20px;
-  }
-
   .wrapper-main {
-    margin: 10px;
+    margin: 0;
   }
 
   section {

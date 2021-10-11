@@ -62,7 +62,7 @@ const Contest = ({ contest: { node } }) => {
         {t.state === "active" && repo ? (
           <a
             href={repo}
-            className="contest-repo button button-small cta-button"
+            className="contest-repo button button-small cta-button primary"
           >
             {`${findingsRepo === "" ? "Preview" : "View"} Contest`}
           </a>
@@ -70,7 +70,10 @@ const Contest = ({ contest: { node } }) => {
           ""
         )}
         {t.state === "active" && findingsRepo && submissionPath ? (
-          <a href={submissionPath} className="button button-small cta-button">
+          <a
+            href={submissionPath}
+            className="button button-small cta-button secondary"
+          >
             Submit Finding
           </a>
         ) : (

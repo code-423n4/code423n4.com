@@ -2,6 +2,7 @@
 @import "./base.css";
 @import "./buttons.css";
 @import "./contests.css";
+@import "./leaderboard.css";
 @import "./footer.css";
 @import "./header.css";
 @import "./hero.css";
@@ -9,3 +10,4 @@
 @import "./testimonials.css";
 @import "./message-bar.css";
 @import "./cosmos.css";
+@import "./index.css";
