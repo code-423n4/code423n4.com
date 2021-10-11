@@ -132,7 +132,9 @@ function getRiskFromLabels(
   labels: QueryResponse["repository"]["issues"]["nodes"][number]["labels"]["nodes"]
 ): string {
   for (let i = 0; i < labels.length; i++) {
-    if (labels[i].name === "0 (Non-critical)") {
+    if (labels[i].name === "invalid") {
+      return "INVALID";
+    } else if (labels[i].name === "0 (Non-critical)") {
       return "N";
     } else if (labels[i].name === "1 (Low Risk)") {
       return "L";
