@@ -25,12 +25,12 @@
   flex-direction: column;
   justify-content: center;
 
-  background-image: linear-gradient(225deg, #350c5b 0%, #18052e 100%);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  background-image: linear-gradient(225deg, #561399 0%, #140b61 100%);
+  border-radius: 10px;
   border-radius: 10px;
   color: white;
 
-  font-family: SpaceMono-Bold, monospace;
+  font-family: SpaceMono, monospace;
   font-size: 16px;
   letter-spacing: 0;
   word-break: break-word;
@@ -38,7 +38,7 @@
 
 @media screen and (min-width: 800px) {
   .testimonials figure {
-    font-size: 20px;
+    font-size: 17px;
     margin: 0 10px 20px;
   }
 }
@@ -95,8 +95,7 @@
 .testimonials figure.tweet {
   padding-bottom: 0;
   font-size: 16px;
-  background-image: linear-gradient(225deg, #4900ad 0%, #280064 100%);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background-image: linear-gradient(225deg, #561399 0%, #140b61 100%);
 }
 
 .testimonials figure.tweet figcaption::before {

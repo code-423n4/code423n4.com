@@ -83,7 +83,7 @@ header nav {
     padding: 40px 40px 0;
   }
   header nav.open {
-    background: #222222f2;
+    background: var(--secondary-background-purple);
     padding: 40px;
   }
   header nav.open .logo {

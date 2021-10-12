@@ -5,9 +5,12 @@
 }
 
 .hero h1 {
-  font-size: 80px;
-  text-shadow: 0 7px rgba(51, 0, 101, 1);
-  margin: 0 0 60px 0;
+  font-family: "Roboto", sans-serif;
+  font-size: 75px;
+  color: #ffffff;
+  letter-spacing: 0;
+  text-shadow: 2px 2px 19px rgba(132, 36, 226, 0.77);
+  margin: 0 0 30px 0;
 }
 
 .hero h1 span {
@@ -17,6 +20,10 @@
 .definitions {
   grid-template-columns: 1fr 1fr 1fr;
   display: grid;
+}
+
+.hero h5 {
+  margin-bottom: 40px;
 }
 
 .definitions div {
@@ -39,7 +46,7 @@
 
 @media (max-width: 600px) {
   .hero {
-    margin: 40px 10px 0 10px;
+    margin: 40px 0 0;
   }
 
   .hero h1 {

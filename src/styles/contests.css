@@ -11,7 +11,7 @@
 .wrapper-contest {
   margin-top: 40px;
   border-radius: 10px;
-  background: rgba(51, 0, 101, 0.3);
+  background: var(--secondary-background-purple);
   box-shadow: 0 -1px 0px #5e507133, 0 1px 0px rgba(0, 0, 0, 0.2);
   padding: 20px;
   grid-template-columns: 1fr;
@@ -27,21 +27,14 @@
 .wrapper-contest .cta-button {
   display: block;
   text-align: center;
+  margin: 5px 0;
 }
 
 @media (min-width: 1024px) {
   .wrapper-contest .cta-button {
-    display: inline;
-    text-align: left;
+    display: inline-block;
+    margin: 0.25rem 0.5rem 0.25rem 0;
   }
-}
-
-.wrapper-contest.soon {
-  background: rgba(51, 0, 101, 0.3);
-}
-
-.wrapper-contest.active {
-  background: rgba(51, 0, 101, 0.3);
 }
 .wrapper-contest.completed {
   opacity: 0.8;
@@ -53,6 +46,9 @@
 }
 .wrapper-contest p {
   margin-bottom: 0.8em;
+}
+.wrapper-report .wrapper-contest p {
+  margin-bottom: 0.1em;
 }
 
 .wardens {
@@ -84,7 +80,7 @@
 
 .countdown h5 {
   font-size: 20px;
-  margin: 0 0 10px 0;
+  margin: 0 0 5px 0;
 }
 
 .countdown h5 .wrapper-time {
@@ -136,69 +132,6 @@
   margin: 10px auto;
 }
 
-table {
-  color: #d7c7ef;
-  font-family: sans-serif;
-  border-collapse: collapse;
-  border-style: hidden;
-  font-family: "Space Mono", monospace;
-  font-weight: 400;
-  margin: 40px auto;
-}
-th {
-  margin: 0;
-  min-width: 60px;
-}
-th[role="columnheader"] {
-  text-align: left;
-}
-thead tr:nth-of-type(2) th:nth-of-type(1) {
-  padding-left: 40px;
-}
-
-table td {
-  margin: 0;
-  /* border: 1px solid rgba(146, 129, 171, 0.2); */
-  border: 1px solid #443658;
-  padding: 10px;
-}
-
-table td,
-table th {
-  padding: 10px;
-  font-size: 12px;
-}
-
-table th {
-  color: #fff;
-}
-
-th:first-child .sort-direction {
-  display: none;
-}
-
-th {
-  position: relative;
-}
-
-.sort-direction {
-  position: absolute;
-  right: 10px;
-}
-
-.member + .member {
-  margin-top: 10px;
-}
-.teamname {
-  display: block;
-  margin: 0 0 5px 30px;
-  padding-bottom: 5px;
-  border-bottom: 1px solid #443658;
-}
-.sb-avatar {
-  margin-right: 10px;
-}
-
 .contest-league {
   background: rgba(0, 0, 0, 0.5);
   color: white;
@@ -226,27 +159,6 @@ th {
 }
 
 @media (max-width: 600px) {
-  th {
-    min-width: 50px;
-  }
-  th:nth-of-type(5),
-  td:nth-of-type(5),
-  th:nth-of-type(6),
-  td:nth-of-type(6) {
-    display: none;
-  }
-  td:nth-of-type(4),
-  th:nth-of-type(4) {
-    border-right: 0px;
-  }
-  table .sb-avatar,
-  table .teamname {
-    display: none !important;
-  }
-  thead tr:nth-of-type(2) th:nth-of-type(1) {
-    text-align: left;
-  }
-
   .wrapper-contest {
     margin-top: 10px;
   }
@@ -263,13 +175,5 @@ th {
   .wrapper-contest p {
     font-size: 15px;
     margin: 10px 0;
-  }
-}
-
-@media (min-width: 850px) {
-  table td,
-  table th {
-    padding: 20px;
-    font-size: 15px;
   }
 }
