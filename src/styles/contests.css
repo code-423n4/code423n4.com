@@ -27,11 +27,13 @@
 .wrapper-contest .cta-button {
   display: block;
   text-align: center;
+  margin: 5px 0;
 }
 
 @media (min-width: 1024px) {
   .wrapper-contest .cta-button {
     display: inline-block;
+    margin: 0.25rem 0.5rem 0.25rem 0;
   }
 }
 .wrapper-contest.completed {
