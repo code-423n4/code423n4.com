@@ -1,27 +1,18 @@
 .Form {
-  background-color: white;
-  color: #444;
+  color-scheme: dark;
+  background-color: var(--secondary-background-purple);
+  color: #ccc;
   max-width: 700px;
   margin: 40px auto;
   padding: 40px;
-  border: 1px solid #eee;
+  border: 1px solid var(--border-lightest-background);
+  border-radius: 10px;
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue",
     Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji",
     "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 
-  @media (prefers-color-scheme: dark) {
-    background-color: black;
-    color: #ccc;
-    border-color: #443658;
-  }
-
   & h1 {
-    color: inherit;
     text-align: center;
-  }
-
-  & p {
-    color: inherit;
   }
 }
 

@@ -188,12 +188,17 @@ const WardenRegistrationForm = ({ handles }) => {
           )}
         </div>
       )}
-      {status === FormStatus.Submitted && (
+      {status === FormStatus.Unsubmitted && (
         <div style={{ textAlign: "center" }}>
           <h1>Thank you!</h1>
           <p>
             Your handle has been registered, and you're ready to submit
-            findings.
+            findings. We look forward to seeing you in the arena!
+          </p>
+          <h2>One more thing...</h2>
+          <p>
+            Join us in <a href="https://discord.gg/code4rena">Discord</a> and
+            give us a howl in #i-want-to-be-a-warden!
           </p>
         </div>
       )}
