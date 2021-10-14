@@ -188,7 +188,7 @@ const WardenRegistrationForm = ({ handles }) => {
           )}
         </div>
       )}
-      {status === FormStatus.Unsubmitted && (
+      {status === FormStatus.Submitted && (
         <div style={{ textAlign: "center" }}>
           <h1>Thank you!</h1>
           <p>
