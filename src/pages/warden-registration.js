@@ -193,7 +193,9 @@ const WardenRegistrationForm = ({ handles }) => {
           <h1>Thank you!</h1>
           <p>
             Your handle has been registered, and you're ready to submit
-            findings. We look forward to seeing you in the arena!
+            findings.
+            <br />
+            We look forward to seeing you in the arena!
           </p>
           <h2>One more thing...</h2>
           <p>
