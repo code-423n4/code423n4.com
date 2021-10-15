@@ -194,6 +194,13 @@ const WardenRegistrationForm = ({ handles }) => {
           <p>
             Your handle has been registered, and you're ready to submit
             findings.
+            <br />
+            We look forward to seeing you in the arena!
+          </p>
+          <h2>One more thing...</h2>
+          <p>
+            Join us in <a href="https://discord.gg/code4rena">Discord</a> and
+            give us a howl in #i-want-to-be-a-warden!
           </p>
         </div>
       )}
