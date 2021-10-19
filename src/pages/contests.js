@@ -2,19 +2,54 @@ import React from "react";
 import { graphql } from "gatsby";
 import DefaultLayout from "../layouts/DefaultLayout";
 import ContestList from "../components/ContestList";
-import { getTimeRemaining, getDates, getTimeState } from "../utils/time";
+import { getTimeRemaining, getDates } from "../utils/time";
+import { sortByContestStart } from "../utils/sort";
 
 export default function Contests({ data }) {
   const contests = data.contests.edges;
 
-  // TODO: group contests by date
-  // TODO: set contest state based on grouping
-  // TODO: add to template in subsets (active / soon / recently completed)
+  const contestsByLeague = {
+    active: contests.filter(
+      (c) => getDates(c.node.start_time, c.node.end_time).state === "active"
+    ),
+    soon: contests.filter(
+      (c) => getDates(c.node.start_time, c.node.end_time).state === "soon"
+    ),
+    completed: contests
+      .filter(
+        (c) =>
+          getDates(c.node.start_time, c.node.end_time).state === "completed"
+      )
+      .sort(sortByContestStart("reverse")),
+  };
 
   return (
-    <DefaultLayout pageTitle="Contests" bodyClass="">
+    <DefaultLayout pageTitle="Contests" bodyClass="contests-page">
       <div className="wrapper-main">
-        <section>{contests ? <ContestList contests={contests} /> : ""}</section>
+        {contestsByLeague.active ? (
+          <section>
+            <h2>Active contests</h2>
+            <ContestList contests={contestsByLeague.active} />
+          </section>
+        ) : (
+          ""
+        )}
+        {contestsByLeague.soon ? (
+          <section>
+            <h2>Upcoming contests</h2>
+            <ContestList contests={contestsByLeague.soon} />
+          </section>
+        ) : (
+          ""
+        )}
+        {contestsByLeague.completed ? (
+          <section>
+            <h2>Completed contests</h2>
+            <ContestList contests={contestsByLeague.completed} />
+          </section>
+        ) : (
+          ""
+        )}
       </div>
     </DefaultLayout>
   );

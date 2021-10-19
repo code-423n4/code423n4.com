@@ -55,11 +55,11 @@ const getDates = (starttime, endtime) => {
   const end = new Date(endtime).getTime();
 
   let state;
-  if (now < start) {
-    state = "soon";
-  }
   if (now >= start && now <= end) {
     state = "active";
+  }
+  if (now < start) {
+    state = "soon";
   }
   if (now > end) {
     state = "completed";
@@ -71,7 +71,9 @@ const getDates = (starttime, endtime) => {
   const endMonth = monthNames[new Date(endtime).getMonth()];
   const endYear = new Date(endtime).getFullYear();
   const endDate = new Date(endtime).getDate();
-  const daysDuration = Math.round((end - start) * 1/1000 * 1/60 * 1/60 * 1/24);
+  const daysDuration = Math.round(
+    ((((((((end - start) * 1) / 1000) * 1) / 60) * 1) / 60) * 1) / 24
+  );
 
   const t = {
     state,
@@ -91,18 +93,5 @@ const getDates = (starttime, endtime) => {
 
   return t;
 };
-
-// const getTimeState = (t) => {
-//   let timeState;
-//   if (t.now < t.start) {
-//     return "soon";
-//   }
-//   if (t.now >= t.start && t.now <= t.end) {
-//     return "active";
-//   }
-//   if (t.now > t.end) {
-//     return "completed";
-//   }
-// };
 
 export { getTimeRemaining, getDates };
