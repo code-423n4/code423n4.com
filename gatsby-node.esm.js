@@ -13,14 +13,22 @@ function slugify(text) {
     .replace(/-+$/, ""); // Trim - from end of text
 }
 
-function contestPermalink(contestNode) {
+function contestSlug(contestNode) {
   const startDate = new Date(contestNode.start_time);
   const year = startDate.getFullYear();
   const month = `${startDate.getMonth() + 1}`.padStart(2, "0");
   const title = slugify(contestNode.title);
-  const submissionPath = `/${year}-${month}-${title}/submit`;
+  const slug = `${year}-${month}-${title}`;
 
-  return submissionPath;
+  return slug;
+}
+
+function contestPermalink(contestNode) {
+  return `/contests/${contestSlug(contestNode)}`;
+}
+
+function contestSubmissionPermalink(contestNode) {
+  return `/contests/${contestSlug(contestNode)}/submit`;
 }
 
 const queries = {
@@ -82,8 +90,13 @@ exports.onCreateNode = ({ node, getNode, actions }) => {
   if (node.internal.type === `ContestsCsv`) {
     createNodeField({
       node,
-      name: `submissionPath`,
+      name: `permalink`,
       value: contestPermalink(node),
+    });
+    createNodeField({
+      node,
+      name: `submissionPath`,
+      value: contestSubmissionPermalink(node),
     });
   }
 };
@@ -93,6 +106,7 @@ exports.createPages = async ({ graphql, actions }) => {
 
   let contests = await graphql(queries.contests);
   const formTemplate = path.resolve("./src/layouts/ReportForm.js");
+  const contestTemplate = path.resolve("./src/layouts/ContestLayout.js");
   contests.data.contests.edges.forEach((contest) => {
     if (contest.node.findingsRepo) {
       createPage({
@@ -103,5 +117,13 @@ exports.createPages = async ({ graphql, actions }) => {
         },
       });
     }
+
+    // createPage({
+    //   path: contest.node.fields.permalink,
+    //   component: contestTemplate,
+    //   context: {
+    //     contestId: contest.node.contestid,
+    //   },
+    // });
   });
 };
