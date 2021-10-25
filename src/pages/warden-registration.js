@@ -5,6 +5,7 @@ import HCaptcha from "@hcaptcha/react-hcaptcha";
 import DefaultLayout from "../layouts/DefaultLayout";
 import * as styles from "../components/reporter/Form.module.scss";
 import * as widgetStyles from "../components/reporter/widgets/Widgets.module.scss";
+import Agreement from "../components/content/Agreement.js";
 
 const initialState = {
   handle: "",
@@ -150,15 +151,16 @@ const WardenRegistrationForm = ({ handles }) => {
               ref={avatarInputRef}
             />
           </div>
-          <div style={{ display: "flex", justifyContent: "center" }}>
+          <div className="captcha-container">
             <HCaptcha
               sitekey="4963abcb-188b-4972-8e44-2887e315af52"
               theme="dark"
               onVerify={handleCaptchaVerification}
             />
           </div>
+          <Agreement />
           <button
-            className={styles.Button}
+            className="button cta-button centered"
             type="button"
             onClick={submitFinding}
             disabled={
