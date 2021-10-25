@@ -4,6 +4,7 @@ import { StaticQuery, graphql } from "gatsby";
 import clsx from "clsx";
 import { Widgets } from "./widgets";
 import * as styles from "./Form.module.scss";
+import Agreement from "../content/Agreement.js";
 
 const config = {
   labelAll: "bug",
@@ -231,8 +232,9 @@ const Form = ({ contest, sponsor, repoUrl }) => {
                   onChange={handleChange}
                   fieldState={state}
                 />
+                <Agreement />
                 <button
-                  className={styles.Button}
+                  className="button cta-button centered"
                   type="button"
                   onClick={handleSubmit}
                   disabled={status !== "unsubmitted"}
@@ -253,7 +255,7 @@ const Form = ({ contest, sponsor, repoUrl }) => {
                 <h1>Thank you!</h1>
                 <p>Your report has been submitted.</p>
                 <button
-                  className={styles.Button}
+                  className="button cta-button"
                   type="button"
                   onClick={handleReset}
                 >
