@@ -1,9 +1,9 @@
 import React from "react";
 import { graphql } from "gatsby";
-import DefaultLayout from "../layouts/DefaultLayout";
-import ContestList from "../components/ContestList";
-import { getTimeRemaining, getDates } from "../utils/time";
-import { sortByContestStart } from "../utils/sort";
+import DefaultLayout from "../../layouts/DefaultLayout";
+import ContestList from "../../components/ContestList";
+import { getTimeRemaining, getDates } from "../../utils/time";
+import { sortByContestStart } from "../../utils/sort";
 
 export default function Contests({ data }) {
   const contests = data.contests.edges;

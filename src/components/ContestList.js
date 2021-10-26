@@ -1,5 +1,5 @@
 import React from "react";
-import Contest from "./Contest";
+import Contest from "./ContestTile";
 
 const ContestList = ({ contests }) => {
   return (
