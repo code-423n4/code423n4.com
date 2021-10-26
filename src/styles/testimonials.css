@@ -110,6 +110,7 @@
 
 .testimonials figure.tweet blockquote {
   padding: 1.5em 2em;
+  break-inside: avoid;
 }
 
 .testimonials figure.tweet figcaption {

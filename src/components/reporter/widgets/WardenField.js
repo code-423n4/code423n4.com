@@ -1,4 +1,5 @@
 import React, { useCallback } from "react";
+import { Link } from "gatsby";
 import Select from "react-select";
 import * as baseStyles from "./Widgets.module.scss";
 import * as styles from "./WardenField.module.scss";
@@ -40,10 +41,8 @@ const WardenField = ({ label, helptext, options, onChange, fieldState }) => {
       />
       <p className={baseStyles.Help}>
         <small>
-          Don't see your handle here?{" "}
-          <a href="https://github.com/code-423n4/code423n4.com">
-            Submit a pull request here to register.
-          </a>
+          Don't see your handle?{" "}
+          <Link to="/warden-registration">Click here</Link> to register.
         </small>
       </p>
     </div>

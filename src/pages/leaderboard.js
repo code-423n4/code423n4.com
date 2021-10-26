@@ -86,7 +86,7 @@ const Leaderboard = ({ data }) => {
 
 export const query = graphql`
   query {
-    handles: allHandlesJson {
+    handles: allHandlesJson(filter: { showOnLeaderboard: { ne: false } }) {
       edges {
         node {
           handle
