@@ -17,3 +17,8 @@
   white-space: normal;
   width: auto;
 }
+
+.centered {
+  display: block !important;
+  margin: 0 auto !important;
+}
