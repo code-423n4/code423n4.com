@@ -82,6 +82,7 @@ export const query = graphql`
           }
           fields {
             submissionPath
+            contestPath
           }
         }
       }

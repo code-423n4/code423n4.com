@@ -1,0 +1,57 @@
+.contest-artwork {
+  --art-height: 100px;
+  --art-border-radius: 10px;
+  --art-transition: all 0.2s ease-out;
+
+  background-color: var(--secondary-background-purple);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: -50%;
+  border-radius: var(--art-border-radius);
+  height: var(--art-height);
+  width: 100%;
+  transition: var(--art-transition);
+  cursor: pointer;
+  position: relative;
+}
+
+.contest-artwork:hover {
+  height: calc(var(--art-height) + 5px);
+}
+
+.contest-artwork:after {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--secondary-background-purple);
+  border-radius: var(--art-border-radius);
+  opacity: 0.5;
+  transition: var(--art-transition);
+}
+
+.contest-artwork:hover:after,
+.contest-artwork.open:after {
+  opacity: 0;
+}
+
+.contest-artwork.open {
+  height: auto;
+  padding-bottom: 56.25%;
+}
+.header-live {
+  display: flex;
+}
+.header-live:before {
+  content: "LIVE";
+  font-size: 0.5em;
+  border: 2px solid var(--hot-pink);
+  padding: 0.1em 0.8em;
+  border-radius: 4px;
+  box-shadow: 0 0 10px 0 var(--hot-pink);
+  text-shadow: 0 0 10px var(--hot-pink);
+  margin: auto 1em auto 0;
+}

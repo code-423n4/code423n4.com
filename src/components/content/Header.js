@@ -46,6 +46,7 @@ const Header = () => {
         />
         <div className="nav-links">
           <Link to="/leaderboard">Leaderboard</Link>
+          <Link to="/contests">Contests</Link>
           <Link to="/reports">Reports</Link>
           <Link to="/cosmos">Cosmos</Link>
           <a href="https://docs.code4rena.com">Docs</a>
