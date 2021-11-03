@@ -42,16 +42,75 @@
   height: auto;
   padding-bottom: 56.25%;
 }
+
 .header-live {
   display: flex;
 }
+
 .header-live:before {
   content: "LIVE";
-  font-size: 0.5em;
+  font-size: 0.44em;
+  letter-spacing: 0.1em;
   border: 2px solid var(--hot-pink);
-  padding: 0.1em 0.8em;
+  padding: 0.2em 0.8em;
   border-radius: 4px;
   box-shadow: 0 0 10px 0 var(--hot-pink);
   text-shadow: 0 0 10px var(--hot-pink);
   margin: auto 1em auto 0;
+}
+
+.contest-page .top-section {
+  display: flex;
+  align-content: center;
+}
+
+.contest-page .sponsor-image {
+  /* transform: translate(0, -25px); */
+  margin: 25px 40px 0 20px;
+}
+
+.contest-page .sponsor-image a {
+  display: block;
+  width: 90px;
+  height: 90px;
+}
+
+.contest-page .sponsor-image img {
+  border-radius: 50%;
+  border: 5px solid white;
+}
+
+.top-section-text {
+  flex-grow: 1;
+}
+
+.top-section-text h1 {
+  margin-bottom: 0;
+  margin-top: 20px;
+  font-weight: 500;
+  font-size: 30px;
+}
+
+.top-section-text p {
+  margin-top: 0;
+}
+
+.top-section-amount {
+  margin-right: auto;
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.top-section-amount p:first-of-type {
+  font-size: 24px;
+  color: #ffffff;
+  margin: 0;
+}
+
+.top-section-amount p:last-of-type {
+  text-transform: uppercase;
+  font-size: 16px;
+  margin: 0;
 }

@@ -1,5 +1,6 @@
 .landing,
-.contests-page {
+.contests-page,
+.contest-page {
   background-image: radial-gradient(
     1000px 1000px at top center,
     #8424e229 50%,
