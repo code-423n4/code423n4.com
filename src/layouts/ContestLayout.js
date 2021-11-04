@@ -3,12 +3,18 @@ import { graphql } from "gatsby";
 import DefaultLayout from "./DefaultLayout";
 import ReactMarkdown from "react-markdown";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
-import "react-tabs/style/react-tabs.css";
 
 const ContestLayout = (props) => {
   const [artOpen, setArtOpen] = useState(false);
   let artClass = artOpen ? "open" : null;
-  const { title, sponsor, details, fields, amount } = props.data.contestsCsv;
+  const {
+    title,
+    sponsor,
+    details,
+    fields,
+    amount,
+    repo,
+  } = props.data.contestsCsv;
   const artURL = "http://placeimg.com/1200/675/arch/grayscale";
   return (
     <DefaultLayout pageTitle={title} bodyClass="contest-page">
@@ -36,9 +42,15 @@ const ContestLayout = (props) => {
             <div class="button-wrapper">
               <a
                 href={fields.submissionPath}
-                className="button button-small primary"
+                className="button button-small cta-button primary"
               >
                 Submit Finding
+              </a>
+              <a
+                href={repo}
+                className="button button-small cta-button secondary"
+              >
+                View Contest Repo
               </a>
             </div>
           </div>

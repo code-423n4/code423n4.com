@@ -93,6 +93,7 @@
 
 .top-section-text p {
   margin-top: 0;
+  margin-bottom: 5px;
 }
 
 .top-section-amount {
@@ -100,7 +101,7 @@
   text-align: right;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  margin-top: 25px;
 }
 
 .top-section-amount p:first-of-type {
