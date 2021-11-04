@@ -53,7 +53,7 @@ async function fetchReadmeMarkdown(contestNode) {
 
   // Convert the base64 to normal text
   var buff = Buffer.from(request.data.content, "base64");
-  let rawMarkdown = buff.toString("ascii");
+  let rawMarkdown = buff.toString();
 
   return rawMarkdown;
 }
