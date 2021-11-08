@@ -3,6 +3,8 @@ import { graphql } from "gatsby";
 import DefaultLayout from "./DefaultLayout";
 import ReactMarkdown from "react-markdown";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
+import Countdown from "../components/Countdown";
+import { getDates } from "../utils/time";
 
 const ContestLayout = (props) => {
   const [artOpen, setArtOpen] = useState(false);
@@ -14,18 +16,30 @@ const ContestLayout = (props) => {
     fields,
     amount,
     repo,
+    findingsRepo,
+    start_time,
+    end_time,
   } = props.data.contestsCsv;
   const artURL = "http://placeimg.com/1200/675/arch/grayscale";
+  const t = getDates(start_time, end_time);
   return (
     <DefaultLayout pageTitle={title} bodyClass="contest-page">
-      <article className="wrapper-main">
-        <div
-          style={{ backgroundImage: `url(${artURL})` }}
-          onClick={() => setArtOpen((isOpen) => !isOpen)}
-          className={`${artClass} contest-artwork`}
-          aria-label={`${title} artwork. Expands on click.`}
-        />
-        <section className="top-section">
+      <>
+        <div class="contest-wrapper contest-artwork-wrapper">
+          <Countdown
+            state={t.state}
+            start={start_time}
+            end={end_time}
+            isPreview={findingsRepo === ""}
+          />
+          <div
+            // style={{ backgroundImage: `url(${artURL})` }}
+            onClick={() => setArtOpen((isOpen) => !isOpen)}
+            className={`${artClass} contest-artwork background-pattern`}
+            aria-label={`${title} artwork. Expands on click.`}
+          />
+        </div>
+        <section className="top-section contest-wrapper">
           <div className="sponsor-image">
             <a href={sponsor.link}>
               <img
@@ -42,13 +56,13 @@ const ContestLayout = (props) => {
             <div class="button-wrapper">
               <a
                 href={fields.submissionPath}
-                className="button button-small cta-button primary"
+                className="button cta-button button-medium primary"
               >
                 Submit Finding
               </a>
               <a
                 href={repo}
-                className="button button-small cta-button secondary"
+                className="button cta-button button-medium secondary"
               >
                 View Contest Repo
               </a>
@@ -60,32 +74,36 @@ const ContestLayout = (props) => {
           </div>
         </section>
         <section>
-          <Tabs>
+          <Tabs className="contest-tabs">
             <TabList>
               <Tab>Details</Tab>
               <Tab>FAQ</Tab>
             </TabList>
 
             <TabPanel>
-              <ReactMarkdown children={fields.readmeContent} />
+              <div className="contest-wrapper">
+                <ReactMarkdown children={fields.readmeContent} />
+              </div>
             </TabPanel>
             <TabPanel>
-              <h2>FAQ</h2>
-              <p>
-                <strong>
-                  Corvids love to play pranks on humans and other animals?
-                </strong>
-                Corvids use their intelligence and ability to mimic sounds for
-                their own personal amusement. One zookeeper noted the magpies
-                would mimic the voice of the employee responsible for feeding
-                the chickens. The chickens would come running, but there would
-                be no food. The magpies would do this again and again to the
-                chickens, who never got wise to the prank.
-              </p>
+              <div className="contest-wrapper">
+                <h2>FAQ</h2>
+                <p>
+                  <strong>
+                    Corvids love to play pranks on humans and other animals?
+                  </strong>
+                  Corvids use their intelligence and ability to mimic sounds for
+                  their own personal amusement. One zookeeper noted the magpies
+                  would mimic the voice of the employee responsible for feeding
+                  the chickens. The chickens would come running, but there would
+                  be no food. The magpies would do this again and again to the
+                  chickens, who never got wise to the prank.
+                </p>
+              </div>
             </TabPanel>
           </Tabs>
         </section>
-      </article>
+      </>
     </DefaultLayout>
   );
 };

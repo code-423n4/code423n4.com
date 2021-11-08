@@ -1,3 +1,21 @@
+:root {
+  --contest-page-width: 1100px;
+}
+
+.contest-page main {
+  margin: 0; /* remove margins so we can use full-width backgrounds for sections. TODO: make this treatment the default */
+}
+
+.contest-page section {
+  margin-top: 50px;
+}
+
+.contest-wrapper {
+  margin: 10px auto;
+  padding: 20px;
+  max-width: var(--contest-page-width);
+}
+
 .contest-artwork {
   --art-height: 100px;
   --art-border-radius: 10px;
@@ -6,20 +24,22 @@
   background-color: var(--secondary-background-purple);
   background-repeat: no-repeat;
   background-size: cover;
-  background-position: -50%;
+  background-position: 0, -50%;
   border-radius: var(--art-border-radius);
   height: var(--art-height);
   width: 100%;
+  max-width: var(--contest-page-width);
   transition: var(--art-transition);
+  margin: 0 auto;
   cursor: pointer;
   position: relative;
 }
 
-.contest-artwork:hover {
+.contest-page .contest-artwork:hover {
   height: calc(var(--art-height) + 5px);
 }
 
-.contest-artwork:after {
+.contest-page .contest-artwork:after {
   content: "";
   display: block;
   position: absolute;
@@ -29,25 +49,25 @@
   bottom: 0;
   background-color: var(--secondary-background-purple);
   border-radius: var(--art-border-radius);
-  opacity: 0.5;
+  opacity: 0.2;
   transition: var(--art-transition);
 }
 
-.contest-artwork:hover:after,
-.contest-artwork.open:after {
+.contest-page .contest-artwork:hover:after,
+.contest-page .contest-artwork.open:after {
   opacity: 0;
 }
 
-.contest-artwork.open {
+.contest-page .contest-artwork.open {
   height: auto;
   padding-bottom: 56.25%;
+  background-position: 0, 0;
 }
 
-.header-live {
-  display: flex;
+.contest-page .header-live {
 }
 
-.header-live:before {
+.contest-page .header-live:before {
   content: "LIVE";
   font-size: 0.44em;
   letter-spacing: 0.1em;
@@ -56,23 +76,25 @@
   border-radius: 4px;
   box-shadow: 0 0 10px 0 var(--hot-pink);
   text-shadow: 0 0 10px var(--hot-pink);
-  margin: auto 1em auto 0;
+  margin-right: 1em;
+  display: inline-block;
+  transform: translate(0, -0.5em);
 }
 
 .contest-page .top-section {
   display: flex;
   align-content: center;
+  margin-top: 0px;
 }
 
 .contest-page .sponsor-image {
-  /* transform: translate(0, -25px); */
-  margin: 25px 40px 0 20px;
+  /* transform: translate(10px, -55px); */
+  margin-right: 40px;
+  flex: none;
 }
 
 .contest-page .sponsor-image a {
   display: block;
-  width: 90px;
-  height: 90px;
 }
 
 .contest-page .sponsor-image img {
@@ -80,38 +102,124 @@
   border: 5px solid white;
 }
 
-.top-section-text {
+.contest-page .top-section-text {
   flex-grow: 1;
+  order: 1;
 }
 
-.top-section-text h1 {
-  margin-bottom: 0;
-  margin-top: 20px;
+.contest-page .top-section-text h1 {
+  margin-bottom: 5px;
+  margin-top: 0;
   font-weight: 500;
   font-size: 30px;
 }
 
-.top-section-text p {
+.contest-page .top-section-text p {
   margin-top: 0;
-  margin-bottom: 5px;
+  margin-bottom: 15px;
 }
 
-.top-section-amount {
+.contest-page .top-section-amount {
   margin-right: auto;
   text-align: right;
   display: flex;
   flex-direction: column;
-  margin-top: 25px;
+  font-size: 25px;
+  order: 2;
 }
 
-.top-section-amount p:first-of-type {
-  font-size: 24px;
-  color: #ffffff;
-  margin: 0;
+.contest-page .top-section-amount p {
+  margin-bottom: 5px;
+  margin-top: 0;
 }
 
-.top-section-amount p:last-of-type {
+.contest-page .top-section-amount p:first-of-type {
+  color: white;
+}
+
+.contest-page .top-section-amount p:last-of-type {
   text-transform: uppercase;
   font-size: 16px;
   margin: 0;
+}
+
+.contest-page .contest-tabs .react-tabs__tab-list {
+  max-width: var(--contest-page-width);
+  margin: 0 auto;
+}
+
+/*******************************/
+/***** Tab content styling *****/
+/*******************************/
+
+.contest-tabs {
+  font-family: "Roboto", sans-serif;
+  line-height: 140%;
+}
+
+.contest-tabs h1 {
+  font-size: 30px;
+  font-weight: normal;
+  line-height: 120%;
+}
+
+.contest-tabs h2 {
+  font-size: 20px;
+  line-height: 120%;
+}
+
+.contest-tabs hr {
+  border: 1px solid var(--border-lightest-background);
+  margin: 60px 0;
+  opacity: 0.5;
+}
+
+/* TODO: Find out why this media query doesn't fire until 15 pixels off
+- Happens in Chrome and Firefox
+- It's not zoom, and it's not an initial device scale issue
+- All other media queries are fine
+- Nothing to do with the cascade */
+
+@media only screen and (max-width: 965px) {
+  .contest-page .top-section {
+    flex-direction: column;
+    text-align: center;
+  }
+  .contest-page .sponsor-image {
+    display: inline;
+    text-align: center;
+    margin: -25px auto 10px;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  .contest-page .sponsor-image a {
+    display: inline;
+    pointer-events: auto;
+  }
+
+  .contest-page .contest-artwork-wrapper {
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+
+  .contest-page .top-section {
+    padding-top: 0;
+  }
+
+  .contest-page .button-wrapper {
+    display: flex;
+    flex-direction: column;
+    max-width: 350px;
+    margin: 0 auto 1em;
+  }
+  .contest-page .top-section-text {
+    order: 2;
+  }
+  .contest-page .top-section-amount {
+    text-align: center;
+    margin: 0 auto;
+    order: 1;
+    margin-bottom: 10px;
+  }
 }

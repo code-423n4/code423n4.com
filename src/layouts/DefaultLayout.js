@@ -21,10 +21,7 @@ const DefaultLayout = (props) => {
       >
         <meta charset="utf-8" />
         <meta httpEquiv="X-UA-Compatible" content="chrome-1" />
-        <meta
-          name="viewport"
-          content="width=device-width, initial-scale=1, shrink-to-fit=no"
-        />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta name="description" content={pageDescription} />
         <meta name="keywords" content="" />
         <meta property="og:site_name" content="Code 423n4" />

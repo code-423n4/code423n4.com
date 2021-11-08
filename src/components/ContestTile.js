@@ -84,7 +84,7 @@ const ContestTile = ({ contest: { node } }) => {
           className="button button-small cta-button primary"
         >
           {" "}
-          let's go to work!
+          View Contest
         </a>
       </div>
     </div>

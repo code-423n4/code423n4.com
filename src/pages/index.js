@@ -23,10 +23,7 @@ export default function SiteIndex({ data }) {
         <section className="center">
           <h5>Want to learn more?</h5>
           <div className="button-wrapper">
-            <a
-              className="button cta-button"
-              href="https://docs.code4rena.com"
-            >
+            <a className="button cta-button" href="https://docs.code4rena.com">
               <strong>Read the docs</strong>
             </a>
           </div>
@@ -67,6 +64,7 @@ export const query = graphql`
           }
           fields {
             submissionPath
+            contestPath
           }
         }
       }
