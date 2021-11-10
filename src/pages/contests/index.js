@@ -28,7 +28,7 @@ export default function Contests({ data }) {
       <div className="wrapper-main">
         {contestsByLeague.active ? (
           <section>
-            <h2>Active contests</h2>
+            <h1>Active contests</h1>
             <ContestList contests={contestsByLeague.active} />
           </section>
         ) : (
@@ -36,7 +36,7 @@ export default function Contests({ data }) {
         )}
         {contestsByLeague.soon ? (
           <section>
-            <h2>Upcoming contests</h2>
+            <h1>Upcoming contests</h1>
             <ContestList contests={contestsByLeague.soon} />
           </section>
         ) : (
@@ -44,7 +44,7 @@ export default function Contests({ data }) {
         )}
         {contestsByLeague.completed ? (
           <section>
-            <h2>Completed contests</h2>
+            <h1>Completed contests</h1>
             <ContestList contests={contestsByLeague.completed} />
           </section>
         ) : (

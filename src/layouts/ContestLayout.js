@@ -5,6 +5,7 @@ import ReactMarkdown from "react-markdown";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import Countdown from "../components/Countdown";
 import { getDates } from "../utils/time";
+import ContestFAQ from "../pages/contests/faq";
 
 const ContestLayout = (props) => {
   const [artOpen, setArtOpen] = useState(false);
@@ -20,20 +21,33 @@ const ContestLayout = (props) => {
     start_time,
     end_time,
   } = props.data.contestsCsv;
-  const artURL = "http://placeimg.com/1200/675/arch/grayscale";
+
+  // const artURL = "http://placeimg.com/1200/675/arch/grayscale";
+  const artURL = "/images/contest_art/badger.jpg";
+
   const t = getDates(start_time, end_time);
+
   return (
     <DefaultLayout pageTitle={title} bodyClass="contest-page">
       <>
         <div class="contest-wrapper contest-artwork-wrapper">
-          <Countdown
-            state={t.state}
-            start={start_time}
-            end={end_time}
-            isPreview={findingsRepo === ""}
-          />
+          {t.state === "soon" || t.state === "active" ? (
+            <Countdown
+              state={t.state}
+              start={start_time}
+              end={end_time}
+              isPreview={findingsRepo === ""}
+            />
+          ) : (
+            <p>
+              Contest ran {t.startDay}—{t.endDay}
+            </p>
+          )}
+          {t.state !== "active" ? (
+            <p className="days-duration">{t.daysDuration} day contest</p>
+          ) : null}
           <div
-            // style={{ backgroundImage: `url(${artURL})` }}
+            style={{ backgroundImage: `url(${artURL})` }}
             onClick={() => setArtOpen((isOpen) => !isOpen)}
             className={`${artClass} contest-artwork background-pattern`}
             aria-label={`${title} artwork. Expands on click.`}
@@ -82,23 +96,22 @@ const ContestLayout = (props) => {
 
             <TabPanel>
               <div className="contest-wrapper">
+                {/* {t.state === "active" && repo ? (
+        <a
+          href={repo}
+          className="contest-repo button button-small cta-button primary"
+        >
+          {`${findingsRepo === "" ? "Preview" : "View"} Repo`}
+        </a>
+      ) : (
+        ""
+      )} */}
                 <ReactMarkdown children={fields.readmeContent} />
               </div>
             </TabPanel>
             <TabPanel>
               <div className="contest-wrapper">
-                <h2>FAQ</h2>
-                <p>
-                  <strong>
-                    Corvids love to play pranks on humans and other animals?
-                  </strong>
-                  Corvids use their intelligence and ability to mimic sounds for
-                  their own personal amusement. One zookeeper noted the magpies
-                  would mimic the voice of the employee responsible for feeding
-                  the chickens. The chickens would come running, but there would
-                  be no food. The magpies would do this again and again to the
-                  chickens, who never got wise to the prank.
-                </p>
+                <ContestFAQ />
               </div>
             </TabPanel>
           </Tabs>
@@ -107,7 +120,7 @@ const ContestLayout = (props) => {
     </DefaultLayout>
   );
 };
-
+// https://github.com/code-423n4/2021-11-bootfinance/blob/main/core-contracts/diagrams/Overview.png
 export default ContestLayout;
 
 export const pageQuery = graphql`

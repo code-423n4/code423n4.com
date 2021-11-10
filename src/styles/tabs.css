@@ -67,7 +67,6 @@
 
 .react-tabs__tab-panel--selected {
   display: block;
-  padding: 0 30px 30px;
   background: var(--secondary-background-purple);
   border-top: 2px solid var(--tab-border-color);
 }

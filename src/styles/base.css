@@ -19,6 +19,9 @@
   /* these rgb color values should be identical to their pairs above */
   /* use these to change opacity like this: `rgba(var(--main-purple-rgb), 0.8)` */
   --main-purple-rgb: 132, 36, 226;
+
+  --page-margin: 40px;
+  --page-margin-mobile: 40px;
 }
 
 img {
@@ -36,12 +39,12 @@ body {
 }
 
 main {
-  margin: 40px;
+  margin: var(--page-margin-mobile);
 }
 
 @media (min-width: 600px) {
   main {
-    margin: 40px;
+    margin: var(--page-margin);
   }
 }
 

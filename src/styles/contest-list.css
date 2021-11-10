@@ -150,6 +150,12 @@
   padding-right: 5px;
 }
 
+.contests-page h1 {
+  font-family: "Roboto", sans-serif;
+  font-size: 40px;
+  text-align: center;
+}
+
 @media (min-width: 600px) {
   .contest-league {
     float: right;

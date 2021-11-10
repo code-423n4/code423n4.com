@@ -12,7 +12,7 @@
 
 .contest-wrapper {
   margin: 10px auto;
-  padding: 20px;
+  padding: 20px var(--page-margin-mobile);
   max-width: var(--contest-page-width);
 }
 
@@ -76,7 +76,7 @@
   border-radius: 4px;
   box-shadow: 0 0 10px 0 var(--hot-pink);
   text-shadow: 0 0 10px var(--hot-pink);
-  margin-right: 1em;
+  margin: 0 1em 0 0;
   display: inline-block;
   transform: translate(0, -0.5em);
 }
@@ -100,6 +100,7 @@
 .contest-page .sponsor-image img {
   border-radius: 50%;
   border: 5px solid white;
+  background: white;
 }
 
 .contest-page .top-section-text {
@@ -155,6 +156,7 @@
 .contest-tabs {
   font-family: "Roboto", sans-serif;
   line-height: 140%;
+  color: white;
 }
 
 .contest-tabs h1 {
@@ -174,7 +176,25 @@
   opacity: 0.5;
 }
 
-/* TODO: Find out why this media query doesn't fire until 15 pixels off
+.faq-question-list {
+  padding-left: 0;
+}
+
+.faq-question-list li {
+  margin-bottom: 3em;
+  list-style-type: none;
+}
+
+.faq-question-list h2 {
+  font-weight: normal;
+}
+
+.faq-question-list p {
+  border-left: 3px solid var(--border-lightest-background);
+  padding-left: 1em;
+}
+
+/* TODO: Find out why this media query doesn't fire until +15 pixels off
 - Happens in Chrome and Firefox
 - It's not zoom, and it's not an initial device scale issue
 - All other media queries are fine
@@ -210,16 +230,22 @@
   .contest-page .button-wrapper {
     display: flex;
     flex-direction: column;
-    max-width: 350px;
+    max-width: 500px;
     margin: 0 auto 1em;
   }
+
   .contest-page .top-section-text {
     order: 2;
   }
+
   .contest-page .top-section-amount {
     text-align: center;
     margin: 0 auto;
     order: 1;
-    margin-bottom: 10px;
+    margin-bottom: 30px;
+  }
+
+  .contest-page .top-section-text .header-live:before {
+    display: none;
   }
 }
