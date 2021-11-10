@@ -81,11 +81,27 @@
 .countdown h5 {
   font-size: 20px;
   margin: 0 0 5px 0;
+  display: flex;
+  align-items: center;
 }
 
 .countdown h5 .wrapper-time {
   display: inline-block;
   margin: 0 5px 0 0;
+}
+
+.countdown h5 .countdown-live:before {
+  content: "LIVE";
+  font-size: 0.6em;
+  letter-spacing: 0.1em;
+  border: 2px solid var(--hot-pink);
+  padding: 0.2em 0.8em;
+  border-radius: 4px;
+  box-shadow: 0 0 10px 0 var(--hot-pink);
+  text-shadow: 0 0 10px var(--hot-pink);
+  margin: 0 1em 0 0;
+  display: inline-block;
+  transform: translate(0, -0.25em);
 }
 
 .wrapper-time span {

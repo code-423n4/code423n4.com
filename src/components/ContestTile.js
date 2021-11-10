@@ -61,7 +61,7 @@ const ContestTile = ({ contest: { node } }) => {
         )}
         {t.state === "active" && repo ? (
           <a
-            href={repo}
+            href={contestPath}
             className="contest-repo button button-small cta-button primary"
           >
             {`${findingsRepo === "" ? "Preview" : "View"} Contest`}
@@ -69,7 +69,11 @@ const ContestTile = ({ contest: { node } }) => {
         ) : (
           ""
         )}
-        {t.state === "active" && findingsRepo && submissionPath ? (
+        {/* <p>Status: {t.state}</p>
+        <p>FindingsRepo: {findingsRepo}</p>
+        <p>SubmissionPath: {submissionPath}</p>
+        {t.state === "active" && findingsRepo && submissionPath ? ( */}
+        {t.state === "active" && submissionPath ? (
           <a
             href={submissionPath}
             className="button button-small cta-button secondary"
@@ -79,13 +83,6 @@ const ContestTile = ({ contest: { node } }) => {
         ) : (
           ""
         )}
-        <a
-          href={contestPath}
-          className="button button-small cta-button primary"
-        >
-          {" "}
-          View Contest
-        </a>
       </div>
     </div>
   );

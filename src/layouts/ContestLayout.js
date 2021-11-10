@@ -65,20 +65,20 @@ const ContestLayout = (props) => {
             </a>
           </div>
           <div class="top-section-text">
-            <h1 className="header-live">{title}</h1>
+            <h1>{title}</h1>
             <p>{details}</p>
             <div class="button-wrapper">
               <a
-                href={fields.submissionPath}
+                href={repo}
                 className="button cta-button button-medium primary"
               >
-                Submit Finding
+                View Repo
               </a>
               <a
-                href={repo}
+                href={fields.submissionPath}
                 className="button cta-button button-medium secondary"
               >
-                View Contest Repo
+                Submit Finding
               </a>
             </div>
           </div>
@@ -97,15 +97,15 @@ const ContestLayout = (props) => {
             <TabPanel>
               <div className="contest-wrapper">
                 {/* {t.state === "active" && repo ? (
-        <a
-          href={repo}
-          className="contest-repo button button-small cta-button primary"
-        >
-          {`${findingsRepo === "" ? "Preview" : "View"} Repo`}
-        </a>
-      ) : (
-        ""
-      )} */}
+                  <a
+                    href={repo}
+                    className="contest-repo button button-small cta-button primary"
+                  >
+                    {`${findingsRepo === "" ? "Preview" : "View"} Repo`}
+                  </a>
+                ) : (
+                  ""
+                )} */}
                 <ReactMarkdown children={fields.readmeContent} />
               </div>
             </TabPanel>
@@ -120,7 +120,6 @@ const ContestLayout = (props) => {
     </DefaultLayout>
   );
 };
-// https://github.com/code-423n4/2021-11-bootfinance/blob/main/core-contracts/diagrams/Overview.png
 export default ContestLayout;
 
 export const pageQuery = graphql`
