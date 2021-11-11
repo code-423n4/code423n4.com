@@ -194,6 +194,31 @@
   padding-left: 1em;
 }
 
+.contest-tabs .coming-soon {
+  margin: 0 auto;
+  text-align: center;
+  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+  padding: 30px 0;
+}
+
+.contest-tabs .coming-soon img {
+  align-self: center;
+}
+
+.contest-tabs .coming-soon h1 {
+  font-size: 23px;
+}
+
+.contest-tabs .coming-soon p {
+  margin: 0;
+}
+
+.contest-tabs .coming-soon .countdown h5 {
+  justify-content: center;
+}
+
 /* TODO: Find out why this media query doesn't fire until +15 pixels off
 - Happens in Chrome and Firefox
 - It's not zoom, and it's not an initial device scale issue
@@ -247,5 +272,13 @@
 
   .contest-page .top-section-text .header-live:before {
     display: none;
+  }
+
+  .contest-tabs .coming-soon h1 {
+    font-size: 20px;
+  }
+
+  .contest-page section {
+    margin-top: 20px;
   }
 }

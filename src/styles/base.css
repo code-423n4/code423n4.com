@@ -262,8 +262,8 @@ iframe {
     margin: 0;
   }
 
-  h1 {
-    font-size: 32px !important;
+  body h1 {
+    font-size: 32px;
   }
 
   .wrapper-main {

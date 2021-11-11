@@ -14,10 +14,10 @@ const ContestLayout = (props) => {
     title,
     sponsor,
     details,
-    fields,
     amount,
     repo,
     findingsRepo,
+    fields,
     start_time,
     end_time,
   } = props.data.contestsCsv;
@@ -68,18 +68,23 @@ const ContestLayout = (props) => {
             <h1>{title}</h1>
             <p>{details}</p>
             <div class="button-wrapper">
-              <a
-                href={repo}
-                className="button cta-button button-medium primary"
-              >
-                View Repo
-              </a>
-              <a
-                href={fields.submissionPath}
-                className="button cta-button button-medium secondary"
-              >
-                Submit Finding
-              </a>
+              {t.state !== "soon" ? (
+                <a
+                  href={repo}
+                  className="button cta-button button-medium primary"
+                >
+                  View Repo
+                </a>
+              ) : null}
+
+              {t.state === "active" && findingsRepo && fields.submissionPath ? (
+                <a
+                  href={fields.submissionPath}
+                  className="button cta-button button-medium secondary"
+                >
+                  Submit Finding
+                </a>
+              ) : null}
             </div>
           </div>
           <div className="top-section-amount">
@@ -96,17 +101,25 @@ const ContestLayout = (props) => {
 
             <TabPanel>
               <div className="contest-wrapper">
-                {/* {t.state === "active" && repo ? (
-                  <a
-                    href={repo}
-                    className="contest-repo button button-small cta-button primary"
-                  >
-                    {`${findingsRepo === "" ? "Preview" : "View"} Repo`}
-                  </a>
+                {t.state === "soon" ? (
+                  <div className="coming-soon">
+                    <img
+                      src="/images/icon-details.svg"
+                      alt="icon of a piece of paper with lines on it to indicate text"
+                    />
+                    <h1>Contest details coming soon</h1>
+                    <p>Check back when this contest launches in:</p>
+                    <Countdown
+                      state={t.state}
+                      start={start_time}
+                      end={end_time}
+                      isPreview={findingsRepo === ""}
+                      text={false}
+                    />
+                  </div>
                 ) : (
-                  ""
-                )} */}
-                <ReactMarkdown children={fields.readmeContent} />
+                  <ReactMarkdown children={fields.readmeContent} />
+                )}
               </div>
             </TabPanel>
             <TabPanel>
@@ -136,6 +149,7 @@ export const pageQuery = graphql`
       hide
       league
       repo
+      findingsRepo
       start_time
       sponsor {
         name
