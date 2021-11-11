@@ -16,6 +16,12 @@
   max-width: var(--contest-page-width);
 }
 
+.contest-tippy-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .contest-artwork {
   --art-height: 100px;
   --art-border-radius: 10px;
@@ -205,6 +211,8 @@
 
 .contest-tabs .coming-soon img {
   align-self: center;
+  max-width: 100px;
+  width: 100%;
 }
 
 .contest-tabs .coming-soon h1 {

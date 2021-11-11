@@ -30,22 +30,22 @@ const ContestLayout = (props) => {
   return (
     <DefaultLayout pageTitle={title} bodyClass="contest-page">
       <>
-        <div class="contest-wrapper contest-artwork-wrapper">
-          {t.state === "soon" || t.state === "active" ? (
-            <Countdown
-              state={t.state}
-              start={start_time}
-              end={end_time}
-              isPreview={findingsRepo === ""}
-            />
-          ) : (
-            <p>
-              Contest ran {t.startDay}—{t.endDay}
-            </p>
-          )}
-          {t.state !== "active" ? (
+        <div className="contest-wrapper contest-artwork-wrapper">
+          <div className="contest-tippy-top">
+            {t.state === "soon" || t.state === "active" ? (
+              <Countdown
+                state={t.state}
+                start={start_time}
+                end={end_time}
+                isPreview={findingsRepo === ""}
+              />
+            ) : (
+              <p>
+                Contest ran {t.startDay}—{t.endDay}
+              </p>
+            )}
             <p className="days-duration">{t.daysDuration} day contest</p>
-          ) : null}
+          </div>
           <div
             style={{ backgroundImage: `url(${artURL})` }}
             onClick={() => setArtOpen((isOpen) => !isOpen)}
