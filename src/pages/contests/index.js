@@ -2,50 +2,37 @@ import React from "react";
 import { graphql } from "gatsby";
 import DefaultLayout from "../../layouts/DefaultLayout";
 import ContestList from "../../components/ContestList";
-import { getTimeRemaining, getDates } from "../../utils/time";
-import { sortByContestStart } from "../../utils/sort";
+import { contestsByState } from "../../utils/filter";
 
 export default function Contests({ data }) {
   const contests = data.contests.edges;
 
-  const contestsByLeague = {
-    active: contests.filter(
-      (c) => getDates(c.node.start_time, c.node.end_time).state === "active"
-    ),
-    soon: contests.filter(
-      (c) => getDates(c.node.start_time, c.node.end_time).state === "soon"
-    ),
-    completed: contests
-      .filter(
-        (c) =>
-          getDates(c.node.start_time, c.node.end_time).state === "completed"
-      )
-      .sort(sortByContestStart("reverse")),
-  };
+  const filteredContests = contestsByState({ contests });
+  console.log(JSON.stringify(filteredContests));
 
   return (
     <DefaultLayout pageTitle="Contests" bodyClass="contests-page">
       <div className="wrapper-main">
-        {contestsByLeague.active ? (
+        {filteredContests.active ? (
           <section>
             <h1>Active contests</h1>
-            <ContestList contests={contestsByLeague.active} />
+            <ContestList contests={filteredContests.active} />
           </section>
         ) : (
           ""
         )}
-        {contestsByLeague.soon ? (
+        {filteredContests.soon ? (
           <section>
             <h1>Upcoming contests</h1>
-            <ContestList contests={contestsByLeague.soon} />
+            <ContestList contests={filteredContests.soon} />
           </section>
         ) : (
           ""
         )}
-        {contestsByLeague.completed ? (
+        {filteredContests.completed ? (
           <section>
             <h1>Completed contests</h1>
-            <ContestList contests={contestsByLeague.completed} />
+            <ContestList contests={filteredContests.completed} />
           </section>
         ) : (
           ""

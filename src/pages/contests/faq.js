@@ -2,11 +2,13 @@ import React from "react";
 
 const ContestFAQ = (props) => {
   return (
-    <>
-      <h1 id="faq-tab-content-for-website">C4 Contest FAQ</h1>
+    <div className="faq-tab-content">
+      <h1 className="header-context" id="faq-tab-content-for-website">
+        C4 Contest FAQ
+      </h1>
       <p>
-        (All links sourced from:{" "}
-        <a href="https://docs.code4rena.com/">https://docs.code4rena.com/</a>)
+        All links sourced from:{" "}
+        <a href="https://docs.code4rena.com/">https://docs.code4rena.com/</a>
       </p>
       <h2 id="what-is-c4-">What is C4?</h2>
       <ul>
@@ -76,7 +78,7 @@ const ContestFAQ = (props) => {
           </a>
         </li>
       </ul>
-    </>
+    </div>
   );
 };
 

@@ -182,22 +182,24 @@
   opacity: 0.5;
 }
 
-.faq-question-list {
-  padding-left: 0;
+.faq-tab-content .header-context {
+  margin-bottom: 0;
 }
 
-.faq-question-list li {
+.faq-tab-content .header-context + p {
   margin-bottom: 3em;
-  list-style-type: none;
 }
 
-.faq-question-list h2 {
-  font-weight: normal;
+.faq-tab-content a::after {
+  content: " →";
 }
 
-.faq-question-list p {
-  border-left: 3px solid var(--border-lightest-background);
-  padding-left: 1em;
+.faq-tab-content li {
+  margin-bottom: 10px;
+}
+
+.faq-tab-content li ul {
+  margin-top: 10px;
 }
 
 .contest-tabs .coming-soon {
