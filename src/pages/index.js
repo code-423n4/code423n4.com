@@ -11,12 +11,11 @@ export default function SiteIndex({ data }) {
 
   return (
     <DefaultLayout pageTitle="Code 423n4" bodyClass="landing">
-      <HeroIndex />
+      <div className="hero-wrapper">
+        <HeroIndex />
+      </div>
       <div className="wrapper-main">
-        <section>
-          <Definitions />
-          {contests ? <ContestList contests={contests} /> : ""}
-        </section>
+        <section>{contests ? <ContestList contests={contests} /> : ""}</section>
         <section>
           <Testimonials />
         </section>

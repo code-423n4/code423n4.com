@@ -104,10 +104,6 @@ const ContestLayout = (props) => {
               <div className="contest-wrapper">
                 {t.state === "soon" ? (
                   <div className="coming-soon">
-                    <img
-                      src="/images/icon-details.svg"
-                      alt="icon of a piece of paper with lines on it to indicate text"
-                    />
                     <h1>Contest details coming soon</h1>
                     <p>Check back when this contest launches in:</p>
                     <Countdown
@@ -116,6 +112,10 @@ const ContestLayout = (props) => {
                       end={end_time}
                       isPreview={findingsRepo === ""}
                       text={false}
+                    />
+                    <img
+                      src="/images/icon-details.svg"
+                      alt="icon of a piece of paper with lines on it to indicate text"
                     />
                   </div>
                 ) : (

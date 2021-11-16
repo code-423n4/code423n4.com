@@ -2,6 +2,16 @@
   --contest-page-width: 1100px;
 }
 
+.contests-page,
+.contest-page {
+  background-image: radial-gradient(
+    1000px 1000px at top center,
+    #8424e212 50%,
+    rgba(132, 36, 226, 0) 100%
+  );
+  background-repeat: no-repeat;
+}
+
 .contest-page main {
   margin: 0; /* remove margins so we can use full-width backgrounds for sections. TODO: make this treatment the default */
 }
@@ -123,11 +133,14 @@
 
 .contest-page .top-section-text p {
   margin-top: 0;
+  padding-top: 5px;
   margin-bottom: 15px;
+  line-height: 140%;
 }
 
 .contest-page .top-section-amount {
   margin-right: auto;
+  padding-left: 2em;
   text-align: right;
   display: flex;
   flex-direction: column;
@@ -142,6 +155,7 @@
 
 .contest-page .top-section-amount p:first-of-type {
   color: white;
+  white-space: nowrap;
 }
 
 .contest-page .top-section-amount p:last-of-type {
@@ -215,6 +229,7 @@
   align-self: center;
   max-width: 100px;
   width: 100%;
+  margin-top: 1em;
 }
 
 .contest-tabs .coming-soon h1 {
@@ -239,6 +254,13 @@
   .contest-page .top-section {
     flex-direction: column;
     text-align: center;
+  }
+
+  .contest-page .days-duration {
+    font-size: 13px;
+  }
+  .contest-page .contest-tippy-top h5 {
+    margin-bottom: 0;
   }
   .contest-page .sponsor-image {
     display: inline;
@@ -273,11 +295,17 @@
     order: 2;
   }
 
+  .contest-page .top-section-text p {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
   .contest-page .top-section-amount {
     text-align: center;
     margin: 0 auto;
     order: 1;
     margin-bottom: 30px;
+    padding-left: 0;
   }
 
   .contest-page .top-section-text .header-live:before {

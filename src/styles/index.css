@@ -1,10 +1,31 @@
-.landing,
-.contests-page,
-.contest-page {
-  background-image: radial-gradient(
-    1000px 1000px at top center,
-    #8424e212 50%,
-    rgba(132, 36, 226, 0) 100%
+/* TODO: not a great solution, but we'll need to rethink the way all the components work together to make this work in a nicer way */
+/* this is a short background that fades out in case the edge of it is ever seen. it extends slightly behind .hero-wrapper to make it look like a seamless color. */
+.landing {
+  background: var(--header-background-purple);
+  background: linear-gradient(
+    180deg,
+    var(--header-background-purple) 0%,
+    var(--header-background-purple) 210px,
+    var(--background-purple) 250px,
+    var(--background-purple) 100%
   );
-  background-repeat: no-repeat;
+}
+
+.landing main {
+  margin: 0;
+}
+
+.landing .hero-wrapper {
+  background: var(--header-background-purple);
+  display: flow-root;
+}
+
+.landing .hero-wrapper .hero {
+  padding: var(--page-margin);
+  margin: 0 auto var(--page-margin);
+}
+
+.landing .wrapper-main {
+  padding: var(--page-margin);
+  margin: 0 auto;
 }
