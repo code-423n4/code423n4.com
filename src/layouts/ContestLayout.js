@@ -9,7 +9,7 @@ import ContestFAQ from "../pages/contests/faq";
 
 const ContestLayout = (props) => {
   const [artOpen, setArtOpen] = useState(false);
-  let artClass = artOpen ? "open" : null;
+  let artClass = artOpen ? "open" : "";
   const {
     title,
     sponsor,
@@ -21,9 +21,6 @@ const ContestLayout = (props) => {
     start_time,
     end_time,
   } = props.data.contestsCsv;
-
-  // const artURL = "http://placeimg.com/1200/675/arch/grayscale";
-  const artURL = "/images/contest_art/badger.jpg";
 
   const t = getDates(start_time, end_time);
 
@@ -47,7 +44,11 @@ const ContestLayout = (props) => {
             <p className="days-duration">{t.daysDuration} day contest</p>
           </div>
           <div
-            style={{ backgroundImage: `url(${artURL})` }}
+            style={
+              fields.artPath !== null
+                ? { backgroundImage: `url(${fields.artPath})` }
+                : null
+            }
             onClick={() => setArtOpen((isOpen) => !isOpen)}
             className={`${artClass} contest-artwork background-pattern`}
             aria-label={`${title} artwork. Expands on click.`}
@@ -145,6 +146,8 @@ export const pageQuery = graphql`
       fields {
         submissionPath
         readmeContent
+        contestPath
+        artPath
       }
       hide
       league

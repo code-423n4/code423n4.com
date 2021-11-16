@@ -33,6 +33,19 @@ function contestSubmissionPermalink(contestNode) {
   return `/contests/${contestSlug(contestNode)}/submit`;
 }
 
+function contestArtworkPermalink(contestNode) {
+  const fs = require("fs");
+  let slug = contestSlug(contestNode);
+  let path = `static/images/contests/${slug}.jpg`;
+  if (fs.existsSync(path)) {
+    // found the image
+    return `/images/contests/${slug}.jpg`;
+  } else {
+    console.warn("[MISSING IMAGE]:", path);
+    return null;
+  }
+}
+
 function getRepoName(contestNode) {
   let regex = "([^/]+$)";
   let url = contestNode.repo;
@@ -131,6 +144,11 @@ exports.onCreateNode = async ({ node, getNode, actions }) => {
       node,
       name: `readmeContent`,
       value: await fetchReadmeMarkdown(node),
+    });
+    createNodeField({
+      node,
+      name: `artPath`,
+      value: contestArtworkPermalink(node),
     });
   }
 };
