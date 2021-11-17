@@ -21,27 +21,27 @@ const DefaultLayout = (props) => {
       >
         <meta charset="utf-8" />
         <meta httpEquiv="X-UA-Compatible" content="chrome-1" />
-        <meta
-          name="viewport"
-          content="width=device-width, initial-scale=1, shrink-to-fit=no"
-        />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta name="description" content={pageDescription} />
         <meta name="keywords" content="" />
-        <meta property="og:site_name" content="Code 423n4" />
+        <meta property="og:site_name" content="Code4rena" />
         <meta property="og:title" content={pageTitle} />
-
-        <meta
-          property="og:description"
-          content="Hack DeFi. Compete. Get paid."
-        />
+        {pageDescription ? (
+          <meta property="og:description" content={pageDescription} />
+        ) : (
+          <meta
+            property="og:description"
+            content="The future of audits is decentralized."
+          />
+        )}
         <meta property="og:type" content="article" />
-        <meta property="og:url" content={`https://code423n4.com/${url}`} />
+        <meta property="og:url" content={`https://code4rena.com/${url}`} />
         {preview ? (
           <meta property="og:image" content={preview} />
         ) : (
           <meta
             property="og:image"
-            content="https://code423n4/images/C4-banner.png"
+            content="https://code4rena.com/images/C4-banner.png"
           />
         )}
         <link

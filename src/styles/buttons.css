@@ -12,6 +12,10 @@
   background-color: var(--main-purple);
 }
 
+.button-medium {
+  padding: 0.8em 2.5em;
+}
+
 .button-small {
   font-size: 0.9em;
   padding: 0.6em 2.5em;

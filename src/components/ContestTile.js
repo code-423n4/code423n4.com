@@ -2,7 +2,7 @@ import React from "react";
 import Countdown from "./Countdown";
 import { getDates } from "../utils/time";
 
-const Contest = ({ contest: { node } }) => {
+const ContestTile = ({ contest: { node } }) => {
   const {
     sponsor,
     title,
@@ -15,9 +15,9 @@ const Contest = ({ contest: { node } }) => {
     findingsRepo,
     fields,
   } = node;
-  const { submissionPath } = fields;
+  const { submissionPath, contestPath } = fields;
 
-  const t = getDates(start_time, end_time);
+  const t = getDates(start_time, end_time, true);
 
   return (
     <div className={"wrapper-contest " + t.state}>
@@ -59,17 +59,15 @@ const Contest = ({ contest: { node } }) => {
             Contest ran {t.startDay}—{t.endDay}
           </p>
         )}
-        {t.state === "active" && repo ? (
-          <a
-            href={repo}
-            className="contest-repo button button-small cta-button primary"
-          >
-            {`${findingsRepo === "" ? "Preview" : "View"} Contest`}
-          </a>
-        ) : (
-          ""
-        )}
-        {t.state === "active" && findingsRepo && submissionPath ? (
+        <a
+          href={contestPath}
+          className="contest-repo button button-small cta-button primary"
+        >
+          {`${findingsRepo === "" ? "Preview" : "View"} Contest`}
+        </a>
+        {(t.state === "active" || t.inGracePeriod) &&
+        findingsRepo &&
+        submissionPath ? (
           <a
             href={submissionPath}
             className="button button-small cta-button secondary"
@@ -84,4 +82,4 @@ const Contest = ({ contest: { node } }) => {
   );
 };
 
-export default Contest;
+export default ContestTile;

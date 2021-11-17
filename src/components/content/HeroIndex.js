@@ -1,15 +1,23 @@
 import React from "react";
+import Definitions from "../content/Definitions";
 
 const HeroIndex = () => {
   return (
     <div className="hero">
       <h1>
-        <span>Hack DeFi.</span> <span>Compete.</span> <span>Get paid.</span>
+        The future of audits
+        <br />
+        is decentralized.
       </h1>
       <h5>
-        We’re creating a community-driven approach to competitive smart contract
-        audits. Join our open organization.
+        Book an audit contest as soon as this month.
+        <br />
+        <a href="https://discord.gg/code4rena" className="button button-small">
+          Join our Discord
+        </a>
       </h5>
+
+      <Definitions />
     </div>
   );
 };
