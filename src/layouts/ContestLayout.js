@@ -22,7 +22,7 @@ const ContestLayout = (props) => {
   } = props.data.contestsCsv;
 
   const t = getDates(start_time, end_time);
-  const dateDescription = `${amount} • ${t.startDay}—${t.endDay}`;
+  const dateDescription = `${amount}\n${t.startDay}—${t.endDay}`;
   const pageTitle = `Code4rena ${title}`;
   let art;
 
