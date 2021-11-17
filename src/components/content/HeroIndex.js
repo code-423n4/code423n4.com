@@ -1,5 +1,5 @@
 import React from "react";
-import Definitions from "./definitions";
+import Definitions from "../content/Definitions";
 
 const HeroIndex = () => {
   return (
