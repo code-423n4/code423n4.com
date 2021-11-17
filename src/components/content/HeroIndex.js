@@ -5,9 +5,8 @@ const HeroIndex = () => {
   return (
     <div className="hero">
       <h1>
-        The future of audits
-        <br />
-        is decentralized.
+        <span>The future of audits </span>
+        <span>is decentralized.</span>
       </h1>
       <h5>
         Book an audit contest as soon as this month.

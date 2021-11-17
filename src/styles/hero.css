@@ -72,6 +72,9 @@
     font-size: 40px;
     margin-bottom: 20px;
   }
+  .hero h1 span {
+    display: inline;
+  }
 
   .hero h5 {
     font-size: 20px;
