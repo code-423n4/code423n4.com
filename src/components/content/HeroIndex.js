@@ -9,10 +9,7 @@ const HeroIndex = () => {
         <br />
         is decentralized.
       </h1>
-      <h5>
-        We’re creating a community-driven approach to competitive smart contract
-        audits. Join our open organization.
-      </h5>
+      <h5>Book an audit contest within weeks.</h5>
       <Definitions />
     </div>
   );
