@@ -10,7 +10,12 @@ export default function Contests({ data }) {
   const filteredContests = contestsByState({ contests });
 
   return (
-    <DefaultLayout pageTitle="Contests" bodyClass="contests-page">
+    <DefaultLayout
+      pageTitle="Contests"
+      bodyClass="contests-page"
+      // preview=""
+      pageDescription="Current, upcoming, and past audit contests"
+    >
       <div className="wrapper-main">
         {filteredContests.active.length > 0 ? (
           <section>

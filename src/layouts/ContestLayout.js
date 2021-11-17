@@ -22,9 +22,22 @@ const ContestLayout = (props) => {
   } = props.data.contestsCsv;
 
   const t = getDates(start_time, end_time);
+  const dateDescription = `${t.startDay}—${t.endDay}`;
+  let art;
+
+  if (fields.artPath) {
+    art = fields.artPath;
+  } else {
+    art = null;
+  }
 
   return (
-    <DefaultLayout pageTitle={title} bodyClass="contest-page">
+    <DefaultLayout
+      pageTitle={title}
+      bodyClass="contest-page"
+      preview={art}
+      pageDescription={dateDescription}
+    >
       <>
         <div className="contest-wrapper contest-artwork-wrapper">
           <div className="contest-tippy-top">

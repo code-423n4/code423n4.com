@@ -110,6 +110,7 @@ const queries = {
             submissionPath
             contestPath
             readmeContent
+            artPath
           }
         }
       }
