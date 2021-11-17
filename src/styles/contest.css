@@ -251,6 +251,18 @@
 - Nothing to do with the cascade */
 
 @media only screen and (max-width: 965px) {
+  .contest-page .contest-tippy-top {
+    flex-direction: column-reverse;
+  }
+  .contest-page .countdown {
+    align-self: flex-start;
+  }
+  .contest-page .contest-tippy-top p {
+    margin-top: 0;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
   .contest-page .top-section {
     flex-direction: column;
     text-align: center;
@@ -259,9 +271,7 @@
   .contest-page .days-duration {
     font-size: 13px;
   }
-  .contest-page .contest-tippy-top h5 {
-    margin-bottom: 0;
-  }
+
   .contest-page .sponsor-image {
     display: inline;
     text-align: center;

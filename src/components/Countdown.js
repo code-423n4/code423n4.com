@@ -39,7 +39,7 @@ const Countdown = ({ start, end, isPreview, text }) => {
           <span className="seconds">{tLeft.ss}</span>
         </span>
         {text !== false ? (
-          <span className="wrapper-time">
+          <span className="wrapper-time end-cap">
             {t.state === "soon"
               ? ` until ${type} starts`
               : ` until ${type} ends`}
