@@ -212,7 +212,6 @@ const WardenRegistrationForm = ({ handles }) => {
 
 export default function WardenRegistration({ data }) {
   const handles = new Set(data.allHandlesJson.edges.map((h) => h.node.handle));
-  console.log({ handles });
 
   return (
     <DefaultLayout pageTitle="Warden Registration | Code 423n4">

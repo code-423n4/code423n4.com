@@ -8,35 +8,28 @@ export default function Contests({ data }) {
   const contests = data.contests.edges;
 
   const filteredContests = contestsByState({ contests });
-  console.log(JSON.stringify(filteredContests));
 
   return (
     <DefaultLayout pageTitle="Contests" bodyClass="contests-page">
       <div className="wrapper-main">
-        {filteredContests.active ? (
+        {filteredContests.active.length > 0 ? (
           <section>
             <h1>Active contests</h1>
             <ContestList contests={filteredContests.active} />
           </section>
-        ) : (
-          ""
-        )}
-        {filteredContests.soon ? (
+        ) : null}
+        {filteredContests.soon.length > 0 ? (
           <section>
             <h1>Upcoming contests</h1>
             <ContestList contests={filteredContests.soon} />
           </section>
-        ) : (
-          ""
-        )}
-        {filteredContests.completed ? (
+        ) : null}
+        {filteredContests.completed.length > 0 ? (
           <section>
             <h1>Completed contests</h1>
             <ContestList contests={filteredContests.completed} />
           </section>
-        ) : (
-          ""
-        )}
+        ) : null}
       </div>
     </DefaultLayout>
   );

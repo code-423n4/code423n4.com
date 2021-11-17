@@ -15,7 +15,9 @@ export default function SiteIndex({ data }) {
         <HeroIndex />
       </div>
       <div className="wrapper-main">
-        <section>{contests ? <ContestList contests={contests} /> : ""}</section>
+        <section>
+          {contests ? <ContestList contests={contests} /> : null}
+        </section>
         <section>
           <Testimonials />
         </section>
