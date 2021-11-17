@@ -254,7 +254,7 @@
   .contest-page .contest-tippy-top {
     flex-direction: column-reverse;
   }
-  .contest-page .countdown {
+  .contest-page .contest-tippy-top .countdown {
     align-self: flex-start;
   }
   .contest-page .contest-tippy-top p {
