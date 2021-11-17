@@ -22,7 +22,7 @@ const ContestLayout = (props) => {
     end_time,
   } = props.data.contestsCsv;
 
-  const t = getDates(start_time, end_time);
+  const t = getDates(start_time, end_time, true);
 
   return (
     <DefaultLayout pageTitle={title} bodyClass="contest-page">
@@ -78,7 +78,9 @@ const ContestLayout = (props) => {
                 </a>
               ) : null}
 
-              {t.state === "active" && findingsRepo && fields.submissionPath ? (
+              {(t.state === "active" || t.inGracePeriod) &&
+              findingsRepo &&
+              fields.submissionPath ? (
                 <a
                   href={fields.submissionPath}
                   className="button cta-button button-medium secondary"
