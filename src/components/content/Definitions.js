@@ -9,7 +9,7 @@ const Definitions = () => {
       </div>
       <div>
         <h3>Sponsors</h3>
-        <p>Create prize pools to attract wardens to audit projects.</p>
+        <p>Create prize pools to attract wardens to audit their project.</p>
       </div>
       <div>
         <h3>Judges</h3>

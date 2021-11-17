@@ -36,9 +36,6 @@
     margin: 0.25rem 0.5rem 0.25rem 0;
   }
 }
-.wrapper-contest.completed {
-  opacity: 0.8;
-}
 
 .wrapper-contest h4,
 .wrapper-contest p {

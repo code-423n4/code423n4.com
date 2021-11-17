@@ -21,7 +21,7 @@ const ContestLayout = (props) => {
     end_time,
   } = props.data.contestsCsv;
 
-  const t = getDates(start_time, end_time);
+  const t = getDates(start_time, end_time, true);
   const dateDescription = `${amount}\n${t.startDay}—${t.endDay}`;
   const pageTitle = `Code4rena ${title}`;
   let art;
@@ -94,7 +94,9 @@ const ContestLayout = (props) => {
                 </a>
               ) : null}
 
-              {t.state === "active" && findingsRepo && fields.submissionPath ? (
+              {(t.state === "active" || t.inGracePeriod) &&
+              findingsRepo &&
+              fields.submissionPath ? (
                 <a
                   href={fields.submissionPath}
                   className="button cta-button button-medium secondary"

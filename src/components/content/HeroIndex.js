@@ -17,7 +17,6 @@ const HeroIndex = () => {
           Join our Discord
         </a>
       </h5>
-
       <Definitions />
     </div>
   );
