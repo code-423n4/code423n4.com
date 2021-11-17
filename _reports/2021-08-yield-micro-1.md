@@ -36,7 +36,7 @@ Final report assembled by [moneylegobatman](https://twitter.com/money_lego) and 
 
 # Summary
 
-The C4 analysis yielded an aggregated total of 21 unique vulnerabilities. All of the issues presented here are linked back to their original finding
+The C4 analysis yielded an aggregated total of 21 unique vulnerabilities and 48 total findings.   All of the issues presented here are linked back to their original finding
 
 Of these vulnerabilities, 5 received a risk rating in the category of HIGH severity, 4 received a risk rating in the category of MEDIUM severity, and 12 received a risk rating in the category of LOW severity.
 
