@@ -12,11 +12,11 @@ const HeroIndex = () => {
       <h5>
         Book an audit contest as soon as this month.
         <br />
-        <br />
         <a href="https://discord.gg/code4rena" className="button button-small">
           Join our Discord
         </a>
       </h5>
+
       <Definitions />
     </div>
   );

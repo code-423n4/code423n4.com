@@ -10,7 +10,7 @@
   color: #ffffff;
   letter-spacing: 0;
   text-shadow: 2px 2px 19px rgba(132, 36, 226, 0.77);
-  margin: 20px 0 30px 0;
+  margin: 20px 0;
   text-align: center;
 }
 
@@ -27,7 +27,7 @@
   max-width: 800px;
   text-align: center;
   margin: 0 auto var(--page-margin);
-  font-size: 30px;
+  font-size: 26px;
 }
 
 .definitions div {
