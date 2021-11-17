@@ -5,9 +5,11 @@ import HeroIndex from "../components/content/HeroIndex";
 import Definitions from "../components/content/Definitions";
 import ContestList from "../components/ContestList";
 import Testimonials from "../components/Testimonials";
+import { contestsByState } from "../utils/filter";
 
 export default function SiteIndex({ data }) {
   const contests = data.contests.edges;
+  const filteredContests = contestsByState({ contests }, true);
 
   return (
     <DefaultLayout pageTitle="Code 423n4" bodyClass="landing">
@@ -16,7 +18,13 @@ export default function SiteIndex({ data }) {
       </div>
       <div className="wrapper-main">
         <section>
-          {contests ? <ContestList contests={contests} /> : null}
+          {filteredContests.active.length > 0 ? (
+            <ContestList contests={filteredContests.active} />
+          ) : null}
+          <h1 className="upcoming-header">Upcoming Contests</h1>
+          {filteredContests.soon.length > 0 ? (
+            <ContestList contests={filteredContests.soon} />
+          ) : null}
         </section>
         <section>
           <Testimonials />
