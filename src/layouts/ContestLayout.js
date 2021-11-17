@@ -22,9 +22,23 @@ const ContestLayout = (props) => {
   } = props.data.contestsCsv;
 
   const t = getDates(start_time, end_time, true);
+  const dateDescription = `${amount}\n${t.startDay}—${t.endDay}`;
+  const pageTitle = `Code4rena ${title}`;
+  let art;
+
+  if (fields.artPath) {
+    art = fields.artPath;
+  } else {
+    art = null;
+  }
 
   return (
-    <DefaultLayout pageTitle={title} bodyClass="contest-page">
+    <DefaultLayout
+      pageTitle={pageTitle}
+      bodyClass="contest-page"
+      preview={art}
+      pageDescription={dateDescription}
+    >
       <>
         <div className="contest-wrapper contest-artwork-wrapper">
           <div className="contest-tippy-top">

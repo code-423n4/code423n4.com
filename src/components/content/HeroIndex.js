@@ -9,7 +9,14 @@ const HeroIndex = () => {
         <br />
         is decentralized.
       </h1>
-      <h5>Book an audit contest within weeks.</h5>
+      <h5>
+        Book an audit contest as soon as this month.
+        <br />
+        <br />
+        <a href="https://discord.gg/code4rena" className="button button-small">
+          Join our Discord
+        </a>
+      </h5>
       <Definitions />
     </div>
   );
