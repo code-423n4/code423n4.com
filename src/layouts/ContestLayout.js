@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { graphql } from "gatsby";
+import clsx from "clsx";
 import DefaultLayout from "./DefaultLayout";
-import ReactMarkdown from "react-markdown";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import Countdown from "../components/Countdown";
 import { getDates } from "../utils/time";
@@ -9,7 +9,6 @@ import ContestFAQ from "../pages/contests/faq";
 
 const ContestLayout = (props) => {
   const [artOpen, setArtOpen] = useState(false);
-  let artClass = artOpen ? "open" : "";
   const {
     title,
     sponsor,
@@ -50,7 +49,10 @@ const ContestLayout = (props) => {
                 : null
             }
             onClick={() => setArtOpen((isOpen) => !isOpen)}
-            className={`${artClass} contest-artwork background-pattern`}
+            className={clsx(
+              { open: artOpen },
+              "contest-artwork background-pattern"
+            )}
             aria-label={`${title} artwork. Expands on click.`}
           />
         </div>
@@ -119,7 +121,9 @@ const ContestLayout = (props) => {
                     />
                   </div>
                 ) : (
-                  <ReactMarkdown children={fields.readmeContent} />
+                  <div
+                    dangerouslySetInnerHTML={{ __html: fields.readmeContent }}
+                  />
                 )}
               </div>
             </TabPanel>

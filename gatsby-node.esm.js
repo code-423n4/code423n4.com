@@ -2,7 +2,17 @@ import path from "path";
 import SchemaCustomization from "./schema";
 import { createFilePath } from "gatsby-source-filesystem";
 import { Octokit } from "@octokit/core";
+import { graphql } from "@octokit/graphql";
 const { token } = require("./functions/_config");
+
+const octokit = new Octokit({
+  auth: token,
+});
+const graphqlWithAuth = graphql.defaults({
+  headers: {
+    authorization: `Bearer ${token}`,
+  },
+});
 
 function slugify(text) {
   return text
@@ -35,8 +45,8 @@ function contestSubmissionPermalink(contestNode) {
 
 function contestArtworkPermalink(contestNode) {
   const fs = require("fs");
-  let slug = contestSlug(contestNode);
-  let path = `static/images/contests/${slug}.jpg`;
+  const slug = contestSlug(contestNode);
+  const path = `static/images/contests/${slug}.jpg`;
   if (fs.existsSync(path)) {
     // found the image
     return `/images/contests/${slug}.jpg`;
@@ -47,28 +57,43 @@ function contestArtworkPermalink(contestNode) {
 }
 
 function getRepoName(contestNode) {
-  let regex = "([^/]+$)";
-  let url = contestNode.repo;
+  const regex = "([^/]+$)";
+  const url = contestNode.repo;
 
-  let result = url.match(regex);
-  let repoName = result[0];
+  const result = url.match(regex);
+  const repoName = result[0];
   return repoName;
 }
 
 async function fetchReadmeMarkdown(contestNode) {
-  const octokit = new Octokit({
-    auth: token,
-  });
-  const request = await octokit.request("GET /repos/{owner}/{repo}/readme", {
+  const { data } = await octokit.request("GET /repos/{owner}/{repo}/readme", {
     owner: "code-423n4",
     repo: `${getRepoName(contestNode)}`,
+    headers: {
+      accept: "application/vnd.github.v3.html+json",
+    },
   });
 
-  // Convert the base64 to normal text
-  var buff = Buffer.from(request.data.content, "base64");
-  let rawMarkdown = buff.toString();
+  return data;
+}
 
-  return rawMarkdown;
+async function fetchSocialImage(contestNode) {
+  const { repository } = await graphqlWithAuth(
+    `query socialImage($repo: String!) {
+    repository(owner: "code-423n4", name: $repo) {
+      openGraphImageUrl
+      usesCustomOpenGraphImage
+    }
+  }`,
+    {
+      repo: getRepoName(contestNode),
+    }
+  );
+  if (repository.usesCustomOpenGraphImage) {
+    return repository.openGraphImageUrl;
+  }
+
+  return null;
 }
 
 const queries = {
@@ -135,20 +160,25 @@ exports.onCreateNode = async ({ node, getNode, actions }) => {
       name: `contestPath`,
       value: contestPermalink(node),
     });
+
     createNodeField({
       node,
       name: `submissionPath`,
       value: contestSubmissionPermalink(node),
     });
+
+    const readmeMarkdown = await fetchReadmeMarkdown(node);
     createNodeField({
       node,
       name: `readmeContent`,
-      value: await fetchReadmeMarkdown(node),
+      value: readmeMarkdown,
     });
+
+    const socialImageUrl = await fetchSocialImage(node);
     createNodeField({
       node,
       name: `artPath`,
-      value: contestArtworkPermalink(node),
+      value: socialImageUrl,
     });
   }
 };

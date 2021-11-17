@@ -5,7 +5,6 @@ import ReportList from "../../components/ReportList";
 
 export default function ReportIndex({ data }) {
   const reports = data.reports.edges;
-  console.log("reports", data);
 
   return (
     <DefaultLayout pageTitle="Security Audit Reports" bodyClass="report-page">
