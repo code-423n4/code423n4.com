@@ -41,7 +41,7 @@ const DefaultLayout = (props) => {
         ) : (
           <meta
             property="og:image"
-            content="https://code423n4/images/C4-banner.png"
+            content="https://code4rena.com/images/C4-banner.png"
           />
         )}
         <link
