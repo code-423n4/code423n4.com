@@ -68,7 +68,7 @@ const getDates = (starttime, endtime, gracePeriod) => {
 
   let graceAmount = 0;
   if (gracePeriod) {
-    graceAmount = 28800000; // 8 hours in milliseconds
+    graceAmount = 8 * 60 * 60 * 1000; // 8 hours in milliseconds
   }
   let inGracePeriod = now >= start && now - graceAmount <= end; // true or false
 
