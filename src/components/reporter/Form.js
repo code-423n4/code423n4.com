@@ -2,9 +2,9 @@ import React, { useCallback, useState } from "react";
 import { omit, find } from "lodash";
 import { StaticQuery, graphql } from "gatsby";
 import clsx from "clsx";
-import { Widgets } from "./widgets";
-import * as styles from "./Form.module.scss";
 import Agreement from "../content/Agreement.js";
+import * as styles from "./Form.module.scss";
+import { Widgets } from "./widgets";
 
 const config = {
   labelAll: "bug",
