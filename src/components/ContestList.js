@@ -1,11 +1,11 @@
 import React from "react";
-import Contest from "./Contest";
+import ContestTile from "./ContestTile";
 
 const ContestList = ({ contests }) => {
   return (
     <>
       {contests.map((contest) => (
-        <Contest contest={contest} key={contest.node.id} />
+        <ContestTile contest={contest} key={contest.node.id} />
       ))}
     </>
   );

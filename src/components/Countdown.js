@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { getTimeRemaining, getDates } from "../utils/time";
 
-const Countdown = ({ start, end, isPreview }) => {
+const Countdown = ({ start, end, isPreview, text }) => {
   const [timeLeft, setTimeLeft] = useState(getTimeRemaining());
 
   const type = isPreview ? "preview" : "contest";
@@ -28,6 +28,9 @@ const Countdown = ({ start, end, isPreview }) => {
     <div className="countdown">
       <h5>
         <span className="wrapper-time">
+          {t.state === "active" ? (
+            <span className="countdown-live"></span>
+          ) : null}
           <span className="days">{tLeft.days}</span> days +{" "}
         </span>
         <span className="wrapper-time">
@@ -35,11 +38,13 @@ const Countdown = ({ start, end, isPreview }) => {
           <span className="minutes">{tLeft.mm}</span>{" "}
           <span className="seconds">{tLeft.ss}</span>
         </span>
-        <span className="wrapper-time">
-          {t.state === "soon"
-            ? ` until ${type} starts`
-            : ` until ${type} ends`}
-        </span>
+        {text !== false ? (
+          <span className="wrapper-time end-cap">
+            {t.state === "soon"
+              ? ` until ${type} starts`
+              : ` until ${type} ends`}
+          </span>
+        ) : null}
       </h5>
     </div>
   );

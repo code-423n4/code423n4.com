@@ -3,9 +3,9 @@ header {
 }
 
 .logo img {
-  width: 130px;
+  width: 170px;
   display: inline-block;
-  margin: 5px 30px 5px 0px;
+  margin: 10px 30px 5px 0px;
 }
 
 .logo:focus-visible img {
@@ -19,6 +19,7 @@ header {
 header nav {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   text-align: right;
   padding: 5px 0;
 }
@@ -49,7 +50,7 @@ header nav {
   transition: all 0.3s ease-out;
 }
 
-@media (max-width: 760px) {
+@media (max-width: 800px) {
   header {
     margin: 0;
     padding: 0;

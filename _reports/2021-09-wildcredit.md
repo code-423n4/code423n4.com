@@ -42,7 +42,7 @@ Final report assembled by [itsmetechjay](https://twitter.com/itsmetechjay) and [
 
 # Summary
 
-The C4 analysis yielded an aggregated total of 63 unique vulnerabilities. All of the issues presented here are linked back to their original finding
+The C4 analysis yielded an aggregated total of 14 unique vulnerabilities and 63 total findings.  All of the issues presented here are linked back to their original finding
 
 Of these vulnerabilities, 2 received a risk rating in the category of HIGH severity, 3 received a risk rating in the category of MEDIUM severity, and 9 received a risk rating in the category of LOW severity.
 

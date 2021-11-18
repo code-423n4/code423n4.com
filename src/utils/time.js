@@ -49,21 +49,28 @@ const getTimeRemaining = (endtime) => {
   }
 };
 
-const getDates = (starttime, endtime) => {
+// gracePeriod is just is tested for existing; it doesn't use the value.
+const getDates = (starttime, endtime, gracePeriod) => {
   const now = new Date().getTime();
   const start = new Date(starttime).getTime();
   const end = new Date(endtime).getTime();
 
   let state;
-  if (now < start) {
-    state = "soon";
-  }
   if (now >= start && now <= end) {
     state = "active";
+  }
+  if (now < start) {
+    state = "soon";
   }
   if (now > end) {
     state = "completed";
   }
+
+  let graceAmount = 0;
+  if (gracePeriod) {
+    graceAmount = 8 * 60 * 60 * 1000; // 8 hours in milliseconds
+  }
+  let inGracePeriod = now >= start && now - graceAmount <= end; // true or false
 
   const startMonth = monthNames[new Date(starttime).getMonth()];
   const startYear = new Date(starttime).getFullYear();
@@ -71,13 +78,16 @@ const getDates = (starttime, endtime) => {
   const endMonth = monthNames[new Date(endtime).getMonth()];
   const endYear = new Date(endtime).getFullYear();
   const endDate = new Date(endtime).getDate();
-  const daysDuration = Math.round((end - start) * 1/1000 * 1/60 * 1/60 * 1/24);
+  const daysDuration = Math.round(
+    ((((((((end - start) * 1) / 1000) * 1) / 60) * 1) / 60) * 1) / 24
+  );
 
   const t = {
     state,
     now,
     start,
     end,
+    inGracePeriod,
     startMonth,
     startDate,
     endMonth,
@@ -91,18 +101,5 @@ const getDates = (starttime, endtime) => {
 
   return t;
 };
-
-// const getTimeState = (t) => {
-//   let timeState;
-//   if (t.now < t.start) {
-//     return "soon";
-//   }
-//   if (t.now >= t.start && t.now <= t.end) {
-//     return "active";
-//   }
-//   if (t.now > t.end) {
-//     return "completed";
-//   }
-// };
 
 export { getTimeRemaining, getDates };
