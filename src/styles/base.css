@@ -4,9 +4,11 @@
   --light-blue: #5cb8ff;
   --hot-blue: #1a4bff;
   --blue: #361ee0;
+  --hot-pink: #ff108b;
 
+  --header-background-purple: #190b3e;
   --background-purple: #160f29;
-  --secondary-background-purple: #292044;
+  --secondary-background-purple: #291d4d;
   --lightest-background-purple: #50426c; /* use white text */
 
   --border-lightest-background: #71678a; /* border color. use with lightest background purple */
@@ -18,6 +20,9 @@
   /* these rgb color values should be identical to their pairs above */
   /* use these to change opacity like this: `rgba(var(--main-purple-rgb), 0.8)` */
   --main-purple-rgb: 132, 36, 226;
+
+  --page-margin: 40px;
+  --page-margin-mobile: 40px;
 }
 
 img {
@@ -35,12 +40,12 @@ body {
 }
 
 main {
-  margin: 40px;
+  margin: var(--page-margin-mobile);
 }
 
 @media (min-width: 600px) {
   main {
-    margin: 40px;
+    margin: var(--page-margin);
   }
 }
 
@@ -258,8 +263,8 @@ iframe {
     margin: 0;
   }
 
-  h1 {
-    font-size: 32px !important;
+  body h1 {
+    font-size: 32px;
   }
 
   .wrapper-main {
