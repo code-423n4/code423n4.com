@@ -12,7 +12,7 @@ export default function SiteIndex({ data }) {
   const filteredContests = contestsByState({ contests }, true);
 
   return (
-    <DefaultLayout pageTitle="Code 423n4" bodyClass="landing">
+    <DefaultLayout bodyClass="landing">
       <div className="hero-wrapper">
         <HeroIndex />
       </div>
