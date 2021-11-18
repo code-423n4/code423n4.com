@@ -5,8 +5,8 @@ const HeroIndex = () => {
   return (
     <div className="hero">
       <h1>
-        <span>C4 audit contests</span>
-        <span>find more bugs faster</span>
+        <span>C4 audit contests</span>{' '}
+        <span>find more bugs faster</span>{' '}
         <span>than any other method.</span>
       </h1>
       <h5>
