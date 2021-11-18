@@ -69,7 +69,7 @@ const DefaultLayout = (props) => {
         />
         <title>
           {pageTitle ? `${pageTitle} — ` : ""}
-          Code 423n4
+          Code4rena
         </title>
         <body className={bodyClass} />
       </Helmet>
