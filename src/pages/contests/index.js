@@ -42,7 +42,10 @@ export default function Contests({ data }) {
 
 export const query = graphql`
   query {
-    contests: allContestsCsv(sort: { fields: end_time, order: ASC }) {
+    contests: allContestsCsv(
+      filter: { hide: { ne: true } }
+      sort: { fields: end_time, order: ASC }
+    ) {
       edges {
         node {
           id
