@@ -62,7 +62,7 @@ const DefaultLayout = (props) => {
           href="/images/favicon-16.png"
         />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin />
         <link
           href="https://fonts.googleapis.com/css2?family=Roboto+Mono&family=Roboto:wght@400;700&family=Space+Mono&display=swap"
           rel="stylesheet"
@@ -73,7 +73,7 @@ const DefaultLayout = (props) => {
         </title>
         <body className={bodyClass} />
       </Helmet>
-      <div class="message-bar">
+      <div className="message-bar">
         <p>
           ✨ New!✨ &nbsp;C4 Cosmos league
           <a href="https://medium.com/code-423n4/code4rena-comes-to-cosmos-29269f4d13d">

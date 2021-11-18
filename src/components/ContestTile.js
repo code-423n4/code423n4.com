@@ -32,7 +32,7 @@ const ContestTile = ({ contest: { node } }) => {
       <div className="wrapper-contest-content">
         {league === "cosmos" ? (
           <a href="/cosmos">
-            <div class="contest-league">
+            <div className="contest-league">
               <img src="/images/cosmos-icon.svg" alt="Cosmos Logo" />
               Cosmos League
             </div>
