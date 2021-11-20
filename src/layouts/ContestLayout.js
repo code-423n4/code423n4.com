@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { graphql } from "gatsby";
+import { graphql, Link } from "gatsby";
 import clsx from "clsx";
 import DefaultLayout from "./DefaultLayout";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
@@ -97,12 +97,12 @@ const ContestLayout = (props) => {
               {(t.state === "active" || t.inGracePeriod) &&
               findingsRepo &&
               fields.submissionPath ? (
-                <a
-                  href={fields.submissionPath}
+                <Link
+                  to={fields.submissionPath}
                   className="button cta-button button-medium secondary"
                 >
                   Submit Finding
-                </a>
+                </Link>
               ) : null}
             </div>
           </div>
