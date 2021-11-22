@@ -49,8 +49,7 @@ const getTimeRemaining = (endtime) => {
   }
 };
 
-// gracePeriod is just is tested for existing; it doesn't use the value.
-const getDates = (starttime, endtime, gracePeriod) => {
+const getDates = (starttime, endtime) => {
   const now = new Date().getTime();
   const start = new Date(starttime).getTime();
   const end = new Date(endtime).getTime();
@@ -65,12 +64,6 @@ const getDates = (starttime, endtime, gracePeriod) => {
   if (now > end) {
     state = "completed";
   }
-
-  let graceAmount = 0;
-  if (gracePeriod) {
-    graceAmount = 8 * 60 * 60 * 1000; // 8 hours in milliseconds
-  }
-  let inGracePeriod = now >= start && now - graceAmount <= end; // true or false
 
   const startMonth = monthNames[new Date(starttime).getMonth()];
   const startYear = new Date(starttime).getFullYear();
@@ -87,7 +80,6 @@ const getDates = (starttime, endtime, gracePeriod) => {
     now,
     start,
     end,
-    inGracePeriod,
     startMonth,
     startDate,
     endMonth,

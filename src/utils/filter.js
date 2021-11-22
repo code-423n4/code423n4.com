@@ -1,24 +1,18 @@
 import { getDates } from "./time";
 import { sortByContestStart } from "./sort";
 
-function contestsByState({ contests }, gracePeriod) {
+function contestsByState({ contests }) {
   const filteredContests = {
     active: contests.filter(
-      (c) =>
-        getDates(c.node.start_time, c.node.end_time, gracePeriod).state ===
-          "active" ||
-        getDates(c.node.start_time, c.node.end_time, gracePeriod).inGracePeriod
+      (c) => getDates(c.node.start_time, c.node.end_time).state === "active"
     ),
     soon: contests.filter(
-      (c) =>
-        getDates(c.node.start_time, c.node.end_time, gracePeriod).state ===
-        "soon"
+      (c) => getDates(c.node.start_time, c.node.end_time).state === "soon"
     ),
     completed: contests
       .filter(
         (c) =>
-          getDates(c.node.start_time, c.node.end_time, gracePeriod).state ===
-          "completed"
+          getDates(c.node.start_time, c.node.end_time).state === "completed"
       )
       .sort(sortByContestStart("reverse")),
   };

@@ -9,7 +9,7 @@ import { contestsByState } from "../utils/filter";
 
 export default function SiteIndex({ data }) {
   const contests = data.contests.edges;
-  const filteredContests = contestsByState({ contests }, true);
+  const filteredContests = contestsByState({ contests });
 
   return (
     <DefaultLayout bodyClass="landing">
