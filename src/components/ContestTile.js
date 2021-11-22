@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "gatsby";
 import Countdown from "./Countdown";
 import { getDates } from "../utils/time";
 
@@ -31,12 +32,12 @@ const ContestTile = ({ contest: { node } }) => {
       </div>
       <div className="wrapper-contest-content">
         {league === "cosmos" ? (
-          <a href="/cosmos">
+          <Link to="/cosmos">
             <div class="contest-league">
               <img src="/images/cosmos-icon.svg" alt="Cosmos Logo" />
               Cosmos League
             </div>
-          </a>
+          </Link>
         ) : (
           ""
         )}
@@ -59,21 +60,21 @@ const ContestTile = ({ contest: { node } }) => {
             Contest ran {t.startDay}—{t.endDay}
           </p>
         )}
-        <a
-          href={contestPath}
+        <Link
+          to={contestPath}
           className="contest-repo button button-small cta-button primary"
         >
           {`${findingsRepo === "" ? "Preview" : "View"} Contest`}
-        </a>
+        </Link>
         {(t.state === "active" || t.inGracePeriod) &&
         findingsRepo &&
         submissionPath ? (
-          <a
-            href={submissionPath}
+          <Link
+            to={submissionPath}
             className="button button-small cta-button secondary"
           >
             Submit Finding
-          </a>
+          </Link>
         ) : (
           ""
         )}

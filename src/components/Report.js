@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "gatsby";
 import { getDates } from "../utils/time";
 
 const Report = ({ report }) => {
@@ -42,12 +43,12 @@ const Report = ({ report }) => {
             Contest report
           </a>
         ) : (
-          <a
-            href={reportUrl}
+          <Link
+            to={reportUrl}
             className="contest-repo button button-small cta-button"
           >
             Contest report
-          </a>
+          </Link>
         )}
       </div>
     </div>
