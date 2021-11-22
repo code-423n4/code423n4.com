@@ -1,8 +1,7 @@
-import { getTimeRemaining, getDates } from "./time";
+import { getDates } from "./time";
 import { sortByContestStart } from "./sort";
 
 function contestsByState({ contests }, gracePeriod) {
-  console.log(gracePeriod);
   const filteredContests = {
     active: contests.filter(
       (c) =>

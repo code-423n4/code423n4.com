@@ -81,10 +81,10 @@ const ContestLayout = (props) => {
               />
             </a>
           </div>
-          <div class="top-section-text">
+          <div className="top-section-text">
             <h1>{title}</h1>
             <p>{details}</p>
-            <div class="button-wrapper">
+            <div className="button-wrapper">
               {t.state !== "soon" ? (
                 <a
                   href={repo}

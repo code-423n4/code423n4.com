@@ -1,5 +1,5 @@
 import React from "react";
-import { TextField, TextArea, SelectField } from "./";
+import { SelectField, TextArea, TextField } from "./";
 import WardenField from "./WardenField";
 
 const Widget = (props) => {

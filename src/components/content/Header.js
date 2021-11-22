@@ -17,7 +17,7 @@ const Hamburger = ({ mobileNavOpen, setMobileNavOpen }) => {
         width="28"
         xmlns="http://www.w3.org/2000/svg"
       >
-        <g fill="#d8d8d8" fill-rule="evenodd">
+        <g fill="#d8d8d8" fillRule="evenodd">
           <rect className="top-bun" height="3" rx="1.5" width="28" />
           <rect className="patty" height="3" rx="1.5" width="28" y="9" />
           <rect className="bottom-bun" height="3" rx="1.5" width="28" y="18" />
@@ -33,7 +33,7 @@ const Header = () => {
 
   return (
     <header className={navClass}>
-      <a class="visually-hidden focusable skip-link" href="#skip-link">
+      <a className="visually-hidden focusable skip-link" href="#skip-link">
         Skip Navigation
       </a>
       <nav className={navClass} role="navigation">

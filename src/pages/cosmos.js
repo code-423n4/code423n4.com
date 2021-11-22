@@ -10,9 +10,13 @@ export default function Contests({ data }) {
   return (
     <DefaultLayout pageTitle="Cosmos" bodyClass="cosmos">
       <section className="cosmos-hero">
-        <img src="/images/cosmos-logo.svg" class="cosmos-logo" alt="Cosmos" />
+        <img
+          src="/images/cosmos-logo.svg"
+          className="cosmos-logo"
+          alt="Cosmos"
+        />
         <p>&mdash; on &mdash;</p>
-        <img src="/images/c4-logo.svg" class="c4-logo" alt="Code Arena" />
+        <img src="/images/c4-logo.svg" className="c4-logo" alt="Code Arena" />
       </section>
       <section className="cosmos-wrapper">
         <h1>Audit contests for the Cosmos ecosystem</h1>
@@ -22,15 +26,17 @@ export default function Contests({ data }) {
         </p>
         <Definitions />
       </section>
-      {contests.length > 0 ? 
+      {contests.length > 0 ? (
         <>
           <hr />
           <section className="cosmos-wrapper">
             <h2>Current Cosmos contests</h2>
-            <section><ContestList contests={contests} /></section>
+            <section>
+              <ContestList contests={contests} />
+            </section>
           </section>
         </>
-       : null}
+      ) : null}
       <section className="cosmos-bkg">
         <div className="cosmos-wrapper">
           <h2>Want to sponsor an audit contest for your project?</h2>
