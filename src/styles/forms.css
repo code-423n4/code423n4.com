@@ -31,3 +31,7 @@ label {
   justify-content: center;
   margin-bottom: 1em;
 }
+
+.judge-application {
+  font-family: var(--font-family) !important;
+}
