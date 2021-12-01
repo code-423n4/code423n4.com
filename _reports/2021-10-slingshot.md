@@ -30,7 +30,7 @@ During the code contest outlined in this document, C4 conducted an analysis of S
 1. [pauliax](https://twitter.com/SolidityDev)
 1. [ye0lde](https://twitter.com/_ye0lde)
 1. [cmichel](https://twitter.com/cmichelio)
-1. [TomFrench](https://github.com/TomAFrench)
+1. [TomFrenchBlockchain](https://github.com/TomAFrench)
 1. [csanuragjain](https://twitter.com/csanuragjain)
 1. pants
 1. [onewayfunction](https://twitter.com/onewayfunction)
@@ -195,10 +195,10 @@ Save the user's (not Executioner's) `toToken` balance in the beginning of `execu
 - [[L-14] receive function](https://github.com/code-423n4/2021-10-slingshot-findings/issues/94) _Submitted by pauliax_.
 
 # Non-Critical Findings (17)
-- [[N-01] ModuleRegistry doesn't need to know address of Slingshot.sol](https://github.com/code-423n4/2021-10-slingshot-findings/issues/1) _Submitted by TomFrench_.
-- [[N-02] Malicious governance can abuse approvals to ApprovalHandler](https://github.com/code-423n4/2021-10-slingshot-findings/issues/2) _Submitted by TomFrench_.
+- [[N-01] ModuleRegistry doesn't need to know address of Slingshot.sol](https://github.com/code-423n4/2021-10-slingshot-findings/issues/1) _Submitted by TomFrenchBlockchain_.
+- [[N-02] Malicious governance can abuse approvals to ApprovalHandler](https://github.com/code-423n4/2021-10-slingshot-findings/issues/2) _Submitted by TomFrenchBlockchain_.
 - [[N-03] Flaws in Slingshot._sendFunds()](https://github.com/code-423n4/2021-10-slingshot-findings/issues/24) _Submitted by daejunpark, also found by gpersoon, hickuphh3, kenzo, and pauliax_.
-- [[N-04] String concatenation in revert messages results in increased gas costs + code complexity](https://github.com/code-423n4/2021-10-slingshot-findings/issues/37) _Submitted by TomFrench_.
+- [[N-04] String concatenation in revert messages results in increased gas costs + code complexity](https://github.com/code-423n4/2021-10-slingshot-findings/issues/37) _Submitted by TomFrenchBlockchain_.
 - [[N-05] Slingshot: Incorrect comment for rescueTokensFromExecutioner()](https://github.com/code-423n4/2021-10-slingshot-findings/issues/43) _Submitted by hickuphh3_.
 - [[N-06] Slingshot: Index fromToken and toToken for Trade event](https://github.com/code-423n4/2021-10-slingshot-findings/issues/45) _Submitted by hickuphh3_.
 - [[N-07] Inconsistent naming for functions in `ConcatStrings.sol`](https://github.com/code-423n4/2021-10-slingshot-findings/issues/48) _Submitted by pmerkleplant_.
@@ -214,7 +214,7 @@ Save the user's (not Executioner's) `toToken` balance in the beginning of `execu
 - [[N-17] Redundant code](https://github.com/code-423n4/2021-10-slingshot-findings/issues/55) _Submitted by WatchPug_.
 
 # Gas Optimizations (24)
-- [[G-01] Use of constant `keccak` variables results in extra hashing (and so gas).](https://github.com/code-423n4/2021-10-slingshot-findings/issues/3) _Submitted by TomFrench_.
+- [[G-01] Use of constant `keccak` variables results in extra hashing (and so gas).](https://github.com/code-423n4/2021-10-slingshot-findings/issues/3) _Submitted by TomFrenchBlockchain_.
 - [[G-02] _transferFromOrWrap could be set private to save gas](https://github.com/code-423n4/2021-10-slingshot-findings/issues/5) _Submitted by pants_.
 - [[G-03] The function _getTokenBalance could be set private to save gas](https://github.com/code-423n4/2021-10-slingshot-findings/issues/6) _Submitted by pants_.
 - [[G-04] The function _sendFunds could be set private to save gas](https://github.com/code-423n4/2021-10-slingshot-findings/issues/7) _Submitted by pants_.
