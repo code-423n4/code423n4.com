@@ -169,10 +169,10 @@ const JudgeApplication = () => {
     bio: state.bio,
     link1: state.link1,
     details1: state.details1,
-    link2: state.link1,
-    details2: state.details1,
-    link3: state.link1,
-    details3: state.details1,
+    link2: state.link2,
+    details2: state.details2,
+    link3: state.link3,
+    details3: state.details3,
   };
   const handleSubmit = () => {
     applyForJudge(url, formData);
