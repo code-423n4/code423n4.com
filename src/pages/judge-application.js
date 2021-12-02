@@ -28,64 +28,66 @@ const config = {
     },
     {
       name: "link1",
-      label: "First high-severity link",
+      label: "First high severity finding link",
       helptext:
-        "Link to an example submission to Code4rena contests that were judged high severity",
+        "Link to a valid, high-severity finding you submitted to a Code4rena contest",
       widget: "text",
       required: true,
     },
     {
       name: "details1",
-      label: "First high-severity details",
+      label: "First high severity finding details",
       helptext:
-        "Description of how the above submission demonstrates your depth of knowledge",
+        "Describe how the above finding demonstrates your depth of knowledge",
       widget: "textarea",
       required: true,
     },
     {
       name: "link2",
-      label: "Second high-severity link",
+      label: "Second high severity finding link",
       helptext:
-        "Link to an example submission to Code4rena contests that were judged high severity",
+        "Link to a valid, high-severity finding you submitted to a Code4rena contest",
       widget: "text",
       required: true,
     },
     {
       name: "details2",
-      label: "Second high-severity details",
+      label: "Second high severity finding details",
       helptext:
-        "Description of how the above submission demonstrates your depth of knowledge",
+        "Describe how the above finding demonstrates your depth of knowledge",
       widget: "textarea",
       required: true,
     },
     {
       name: "link3",
-      label: "Third high-severity link",
+      label: "Third high severity finding link",
       helptext:
-        "Link to an example submission to Code4rena contests that were judged high severity",
+        "Link to a valid, high-severity finding you submitted to a Code4rena contest",
       widget: "text",
       required: true,
     },
     {
       name: "details3",
-      label: "Third high-severity details",
+      label: "Third high severity finding details",
       helptext:
-        "Description of how the above submission demonstrates your depth of knowledge",
+        "Describe how the above finding demonstrates your depth of knowledge",
       widget: "textarea",
       required: true,
     },
   ],
 };
 
+const textareaHint = "## accepts markdown";
+
 const initialState = {
   handle: "",
-  bio: "",
+  bio: textareaHint,
   link1: "",
-  details1: "",
+  details1: textareaHint,
   link2: "",
-  details2: "",
+  details2: textareaHint,
   link3: "",
-  details3: "",
+  details3: textareaHint,
 };
 
 const FormStatus = {
@@ -116,16 +118,7 @@ const wardenListQuery = graphql`
 `;
 
 const JudgeApplication = () => {
-  const [state, setState] = useState({
-    handle: "",
-    bio: "",
-    link1: "",
-    details1: "",
-    link2: "",
-    details2: "",
-    link3: "",
-    details3: "",
-  });
+  const [state, setState] = useState(initialState);
   const [status, setStatus] = useState("unsubmitted");
 
   const fields = config.fields;
@@ -189,7 +182,7 @@ const JudgeApplication = () => {
         return (
           <DefaultLayout
             bodyClass="judge-application"
-            pageTitle="Judge Application | Code 423n4"
+            pageTitle="Judge Application | Code4rena"
           >
             <div className="wrapper-main">
               {(status === FormStatus.Unsubmitted ||
@@ -218,7 +211,7 @@ const JudgeApplication = () => {
                       type="button"
                       onClick={handleSubmit}
                     >
-                      Apply for Judge
+                      Apply to be a Judge
                     </button>
                   </form>
                 </>

@@ -5,7 +5,7 @@ const dedent = require("dedent");
 const octokit = new Octokit({ auth: token });
 
 exports.handler = async (event) => {
-  console.log("event:", event);
+  // console.log("event:", event);
 
   // only allow POST
   try {
@@ -72,9 +72,9 @@ exports.handler = async (event) => {
       {
         owner: "code-423n4",
         repo: "judges",
-        title: `[TEST PR; INVALID] Warden ${handle} has applied for judge`,
+        title: `Warden ${handle} has applied to be a judge`,
         body: `${details}`,
-        labels: ["invalid"],
+        labels: ["candidate"],
       }
     );
 
