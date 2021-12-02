@@ -1,10 +1,12 @@
 const { Octokit } = require("@octokit/core");
 const { token } = require("./_config");
+const dedent = require("dedent");
 
 const octokit = new Octokit({ auth: token });
 
 exports.handler = async (event) => {
   console.log("event:", event);
+
   // only allow POST
   try {
     if (event.httpMethod !== "POST") {
@@ -16,15 +18,54 @@ exports.handler = async (event) => {
     }
 
     const data = JSON.parse(event.body);
-    const { handle, details } = data;
+    const {
+      handle,
+      bio,
+      link1,
+      details1,
+      link2,
+      details2,
+      link3,
+      details3,
+    } = data;
 
     // ensure we have the data we need
-    if (!handle || !details) {
+    if (
+      !handle ||
+      !bio ||
+      !link1 ||
+      !details1 ||
+      !link2 ||
+      !details2 ||
+      !link3 ||
+      !details3
+    ) {
       return {
         statusCode: 422,
-        body: "Handle and details are required.",
+        body: "All form fields are required",
       };
     }
+
+    // Stitch all those form fields together into one chunk for the body of the GitHub issue
+    const details = dedent`
+    # Warden ${handle} wants to be a judge
+
+    ## Bio
+    ${bio}
+
+    ## High severity Code4rena submission 1
+    ${link1}
+    ${details1}
+
+    ## High severity Code4rena submission 2
+    ${link2}
+    ${details2}
+
+    ## High severity Code4rena submission 3
+    ${link3}
+    ${details3}
+
+    `;
 
     const createIssue = await octokit.request(
       "POST /repos/{owner}/{repo}/issues",
@@ -36,6 +77,8 @@ exports.handler = async (event) => {
         labels: ["invalid"],
       }
     );
+
+    // const createIssue = await true;
 
     return {
       statusCode: 201,
