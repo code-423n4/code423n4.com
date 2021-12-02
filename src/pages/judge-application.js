@@ -197,7 +197,11 @@ const JudgeApplication = () => {
                       fieldState={state}
                     />{" "}
                     {status === FormStatus.Error && (
-                      <div class="error-message">
+                      <div
+                        className="error-message"
+                        role="alert"
+                        aria-atomic="true"
+                      >
                         <p>
                           An error occurred; please try again. If you continue
                           to receive this error, let us know in{" "}
