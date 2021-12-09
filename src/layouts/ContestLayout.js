@@ -9,6 +9,7 @@ import ContestFAQ from "../pages/contests/faq";
 
 const ContestLayout = (props) => {
   const [artOpen, setArtOpen] = useState(false);
+
   const {
     title,
     sponsor,
@@ -24,19 +25,12 @@ const ContestLayout = (props) => {
   const t = getDates(start_time, end_time);
   const dateDescription = `${amount}\n${t.startDay}—${t.endDay}`;
   const pageTitle = `Code4rena ${title}`;
-  let art;
-
-  if (fields.artPath) {
-    art = fields.artPath;
-  } else {
-    art = null;
-  }
 
   return (
     <DefaultLayout
       pageTitle={pageTitle}
       bodyClass="contest-page"
-      preview={art}
+      preview={fields.artPath}
       pageDescription={dateDescription}
     >
       <>
@@ -102,6 +96,15 @@ const ContestLayout = (props) => {
                   Submit Finding
                 </Link>
               ) : null}
+              {props.data.markdownRemark &&
+              props.data.markdownRemark.frontmatter ? (
+                <Link
+                  to={`/reports/${props.data.markdownRemark.frontmatter.slug}`}
+                  className="button cta-button button-medium primary"
+                >
+                  View Report
+                </Link>
+              ) : null}
             </div>
           </div>
           <div className="top-section-amount">
@@ -154,8 +157,17 @@ const ContestLayout = (props) => {
 };
 export default ContestLayout;
 
-export const pageQuery = graphql`
-  query ContestsId($contestId: Int) {
+export const myQuery = graphql`
+  query MyQuery($contestId: Int) {
+    markdownRemark(
+      frontmatter: { contest: { contestid: { eq: $contestId } } }
+    ) {
+      frontmatter {
+        altUrl
+        slug
+        title
+      }
+    }
     contestsCsv(contestid: { eq: $contestId }) {
       amount
       contestid
