@@ -97,9 +97,20 @@ const ContestLayout = (props) => {
                 </Link>
               ) : null}
               {props.data.markdownRemark &&
-              props.data.markdownRemark.frontmatter ? (
+              props.data.markdownRemark.frontmatter &&
+              !props.data.markdownRemark.frontmatter.altUrl ? (
                 <Link
                   to={`/reports/${props.data.markdownRemark.frontmatter.slug}`}
+                  className="button cta-button button-medium primary"
+                >
+                  View Report
+                </Link>
+              ) : null}
+              {props.data.markdownRemark &&
+              props.data.markdownRemark.frontmatter &&
+              props.data.markdownRemark.frontmatter.altUrl ? (
+                <Link
+                  to={props.data.markdownRemark.frontmatter.altUrl}
                   className="button cta-button button-medium primary"
                 >
                   View Report
