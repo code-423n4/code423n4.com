@@ -26,9 +26,9 @@ const config = {
     },
     {
       name: "address",
-      label: "Eth address",
+      label: "Polygon address",
       helptext:
-        "Address where your prize should go to (and retroactive token reward should C4 be tokenized later)",
+        "Address where your prize should go to (and retroactive token reward should C4 be tokenized later). If you use a smart contract wallet, please contact one of our organizers in Discord in addition to adding the address here.",
       widget: "text",
       required: true,
     },
