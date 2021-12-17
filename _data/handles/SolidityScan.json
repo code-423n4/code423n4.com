@@ -1,5 +1,5 @@
 {
-    "image": "./avatars/credshields.svg",
-    "handle": "SolidityScan",
-    "members": ["cyberboy", "zombie"]
+  "image": "./avatars/credshields.png",
+  "handle": "SolidityScan",
+  "members": ["cyberboy", "zombie"]
 }
