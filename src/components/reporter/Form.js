@@ -180,10 +180,12 @@ const Form = ({ contest, sponsor, repoUrl }) => {
     risk = state.label.slice(0, 1);
   }
 
+  const repo = repoUrl.split("/").pop();
+
   const formData = {
     contest,
     sponsor,
-    repoUrl,
+    repo,
     email: state.email,
     handle: state.handle,
     address: state.address,
