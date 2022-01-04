@@ -59,6 +59,11 @@
 
     .react-select__placeholder {
       color: white;
+      opacity: 0.75;
+    }
+
+    .react-select__input {
+      color: white;
     }
   }
 }
