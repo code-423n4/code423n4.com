@@ -28,7 +28,7 @@ const WardenField = ({ label, helptext, options, onChange, fieldState }) => {
     [onChange]
   );
 
-    return (
+  return (
     <div className={baseStyles.Container}>
       <label className={baseStyles.Label}>{label}</label>
       <p className={baseStyles.Help}>{helptext}</p>
