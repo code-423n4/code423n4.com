@@ -1,4 +1,6 @@
 import React from "react";
+import ReactMarkdown from 'react-markdown';
+import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import clsx from "clsx";
 import * as styles from "./Widgets.module.scss";
 
@@ -8,17 +10,31 @@ const TextArea = (props) => {
   function handleChange(e) {
     props.onChange(e);
   }
+
   return (
     <div className={styles.Container}>
       <label className={styles.Label}>{label}</label>
       <p className={styles.Help}>{helptext}</p>
-      <textarea
-        className={clsx(styles.Control, styles.Text, styles.Textarea)}
-        name={name}
-        onChange={handleChange}
-        required={required}
-        value={fieldState}
-      />
+      <Tabs className="alternate-tab">
+        <TabList>
+          <Tab>Edit</Tab>
+          <Tab>Preview</Tab>
+        </TabList>
+        <TabPanel>
+          <textarea
+            className={clsx(styles.Control, styles.Text, styles.Textarea)}
+            name={name}
+            onChange={handleChange}
+            required={required}
+            value={fieldState}
+          />
+        </TabPanel>
+        <TabPanel>
+          <ReactMarkdown className={clsx(styles.Control, styles.Markdown)}>
+            {fieldState}
+          </ReactMarkdown>
+        </TabPanel>
+      </Tabs>      
     </div>
   );
 };
