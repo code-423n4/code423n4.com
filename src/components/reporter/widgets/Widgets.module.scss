@@ -43,6 +43,29 @@
 }
 
 .Textarea {
-  height: 150px;
+  height: 250px;
   font-family: inherit;
+}
+
+.Markdown {
+  height: 250px;
+  overflow: auto;  
+
+  h1,h2,h3 {
+    font-weight: 600;
+    text-align: left;
+    color: white;
+    margin-top: 0;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(204, 204, 204, 0.25);
+  }
+  h1 {
+    font-size: 28px;
+  }
+  h2 {
+    font-size: 24px;
+  }
+  h3 {
+    font-size: 20px;
+  }
 }
