@@ -61,7 +61,7 @@ const getDates = (starttime, endtime) => {
   if (now < start) {
     state = "soon";
   }
-  if (now > end) {
+  if (now >= end) {
     state = "completed";
   }
 

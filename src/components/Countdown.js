@@ -19,26 +19,29 @@ const Countdown = ({ start, end, isPreview, text }) => {
 
   if (t.state === "soon") {
     tLeft = getTimeRemaining(start);
-  }
-  if (t.state === "active") {
+  } else if (t.state === "active") {
     tLeft = getTimeRemaining(end);
+  } else {
+    tLeft = 0;
   }
 
   return (
     <div className="countdown">
       <h5>
-        <span className="wrapper-time">
-          {t.state === "active" ? (
-            <span className="countdown-live"></span>
-          ) : null}
-          <span className="days">{tLeft.days}</span> days +{" "}
-        </span>
-        <span className="wrapper-time">
-          <span className="hours">{tLeft.hh}</span>{" "}
-          <span className="minutes">{tLeft.mm}</span>{" "}
-          <span className="seconds">{tLeft.ss}</span>
-        </span>
-        {text !== false ? (
+        {(tLeft !== 0 && t.state === "active") || t.state === "soon"  ? (
+        <><span className="wrapper-time">
+            {t.state === "active" ? (
+              <span className="countdown-live"></span>
+            ) : null}
+            <span className="days">{tLeft.days}</span> days +{" "}
+          </span><span className="wrapper-time">
+              <span className="hours">{tLeft.hh}</span>{" "}
+              <span className="minutes">{tLeft.mm}</span>{" "}
+              <span className="seconds">{tLeft.ss}</span>
+            </span></>
+        ) : `Contest ended`}
+        
+        {(text !== false && tLeft !== 0 && t.state === "active") || t.state === "soon" ? (
           <span className="wrapper-time end-cap">
             {t.state === "soon"
               ? ` until ${type} starts`
