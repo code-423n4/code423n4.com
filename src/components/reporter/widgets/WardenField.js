@@ -21,7 +21,8 @@ const WardenOptionLabel = ({ value, image }) => {
 
 const WardenField = ({ label, helptext, options, onChange, fieldState }) => {
   const handleChange = useCallback(
-    ({ value }) => {
+    (option) => {
+      const value = option && option.value ? option.value : '';
       onChange({ target: { name: "handle", value } });
     },
     [onChange]
@@ -38,6 +39,7 @@ const WardenField = ({ label, helptext, options, onChange, fieldState }) => {
         onChange={handleChange}
         className={styles.ReactSelect}
         classNamePrefix="react-select"
+        isClearable={true}
       />
       <p className={baseStyles.Help}>
         <small>

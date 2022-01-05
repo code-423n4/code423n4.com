@@ -4,3 +4,4 @@ public
 .cache
 .nova
 .env
+yarn-error.log
