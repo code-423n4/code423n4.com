@@ -19,6 +19,8 @@ const ContestTile = ({ contest: { node } }) => {
   const { submissionPath, contestPath } = fields;
 
   const t = getDates(start_time, end_time);
+  let now = new Date().getTime();
+  const end = new Date(end_time).getTime();
 
   return (
     <div className={"wrapper-contest " + t.state}>
@@ -57,7 +59,7 @@ const ContestTile = ({ contest: { node } }) => {
           />
         ) : (
           <p>
-            Contest ran {t.startDay}—{t.endDay}
+            Contest ran {t.startDay}-{t.endDay}
           </p>
         )}
         <Link
@@ -66,7 +68,7 @@ const ContestTile = ({ contest: { node } }) => {
         >
           {`${findingsRepo === "" ? "Preview" : "View"} Contest`}
         </Link>
-        {t.state === "active" && findingsRepo && submissionPath ? (
+        {t.state === "active" && findingsRepo && submissionPath && (end - now >= 0) ? (
           <Link
             to={submissionPath}
             className="button button-small cta-button secondary"
