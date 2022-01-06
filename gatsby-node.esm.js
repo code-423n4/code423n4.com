@@ -123,12 +123,9 @@ exports.createSchemaCustomization = (helpers) => {
   const { actions } = helpers;
   const { createTypes } = actions;
 
-  const typeDefs = `
-    type ContestsCsvFields implements Node {
-      artPath: String!
-    }
-  `
-  createTypes(typeDefs);
+  // const typeDefs = `
+  // `
+  // createTypes(typeDefs);
 
   try {
     createTypes(SchemaCustomization);
