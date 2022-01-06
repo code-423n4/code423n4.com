@@ -196,24 +196,22 @@ exports.createPages = async ({ graphql, actions }) => {
   const formTemplate = path.resolve("./src/layouts/ReportForm.js");
   const contestTemplate = path.resolve("./src/layouts/ContestLayout.js");
   contests.data.contests.edges.forEach((contest) => {
-    if (contest.node.fields) {
-      if (contest.node.findingsRepo) {
-        createPage({
-          path: contest.node.fields.submissionPath,
-          component: formTemplate,
-          context: {
-            contestId: contest.node.contestid,
-          },
-        });
-      }
-  
+    if (contest.node.findingsRepo) {
       createPage({
-        path: contest.node.fields.contestPath,
-        component: contestTemplate,
+        path: contest.node.fields.submissionPath,
+        component: formTemplate,
         context: {
           contestId: contest.node.contestid,
         },
       });
     }
+
+    createPage({
+      path: contest.node.fields.contestPath,
+      component: contestTemplate,
+      context: {
+        contestId: contest.node.contestid,
+      },
+    });
   });
 };
