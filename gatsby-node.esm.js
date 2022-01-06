@@ -119,7 +119,7 @@ const queries = {
 `,
 };
 
-exports.createSchemaCustomization = (actions) => {
+exports.createSchemaCustomization = ({ actions }) => {
   const { createTypes } = actions;
   try {
     createTypes(SchemaCustomization);
