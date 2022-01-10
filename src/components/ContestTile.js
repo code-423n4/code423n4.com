@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "gatsby";
 import Countdown from "./Countdown";
 import { getDates } from "../utils/time";
+import SponsorLink from './SponsorLink';
 
 const ContestTile = ({ contest: { node } }) => {
   const {
@@ -24,14 +25,7 @@ const ContestTile = ({ contest: { node } }) => {
 
   return (
     <div className={"wrapper-contest " + t.state}>
-      <div className="wrapper-sponsor">
-        <a href={sponsor.link}>
-          <img
-            src={sponsor.image.childImageSharp.resize.src}
-            alt={sponsor.name}
-          />
-        </a>
-      </div>
+      <SponsorLink sponsor={sponsor}/>
       <div className="wrapper-contest-content">
         {league === "cosmos" ? (
           <Link to="/cosmos">
