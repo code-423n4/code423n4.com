@@ -20,6 +20,8 @@ const ContestTile = ({ contest: { node } }) => {
   
   // @todo: Find a better solution to the below issue
   // This is a work-around for an issue with hydrating React components in Gatsby
+  // The drawbacks of this approach: the page momentarily renders contests that have
+  // expired and each contest tile component has to be rendered twice
   // This approach was suggested here: https://github.com/gatsbyjs/gatsby/discussions/17914
   const [isClient, setIsClient] = useState(false);
   
