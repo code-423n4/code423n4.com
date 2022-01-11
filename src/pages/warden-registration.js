@@ -48,7 +48,7 @@ const WardenRegistrationForm = ({ handles }) => {
 
   const url = `/.netlify/functions/register-warden`;
 
-  const submitFinding = useCallback(() => {
+  const submitRegistration = useCallback(() => {
     (async () => {
       setStatus(FormStatus.Submitting);
       let image = undefined;
@@ -94,7 +94,7 @@ const WardenRegistrationForm = ({ handles }) => {
         <form>
           <div className={widgetStyles.Container}>
             <label htmlFor="handle" className={widgetStyles.Label}>
-              Handle
+              Username
             </label>
             <p className={widgetStyles.Help}>
               Used to report findings, as well as display your total award
@@ -107,9 +107,10 @@ const WardenRegistrationForm = ({ handles }) => {
               type="text"
               id="handle"
               name="handle"
-              placeholder="Handle"
+              placeholder="Username"
               value={state.handle}
               onChange={handleChange}
+              maxlength={25}
             />
             {handles.has(state.handle) && (
               <p className={widgetStyles.Help}>
@@ -162,7 +163,7 @@ const WardenRegistrationForm = ({ handles }) => {
           <button
             className="button cta-button centered"
             type="button"
-            onClick={submitFinding}
+            onClick={submitRegistration}
             disabled={
               captchaToken === "" ||
               status !== "unsubmitted" ||
@@ -171,7 +172,7 @@ const WardenRegistrationForm = ({ handles }) => {
             }
           >
             {status === FormStatus.Unsubmitted
-              ? "Register handle"
+              ? "Register username"
               : "Submitting..."}
           </button>
         </form>
@@ -180,7 +181,7 @@ const WardenRegistrationForm = ({ handles }) => {
         <div style={{ textAlign: "center" }}>
           <h1>Whoops!</h1>
           <p>
-            An error occurred while attempting to register your handle. Please
+            An error occurred while attempting to register your username. Please
             try again later.
           </p>
           {errorMessage !== "" && (
@@ -194,7 +195,7 @@ const WardenRegistrationForm = ({ handles }) => {
         <div style={{ textAlign: "center" }}>
           <h1>Thank you!</h1>
           <p>
-            Your handle has been registered, and you're ready to submit
+            Your username has been registered, and you're ready to submit
             findings.
             <br />
             We look forward to seeing you in the arena!

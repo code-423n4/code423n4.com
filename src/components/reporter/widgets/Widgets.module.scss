@@ -35,6 +35,11 @@
 .Text {
   width: calc(100% - 20px);
   margin-bottom: 40px;
+
+  &::placeholder {
+    color: white;
+    opacity: 0.75;
+  }
 }
 
 .Select {
