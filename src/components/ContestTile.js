@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Link } from "gatsby";
 import Countdown from "./Countdown";
 import { getDates } from "../utils/time";
+import SponsorLink from './SponsorLink';
 
 const ContestTile = ({ contest: { node } }) => {
   const {
@@ -17,32 +18,14 @@ const ContestTile = ({ contest: { node } }) => {
     fields,
   } = node;
   const { submissionPath, contestPath } = fields;
-  
-  // @todo: Find a better solution to the below issue
-  // This is a work-around for an issue with hydrating React components in Gatsby
-  // The drawbacks of this approach: the page momentarily renders contests that have
-  // expired and each contest tile component has to be rendered twice
-  // This approach was suggested here: https://github.com/gatsbyjs/gatsby/discussions/17914
-  const [isClient, setIsClient] = useState(false);
-  
-  useEffect(() => {
-    setIsClient(true)
-  })
 
   const t = getDates(start_time, end_time);
   let now = new Date().getTime();
   const end = new Date(end_time).getTime();
 
   return (
-    <div className={"wrapper-contest " + t.state} key={isClient}>
-      <div className="wrapper-sponsor">
-        <a href={sponsor.link}>
-          <img
-            src={sponsor.image.childImageSharp.resize.src}
-            alt={sponsor.name}
-          />
-        </a>
-      </div>
+    <div className={"wrapper-contest " + t.state}>
+      <SponsorLink sponsor={sponsor}/>
       <div className="wrapper-contest-content">
         {league === "cosmos" ? (
           <Link to="/cosmos">
