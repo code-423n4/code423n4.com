@@ -1,5 +1,7 @@
 import React from "react";
 import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import remarkBreaks from 'remark-breaks';
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import clsx from "clsx";
 import * as styles from "./Widgets.module.scss";
@@ -30,7 +32,10 @@ const TextArea = (props) => {
           />
         </TabPanel>
         <TabPanel>
-          <ReactMarkdown className={clsx(styles.Control, styles.Markdown)}>
+          <ReactMarkdown
+            className={clsx(styles.Control, styles.Markdown)}
+            remarkPlugins={[remarkGfm, remarkBreaks]}
+          >
             {fieldState}
           </ReactMarkdown>
         </TabPanel>

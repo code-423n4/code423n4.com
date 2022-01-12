@@ -1,5 +1,7 @@
 .Fields {
   border: none;
+  min-width: 0px;
+  display: table-cell;
 }
 
 .Container {
@@ -50,6 +52,8 @@
 .Textarea {
   height: 250px;
   font-family: inherit;
+  resize: vertical;
+  margin-top: 0;
 }
 
 .Markdown {
@@ -72,5 +76,33 @@
   }
   h3 {
     font-size: 20px;
+  }
+
+  pre {
+    padding: 16px;
+    overflow: auto;
+    font-size: 85%;
+    line-height: 1.45;
+    background-color: var(--border-lightest-background);
+    border-radius: 6px;
+
+    &::-webkit-scrollbar {
+      height: 5px;
+    }
+    
+    &::-webkit-scrollbar-thumb {
+      height: 5px;
+    }
+
+  }
+
+  code {
+    padding: 0;
+    margin: 0;
+    background-color: var(--border-lightest-background);
+    display: inline;
+    overflow: visible;
+    line-height: inherit;
+    word-wrap: normal;
   }
 }
