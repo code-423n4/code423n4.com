@@ -3,6 +3,8 @@ import SchemaCustomization from "./schema";
 import { createFilePath } from "gatsby-source-filesystem";
 import { Octokit } from "@octokit/core";
 import { graphql } from "@octokit/graphql";
+import format from 'date-fns/format';
+
 const { token } = require("./functions/_config");
 
 const octokit = new Octokit({
@@ -27,10 +29,8 @@ function slugify(text) {
 
 function contestSlug(contestNode) {
   const startDate = new Date(contestNode.start_time);
-  const year = startDate.getFullYear();
-  const month = `${startDate.getMonth() + 1}`.padStart(2, "0");
   const title = slugify(contestNode.title);
-  const slug = `${year}-${month}-${title}`;
+  const slug = `${format(startDate, 'yyyy-MM')}-${title}`;
 
   return slug;
 }

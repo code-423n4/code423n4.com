@@ -121,18 +121,6 @@ article h1 {
 }
 
 article h2 {
-}
-
-article h3 {
-}
-
-article h4 {
-}
-
-article h5 {
-}
-
-article h2 {
   margin-top: 60px;
   color: var(--text-headers);
   border-bottom: 1px solid var(--secondary-background-purple);
@@ -194,7 +182,7 @@ pre {
 }
 
 pre::-webkit-scrollbar {
-  width: 10px;
+  height: 10px;
 }
 
 pre::-webkit-scrollbar-track {
@@ -204,7 +192,7 @@ pre::-webkit-scrollbar-track {
 
 pre::-webkit-scrollbar-thumb {
   background-color: var(--light-purple);
-  width: 5px;
+  height: 5px;
 }
 
 pre code {
