@@ -182,7 +182,7 @@ pre {
 }
 
 pre::-webkit-scrollbar {
-  width: 10px;
+  height: 10px;
 }
 
 pre::-webkit-scrollbar-track {
@@ -192,7 +192,7 @@ pre::-webkit-scrollbar-track {
 
 pre::-webkit-scrollbar-thumb {
   background-color: var(--light-purple);
-  width: 5px;
+  height: 5px;
 }
 
 pre code {
