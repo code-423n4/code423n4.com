@@ -16,6 +16,14 @@
   }
 }
 
+.Invalid.ReactSelect {
+  :global {
+    .react-select__control {
+      border: 2px solid var(--hot-pink)
+    }
+  }
+}
+
 .ReactSelect {
   :global {
     .react-select__control {
