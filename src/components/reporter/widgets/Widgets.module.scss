@@ -28,6 +28,24 @@
   }
 }
 
+.ErrorMessage {
+  display: flex;
+  align-items: center;
+  &::before {
+    content: "";
+    width: 8px;
+    height: 8px;
+    border-radius: 100%;
+    background-color: var(--hot-pink);
+    display: inline-block;
+    margin-right: 5px;
+  }
+}
+
+.Placeholder {
+  color: rgba(255, 255, 255, 0.75);
+}
+
 .Control {
   display: block;
   margin: 10px 0;
@@ -36,17 +54,15 @@
 
 .Text {
   width: calc(100% - 20px);
-  margin-bottom: 40px;
 
   &::placeholder {
-    color: white;
-    opacity: 0.75;
+    color: rgba(255, 255, 255, 0.75);
   }
 }
 
 .Select {
   width: 100%;
-  margin-bottom: 40px;
+  cursor: pointer;
 }
 
 .Textarea {
