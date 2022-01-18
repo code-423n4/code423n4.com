@@ -1,11 +1,15 @@
-import React, { useCallback, useState, useRef } from "react";
+import React, {
+  useCallback,
+  useState,
+  // useRef
+} from "react";
 import { StaticQuery, graphql } from "gatsby";
-import clsx from "clsx";
-import HCaptcha from "@hcaptcha/react-hcaptcha";
 import DefaultLayout from "../layouts/DefaultLayout";
-import * as styles from "../components/reporter/Form.module.scss";
-import * as widgetStyles from "../components/reporter/widgets/Widgets.module.scss";
 import { Widgets } from "../components/reporter/widgets";
+// import clsx from "clsx";
+// import HCaptcha from "@hcaptcha/react-hcaptcha";
+// import * as styles from "../components/reporter/Form.module.scss";
+// import * as widgetStyles from "../components/reporter/widgets/Widgets.module.scss";
 
 const config = {
   labelAll: "candidate",
@@ -146,15 +150,15 @@ const JudgeApplication = () => {
         setStatus(FormStatus.Submitted);
       } else {
         setStatus(FormStatus.Error);
-        const message = `Error: ${response.status}`;
+        // const message = `Error: ${response.status}`;
       }
     })();
   }, []);
 
-  const labelSet = [
-    config.labelAll ? config.labelAll : "",
-    state.label ? state.label : "",
-  ];
+  // const labelSet = [
+  //   config.labelAll ? config.labelAll : "",
+  //   state.label ? state.label : "",
+  // ];
 
   const formData = {
     handle: state.handle,
@@ -221,7 +225,7 @@ const JudgeApplication = () => {
               )}
 
               {status === FormStatus.Submitted && (
-                <div class="thank-you">
+                <div className="thank-you">
                   <h1>Thanks for applying!</h1>
                   <p>
                     <strong>Here's what happens next:</strong>
