@@ -110,7 +110,7 @@ exports.handler = async (event) => {
     } catch (err) {
       return {
         statusCode: err.response.status,
-        body: err.response.data.message,
+        body: err.response.data.message.toString(),
       }
     }
   } catch (err) {
