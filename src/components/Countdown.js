@@ -36,7 +36,7 @@ const Countdown = ({ start, end, isPreview, text, updateContestStatus }) => {
           <span className="minutes">{timeLeft.mm}</span>{" "}
           <span className="seconds">{timeLeft.ss}</span>
         </span>
-        {text && timeLeft.total > 0 ? (
+        {text !== false && timeLeft.total > 0 ? (
           <span className="wrapper-time end-cap">
             {contestTimer.contestStatus === "soon"
               ? ` until ${type} starts`
