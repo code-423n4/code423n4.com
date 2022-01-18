@@ -1,5 +1,4 @@
 import React, { useCallback, useState } from "react";
-import { omit, find } from "lodash";
 import { StaticQuery, graphql } from "gatsby";
 import clsx from "clsx";
 import Agreement from "../content/Agreement.js";
@@ -12,7 +11,7 @@ const config = {
     {
       name: "handle",
       label: "Handle",
-      helptext: "Handle you're competing under (individual or team name)",
+      helpText: "Handle you're competing under (individual or team name)",
       widget: "warden",
       required: true,
       options: [],
@@ -20,14 +19,14 @@ const config = {
     {
       name: "email",
       label: "Email address",
-      helptext: "Used to send a copy of this form for your records",
+      helpText: "Used to send a copy of this form for your records",
       widget: "text",
       required: true,
     },
     {
       name: "address",
       label: "Polygon address",
-      helptext:
+      helpText:
         "Address where your prize should go to (and retroactive token reward should C4 be tokenized later). If you use a smart contract wallet, please contact one of our organizers in Discord in addition to adding the address here.",
       widget: "text",
       required: true,
@@ -35,13 +34,13 @@ const config = {
     {
       name: "title",
       label: "Title",
-      helptext:
+      helpText:
         "Summarize your findings for the bug or vulnerability. (This will be the issue title.)",
       widget: "text",
       required: true,
     },
     {
-      name: "label",
+      name: "risk",
       label: "Risk rating",
       widget: "select",
       required: true,
@@ -71,7 +70,7 @@ const config = {
     {
       name: "details",
       label: "Vulnerability details",
-      helptext: "Link to all referenced sections of code in GitHub",
+      helpText: "Link to all referenced sections of code in GitHub",
       widget: "textarea",
       required: true,
     },
@@ -85,6 +84,7 @@ const initialState = {
   email: "",
   handle: "",
   address: "",
+  risk: "",
   details: mdTemplate,
 };
 
@@ -117,7 +117,9 @@ const wardensQuery = graphql`
 
 const Form = ({ contest, sponsor, repoUrl }) => {
   const [state, setState] = useState(initialState);
-  const [status, setStatus] = useState("unsubmitted");
+  const [status, setStatus] = useState(FormStatus.Unsubmitted);
+  const [hasValidationErrors, setHasValidationErrors] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("An error occurred");
 
   const fields = config.fields;
 
@@ -144,57 +146,45 @@ const Form = ({ contest, sponsor, repoUrl }) => {
         setStatus(FormStatus.Error);
         const message = `Error: ${response.status}`;
         throw new Error(message);
+        if (response) {
+          setErrorMessage(response)
+        }
       }
     })();
   }, []);
 
-  // body contains everything in state except title, label, and status
-
-  // TODO filter out email, eth address, and possibly handle
-  // TODO add eth address to data blob
-  const bodyFields = omit(
-    state,
-    "title",
-    "status",
-    "label",
-    "email",
-    "address"
-  );
-  // const bodyFields = omit(state, "title", "status", "label");
-
-  let markdownBody = [];
-
-  Object.keys(bodyFields).forEach((key) => {
-    const fieldOpts = find(fields, { name: key });
-    const input = bodyFields[key];
-    markdownBody.push(`# ${fieldOpts.label}\n\n${input}\n\n`);
-  });
+  const markdownBody = `# Handle\n\n${state['handle']}\n\n\n# Vulnerability details\n\n${state['details']}\n\n`
 
   const labelSet = [
-    config.labelAll ? config.labelAll : "",
-    state.label ? state.label : "",
+    config.labelAll,
+    state.risk ? state.risk : "",
   ];
 
-  let risk;
-  if (state.label) {
-    risk = state.label.slice(0, 1);
-  }
+  const repo = repoUrl.split("/").pop();
 
   const formData = {
     contest,
     sponsor,
-    repoUrl,
+    repo,
     email: state.email,
     handle: state.handle,
     address: state.address,
-    risk,
+    risk: state.risk ? state.risk.slice(0, 1) : "",
     title: state.title,
-    body: markdownBody.join("\n"),
+    body: markdownBody,
     labels: labelSet,
   };
 
   const handleSubmit = () => {
-    submitFinding(url, formData);
+    // extract required fields from field data for validation check
+    const { email, handle, address, risk, title, body } = formData;
+    const errors = [email, handle, address, risk, title, body].some(field => {
+      return field === '' || field === undefined
+    });
+    setHasValidationErrors(Boolean(errors));
+    if (!errors) {
+      submitFinding(url, formData);
+    }
   };
 
   const handleReset = () => {
@@ -231,13 +221,14 @@ const Form = ({ contest, sponsor, repoUrl }) => {
                   fields={fields}
                   onChange={handleChange}
                   fieldState={state}
+                  showValidationErrors={hasValidationErrors}
                 />
                 <Agreement />
                 <button
                   className="button cta-button centered"
                   type="button"
                   onClick={handleSubmit}
-                  disabled={status !== "unsubmitted"}
+                  disabled={status !== FormStatus.Unsubmitted}
                 >
                   {status === FormStatus.Unsubmitted
                     ? "Create issue"
@@ -247,7 +238,7 @@ const Form = ({ contest, sponsor, repoUrl }) => {
             )}
             {status === FormStatus.Error && (
               <div>
-                <p>An error occurred</p>
+                <p>{errorMessage}</p>
               </div>
             )}
             {status === FormStatus.Submitted && (
