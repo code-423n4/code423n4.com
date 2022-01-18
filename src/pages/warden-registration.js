@@ -74,8 +74,10 @@ const WardenRegistrationForm = ({ handles }) => {
         console.log('response', response)
         try {
           const res = await response.json();
+          console.log('response json', res)
           updateErrorMessage(res.error);
         } catch (err) {
+          console.log('error converting response to json', err)
           setErrorMessage("");
         }
       }
