@@ -34,7 +34,7 @@ function getFileAsBase64(file) {
 
 const WardenRegistrationForm = ({ handles }) => {
   const [state, setState] = useState(initialState);
-  const [status, setStatus] = useState("unsubmitted");
+  const [status, setStatus] = useState(FormStatus.Unsubmitted);
   const [errorMessage, setErrorMessage] = useState("");
   const [captchaToken, setCaptchaToken] = useState("");
   const avatarInputRef = useRef();
@@ -72,15 +72,23 @@ const WardenRegistrationForm = ({ handles }) => {
         setStatus(FormStatus.Error);
         try {
           const res = await response.json();
-          if (res.error) {
-            setErrorMessage(res.error);
-          }
+          updateErrorMessage(res.error);
         } catch (err) {
           setErrorMessage("");
         }
       }
     })();
   }, [avatarInputRef, state.handle, state.link, captchaToken]);
+
+  const updateErrorMessage = (message) => {
+    if (!message) {
+      setErrorMessage("");
+    } else if (message === 'Reference already exists') {
+      setErrorMessage("It looks like this username has already been registered. Don't forget to join us in discord and give us a howl in #i-want-to-be-a-warden");
+    } else {
+      setErrorMessage(message);
+    }
+  }
 
   const handleCaptchaVerification = useCallback((token) => {
     setCaptchaToken(token);
@@ -180,8 +188,7 @@ const WardenRegistrationForm = ({ handles }) => {
         <div style={{ textAlign: "center" }}>
           <h1>Whoops!</h1>
           <p>
-            An error occurred while attempting to register your username. Please
-            try again later.
+            An error occurred while attempting to register your username.
           </p>
           {errorMessage !== "" && (
             <p>
@@ -193,16 +200,13 @@ const WardenRegistrationForm = ({ handles }) => {
       {status === FormStatus.Submitted && (
         <div style={{ textAlign: "center" }}>
           <h1>Thank you!</h1>
-          <p>
-            Your username has been registered, and you're ready to submit
-            findings.
-            <br />
-            We look forward to seeing you in the arena!
-          </p>
+          <p>Your username has been submitted for registration.</p>
           <h2>One more thing...</h2>
           <p>
-            Join us in <a href="https://discord.gg/code4rena">Discord</a> and
-            give us a howl in #i-want-to-be-a-warden!
+            Before we can register you, please join us in{" "}
+            <a href="https://discord.gg/code4rena">Discord</a> and give us a
+            howl in #i-want-to-be-a-warden! <br />
+            We look forward to seeing you in the arena!
           </p>
         </div>
       )}
