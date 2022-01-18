@@ -12,7 +12,6 @@ function isDangerous(s) {
 }
 
 exports.handler = async (event) => {
-  console.log("event", event);
   // only allow POST
   try {
     if (event.httpMethod !== "POST") {
@@ -89,28 +88,32 @@ exports.handler = async (event) => {
       };
     }
 
-    console.log({ files });
+    try {
+      const res = await octokit.createPullRequest({
+        owner: "code-423n4",
+        repo: "code423n4.com",
+        title: `Add warden ${handle}`,
+        body: `This auto-generated PR registers the new warden ${handle}`,
+        head: `warden-${handle}`,
+        changes: [
+          {
+            files,
+            commit: `Add warden ${handle}`,
+          },
+        ],
+      });
 
-    const res = await octokit.createPullRequest({
-      owner: "code-423n4",
-      repo: "code423n4.com",
-      title: `Add warden ${handle}`,
-      body: `This auto-generated PR registers the new warden ${handle}`,
-      head: `warden-${handle}`,
-      changes: [
-        {
-          files,
-          commit: `Add warden ${handle}`,
-        },
-      ],
-    });
-
-    return {
-      statusCode: 201,
-      body: JSON.stringify({ message: `Created PR ${res.data.number}` }),
-    };
+      return {
+        statusCode: 201,
+        body: JSON.stringify({ message: `Created PR ${res.data.number}` }),
+      };
+    } catch (err) {
+      return {
+        statusCode: err.response.status,
+        body: err.response.data.message,
+      }
+    }
   } catch (err) {
-    console.error(err);
     return {
       statusCode: 500,
       body: JSON.stringify({ error: "Internal server error." }),
