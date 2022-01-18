@@ -110,7 +110,7 @@ exports.handler = async (event) => {
     } catch (err) {
       return {
         statusCode: err.response.status,
-        body: JSON.stringify({ message: err.response.data.message.toString() }),
+        body: JSON.stringify({ error: err.response.data.message.toString() }),
       }
     }
   } catch (err) {
