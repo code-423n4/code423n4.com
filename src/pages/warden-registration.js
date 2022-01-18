@@ -71,6 +71,7 @@ const WardenRegistrationForm = ({ handles }) => {
         setStatus(FormStatus.Submitted);
       } else {
         setStatus(FormStatus.Error);
+        console.log('response', response)
         try {
           const res = await response.json();
           updateErrorMessage(res.error);
@@ -82,6 +83,7 @@ const WardenRegistrationForm = ({ handles }) => {
   }, [avatarInputRef, state.handle, state.link, captchaToken]);
 
   const updateErrorMessage = (message) => {
+    console.log('error message: ', message)
     if (!message) {
       setErrorMessage("");
     } else if (message === 'Reference already exists') {
