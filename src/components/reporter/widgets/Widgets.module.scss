@@ -1,5 +1,7 @@
 .Fields {
   border: none;
+  min-width: 0px;
+  display: table-cell;
 }
 
 .Container {
@@ -26,6 +28,24 @@
   }
 }
 
+.ErrorMessage {
+  display: flex;
+  align-items: center;
+  &::before {
+    content: "";
+    width: 8px;
+    height: 8px;
+    border-radius: 100%;
+    background-color: var(--hot-pink);
+    display: inline-block;
+    margin-right: 5px;
+  }
+}
+
+.Placeholder {
+  color: rgba(255, 255, 255, 0.75);
+}
+
 .Control {
   display: block;
   margin: 10px 0;
@@ -34,17 +54,22 @@
 
 .Text {
   width: calc(100% - 20px);
-  margin-bottom: 40px;
+
+  &::placeholder {
+    color: rgba(255, 255, 255, 0.75);
+  }
 }
 
 .Select {
   width: 100%;
-  margin-bottom: 40px;
+  cursor: pointer;
 }
 
 .Textarea {
   height: 250px;
   font-family: inherit;
+  resize: vertical;
+  margin-top: 0;
 }
 
 .Markdown {
@@ -67,5 +92,33 @@
   }
   h3 {
     font-size: 20px;
+  }
+
+  pre {
+    padding: 16px;
+    overflow: auto;
+    font-size: 85%;
+    line-height: 1.45;
+    background-color: var(--border-lightest-background);
+    border-radius: 6px;
+
+    &::-webkit-scrollbar {
+      height: 5px;
+    }
+    
+    &::-webkit-scrollbar-thumb {
+      height: 5px;
+    }
+
+  }
+
+  code {
+    padding: 0;
+    margin: 0;
+    background-color: var(--border-lightest-background);
+    display: inline;
+    overflow: visible;
+    line-height: inherit;
+    word-wrap: normal;
   }
 }
