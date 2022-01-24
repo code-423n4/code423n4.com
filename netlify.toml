@@ -9,3 +9,6 @@
   from = "/*"
   to = "/index.html"
   status = 200
+
+[[context.deploy-preview]]
+  ignore = "bash ./netlify-ignore-branch.sh"
