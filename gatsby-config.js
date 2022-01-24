@@ -120,14 +120,6 @@ module.exports = {
         },
       },
     },
-    // {
-    //   resolve: `gatsby-plugin-netlify-cms`,
-    //   options: {
-    //     manualInit: true,
-    //     modulePath: `${__dirname}/src/cms/cms.js`,
-    //     htmlTitle: "code423n4.com admin",
-    //   },
-    // },
     `gatsby-plugin-sass`,
   ],
 };
