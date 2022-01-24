@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [[echo $BRANCH | grep "^warden-"]]
+if echo $BRANCH | grep "^warden-"
 then
   exit 0
 else
