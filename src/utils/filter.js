@@ -4,15 +4,15 @@ import { sortByContestStart } from "./sort";
 function contestsByState({ contests }) {
   const filteredContests = {
     active: contests.filter(
-      (c) => getDates(c.node.start_time, c.node.end_time).state === "active"
+      (c) => getDates(c.node.start_time, c.node.end_time).contestStatus === "active"
     ),
     soon: contests.filter(
-      (c) => getDates(c.node.start_time, c.node.end_time).state === "soon"
+      (c) => getDates(c.node.start_time, c.node.end_time).contestStatus === "soon"
     ),
     completed: contests
       .filter(
         (c) =>
-          getDates(c.node.start_time, c.node.end_time).state === "completed"
+          getDates(c.node.start_time, c.node.end_time).contestStatus === "completed"
       )
       .sort(sortByContestStart("reverse")),
   };

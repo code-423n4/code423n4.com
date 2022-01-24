@@ -1,5 +1,4 @@
 import React from "react";
-import { map, pick } from "lodash";
 import { useTable, useSortBy } from "react-table";
 import LeaderboardHandle from "./LeaderboardHandle";
 
