@@ -16,6 +16,14 @@
   }
 }
 
+.Invalid.ReactSelect {
+  :global {
+    .react-select__control {
+      border: 2px solid var(--hot-pink)
+    }
+  }
+}
+
 .ReactSelect {
   :global {
     .react-select__control {
@@ -58,6 +66,11 @@
     }
 
     .react-select__placeholder {
+      color: white;
+      opacity: 0.75;
+    }
+
+    .react-select__input {
       color: white;
     }
   }

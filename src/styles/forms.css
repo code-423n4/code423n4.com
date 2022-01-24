@@ -22,6 +22,11 @@ textarea {
   border: none;
 }
 
+input[type="text"].input-error,
+.input-error {
+  border: 2px solid var(--hot-pink)
+}
+
 label {
   color: white;
 }
