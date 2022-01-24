@@ -1,8 +1,8 @@
 ---
-sponsor: "Perennial"
+sponsor: "Perennial Finance"
 slug: "2021-12-perennial"
 date: "2022-01-24"  # the date this report is published to the C4 website
-title: "Perennial contest"
+title: "Perennial Finance contest"
 findings: "https://github.com/code-423n4/2021-12-perennial-findings/issues"
 contest: 60
 ---
