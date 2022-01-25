@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if echo $HEAD | grep "^warden-"
+if echo $HEAD | grep "^\(warden\|leaderboard\|report\)-"
 then
   exit 0
 else
