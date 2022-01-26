@@ -1,8 +1,8 @@
 ---
-sponsor: "Perennial Finance"
+sponsor: "Perennial"
 slug: "2021-12-perennial"
-date: "2022-01-24"  # the date this report is published to the C4 website
-title: "Perennial Finance contest"
+date: "2022-01-24" 
+title: "Perennial contest"
 findings: "https://github.com/code-423n4/2021-12-perennial-findings/issues"
 contest: 60
 ---
@@ -15,11 +15,11 @@ Code4rena (C4) is an open organization consisting of security researchers, audit
 
 A C4 code contest is an event in which community participants, referred to as Wardens, review, audit, or analyze smart contract logic in exchange for a bounty provided by sponsoring projects.
 
-During the code contest outlined in this document, C4 conducted an analysis of Perennial Finance contest smart contract system written in Solidity. The code contest took place between December 9—December 15 2021.
+During the code contest outlined in this document, C4 conducted an analysis of Perennial contest smart contract system written in Solidity. The code contest took place between December 9—December 15 2021.
 
 ## Wardens
 
-13 Wardens contributed reports to the Perennial Finance contest:
+13 Wardens contributed reports to the Perennial contest:
 
 1. [leastwood](https://twitter.com/liam_eastwood13) 
 1. [kenzo](https://twitter.com/KenzoAgada)
@@ -49,7 +49,7 @@ C4 analysis also identified 5 non-critical recommendations and 22 gas optimizati
 
 # Scope
 
-The code under review can be found within the [C4 Perennial Finance contest repository](https://github.com/code-423n4/2021-12-perennial), and is composed of 38 smart contracts written in the Solidity programming language and includes 3531 lines of Solidity code and 7 lines of JavaScript.
+The code under review can be found within the [C4 Perennial contest repository](https://github.com/code-423n4/2021-12-perennial), and is composed of 38 smart contracts written in the Solidity programming language and includes 3531 lines of Solidity code and 7 lines of JavaScript.
 
 # Severity Criteria
 
