@@ -7,7 +7,7 @@ const ReportForm = (props) => {
     <div>
       <Form
         repoUrl={props.data.contestsCsv.findingsRepo}
-        contest={props.data.contestsCsv.title}
+        contest={props.data.contestsCsv.contestid}
         sponsor={props.data.contestsCsv.sponsor.name}
       />
     </div>
