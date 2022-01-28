@@ -3,3 +3,5 @@ node_modules
 public
 .cache
 .nova
+.env
+yarn-error.log

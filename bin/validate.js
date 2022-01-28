@@ -193,7 +193,7 @@ async function validateContests() {
     // Check that contest.sponsor is a registered organization.
     if (!registeredOrganizations.has(parsedContest.sponsor)) {
       console.error(
-        `Contest at ${contestFile} uses unknown organization: ${parsedContest.sponsor}`
+        `Contest uses unknown organization: ${parsedContest.sponsor}`
       );
       passedValidation = false;
       continue;
@@ -202,7 +202,7 @@ async function validateContests() {
     // Check that contest.contestid is unique.
     if (existingContestIds.has(parsedContest.contestid)) {
       console.error(
-        `Contest at ${contestFile} uses duplicate contestid: ${parsedContest.contestid}`
+        `Contest uses duplicate contestid: ${parsedContest.contestid}`
       );
       passedValidation = false;
       continue;
@@ -222,11 +222,13 @@ async function validateContests() {
 
 async function validateFindings() {
   let passedValidation = true;
-  const findingsFile = "./_data/findings/findings.json";
-  const blob = await readFile(findingsFile);
   let parsedFindings;
   try {
-    parsedFindings = JSON.parse(blob);
+    parsedFindings = await csv({
+      colParser: {
+        contest: "number",
+      },
+    }).fromFile("./_data/findings/findings.csv");
   } catch (err) {
     console.error(`Unable to parse JSON file at ${findingsFile}`);
     passedValidation = false;
@@ -245,7 +247,7 @@ async function validateFindings() {
     }
 
     if (!uniqueContestIds.has(finding.contest)) {
-      unknownContestIds.add(finding.contestid);
+      unknownContestIds.add(finding.contest);
       passedValidation = false;
       continue;
     }

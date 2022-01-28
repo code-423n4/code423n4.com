@@ -5,9 +5,13 @@
 }
 
 .hero h1 {
-  font-size: 80px;
-  text-shadow: 0 7px rgba(51, 0, 101, 1);
-  margin: 0 0 60px 0;
+  font-family: "Roboto", sans-serif;
+  font-size: 75px;
+  color: #ffffff;
+  letter-spacing: 0;
+  text-shadow: 2px 2px 19px rgba(132, 36, 226, 0.77);
+  margin: 20px 0;
+  text-align: center;
 }
 
 .hero h1 span {
@@ -17,6 +21,13 @@
 .definitions {
   grid-template-columns: 1fr 1fr 1fr;
   display: grid;
+}
+
+.hero h5 {
+  max-width: 800px;
+  text-align: center;
+  margin: 0 auto var(--page-margin);
+  font-size: 26px;
 }
 
 .definitions div {
@@ -35,16 +46,38 @@
   font-family: "Roboto", sans-serif;
   font-weight: 800;
   text-transform: uppercase;
+  font-size: 18px;
+  margin-bottom: 0px;
 }
 
-@media (max-width: 600px) {
+.definitions h3 + p {
+  margin-top: 0.5em;
+}
+
+@media screen and (max-width: 900px) {
+  .hero h1 {
+    font-size: 60px;
+  }
+  .hero h5 {
+    font-size: 25px;
+  }
+}
+
+@media (max-width: 645px) {
   .hero {
-    margin: 40px 10px 0 10px;
+    margin: 40px 0 0;
   }
 
   .hero h1 {
     font-size: 40px;
     margin-bottom: 20px;
+  }
+  .hero h1 span {
+    display: inline;
+  }
+
+  .hero h5 {
+    font-size: 20px;
   }
 
   .definitions {

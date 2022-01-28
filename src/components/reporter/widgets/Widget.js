@@ -1,10 +1,10 @@
 import React from "react";
-import { TextField, TextArea, SelectField } from "./";
+import { SelectField, TextArea, TextField } from "./";
 import WardenField from "./WardenField";
 
 const Widget = (props) => {
-  const { field, fieldState } = props;
-  const { widget, name, label, helptext, required, options } = field;
+  const { field, fieldState, isInvalid } = props;
+  const { widget, name, required, options } = field;
 
   function handleChange(e) {
     props.onChange(e);
@@ -13,44 +13,40 @@ const Widget = (props) => {
   const textFieldWidget = (
     <TextField
       name={name}
-      label={label}
-      helptext={helptext}
       required={required}
       onChange={handleChange}
       fieldState={fieldState[name]}
+      isInvalid={isInvalid}
     />
   );
 
   const textAreaWidget = (
     <TextArea
       name={name}
-      label={label}
-      helptext={helptext}
       required={required}
       onChange={handleChange}
       fieldState={fieldState[name]}
+      isInvalid={isInvalid}
     />
   );
 
   const selectFieldWidget = (
     <SelectField
       name={name}
-      label={label}
-      helptext={helptext}
       required={required}
       onChange={handleChange}
       options={options}
       fieldState={fieldState[name]}
+      isInvalid={isInvalid}
     />
   );
 
   const wardenFieldWidget = (
     <WardenField
-      label={label}
-      helptext={helptext}
       onChange={handleChange}
       options={options}
       fieldState={fieldState[name]}
+      isInvalid={isInvalid}
     />
   );
 

@@ -1,6 +1,20 @@
 import path from "path";
 import SchemaCustomization from "./schema";
 import { createFilePath } from "gatsby-source-filesystem";
+import { Octokit } from "@octokit/core";
+import { graphql } from "@octokit/graphql";
+import format from 'date-fns/format';
+
+const { token } = require("./functions/_config");
+
+const octokit = new Octokit({
+  auth: token,
+});
+const graphqlWithAuth = graphql.defaults({
+  headers: {
+    authorization: `Bearer ${token}`,
+  },
+});
 
 function slugify(text) {
   return text
@@ -13,14 +27,73 @@ function slugify(text) {
     .replace(/-+$/, ""); // Trim - from end of text
 }
 
-function contestPermalink(contestNode) {
+function contestSlug(contestNode) {
   const startDate = new Date(contestNode.start_time);
-  const year = startDate.getFullYear();
-  const month = `${startDate.getMonth() + 1}`.padStart(2, "0");
   const title = slugify(contestNode.title);
-  const submissionPath = `/${year}-${month}-${title}/submit`;
+  const slug = `${format(startDate, 'yyyy-MM')}-${title}`;
 
-  return submissionPath;
+  return slug;
+}
+
+function contestPermalink(contestNode) {
+  return `/contests/${contestSlug(contestNode)}`;
+}
+
+function contestSubmissionPermalink(contestNode) {
+  return `/contests/${contestSlug(contestNode)}/submit`;
+}
+
+function contestArtworkPermalink(contestNode) {
+  const fs = require("fs");
+  const slug = contestSlug(contestNode);
+  const path = `static/images/contests/${slug}.jpg`;
+  if (fs.existsSync(path)) {
+    // found the image
+    return `/images/contests/${slug}.jpg`;
+  } else {
+    console.warn("[MISSING IMAGE]:", path);
+    return null;
+  }
+}
+
+function getRepoName(contestNode) {
+  const regex = "([^/]+$)";
+  const url = contestNode.repo;
+
+  const result = url.match(regex);
+  const repoName = result[0];
+  return repoName;
+}
+
+async function fetchReadmeMarkdown(contestNode) {
+  const { data } = await octokit.request("GET /repos/{owner}/{repo}/readme", {
+    owner: "code-423n4",
+    repo: `${getRepoName(contestNode)}`,
+    headers: {
+      accept: "application/vnd.github.v3.html+json",
+    },
+  });
+
+  return data;
+}
+
+async function fetchSocialImage(contestNode) {
+  const { repository } = await graphqlWithAuth(
+    `query socialImage($repo: String!) {
+    repository(owner: "code-423n4", name: $repo) {
+      openGraphImageUrl
+      usesCustomOpenGraphImage
+    }
+  }`,
+    {
+      repo: getRepoName(contestNode),
+    }
+  );
+  if (repository.usesCustomOpenGraphImage) {
+    return repository.openGraphImageUrl;
+  }
+
+  return null;
 }
 
 const queries = {
@@ -35,6 +108,9 @@ const queries = {
           findingsRepo
           fields {
             submissionPath
+            contestPath
+            readmeContent
+            artPath
           }
         }
       }
@@ -43,8 +119,7 @@ const queries = {
 `,
 };
 
-exports.createSchemaCustomization = (helpers) => {
-  const { actions } = helpers;
+exports.createSchemaCustomization = ({ actions }) => {
   const { createTypes } = actions;
   try {
     createTypes(SchemaCustomization);
@@ -53,7 +128,7 @@ exports.createSchemaCustomization = (helpers) => {
   }
 };
 
-exports.onCreateNode = ({ node, getNode, actions }) => {
+exports.onCreateNode = async ({ node, getNode, actions }) => {
   const { createNodeField } = actions;
   if (node.internal.type === `MarkdownRemark`) {
     const value = createFilePath({ node, getNode });
@@ -82,8 +157,28 @@ exports.onCreateNode = ({ node, getNode, actions }) => {
   if (node.internal.type === `ContestsCsv`) {
     createNodeField({
       node,
-      name: `submissionPath`,
+      name: `contestPath`,
       value: contestPermalink(node),
+    });
+
+    createNodeField({
+      node,
+      name: `submissionPath`,
+      value: contestSubmissionPermalink(node),
+    });
+
+    const readmeMarkdown = await fetchReadmeMarkdown(node);
+    createNodeField({
+      node,
+      name: `readmeContent`,
+      value: readmeMarkdown,
+    });
+
+    const socialImageUrl = await fetchSocialImage(node);
+    createNodeField({
+      node,
+      name: `artPath`,
+      value: socialImageUrl,
     });
   }
 };
@@ -93,6 +188,7 @@ exports.createPages = async ({ graphql, actions }) => {
 
   let contests = await graphql(queries.contests);
   const formTemplate = path.resolve("./src/layouts/ReportForm.js");
+  const contestTemplate = path.resolve("./src/layouts/ContestLayout.js");
   contests.data.contests.edges.forEach((contest) => {
     if (contest.node.findingsRepo) {
       createPage({
@@ -103,5 +199,13 @@ exports.createPages = async ({ graphql, actions }) => {
         },
       });
     }
+
+    createPage({
+      path: contest.node.fields.contestPath,
+      component: contestTemplate,
+      context: {
+        contestId: contest.node.contestid,
+      },
+    });
   });
 };

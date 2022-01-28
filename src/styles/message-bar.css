@@ -1,30 +1,66 @@
 .message-bar {
   display: flex;
-  background: url(../../static/images/message-background-stars-hot.png);
   padding: 10px;
   justify-content: center;
   align-items: center;
   position: relative;
   color: white;
   font-family: "Roboto", sans-serif;
-  border-top: 4px solid rgba(141,49,239,1);
-  border-bottom: 3px solid rgba(141,49,239,1);
-  opacity: .9
+  box-shadow: 0px 3px 20px 0px rgb(0 0 0 / 25%);
+  box-sizing: border-box;
 }
 
 .message-bar::before {
+  /* I broke this piece off so we could apply css filters/opacity to the background image if we wanted to */
+  content: "";
   position: absolute;
   top: 0;
   bottom: 0;
   left: 0;
   right: 0;
-  background: rgba(141,49,239,0.3);
+  background: url(../../static/images/message-bar-bkg.png) no-repeat;
+  background-size: cover;
+  background-position: center center;
   display: block;
-  content: '';
+}
+
+.message-bar::after {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-image: linear-gradient(
+    90deg,
+    rgba(53, 65, 248, 0.87) 0%,
+    rgba(133, 0, 255, 0.72) 13%,
+    rgba(53, 65, 248, 0.57) 25%,
+    rgba(145, 54, 227, 0.68) 38%,
+    rgba(132, 36, 226, 0.93) 51%,
+    rgba(145, 54, 227, 0.68) 66%,
+    rgba(53, 65, 248, 0.57) 76%,
+    rgba(133, 0, 255, 0.56) 88%,
+    rgba(26, 75, 255, 0.31) 100%
+  );
+  display: block;
+  content: "";
+}
+
+@media (max-width: 600px) {
+  .message-bar::before {
+    background-image: radial-gradient(
+      90deg,
+      rgba(133, 0, 255, 0.72) 0%,
+      rgba(53, 65, 248, 0.57) 25%,
+      rgba(132, 36, 226, 0.93) 51%,
+      rgba(53, 65, 248, 0.57) 76%,
+      rgba(26, 75, 255, 0.31) 100%
+    );
+    background-position: center center;
+  }
 }
 
 .message-bar p {
-  text-shadow: 2px 2px 8px #000;
   color: white;
   padding: 0;
   margin: 0;
@@ -33,15 +69,15 @@
 }
 
 .message-bar a {
-  border: 1px solid rgba(255,255,255,.5);
+  border: 1px solid rgba(255, 255, 255, 0.5);
   padding: 5px 15px;
   margin-left: 10px;
   display: inline-block;
 }
 
 .message-bar a:hover {
-  background: rgb(255,255,255, .3);
+  background: rgb(255, 255, 255, 0.3);
   color: white;
   text-decoration: none;
-  border: 1px solid rgb(255,255,255, .5);
+  border: 1px solid rgb(255, 255, 255, 0.5);
 }
