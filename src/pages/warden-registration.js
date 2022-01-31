@@ -46,9 +46,8 @@ const WardenRegistrationForm = ({ handles }) => {
     });
   }, []);
 
-  const url = `/.netlify/functions/register-warden`;
-
   const submitRegistration = useCallback(() => {
+    const url = `/.netlify/functions/register-warden`;
     (async () => {
       setStatus(FormStatus.Submitting);
       let image = undefined;
@@ -118,7 +117,7 @@ const WardenRegistrationForm = ({ handles }) => {
               placeholder="Username"
               value={state.handle}
               onChange={handleChange}
-              maxlength={25}
+              maxLength={25}
             />
             {handles.has(state.handle) && (
               <p className={widgetStyles.Help}>

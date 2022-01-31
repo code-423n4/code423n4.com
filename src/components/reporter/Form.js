@@ -144,10 +144,9 @@ const Form = ({ contest, sponsor, repoUrl }) => {
         setStatus(FormStatus.Submitted);
       } else {
         setStatus(FormStatus.Error);
-        const message = `Error: ${response.status}`;
-        throw new Error(message);
-        if (response) {
-          setErrorMessage(response)
+        const message = await response.json();
+        if (message) {
+          setErrorMessage(message);
         }
       }
     })();
