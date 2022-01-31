@@ -22,9 +22,19 @@ const ContestLayout = (props) => {
     end_time,
   } = props.data.contestsCsv;
 
+  const { markdownRemark } = props.data;
+
   const t = getDates(start_time, end_time);
   const dateDescription = `${amount}\n${t.startDay}—${t.endDay}`;
   const pageTitle = `Code4rena ${title}`;
+
+  const canViewReport = Boolean(markdownRemark && markdownRemark.frontmatter);
+  let reportUrl = "";
+  if (canViewReport) {
+    reportUrl = markdownRemark.frontmatter.altUrl
+      ? markdownRemark.frontmatter.altUrl
+      : `/reports/${props.data.markdownRemark.frontmatter.slug}`;
+  }
 
   return (
     <DefaultLayout
@@ -88,7 +98,9 @@ const ContestLayout = (props) => {
                 </a>
               ) : null}
 
-              {t.contestStatus === "active" && findingsRepo && fields.submissionPath ? (
+              {t.contestStatus === "active" &&
+              findingsRepo &&
+              fields.submissionPath ? (
                 <Link
                   to={fields.submissionPath}
                   className="button cta-button button-medium secondary"
@@ -96,22 +108,10 @@ const ContestLayout = (props) => {
                   Submit Finding
                 </Link>
               ) : null}
-              {props.data.markdownRemark &&
-              props.data.markdownRemark.frontmatter &&
-              !props.data.markdownRemark.frontmatter.altUrl ? (
+              {canViewReport ? (
                 <Link
-                  to={`/reports/${props.data.markdownRemark.frontmatter.slug}`}
-                  className="button cta-button button-medium primary"
-                >
-                  View Report
-                </Link>
-              ) : null}
-              {props.data.markdownRemark &&
-              props.data.markdownRemark.frontmatter &&
-              props.data.markdownRemark.frontmatter.altUrl ? (
-                <Link
-                  to={props.data.markdownRemark.frontmatter.altUrl}
-                  className="button cta-button button-medium primary"
+                  to={reportUrl}
+                  className="button cta-button button-medium secondary"
                 >
                   View Report
                 </Link>
