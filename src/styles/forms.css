@@ -24,7 +24,7 @@ textarea {
 
 input[type="text"].input-error,
 .input-error {
-  border: 2px solid var(--hot-pink)
+  border: 2px solid var(--hot-pink);
 }
 
 label {
@@ -71,6 +71,22 @@ label {
 
 .thank-you ol li {
   margin-bottom: 20px;
+}
+
+.warning-message {
+  line-height: 140%;
+  font-size: 0.9em;
+  border: 1px solid var(--hot-pink);
+  box-shadow: 0px 0px 3px var(--hot-pink);
+  border-radius: 3px;
+  padding: 10px;
+}
+
+/* TODO: delete me on or after Feb 3, 2022 */
+.C81 .warning-message,
+.C78 .warning-message,
+.C72 .warning-message {
+  display: none !important;
 }
 
 /* TODO: finish this battle with flexbox */
