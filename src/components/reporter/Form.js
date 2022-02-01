@@ -238,7 +238,7 @@ const Form = ({ contest, sponsor, repoUrl }) => {
               </div>
             )}
             {status === FormStatus.Submitted && (
-              <div style={{ textAlign: "center" }}>
+              <div className="centered-text">
                 <h1>Thank you!</h1>
                 <p>Your report has been submitted.</p>
                 <button
