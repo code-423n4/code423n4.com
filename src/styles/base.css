@@ -210,9 +210,7 @@ strong {
 }
 
 a {
-  text-decoration: none;
   color: #fff;
-  border-bottom: 1px solid transparent;
 }
 
 a:hover {
@@ -228,7 +226,7 @@ h4 a:hover,
 h5 a:hover,
 h6 a:hover,
 blockquote a:hover {
-  border-bottom: 1px solid var(--orange);
+  color: var(--orange);
 }
 
 h1.page-header {
