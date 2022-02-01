@@ -5,6 +5,7 @@
   --hot-blue: #1a4bff;
   --blue: #361ee0;
   --hot-pink: #ff108b;
+  --orange: #ff4000;
 
   --header-background-purple: #190b3e;
   --background-purple: #160f29;
@@ -182,7 +183,7 @@ pre {
 }
 
 pre::-webkit-scrollbar {
-  width: 10px;
+  height: 10px;
 }
 
 pre::-webkit-scrollbar-track {
@@ -192,7 +193,7 @@ pre::-webkit-scrollbar-track {
 
 pre::-webkit-scrollbar-thumb {
   background-color: var(--light-purple);
-  width: 5px;
+  height: 5px;
 }
 
 pre code {
@@ -215,7 +216,7 @@ a {
 }
 
 a:hover {
-  color: #ff4000;
+  color: var(--orange);
 }
 
 p a:hover,
@@ -227,7 +228,7 @@ h4 a:hover,
 h5 a:hover,
 h6 a:hover,
 blockquote a:hover {
-  border-bottom: 1px solid #ff4000;
+  border-bottom: 1px solid var(--orange);
 }
 
 h1.page-header {

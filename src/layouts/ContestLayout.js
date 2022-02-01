@@ -42,9 +42,9 @@ const ContestLayout = (props) => {
       <>
         <div className="contest-wrapper contest-artwork-wrapper">
           <div className="contest-tippy-top">
-            {t.state === "soon" || t.state === "active" ? (
+            {t.contestStatus === "soon" || t.contestStatus === "active" ? (
               <Countdown
-                state={t.state}
+                state={t.contestStatus}
                 start={start_time}
                 end={end_time}
                 isPreview={findingsRepo === ""}
@@ -85,7 +85,7 @@ const ContestLayout = (props) => {
             <h1>{title}</h1>
             <p>{details}</p>
             <div className="button-wrapper">
-              {t.state !== "soon" ? (
+              {t.contestStatus !== "soon" ? (
                 <a
                   href={repo}
                   className="button cta-button button-medium primary"
@@ -94,7 +94,7 @@ const ContestLayout = (props) => {
                 </a>
               ) : null}
 
-              {t.state === "active" && findingsRepo && fields.submissionPath ? (
+              {t.contestStatus === "active" && findingsRepo && fields.submissionPath ? (
                 <Link
                   to={fields.submissionPath}
                   className="button cta-button button-medium secondary"
@@ -118,12 +118,12 @@ const ContestLayout = (props) => {
 
             <TabPanel>
               <div className="contest-wrapper">
-                {t.state === "soon" ? (
+                {t.contestStatus === "soon" ? (
                   <div className="coming-soon">
                     <h1>Contest details coming soon</h1>
                     <p>Check back when this contest launches in:</p>
                     <Countdown
-                      state={t.state}
+                      state={t.contestStatus}
                       start={start_time}
                       end={end_time}
                       isPreview={findingsRepo === ""}
