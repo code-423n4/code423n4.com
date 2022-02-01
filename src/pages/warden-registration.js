@@ -83,12 +83,14 @@ const WardenRegistrationForm = ({ handles }) => {
   const updateErrorMessage = (message) => {
     if (!message) {
       setErrorMessage("");
-    } else if (message === 'Reference already exists') {
-      setErrorMessage("It looks like this username has already been registered. Don't forget to join us in discord and give us a howl in #i-want-to-be-a-warden");
+    } else if (message === "Reference already exists") {
+      setErrorMessage(
+        "It looks like this username has already been registered. Don't forget to join us in discord and give us a howl in #i-want-to-be-a-warden"
+      );
     } else {
       setErrorMessage(message);
     }
-  }
+  };
 
   const handleCaptchaVerification = useCallback((token) => {
     setCaptchaToken(token);
@@ -187,9 +189,7 @@ const WardenRegistrationForm = ({ handles }) => {
       {status === FormStatus.Error && (
         <div style={{ textAlign: "center" }}>
           <h1>Whoops!</h1>
-          <p>
-            An error occurred while attempting to register your username.
-          </p>
+          <p>An error occurred while attempting to register your username.</p>
           {errorMessage !== "" && (
             <p>
               <small>{errorMessage}</small>
@@ -198,7 +198,7 @@ const WardenRegistrationForm = ({ handles }) => {
         </div>
       )}
       {status === FormStatus.Submitted && (
-        <div style={{ textAlign: "center" }}>
+        <div className="centered-text">
           <h1>Thank you!</h1>
           <p>Your username has been submitted for registration.</p>
           <h2>One more thing...</h2>

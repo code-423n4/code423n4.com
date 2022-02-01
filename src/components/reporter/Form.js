@@ -152,12 +152,9 @@ const Form = ({ contest, sponsor, repoUrl }) => {
     })();
   }, []);
 
-  const markdownBody = `# Handle\n\n${state['handle']}\n\n\n# Vulnerability details\n\n${state['details']}\n\n`
+  const markdownBody = `# Handle\n\n${state["handle"]}\n\n\n# Vulnerability details\n\n${state["details"]}\n\n`;
 
-  const labelSet = [
-    config.labelAll,
-    state.risk ? state.risk : "",
-  ];
+  const labelSet = [config.labelAll, state.risk ? state.risk : ""];
 
   const repo = repoUrl.split("/").pop();
 
@@ -177,8 +174,8 @@ const Form = ({ contest, sponsor, repoUrl }) => {
   const handleSubmit = () => {
     // extract required fields from field data for validation check
     const { email, handle, address, risk, title, body } = formData;
-    const errors = [email, handle, address, risk, title, body].some(field => {
-      return field === '' || field === undefined
+    const errors = [email, handle, address, risk, title, body].some((field) => {
+      return field === "" || field === undefined;
     });
     setHasValidationErrors(Boolean(errors));
     if (!errors) {
@@ -241,7 +238,7 @@ const Form = ({ contest, sponsor, repoUrl }) => {
               </div>
             )}
             {status === FormStatus.Submitted && (
-              <div>
+              <div className="centered-text">
                 <h1>Thank you!</h1>
                 <p>Your report has been submitted.</p>
                 <button

@@ -32,6 +32,7 @@ nav a {
   font-weight: 800;
   font-family: "Roboto", sans-serif;
   text-transform: uppercase;
+  text-decoration: none;
 }
 
 .logo {
