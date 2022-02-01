@@ -168,8 +168,8 @@ const ContestLayout = (props) => {
 };
 export default ContestLayout;
 
-export const myQuery = graphql`
-  query MyQuery($contestId: Int) {
+export const contestLayoutQuery = graphql`
+  query contestLayoutQuery($contestId: Int) {
     markdownRemark(
       frontmatter: { contest: { contestid: { eq: $contestId } } }
     ) {
