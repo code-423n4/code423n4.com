@@ -9,6 +9,7 @@ import ContestFAQ from "../pages/contests/faq";
 
 const ContestLayout = (props) => {
   const [artOpen, setArtOpen] = useState(false);
+
   const {
     title,
     sponsor,
@@ -21,22 +22,25 @@ const ContestLayout = (props) => {
     end_time,
   } = props.data.contestsCsv;
 
+  const { markdownRemark } = props.data;
+
   const t = getDates(start_time, end_time);
   const dateDescription = `${amount}\n${t.startDay}—${t.endDay}`;
   const pageTitle = `Code4rena ${title}`;
-  let art;
 
-  if (fields.artPath) {
-    art = fields.artPath;
-  } else {
-    art = null;
+  const canViewReport = Boolean(markdownRemark && markdownRemark.frontmatter);
+  let reportUrl = "";
+  if (canViewReport) {
+    reportUrl = markdownRemark.frontmatter.altUrl
+      ? markdownRemark.frontmatter.altUrl
+      : `/reports/${props.data.markdownRemark.frontmatter.slug}`;
   }
 
   return (
     <DefaultLayout
       pageTitle={pageTitle}
       bodyClass="contest-page"
-      preview={art}
+      preview={fields.artPath}
       pageDescription={dateDescription}
     >
       <>
@@ -94,12 +98,22 @@ const ContestLayout = (props) => {
                 </a>
               ) : null}
 
-              {t.contestStatus === "active" && findingsRepo && fields.submissionPath ? (
+              {t.contestStatus === "active" &&
+              findingsRepo &&
+              fields.submissionPath ? (
                 <Link
                   to={fields.submissionPath}
                   className="button cta-button button-medium secondary"
                 >
                   Submit Finding
+                </Link>
+              ) : null}
+              {canViewReport ? (
+                <Link
+                  to={reportUrl}
+                  className="button cta-button button-medium secondary"
+                >
+                  View Report
                 </Link>
               ) : null}
             </div>
@@ -154,8 +168,17 @@ const ContestLayout = (props) => {
 };
 export default ContestLayout;
 
-export const pageQuery = graphql`
-  query ContestsId($contestId: Int) {
+export const contestLayoutQuery = graphql`
+  query contestLayoutQuery($contestId: Int) {
+    markdownRemark(
+      frontmatter: { contest: { contestid: { eq: $contestId } } }
+    ) {
+      frontmatter {
+        altUrl
+        slug
+        title
+      }
+    }
     contestsCsv(contestid: { eq: $contestId }) {
       amount
       contestid

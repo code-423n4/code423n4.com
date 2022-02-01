@@ -30,7 +30,7 @@ export default function Contests({ data }) {
         <>
           <hr />
           <section className="cosmos-wrapper">
-            <h2>Current Cosmos contests</h2>
+            <h2>Cosmos contests</h2>
             <section>
               <ContestList contests={contests} />
             </section>
@@ -58,7 +58,7 @@ export const query = graphql`
   query {
     contests: allContestsCsv(
       filter: { hide: { ne: true }, league: { eq: "cosmos" } }
-      sort: { fields: start_time, order: ASC }
+      sort: { fields: start_time, order: DESC }
     ) {
       edges {
         node {
@@ -84,6 +84,8 @@ export const query = graphql`
           }
           fields {
             submissionPath
+            contestPath
+            artPath
           }
         }
       }
