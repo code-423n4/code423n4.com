@@ -13,7 +13,7 @@ const SelectField = ({ name, options, onChange, isInvalid, contest }) => {
 
     if (
       (name === "risk" && value.slice(0, 1) <= 1) ||
-      value.slice(0, 1) === "G"
+      (name === "risk" && value.slice(0, 1)) === "G"
     ) {
       setQaMessage(true);
     } else {
@@ -27,8 +27,10 @@ const SelectField = ({ name, options, onChange, isInvalid, contest }) => {
         <div>
           <p className="warning-message">
             👋 Hi there! We've changed the way we are handling low risk,
-            non-critical, and gas optimization findings. Please submit them all
-            as one report. Check out <a href="">the FAQ</a> for more details.
+            non-critical, and gas optimization findings. Please submit all low
+            risk and non critical findings as one report, and gas optimization
+            findings as another, separate report. Check out{" "}
+            <a href="">the FAQ</a> for more details.
           </p>
         </div>
       )}
