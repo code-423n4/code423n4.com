@@ -29,7 +29,8 @@ const SelectField = ({ name, options, onChange, isInvalid, contest }) => {
             👋 Hi there! We've changed the way we are handling low risk,
             non-critical, and gas optimization findings. Please submit all low
             risk and non critical findings as one report, and gas optimization
-            findings as another, separate report. Check out{" "}
+            findings as another, separate report. Submissions for medium and
+            high risk findings are not changing. Check out{" "}
             <a href="">the FAQ</a> for more details.
           </p>
         </div>
