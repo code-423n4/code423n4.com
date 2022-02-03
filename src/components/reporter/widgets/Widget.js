@@ -2,12 +2,11 @@ import React from "react";
 import { SelectField, TextArea, TextField } from "./";
 import WardenField from "./WardenField";
 
-const Widget = (props) => {
-  const { field, fieldState, isInvalid } = props;
+const Widget = ({ field, fieldState, isInvalid, onChange }) => {
   const { widget, name, required, options } = field;
 
   function handleChange(e) {
-    props.onChange(e);
+    onChange(e);
   }
 
   const textFieldWidget = (
