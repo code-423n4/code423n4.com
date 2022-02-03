@@ -66,7 +66,11 @@ const LinesOfCode = (onChange) => {
       <p>
         Provide GitHub links, including line numbers, to all instances of this
         bug throughout the repo. (
-        <a href="https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/creating-a-permanent-link-to-a-code-snippet#linking-to-code">
+        <a
+          href="https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/creating-a-permanent-link-to-a-code-snippet#linking-to-code"
+          target="_blank"
+          aria-label="How do I link to line number on GitHub? Opens in new window."
+        >
           How do I link to line numbers on GitHub?
         </a>
         )
