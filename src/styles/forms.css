@@ -119,10 +119,10 @@ label {
 
 .add-line-button::before {
   content: "+";
-  border: 1px solid white;
+  border: 2px solid white;
   border-radius: 50%;
   width: 24px;
-  font-size: 16px;
+  font-size: 17px;
   aspect-ratio: 1/1;
   margin-right: 10px;
   display: inline-block;
