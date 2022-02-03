@@ -206,7 +206,7 @@ const Form = ({ contest, sponsor, repoUrl }) => {
             <h1>{sponsor} contest finding</h1>
             {(status === FormStatus.Unsubmitted ||
               status === FormStatus.Submitting) && (
-              <form>
+              <form className={`C${contest}`}>
                 <input
                   type="hidden"
                   id="contest"
