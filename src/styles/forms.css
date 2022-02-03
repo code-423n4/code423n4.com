@@ -82,6 +82,75 @@ label {
   padding: 10px;
 }
 
+.lines-of-code-input {
+  background: var(--background-purple);
+  margin-left: -40px;
+  margin-right: -40px;
+  margin: 0 -40px 20px;
+  padding: 20px 45px;
+}
+
+.lines-of-code-input p {
+  font-size: 13px;
+}
+
+.input-and-close-button {
+  display: flex;
+  padding: 0;
+}
+
+.input-and-close-button:first-of-type button {
+  display: none;
+}
+
+.add-line-button {
+  cursor: pointer;
+  background: none;
+  border: none;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  display: inline-block;
+}
+
+.add-line-button:hover {
+  text-decoration: underline;
+}
+
+.add-line-button::before {
+  content: "+";
+  border: 1px solid white;
+  border-radius: 50%;
+  width: 24px;
+  font-size: 16px;
+  aspect-ratio: 1/1;
+  margin-right: 10px;
+  display: inline-block;
+  line-height: 130%;
+}
+
+.add-line-button:hover::before {
+  text-decoration: none;
+  background-color: var(--lightest-background-purple);
+}
+
+.input-and-close-button button {
+  font-family: "Roboto Mono", monospace;
+  height: 36px;
+  align-self: center;
+  background: none;
+  border: 2px solid transparent;
+  cursor: pointer;
+  padding: 0 10px;
+  margin-left: 3px;
+  border-radius: 4px;
+}
+
+.input-and-close-button button:hover {
+  background: var(--lightest-background-purple);
+  border: 2px solid white;
+}
+
 /* TODO: finish this battle with flexbox */
 
 /* .thank-you ol {

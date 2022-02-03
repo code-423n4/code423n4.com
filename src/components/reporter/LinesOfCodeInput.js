@@ -11,6 +11,7 @@ const InputField = ({
   id,
   handleChange,
   handleRemoveInputField,
+  onChange,
 }) => (
   <div className="input-and-close-button">
     <input
@@ -25,17 +26,20 @@ const InputField = ({
       className="remove-line-button"
       type="button"
       onClick={() => handleRemoveInputField(id)}
+      aria-label="Remove this field"
     >
-      X
+      &#x2715;
     </button>
   </div>
 );
 
-const LinesOfCode = () => {
+const LinesOfCode = (onChange) => {
   const [inputFields, setInputFields] = React.useState([
     { id: Date.now().toString(), value: "" },
   ]);
-
+  function handleChange(e) {
+    onChange(e);
+  }
   const handleRemoveInputField = useCallback(
     (id) => {
       console.log("id removed=", id);
@@ -50,10 +54,6 @@ const LinesOfCode = () => {
     [inputFields]
   );
 
-  const handleChange = useCallback(() => {
-    console.log("hello");
-  }, []);
-
   const handleAddInputField = (e) => {
     const id = Date.now().toString();
     console.log("id added=", id);
@@ -61,7 +61,16 @@ const LinesOfCode = () => {
   };
 
   return (
-    <>
+    <div class="lines-of-code-input">
+      <h2>Links to affected code</h2>
+      <p>
+        Provide GitHub links, including line numbers, to all instances of this
+        bug throughout the repo. (
+        <a href="https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/creating-a-permanent-link-to-a-code-snippet#linking-to-code">
+          How do I link to line numbers on GitHub?
+        </a>
+        )
+      </p>
       {/* inputfield.map , return an input field component where the name is the index */}
       {inputFields.map((field, i) => (
         <InputField
@@ -81,7 +90,7 @@ const LinesOfCode = () => {
         Add another code block
       </button>
       <div class="featured-products"></div>
-    </>
+    </div>
   );
 };
 
