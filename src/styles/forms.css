@@ -82,13 +82,6 @@ label {
   padding: 10px;
 }
 
-/* TODO: delete me on or after Feb 3, 2022 */
-.C81 .warning-message,
-.C78 .warning-message,
-.C72 .warning-message {
-  display: none !important;
-}
-
 /* TODO: finish this battle with flexbox */
 
 /* .thank-you ol {

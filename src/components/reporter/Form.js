@@ -4,6 +4,7 @@ import clsx from "clsx";
 import Agreement from "../content/Agreement.js";
 import * as styles from "./Form.module.scss";
 import { Widgets } from "./widgets";
+import LinesOfCode from "../reporter/LinesOfCodeInput.js";
 
 const config = {
   labelAll: "bug",
@@ -219,7 +220,11 @@ const Form = ({ contest, sponsor, repoUrl }) => {
                   fieldState={state}
                   showValidationErrors={hasValidationErrors}
                 />
+
+                <LinesOfCode />
+
                 <Agreement />
+
                 <button
                   className="button cta-button centered"
                   type="button"
