@@ -31,7 +31,7 @@ const SelectField = ({ name, options, onChange, isInvalid, contest }) => {
             risk and non critical findings as one report, and gas optimization
             findings as another, separate report. Submissions for medium and
             high risk findings are not changing. Check out{" "}
-            <a href="">the FAQ</a> for more details.
+            <a href="https://docs.code4rena.com/roles/wardens/judging-criteria">the docs</a> and <a href="https://docs.code4rena.com/roles/wardens/qa-gas-report-faq">FAQ about QA and Gas Reports</a> for more details.
           </p>
         </div>
       )}
