@@ -197,6 +197,15 @@ const Form = ({ contest, sponsor, repoUrl }) => {
   )}\n\n\n# Vulnerability details\n\n${details}\n\n`;
   const labelSet = [config.labelAll, state.risk ? state.risk : ""];
   const submissionUrl = `/.netlify/functions/submit-finding`;
+  let title = "";
+  if (state.risk === "G (Gas Optimization)") {
+    title = "Gas Optimizations";
+  } else if (state.risk === "1 (Low Risk)") {
+    title = "QA Report";
+  } else {
+    title = state.title;
+  }
+
   const formData = {
     contest,
     sponsor,
@@ -205,7 +214,7 @@ const Form = ({ contest, sponsor, repoUrl }) => {
     handle: state.handle,
     address: state.address,
     risk: state.risk ? state.risk.slice(0, 1) : "",
-    title: state.title,
+    title,
     body: markdownBody,
     labels: labelSet,
   };
