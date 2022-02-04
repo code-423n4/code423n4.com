@@ -2,58 +2,72 @@ import React, { useCallback } from "react";
 import clsx from "clsx";
 import * as styles from "./widgets/Widgets.module.scss";
 
-/* prop storage */
-const isInvalid = false;
-
 const InputField = ({
   value,
   index,
   id,
   handleChange,
   handleRemoveInputField,
-}) => (
-  <div className="input-and-close-button">
-    <input
-      className={clsx(styles.Control, styles.Text, isInvalid && "input-error")}
-      name={index}
-      type="text"
-      onChange={(e) => handleChange(e, index)}
-      value={value}
-    />
+  hasValidationErrors,
+}) => {
+  const isInvalid = hasValidationErrors && index === 0 && value === "";
 
-    <button
-      className="remove-line-button"
-      type="button"
-      onClick={() => handleRemoveInputField(id)}
-      aria-label="Remove this field"
-    >
-      &#x2715;
-    </button>
-  </div>
-);
+  return (
+    <div>
+      {/* TODO: use and input component once widgets are refactored */}
+      <div className="input-and-close-button">
+        <input
+          className={clsx(
+            styles.Control,
+            styles.Text,
+            isInvalid && "input-error"
+          )}
+          name={index}
+          type="text"
+          onChange={(e) => handleChange(e, index)}
+          value={value}
+        />
+        {index > 0 && (
+          <button
+            className="remove-line-button"
+            type="button"
+            onClick={() => handleRemoveInputField(id)}
+            aria-label="Remove this field"
+          >
+            &#x2715;
+          </button>
+        )}
+      </div>
+      {isInvalid && (
+        <label for={index} className={styles.ErrorMessage}>
+          This field is required
+        </label>
+      )}
+    </div>
+  );
+};
 
-const LinesOfCode = ({ onChange, codeLines }) => {
+const LinesOfCode = ({ onChange, linesOfCode, hasValidationErrors }) => {
   const handleChange = (e, index) => {
     const { value } = e.target;
-    const updatedCodeLines = [...codeLines];
+    const updatedCodeLines = [...linesOfCode];
     updatedCodeLines[index].value = value;
     onChange(updatedCodeLines);
-  }
+  };
 
   const handleRemoveInputField = useCallback(
     (id) => {
-      const updatedCodeLines = codeLines.filter((field) => {
+      const updatedCodeLines = linesOfCode.filter((field) => {
         return field.id != id;
       });
-      onChange(updatedCodeLines)
+      onChange(updatedCodeLines);
     },
-    [codeLines]
+    [linesOfCode]
   );
 
   const handleAddInputField = (e) => {
     const id = Date.now().toString();
-    console.log("id added=", id);
-    onChange([...codeLines, { id, value: "" }]);
+    onChange([...linesOfCode, { id, value: "" }]);
   };
 
   return (
@@ -72,7 +86,7 @@ const LinesOfCode = ({ onChange, codeLines }) => {
         )
       </p>
       {/* inputfield.map , return an input field component where the name is the index */}
-      {codeLines.map((field, i) => (
+      {linesOfCode.map((field, i) => (
         <InputField
           key={field.id}
           value={field.value}
@@ -80,6 +94,7 @@ const LinesOfCode = ({ onChange, codeLines }) => {
           id={field.id}
           handleChange={handleChange}
           handleRemoveInputField={handleRemoveInputField}
+          hasValidationErrors={hasValidationErrors}
         />
       ))}
       <button

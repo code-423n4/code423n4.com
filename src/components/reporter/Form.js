@@ -18,7 +18,7 @@ const emailField = {
   helpText: "Used to send a copy of this form for your records",
   widget: "text",
   required: true,
-}
+};
 
 const addressField = {
   name: "address",
@@ -27,7 +27,7 @@ const addressField = {
     "Address where your prize should go to (and retroactive token reward should C4 be tokenized later). If you use a smart contract wallet, please contact one of our organizers in Discord in addition to adding the address here.",
   widget: "text",
   required: true,
-}
+};
 
 const titleField = {
   name: "title",
@@ -36,7 +36,7 @@ const titleField = {
     "Summarize your findings for the bug or vulnerability. (This will be the issue title.)",
   widget: "text",
   required: true,
-}
+};
 
 const riskField = {
   name: "risk",
@@ -49,11 +49,7 @@ const riskField = {
       value: "G (Gas Optimization)",
     },
     {
-      label: "0 — Non-critical",
-      value: "0 (Non-critical)",
-    },
-    {
-      label: "1 — Low Risk",
+      label: "1 — QA (Low and Non-critical)",
       value: "1 (Low Risk)",
     },
     {
@@ -65,7 +61,7 @@ const riskField = {
       value: "3 (High Risk)",
     },
   ],
-}
+};
 
 const vulnerabilityDetailsField = {
   name: "details",
@@ -73,7 +69,7 @@ const vulnerabilityDetailsField = {
   helpText: "Link to all referenced sections of code in GitHub",
   widget: "textarea",
   required: true,
-}
+};
 
 const qaGasDetailsField = {
   name: "qaGasDetails",
@@ -81,7 +77,7 @@ const qaGasDetailsField = {
   helpText: "Link to all referenced sections of code in GitHub",
   widget: "textarea",
   required: true,
-}
+};
 
 const mdTemplate =
   "## Impact\nDetailed description of the impact of this finding.\n\n## Proof of Concept\nProvide direct links to all referenced code in GitHub. Add screenshots, logs, or any other relevant proof that illustrates the concept.\n\n## Tools Used\n\n## Recommended Mitigation Steps";
@@ -94,8 +90,11 @@ const initialState = {
   risk: "",
   details: mdTemplate,
   qaGasDetails: "",
-  codeLines: [
-    {}
+  linesOfCode: [
+    {
+      id: Date.now(),
+      value: "",
+    },
   ],
 };
 
@@ -126,63 +125,92 @@ const wardensQuery = graphql`
   }
 `;
 
-const FindingContent = ({hasValidationErrors, state, handleChange, isGasFinding, isQaFinding}) => {
-  return (
-    isGasFinding || isQaFinding ? (
-      <FormField
-        name={qaGasDetailsField.name}
-        label={qaGasDetailsField.label}
-        helpText={qaGasDetailsField.helpText}
+const FindingContent = ({
+  hasValidationErrors,
+  state,
+  handleChange,
+  handleLocChange,
+  isQaOrGasFinding,
+}) => {
+  return isQaOrGasFinding ? (
+    <FormField
+      name={qaGasDetailsField.name}
+      label={qaGasDetailsField.label}
+      helpText={qaGasDetailsField.helpText}
+      isInvalid={hasValidationErrors && !state.qaGasDetails}
+    >
+      <Widget
+        field={qaGasDetailsField}
+        onChange={handleChange}
+        fieldState={state}
         isInvalid={hasValidationErrors && !state.qaGasDetails}
+      />
+    </FormField>
+  ) : (
+    <>
+      <FormField
+        name={titleField.name}
+        label={titleField.label}
+        helpText={titleField.helpText}
+        isInvalid={hasValidationErrors && !state.title}
       >
         <Widget
-          field={qaGasDetailsField}
+          field={titleField}
           onChange={handleChange}
           fieldState={state}
-          isInvalid={hasValidationErrors && !state.qaGasDetails}
+          isInvalid={hasValidationErrors && !state.title}
         />
       </FormField>
-    ) : (
-      <>
-        <FormField
-          name={titleField.name}
-          label={titleField.label}
-          helpText={titleField.helpText}
-          isInvalid={hasValidationErrors && !state.title}
-        >
-          <Widget
-            field={titleField}
-            onChange={handleChange}
-            fieldState={state}
-            isInvalid={hasValidationErrors && !state.title}
-          />
-        </FormField>
-        <FormField
-          name={vulnerabilityDetailsField.name}
-          label={vulnerabilityDetailsField.label}
-          helpText={vulnerabilityDetailsField.helpText}
+      <LinesOfCode
+        onChange={handleLocChange}
+        linesOfCode={state.linesOfCode}
+        hasValidationErrors={hasValidationErrors}
+      />
+      <FormField
+        name={vulnerabilityDetailsField.name}
+        label={vulnerabilityDetailsField.label}
+        helpText={vulnerabilityDetailsField.helpText}
+        isInvalid={hasValidationErrors && !state.details}
+      >
+        <Widget
+          field={vulnerabilityDetailsField}
+          onChange={handleChange}
+          fieldState={state}
           isInvalid={hasValidationErrors && !state.details}
-        >
-          <Widget
-            field={vulnerabilityDetailsField}
-            onChange={handleChange}
-            fieldState={state}
-            isInvalid={hasValidationErrors && !state.details}
-          />
-        </FormField>
-      </>
-    )
-  )
-}
+        />
+      </FormField>
+    </>
+  );
+};
 
 const Form = ({ contest, sponsor, repoUrl }) => {
+  // Component State
   const [state, setState] = useState(initialState);
   const [status, setStatus] = useState(FormStatus.Unsubmitted);
   const [hasValidationErrors, setHasValidationErrors] = useState(false);
   const [errorMessage, setErrorMessage] = useState("An error occurred");
-  const [isQaFinding, setIsQaFinding] = useState(false);
-  const [isGasFinding, setGasMessage] = useState(false);
+  const [isQaOrGasFinding, setIsQaOrGasFinding] = useState(false);
 
+  const details = isQaOrGasFinding ? state.qaGasDetails : state.details;
+  const markdownBody = `# LOC\n\n${state.linesOfCode.join(
+    "\n"
+  )}\n\n\n# Vulnerability details\n\n${details}\n\n`;
+  const labelSet = [config.labelAll, state.risk ? state.risk : ""];
+  const submissionUrl = `/.netlify/functions/submit-finding`;
+  const formData = {
+    contest,
+    sponsor,
+    repo: repoUrl.split("/").pop(),
+    email: state.email,
+    handle: state.handle,
+    address: state.address,
+    risk: state.risk ? state.risk.slice(0, 1) : "",
+    title: state.title,
+    body: markdownBody,
+    labels: labelSet,
+  };
+
+  // Event Handlers
   const handleChange = useCallback((e) => {
     const { name, value } = e.target;
 
@@ -191,28 +219,54 @@ const Form = ({ contest, sponsor, repoUrl }) => {
     });
   }, []);
 
-  const updateLinesOfCode = useCallback((codeLines) => {
+  const handleLocChange = useCallback((linesOfCode) => {
     setState((state) => {
-      return { ...state, codeLines }
-    })
+      return { ...state, linesOfCode };
+    });
   }, []);
 
-  const handleRiskChange = useCallback((e) => {
-    handleChange(e);
-    const { value } = e.target;
-      if (value.slice(0, 1) === "G") {
-        setGasMessage(true);
-        setIsQaFinding(false);
-      } else if (value.slice(0, 1) === '1' || value.slice(0, 1) === '0') {
-        setIsQaFinding(true);
-        setGasMessage(false);
+  const handleRiskChange = useCallback(
+    (e) => {
+      handleChange(e);
+      const riskLevel = e.target.value.slice(0, 1);
+      if (riskLevel === "G" || riskLevel === "1") {
+        setIsQaOrGasFinding(true);
       } else {
-        setIsQaFinding(false);
-        setIsQaFinding(false);
+        setIsQaOrGasFinding(false);
       }
-  }, [state, isQaFinding, isGasFinding]);
+    },
+    [state, isQaOrGasFinding]
+  );
 
-  const url = `/.netlify/functions/submit-finding`;
+  const handleSubmit = () => {
+    // extract required fields from field data for validation check
+    const { email, handle, address, risk, title, body } = formData;
+    const requiredFields = isQaOrGasFinding
+      ? [email, handle, address, risk, body]
+      : [email, handle, address, risk, title, body];
+    let hasErrors = requiredFields.some((field) => {
+      return field === "" || field === undefined;
+    });
+
+    // TODO: verify that loc include code lines and are valid URLs
+    if (!isQaOrGasFinding && !state.linesOfCode[0].value) {
+      hasErrors = true;
+    }
+
+    setHasValidationErrors(hasErrors);
+    if (!hasErrors) {
+      submitFinding(submissionUrl, formData);
+    }
+  };
+
+  const handleReset = () => {
+    setState({
+      ...state,
+      title: "",
+      details: mdTemplate,
+    });
+    setStatus(FormStatus.Unsubmitted);
+  };
 
   const submitFinding = useCallback((url, data) => {
     (async () => {
@@ -234,50 +288,6 @@ const Form = ({ contest, sponsor, repoUrl }) => {
     })();
   }, []);
 
-  const details = isGasFinding || isQaFinding ? state.qaGasDetails : state.details;
-
-  const markdownBody = `# Handle\n\n${state["handle"]}\n\n\n# Vulnerability details\n\n${details}\n\n`;
-
-  const labelSet = [config.labelAll, state.risk ? state.risk : ""];
-
-  const repo = repoUrl.split("/").pop();
-
-  const formData = {
-    contest,
-    sponsor,
-    repo,
-    email: state.email,
-    handle: state.handle,
-    address: state.address,
-    risk: state.risk ? state.risk.slice(0, 1) : "",
-    title: state.title,
-    body: markdownBody,
-    labels: labelSet,
-  };
-
-  const handleSubmit = () => {
-    // extract required fields from field data for validation check
-    const { email, handle, address, risk, title, body } = formData;
-    const errors = [email, handle, address, risk, title, body].some((field) => {
-      return field === "" || field === undefined;
-    });
-    setHasValidationErrors(Boolean(errors));
-    if (!errors) {
-      submitFinding(url, formData);
-    }
-  };
-
-  const handleReset = () => {
-    setState({
-      ...state,
-      title: "",
-      details: mdTemplate,
-    });
-    setStatus(FormStatus.Unsubmitted);
-  };
-
-  
-
   return (
     <StaticQuery
       query={wardensQuery}
@@ -298,9 +308,6 @@ const Form = ({ contest, sponsor, repoUrl }) => {
                   name="contest"
                   value={contest}
                 />
-
-                <LinesOfCode onChange={updateLinesOfCode} codeLines={state.codeLines}/>
-
                 <fieldset className={widgetStyles.Fields}>
                   {/* TODO: refactor form fields; move FormField into individual field components */}
                   <FormField
@@ -313,7 +320,8 @@ const Form = ({ contest, sponsor, repoUrl }) => {
                       field={{
                         name: "handle",
                         label: "Handle",
-                        helpText: "Handle you're competing under (individual or team name)",
+                        helpText:
+                          "Handle you're competing under (individual or team name)",
                         widget: "warden",
                         required: true,
                         options: wardens,
@@ -349,24 +357,35 @@ const Form = ({ contest, sponsor, repoUrl }) => {
                       isInvalid={hasValidationErrors && !state.address}
                     />
                   </FormField>
-                  {isQaFinding && (
+                  {isQaOrGasFinding && (
                     <div>
                       <p className="warning-message">
-                        👋 Hi there! We've changed the way we are handling low risk,
-                        and non-critical findings. Please submit all low
-                        risk and non critical findings as one report. Submissions for medium and
-                        high risk findings are not changing. Check out{" "}
-                        <a href="">the FAQ</a> for more details.
-                      </p>
-                    </div>
-                  )}
-                  {isGasFinding && (
-                    <div>
-                      <p className="warning-message">
-                        👋 Hi there! We've changed the way we are handling gas optimization findings.
-                        Please submit all gas optimization as one report.
-                        Submissions for medium and high risk findings are not changing. Check out{" "}
-                        <a href="">the FAQ</a> for more details.
+                        👋 Hi there! We've changed the way we are handling low
+                        risk, non-critical, and gas optimization findings.
+                        Please submit all low risk and non critical findings as
+                        one report, and gas optimization findings as another,
+                        separate report. Submissions for medium and high risk
+                        findings are not changing. Check out
+                        <a
+                          href="https://docs.code4rena.com/roles/wardens/judging-criteria"
+                          target="_blank"
+                          rel="noreferrer"
+                          aria-label="the docs (opens in a new window)"
+                        >
+                          {" "}
+                          the docs
+                        </a>{" "}
+                        and
+                        <a
+                          href="https://docs.code4rena.com/roles/wardens/qa-gas-report-faq"
+                          target="_blank"
+                          rel="noreferrer"
+                          aria-label="FAQ about QA and Gas Reports (opens in a new window)"
+                        >
+                          {" "}
+                          FAQ about QA and Gas Reports
+                        </a>{" "}
+                        for more details.
                       </p>
                     </div>
                   )}
@@ -388,8 +407,8 @@ const Form = ({ contest, sponsor, repoUrl }) => {
                       hasValidationErrors={hasValidationErrors}
                       state={state}
                       handleChange={handleChange}
-                      isGasFinding={isGasFinding}
-                      isQaFinding={isQaFinding}
+                      handleLocChange={handleLocChange}
+                      isQaOrGasFinding={isQaOrGasFinding}
                     />
                   )}
                 </fieldset>
