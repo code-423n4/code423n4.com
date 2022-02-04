@@ -11,14 +11,13 @@ const InputField = ({
   id,
   handleChange,
   handleRemoveInputField,
-  onChange,
 }) => (
   <div className="input-and-close-button">
     <input
       className={clsx(styles.Control, styles.Text, isInvalid && "input-error")}
       name={index}
       type="text"
-      onChange={handleChange}
+      onChange={(e) => handleChange(e, index)}
       value={value}
     />
 
@@ -33,31 +32,28 @@ const InputField = ({
   </div>
 );
 
-const LinesOfCode = (onChange) => {
-  const [inputFields, setInputFields] = React.useState([
-    { id: Date.now().toString(), value: "" },
-  ]);
-  function handleChange(e) {
-    onChange(e);
+const LinesOfCode = ({ onChange, codeLines }) => {
+  const handleChange = (e, index) => {
+    const { value } = e.target;
+    const updatedCodeLines = [...codeLines];
+    updatedCodeLines[index].value = value;
+    onChange(updatedCodeLines);
   }
+
   const handleRemoveInputField = useCallback(
     (id) => {
-      console.log("id removed=", id);
-      console.log("inputFields", inputFields);
-      const hello = inputFields.filter((field) => {
-        console.log(field.id);
+      const updatedCodeLines = codeLines.filter((field) => {
         return field.id != id;
       });
-      console.log("hello variable", hello);
-      setInputFields(hello);
+      onChange(updatedCodeLines)
     },
-    [inputFields]
+    [codeLines]
   );
 
   const handleAddInputField = (e) => {
     const id = Date.now().toString();
     console.log("id added=", id);
-    setInputFields([...inputFields, { id, value: "" }]);
+    onChange([...codeLines, { id, value: "" }]);
   };
 
   return (
@@ -76,7 +72,7 @@ const LinesOfCode = (onChange) => {
         )
       </p>
       {/* inputfield.map , return an input field component where the name is the index */}
-      {inputFields.map((field, i) => (
+      {codeLines.map((field, i) => (
         <InputField
           key={field.id}
           value={field.value}

@@ -94,6 +94,9 @@ const initialState = {
   risk: "",
   details: mdTemplate,
   qaGasDetails: "",
+  codeLines: [
+    {}
+  ],
 };
 
 const FormStatus = {
@@ -188,19 +191,22 @@ const Form = ({ contest, sponsor, repoUrl }) => {
     });
   }, []);
 
+  const updateLinesOfCode = useCallback((codeLines) => {
+    setState((state) => {
+      return { ...state, codeLines }
+    })
+  }, []);
+
   const handleRiskChange = useCallback((e) => {
     handleChange(e);
     const { value } = e.target;
       if (value.slice(0, 1) === "G") {
-        console.log('GAS')
         setGasMessage(true);
         setIsQaFinding(false);
       } else if (value.slice(0, 1) === '1' || value.slice(0, 1) === '0') {
-        console.log('LOW')
         setIsQaFinding(true);
         setGasMessage(false);
       } else {
-        console.log('HIGH OR MED')
         setIsQaFinding(false);
         setIsQaFinding(false);
       }
@@ -293,7 +299,7 @@ const Form = ({ contest, sponsor, repoUrl }) => {
                   value={contest}
                 />
 
-                <LinesOfCode />
+                <LinesOfCode onChange={updateLinesOfCode} codeLines={state.codeLines}/>
 
                 <fieldset className={widgetStyles.Fields}>
                   {/* TODO: refactor form fields; move FormField into individual field components */}
