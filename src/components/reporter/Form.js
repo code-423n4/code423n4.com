@@ -24,7 +24,7 @@ const addressField = {
   name: "address",
   label: "Polygon address",
   helpText:
-    "Address where your prize should go to (and retroactive token reward should C4 be tokenized later). If you use a smart contract wallet, please contact one of our organizers in Discord in addition to adding the address here.",
+    "Address where your prize should go. If you use a smart contract wallet, please contact one of our organizers in Discord in addition to adding the address here.",
   widget: "text",
   required: true,
 };
@@ -45,19 +45,19 @@ const riskField = {
   required: true,
   options: [
     {
-      label: "0 — Gas Optimization",
+      label: "Gas Optimizations",
       value: "G (Gas Optimization)",
     },
     {
-      label: "1 — QA (Low and Non-critical)",
+      label: "QA Report (low / non-critical)",
       value: "1 (Low Risk)",
     },
     {
-      label: "2 — Medium Risk",
+      label: "Medium Risk",
       value: "2 (Med Risk)",
     },
     {
-      label: "3 — High Risk",
+      label: "High Risk",
       value: "3 (High Risk)",
     },
   ],
