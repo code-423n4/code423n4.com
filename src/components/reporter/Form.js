@@ -193,7 +193,7 @@ const Form = ({ contest, sponsor, repoUrl }) => {
 
   const locString = state.linesOfCode.map((loc) => loc.value).join("\n");
   const details = isQaOrGasFinding ? state.qaGasDetails : state.details;
-  const markdownBody = `# LOC\n\n${locString}\n\n\n# Vulnerability details\n\n${details}\n\n`;
+  const markdownBody = `# Lines of code\n\n${locString}\n\n\n# Vulnerability details\n\n${details}\n\n`;
   const labelSet = [config.labelAll, state.risk ? state.risk : ""];
   const submissionUrl = `/.netlify/functions/submit-finding`;
   let title = "";
@@ -214,7 +214,7 @@ const Form = ({ contest, sponsor, repoUrl }) => {
     address: state.address,
     risk: state.risk ? state.risk.slice(0, 1) : "",
     title,
-    body: markdownBody,
+    body: isQaOrGasFinding ? details : markdownBody,
     labels: labelSet,
   };
 
