@@ -29,7 +29,7 @@ const ticketTags = {
   },
   findingsChange: {
     name: "Update or withdraw finding 📝",
-    color: "blue",
+    color: "pink",
   },
   docs: {
     name: "C4 docs 📚",
@@ -212,6 +212,7 @@ async function handler(event) {
       body: "Your request has been submitted",
     };
   } catch (err) {
+    console.error(err);
     return {
       statusCode: 500,
       body: JSON.stringify({ error: "Internal server error." }),
