@@ -3,12 +3,12 @@ import clsx from "clsx";
 import * as styles from "./Widgets.module.scss";
 
 const SelectField = ({ name, options, onChange, isInvalid }) => {
-  const [value, setValue] = useState("")
+  const [value, setValue] = useState("");
 
   const handleChange = (e) => {
     setValue(e.target.value);
     onChange(e);
-  }
+  };
 
   return (
     <select
@@ -16,7 +16,7 @@ const SelectField = ({ name, options, onChange, isInvalid }) => {
         styles.Control,
         styles.Select,
         isInvalid && "input-error",
-        value === "" && styles.Placeholder,
+        value === "" && styles.Placeholder
       )}
       name={name}
       onChange={handleChange}
