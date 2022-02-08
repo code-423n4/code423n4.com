@@ -111,9 +111,9 @@ function ContactUs() {
       setStatus(FormStatus.Submitted);
     } else {
       setStatus(FormStatus.Error);
-      const message = await response.json();
-      if (message) {
-        setErrorMessage(message);
+      const { body } = await response.json();
+      if (body.error) {
+        setErrorMessage(body.error);
       }
     }
   };
@@ -200,7 +200,7 @@ function ContactUs() {
             className="button cta-button centered"
             type="button"
             onClick={handleSubmit}
-            disabled={status !== FormStatus.Unsubmitted}
+            disabled={status !== FormStatus.Unsubmitted || !captchaToken}
           >
             {status === FormStatus.Unsubmitted ? "Submit" : "Submitting..."}
           </button>

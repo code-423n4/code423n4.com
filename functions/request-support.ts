@@ -98,52 +98,49 @@ interface NotionHelpdeskTicket {
 }
 
 async function handler(event) {
+  if (event.httpMethod !== "POST") {
+    return {
+      statusCode: 405,
+      body: JSON.stringify({ error: "Method not allowed" }),
+      headers: { Allow: "POST" },
+    };
+  }
+
+  const { authorization } = event.headers;
+  if (!authorization) {
+    return {
+      statusCode: 401,
+      body: JSON.stringify({ error: "Authorization failed" }),
+    };
+  }
+
+  const { success } = await verify(process.env.HCAPTCHA_SECRET, authorization);
+  if (!success) {
+    return {
+      statusCode: 401,
+      body: JSON.stringify({ error: "Authorization failed" }),
+    };
+  }
+
+  const ticket = JSON.parse(event.body);
+  if (!ticket.discordHandle && !ticket.email) {
+    return {
+      statusCode: 422,
+      body: JSON.stringify({ error: "Contact info is required" }),
+    };
+  }
+
+  if (ticket.discordHandle && isDangerous(ticket.discordHandle)) {
+    return {
+      statusCode: 400,
+      body: JSON.stringify({
+        error:
+          "Handle can only use alphanumeric characters [a-zA-Z0-9], underscores (_), and hyphens (-).",
+      }),
+    };
+  }
+
   try {
-    if (event.httpMethod !== "POST") {
-      return {
-        statusCode: 405,
-        body: "Method not allowed",
-        headers: { Allow: "POST" },
-      };
-    }
-
-    const { authorization } = event.headers;
-    if (!authorization) {
-      return {
-        statusCode: 401,
-        body: JSON.stringify({ error: "Authorization failed" }),
-      };
-    }
-
-    const { success } = await verify(
-      process.env.HCAPTCHA_SECRET,
-      authorization
-    );
-    if (!success) {
-      return {
-        statusCode: 401,
-        body: JSON.stringify({ error: "Authorization failed" }),
-      };
-    }
-
-    const ticket = JSON.parse(event.body);
-    if (!ticket.discordHandle && !ticket.email) {
-      return {
-        statusCode: 422,
-        body: "Contact info is required",
-      };
-    }
-
-    if (ticket.discordHandle && isDangerous(ticket.discordHandle)) {
-      return {
-        statusCode: 400,
-        body: JSON.stringify({
-          error:
-            "Handle can only use alphanumeric characters [a-zA-Z0-9], underscores (_), and hyphens (-).",
-        }),
-      };
-    }
-
     const body: NotionHelpdeskTicket = {
       parent: {
         database_id: helpdeskId,
