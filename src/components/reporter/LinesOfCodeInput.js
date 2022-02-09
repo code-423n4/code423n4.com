@@ -14,7 +14,7 @@ const InputField = ({
 
   return (
     <div>
-      {/* TODO: use and input component once widgets are refactored */}
+      {/* TODO: use an input component once widgets are refactored */}
       <div className="input-and-close-button">
         <input
           className={clsx(
@@ -26,6 +26,7 @@ const InputField = ({
           type="text"
           onChange={(e) => handleChange(e, index)}
           value={value}
+          autoComplete="off"
         />
         {index > 0 && (
           <button
