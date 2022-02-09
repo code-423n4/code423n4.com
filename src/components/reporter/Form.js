@@ -21,7 +21,7 @@ const emailField = {
 };
 
 const addressField = {
-  name: "address",
+  name: "polygonAddress",
   label: "Polygon address",
   helpText:
     "Address where your prize should go. If you use a smart contract wallet, please contact one of our organizers in Discord in addition to adding the address here.",
@@ -86,7 +86,7 @@ const initialState = {
   title: "",
   email: "",
   handle: "",
-  address: "",
+  polygonAddress: "",
   risk: "",
   details: mdTemplate,
   qaGasDetails: "",
@@ -211,7 +211,7 @@ const Form = ({ contest, sponsor, repoUrl }) => {
     repo: repoUrl.split("/").pop(),
     email: state.email,
     handle: state.handle,
-    address: state.address,
+    address: state.polygonAddress,
     risk: state.risk ? state.risk.slice(0, 1) : "",
     title,
     body: isQaOrGasFinding ? details : markdownBody,
@@ -356,13 +356,13 @@ const Form = ({ contest, sponsor, repoUrl }) => {
                     name={addressField.name}
                     label={addressField.label}
                     helpText={addressField.helpText}
-                    isInvalid={hasValidationErrors && !state.address}
+                    isInvalid={hasValidationErrors && !state.polygonAddress}
                   >
                     <Widget
                       field={addressField}
                       onChange={handleChange}
                       fieldState={state}
-                      isInvalid={hasValidationErrors && !state.address}
+                      isInvalid={hasValidationErrors && !state.polygonAddress}
                     />
                   </FormField>
                   {isQaOrGasFinding && (
