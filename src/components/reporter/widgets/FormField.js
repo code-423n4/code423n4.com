@@ -1,18 +1,25 @@
 import React from 'react'
 import * as styles from "./Widgets.module.scss";
 
-function FormField({ name, label, helpText, isInvalid, children }) {
+function FormField({ 
+  name,
+  label,
+  helpText,
+  isInvalid,
+  children,
+  errorMessage="This field is required"
+}) {
   return (
     <div className={styles.Container}>
-      {label &&<label className={styles.Label} for={name}>{label}</label>}
+      {label &&<label className={styles.Label} htmlFor={name}>{label}</label>}
       {helpText && <p className={styles.Help}>{helpText}</p>}
       {children}
       {isInvalid &&
         <label
-          for={name}
+          htmlFor={name}
           className={styles.ErrorMessage}
         >
-          This field is required
+          {errorMessage}
         </label>
       }
     </div>
