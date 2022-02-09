@@ -358,11 +358,20 @@ const Form = ({ contest, sponsor, repoUrl }) => {
                     helpText={addressField.helpText}
                     isInvalid={hasValidationErrors && !state.polygonAddress}
                   >
-                    <Widget
-                      field={addressField}
+                    <input
+                      className={clsx(
+                        widgetStyles.Control,
+                        widgetStyles.Text,
+                        hasValidationErrors &&
+                          !state.polygonAddress &&
+                          "input-error"
+                      )}
+                      name={addressField.name}
+                      type="text"
                       onChange={handleChange}
-                      fieldState={state}
-                      isInvalid={hasValidationErrors && !state.polygonAddress}
+                      required={true}
+                      value={state.polygonAddress}
+                      data-form-type="other"
                     />
                   </FormField>
                   {isQaOrGasFinding && (
