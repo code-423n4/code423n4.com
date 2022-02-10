@@ -18,7 +18,7 @@ function computeResults(findings) {
     results.allFindings += 1;
     results.awardTotal += f.awardUSD ?? 0;
 
-    switch (f.risk) {
+    switch (f.risk.toLowerCase()) {
       case "0":
         results.nonCrit += 1;
         break;

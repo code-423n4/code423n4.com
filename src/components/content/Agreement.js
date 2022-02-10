@@ -7,6 +7,7 @@ const Agreement = () => {
       <a
         href="https://discord.com/channels/810916927919620096/851883682470166558/851891396255940618"
         target="_blank"
+        rel="noreferrer"
         aria-label="Code of conduct. Opens in new window."
       >
         code of conduct
@@ -15,6 +16,7 @@ const Agreement = () => {
       <a
         href="https://docs.code4rena.com/roles/wardens/submission-policy"
         target="_blank"
+        rel="noreferrer"
         aria-label="Submission policy. Opens in new window."
       >
         submission policy

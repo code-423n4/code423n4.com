@@ -32,6 +32,7 @@ nav a {
   font-weight: 800;
   font-family: "Roboto", sans-serif;
   text-transform: uppercase;
+  text-decoration: none;
 }
 
 .logo {
@@ -50,7 +51,7 @@ header nav {
   transition: all 0.3s ease-out;
 }
 
-@media (max-width: 800px) {
+@media (max-width: 830px) {
   header {
     margin: 0;
     padding: 0;

@@ -19,11 +19,13 @@
   bottom: -2px;
   position: relative;
   list-style: none;
-  padding: 10px 30px;
+  padding: 10px 20px;
   cursor: pointer;
   margin: 0 5px;
   text-transform: uppercase;
-  letter-spacing: 2px;
+  letter-spacing: 2.5px;
+  font-size: 14px;
+  font-weight: bold;
   color: white;
 }
 
@@ -77,4 +79,13 @@
   display: block;
   height: 1px;
   width: 1px;
+}
+
+.alternate-tab .react-tabs__tab-panel--selected {
+  background: var(--lightest-background-purple);
+  border-radius: 4px;
+}
+
+.alternate-tab .react-tabs__tab--selected {
+  background-color: var(--lightest-background-purple);
 }

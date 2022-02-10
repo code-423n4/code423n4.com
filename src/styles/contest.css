@@ -179,6 +179,15 @@
   color: white;
 }
 
+.contest-tabs article {
+  margin: 40px auto;
+}
+
+.contest-tabs svg.octicon {
+  fill: white;
+  margin-right: 10px;
+}
+
 .contest-tabs h1 {
   font-size: 30px;
   font-weight: normal;

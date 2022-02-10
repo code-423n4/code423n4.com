@@ -141,6 +141,13 @@
   border-radius: 100%;
 }
 
+.placeholder-img {
+  width: 80px;
+  height: 80px;
+  border-radius: 100%;
+  background: rgba(255,255,255,.1);
+}
+
 .center {
   text-align: center;
   margin: 10px auto;

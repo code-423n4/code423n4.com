@@ -1,12 +1,15 @@
-import React, { useCallback, useState, useRef } from "react";
+import React, {
+  useCallback,
+  useState,
+  // useRef
+} from "react";
 import { StaticQuery, graphql } from "gatsby";
-import { omit, find } from "lodash";
-import clsx from "clsx";
-import HCaptcha from "@hcaptcha/react-hcaptcha";
 import DefaultLayout from "../layouts/DefaultLayout";
-import * as styles from "../components/reporter/Form.module.scss";
-import * as widgetStyles from "../components/reporter/widgets/Widgets.module.scss";
 import { Widgets } from "../components/reporter/widgets";
+// import clsx from "clsx";
+// import HCaptcha from "@hcaptcha/react-hcaptcha";
+// import * as styles from "../components/reporter/Form.module.scss";
+// import * as widgetStyles from "../components/reporter/widgets/Widgets.module.scss";
 
 const config = {
   labelAll: "candidate",
@@ -14,7 +17,7 @@ const config = {
     {
       name: "handle",
       label: "Warden handle",
-      helptext: "Handle you're competing under",
+      helpText: "Handle you're competing under",
       widget: "warden",
       required: true,
       options: [],
@@ -22,14 +25,14 @@ const config = {
     {
       name: "bio",
       label: "Tell us about yourself",
-      helptext: "Short bio/intro and summary of relevant experience",
+      helpText: "Short bio/intro and summary of relevant experience",
       widget: "textarea",
       required: true,
     },
     {
       name: "link1",
       label: "First high severity finding link",
-      helptext:
+      helpText:
         "Link to a valid, high-severity finding you submitted to a Code4rena contest",
       widget: "text",
       required: true,
@@ -37,7 +40,7 @@ const config = {
     {
       name: "details1",
       label: "First high severity finding details",
-      helptext:
+      helpText:
         "Describe how the above finding demonstrates your depth of knowledge",
       widget: "textarea",
       required: true,
@@ -45,7 +48,7 @@ const config = {
     {
       name: "link2",
       label: "Second high severity finding link",
-      helptext:
+      helpText:
         "Link to a valid, high-severity finding you submitted to a Code4rena contest",
       widget: "text",
       required: true,
@@ -53,7 +56,7 @@ const config = {
     {
       name: "details2",
       label: "Second high severity finding details",
-      helptext:
+      helpText:
         "Describe how the above finding demonstrates your depth of knowledge",
       widget: "textarea",
       required: true,
@@ -61,7 +64,7 @@ const config = {
     {
       name: "link3",
       label: "Third high severity finding link",
-      helptext:
+      helpText:
         "Link to a valid, high-severity finding you submitted to a Code4rena contest",
       widget: "text",
       required: true,
@@ -69,7 +72,7 @@ const config = {
     {
       name: "details3",
       label: "Third high severity finding details",
-      helptext:
+      helpText:
         "Describe how the above finding demonstrates your depth of knowledge",
       widget: "textarea",
       required: true,
@@ -147,15 +150,15 @@ const JudgeApplication = () => {
         setStatus(FormStatus.Submitted);
       } else {
         setStatus(FormStatus.Error);
-        const message = `Error: ${response.status}`;
+        // const message = `Error: ${response.status}`;
       }
     })();
   }, []);
 
-  const labelSet = [
-    config.labelAll ? config.labelAll : "",
-    state.label ? state.label : "",
-  ];
+  // const labelSet = [
+  //   config.labelAll ? config.labelAll : "",
+  //   state.label ? state.label : "",
+  // ];
 
   const formData = {
     handle: state.handle,
@@ -222,7 +225,7 @@ const JudgeApplication = () => {
               )}
 
               {status === FormStatus.Submitted && (
-                <div class="thank-you">
+                <div className="thank-you">
                   <h1>Thanks for applying!</h1>
                   <p>
                     <strong>Here's what happens next:</strong>

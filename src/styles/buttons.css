@@ -10,6 +10,7 @@
   text-decoration: none;
   margin: 0.25rem 0.5rem 0.25rem 0;
   background-color: var(--main-purple);
+  cursor: pointer;
 }
 
 .button-medium {

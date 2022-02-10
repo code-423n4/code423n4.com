@@ -9,6 +9,7 @@ import ContestFAQ from "../pages/contests/faq";
 
 const ContestLayout = (props) => {
   const [artOpen, setArtOpen] = useState(false);
+
   const {
     title,
     sponsor,
@@ -21,30 +22,33 @@ const ContestLayout = (props) => {
     end_time,
   } = props.data.contestsCsv;
 
+  const { markdownRemark } = props.data;
+
   const t = getDates(start_time, end_time);
   const dateDescription = `${amount}\n${t.startDay}—${t.endDay}`;
   const pageTitle = `Code4rena ${title}`;
-  let art;
 
-  if (fields.artPath) {
-    art = fields.artPath;
-  } else {
-    art = null;
+  const canViewReport = Boolean(markdownRemark && markdownRemark.frontmatter);
+  let reportUrl = "";
+  if (canViewReport) {
+    reportUrl = markdownRemark.frontmatter.altUrl
+      ? markdownRemark.frontmatter.altUrl
+      : `/reports/${props.data.markdownRemark.frontmatter.slug}`;
   }
 
   return (
     <DefaultLayout
       pageTitle={pageTitle}
       bodyClass="contest-page"
-      preview={art}
+      preview={fields.artPath}
       pageDescription={dateDescription}
     >
       <>
         <div className="contest-wrapper contest-artwork-wrapper">
           <div className="contest-tippy-top">
-            {t.state === "soon" || t.state === "active" ? (
+            {t.contestStatus === "soon" || t.contestStatus === "active" ? (
               <Countdown
-                state={t.state}
+                state={t.contestStatus}
                 start={start_time}
                 end={end_time}
                 isPreview={findingsRepo === ""}
@@ -85,7 +89,7 @@ const ContestLayout = (props) => {
             <h1>{title}</h1>
             <p>{details}</p>
             <div className="button-wrapper">
-              {t.state !== "soon" ? (
+              {t.contestStatus !== "soon" ? (
                 <a
                   href={repo}
                   className="button cta-button button-medium primary"
@@ -94,12 +98,22 @@ const ContestLayout = (props) => {
                 </a>
               ) : null}
 
-              {t.state === "active" && findingsRepo && fields.submissionPath ? (
+              {t.contestStatus === "active" &&
+              findingsRepo &&
+              fields.submissionPath ? (
                 <Link
                   to={fields.submissionPath}
                   className="button cta-button button-medium secondary"
                 >
                   Submit Finding
+                </Link>
+              ) : null}
+              {canViewReport ? (
+                <Link
+                  to={reportUrl}
+                  className="button cta-button button-medium secondary"
+                >
+                  View Report
                 </Link>
               ) : null}
             </div>
@@ -118,12 +132,12 @@ const ContestLayout = (props) => {
 
             <TabPanel>
               <div className="contest-wrapper">
-                {t.state === "soon" ? (
+                {t.contestStatus === "soon" ? (
                   <div className="coming-soon">
                     <h1>Contest details coming soon</h1>
                     <p>Check back when this contest launches in:</p>
                     <Countdown
-                      state={t.state}
+                      state={t.contestStatus}
                       start={start_time}
                       end={end_time}
                       isPreview={findingsRepo === ""}
@@ -154,8 +168,17 @@ const ContestLayout = (props) => {
 };
 export default ContestLayout;
 
-export const pageQuery = graphql`
-  query ContestsId($contestId: Int) {
+export const contestLayoutQuery = graphql`
+  query contestLayoutQuery($contestId: Int) {
+    markdownRemark(
+      frontmatter: { contest: { contestid: { eq: $contestId } } }
+    ) {
+      frontmatter {
+        altUrl
+        slug
+        title
+      }
+    }
     contestsCsv(contestid: { eq: $contestId }) {
       amount
       contestid
