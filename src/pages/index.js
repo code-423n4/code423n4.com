@@ -1,29 +1,41 @@
-import React from "react";
+import React, { useState } from "react";
 import { graphql } from "gatsby";
 import DefaultLayout from "../layouts/DefaultLayout";
 import HeroIndex from "../components/content/HeroIndex";
-import Definitions from "../components/content/Definitions";
 import ContestList from "../components/ContestList";
 import Testimonials from "../components/Testimonials";
 import { contestsByState } from "../utils/filter";
 
 export default function SiteIndex({ data }) {
+  // @todo: implement global state management instead of props drilling
+  const [contestStatusChanges, updateContestStatusChanges] = useState(0);
+
+  const updateContestStatus = () => {
+    updateContestStatusChanges(contestStatusChanges + 1);
+  }
+
   const contests = data.contests.edges;
   const filteredContests = contestsByState({ contests });
 
   return (
-    <DefaultLayout bodyClass="landing">
+    <DefaultLayout bodyClass="landing" key={'landing' + contestStatusChanges}>
       <div className="hero-wrapper">
         <HeroIndex />
       </div>
       <div className="wrapper-main">
         <section>
           {filteredContests.active.length > 0 ? (
-            <ContestList contests={filteredContests.active} />
+            <ContestList
+              contests={filteredContests.active}
+              updateContestStatus={updateContestStatus}
+            />
           ) : null}
           <h1 className="upcoming-header">Upcoming Contests</h1>
           {filteredContests.soon.length > 0 ? (
-            <ContestList contests={filteredContests.soon} />
+            <ContestList
+              contests={filteredContests.soon}
+              updateContestStatus={updateContestStatus}
+            />
           ) : null}
         </section>
         <section>

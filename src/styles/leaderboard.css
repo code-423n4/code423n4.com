@@ -51,14 +51,37 @@ th {
 .member + .member {
   margin-top: 10px;
 }
+
+.member,
+.wrapper-competitor {
+  position: relative;
+  padding-left: 30px;
+}
+
 .teamname {
   display: block;
-  margin: 0 0 5px 30px;
+  margin: 0 0 5px;
   padding-bottom: 5px;
   border-bottom: 1px solid #443658;
 }
+
+.team-identifier {
+  text-transform: uppercase;
+  font-family: var(--font-family);
+  font-size: 12px;
+  font-weight: bold;
+  letter-spacing: 3px;
+  color: white;
+  background: var(--secondary-background-purple);
+  text-align: center;
+  border-radius: 3px;
+  margin-bottom: 5px;
+}
+
+/* avatars are 20px */
 .sb-avatar {
-  margin-right: 10px;
+  position: absolute;
+  left: 0;
 }
 
 @media (max-width: 600px) {
@@ -79,6 +102,12 @@ th {
   table .teamname {
     display: none !important;
   }
+
+  .member,
+  .wrapper-competitor {
+    padding-left: 0;
+  }
+
   thead tr:nth-of-type(2) th:nth-of-type(1) {
     text-align: left;
   }

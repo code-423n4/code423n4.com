@@ -1,17 +1,5 @@
-const monthNames = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
-];
+import format from 'date-fns/format';
+import differenceInCalendarDays from 'date-fns/differenceInCalendarDays';
 
 const left = (total) => {
   return {
@@ -22,8 +10,9 @@ const left = (total) => {
   };
 };
 
-const getTimeRemaining = (endtime) => {
-  const total = Date.parse(endtime) - Date.parse(new Date());
+const getTimeRemaining = (contestTimer) => {
+  const endTime = contestTimer.contestStatus === 'active' ? contestTimer.end : contestTimer.start;
+  const total = endTime - Date.now();
   if (total > 0) {
     return {
       total: total,
@@ -49,45 +38,32 @@ const getTimeRemaining = (endtime) => {
   }
 };
 
-const getDates = (starttime, endtime) => {
-  const now = new Date().getTime();
-  const start = new Date(starttime).getTime();
-  const end = new Date(endtime).getTime();
+const getDates = (start, end) => {
+  const now = Date.now();
+  const startDate = new Date(start);
+  const endDate = new Date(end);
+  const startTime = startDate.getTime();
+  const endTime = endDate.getTime();
 
-  let state;
-  if (now >= start && now <= end) {
-    state = "active";
+  let contestStatus;
+  if (now >= startTime && now <= endTime) {
+    contestStatus = "active";
   }
-  if (now < start) {
-    state = "soon";
+  if (now < startTime) {
+    contestStatus = "soon";
   }
-  if (now >= end) {
-    state = "completed";
+  if (now >= endTime) {
+    contestStatus = "completed";
   }
 
-  const startMonth = monthNames[new Date(starttime).getMonth()];
-  const startYear = new Date(starttime).getFullYear();
-  const startDate = new Date(starttime).getDate();
-  const endMonth = monthNames[new Date(endtime).getMonth()];
-  const endYear = new Date(endtime).getFullYear();
-  const endDate = new Date(endtime).getDate();
-  const daysDuration = Math.round(
-    ((((((((end - start) * 1) / 1000) * 1) / 60) * 1) / 60) * 1) / 24
-  );
+  const daysDuration = differenceInCalendarDays(endDate, startDate)
 
   const t = {
-    state,
-    now,
-    start,
-    end,
-    startMonth,
-    startDate,
-    endMonth,
-    endDate,
-    startDay: `${startMonth} ${startDate}`,
-    endDay: `${endMonth} ${endDate}`,
-    startYear,
-    endYear,
+    contestStatus,
+    start: startTime,
+    end: endTime,
+    startDay: format(startDate, 'd MMMM yyyy'),
+    endDay: format(endDate, 'd MMMM yyyy'),
     daysDuration,
   };
 

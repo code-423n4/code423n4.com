@@ -7,6 +7,7 @@ const MarkdownRemark = `
     title:        String
     slug:         String
     url:          String
+    altUrl:       String
     title:        String
     findings:     String
     date:         Date
