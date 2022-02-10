@@ -20,27 +20,15 @@ function ContactUs() {
           value: "wardenRegistration",
         },
         {
-          label: "Update wallet",
+          label: "Update polygon address",
           value: "walletUpdate",
-        },
-        {
-          label: "Airdrop help",
-          value: "airdropHelp",
         },
         {
           label: "Change or withdraw a finding I submitted",
           value: "findingsChange",
         },
         {
-          label: "Process improvement",
-          value: "suggestion",
-        },
-        {
-          label: "C4 documentation",
-          value: "docs",
-        },
-        {
-          label: "Report a bug",
+          label: "Report a bug or issue with documentation",
           value: "bug",
         },
         {
@@ -154,7 +142,7 @@ function ContactUs() {
   return (
     <DefaultLayout
       pageDescription="Need help with something? Contact us here."
-      pageTitle="Contact Us | Code 423n4"
+      pageTitle="Help | Code 423n4"
     >
       {(status === FormStatus.Unsubmitted ||
         status === FormStatus.Submitting) && (

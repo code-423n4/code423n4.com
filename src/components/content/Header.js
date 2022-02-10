@@ -50,7 +50,7 @@ const Header = () => {
           <Link to="/reports">Reports</Link>
           <Link to="/cosmos">Cosmos</Link>
           <a href="https://docs.code4rena.com">Docs</a>
-          <Link to="/contact-us">Help</Link>
+          <Link to="/help">Help</Link>
         </div>
       </nav>
       <span id="skip-link"></span>
