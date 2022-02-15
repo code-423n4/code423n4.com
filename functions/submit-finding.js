@@ -1,5 +1,4 @@
 const dedent = require("dedent");
-const csv = require("csvtojson");
 const { Octokit } = require("@octokit/core");
 const { token, apiKey, domain } = require("./_config");
 
@@ -12,13 +11,6 @@ function isDangerousHandle(s) {
 
 function isDangerousRepo(s) {
   return s.match(/^[0-9a-zA-Z\-]+$/) === null;
-}
-
-async function getContestEnd(contestId) {
-  const contests = await csv().fromFile("./_data/contests/contests.csv");
-
-  const contest = contests.find(c => c.contestid == contestId);
-  return new Date(contest.end_time).getTime();
 }
 
 exports.handler = async (event) => {
@@ -82,15 +74,6 @@ exports.handler = async (event) => {
       body:
         "Handle can only contain alphanumeric characters [a-zA-Z0-9], underscores (_), and hyphens (-).",
     };
-  }
-
-  // make sure finding was submitted within the contest window, allowing 5 sec padding
-  const contestEnd = await getContestEnd(contest)
-  if (Date.now() - 5000 > contestEnd) {
-    return {
-      statusCode: 400,
-      body: "This contest has ended."
-    }
   }
 
   const recipients = `${email}, submissions@code423n4.com`;
