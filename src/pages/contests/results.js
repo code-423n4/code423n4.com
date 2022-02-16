@@ -1,8 +1,17 @@
-import React from "react";
+import React, { useMemo } from "react";
+import { graphql } from "gatsby";
 
-const ContestResults = (props) => {
+import LeaderboardTable from "../../components/LeaderboardTable";
+
+const ContestResults = (data) => {  
+  const resultData = useMemo(() => {
+    let result = [];
+
+    return result;
+  }, [data]);
+
   return (
-    <div>test</div>
+    <LeaderboardTable results={resultData} />
   );
 };
 
