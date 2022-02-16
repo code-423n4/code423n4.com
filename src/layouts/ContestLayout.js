@@ -128,6 +128,7 @@ const ContestLayout = (props) => {
             <TabList>
               <Tab>Details</Tab>
               <Tab>FAQ</Tab>
+              <Tab>Results</Tab>
             </TabList>
 
             <TabPanel>
@@ -158,6 +159,11 @@ const ContestLayout = (props) => {
             <TabPanel>
               <div className="contest-wrapper">
                 <ContestFAQ />
+              </div>
+            </TabPanel>
+            <TabPanel>
+              <div className="contest-wrapper">
+                Some Results
               </div>
             </TabPanel>
           </Tabs>
