@@ -43,6 +43,11 @@ function contestSubmissionPermalink(contestNode) {
   return `/contests/${contestSlug(contestNode)}/submit`;
 }
 
+/* TODO: something like this? */
+function contestResultsPermalink(contestNode) {
+  return `/contests/${contestSlug(contestNode)}/results`;
+}
+
 function getRepoName(contestNode) {
   const regex = "([^/]+$)";
   const url = contestNode.repo;
