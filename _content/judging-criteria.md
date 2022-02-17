@@ -91,8 +91,7 @@ What resources and opportunities are required for this group of threat agents to
 - Full access or expensive resources required **(0)**
 - Special access or resources required **(4)**
 - Some access or resources required **(7)**
-- No access or re## 5.7. Duplicate Submissions
-  Should the same bug be submitted by multiple Wardens, Judges have the discretion to place these bugs into the same bucket, in which case, the award will be shared among those who submitted.
+- No access or resources required **(9)**
 
 How large is this group of threat agents?
 

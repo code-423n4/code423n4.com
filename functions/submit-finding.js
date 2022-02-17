@@ -1,5 +1,4 @@
 const dedent = require("dedent");
-const csv = require("csvtojson");
 const { Octokit } = require("@octokit/core");
 const { token, apiKey, domain } = require("./_config");
 
