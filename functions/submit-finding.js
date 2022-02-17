@@ -1,6 +1,7 @@
 const dedent = require("dedent");
 const { Octokit } = require("@octokit/core");
 const { token, apiKey, domain } = require("./_config");
+const csv = require("csvtojson");
 
 const octokit = new Octokit({ auth: token });
 const mg = require("mailgun-js")({ apiKey, domain });
