@@ -2,7 +2,6 @@
   base = "/"
   publish = "public/"
   command = "yarn build"
-  functions = "functions/"
   environment = { YARN_VERSION = "1.22.10" }
 
 [[redirects]]
@@ -12,3 +11,7 @@
 
 [context.deploy-preview]
   ignore = "bash ./netlify-ignore-branch.sh"
+
+[functions]
+  directory = "functions/"
+  included_files = ["_data/contests/*"]
