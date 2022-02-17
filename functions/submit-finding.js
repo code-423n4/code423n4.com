@@ -1,6 +1,7 @@
 const dedent = require("dedent");
 const { Octokit } = require("@octokit/core");
 const { token, apiKey, domain } = require("./_config");
+const csv = require("csvtojson");
 
 const octokit = new Octokit({ auth: token });
 const mg = require("mailgun-js")({ apiKey, domain });
@@ -13,8 +14,14 @@ function isDangerousRepo(s) {
   return s.match(/^[0-9a-zA-Z\-]+$/) === null;
 }
 
+async function getContestEnd(contestId) {
+  const contests = await csv().fromFile("_data/contests/contests.csv");
+
+  const contest = contests.find((c) => c.contestid == contestId);
+  return new Date(contest.end_time).getTime();
+}
+
 exports.handler = async (event) => {
-  console.log("event", event);
   // only allow POST
   if (event.httpMethod !== "POST") {
     return {
@@ -35,10 +42,10 @@ exports.handler = async (event) => {
     labels,
     contest,
     sponsor,
-    repo
+    repo,
   } = data;
 
-  const owner = 'code-423n4';
+  const owner = "code-423n4";
 
   // ensure we have the data we need
   if (
@@ -76,6 +83,23 @@ exports.handler = async (event) => {
     };
   }
 
+  // make sure finding was submitted within the contest window, allowing 5 sec padding
+  try {
+    const contestEnd = await getContestEnd(contest);
+    if (Date.now() - 5000 > contestEnd) {
+      return {
+        statusCode: 400,
+        body: "This contest has ended.",
+      };
+    }
+  } catch (error) {
+    console.error(error);
+    return {
+      statusCode: 422,
+      body: "Error fetching contest data",
+    };
+  }
+
   const recipients = `${email}, submissions@code423n4.com`;
   const text = dedent`
   C4 finding submitted: (risk = ${labels[1]})
@@ -101,7 +125,7 @@ exports.handler = async (event) => {
         labels,
       }
     );
-    
+
     const issueId = issueResult.data.number;
     const issueUrl = issueResult.data.html_url;
     const message = `${handle} issue #${issueId}`;
@@ -121,16 +145,13 @@ exports.handler = async (event) => {
       "base64"
     );
 
-    await octokit.request(
-      "PUT /repos/{owner}/{repo}/contents/{path}",
-      {
-        owner,
-        repo,
-        path,
-        message,
-        content,
-      }
-    );
+    await octokit.request("PUT /repos/{owner}/{repo}/contents/{path}", {
+      owner,
+      repo,
+      path,
+      message,
+      content,
+    });
 
     // Special email used for testing
     if (email === "@@@") {
@@ -154,8 +175,7 @@ exports.handler = async (event) => {
   } catch (error) {
     return {
       statusCode: 500,
-      body:
-        "Something went wrong with your submission. Please try again.",
+      body: "Something went wrong with your submission. Please try again.",
     };
   }
 };
