@@ -3,7 +3,7 @@ type OrgsJson implements Node {
   name:           String
   link:           String
   description:    String
-  contests:       [ ContestsCsv ] @link(by: "id", from: "contests")
+  contests:       [ ContestsCsv ] @link(by: "sponsor.name", from: "name")
   findings:       [ FindingsCsv ] @link(by: "id", from: "findings")
 }`;
 
