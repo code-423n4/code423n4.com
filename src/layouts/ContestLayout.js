@@ -6,7 +6,7 @@ import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import Countdown from "../components/Countdown";
 import { getDates } from "../utils/time";
 import ContestFAQ from "../pages/contests/faq";
-import ContestResults from "../pages/contests/results";
+import ContestResults from "../components/ContestResults";
 
 const ContestLayout = (props) => {
   const [artOpen, setArtOpen] = useState(false);
@@ -164,7 +164,7 @@ const ContestLayout = (props) => {
             </TabPanel>
             <TabPanel>
               <div className="contest-wrapper">
-                <ContestResults id={props.data.contestsCsv.contestid}/>
+                <ContestResults id={props.data}/>
               </div>
             </TabPanel>
           </Tabs>

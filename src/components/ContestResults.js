@@ -1,9 +1,14 @@
 import React, { useMemo } from "react";
-import { graphql } from "gatsby";
+import { graphql, useStaticQuery } from "gatsby";
 
-import LeaderboardTable from "../../components/LeaderboardTable";
+import LeaderboardTable from "./LeaderboardTable";
 
-const ContestResults = (data) => {  
+const ContestResults = (data) => {
+  // console.log(data);
+
+  // const q = useStaticQuery(query);
+  // console.log(q);
+
   const resultData = useMemo(() => {
     let result = [];
 
