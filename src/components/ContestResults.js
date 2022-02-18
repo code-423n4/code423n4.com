@@ -32,7 +32,7 @@ const ContestResults = ({ results }) => {
     let resultData = [];
     let handles = {};
 
-    for (const finding of results) {
+    for (const finding of results.findings) {
       if ( !(finding.handle.handle in handles) ) {
         const handleData = {
           handle: finding.handle.handle,
