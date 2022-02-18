@@ -164,7 +164,7 @@ const ContestLayout = (props) => {
             </TabPanel>
             <TabPanel>
               <div className="contest-wrapper">
-                <ContestResults id={props.data.contestsCsv.contestid}/>
+                <ContestResults handles={props.data.handles.edges}/>
               </div>
             </TabPanel>
           </Tabs>
@@ -214,6 +214,36 @@ export const contestLayoutQuery = graphql`
         link
       }
       title
+    }
+    handles: allHandlesJson(filter: { showOnLeaderboard: { ne: false }, findings: {elemMatch: {contest: {contestid: {eq: 1}}}} }) {
+      edges {
+        node {
+          handle
+          image {
+            childImageSharp {
+              resize(width: 40) {
+                src
+              }
+            }
+          }
+          link
+          members {
+            handle
+            image {
+              childImageSharp {
+                resize(width: 40) {
+                  src
+                }
+              }
+            }
+            link
+          }
+          findings {
+            awardUSD
+            risk
+          }
+        }
+      }
     }
   }
 `;
