@@ -2,73 +2,63 @@ import React, { useMemo } from "react";
 
 import LeaderboardTable from "./LeaderboardTable";
 
-function computeResults(findings) {
-  const results = {
-    lowRisk: 0,
-    medRisk: 0,
-    highRisk: 0,
-    nonCrit: 0,
-    gasOptz: 0,
-    allFindings: 0,
-    awardTotal: 0,
-  };
+function updateFindings(data, finding) {
+  data.allFindings += 1;
+  data.awardTotal += finding.awardUSD ?? 0;
 
-  findings.forEach((f) => {
-    results.allFindings += 1;
-    results.awardTotal += f.awardUSD ?? 0;
-
-    switch (f.risk.toLowerCase()) {
-      case "0":
-        results.nonCrit += 1;
-        break;
-      case "1":
-        results.lowRisk += 1;
-        break;
-      case "2":
-        results.medRisk += 1;
-        break;
-      case "3":
-        results.highRisk += 1;
-        break;
-      case "g":
-        results.gasOptz += 1;
-        break;
-      default:
-        break;
-    }
-  });
-
-  return results;
+  switch (finding.risk.toLowerCase()) {
+    case "0":
+      data.nonCrit += 1;
+      break;
+    case "1":
+      data.lowRisk += 1;
+      break;
+    case "2":
+      data.medRisk += 1;
+      break;
+    case "3":
+      data.highRisk += 1;
+      break;
+    case "g":
+      data.gasOptz += 1;
+      break;
+    default:
+      break;
+  }
 }
 
 const ContestResults = ({ results }) => {
   const resultData = useMemo(() => {
-    let result = [];
+    let resultData = [];
+    let handles = {};
 
-    // for (const handle of handles) {
-    //   let p = handle.node;
+    for (const finding of results) {
+      if ( !(finding.handle.handle in handles) ) {
+        const handleData = {
+          handle: finding.handle.handle,
+          image: finding.handle.image,
+          link: finding.handle.link,
+          members: finding.handle.members,
+          lowRisk: 0,
+          medRisk: 0,
+          highRisk: 0,
+          nonCrit: 0,
+          gasOptz: 0,
+          allFindings: 0,
+          awardTotal: 0,
+        };
+        handles[finding.handle.handle] = { ...handleData };
+      }
+      updateFindings(handles[finding.handle.handle], finding);
+    }
 
-    //   const handleData = {
-    //     handle: p.handle,
-    //     image: p.image,
-    //     link: p.link,
-    //     members: p.members,
-    //     lowRisk: 0,
-    //     medRisk: 0,
-    //     highRisk: 0,
-    //     nonCrit: 0,
-    //     gasOptz: 0,
-    //     allFindings: 0,
-    //     awardTotal: 0,
-    //   };
+    for (const handle in handles) {
+      if (handles[handle].allFindings > 0) {
+        resultData.push(handles[handle]);
+      }
+    }
 
-    //   const combinedData = { ...handleData, ...computeResults(p.findings) };
-    //   if (combinedData.allFindings > 0) {
-    //     result.push(combinedData);
-    //   }
-    // }
-
-    return result;
+    return resultData;
   }, [results]);
 
   return (
