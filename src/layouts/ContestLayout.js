@@ -162,11 +162,13 @@ const ContestLayout = (props) => {
                 <ContestFAQ />
               </div>
             </TabPanel>
-            <TabPanel>
-              <div className="contest-wrapper">
-                <ContestResults results={props.data.leaderboardFindings}/>
-              </div>
-            </TabPanel>
+            {props.data.leaderboardFindings && (
+              <TabPanel>
+                <div className="contest-wrapper">
+                  <ContestResults results={props.data.leaderboardFindings}/>
+                </div>
+              </TabPanel>
+            )}
           </Tabs>
         </section>
       </>
