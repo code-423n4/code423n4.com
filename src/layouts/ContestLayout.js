@@ -129,7 +129,7 @@ const ContestLayout = (props) => {
             <TabList>
               <Tab>Details</Tab>
               <Tab>FAQ</Tab>
-              <Tab>Results</Tab>
+              {props.data.leaderboardFindings && <Tab>Results</Tab>}
             </TabList>
 
             <TabPanel>
