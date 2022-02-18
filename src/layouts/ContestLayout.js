@@ -164,7 +164,7 @@ const ContestLayout = (props) => {
             </TabPanel>
             <TabPanel>
               <div className="contest-wrapper">
-                <ContestResults id={props.data}/>
+                <ContestResults id={props.data.contestsCsv.contestid}/>
               </div>
             </TabPanel>
           </Tabs>
