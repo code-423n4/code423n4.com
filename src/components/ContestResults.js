@@ -41,35 +41,35 @@ function computeResults(findings) {
   return results;
 }
 
-const ContestResults = ({ handles }) => {
+const ContestResults = ({ results }) => {
   const resultData = useMemo(() => {
     let result = [];
 
-    for (const handle of handles) {
-      let p = handle.node;
+    // for (const handle of handles) {
+    //   let p = handle.node;
 
-      const handleData = {
-        handle: p.handle,
-        image: p.image,
-        link: p.link,
-        members: p.members,
-        lowRisk: 0,
-        medRisk: 0,
-        highRisk: 0,
-        nonCrit: 0,
-        gasOptz: 0,
-        allFindings: 0,
-        awardTotal: 0,
-      };
+    //   const handleData = {
+    //     handle: p.handle,
+    //     image: p.image,
+    //     link: p.link,
+    //     members: p.members,
+    //     lowRisk: 0,
+    //     medRisk: 0,
+    //     highRisk: 0,
+    //     nonCrit: 0,
+    //     gasOptz: 0,
+    //     allFindings: 0,
+    //     awardTotal: 0,
+    //   };
 
-      const combinedData = { ...handleData, ...computeResults(p.findings) };
-      if (combinedData.allFindings > 0) {
-        result.push(combinedData);
-      }
-    }
+    //   const combinedData = { ...handleData, ...computeResults(p.findings) };
+    //   if (combinedData.allFindings > 0) {
+    //     result.push(combinedData);
+    //   }
+    // }
 
     return result;
-  }, [handles]);
+  }, [results]);
 
   return (
     <LeaderboardTable results={resultData} />

@@ -164,7 +164,7 @@ const ContestLayout = (props) => {
             </TabPanel>
             <TabPanel>
               <div className="contest-wrapper">
-                <ContestResults handles={props.data.handles.edges}/>
+                <ContestResults results={props.data.leaderboardFindings}/>
               </div>
             </TabPanel>
           </Tabs>
@@ -215,9 +215,13 @@ export const query = graphql`
       }
       title
     }
-    handles: allHandlesJson(filter: { showOnLeaderboard: { ne: false }, findings: {elemMatch: {contest: {contestid: {eq: $contestId}}}} }) {
-      edges {
-        node {
+    leaderboardFindings: contestsCsv(contestid: {eq: $contestId}) {
+      title
+      findings {
+        finding
+        awardUSD
+        risk
+        handle {
           handle
           image {
             childImageSharp {
@@ -237,10 +241,6 @@ export const query = graphql`
               }
             }
             link
-          }
-          findings {
-            awardUSD
-            risk
           }
         }
       }
