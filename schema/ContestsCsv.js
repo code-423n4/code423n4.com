@@ -13,7 +13,7 @@ type ContestsCsv implements Node @dontInfer {
   league:         String
 
   fields:         ContestsCsvFields
-  findings:       [FindingsCsv] @link(by: "id", from: "findings")
+  findings:       [FindingsCsv] @link(by: "contest.contestid", from: "contestid")
 }`;
 
 export default ContestsCsv;
