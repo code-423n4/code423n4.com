@@ -1,5 +1,5 @@
 const ContestsCsv = `
-type ContestsCsv implements Node {
+type ContestsCsv implements Node @dontInfer {
   contestid:      Int
   sponsor:        OrgsJson @link(by: "name", from: "sponsor")
   title:          String
@@ -14,6 +14,7 @@ type ContestsCsv implements Node {
   findings:       [ FindingsCsv ] @link(by: "id", from: "findings")
   hide:           Boolean
   league:         String
+  fields:         ContestsCsvFields
 }`;
 
 export default ContestsCsv;
