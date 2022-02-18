@@ -175,7 +175,7 @@ const ContestLayout = (props) => {
 };
 export default ContestLayout;
 
-export const contestLayoutQuery = graphql`
+export const query = graphql`
   query contestLayoutQuery($contestId: Int) {
     markdownRemark(
       frontmatter: { contest: { contestid: { eq: $contestId } } }
@@ -215,7 +215,7 @@ export const contestLayoutQuery = graphql`
       }
       title
     }
-    handles: allHandlesJson(filter: { showOnLeaderboard: { ne: false }, findings: {elemMatch: {contest: {contestid: {eq: 1}}}} }) {
+    handles: allHandlesJson(filter: { showOnLeaderboard: { ne: false }, findings: {elemMatch: {contest: {contestid: {eq: $contestId}}}} }) {
       edges {
         node {
           handle
