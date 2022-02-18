@@ -8,9 +8,9 @@ function csvBooleanParser(item) {
 
 module.exports = {
   siteMetadata: {
-    title: `code423n4.com`,
+    title: `code4rena.com`,
     description: `C4 website`,
-    siteUrl: `https://code423n4.com`,
+    siteUrl: `https://code4rena.com`,
     author: `Adam Avenir (@sockdrawermoney)`,
   },
   plugins: [
