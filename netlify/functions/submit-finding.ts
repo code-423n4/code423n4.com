@@ -212,13 +212,20 @@ exports.handler = async (event) => {
   const owner = process.env.GITHUB_CONTEST_REPO_OWNER;
 
   try {
+    const markdownPath = `data/${attributedTo}-${risk}.md`;
+    const qaOrGasSubmissionBody = dedent`
+      This report was too long to be submitted as a GitHub issue. 
+      [See the markdown file here](https://github.com/${owner}/${repo}/blob/main/${markdownPath}).
+    `;
+    const isQaOrGasSubmission = Boolean(risk === "G" || risk === "1");
+
     const issueResult = await octokit.request(
       "POST /repos/{owner}/{repo}/issues",
       {
         owner,
         repo,
         title,
-        body,
+        body: isQaOrGasSubmission ? qaOrGasSubmissionBody : body,
         labels,
       }
     );
@@ -249,6 +256,16 @@ exports.handler = async (event) => {
       message,
       content,
     });
+
+    if (isQaOrGasSubmission) {
+      await octokit.request("PUT /repos/{owner}/{repo}/contents/{path}", {
+        owner,
+        repo,
+        path: markdownPath,
+        message: `${attributedTo} data for issue #${issueId}`,
+        content,
+      });
+    }
 
     if (apiKey && domain && process.env.EMAIL_SENDER) {
       const text = dedent`
