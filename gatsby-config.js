@@ -53,7 +53,7 @@ module.exports = {
     {
       resolve: "gatsby-source-filesystem",
       options: {
-        path: `${__dirname}/_reports`,
+        path: `${__dirname}/_data/reports`,
         name: `reports`,
       },
     },
@@ -99,6 +99,7 @@ module.exports = {
           start_time: csvDatetimeParser,
           end_time: csvDatetimeParser,
           hide: csvBooleanParser,
+          contest: `number`,
         },
       },
     },

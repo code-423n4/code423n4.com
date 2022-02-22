@@ -272,6 +272,12 @@ const Form = ({ contest, sponsor, repoUrl }) => {
       ...state,
       title: "",
       details: mdTemplate,
+      linesOfCode: [
+        {
+          id: Date.now(),
+          value: "",
+        },
+      ],
     });
     setStatus(FormStatus.Unsubmitted);
   };
