@@ -129,7 +129,7 @@ const ContestLayout = (props) => {
             <TabList>
               <Tab>Details</Tab>
               <Tab>FAQ</Tab>
-              {props.data.leaderboardFindings && <Tab>Results</Tab>}
+              {(props.data.leaderboardFindings.findings.length > 0) && <Tab>Results</Tab>}
             </TabList>
 
             <TabPanel>
@@ -162,7 +162,7 @@ const ContestLayout = (props) => {
                 <ContestFAQ />
               </div>
             </TabPanel>
-            {props.data.leaderboardFindings && (
+            {(props.data.leaderboardFindings.findings.length > 0) && (
               <TabPanel>
                 <div className="contest-wrapper">
                   <ContestResults results={props.data.leaderboardFindings}/>
