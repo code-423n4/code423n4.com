@@ -127,11 +127,18 @@ const ContestLayout = (props) => {
         <section>
           <Tabs className="contest-tabs">
             <TabList>
+              {(props.data.leaderboardFindings.findings.length > 0) && <Tab>Results</Tab>}
               <Tab>Details</Tab>
               <Tab>FAQ</Tab>
-              {(props.data.leaderboardFindings.findings.length > 0) && <Tab>Results</Tab>}
             </TabList>
 
+            {(props.data.leaderboardFindings.findings.length > 0) && (
+              <TabPanel>
+                <div className="contest-wrapper">
+                  <ContestResults results={props.data.leaderboardFindings}/>
+                </div>
+              </TabPanel>
+            )}
             <TabPanel>
               <div className="contest-wrapper">
                 {t.contestStatus === "soon" ? (
@@ -162,13 +169,6 @@ const ContestLayout = (props) => {
                 <ContestFAQ />
               </div>
             </TabPanel>
-            {(props.data.leaderboardFindings.findings.length > 0) && (
-              <TabPanel>
-                <div className="contest-wrapper">
-                  <ContestResults results={props.data.leaderboardFindings}/>
-                </div>
-              </TabPanel>
-            )}
           </Tabs>
         </section>
       </>
