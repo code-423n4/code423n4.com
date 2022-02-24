@@ -59,7 +59,7 @@ const LinesOfCode = ({ onChange, linesOfCode, hasValidationErrors }) => {
   const handleRemoveInputField = useCallback(
     (id) => {
       const updatedCodeLines = linesOfCode.filter((field) => {
-        return field.id != id;
+        return field.id !== id;
       });
       onChange(updatedCodeLines);
     },
