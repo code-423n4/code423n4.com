@@ -63,7 +63,7 @@ const LinesOfCode = ({ onChange, linesOfCode, hasValidationErrors }) => {
       });
       onChange(updatedCodeLines);
     },
-    [linesOfCode]
+    [linesOfCode, onChange]
   );
 
   const handleAddInputField = (e) => {
@@ -79,7 +79,7 @@ const LinesOfCode = ({ onChange, linesOfCode, hasValidationErrors }) => {
         bug throughout the repo. (
         <a
           href="https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/creating-a-permanent-link-to-a-code-snippet#linking-to-code"
-          target="_blank"
+          target="_blank" rel="noreferrer"
           aria-label="How do I link to line number on GitHub? Opens in new window."
         >
           How do I link to line numbers on GitHub?
