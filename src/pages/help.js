@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from "react";
 import HCaptcha from "@hcaptcha/react-hcaptcha";
-import DefaultLayout from "../layouts/DefaultLayout";
+import DefaultLayout from "../templates/DefaultLayout";
 import Widget from "../components/reporter/widgets/Widget";
 import FormField from "../components/reporter/widgets/FormField";
 import * as styles from "../components/reporter/Form.module.scss";
