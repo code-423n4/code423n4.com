@@ -72,7 +72,7 @@ const Leaderboard = ({ data }) => {
     }
 
     return result;
-  }, [data]);
+  }, [handles]);
 
   return (
     <DefaultLayout pageTitle="Leaderboard" bodyClass="leaderboard">
