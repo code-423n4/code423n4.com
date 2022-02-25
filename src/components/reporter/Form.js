@@ -261,7 +261,12 @@ const Form = ({ contest, sponsor, repoUrl }) => {
       hasErrors = true;
     }
 
-    setHasValidationErrors(hasErrors);
+    const regex = new RegExp("#L", "g");
+    const hasInvalidLinks = state.linesOfCode.some((line) => {
+      return !regex.test(line.value);
+    });
+
+    setHasValidationErrors(hasErrors || hasInvalidLinks);
     if (!hasErrors) {
       submitFinding(submissionUrl, formData);
     }
