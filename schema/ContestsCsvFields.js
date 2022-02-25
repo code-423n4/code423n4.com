@@ -1,5 +1,5 @@
 const ContestsCsvFields = `
-type ContestsCsvFields implements Node {
+type ContestsCsvFields implements Node @dontInfer {
   contestPath: String
   submissionPath: String
   artPath: String

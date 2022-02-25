@@ -6,6 +6,7 @@ import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import Countdown from "../components/Countdown";
 import { getDates } from "../utils/time";
 import ContestFAQ from "../pages/contests/faq";
+import ContestResults from "../components/ContestResults";
 
 const ContestLayout = (props) => {
   const [artOpen, setArtOpen] = useState(false);
@@ -126,10 +127,18 @@ const ContestLayout = (props) => {
         <section>
           <Tabs className="contest-tabs">
             <TabList>
+              {(props.data.leaderboardFindings.findings.length > 0) && <Tab>Results</Tab>}
               <Tab>Details</Tab>
               <Tab>FAQ</Tab>
             </TabList>
 
+            {(props.data.leaderboardFindings.findings.length > 0) && (
+              <TabPanel>
+                <div className="contest-wrapper">
+                  <ContestResults results={props.data.leaderboardFindings}/>
+                </div>
+              </TabPanel>
+            )}
             <TabPanel>
               <div className="contest-wrapper">
                 {t.contestStatus === "soon" ? (
@@ -168,7 +177,7 @@ const ContestLayout = (props) => {
 };
 export default ContestLayout;
 
-export const contestLayoutQuery = graphql`
+export const query = graphql`
   query contestLayoutQuery($contestId: Int) {
     markdownRemark(
       frontmatter: { contest: { contestid: { eq: $contestId } } }
@@ -207,6 +216,36 @@ export const contestLayoutQuery = graphql`
         link
       }
       title
+    }
+    leaderboardFindings: contestsCsv(contestid: {eq: $contestId}) {
+      title
+      findings {
+        finding
+        awardUSD
+        risk
+        handle {
+          handle
+          image {
+            childImageSharp {
+              resize(width: 40) {
+                src
+              }
+            }
+          }
+          link
+          members {
+            handle
+            image {
+              childImageSharp {
+                resize(width: 40) {
+                  src
+                }
+              }
+            }
+            link
+          }
+        }
+      }
     }
   }
 `;
