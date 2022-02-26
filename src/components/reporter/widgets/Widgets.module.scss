@@ -32,11 +32,13 @@
 
 .ErrorMessage {
   display: flex;
-  align-items: center;
   &::before {
     content: "";
     width: 8px;
     height: 8px;
+    aspect-ratio: 1/1;
+    margin-top: 6px;
+
     border-radius: 100%;
     background-color: var(--hot-pink);
     display: inline-block;
@@ -76,9 +78,11 @@
 
 .Markdown {
   height: 250px;
-  overflow: auto;  
+  overflow: auto;
 
-  h1,h2,h3 {
+  h1,
+  h2,
+  h3 {
     font-weight: 600;
     text-align: left;
     color: white;
@@ -107,11 +111,10 @@
     &::-webkit-scrollbar {
       height: 5px;
     }
-    
+
     &::-webkit-scrollbar-thumb {
       height: 5px;
     }
-
   }
 
   code {
