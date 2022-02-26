@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import { graphql } from "gatsby";
-import DefaultLayout from "../layouts/DefaultLayout";
+import DefaultLayout from "../templates/DefaultLayout";
 import LeaderboardTable from "../components/LeaderboardTable";
 
 function computeResults(findings) {
