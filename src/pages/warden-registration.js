@@ -2,7 +2,7 @@ import React, { useCallback, useState, useRef } from "react";
 import { graphql } from "gatsby";
 import clsx from "clsx";
 import HCaptcha from "@hcaptcha/react-hcaptcha";
-import DefaultLayout from "../layouts/DefaultLayout";
+import DefaultLayout from "../templates/DefaultLayout";
 import * as styles from "../components/reporter/Form.module.scss";
 import * as widgetStyles from "../components/reporter/widgets/Widgets.module.scss";
 import Agreement from "../components/content/Agreement.js";

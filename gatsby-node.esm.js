@@ -174,8 +174,8 @@ exports.createPages = async ({ graphql, actions }) => {
   const { createPage } = actions;
 
   let contests = await graphql(queries.contests);
-  const formTemplate = path.resolve("./src/layouts/ReportForm.js");
-  const contestTemplate = path.resolve("./src/layouts/ContestLayout.js");
+  const formTemplate = path.resolve("./src/templates/ReportForm.js");
+  const contestTemplate = path.resolve("./src/templates/ContestLayout.js");
   contests.data.contests.edges.forEach((contest) => {
     if (contest.node.findingsRepo) {
       createPage({

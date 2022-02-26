@@ -1,6 +1,6 @@
 import React from "react";
 import { graphql } from "gatsby";
-import DefaultLayout from "../../layouts/DefaultLayout";
+import DefaultLayout from "../../templates/DefaultLayout";
 import ReportList from "../../components/ReportList";
 
 export default function ReportIndex({ data }) {
