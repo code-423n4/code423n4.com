@@ -243,7 +243,7 @@ const Form = ({ contest, sponsor, repoUrl }) => {
         setIsQaOrGasFinding(false);
       }
     },
-    [state, isQaOrGasFinding]
+    [handleChange]
   );
 
   const handleSubmit = () => {
