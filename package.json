@@ -18,6 +18,8 @@
     "@octokit/core": "^3.5.1",
     "@octokit/graphql": "^4.8.0",
     "@types/react": "^17.0.39",
+    "@walletconnect/client": "^1.7.3",
+    "@walletconnect/qrcode-modal": "^1.7.3",
     "babel-eslint": "^10.0.0",
     "clsx": "^1.1.1",
     "csvtojson": "^2.0.10",
