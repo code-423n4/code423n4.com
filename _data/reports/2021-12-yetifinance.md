@@ -38,7 +38,7 @@ During the code contest outlined in this document, C4 conducted an analysis of Y
 1. [Ruhum](https://twitter.com/0xruhum)
 1. [gzeon](https://twitter.com/gzeon)
 1. certora
-1. [Dravee](https://twitter.com/DylanPokun)
+1. [Dravee](https://twitter.com/JustDravee)
 1. [shenwilly](https://twitter.com/shenwilly_)
 1. p4st13r4 (0xb4bb4 and [0x69e8](https://github.com/0x69e8))
 1. [gpersoon](https://twitter.com/gpersoon)
