@@ -51,6 +51,7 @@ const Header = () => {
           <Link to="/cosmos">Cosmos</Link>
           <a href="https://docs.code4rena.com">Docs</a>
           <Link to="/help">Help</Link>
+          <Link to="/login">Login</Link>
         </div>
       </nav>
       <span id="skip-link"></span>
