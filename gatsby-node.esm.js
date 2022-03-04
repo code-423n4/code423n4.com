@@ -207,5 +207,14 @@ exports.createPages = async ({ graphql, actions }) => {
   });
 
   // let wardens -- to generate warden page(s)
+  let wardens = await graphql(queries.wardens);
+  wardens.data.wardens.nodes.forEach((warden) => {
+    console.log(warden);
+  });
+
   // let sponsors -- to generate sponsor page(s)
+  let sponsors = await graphql(queries.sponsors);
+  sponsors.data.sponsors.nodes.forEach((sponsor) => {
+    console.log(sponsor);
+  });
 };
