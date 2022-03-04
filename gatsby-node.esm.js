@@ -225,6 +225,11 @@ exports.createPages = async ({ graphql, actions }) => {
   let sponsors = await graphql(queries.sponsors);
   const sponsorPageTemplate = path.resolve("./src/templates/SponsorLayout.js");
   sponsors.data.sponsors.nodes.forEach((sponsor) => {
-    console.log(sponsor);
+    createPage({
+      path: `/sponsors/${sponsor.name}`,
+      component: sponsorPageTemplate,
+      context: {
+      },
+    });
   });
 };
