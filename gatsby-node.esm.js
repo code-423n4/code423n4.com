@@ -195,4 +195,7 @@ exports.createPages = async ({ graphql, actions }) => {
       },
     });
   });
+
+  // let wardens -- to generate warden page(s)
+  // let sponsors -- to generate sponsor page(s)
 };
