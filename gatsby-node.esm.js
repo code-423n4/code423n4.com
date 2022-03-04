@@ -101,9 +101,19 @@ const queries = {
           }
         }
       }
-    }
-  }
-`,
+    } }`,
+  wardens: `query {
+    wardens: allHandlesJson {
+      nodes {
+        handle
+      }
+    } }`,
+  sponsors: `query {
+    sponsors: allOrgsJson {
+      nodes {
+        name
+      }
+    } }`
 };
 
 exports.createSchemaCustomization = ({ actions }) => {
