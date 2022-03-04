@@ -211,12 +211,14 @@ exports.createPages = async ({ graphql, actions }) => {
 
   // let wardens -- to generate warden page(s)
   let wardens = await graphql(queries.wardens);
+  const wardenPageTemplate = path.resolve("./src/templates/WardenLayout.js");
   wardens.data.wardens.nodes.forEach((warden) => {
     console.log(warden);
   });
 
   // let sponsors -- to generate sponsor page(s)
   let sponsors = await graphql(queries.sponsors);
+  const sponsorPageTemplate = path.resolve("./src/templates/SponsorLayout.js");
   sponsors.data.sponsors.nodes.forEach((sponsor) => {
     console.log(sponsor);
   });
