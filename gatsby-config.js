@@ -99,6 +99,7 @@ module.exports = {
           start_time: csvDatetimeParser,
           end_time: csvDatetimeParser,
           hide: csvBooleanParser,
+          contest: `number`,
         },
       },
     },
@@ -115,8 +116,8 @@ module.exports = {
       options: {
         extensions: [`.mdx`],
         defaultLayouts: {
-          reports: require.resolve("./src/layouts/ReportLayout.js"),
-          default: require.resolve("./src/layouts/DefaultLayout.js"),
+          reports: require.resolve("./src/templates/ReportLayout.js"),
+          default: require.resolve("./src/templates/DefaultLayout.js"),
         },
       },
     },

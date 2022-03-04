@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { graphql } from "gatsby";
-import DefaultLayout from "../../layouts/DefaultLayout";
+import DefaultLayout from "../../templates/DefaultLayout";
 import ContestList from "../../components/ContestList";
 import { contestsByState } from "../../utils/filter";
 

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { graphql } from "gatsby";
-import DefaultLayout from "../layouts/DefaultLayout";
+import DefaultLayout from "../templates/DefaultLayout";
 import HeroIndex from "../components/content/HeroIndex";
 import ContestList from "../components/ContestList";
 import Testimonials from "../components/Testimonials";

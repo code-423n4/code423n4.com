@@ -14,6 +14,7 @@ const WardenOptionLabel = ({ value, image }) => {
             ? image.childImageSharp.resize.src
             : "https://placekitten.com/g/64/64"
         }
+        alt={"avatar for " + value}
       />
       <span>{value}</span>
     </div>
