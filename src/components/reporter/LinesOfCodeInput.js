@@ -10,7 +10,10 @@ const InputField = ({
   handleRemoveInputField,
   hasValidationErrors,
 }) => {
-  const isInvalid = hasValidationErrors && index === 0 && value === "";
+  const regex = new RegExp("#L", "g");
+  const isComplete = regex.test(value);
+  const isInvalid =
+    hasValidationErrors && ((index === 0 && value === "") || !isComplete);
 
   return (
     <div>
@@ -41,7 +44,20 @@ const InputField = ({
       </div>
       {isInvalid && (
         <label for={index} className={styles.ErrorMessage}>
-          This field is required
+          {value === "" ? (
+            "This field is required"
+          ) : (
+            <span>
+              Please include at least one line number at the end of your URL.{" "}
+              <a
+                href="https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/creating-a-permanent-link-to-a-code-snippet#linking-to-code"
+                target="_blank"
+                aria-label="How do I link to line numbers on GitHub? Opens in new window"
+              >
+                How do I link to line numbers on GitHub?
+              </a>
+            </span>
+          )}
         </label>
       )}
     </div>
@@ -59,11 +75,11 @@ const LinesOfCode = ({ onChange, linesOfCode, hasValidationErrors }) => {
   const handleRemoveInputField = useCallback(
     (id) => {
       const updatedCodeLines = linesOfCode.filter((field) => {
-        return field.id != id;
+        return field.id !== id;
       });
       onChange(updatedCodeLines);
     },
-    [linesOfCode]
+    [linesOfCode, onChange]
   );
 
   const handleAddInputField = (e) => {
@@ -79,7 +95,7 @@ const LinesOfCode = ({ onChange, linesOfCode, hasValidationErrors }) => {
         bug throughout the repo. (
         <a
           href="https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/creating-a-permanent-link-to-a-code-snippet#linking-to-code"
-          target="_blank"
+          target="_blank" rel="noreferrer"
           aria-label="How do I link to line number on GitHub? Opens in new window."
         >
           How do I link to line numbers on GitHub?

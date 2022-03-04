@@ -1,6 +1,6 @@
 import * as React from "react";
 import { graphql } from "gatsby";
-import DefaultLayout from "../layouts/DefaultLayout";
+import DefaultLayout from "../templates/DefaultLayout";
 
 function PageTemplate({ data }) {
   const page = data.markdownRemark;
