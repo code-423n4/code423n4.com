@@ -10,7 +10,7 @@ const LeaderboardHandle = ({ handle, image, link, members }) => {
           <span className="teamname">{handle}</span>
           {members.map((member) => (
             <div className="member" key={member.handle}>
-              <a href={member.link}>
+              <a href={"/wardens/"+member.handle}>
                 {member.image ? (
                   <Avatar
                     src={member.image.childImageSharp.resize.src}
@@ -27,7 +27,7 @@ const LeaderboardHandle = ({ handle, image, link, members }) => {
           ))}
         </div>
       ) : (
-        <a href={link}>
+        <a href={"/wardens/"+handle}>
           {image ? (
             <Avatar
               src={image.childImageSharp.resize.src}
