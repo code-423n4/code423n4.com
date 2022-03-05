@@ -88,6 +88,7 @@ const ContestLayout = (props) => {
           </div>
           <div className="top-section-text">
             <h1>{title}</h1>
+            <h2><a href={"/sponsors/"+sponsor.name}>{sponsor.name}</a></h2>
             <p>{details}</p>
             <div className="button-wrapper">
               {t.contestStatus !== "soon" ? (
