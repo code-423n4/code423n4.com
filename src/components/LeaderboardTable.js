@@ -2,10 +2,10 @@ import React from "react";
 import { useTable, useSortBy } from "react-table";
 import LeaderboardHandle from "./LeaderboardHandle";
 
-const LeaderboardTable = ({ results }) => {
+const LeaderboardTable = ({ results, mode="warden" }) => {
   const columns = React.useMemo(
     () => [
-          {
+          mode === "warden" ? {
             Header: "Competitor",
             accessor: "handle",
             defaultCanSort: false,
@@ -17,7 +17,9 @@ const LeaderboardTable = ({ results }) => {
                 members={props.row.original.members}
               />
             ),
-          },
+          } : mode === "contest" ? {
+            Header: "Contest",
+          } : {},
           {
             Header: "USD",
             accessor: "awardTotal",
