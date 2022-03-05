@@ -217,6 +217,7 @@ exports.createPages = async ({ graphql, actions }) => {
       path: `/wardens/${warden.handle}`,
       component: wardenPageTemplate,
       context: {
+        wardenId: warden.handle,
       },
     });
   });
