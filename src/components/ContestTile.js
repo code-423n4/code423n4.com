@@ -38,6 +38,7 @@ const ContestTile = ({ contest: { node }, updateContestStatus }) => {
         <h4>
           {amount ? amount : ""} {title}
         </h4>
+        <h5><a href={"/sponsors/"+sponsor.name}>{sponsor.name}</a></h5>
         <p>{details}</p>
         {t.contestStatus !== "active" ? (
           <p className="days-duration">{t.daysDuration} day contest</p>
