@@ -1,10 +1,17 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { graphql } from "gatsby";
 
 import DefaultLayout from "./DefaultLayout";
+import LeaderboardTable from "../components/LeaderboardTable";
 
 const SponsorLayout = (props) => {
   const pageTitle = `Sponsor ${props.pageContext.sponsorId}`;
+
+  const resultData = useMemo(() => {
+    let resultData = [];
+
+    return resultData;
+  });
 
   return (
     <DefaultLayout
@@ -14,6 +21,7 @@ const SponsorLayout = (props) => {
       pageDescription=""
     >
       <p>{props.pageContext.sponsorId}</p>
+      <LeaderboardTable results={resultData} mode="contest" />
     </DefaultLayout>
   );
 };

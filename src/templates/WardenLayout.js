@@ -1,11 +1,18 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { graphql } from "gatsby";
 
 import DefaultLayout from "./DefaultLayout";
+import LeaderboardTable from "../components/LeaderboardTable";
 
 const WardenLayout = (props) => {
   const pageTitle = `Warden ${props.pageContext.wardenId}`;
-  
+
+  const resultData = useMemo(() => {
+    let resultData = [];
+
+    return resultData;
+  });
+
   return (
     <DefaultLayout
       pageTitle={pageTitle}
@@ -14,6 +21,7 @@ const WardenLayout = (props) => {
       pageDescription=""
     >
       <p>{props.pageContext.wardenId}</p>
+      <LeaderboardTable results={resultData} mode="contest" />
     </DefaultLayout>
   );
 };
