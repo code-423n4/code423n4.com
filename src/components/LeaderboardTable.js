@@ -5,55 +5,73 @@ import LeaderboardHandle from "./LeaderboardHandle";
 const LeaderboardTable = ({ results }) => {
   const columns = React.useMemo(
     () => [
-          {
-            Header: "Competitor",
-            accessor: "handle",
-            defaultCanSort: false,
-            Cell: (props) => (
-              <LeaderboardHandle
-                handle={props.row.original.handle}
-                image={props.row.original.image}
-                link={props.row.original.link}
-                members={props.row.original.members}
-              />
-            ),
-          },
-          {
-            Header: "USD",
-            accessor: "awardTotal",
-            sortDescFirst: true,
-            Cell: (props) => {
-              return (
-                <span>
-                  {props.value.toLocaleString("en-US", {
-                    style: "currency",
-                    currency: "USD",
-                  })}
-                </span>
-              );
-            },
-          },
+      {
+        Header: "Competitor",
+        Cell: (props) => (
+          <LeaderboardHandle
+            handle={props.row.original.handle}
+            image={props.row.original.image}
+            link={props.row.original.link}
+            members={props.row.original.members}
+          />
+        ),
+      },
+      {
+        Header: "USD",
+        accessor: "awardTotal",
+        sortDescFirst: true,
+        Cell: (props) => {
+          return (
+            <span>
+              {props.value.toLocaleString("en-US", {
+                style: "currency",
+                currency: "USD",
+              })}
+            </span>
+          );
+        },
+      },
+      {
+        Header: "All",
+        accessor: "allFindings",
+        sortDescFirst: true,
+      },
+      {
+        Header: "High",
+        columns: [
           {
             Header: "All",
-            accessor: "allFindings",
-            sortDescFirst: true,
-          },
-          {
-            Header: "High",
             accessor: "highRisk",
             sortDescFirst: true,
           },
           {
-            Header: "Med",
+            Header: "Solo",
+            accessor: "soloHigh",
+            sortDescFirst: true,
+          },
+        ],
+      },
+      {
+        Header: "Med",
+        columns: [
+          {
+            Header: "All",
             accessor: "medRisk",
             sortDescFirst: true,
           },
           {
-            Header: "Gas",
-            accessor: "gasOptz",
+            Header: "Solo",
+            accessor: "soloMed",
             sortDescFirst: true,
           },
         ],
+      },
+      {
+        Header: "Gas",
+        accessor: "gasOptz",
+        sortDescFirst: true,
+      },
+    ],
     []
   );
 
@@ -78,6 +96,8 @@ const LeaderboardTable = ({ results }) => {
     },
     useSortBy
   );
+
+  console.log(headerGroups);
 
   return (
     <table {...getTableProps()}>
