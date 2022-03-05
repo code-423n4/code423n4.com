@@ -230,6 +230,7 @@ exports.createPages = async ({ graphql, actions }) => {
       path: `/sponsors/${sponsor.name}`,
       component: sponsorPageTemplate,
       context: {
+        sponsorId: sponsor.name,
       },
     });
   });
