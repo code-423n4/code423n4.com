@@ -57,7 +57,7 @@ const LeaderboardTable = ({ results, mode="warden" }) => {
             sortDescFirst: true,
           },
         ],
-    []
+    [mode]
   );
 
   const {
