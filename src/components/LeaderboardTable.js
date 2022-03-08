@@ -19,6 +19,7 @@ const LeaderboardTable = ({ results, mode="warden" }) => {
             ),
           } : mode === "contest" ? {
             Header: "Contest",
+            accessor: "title",
           } : {},
           {
             Header: "USD",
