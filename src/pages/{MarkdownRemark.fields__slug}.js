@@ -1,5 +1,6 @@
 import * as React from "react";
 import { graphql } from "gatsby";
+
 import DefaultLayout from "../templates/DefaultLayout";
 
 function PageTemplate({ data }) {

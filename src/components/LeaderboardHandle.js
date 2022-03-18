@@ -6,20 +6,20 @@ const LeaderboardHandle = ({ handle, image, link, members }) => {
     <div className="wrapper-competitor" key={handle}>
       {members ? (
         <div className="wrapper-members">
-          <div className="team-identifier">Team</div>
-          <span className="teamname">{handle}</span>
+          <div className="team-wrapper">
+            <span className="team-name">{handle}</span>
+            <span className="team-identifier">Team</span>
+          </div>
           {members.map((member) => (
             <div className="member" key={member.handle}>
               <a href={member.link}>
-                {member.image ? (
+                {member.image && (
                   <Avatar
                     src={member.image.childImageSharp.resize.src}
                     name={handle}
-                    size="20px"
-                    round="20px"
+                    size="27px"
+                    round="27px"
                   />
-                ) : (
-                  ""
                 )}
                 <span>{member.handle}</span>
               </a>
@@ -28,15 +28,13 @@ const LeaderboardHandle = ({ handle, image, link, members }) => {
         </div>
       ) : (
         <a href={link}>
-          {image ? (
+          {image && (
             <Avatar
               src={image.childImageSharp.resize.src}
               name={handle}
-              size="20px"
-              round="20px"
+              size="27px"
+              round="27px"
             />
-          ) : (
-            ""
           )}
           <span>{handle}</span>
         </a>

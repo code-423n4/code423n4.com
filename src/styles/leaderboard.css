@@ -1,39 +1,107 @@
-table {
-  color: #d7c7ef;
-  font-family: sans-serif;
+.leaderboard-container {
+  padding: 0 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.leaderboard-table {
+  color: #fff;
   border-collapse: collapse;
   border-style: hidden;
-  font-family: "Space Mono", monospace;
+  font-family: var(--font-family);
   font-weight: 400;
-  margin: 40px auto;
+  width: 100%;
+  border-top: 4px solid var(--main-purple);
 }
+
 th {
   margin: 0;
   min-width: 60px;
 }
+
 th[role="columnheader"] {
   text-align: left;
 }
-thead tr:nth-of-type(2) th:nth-of-type(1) {
-  padding-left: 40px;
+
+thead th {
+  text-transform: uppercase;
 }
 
-table td {
+.leaderboard-table td {
   margin: 0;
-  /* border: 1px solid rgba(146, 129, 171, 0.2); */
-  border: 1px solid #443658;
+  border-left: 1px solid rgba(255, 255, 255, 0.22);
   padding: 10px;
 }
 
-table td,
-table th {
+.leaderboard-table td:nth-child(n + 2) {
+  width: 1%;
+  text-align: right;
+}
+
+.leaderboard-table tbody tr:nth-child(odd) {
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.leaderboard-table td:nth-child(4),
+.leaderboard-table td:nth-child(8),
+.leaderboard-table th:nth-child(4),
+.leaderboard-table tr:nth-child(1) th:nth-child(6),
+.leaderboard-table th:nth-child(8) {
+  border-left: 2px solid rgba(209, 180, 180, 0.22);
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.leaderboard-table tr:nth-child(1) th:nth-child(4) {
+  border-right: 2px solid rgba(255, 255, 255, 0.22);
+}
+
+.leaderboard-table td:nth-child(5),
+.leaderboard-table tr:nth-child(2) th:nth-child(5) {
+  border-right: 2px solid rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.leaderboard-table td,
+.leaderboard-table th {
   padding: 10px;
   font-size: 12px;
 }
 
-table th {
-  color: #fff;
+.leaderboard-table td:nth-child(1) {
+  width: 100%;
 }
+
+.leaderboard-table tr:nth-child(1) th {
+  text-align: center;
+}
+
+.leaderboard-table thead tr:nth-child(2) th {
+  padding-top: 0;
+}
+
+/* .leaderboard-table tbody tr:nth-child(1) .wrapper-competitor,
+.leaderboard-table tbody tr:nth-child(1) .member,
+.leaderboard-table tbody tr:nth-child(1) .award-amount {
+  font-size: 19px;
+}
+
+.leaderboard-table tbody tr:nth-child(2) .wrapper-competitor,
+.leaderboard-table tbody tr:nth-child(2) .member,
+.leaderboard-table tbody tr:nth-child(2) .award-amount {
+  font-size: 17px;
+} */
+
+/* .badge {
+  position: absolute;
+  right: 13px;
+}
+
+.leaderboard-table tbody tr:nth-child(1) .badge {
+  width: 51px;
+  height: 51px;
+  background-color: #b9883a;
+} */
 
 th:first-child .sort-direction {
   display: none;
@@ -55,33 +123,45 @@ th {
 .member,
 .wrapper-competitor {
   position: relative;
-  padding-left: 30px;
+  padding-left: 37px;
 }
 
-.teamname {
-  display: block;
-  margin: 0 0 5px;
-  padding-bottom: 5px;
-  border-bottom: 1px solid #443658;
+.team-wrapper {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
 }
 
 .team-identifier {
   text-transform: uppercase;
   font-family: var(--font-family);
   font-size: 12px;
-  font-weight: bold;
-  letter-spacing: 3px;
+  font-weight: 700;
+  letter-spacing: 2px;
   color: white;
-  background: var(--secondary-background-purple);
-  text-align: center;
-  border-radius: 3px;
-  margin-bottom: 5px;
+  background: var(--tertiary-background-purple);
+  border-radius: 26px;
+  margin-left: 12px;
+  padding: 4px 12px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
 }
 
-/* avatars are 20px */
+/* avatars are 27px */
 .sb-avatar {
   position: absolute;
   left: 0;
+}
+
+.dropdown {
+  padding: 10px;
+  margin-bottom: 4px;
+  margin-right: 8px;
+  background-color: transparent;
+  border: none;
+  font-size: 18px;
+  text-transform: uppercase;
 }
 
 @media (max-width: 600px) {
@@ -98,8 +178,8 @@ th {
   th:nth-of-type(4) {
     border-right: 0px;
   }
-  table .sb-avatar,
-  table .teamname {
+  .leaderboard-table .sb-avatar,
+  .leaderboard-table .teamname {
     display: none !important;
   }
 
@@ -114,8 +194,8 @@ th {
 }
 
 @media (min-width: 850px) {
-  table td,
-  table th {
+  .leaderboard-table td,
+  .leaderboard-table th {
     padding: 20px;
     font-size: 15px;
   }

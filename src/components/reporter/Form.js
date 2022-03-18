@@ -1,12 +1,14 @@
 import React, { useCallback, useState } from "react";
-import { StaticQuery, graphql } from "gatsby";
 import clsx from "clsx";
+import { StaticQuery, graphql } from "gatsby";
+
 import Agreement from "../content/Agreement.js";
-import * as styles from "./Form.module.scss";
-import LinesOfCode from "../reporter/LinesOfCodeInput.js";
-import * as widgetStyles from "./widgets/Widgets.module.scss";
-import { Widget } from "./widgets";
 import FormField from "./widgets/FormField";
+import LinesOfCode from "../reporter/LinesOfCodeInput.js";
+import Widget from "./widgets/Widget";
+
+import * as styles from "./Form.module.scss";
+import * as widgetStyles from "./widgets/Widgets.module.scss";
 
 const config = {
   labelAll: "bug",

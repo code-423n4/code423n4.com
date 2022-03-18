@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import { graphql } from "gatsby";
+
+import { contestsByState } from "../utils/filter";
+
+import ContestList from "../components/ContestList";
 import DefaultLayout from "../templates/DefaultLayout";
 import HeroIndex from "../components/content/HeroIndex";
-import ContestList from "../components/ContestList";
 import Testimonials from "../components/Testimonials";
-import { contestsByState } from "../utils/filter";
 
 export default function SiteIndex({ data }) {
   // @todo: implement global state management instead of props drilling
@@ -12,13 +14,13 @@ export default function SiteIndex({ data }) {
 
   const updateContestStatus = () => {
     updateContestStatusChanges(contestStatusChanges + 1);
-  }
+  };
 
   const contests = data.contests.edges;
   const filteredContests = contestsByState({ contests });
 
   return (
-    <DefaultLayout bodyClass="landing" key={'landing' + contestStatusChanges}>
+    <DefaultLayout bodyClass="landing" key={"landing" + contestStatusChanges}>
       <div className="hero-wrapper">
         <HeroIndex />
       </div>

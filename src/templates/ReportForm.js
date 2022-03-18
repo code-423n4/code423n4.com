@@ -1,5 +1,6 @@
 import React from "react";
 import { graphql, Link } from "gatsby";
+
 import Form from "../components/reporter/Form";
 
 const ReportForm = (props) => {

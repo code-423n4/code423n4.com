@@ -1,17 +1,11 @@
 import React, { useMemo, useState } from "react";
 import { graphql } from "gatsby";
-import DefaultLayout from "../templates/DefaultLayout";
 import { differenceInDays, getYear } from "date-fns";
+
+import DefaultLayout from "../templates/DefaultLayout";
 import LeaderboardTable from "../components/LeaderboardTable";
 
 const withinLastNDays = (contestEnd, numDays) => {
-  differenceInDays(new Date(), contestEnd) <= numDays &&
-    console.log(
-      `within last ${numDays} days? => ${differenceInDays(
-        new Date(),
-        contestEnd
-      )}`
-    );
   return differenceInDays(new Date(), contestEnd) <= numDays;
 };
 
@@ -19,7 +13,34 @@ const withinYear = (contestEnd, year) => {
   return getYear(contestEnd) === year;
 };
 
-function computeResults(findings, timeFrame) {
+function filterFindingsByTimeFrame(findings, timeFrame) {
+  switch (timeFrame) {
+    case "Last 30 days":
+      return findings.filter((f) =>
+        withinLastNDays(new Date(f.contest.end_time), 30)
+      );
+    case "Last 60 days":
+      return findings.filter((f) =>
+        withinLastNDays(new Date(f.contest.end_time), 60)
+      );
+    case "Last 90 days":
+      return findings.filter((f) =>
+        withinLastNDays(new Date(f.contest.end_time), 90)
+      );
+    case "2022":
+      return findings.filter((f) =>
+        withinYear(new Date(f.contest.end_time), 2022)
+      );
+    case "2021":
+      return findings.filter((f) =>
+        withinYear(new Date(f.contest.end_time), 2021)
+      );
+    default:
+      return findings;
+  }
+}
+
+function computeResults(findings) {
   const results = {
     lowRisk: 0,
     medRisk: 0,
@@ -32,39 +53,7 @@ function computeResults(findings, timeFrame) {
     awardTotal: 0,
   };
 
-  let filteredFindings = findings;
-  switch (timeFrame) {
-    case "Last 30 days":
-      filteredFindings = findings.filter((f) => {
-        return withinLastNDays(new Date(f.contest.end_time), 30);
-      });
-      break;
-    case "Last 60 days":
-      filteredFindings = findings.filter((f) =>
-        withinLastNDays(new Date(f.contest.end_time), 60)
-      );
-      break;
-    case "Last 90 days":
-      filteredFindings = findings.filter((f) =>
-        withinLastNDays(new Date(f.contest.end_time), 90)
-      );
-      break;
-    case "2022":
-      filteredFindings = findings.filter((f) =>
-        withinYear(new Date(f.contest.end_time), 2022)
-      );
-      break;
-    case "2021":
-      filteredFindings = findings.filter((f) =>
-        withinYear(new Date(f.contest.end_time), 2021)
-      );
-      break;
-    default:
-      filteredFindings = findings;
-      break;
-  }
-
-  filteredFindings.forEach((f) => {
+  findings.forEach((f) => {
     results.allFindings += 1;
     results.awardTotal += f.awardUSD ?? 0;
 
@@ -104,10 +93,10 @@ const Leaderboard = ({ data }) => {
   const handles = data.handles.edges;
 
   const resultData = useMemo(() => {
-    let result = [];
+    const result = [];
 
     for (const handle of handles) {
-      let p = handle.node;
+      const p = handle.node;
 
       const handleData = {
         handle: p.handle,
@@ -125,9 +114,11 @@ const Leaderboard = ({ data }) => {
         awardTotal: 0,
       };
 
+      const filteredFindings = filterFindingsByTimeFrame(p.findings, timeFrame);
+
       const combinedData = {
         ...handleData,
-        ...computeResults(p.findings, timeFrame),
+        ...computeResults(filteredFindings),
       };
       if (combinedData.allFindings > 0) {
         result.push(combinedData);
@@ -140,19 +131,28 @@ const Leaderboard = ({ data }) => {
     setTimeFrame(e.target.value);
   };
 
+  const filterOptions = [
+    { value: "Last 60 days", label: "Last 60 days" },
+    { value: "Last 90 days", label: "Last 90 days" },
+    { value: "2022", label: "2022" },
+    { value: "2021", label: "2021" },
+  ];
+
   return (
     <DefaultLayout pageTitle="Leaderboard" bodyClass="leaderboard">
       <div className="wrapper-main">
         <h1 className="page-header">Leaderboard</h1>
-        <select onChange={handleChange}>
-          <option value="All time">All time</option>
-          <option value="Last 30 days">Last 30 days</option>
-          <option value="Last 60 days">Last 60 days</option>
-          <option value="Last 90 days">Last 90 days</option>
-          <option value="2022">2022</option>
-          <option value="2021">2021</option>
-        </select>
-        <LeaderboardTable results={resultData} />
+        <div className="leaderboard-container">
+          <select onChange={handleChange} className="dropdown">
+            <option value="All time">All time</option>
+            <option value="Last 30 days">Last 30 days</option>
+            <option value="Last 60 days">Last 60 days</option>
+            <option value="Last 90 days">Last 90 days</option>
+            <option value="2022">2022</option>
+            <option value="2021">2021</option>
+          </select>
+          <LeaderboardTable results={resultData} />
+        </div>
       </div>
     </DefaultLayout>
   );
