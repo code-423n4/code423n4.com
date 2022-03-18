@@ -108,7 +108,9 @@ const WardenRegistrationForm = ({ handles }) => {
             <p className={widgetStyles.Help}>
               Used to report findings, as well as display your total award
               amount on the leaderboard. Supports alphanumeric characters,
-              underscores, and hyphens.
+              underscores, and hyphens. (Note: for consistency, please ensure
+              your server nickname in our Discord matches the username you
+              provide here)
             </p>
             <input
               className={clsx(widgetStyles.Control, widgetStyles.Text)}
@@ -221,6 +223,10 @@ export default function WardenRegistration({ data }) {
     <DefaultLayout pageTitle="Warden Registration | Code 423n4">
       <div className="wrapper-main">
         <h1 className="page-header">Warden Registration</h1>
+        <p className="center">
+          To register as a warden, please fill out this form and join us in{" "}
+          <a href="https://discord.gg/code4rena">Discord</a>
+        </p>
         <WardenRegistrationForm handles={handles} />
       </div>
     </DefaultLayout>
