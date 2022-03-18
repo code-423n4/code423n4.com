@@ -158,7 +158,7 @@ th {
   padding: 10px;
   margin-bottom: 4px;
   margin-right: 8px;
-  background-color: transparent;
+  background-color: var(--background-purple);
   border: none;
   font-size: 18px;
   text-transform: uppercase;
