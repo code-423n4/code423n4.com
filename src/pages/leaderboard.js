@@ -15,10 +15,6 @@ const withinYear = (contestEnd, year) => {
 
 function filterFindingsByTimeFrame(findings, timeFrame) {
   switch (timeFrame) {
-    case "Last 30 days":
-      return findings.filter((f) =>
-        withinLastNDays(new Date(f.contest.end_time), 30)
-      );
     case "Last 60 days":
       return findings.filter((f) =>
         withinLastNDays(new Date(f.contest.end_time), 60)
@@ -145,7 +141,6 @@ const Leaderboard = ({ data }) => {
         <div className="leaderboard-container">
           <select onChange={handleChange} className="dropdown">
             <option value="All time">All time</option>
-            <option value="Last 30 days">Last 30 days</option>
             <option value="Last 60 days">Last 60 days</option>
             <option value="Last 90 days">Last 90 days</option>
             <option value="2022">2022</option>
