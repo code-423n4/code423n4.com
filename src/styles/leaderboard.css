@@ -1,6 +1,6 @@
 .leaderboard-container {
   margin: 0 auto;
-  max-width: 900px;
+  max-width: 750px;
 }
 
 .leaderboard-table {
@@ -15,7 +15,7 @@
 
 .leaderboard-table th {
   margin: 0;
-  min-width: 60px;
+  min-width: 40px;
 }
 
 .leaderboard-table th[role="columnheader"] {
@@ -164,7 +164,7 @@
   font-weight: 600;
 }
 
-@media only screen and (max-width: 760px),
+@media only screen and (max-width: 740px),
   (min-device-width: 768px) and (max-device-width: 1024px) {
   /* Force table to not be like tables anymore */
   .leaderboard-table table,
