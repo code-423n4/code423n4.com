@@ -7,20 +7,19 @@ const LeaderboardHandle = ({ handle, image, link, members }) => {
       {members ? (
         <div className="wrapper-members">
           <div className="team-wrapper">
+            <span className="team-avatar">{handle.substring(0, 1)}</span>
             <span className="team-name">{handle}</span>
             <span className="team-identifier">Team</span>
           </div>
           {members.map((member) => (
             <div className="member" key={member.handle}>
               <a href={member.link}>
-                {member.image && (
-                  <Avatar
-                    src={member.image.childImageSharp.resize.src}
-                    name={handle}
-                    size="27px"
-                    round="27px"
-                  />
-                )}
+                <Avatar
+                  src={member.image && member.image.childImageSharp.resize.src}
+                  name={member.handle}
+                  size="27px"
+                  round="27px"
+                />
                 <span>{member.handle}</span>
               </a>
             </div>
@@ -28,14 +27,13 @@ const LeaderboardHandle = ({ handle, image, link, members }) => {
         </div>
       ) : (
         <a href={link}>
-          {image && (
-            <Avatar
-              src={image.childImageSharp.resize.src}
-              name={handle}
-              size="27px"
-              round="27px"
-            />
-          )}
+          <Avatar
+            src={image && image.childImageSharp.resize.src}
+            name={handle}
+            size="27px"
+            round="27px"
+          />
+
           <span>{handle}</span>
         </a>
       )}
