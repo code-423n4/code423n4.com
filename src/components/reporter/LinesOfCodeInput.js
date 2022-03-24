@@ -52,7 +52,7 @@ const InputField = ({
               Please include at least one line number at the end of your URL.{" "}
               <a
                 href="https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/creating-a-permanent-link-to-a-code-snippet#linking-to-code"
-                target="_blank"
+                target="_blank" rel="noreferrer"
                 aria-label="How do I link to line numbers on GitHub? Opens in new window"
               >
                 How do I link to line numbers on GitHub?
