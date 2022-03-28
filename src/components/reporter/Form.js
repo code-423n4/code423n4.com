@@ -50,7 +50,7 @@ const riskField = {
     },
     {
       label: "QA Report (low / non-critical)",
-      value: "1 (Low Risk)",
+      value: "QA (Quality Assurance)",
     },
     {
       label: "Medium Risk",
