@@ -6,10 +6,6 @@ const helpdeskId = process.env.NOTION_HELPDESK_DATABASE_ID;
 
 const notion = new Client({ auth: notionKey });
 
-function isDangerous(s) {
-  return s.match(/^[0-9a-zA-Z_\-]+$/) === null;
-}
-
 const ticketTags = {
   wardenRegistration: {
     name: "Warden registration 🐺",
@@ -130,16 +126,6 @@ async function handler(event) {
     };
   }
 
-  if (ticket.discordHandle && isDangerous(ticket.discordHandle)) {
-    return {
-      statusCode: 400,
-      body: JSON.stringify({
-        error:
-          "Handle can only use alphanumeric characters [a-zA-Z0-9], underscores (_), and hyphens (-).",
-      }),
-    };
-  }
-
   try {
     const body: NotionHelpdeskTicket = {
       parent: {
@@ -205,17 +191,16 @@ async function handler(event) {
       };
     }
 
-    const response = await notion.pages.create(body);
+    await notion.pages.create(body);
 
     return {
       statusCode: 201,
       body: "Your request has been submitted",
     };
   } catch (err) {
-    console.error(err);
     return {
-      statusCode: 500,
-      body: JSON.stringify({ error: "Internal server error." }),
+      statusCode: err.status,
+      body: JSON.stringify({ error: err.message }),
     };
   }
 }
