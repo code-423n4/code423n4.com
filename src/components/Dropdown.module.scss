@@ -1,0 +1,26 @@
+.Wrapper {
+  position: relative;
+}
+
+.DropdownListContainer {
+  display: none;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  transition: all 3000ms;
+  width: 180px;
+  background: transparent;
+  padding-top: 10px;
+
+  &.Open {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+.DropdownList {
+  background: var(--lightest-background-purple);
+  border-radius: 5px;
+  overflow: hidden;
+}

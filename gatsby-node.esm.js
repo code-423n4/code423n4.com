@@ -1,15 +1,18 @@
 import path from "path";
-import SchemaCustomization from "./schema";
+import webpack from "webpack";
 import { createFilePath } from "gatsby-source-filesystem";
 import { Octokit } from "@octokit/core";
 import { graphql } from "@octokit/graphql";
-import format from 'date-fns/format';
+import format from "date-fns/format";
+
+import SchemaCustomization from "./schema";
 
 const { token } = require("./functions/_config");
 
 const octokit = new Octokit({
   auth: token,
 });
+
 const graphqlWithAuth = graphql.defaults({
   headers: {
     authorization: `Bearer ${token}`,
@@ -30,7 +33,7 @@ function slugify(text) {
 function contestSlug(contestNode) {
   const startDate = new Date(contestNode.start_time);
   const title = slugify(contestNode.title);
-  const slug = `${format(startDate, 'yyyy-MM')}-${title}`;
+  const slug = `${format(startDate, "yyyy-MM")}-${title}`;
 
   return slug;
 }
@@ -173,7 +176,7 @@ exports.onCreateNode = async ({ node, getNode, actions }) => {
 exports.createPages = async ({ graphql, actions }) => {
   const { createPage } = actions;
 
-  let contests = await graphql(queries.contests);
+  const contests = await graphql(queries.contests);
   const formTemplate = path.resolve("./src/templates/ReportForm.js");
   const contestTemplate = path.resolve("./src/templates/ContestLayout.js");
   contests.data.contests.edges.forEach((contest) => {
@@ -194,5 +197,25 @@ exports.createPages = async ({ graphql, actions }) => {
         contestId: contest.node.contestid,
       },
     });
+  });
+};
+
+exports.onCreateWebpackConfig = ({ actions }) => {
+  actions.setWebpackConfig({
+    plugins: [
+      new webpack.ProvidePlugin({
+        Buffer: [require.resolve("buffer/"), "Buffer"],
+      }),
+    ],
+    resolve: {
+      fallback: {
+        assert: require.resolve("assert"),
+        crypto: require.resolve("crypto-browserify"),
+        http: require.resolve("stream-http"),
+        https: require.resolve("https-browserify"),
+        os: require.resolve("os-browserify/browser"),
+        stream: require.resolve("stream-browserify"),
+      },
+    },
   });
 };

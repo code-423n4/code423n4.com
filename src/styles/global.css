@@ -1,3 +1,4 @@
+@import "react-toastify/dist/ReactToastify.css";
 @import "./helpers.css";
 @import "./base.css";
 @import "./buttons.css";
@@ -14,3 +15,4 @@
 @import "./index.css";
 @import "./forms.css";
 @import "./tabs.css";
+@import "./toast.css";

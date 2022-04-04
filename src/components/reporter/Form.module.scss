@@ -18,15 +18,7 @@
 
 .Button {
   font-family: inherit;
-  display: block;
-  padding: 10px;
-  width: 200px;
-  margin: 10px auto;
-  font-weight: bold;
-
-  &:hover {
-    cursor: pointer;
-  }
+  margin: 10px;
 
   &:disabled {
     opacity: 0.3;
@@ -35,14 +27,10 @@
   &:disabled:hover {
     cursor: not-allowed;
   }
+}
 
-  @media (prefers-color-scheme: dark) {
-    background-color: black;
-    color: #fff;
-    border: 1px solid #fff;
-
-    &:hover {
-      background-color: rgba(255, 255, 255, 0.2);
-    }
-  }
+.ButtonsWrapper {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
 }
