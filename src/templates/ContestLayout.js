@@ -9,6 +9,7 @@ import ContestFAQ from "../pages/contests/faq";
 import ContestResults from "../components/ContestResults";
 import Countdown from "../components/Countdown";
 import DefaultLayout from "./DefaultLayout";
+import ClientOnly from "../components/ClientOnly";
 
 const ContestLayout = (props) => {
   const [artOpen, setArtOpen] = useState(false);
@@ -46,7 +47,7 @@ const ContestLayout = (props) => {
       preview={fields.artPath}
       pageDescription={dateDescription}
     >
-      <>
+      <ClientOnly>
         <div className="contest-wrapper contest-artwork-wrapper">
           <div className="contest-tippy-top">
             {t.contestStatus === "soon" || t.contestStatus === "active" ? (
@@ -175,7 +176,7 @@ const ContestLayout = (props) => {
             </TabPanel>
           </Tabs>
         </section>
-      </>
+      </ClientOnly>
     </DefaultLayout>
   );
 };
