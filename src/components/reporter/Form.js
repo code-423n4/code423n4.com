@@ -52,7 +52,7 @@ const riskField = {
     },
     {
       label: "QA Report (low / non-critical)",
-      value: "1 (Low Risk)",
+      value: "QA (Quality Assurance)",
     },
     {
       label: "Medium Risk",
@@ -201,7 +201,7 @@ const Form = ({ contest, sponsor, repoUrl }) => {
   let title = "";
   if (state.risk === "G (Gas Optimization)") {
     title = "Gas Optimizations";
-  } else if (state.risk === "1 (Low Risk)") {
+  } else if (state.risk === "QA (Quality Assurance)") {
     title = "QA Report";
   } else {
     title = state.title;
@@ -239,7 +239,7 @@ const Form = ({ contest, sponsor, repoUrl }) => {
     (e) => {
       handleChange(e);
       const riskLevel = e.target.value.slice(0, 1);
-      if (riskLevel === "G" || riskLevel === "1") {
+      if (riskLevel === "G" || riskLevel === "Q") {
         setIsQaOrGasFinding(true);
       } else {
         setIsQaOrGasFinding(false);

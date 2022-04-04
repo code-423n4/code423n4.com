@@ -101,9 +101,9 @@ function ContactUs() {
       setStatus(FormStatus.Submitted);
     } else {
       setStatus(FormStatus.Error);
-      const { body } = await response.json();
-      if (body.error) {
-        setErrorMessage(body.error);
+      const res = await response.json();
+      if (res.error) {
+        setErrorMessage(res.error);
       }
     }
   };
@@ -130,6 +130,7 @@ function ContactUs() {
   };
 
   const handleReset = () => {
+    setCaptchaToken("");
     setFieldState(initialState);
     setStatus(FormStatus.Unsubmitted);
   };

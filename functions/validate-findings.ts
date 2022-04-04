@@ -144,6 +144,8 @@ function getRiskFromLabels(
       return "H";
     } else if (labels[i].name === "G (Gas Optimization)") {
       return "G";
+    } else if (labels[i].name === "QA (Quality Assurance)") {
+      return "Q";
     }
   }
 
