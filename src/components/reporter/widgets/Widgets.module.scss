@@ -5,6 +5,15 @@
   padding: 0;
 }
 
+.RadioGroup {
+  display: flex;
+  flex-direction: column;
+}
+
+.Radio {
+  margin: 10px 10px 10px 0;
+}
+
 .Container {
   margin-bottom: 40px;
   width: 100%;
@@ -57,7 +66,9 @@
 }
 
 .Text {
-  width: calc(100% - 20px);
+  height: 50px;
+  width: 100%;
+  box-sizing: border-box;
 
   &::placeholder {
     color: rgba(255, 255, 255, 0.75);
@@ -65,6 +76,7 @@
 }
 
 .Select {
+  height: 50px;
   width: 100%;
   cursor: pointer;
 }

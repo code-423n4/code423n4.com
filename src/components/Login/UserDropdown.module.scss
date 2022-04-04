@@ -1,0 +1,38 @@
+.UserDropdownWrapper {
+  display: inline-flex;
+  padding-left: 15px;
+  border-left: 3px solid var(--main-purple);
+  margin-left: 10px;
+  height: 20px;
+  align-items: center;
+  justify-content: center;
+}
+
+.UserDropdown {
+  display: inline-flex;
+  position: relative;
+  height: 30px;
+  width: 30px;
+  border: none;
+  padding: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.UserDropdownList {
+  background: var(--lightest-background-purple);
+  display: flex;
+  flex-direction: column;
+  border-radius: 5px;
+  width: 180px;
+  padding: 10px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  box-sizing: border-box;
+}
+
+.Button {
+  background: transparent;
+  cursor: pointer;
+  border: none;
+}

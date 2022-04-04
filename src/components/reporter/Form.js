@@ -1,6 +1,6 @@
-import React, { useCallback, useEffect, useState } from "react";
 import clsx from "clsx";
-import { StaticQuery, graphql } from "gatsby";
+import React, { useCallback, useState } from "react";
+import { StaticQuery, graphql, Link } from "gatsby";
 
 import Agreement from "../content/Agreement.js";
 import FormField from "./widgets/FormField";
@@ -399,15 +399,20 @@ const Form = ({ contest, sponsor, repoUrl }) => {
                   <FormField
                     name="handle"
                     label="Handle"
-                    helpText="Handle you're competing under (individual or team name)"
+                    helpText={
+                      <>
+                        Handle you're competing under (individual or team name)
+                        <br />
+                        Don't see your handle?{" "}
+                        <Link to="/register">Click here</Link> to register.
+                      </>
+                    }
                     isInvalid={hasValidationErrors && !state.handle}
                   >
                     <Widget
                       field={{
                         name: "handle",
                         label: "Handle",
-                        helpText:
-                          "Handle you're competing under (individual or team name)",
                         widget: "warden",
                         required: true,
                         options: wardens,
