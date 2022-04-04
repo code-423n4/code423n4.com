@@ -142,7 +142,7 @@ const Leaderboard = ({ data }) => {
           <select onChange={handleChange} className="dropdown">
             <option value="All time">All time</option>
             {filterOptions.map((option) => (
-              <option value={option.value}>option.label</option>
+              <option value={option.value}>{option.label}</option>
             ))}
           </select>
           <LeaderboardTable results={resultData} />
