@@ -141,10 +141,9 @@ const Leaderboard = ({ data }) => {
         <div className="leaderboard-container">
           <select onChange={handleChange} className="dropdown">
             <option value="All time">All time</option>
-            <option value="Last 60 days">Last 60 days</option>
-            <option value="Last 90 days">Last 90 days</option>
-            <option value="2022">2022</option>
-            <option value="2021">2021</option>
+            {filterOptions.map((option) => (
+              <option value={option.value}>option.label</option>
+            ))}
           </select>
           <LeaderboardTable results={resultData} />
         </div>
