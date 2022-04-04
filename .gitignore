@@ -1,7 +1,10 @@
 node_modules
 .DS_Store
 public
+.netlify
 .cache
 .nova
 .env
+.env.development
+.env.production
 yarn-error.log

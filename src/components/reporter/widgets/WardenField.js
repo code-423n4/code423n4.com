@@ -1,6 +1,5 @@
 import React, { useCallback } from "react";
 import clsx from "clsx";
-import { Link } from "gatsby";
 
 import Select from "react-select";
 
@@ -45,12 +44,6 @@ const WardenField = ({ name, required, options, onChange, fieldState, isInvalid 
         classNamePrefix="react-select"
         isClearable={true}
       />
-      <p className={baseStyles.Help}>
-        <small>
-          Don't see your handle?{" "}
-          <Link to="/warden-registration">Click here</Link> to register.
-        </small>
-      </p>
     </>
   );
 };

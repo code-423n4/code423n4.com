@@ -1,16 +1,18 @@
 import path from "path";
-import SchemaCustomization from "./schema";
 import { createFilePath } from "gatsby-source-filesystem";
 import { Octokit } from "@octokit/core";
 import { graphql } from "@octokit/graphql";
 import format from "date-fns/format";
 import webpack from "webpack";
 
+import SchemaCustomization from "./schema";
+
 const { token } = require("./functions/_config");
 
 const octokit = new Octokit({
   auth: token,
 });
+
 const graphqlWithAuth = graphql.defaults({
   headers: {
     authorization: `Bearer ${token}`,
@@ -174,7 +176,7 @@ exports.onCreateNode = async ({ node, getNode, actions }) => {
 exports.createPages = async ({ graphql, actions }) => {
   const { createPage } = actions;
 
-  let contests = await graphql(queries.contests);
+  const contests = await graphql(queries.contests);
   const formTemplate = path.resolve("./src/templates/ReportForm.js");
   const contestTemplate = path.resolve("./src/templates/ContestLayout.js");
   contests.data.contests.edges.forEach((contest) => {
@@ -205,6 +207,19 @@ exports.onCreateWebpackConfig = ({ actions }) => {
         resourceRegExp: /canvas/,
         contextRegExp: /jsdom$/,
       }),
+      new webpack.ProvidePlugin({
+        Buffer: [require.resolve("buffer/"), "Buffer"],
+      }),
     ],
+    resolve: {
+      fallback: {
+        assert: require.resolve("assert"),
+        crypto: require.resolve("crypto-browserify"),
+        http: require.resolve("stream-http"),
+        https: require.resolve("https-browserify"),
+        os: require.resolve("os-browserify/browser"),
+        stream: require.resolve("stream-browserify"),
+      },
+    },
   });
 };

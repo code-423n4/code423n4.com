@@ -1,5 +1,6 @@
 import React from "react";
 import Helmet from "react-helmet";
+import { ToastContainer } from "react-toastify";
 
 import Footer from "../components/content/Footer";
 import Header from "../components/content/Header";
@@ -79,6 +80,7 @@ const DefaultLayout = (props) => {
         <body className={bodyClass} />
       </Helmet>
       <Header />
+      <ToastContainer />
       <main>
         {children}
         <Footer />

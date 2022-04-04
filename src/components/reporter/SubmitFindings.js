@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Agreement from "../content/Agreement";
+
 import {
   emailField,
   addressField,
@@ -16,13 +16,36 @@ import {
   checkTitle,
   checkQaOrGasFinding,
 } from "./findings/functions";
-import Form from "../form/Form";
-import { initialState } from "./findings/state";
 
-const SubmitFindings = ({ wardensList, endTime, sponsor, contest, repo }) => {
+import useUser from "../../hooks/UserContext";
+
+import Form from "../form/Form";
+import Agreement from "../content/Agreement";
+
+const mdTemplate =
+  "## Impact\nDetailed description of the impact of this finding.\n\n## Proof of Concept\nProvide direct links to all referenced code in GitHub. Add screenshots, logs, or any other relevant proof that illustrates the concept.\n\n## Tools Used\n\n## Recommended Mitigation Steps";
+
+const initialState = {
+  title: "",
+  email: "",
+  handle: "",
+  polygonAddress: "",
+  risk: "",
+  details: mdTemplate,
+  qaGasDetails: "",
+  linesOfCode: [
+    {
+      id: Date.now(),
+      value: "",
+    },
+  ],
+};
+
+const SubmitFindings = ({ wardensList, sponsor, contest, repo }) => {
   const wardens = wardensList.edges.map(({ node }) => {
     return { value: node.handle, image: node.image };
   });
+  const { currentUser } = useUser();
   const [state, setState] = useState(initialState);
   const [fieldList, setFieldList] = useState([
     wardenField(wardens),
@@ -40,14 +63,55 @@ const SubmitFindings = ({ wardensList, endTime, sponsor, contest, repo }) => {
   };
 
   useEffect(() => {
-    initStateFromStorage(contest, sponsor, repo, setState);
-  }, [contest, repo, sponsor]);
+    (() => {
+      if (currentUser.isLoggedIn) {
+        setState((prevState) => {
+          return {
+            ...prevState,
+            handle: currentUser.username,
+            polygonAddress: currentUser.address,
+            email: currentUser.emailAddress,
+          };
+        });
+      } else {
+        setState((prevState) => {
+          return {
+            ...prevState,
+            handle: "",
+            polygonAddress: "",
+            email: "",
+          };
+        });
+      }
+    })();
+  }, [
+    currentUser.isLoggedIn,
+    currentUser.address,
+    currentUser.username,
+    currentUser.emailAddress,
+  ]);
 
   useEffect(() => {
-    if (typeof window !== `undefined`) {
-      window.localStorage.setItem(contest, JSON.stringify(state));
+    initStateFromStorage(contest, initialState, setState);
+  }, [contest, initialState]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
     }
-  }, [state, contest]);
+    const { risk, details, qaGasDetails, linesOfCode, title } = state;
+    window.localStorage.setItem(
+      contest,
+      JSON.stringify({ risk, details, qaGasDetails, linesOfCode, title })
+    );
+  }, [
+    state.risk,
+    state.details,
+    state.qaGasDetails,
+    state.linesOfCode,
+    state.title,
+    contest,
+  ]);
 
   const changeHandler = (e) => {
     if (Array.isArray(e)) {
@@ -58,22 +122,22 @@ const SubmitFindings = ({ wardensList, endTime, sponsor, contest, repo }) => {
       const { name, value } = e?.target;
       switch (name) {
         case "risk":
-          setState((state) => {
+          setState((prevState) => {
             return {
-              ...state,
+              ...prevState,
               [name]: value,
               labels: [config.labelAll, value ? value : ""],
             };
           });
           break;
         case "title":
-          setState((state) => {
-            return { ...state, [name]: checkTitle(value, state.risk) };
+          setState((prevState) => {
+            return { ...prevState, [name]: checkTitle(value, prevState.risk) };
           });
           break;
         default:
-          setState((state) => {
-            return { ...state, [name]: value };
+          setState((prevState) => {
+            return { ...prevState, [name]: value };
           });
           break;
       }
@@ -139,7 +203,9 @@ const SubmitFindings = ({ wardensList, endTime, sponsor, contest, repo }) => {
   };
 
   useEffect(() => {
-    if (checkQaOrGasFinding(state.risk)) {
+    if (!state.risk) {
+      setFieldList([wardenField(wardens), emailField, addressField, riskField]);
+    } else if (checkQaOrGasFinding(state.risk)) {
       setFieldList([
         wardenField(wardens),
         emailField,

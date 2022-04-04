@@ -51,6 +51,13 @@ header nav {
   transition: all 0.3s ease-out;
 }
 
+.nav-links {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
 @media (max-width: 830px) {
   header {
     margin: 0;
@@ -75,6 +82,7 @@ header nav {
 
 
   .nav-links {
+    /* @todo: style login and register links/buttons for mobile */
     width: 100%;
     top: 50px;
     opacity: 0;

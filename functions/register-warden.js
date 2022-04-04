@@ -23,24 +23,6 @@ exports.handler = async (event) => {
       };
     }
 
-    const { authorization } = event.headers;
-    if (!authorization) {
-      return {
-        statusCode: 401,
-        body: JSON.stringify({ error: "Authorization failed" }),
-      };
-    }
-    const { success } = await verify(
-      process.env.HCAPTCHA_SECRET,
-      authorization
-    );
-    if (!success) {
-      return {
-        statusCode: 401,
-        body: JSON.stringify({ error: "Authorization failed" }),
-      };
-    }
-
     const data = JSON.parse(event.body);
     let { handle, qualifications, image, link } = data;
 
