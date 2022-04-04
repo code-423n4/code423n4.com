@@ -12,13 +12,13 @@ export default function SiteIndex({ data }) {
 
   const updateContestStatus = () => {
     updateContestStatusChanges(contestStatusChanges + 1);
-  }
+  };
 
   const contests = data.contests.edges;
   const filteredContests = contestsByState({ contests });
 
   return (
-    <DefaultLayout bodyClass="landing" key={'landing' + contestStatusChanges}>
+    <DefaultLayout bodyClass="landing" key={"landing" + contestStatusChanges}>
       <div className="hero-wrapper">
         <HeroIndex />
       </div>

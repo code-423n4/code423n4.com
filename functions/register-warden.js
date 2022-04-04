@@ -22,24 +22,6 @@ exports.handler = async (event) => {
       };
     }
 
-    const { authorization } = event.headers;
-    if (!authorization) {
-      return {
-        statusCode: 401,
-        body: JSON.stringify({ error: "Authorization failed" }),
-      };
-    }
-    const { success } = await verify(
-      process.env.HCAPTCHA_SECRET,
-      authorization
-    );
-    if (!success) {
-      return {
-        statusCode: 401,
-        body: JSON.stringify({ error: "Authorization failed" }),
-      };
-    }
-
     const data = JSON.parse(event.body);
     let { handle, image, link } = data;
 
@@ -111,7 +93,7 @@ exports.handler = async (event) => {
       return {
         statusCode: err.response.status,
         body: JSON.stringify({ error: err.response.data.message.toString() }),
-      }
+      };
     }
   } catch (err) {
     return {
