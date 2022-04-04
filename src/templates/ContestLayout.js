@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import { graphql, Link } from "gatsby";
 import clsx from "clsx";
-import DefaultLayout from "./DefaultLayout";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
-import Countdown from "../components/Countdown";
+
 import { getDates } from "../utils/time";
+
 import ContestFAQ from "../pages/contests/faq";
 import ContestResults from "../components/ContestResults";
+import Countdown from "../components/Countdown";
+import DefaultLayout from "./DefaultLayout";
 import ClientOnly from "../components/ClientOnly";
 
 const ContestLayout = (props) => {

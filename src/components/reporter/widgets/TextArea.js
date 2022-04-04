@@ -1,9 +1,10 @@
 import React from "react";
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
-import remarkBreaks from 'remark-breaks';
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import remarkBreaks from "remark-breaks";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import clsx from "clsx";
+
 import * as styles from "./Widgets.module.scss";
 
 const TextArea = ({ name, required, fieldState, isInvalid, onChange }) => {

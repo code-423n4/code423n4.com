@@ -4,8 +4,9 @@ import React, {
   // useRef
 } from "react";
 import { StaticQuery, graphql } from "gatsby";
+
 import DefaultLayout from "../templates/DefaultLayout";
-import { Widgets } from "../components/reporter/widgets";
+import Widgets from "../components/reporter/widgets/Widgets";
 // import clsx from "clsx";
 // import HCaptcha from "@hcaptcha/react-hcaptcha";
 // import * as styles from "../components/reporter/Form.module.scss";

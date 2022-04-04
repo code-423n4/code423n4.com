@@ -1,9 +1,11 @@
 import React from "react";
 import { Link } from "gatsby";
-import Countdown from "./Countdown";
+
 import { getDates } from "../utils/time";
-import SponsorLink from './SponsorLink';
+
 import ClientOnly from "./ClientOnly";
+import Countdown from "./Countdown";
+import SponsorLink from "./SponsorLink";
 
 const ContestTile = ({ contest: { node }, updateContestStatus }) => {
   const {
@@ -18,12 +20,12 @@ const ContestTile = ({ contest: { node }, updateContestStatus }) => {
     fields,
   } = node;
   const { submissionPath, contestPath } = fields;
-  
+
   const t = getDates(start_time, end_time);
-  
+
   return (
     <div className={"wrapper-contest " + t.contestStatus}>
-      <SponsorLink sponsor={sponsor}/>
+      <SponsorLink sponsor={sponsor} />
       <div className="wrapper-contest-content">
         {league === "cosmos" ? (
           <Link to="/cosmos">

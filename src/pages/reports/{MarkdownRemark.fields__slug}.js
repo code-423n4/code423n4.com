@@ -1,5 +1,6 @@
 import * as React from "react";
 import { graphql } from "gatsby";
+
 import ReportLayout from "../../templates/ReportLayout";
 
 function ReportPageTemplate({ data }) {

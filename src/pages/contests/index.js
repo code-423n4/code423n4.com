@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { graphql } from "gatsby";
-import DefaultLayout from "../../templates/DefaultLayout";
-import ContestList from "../../components/ContestList";
+
 import { contestsByState } from "../../utils/filter";
+
+import ContestList from "../../components/ContestList";
+import DefaultLayout from "../../templates/DefaultLayout";
 
 export default function Contests({ data }) {
   // @todo: implement global state management instead of props drilling
@@ -10,7 +12,7 @@ export default function Contests({ data }) {
 
   const updateContestStatus = () => {
     updateContestStatusChanges(contestStatusChanges + 1);
-  }
+  };
 
   const contests = data.contests.edges;
 
@@ -18,7 +20,7 @@ export default function Contests({ data }) {
 
   return (
     <DefaultLayout
-      key={'contests' + contestStatusChanges}
+      key={"contests" + contestStatusChanges}
       pageTitle="Contests"
       bodyClass="contests-page"
       // preview=""
