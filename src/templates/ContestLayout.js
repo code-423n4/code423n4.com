@@ -228,6 +228,7 @@ export const query = graphql`
         finding
         awardUSD
         risk
+        split
         handle {
           handle
           image {
