@@ -10,7 +10,7 @@ const HeroIndex = () => {
         <span>than any other method.</span>
       </h1>
       <h5>
-        Book an audit contest as soon as this month.
+        Book an audit <strong>this week</strong>.
         <br />
         <a href="https://discord.gg/code4rena" className="button button-small">
           Join our Discord
