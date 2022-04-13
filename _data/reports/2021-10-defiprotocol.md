@@ -17,6 +17,8 @@ A C4 code contest is an event in which community participants, referred to as Wa
 
 During the code contest outlined in this document, C4 conducted an analysis of Kuiper contest smart contract system written in Solidity. The code contest took place between October 8—October 10 2021.
 
+_Note: this audit contest originally ran under the name `defiProtocol`._
+
 ## Wardens
 
 9 Wardens contributed reports to the Kuiper contest:
