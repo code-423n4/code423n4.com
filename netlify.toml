@@ -8,6 +8,11 @@
   from = "/*"
   to = "/index.html"
   status = 200
+  
+[[redirects]]
+  from = "/is"
+  to = "/images/code4rena_is.pdf"
+  status = 200
 
 [context.deploy-preview]
   ignore = "bash ./netlify-ignore-branch.sh"
