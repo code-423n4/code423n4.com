@@ -7,4 +7,5 @@ public
 .env
 .env.development
 .env.production
+.netlify
 yarn-error.log

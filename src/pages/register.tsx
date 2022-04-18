@@ -71,8 +71,8 @@ const RegistrationForm = ({ handles, users }) => {
 
   const handleChange = useCallback((e) => {
     const { name, value } = e.target;
-    setState((state) => {
-      return { ...state, [name]: value };
+    setState((prevState) => {
+      return { ...prevState, [name]: value };
     });
   }, []);
 
@@ -86,45 +86,88 @@ const RegistrationForm = ({ handles, users }) => {
         (isNewUser && handles.has(state.username))
       ) {
         setHasValidationErrors(true);
+        setStatus(FormStatus.Error);
         return;
       }
       (async () => {
+        setHasValidationErrors(false);
         setStatus(FormStatus.Submitting);
+
         let image = undefined;
         try {
-          if (avatarInputRef && avatarInputRef.current.files.length > 0) {
+          if (
+            avatarInputRef &&
+            avatarInputRef.current &&
+            avatarInputRef.current.files.length > 0
+          ) {
             image = await getFileAsBase64(avatarInputRef.current?.files[0]);
           }
           const user = await authenticate({ provider });
-          const username = await user.get("c4Username");
-          if (username) {
-            logUserOut();
-            updateErrorMessage("Reference already exists");
+
+          if (user === undefined) {
+            // user does not have the corresponding browser extension
+            // or user clicked "cancel" when prompted to sign message
+            // @todo: update messaging
+            setStatus(FormStatus.Error);
+            updateErrorMessage(
+              `Make sure you have the ${provider} browser extension \n You must sign the message to login`
+            );
             return;
           }
+
+          const username = await user.get("c4Username");
+          const moralisId = await user.id;
+          if (username) {
+            await logUserOut();
+            setStatus(FormStatus.Error);
+            if (username !== state.username) {
+              // user tried to register more than one account with this address
+              updateErrorMessage(
+                `This address is already registered with the username "${username}"`
+              );
+            } else {
+              // registration is pending
+              updateErrorMessage("Reference already exists");
+            }
+            return;
+          }
+
+          const requestBody = {
+            handle: state.username,
+            qualifications: state.qualifications,
+            moralisId,
+          } as {
+            handle: string;
+            qualifications: string;
+            moralisId: string;
+            link?: string;
+            image?: unknown;
+          };
+
+          if (isNewUser) {
+            requestBody.link = state.link;
+            requestBody.image = image;
+          }
+
           const response = await fetch(url, {
-            method: "POST",
+            method: isNewUser ? "POST" : "PUT",
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({
-              handle: state.username,
-              link: state.link,
-              qualifications: state.qualifications,
-              image,
-            }),
+            body: JSON.stringify(requestBody),
           });
+
           if (response.ok) {
             try {
               await user.set("c4Username", state.username);
+              await user.set("discordUsername", state.discordUsername);
+              // @todo: add role
               await user.save();
               await logUserOut();
             } catch (error) {
               await logUserOut();
               setStatus(FormStatus.Error);
-              updateErrorMessage(
-                "Something went wrong. Please refresh the page and try again."
-              );
+              updateErrorMessage("");
               console.error(error);
             }
             setStatus(FormStatus.Submitted);
@@ -134,7 +177,7 @@ const RegistrationForm = ({ handles, users }) => {
               const res = await response.json();
               updateErrorMessage(res.error);
             } catch (error) {
-              setErrorMessage("");
+              updateErrorMessage("");
             }
           }
         } catch (error) {
@@ -150,6 +193,7 @@ const RegistrationForm = ({ handles, users }) => {
       state.link,
       isNewUser,
       handles,
+      hasValidationErrors,
     ]
   );
 
@@ -176,6 +220,9 @@ const RegistrationForm = ({ handles, users }) => {
     event: React.ChangeEvent<HTMLInputElement>
   ): void => {
     setIsNewUser(event.target.value === "newUser");
+    setState((prevState) => {
+      return { ...prevState, username: "" };
+    });
   };
 
   return (
@@ -212,76 +259,98 @@ const RegistrationForm = ({ handles, users }) => {
           </fieldset>
           {instructions}
           {isNewUser ? (
-            <>
-              <div className={widgetStyles.Container}>
-                <label htmlFor="username" className={widgetStyles.Label}>
-                  Code4rena Username *
-                </label>
+            <div className={widgetStyles.Container}>
+              <label htmlFor="username" className={widgetStyles.Label}>
+                Code4rena Username *
+              </label>
+              <p className={widgetStyles.Help}>
+                Used to report findings, as well as display your total award
+                amount on the leaderboard. Supports alphanumeric characters,
+                underscores, and hyphens. (Note: for consistency, please ensure
+                your server nickname in our Discord matches the username you
+                provide here)
+              </p>
+              <input
+                className={clsx(
+                  widgetStyles.Control,
+                  widgetStyles.Text,
+                  !state.username && hasValidationErrors && "input-error"
+                )}
+                style={{ marginBottom: 0 }}
+                type="text"
+                id="username"
+                name="username"
+                placeholder="Username"
+                value={state.username}
+                onChange={handleChange}
+                maxLength={25}
+              />
+              {hasValidationErrors && handles.has(state.username) && (
                 <p className={widgetStyles.Help}>
-                  Used to report findings, as well as display your total award
-                  amount on the leaderboard. Supports alphanumeric characters,
-                  underscores, and hyphens. (Note: for consistency, please
-                  ensure your server nickname in our Discord matches the
-                  username you provide here)
+                  <small>{`${state.username} is already a registered username.`}</small>
                 </p>
-                <input
-                  className={clsx(
-                    widgetStyles.Control,
-                    widgetStyles.Text,
-                    !state.username && hasValidationErrors && "input-error"
-                  )}
-                  style={{ marginBottom: 0 }}
-                  type="text"
-                  id="username"
-                  name="username"
-                  placeholder="Username"
-                  value={state.username}
-                  onChange={handleChange}
-                  maxLength={25}
-                />
-                {hasValidationErrors && handles.has(state.username) && (
-                  <p className={widgetStyles.Help}>
-                    <small>{`${state.username} is already a registered username.`}</small>
-                  </p>
-                )}
-                {!state.username && hasValidationErrors && (
-                  <p className={widgetStyles.ErrorMessage}>
-                    <small>This field is required</small>
-                  </p>
-                )}
-              </div>
-              <div className={widgetStyles.Container}>
-                <label htmlFor="discordUsername" className={widgetStyles.Label}>
-                  Discord Username *
-                </label>
-                <p className={widgetStyles.Help}>
-                  Used in case we need to contact you about your submissions or
-                  winnings.
+              )}
+              {!state.username && hasValidationErrors && (
+                <p className={widgetStyles.ErrorMessage}>
+                  <small>This field is required</small>
                 </p>
-                <input
-                  className={clsx(
-                    widgetStyles.Control,
-                    widgetStyles.Text,
-                    !state.discordUsername &&
-                      hasValidationErrors &&
-                      "input-error"
-                  )}
-                  style={{ marginBottom: 0 }}
-                  type="text"
-                  id="discordUsername"
-                  name="discordUsername"
-                  placeholder="Warden#1234"
-                  value={state.discordUsername}
-                  onChange={handleChange}
-                  maxLength={25}
-                />
-                {!state.discordUsername && hasValidationErrors && (
-                  <p className={widgetStyles.ErrorMessage}>
-                    <small>This field is required</small>
-                  </p>
-                )}
-                {/* {todo: validate discord handle} */}
-                {/* {(
+              )}
+            </div>
+          ) : (
+            <div className={widgetStyles.Container}>
+              <label className={widgetStyles.Label}>Code4rena Username</label>
+              <p className={widgetStyles.Help}>
+                The username you use to submit your findings
+              </p>
+              <WardenField
+                name="handle"
+                required={true}
+                options={wardens}
+                onChange={(e) => {
+                  setState((state) => {
+                    return { ...state, username: e.target.value };
+                  });
+                }}
+                fieldState={state}
+                isInvalid={hasValidationErrors && !state.username}
+              />
+              {hasValidationErrors && !state.username && (
+                <p className={widgetStyles.ErrorMessage}>
+                  <small>This field is required</small>
+                </p>
+              )}
+            </div>
+          )}
+          <div className={widgetStyles.Container}>
+            <label htmlFor="discordUsername" className={widgetStyles.Label}>
+              Discord Username *
+            </label>
+            <p className={widgetStyles.Help}>
+              Used in case we need to contact you about your submissions or
+              winnings.
+            </p>
+            <input
+              className={clsx(
+                widgetStyles.Control,
+                widgetStyles.Text,
+                !state.discordUsername && hasValidationErrors && "input-error"
+              )}
+              style={{ marginBottom: 0 }}
+              type="text"
+              id="discordUsername"
+              name="discordUsername"
+              placeholder="Warden#1234"
+              value={state.discordUsername}
+              onChange={handleChange}
+              maxLength={25}
+            />
+            {!state.discordUsername && hasValidationErrors && (
+              <p className={widgetStyles.ErrorMessage}>
+                <small>This field is required</small>
+              </p>
+            )}
+            {/* {todo: validate discord handle} */}
+            {/* {(
                   <p className={widgetStyles.Help}>
                     <small>
                       Make sure you enter your discord handle,
@@ -290,7 +359,9 @@ const RegistrationForm = ({ handles, users }) => {
                     </small>
                   </p>
                 )} */}
-              </div>
+          </div>
+          {isNewUser && (
+            <>
               <div className={widgetStyles.Container}>
                 <label htmlFor="link" className={widgetStyles.Label}>
                   Qualifications *
@@ -356,72 +427,6 @@ const RegistrationForm = ({ handles, users }) => {
                   accept=".png,.jpg,.jpeg,.webp"
                   ref={avatarInputRef}
                 />
-              </div>
-            </>
-          ) : (
-            <>
-              <div className={widgetStyles.Container}>
-                <label className={widgetStyles.Label}>
-                  Code4rena Username *
-                </label>
-                <p className={widgetStyles.Help}>
-                  The username you use to submit your findings
-                </p>
-                <WardenField
-                  name="handle"
-                  required={true}
-                  options={wardens}
-                  onChange={(handle) =>
-                    setState((state) => {
-                      return { ...state, username: handle.value };
-                    })
-                  }
-                  fieldState={state}
-                  isInvalid={
-                    status === FormStatus.Submitting && !state.username
-                  }
-                />
-              </div>
-              <div className={widgetStyles.Container}>
-                <label htmlFor="discordUsername" className={widgetStyles.Label}>
-                  Discord Username *
-                </label>
-                <p className={widgetStyles.Help}>
-                  Used in case we need to contact you about your submissions or
-                  winnings.
-                </p>
-                <input
-                  className={clsx(
-                    widgetStyles.Control,
-                    widgetStyles.Text,
-                    !state.discordUsername &&
-                      hasValidationErrors &&
-                      "input-error"
-                  )}
-                  style={{ marginBottom: 0 }}
-                  type="text"
-                  id="discordUsername"
-                  name="discordUsername"
-                  placeholder="Warden#1234"
-                  value={state.discordUsername}
-                  onChange={handleChange}
-                  maxLength={25}
-                />
-                {!state.discordUsername && hasValidationErrors && (
-                  <p className={widgetStyles.ErrorMessage}>
-                    <small>This field is required</small>
-                  </p>
-                )}
-                {/* {@todo: validate discord handle} */}
-                {/* {(
-                  <p className={widgetStyles.Help}>
-                    <small>
-                      Make sure you enter your discord handle,
-                      and not your server nickname. It should end with 
-                      '#' followed by 4 digits.
-                    </small>
-                  </p>
-                )} */}
               </div>
             </>
           )}

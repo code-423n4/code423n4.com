@@ -2,6 +2,7 @@ const HandlesJson = `
 type HandlesJson implements Node {
   handle:            String
   link:              String
+  moralisId:         String
   """ TODO: add @dontInfer
   image:          ?
   """

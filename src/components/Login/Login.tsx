@@ -10,7 +10,7 @@ import Dropdown from "../Dropdown";
 import * as styles from "./Login.module.scss";
 
 const Login = () => {
-  const { logUserOut } = useUser();
+  const { logUserOut, login } = useUser();
   const { authenticate } = useMoralis();
 
   const wardensQuery = graphql`
@@ -20,6 +20,7 @@ const Login = () => {
           node {
             handle
             link
+            moralisId
             image {
               childImageSharp {
                 resize(width: 64, quality: 90) {
@@ -44,6 +45,16 @@ const Login = () => {
         ) => {
           try {
             const user = await authenticate({ provider });
+            if (user === undefined) {
+              // user does not have the corresponding browser extension
+              // or user clicked "cancel" when prompted to sign message
+              // @todo: update messaging
+              toast.error(
+                `Make sure you have the ${provider} browser extension \n You must sign the message to login`
+              );
+              return;
+            }
+
             const username = await user.get("c4Username");
 
             // user has not filled out registration yet
@@ -63,7 +74,7 @@ const Login = () => {
             });
 
             // registration is pending
-            if (!registeredUser || !registeredUser.id) {
+            if (!registeredUser || !registeredUser.node.moralisId) {
               await logUserOut();
               toast.error(
                 <span>
@@ -78,7 +89,24 @@ const Login = () => {
               );
               return;
             }
+            const moralisId = registeredUser.node.moralisId;
+            const address = await user.get("ethAddress");
+            const discordUsername = await user.get("discordUsername");
+            const link = registeredUser.node.link || null;
+            const img =
+              registeredUser.node.image?.childImageSharp.resize.src || null;
+
+            login({
+              username,
+              moralisId,
+              address,
+              discordUsername,
+              link,
+              img,
+              isLoggedIn: true,
+            });
           } catch (error) {
+            console.error(error);
             await logUserOut();
             toast.error(
               "Something went wrong. Please refresh the page and try again."
