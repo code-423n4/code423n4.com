@@ -12,17 +12,21 @@ import Moralis from "moralis";
 interface UserState {
   address: string;
   username: string;
+  discordUsername: string;
+  moralisId: string;
   isLoggedIn: boolean;
-  img?: string;
-  link?: string;
+  img?: string | null;
+  link?: string | null;
 }
 
 const DEFAULT_STATE: UserState = {
   address: "",
   username: "",
+  discordUsername: "",
+  moralisId: "",
   isLoggedIn: false,
-  img: "",
-  link: "",
+  img: null,
+  link: null,
 };
 
 interface User {
@@ -47,23 +51,13 @@ const UserProvider = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    const getUser = async () => {
+    const resetUserOnLogout = async () => {
       if (!isAuthenticated) {
+        setCurrentUser(DEFAULT_STATE);
         return;
       }
-      const username = await user.get("c4Username");
-      const address = await user.get("ethAddress");
-
-      // @todo: check that user is registered, then
-      // get user's social link and avatar
-
-      setCurrentUser({
-        username,
-        address,
-        isLoggedIn: true,
-      });
     };
-    getUser();
+    resetUserOnLogout();
   }, [isAuthenticated, user]);
 
   const userContext = useMemo(() => {
@@ -96,26 +90,38 @@ const useUser = () => {
 
 // @todo: verify expected behavior here and implement/communicate it properly
 Moralis.onAccountChanged(async (account) => {
-  const user = Moralis.User.current();
+  const user = await Moralis.User.current();
   console.log("account changed. user = ", user);
-  if (user) {
-    try {
-      const accounts = user.get("accounts");
-      if (accounts.includes(account)) {
-        await user.set("ethAddress", account);
-        console.log("eth address", user.get("ethAddress"));
-        return;
-      }
-      const username = user.get("c4Username");
-      const confirmed = confirm(
-        `Are you sure you want to link your account ${account} to ${username}?`
-      );
-      if (confirmed) {
-        await Moralis.link(account);
-      }
-    } catch (error) {
-      console.error(error);
+
+  if (!user) {
+    Moralis.User.logOut();
+    return;
+  }
+
+  try {
+    const accounts = user.get("accounts");
+    if (!accounts) {
+      await Moralis.User.logOut();
+      return;
     }
+    // if this account is already linked, make the address the default
+    if (accounts.includes(account)) {
+      await user.set("ethAddress", account);
+      return;
+    }
+    const username = user.get("c4Username");
+    // @todo: implement a custom confirmation modal
+    const confirmed = confirm(
+      `Are you sure you want to link your account ${account} to ${username}?`
+    );
+    if (!confirmed) {
+      await Moralis.User.logOut();
+      return;
+    }
+    await Moralis.link(account);
+  } catch (error) {
+    console.error(error);
+    await Moralis.User.logOut();
   }
 });
 
