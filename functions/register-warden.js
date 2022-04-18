@@ -1,7 +1,6 @@
 const { Octokit } = require("@octokit/core");
 const { createPullRequest } = require("octokit-plugin-create-pull-request");
 const sharp = require("sharp");
-const { verify } = require("hcaptcha");
 const { token } = require("./_config");
 
 const OctokitClient = Octokit.plugin(createPullRequest);
@@ -12,24 +11,31 @@ function isDangerous(s) {
 }
 
 exports.handler = async (event) => {
-  // only allow POST
+  // only allow POST or PUT
   try {
-    if (event.httpMethod !== "POST") {
+    if (event.httpMethod !== "POST" && event.httpMethod !== "PUT") {
       return {
         statusCode: 405,
         body: "Method not allowed",
-        headers: { Allow: "POST" },
+        headers: { Allow: ["POST", "PUT"] },
       };
     }
 
     const data = JSON.parse(event.body);
-    let { handle, image, link } = data;
+    const { handle, image, link, moralisId } = data;
 
     // ensure we have the data we need
     if (!handle) {
       return {
         statusCode: 422,
         body: "Handle is required",
+      };
+    }
+
+    if (!moralisId) {
+      return {
+        statusCode: 422,
+        body: "Moralis id is required",
       };
     }
 
@@ -43,7 +49,7 @@ exports.handler = async (event) => {
       };
     }
 
-    let formattedHandleData = { handle, link };
+    const formattedHandleData = { handle, link, moralisId };
     let avatarFilename = "";
     let base64Avatar = "";
     if (image) {
@@ -70,17 +76,55 @@ exports.handler = async (event) => {
       };
     }
 
+    if (event.httpMethod === "PUT") {
+      try {
+        const wardenFile = await octokit.request(
+          "GET /repos/{owner}/{repo}/contents/{path}",
+          {
+            owner: "code-423n4",
+            repo: "code423n4.com",
+            path: `_data/handles/${handle}.json`,
+          }
+        );
+
+        const content = JSON.stringify(
+          {
+            ...JSON.parse(Buffer.from(wardenFile.data.content, "base64")),
+            moralisId,
+          },
+          null,
+          2
+        );
+        files[`_data/handles/${handle}.json`] = content;
+      } catch (error) {
+        console.error(error);
+        return {
+          statusCode: 500,
+          body: JSON.stringify({ error: "Internal server error." }),
+        };
+      }
+    }
+
+    const title =
+      event.httpMethod === "PUT"
+        ? `Update warden ${handle}`
+        : `Add warden ${handle}`;
+    const body =
+      event.httpMethod === "PUT"
+        ? `This auto-generated PR updates info for warden ${handle}`
+        : `This auto-generated PR registers the new warden ${handle}`;
+
     try {
       const res = await octokit.createPullRequest({
         owner: "code-423n4",
         repo: "code423n4.com",
-        title: `Add warden ${handle}`,
-        body: `This auto-generated PR registers the new warden ${handle}`,
+        title,
+        body,
         head: `warden-${handle}`,
         changes: [
           {
             files,
-            commit: `Add warden ${handle}`,
+            commit: title,
           },
         ],
       });
@@ -89,13 +133,13 @@ exports.handler = async (event) => {
         statusCode: 201,
         body: JSON.stringify({ message: `Created PR ${res.data.number}` }),
       };
-    } catch (err) {
+    } catch (error) {
       return {
-        statusCode: err.response.status,
-        body: JSON.stringify({ error: err.response.data.message.toString() }),
+        statusCode: error.response.status,
+        body: JSON.stringify({ error: error.response.data.message.toString() }),
       };
     }
-  } catch (err) {
+  } catch (error) {
     return {
       statusCode: 500,
       body: JSON.stringify({ error: "Internal server error." }),
