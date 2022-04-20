@@ -12,7 +12,7 @@ import Widgets from "../components/reporter/widgets/Widgets";
 import * as styles from "../components/reporter/Form.module.scss";
 import * as widgetStyles from "../components/reporter/widgets/Widgets.module.scss";
 
-function ContactUs() {
+function ApplyForWardenCertification() {
   const fields = [
     {
       name: "request",
@@ -129,7 +129,7 @@ function ContactUs() {
       return;
     }
     setValidationErrors(false);
-    submit("/.netlify/functions/request-support", fieldState);
+    submit("/.netlify/functions/apply-for-certified-warden", fieldState);
   };
 
   const handleReset = () => {
@@ -222,4 +222,4 @@ function ContactUs() {
   );
 }
 
-export default ContactUs;
+export default ApplyForWardenCertification;
