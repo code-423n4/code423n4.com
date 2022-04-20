@@ -6,37 +6,6 @@ const notionDbId = process.env.NOTION_WARDEN_CERTIFICATION_DATABASE_ID;
 
 const notion = new Client({ auth: notionKey });
 
-const ticketTags = {
-  wardenRegistration: {
-    name: "Warden registration 🐺",
-    color: "green",
-  },
-  walletUpdate: {
-    name: "Update wallet",
-    color: "purple",
-  },
-  bug: {
-    name: "Bug 🐞",
-    color: "red",
-  },
-  airdropHelp: {
-    name: "Airdrop 🌧",
-    color: "blue",
-  },
-  findingsChange: {
-    name: "Update or withdraw finding 📝",
-    color: "pink",
-  },
-  docs: {
-    name: "C4 docs 📚",
-    color: "yellow",
-  },
-  suggestion: {
-    name: "Process improvement 🔁",
-    color: "orange",
-  },
-};
-
 interface NotionWardenCertificationApplication {
   parent: {
     database_id: string;
@@ -164,12 +133,6 @@ async function handler(event) {
         },
       ],
     };
-
-    if (ticketTags[ticket.request]) {
-      body.properties.Tags = {
-        multi_select: [ticketTags[ticket.request]],
-      };
-    }
 
     if (ticket.discordHandle) {
       body.properties["Discord Handle"] = {
