@@ -2,7 +2,7 @@ const { Client } = require("@notionhq/client");
 const { verify } = require("hcaptcha");
 
 const notionKey = process.env.NOTION_KEY;
-const helpdeskId = process.env.NOTION_HELPDESK_DATABASE_ID;
+const notionDbId = process.env.NOTION_WARDEN_CERTIFICATION_DATABASE_ID;
 
 const notion = new Client({ auth: notionKey });
 
@@ -37,7 +37,7 @@ const ticketTags = {
   },
 };
 
-interface NotionHelpdeskTicket {
+interface NotionWardenCertificationApplication {
   parent: {
     database_id: string;
   };
@@ -127,9 +127,9 @@ async function handler(event) {
   }
 
   try {
-    const body: NotionHelpdeskTicket = {
+    const body: NotionWardenCertificationApplication = {
       parent: {
-        database_id: helpdeskId,
+        database_id: notionDbId,
       },
       properties: {
         Name: {
