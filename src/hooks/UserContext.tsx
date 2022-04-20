@@ -8,6 +8,12 @@ import React, {
 } from "react";
 import { MoralisProvider, useMoralis } from "react-moralis";
 import Moralis from "moralis";
+import { graphql, StaticQuery } from "gatsby";
+
+export enum UserLoginError {
+  Unregistered = "unregistered",
+  Pending = "registration pending",
+}
 
 interface UserState {
   address: string;
@@ -17,6 +23,12 @@ interface UserState {
   isLoggedIn: boolean;
   img?: string | null;
   link?: string | null;
+}
+
+interface User {
+  currentUser: UserState;
+  logUserOut?: () => void;
+  login?: () => Promise<void>;
 }
 
 const DEFAULT_STATE: UserState = {
@@ -29,43 +41,108 @@ const DEFAULT_STATE: UserState = {
   link: null,
 };
 
-interface User {
-  currentUser: UserState;
-  logUserOut?: () => void;
-  login?: (user: UserState) => void;
-}
-
 const UserContext = createContext<User>({ currentUser: DEFAULT_STATE });
 
 const UserProvider = ({ children }) => {
   const { isAuthenticated, logout, user } = useMoralis();
   const [currentUser, setCurrentUser] = useState(DEFAULT_STATE);
 
-  const login = useCallback((user: UserState) => {
-    setCurrentUser(user);
-  }, []);
-
-  const logUserOut = useCallback(() => {
-    logout();
-    setCurrentUser(DEFAULT_STATE);
-  }, []);
-
-  useEffect(() => {
-    const resetUserOnLogout = async () => {
-      if (!isAuthenticated) {
-        setCurrentUser(DEFAULT_STATE);
-        return;
+  const wardensQuery = graphql`
+    query {
+      handles: allHandlesJson(sort: { fields: handle, order: ASC }) {
+        edges {
+          node {
+            handle
+            link
+            moralisId
+            image {
+              childImageSharp {
+                resize(width: 64, quality: 90) {
+                  src
+                }
+              }
+            }
+          }
+        }
       }
-    };
-    resetUserOnLogout();
-  }, [isAuthenticated, user]);
-
-  const userContext = useMemo(() => {
-    return { currentUser, logUserOut, login };
-  }, [currentUser, logUserOut, login]);
+    }
+  `;
 
   return (
-    <UserContext.Provider value={userContext}>{children}</UserContext.Provider>
+    <StaticQuery
+      query={wardensQuery}
+      render={(data) => {
+        const handles = data.handles.edges;
+
+        const login = useCallback(async (): Promise<void> => {
+          const user = Moralis.User.current();
+          if (!user) {
+            logUserOut();
+          }
+
+          const username = await user.get("c4Username");
+
+          if (!username) {
+            await logUserOut();
+            throw UserLoginError.Unregistered;
+          }
+
+          const registeredUser = handles.find((handle) => {
+            return handle.node.handle === username;
+          });
+
+          if (!registeredUser || !registeredUser.node.moralisId) {
+            await logUserOut();
+            throw UserLoginError.Pending;
+          }
+          const moralisId = registeredUser.node.moralisId;
+          const address = await user.get("ethAddress");
+          const discordUsername = await user.get("discordUsername");
+          const link = registeredUser.node.link || null;
+          const img =
+            registeredUser.node.image?.childImageSharp.resize.src || null;
+
+          setCurrentUser({
+            username,
+            moralisId,
+            address,
+            discordUsername,
+            link,
+            img,
+            isLoggedIn: true,
+          });
+        }, []);
+
+        const logUserOut = useCallback(() => {
+          logout();
+          setCurrentUser(DEFAULT_STATE);
+        }, []);
+
+        useEffect(() => {
+          const getUser = async () => {
+            if (!isAuthenticated) {
+              setCurrentUser(DEFAULT_STATE);
+              return;
+            }
+            try {
+              await login();
+            } catch (error) {
+              console.error(error);
+            }
+          };
+          getUser();
+        }, [isAuthenticated, user]);
+
+        const userContext = useMemo(() => {
+          return { currentUser, logUserOut, login };
+        }, [currentUser, logUserOut, login]);
+        return (
+          <UserContext.Provider value={userContext}>
+            {children}
+          </UserContext.Provider>
+        );
+      }}
+    />
   );
 };
 
