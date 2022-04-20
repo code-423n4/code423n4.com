@@ -13,68 +13,24 @@ import * as styles from "../components/reporter/Form.module.scss";
 import * as widgetStyles from "../components/reporter/widgets/Widgets.module.scss";
 
 function ApplyForWardenCertification() {
-  const fields = [
-    {
-      name: "request",
-      label: "What type of problem do you need help with?",
-      widget: "select",
-      required: true,
-      options: [
-        {
-          label: "Warden registration",
-          value: "wardenRegistration",
-        },
-        {
-          label: "Update polygon address",
-          value: "walletUpdate",
-        },
-        {
-          label: "Change or withdraw a finding I submitted",
-          value: "findingsChange",
-        },
-        {
-          label: "Report a bug or issue with documentation",
-          value: "bug",
-        },
-        {
-          label: "Other",
-          value: "other",
-        },
-      ],
-    },
-    {
-      name: "subject",
-      label: "Subject",
-      widget: "text",
-      required: true,
-    },
-    {
-      name: "description",
-      label: "Description",
-      widget: "textarea",
-      required: true,
-    },
-  ];
+  const fields = [];
 
   const contactFields = [
     {
-      name: "discordHandle",
-      label: "Discord Handle",
+      name: "wardenHandle",
+      label: "Warden Handle",
       widget: "text",
     },
     {
-      name: "email",
-      label: "Email Address",
+      name: "githubUsername",
+      label: "GitHub Username",
       widget: "text",
     },
   ];
 
   const initialState = {
-    discordHandle: "",
-    email: "",
-    subject: "",
-    request: "",
-    description: "",
+    wardenHandle: "",
+    githubUsername: "",
   };
 
   const FormStatus = {
@@ -120,7 +76,7 @@ function ApplyForWardenCertification() {
 
   const handleSubmit = () => {
     if (
-      (!fieldState.discordHandle && !fieldState.email) ||
+      (!fieldState.wardenHandle && !fieldState.githubUsername) ||
       fields.some((field) => {
         return field.required && !fieldState[field.name];
       })
@@ -143,24 +99,24 @@ function ApplyForWardenCertification() {
   }, []);
 
   const invalidContact =
-    hasValidationErrors && !fieldState.discordHandle && !fieldState.email;
+    hasValidationErrors && !fieldState.wardenHandle && !fieldState.githubUsername;
 
   return (
     <DefaultLayout
-      pageDescription="Need help with something? Contact us here."
-      pageTitle="Help | Code 423n4"
+      pageDescription="Apply to become a Certified Warden."
+      pageTitle="Warden Certification Application | Code 423n4"
     >
       {(status === FormStatus.Unsubmitted ||
         status === FormStatus.Submitting) && (
         <form className={styles.Form}>
-          <h1>How can we help?</h1>
+          <h1>Warden Certification Application</h1>
           <fieldset className={widgetStyles.Fields}>
             <FormField
               name="contactInfo"
               label="Contact Information"
-              helpText="Please enter your discord handle or your email address so we can follow up with you"
+              helpText="Select your current warden profile and enter your GitHub username; we'll handle the rest."
               isInvalid={invalidContact}
-              errorMessage="You must enter either your discord handle or email address"
+              errorMessage="You must select your warden profile and provide your GitHub username"
             >
               {contactFields.map((field, index) => {
                 return (
@@ -208,14 +164,7 @@ function ApplyForWardenCertification() {
       {status === FormStatus.Submitted && (
         <div className="centered-text">
           <h1>Thank you!</h1>
-          <p>Your request has been submitted.</p>
-          <button
-            className="button cta-button"
-            type="button"
-            onClick={handleReset}
-          >
-            Get help with something else
-          </button>
+          <p>Your application has been submitted.</p>
         </div>
       )}
     </DefaultLayout>
