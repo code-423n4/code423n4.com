@@ -83,7 +83,7 @@ async function handler(event) {
           title: [
             {
               text: {
-                content: ticket.discordHandle,
+                content: ticket.wardenHandle,
               },
             },
           ],
