@@ -3,7 +3,6 @@ import HCaptcha from "@hcaptcha/react-hcaptcha";
 import { StaticQuery, graphql } from "gatsby";
 
 import DefaultLayout from "../templates/DefaultLayout";
-import FormField from "../components/reporter/widgets/FormField";
 import Widget from "../components/reporter/widgets/Widget";
 import Widgets from "../components/reporter/widgets/Widgets";
 
@@ -126,29 +125,21 @@ function ApplyForWardenCertification() {
               <form className={styles.Form}>
                 <h1>Warden Certification Application</h1>
                 <fieldset className={widgetStyles.Fields}>
-                  <FormField
-                    name="contactInfo"
-                    label="Contact Information"
-                    helpText="Select your current warden profile and enter your GitHub username; we'll handle the rest."
-                    isInvalid={invalidContact}
-                    errorMessage="You must select your warden profile and provide your GitHub username"
-                  >
-                    {contactFields.map((field, index) => {
-                      return (
-                        <div key={field.name + index}>
-                          <label>{field.label}</label>
-                          <Widget
-                            field={field}
-                            onChange={handleChange}
-                            fieldState={fieldState}
-                            isInvalid={invalidContact}
-                            showValidationErrors={hasValidationErrors}
-                            required={field.required}
-                          />
-                        </div>
-                      );
-                    })}
-                  </FormField>
+                  {contactFields.map((field, index) => {
+                    return (
+                      <div key={field.name + index}>
+                        <label>{field.label}</label>
+                        <Widget
+                          field={field}
+                          onChange={handleChange}
+                          fieldState={fieldState}
+                          isInvalid={invalidContact}
+                          showValidationErrors={hasValidationErrors}
+                          required={field.required}
+                        />
+                      </div>
+                    );
+                  })}
                   <Widgets
                     fields={fields}
                     onChange={handleChange}
