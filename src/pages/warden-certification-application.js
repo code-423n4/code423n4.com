@@ -142,6 +142,8 @@ function ApplyForWardenCertification() {
                             onChange={handleChange}
                             fieldState={fieldState}
                             isInvalid={invalidContact}
+                            showValidationErrors={hasValidationErrors}
+                            required={field.required}
                           />
                         </div>
                       );
