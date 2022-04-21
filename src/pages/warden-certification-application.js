@@ -54,7 +54,11 @@ function ApplyForWardenCertification() {
   };
 
   const handleChange = useCallback((e) => {
-    const { name, value } = e.target;
+    // XXX: hack to modify warden field name
+    let { name, value } = e.target;
+    if (name === "handle") {
+      name = "wardenHandle";
+    }
     setFieldState((state) => {
       return { ...state, [name]: value };
     });
