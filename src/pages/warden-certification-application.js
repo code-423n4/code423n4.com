@@ -13,19 +13,6 @@ import * as widgetStyles from "../components/reporter/widgets/Widgets.module.scs
 function ApplyForWardenCertification() {
   const fields = [];
 
-  const contactFields = [
-    {
-      name: "githubUsername",
-      label: "GitHub Username",
-      widget: "text",
-    },
-    {
-      name: "emailAddress",
-      label: "E-mail Address",
-      widget: "text",
-    }
-  ];
-
   const initialState = {
     wardenHandle: "",
     githubUsername: "",
@@ -102,6 +89,27 @@ function ApplyForWardenCertification() {
           return { value: node.handle, image: node.image };
         });
 
+        const contactFields = [
+          {
+            name: "wardenHandle",
+            label: "Warden Handle",
+            helpText: "Handle to certify",
+            widget: "warden",
+            required: true,
+            options: wardens,
+          },
+          {
+            name: "githubUsername",
+            label: "GitHub Username",
+            widget: "text",
+          },
+          {
+            name: "emailAddress",
+            label: "E-mail Address",
+            widget: "text",
+          }
+        ];
+
         return (
           <DefaultLayout
             pageDescription="Apply to become a Certified Warden."
@@ -119,20 +127,6 @@ function ApplyForWardenCertification() {
                     isInvalid={invalidContact}
                     errorMessage="You must select your warden profile and provide your GitHub username"
                   >
-                    <Widget
-                      field={{
-                        name: "wardenHandle",
-                        label: "Warden Handle",
-                        helpText:
-                          "Handle to certify",
-                        widget: "warden",
-                        required: true,
-                        options: wardens,
-                      }}
-                      onChange={handleChange}
-                      fieldState={fieldState}
-                      isInvalid={hasValidationErrors && !fieldState.wardenHandle}
-                    />
                     {contactFields.map((field, index) => {
                       return (
                         <div key={field.name + index}>
