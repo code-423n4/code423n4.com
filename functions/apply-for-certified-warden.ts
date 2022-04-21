@@ -11,7 +11,7 @@ interface NotionWardenCertificationApplication {
     database_id: string;
   };
   properties: {
-    Name: {
+    "Warden Handle": {
       title: {
         text: {
           content: string;
@@ -79,7 +79,7 @@ async function handler(event) {
         database_id: notionDbId,
       },
       properties: {
-        Name: {
+        "Warden Handle": {
           title: [
             {
               text: {
