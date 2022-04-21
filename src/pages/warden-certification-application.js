@@ -87,12 +87,6 @@ function ApplyForWardenCertification() {
     submit("/.netlify/functions/apply-for-certified-warden", fieldState);
   };
 
-  const handleReset = () => {
-    setCaptchaToken("");
-    setFieldState(initialState);
-    setStatus(FormStatus.Unsubmitted);
-  };
-
   const handleCaptchaVerification = useCallback((token) => {
     setCaptchaToken(token);
   }, []);
