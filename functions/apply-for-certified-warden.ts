@@ -18,18 +18,12 @@ interface NotionWardenCertificationApplication {
         };
       }[];
     };
-    Tags?: {
-      multi_select: {
-        name: string;
-        color: string;
-      }[];
-    };
     Status: {
       select: {
         name: string;
       };
     };
-    "Discord Handle"?: {
+    "GitHub Username": {
       rich_text: [
         {
           type: "text";
@@ -39,27 +33,11 @@ interface NotionWardenCertificationApplication {
         }
       ];
     };
-    Email?: {
+    "E-mail": {
       type: "email";
       email: string;
     };
   };
-  children: [
-    {
-      object: "block";
-      type: "paragraph";
-      paragraph: {
-        text: [
-          {
-            type: "text";
-            text: {
-              content: string;
-            };
-          }
-        ];
-      };
-    }
-  ];
 }
 
 async function handler(event) {
@@ -88,7 +66,7 @@ async function handler(event) {
   }
 
   const ticket = JSON.parse(event.body);
-  if (!ticket.discordHandle && !ticket.email) {
+  if (!ticket.wardenHandle || !ticket.githubUsername || !ticket.emailAddress) {
     return {
       statusCode: 422,
       body: JSON.stringify({ error: "Contact info is required" }),
@@ -105,54 +83,32 @@ async function handler(event) {
           title: [
             {
               text: {
-                content: ticket.subject,
+                content: ticket.discordHandle,
               },
             },
           ],
         },
         Status: {
           select: {
-            name: "Not Started",
+            name: "Applied",
           },
+        },
+        "GitHub Username": {
+          rich_text: [
+            {
+              type: "text",
+              text: {
+                content: ticket.githubUsername,
+              },
+            },
+          ],
+        },
+        "E-mail": {
+          type: "email",
+          email: ticket.emailAddress,
         },
       },
-      children: [
-        {
-          object: "block",
-          type: "paragraph",
-          paragraph: {
-            text: [
-              {
-                type: "text",
-                text: {
-                  content: ticket.description,
-                },
-              },
-            ],
-          },
-        },
-      ],
     };
-
-    if (ticket.discordHandle) {
-      body.properties["Discord Handle"] = {
-        rich_text: [
-          {
-            type: "text",
-            text: {
-              content: ticket.discordHandle,
-            },
-          },
-        ],
-      };
-    }
-
-    if (ticket.email) {
-      body.properties.Email = {
-        type: "email",
-        email: ticket.email,
-      };
-    }
 
     await notion.pages.create(body);
 
