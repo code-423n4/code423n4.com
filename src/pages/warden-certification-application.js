@@ -1,6 +1,3 @@
-// warden dropdown
-// github username
-
 import React, { useCallback, useState } from "react";
 import HCaptcha from "@hcaptcha/react-hcaptcha";
 
