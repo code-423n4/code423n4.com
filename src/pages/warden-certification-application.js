@@ -102,11 +102,13 @@ function ApplyForWardenCertification() {
             name: "githubUsername",
             label: "GitHub Username",
             widget: "text",
+            required: true,
           },
           {
             name: "emailAddress",
             label: "E-mail Address",
             widget: "text",
+            required: true,
           }
         ];
 
