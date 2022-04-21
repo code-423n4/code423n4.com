@@ -26,11 +26,17 @@ function ApplyForWardenCertification() {
       label: "GitHub Username",
       widget: "text",
     },
+    {
+      name: "emailAddress",
+      label: "E-mail Address",
+      widget: "text",
+    }
   ];
 
   const initialState = {
     wardenHandle: "",
     githubUsername: "",
+    emailAddress: "",
   };
 
   const FormStatus = {
@@ -76,7 +82,7 @@ function ApplyForWardenCertification() {
 
   const handleSubmit = () => {
     if (
-      (!fieldState.wardenHandle && !fieldState.githubUsername) ||
+      (!fieldState.wardenHandle && !fieldState.githubUsername && !fieldState.emailAddress) ||
       fields.some((field) => {
         return field.required && !fieldState[field.name];
       })
@@ -99,7 +105,7 @@ function ApplyForWardenCertification() {
   }, []);
 
   const invalidContact =
-    hasValidationErrors && !fieldState.wardenHandle && !fieldState.githubUsername;
+    hasValidationErrors && !fieldState.wardenHandle && !fieldState.githubUsername && !fieldState.emailAddress;
 
   return (
     <DefaultLayout
