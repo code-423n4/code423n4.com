@@ -161,7 +161,7 @@ function ApplyForWardenCertification() {
                       I have read and agree to the terms and conditions (see below)
                     </label>
                   </fieldset>
-                  <div className="captcha-container">
+                  <div className="captcha-container" style={{"justify-content": "left", "margin-top": "20px"}}>
                     <HCaptcha
                       sitekey="4963abcb-188b-4972-8e44-2887e315af52"
                       theme="dark"
@@ -169,7 +169,7 @@ function ApplyForWardenCertification() {
                     />
                   </div>
                   <button
-                    className="button cta-button centered"
+                    className="button cta-button"
                     type="button"
                     onClick={handleSubmit}
                     disabled={status !== FormStatus.Unsubmitted || !captchaToken}
