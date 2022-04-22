@@ -68,6 +68,48 @@ const UserProvider = ({ children }) => {
     }
   `;
 
+  useEffect(() => {
+    const initializeEventListeners = () => {
+      // @todo: verify expected behavior here and implement/communicate it properly
+      Moralis.onAccountChanged(async (account) => {
+        const user = await Moralis.User.current();
+        if (!user) {
+          logout();
+          return;
+        }
+
+        try {
+          const accounts = user.get("accounts");
+          if (!accounts) {
+            await logout();
+            return;
+          }
+
+          const username = user.get("c4Username");
+          // @todo: implement a custom confirmation modal
+          const confirmed = confirm(
+            `Are you sure you want to link your account ${account} to ${username}?`
+          );
+          if (!confirmed) {
+            await logout();
+            return;
+          }
+
+          try {
+            await Moralis.link(account);
+          } catch (error) {
+            console.error(error);
+            await logout();
+          }
+        } catch (error) {
+          console.error(error);
+          await logout();
+        }
+      });
+    };
+    initializeEventListeners();
+  }, []);
+
   return (
     <StaticQuery
       query={wardensQuery}
@@ -164,42 +206,5 @@ const useUser = () => {
 
   return currentUser;
 };
-
-// @todo: verify expected behavior here and implement/communicate it properly
-Moralis.onAccountChanged(async (account) => {
-  const user = await Moralis.User.current();
-  console.log("account changed. user = ", user);
-
-  if (!user) {
-    Moralis.User.logOut();
-    return;
-  }
-
-  try {
-    const accounts = user.get("accounts");
-    if (!accounts) {
-      await Moralis.User.logOut();
-      return;
-    }
-    // if this account is already linked, make the address the default
-    if (accounts.includes(account)) {
-      await user.set("ethAddress", account);
-      return;
-    }
-    const username = user.get("c4Username");
-    // @todo: implement a custom confirmation modal
-    const confirmed = confirm(
-      `Are you sure you want to link your account ${account} to ${username}?`
-    );
-    if (!confirmed) {
-      await Moralis.User.logOut();
-      return;
-    }
-    await Moralis.link(account);
-  } catch (error) {
-    console.error(error);
-    await Moralis.User.logOut();
-  }
-});
 
 export default useUser;

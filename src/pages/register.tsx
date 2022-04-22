@@ -86,7 +86,6 @@ const RegistrationForm = ({ handles, users }) => {
         (isNewUser && handles.has(state.username))
       ) {
         setHasValidationErrors(true);
-        setStatus(FormStatus.Error);
         return;
       }
       (async () => {

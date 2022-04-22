@@ -1,15 +1,15 @@
 import React from "react";
 import { graphql, Link } from "gatsby";
 
+import DefaultLayout from "./DefaultLayout";
 import SubmitFindings from "../components/reporter/SubmitFindings";
-
 
 const ReportForm = (props) => {
   const endTime = props.data.contestsCsv.end_time;
   const hasContestEnded = Date.now() > new Date(endTime).getTime();
 
   return (
-    <main>
+    <DefaultLayout>
       {hasContestEnded ? (
         <div className="center">
           <h1>This contest has ended.</h1>
@@ -29,7 +29,7 @@ const ReportForm = (props) => {
           repo={props.data.contestsCsv.findingsRepo}
         />
       )}
-    </main>
+    </DefaultLayout>
   );
 };
 

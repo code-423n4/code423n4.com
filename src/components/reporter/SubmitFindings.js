@@ -121,15 +121,6 @@ const SubmitFindings = ({ wardensList, sponsor, contest, repo }) => {
     } else {
       const { name, value } = e?.target;
       switch (name) {
-        case "risk":
-          setState((prevState) => {
-            return {
-              ...prevState,
-              [name]: value,
-              labels: [config.labelAll, value ? value : ""],
-            };
-          });
-          break;
         case "title":
           setState((prevState) => {
             return { ...prevState, [name]: checkTitle(value, prevState.risk) };
@@ -149,20 +140,17 @@ const SubmitFindings = ({ wardensList, sponsor, contest, repo }) => {
     submitFinding,
     setIsExpanded
   ) => {
+    const isQaOrGasFinding = checkQaOrGasFinding(state.risk);
     const locString = state.linesOfCode.map((loc) => loc.value).join("\n");
-    const details = checkQaOrGasFinding(state.risk)
-      ? state.qaGasDetails
-      : state.details;
+    const details = isQaOrGasFinding ? state.qaGasDetails : state.details;
     const markdownBody = `# Lines of code\n\n${locString}\n\n\n# Vulnerability details\n\n${details}\n\n`;
 
     // extract required fields from field data for validation check
     const formatedRisk = state.risk ? state.risk.slice(0, 1) : "";
-    const formatedBody = checkQaOrGasFinding(state.risk)
-      ? details
-      : markdownBody;
+    const formatedBody = isQaOrGasFinding ? details : markdownBody;
 
     const { email, handle, address, title } = state;
-    const requiredFields = checkQaOrGasFinding(state.risk)
+    const requiredFields = isQaOrGasFinding
       ? [email, handle, address, formatedRisk, formatedBody]
       : [email, handle, address, formatedRisk, title, formatedBody];
     let hasErrors = requiredFields.some((field) => {
@@ -170,7 +158,7 @@ const SubmitFindings = ({ wardensList, sponsor, contest, repo }) => {
     });
 
     // TODO: verify that loc include code lines and are valid URLs
-    if (!checkQaOrGasFinding(state.risk) && !state.linesOfCode[0].value) {
+    if (!isQaOrGasFinding && !state.linesOfCode[0].value) {
       hasErrors = true;
     }
 
@@ -178,6 +166,14 @@ const SubmitFindings = ({ wardensList, sponsor, contest, repo }) => {
     const hasInvalidLinks = state.linesOfCode.some((line) => {
       return !regex.test(line.value);
     });
+
+    if (!isQaOrGasFinding && (!state.linesOfCode[0].value || hasInvalidLinks)) {
+      hasErrors = true;
+    }
+    if (hasErrors) {
+      setHasValidationErrors(hasErrors);
+      return;
+    }
 
     const submitData = {
       contest,
@@ -189,42 +185,39 @@ const SubmitFindings = ({ wardensList, sponsor, contest, repo }) => {
       risk: formatedRisk,
       title: checkTitle(state.title, state.risk),
       body: formatedBody,
-      labels: state.labels,
+      labels: [config.labelAll, state.risk],
     };
-    setHasValidationErrors(hasErrors || hasInvalidLinks);
-    if (!hasErrors) {
-      submitFinding(submissionUrl, submitData);
-      if (typeof window !== `undefined`) {
-        window.localStorage.removeItem(contest);
-      }
-
-      setIsExpanded(false);
+    submitFinding(submissionUrl, submitData);
+    if (typeof window !== `undefined`) {
+      window.localStorage.removeItem(contest);
     }
+
+    setIsExpanded(false);
   };
 
   useEffect(() => {
+    let fieldList = [];
+    if (!currentUser.isLoggedIn) {
+      fieldList = [wardenField(wardens), emailField, addressField];
+    }
+    fieldList.push(riskField);
     if (!state.risk) {
-      setFieldList([wardenField(wardens), emailField, addressField, riskField]);
-    } else if (checkQaOrGasFinding(state.risk)) {
-      setFieldList([
-        wardenField(wardens),
-        emailField,
-        addressField,
-        riskField,
-        qaGasDetailsField,
-      ]);
-    } else {
-      setFieldList([
-        wardenField(wardens),
-        emailField,
-        addressField,
-        riskField,
+      setFieldList(fieldList);
+      return;
+    }
+    if (checkQaOrGasFinding(state.risk)) {
+      fieldList.push(qaGasDetailsField);
+      setFieldList(fieldList);
+      return;
+    }
+    setFieldList(
+      fieldList.concat([
         titleField,
         linesOfCodeField,
         vulnerabilityDetailsField,
-      ]);
-    }
-  }, [state.risk]);
+      ])
+    );
+  }, [state.risk, currentUser.isLoggedIn]);
 
   const resetForm = () => {
     setState((prevState) => {
