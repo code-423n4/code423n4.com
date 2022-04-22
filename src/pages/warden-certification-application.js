@@ -159,7 +159,6 @@ function ApplyForWardenCertification() {
                 >
                   {status === FormStatus.Unsubmitted ? "Submit" : "Submitting..."}
                 </button>
-                <div dangerouslySetInnerHTML={{ __html: data.contributorTerms.html }} />
               </form>
             )}
             {status === FormStatus.Error && (
@@ -173,6 +172,7 @@ function ApplyForWardenCertification() {
                 <p>Your application has been submitted.</p>
               </div>
             )}
+            <article dangerouslySetInnerHTML={{ __html: data.contributorTerms.html }} />
           </DefaultLayout>
         );
       }}
