@@ -153,7 +153,7 @@ function ApplyForWardenCertification() {
                       fieldState={fieldState}
                       showValidationErrors={hasValidationErrors}
                     />
-                    <label className={clsx(styles.Control, (hasValidationErrors && !acceptedAgreement) && "input-error")}>
+                    <label className={clsx((hasValidationErrors && !acceptedAgreement) && "input-error")}>
                       <input
                         type="checkbox"
                         checked={acceptedAgreement}
