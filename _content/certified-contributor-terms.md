@@ -1,6 +1,3 @@
----
-title: "Certified Contributor Terms"
----
 # CODE4RENA CERTIFIED CONTRIBUTOR TERMS AND CONDITIONS
 
 The following terms and conditions (the "CC Terms" or "Agreement") contain the terms and conditions applicable to any Open Opportunity, Role, or Selective Opportunity, as defined below and provided by Code4rena Foundation, an exempted limited guarantee foundation company incorporated in the Cayman Islands ("C4").  Byclicking "Accept", you ("YOU" or "CERTIFIED CONTRIBUTOR") are agreeing that you have read, understand, and agree to be legally bound by these CC Terms. Each of C4 and Certified Contributor is a "Party" and together, the "Parties."
@@ -78,30 +75,28 @@ The Certified Contributor hereby makes the following representations and warrant
 ## 9. Media and Publicity
 The Parties agree that C4 and C4's Agent shall be permitted to identify the Certified Contributor by their avatars and/or handles and generally describe the Certified Contributor services to third parties and in marketing materials to the extent that these materials do not disclose any Confidential Information. Certified Contributor may publicly identify their role in the C4DAO as Warden, Judge, Sponsor, or Mason, but shall not identify or any make statement or representation regarding Sponsor, C4 DAO, C4, C4's Agent, or any affiliate thereof, without prior written approval from C4's Agent or voted approval of the C4DAO, as applicable.  
 
-## 10. [Intentionally Omitted.] 
-
-## 11. Termination
+## 10. Termination
 
 * a. **Termination Without Cause**: Either Party shall have the right to terminate this Agreement in writing with 30 days advance notice, with or without cause.
 
-* b. **Termination for Breach**: In the event that either Party believes that the other materially has breached any obligations under these CC Terms, such Party shall so notify the other Party in writing. If the material breach is not capable of cure, the notice of breach shall state the same and, (i) if notice was provided by C4 then this Agreement shall be terminated upon such notice, or (ii) if such notice was provided by Certified Contributor then this Agreement shall be terminated when C4 confirms, in its sole discretion, that the breach is not susceptible to cure. If the notice of breach does not state that the breach is not susceptible to cure, the breaching Party shall have 15 days from the receipt of notice to cure the alleged breach and to notify the non-breaching Party in writing that cure has been effected. If the breach is not cured within 15 days, the non-breaching Party shall have the right to terminate this Agreement on written notice. Material breach not susceptible to cure shall include, but not be limited to, any violation of applicable law, breach of Section 8 (Certified Contributor Representations and Warranties), and breach of Section 12 (Confidentiality).
+* b. **Termination for Breach**: In the event that either Party believes that the other materially has breached any obligations under these CC Terms, such Party shall so notify the other Party in writing. If the material breach is not capable of cure, the notice of breach shall state the same and, (i) if notice was provided by C4 then this Agreement shall be terminated upon such notice, or (ii) if such notice was provided by Certified Contributor then this Agreement shall be terminated when C4 confirms, in its sole discretion, that the breach is not susceptible to cure. If the notice of breach does not state that the breach is not susceptible to cure, the breaching Party shall have 15 days from the receipt of notice to cure the alleged breach and to notify the non-breaching Party in writing that cure has been effected. If the breach is not cured within 15 days, the non-breaching Party shall have the right to terminate this Agreement on written notice. Material breach not susceptible to cure shall include, but not be limited to, any violation of applicable law, breach of Section 8 (Certified Contributor Representations and Warranties), and breach of Section 11 (Confidentiality).
 
-* c. **Effect of Notice/Termination**: Regardless of the effective date of any termination, Certified Contributors shall not be eligible to participate in any new Opportunities as of the date that termination notice is received by the non-terminating Party. Upon the effective date of any termination, a Certified Contributor's status shall be deemed rescinded.  In the case that this Agreement is terminated by C4 pursuant to Section 11.b above, or by Certified Contributor pursuant to Section 11.a above, Certified Contributor shall not be eligible for compensation for any participation in incomplete Opportunities. In the case that this Agreement is terminated by Certified Contributor under Section 11.b above, or by C4 pursuant to Section 11.a above, the Parties shall negotiate in good faith any compensation due to Certified Contributor for participation in incomplete Opportunities. 
+* c. **Effect of Notice/Termination**: Regardless of the effective date of any termination, Certified Contributors shall not be eligible to participate in any new Opportunities as of the date that termination notice is received by the non-terminating Party. Upon the effective date of any termination, a Certified Contributor's status shall be deemed rescinded.  In the case that this Agreement is terminated by C4 pursuant to Section 10.b above, or by Certified Contributor pursuant to Section 10.a above, Certified Contributor shall not be eligible for compensation for any participation in incomplete Opportunities. In the case that this Agreement is terminated by Certified Contributor under Section 10.b above, or by C4 pursuant to Section 10.a above, the Parties shall negotiate in good faith any compensation due to Certified Contributor for participation in incomplete Opportunities. 
 
-## 12. Confidentiality
+## 11. Confidentiality
 C4, Certified Contributor, or a Sponsor (in this context, the "Discloser") may provide the other ("Recipient") with Confidential Information as defined below. 
 
 * a. **Definition**: The term "Confidential Information" means, to the extent previously, presently or subsequently disclosed by or for Discloser to Recipient, all financial, business, legal and technical information of Discloser or any of its affiliates, suppliers, customers and employees, that is marked or otherwise identified as proprietary, confidential or non-public at the time of disclosure, or that by its nature would be understood by a reasonable person to be proprietary or confidential. Confidential Information shall not include any information that (a) was rightfully known to Recipient without restriction before receipt from Discloser, (b) is rightfully disclosed to Recipient without restriction by a third Party, (c) is or becomes generally known to the public without violation of this Agreement by Recipient or (d) is independently developed by Recipient or its employees without access to or reliance on such information. Discloser represents and warrants to Recipient that it is authorized to disclose any and all Confidential Information, including but not limited to any proprietary information, made available to Recipient.
 
 * b. **Obligations**: Each Party agrees (a) to use Confidential Information solely for the purposes of its obligations and activities related to Contests, (b) to maintain the Confidential Information as confidential, and exercise reasonable precautions to prevent any unauthorized access, use or disclosure, and (c) not to disclose the Confidential Information to any third Party other than employees and agents who have a need to know for the permitted purpose and who are apprised of the confidential nature of the Confidential Information and all of the restrictions in writing. Each Party shall be responsible for any breach of its confidentiality obligations by its respective employees and agents.
 
-## 13. Indemnification
+## 12. Indemnification
 The Certified Contributor shall defend indemnify and hold harmless C4 and C4's Agent, including each of their affiliates, and each of their respective officers, directors, shareholders, employees, representatives, agents, the C4 DAO and its members, Participants, and all successors and assigns ("C4 Indemnitees") from and against any loss, damage or costs (including reasonable attorneys' fees) incurred in connection with claims, demands, suits, or proceedings ("Claims") made or brought against one or more C4 Indemnitee by a third party to the extent arising out of (a) the Certified Contributor's negligence or willful misconduct; (b) a breach by the Certified Contributor of this  Agreement, or (c) Certified Contributor's use of intellectual property owned by a third party or licensed by Certified Contributor from a third party. 
 
-## 14. Limitation of Liability
+## 13. Limitation of Liability
 THE CUMULATIVE LIABILITY OF C4 AND ITS SUBSIDIARIES, AFFILIATES, OFFICERS, EMPLOYEES, AGENTS (INCLUDING BUT NOT LIMITED TO C4'S AGENT), PARTNERS AND LICENSORS TO THE CERTIFIED CONTRIBUTOR FOR ACTIVITIES UNDERTAKEN AS A CERTIFIED CONTRIBUTOR IS LIMITED TO THE AMOUNTS PAID TO CERTIFIED CONTRIBUTOR IN THE TWELVE (12) MONTH PERIOD PRECEDING THE CLAIM. IN NO EVENT SHALL C4 BE LIABLE FOR ANY SPECIAL, INDIRECT, INCIDENTAL, EXEMPLARY OR CONSEQUENTIAL DAMAGES, WHETHER OR NOT FORESEEABLE AND HOWEVER ARISING. THIS LIMITATION SHALL APPLY BUT NOT BE LIMITED TO LOST INCOME, REVENUE, GOODWILL, USE, OR OTHER INTANGIBLE LOSSES. IT WILL ALSO APPLY IRRESPECTIVE OF WHETHER THE LIABILITY ARISES UNDER CONTRACT, TORT, OR ANY OTHER THEORY. 
 
-## 15. Miscellaneous
+## 14. Miscellaneous
 
 * a. **Relationship**: C4 and Certified Contributor shall be and act independently. A Certified Contributor Agreement shall not be construed to create a partnership, joint venture, agent, employee, or employer relationship between the Parties. Certified Contributor does not have authority to assume or create obligations on behalf of C4, and any attempt by Certified Contributor to do so shall be null and void and without any force or effect. 
 
@@ -119,7 +114,7 @@ THE CUMULATIVE LIABILITY OF C4 AND ITS SUBSIDIARIES, AFFILIATES, OFFICERS, EMPLO
 
 * h. **[Intentionally Omitted.]**
 
-* i. **Survival**: Sections 7, 8, 10, 11, 12, 13, 14, and 15(f) shall survive the termination of a CC Services Agreement.
+* i. **Survival**: Sections 7, 8, 10, 11, 12, 13, and 14(f) shall survive the termination of a CC Services Agreement.
 
 * j. **Entire Agreement**: These CC Terms shall constitute the entire agreement between C4 and the Certified Contributor regarding the subject matter hereof and supersedes all prior agreements, proposals and prior discussions and writings between the Parties with respect thereto.
 
