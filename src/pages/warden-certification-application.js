@@ -65,7 +65,7 @@ function ApplyForWardenCertification() {
 
   const handleSubmit = () => {
     if (
-      (!fieldState.wardenHandle && !fieldState.githubUsername && !fieldState.emailAddress) ||
+      (!fieldState.wardenHandle || !fieldState.githubUsername || !fieldState.emailAddress) ||
       fields.some((field) => {
         return field.required && !fieldState[field.name];
       })
@@ -80,9 +80,6 @@ function ApplyForWardenCertification() {
   const handleCaptchaVerification = useCallback((token) => {
     setCaptchaToken(token);
   }, []);
-
-  const invalidContact =
-    hasValidationErrors && !fieldState.wardenHandle && !fieldState.githubUsername && !fieldState.emailAddress;
 
   return (
     <StaticQuery
@@ -133,8 +130,7 @@ function ApplyForWardenCertification() {
                           field={field}
                           onChange={handleChange}
                           fieldState={fieldState}
-                          isInvalid={invalidContact}
-                          showValidationErrors={hasValidationErrors}
+                          isInvalid={hasValidationErrors && !fieldState[field.name]}
                           required={field.required}
                         />
                       </div>
