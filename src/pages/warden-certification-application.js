@@ -143,7 +143,7 @@ function ApplyForWardenCertification() {
                     showValidationErrors={hasValidationErrors}
                   />
                 </fieldset>
-                <div dangerouslySetInnerHTML={{ __html: data.markdownRemark.html }} />
+                <div dangerouslySetInnerHTML={{ __html: data.contributorTermsSummary.html }} />
                 <div className="captcha-container">
                   <HCaptcha
                     sitekey="4963abcb-188b-4972-8e44-2887e315af52"
@@ -159,6 +159,7 @@ function ApplyForWardenCertification() {
                 >
                   {status === FormStatus.Unsubmitted ? "Submit" : "Submitting..."}
                 </button>
+                <div dangerouslySetInnerHTML={{ __html: data.contributorTerms.html }} />
               </form>
             )}
             {status === FormStatus.Error && (
@@ -198,7 +199,10 @@ const wardensQuery = graphql`
         }
       }
     }
-    markdownRemark(frontmatter: {title: {eq: "Certified Contributor Terms"}}) {
+    contributorTerms: markdownRemark(frontmatter: {title: {eq: "Certified Contributor Terms"}}) {
+      html
+    }
+    contributorTermsSummary: markdownRemark(frontmatter: {title: {eq: "Certified Contributor Terms Summary"}}) {
       html
     }
   }
