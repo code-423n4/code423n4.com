@@ -158,7 +158,7 @@ function ApplyForWardenCertification() {
                         type="checkbox"
                         checked={acceptedAgreement}
                         onChange={handleAgreement} />
-                      I have read and agree to the terms and conditions
+                      I have read and agree to the terms and conditions (see below)
                     </label>
                   </fieldset>
                   <div className="captcha-container">
