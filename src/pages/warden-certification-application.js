@@ -117,6 +117,9 @@ function ApplyForWardenCertification() {
             pageDescription="Apply to become a Certified Warden."
             pageTitle="Warden Certification Application | Code 423n4"
           >
+            {(status === FormStatus.Unsubmitted && (
+              <article dangerouslySetInnerHTML={{ __html: data.contributorTermsSummary.html }} />
+            ))}
             {(status === FormStatus.Unsubmitted ||
               status === FormStatus.Submitting) && (
               <form className={styles.Form}>
@@ -143,7 +146,6 @@ function ApplyForWardenCertification() {
                     showValidationErrors={hasValidationErrors}
                   />
                 </fieldset>
-                <div dangerouslySetInnerHTML={{ __html: data.contributorTermsSummary.html }} />
                 <div className="captcha-container">
                   <HCaptcha
                     sitekey="4963abcb-188b-4972-8e44-2887e315af52"
