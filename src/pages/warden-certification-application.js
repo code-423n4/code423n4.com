@@ -30,6 +30,7 @@ function ApplyForWardenCertification() {
   const [status, setStatus] = useState(FormStatus.Unsubmitted);
   const [errorMessage, setErrorMessage] = useState("An error occurred");
   const [captchaToken, setCaptchaToken] = useState("");
+  const [acceptedAgreement, setAcceptedAgreement] = useState(false);
 
   const submit = async (url, data) => {
     setStatus(FormStatus.Submitting);
@@ -63,9 +64,13 @@ function ApplyForWardenCertification() {
     });
   }, []);
 
+  const handleAgreement = useCallback(() => {
+    setAcceptedAgreement(!acceptedAgreement);
+  }, [acceptedAgreement]);
+
   const handleSubmit = () => {
     if (
-      (!fieldState.wardenHandle || !fieldState.githubUsername || !fieldState.emailAddress) ||
+      (!fieldState.wardenHandle || !fieldState.githubUsername || !fieldState.emailAddress || !acceptedAgreement)  ||
       fields.some((field) => {
         return field.required && !fieldState[field.name];
       })
@@ -145,6 +150,13 @@ function ApplyForWardenCertification() {
                     fieldState={fieldState}
                     showValidationErrors={hasValidationErrors}
                   />
+                  <label>
+                    <input
+                      type="checkbox"
+                      checked={acceptedAgreement}
+                      onChange={handleAgreement} />
+                    I have read and agree to the terms and conditions
+                  </label>
                 </fieldset>
                 <div className="captcha-container">
                   <HCaptcha
