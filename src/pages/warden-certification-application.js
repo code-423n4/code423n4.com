@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from "react";
 import HCaptcha from "@hcaptcha/react-hcaptcha";
 import { StaticQuery, graphql } from "gatsby";
+import clsx from "clsx";
 
 import DefaultLayout from "../templates/DefaultLayout";
 import Widget from "../components/reporter/widgets/Widget";
@@ -150,7 +151,7 @@ function ApplyForWardenCertification() {
                     fieldState={fieldState}
                     showValidationErrors={hasValidationErrors}
                   />
-                  <label>
+                  <label className={clsx(styles.Control, (hasValidationErrors && !acceptedAgreement) && "input-error")}>
                     <input
                       type="checkbox"
                       checked={acceptedAgreement}
