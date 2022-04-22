@@ -1,3 +1,6 @@
+---
+title: "Certified Contributor Terms"
+---
 # CODE4RENA CERTIFIED CONTRIBUTOR TERMS AND CONDITIONS
 
 The following terms and conditions (the "CC Terms" or "Agreement") contain the terms and conditions applicable to any Open Opportunity, Role, or Selective Opportunity, as defined below and provided by Code4rena Foundation, an exempted limited guarantee foundation company incorporated in the Cayman Islands ("C4").  Byclicking "Accept", you ("YOU" or "CERTIFIED CONTRIBUTOR") are agreeing that you have read, understand, and agree to be legally bound by these CC Terms. Each of C4 and Certified Contributor is a "Party" and together, the "Parties."
