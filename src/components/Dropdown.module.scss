@@ -10,7 +10,7 @@
   transition: all 3000ms;
   width: 180px;
   background: transparent;
-  padding-top: 10px;
+  padding-top: 15px;
 
   &.Open {
     display: flex;
@@ -23,4 +23,18 @@
   background: var(--lightest-background-purple);
   border-radius: 5px;
   overflow: hidden;
+}
+
+.Button {
+  background: var(--lightest-background-purple);
+  cursor: pointer;
+  border: none;
+  padding: 10px;
+  margin: 0;
+  width: 100%;
+  text-align: left;
+
+  &:hover {
+    background: var(--border-lightest-background);
+  }
 }

@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import { StaticQuery, graphql, Link } from "gatsby";
 import clsx from "clsx";
 
@@ -9,6 +9,8 @@ import Widget from "./widgets/Widget";
 
 import * as styles from "./Form.module.scss";
 import * as widgetStyles from "./widgets/Widgets.module.scss";
+
+import useUser from "../../hooks/UserContext";
 
 const config = {
   labelAll: "bug",
@@ -193,6 +195,7 @@ const Form = ({ contest, sponsor, repoUrl }) => {
   const [errorMessage, setErrorMessage] = useState("An error occurred");
   const [isQaOrGasFinding, setIsQaOrGasFinding] = useState(false);
 
+  const { currentUser } = useUser();
   const locString = state.linesOfCode.map((loc) => loc.value).join("\n");
   const details = isQaOrGasFinding ? state.qaGasDetails : state.details;
   const markdownBody = `# Lines of code\n\n${locString}\n\n\n# Vulnerability details\n\n${details}\n\n`;
@@ -206,6 +209,28 @@ const Form = ({ contest, sponsor, repoUrl }) => {
   } else {
     title = state.title;
   }
+
+  useEffect(() => {
+    (() => {
+      if (currentUser.isLoggedIn) {
+        setState((prevState) => {
+          return {
+            ...prevState,
+            handle: currentUser.username,
+            polygonAddress: currentUser.address,
+          };
+        });
+      } else {
+        setState((prevState) => {
+          return {
+            ...prevState,
+            handle: "",
+            polygonAddress: "",
+          };
+        });
+      }
+    })();
+  }, [currentUser.isLoggedIn]);
 
   const formData = {
     contest,
@@ -258,17 +283,16 @@ const Form = ({ contest, sponsor, repoUrl }) => {
       return field === "" || field === undefined;
     });
 
-    // TODO: verify that loc include code lines and are valid URLs
-    if (!isQaOrGasFinding && !state.linesOfCode[0].value) {
-      hasErrors = true;
-    }
-
     const regex = new RegExp("#L", "g");
     const hasInvalidLinks = state.linesOfCode.some((line) => {
       return !regex.test(line.value);
     });
 
-    setHasValidationErrors(hasErrors || hasInvalidLinks);
+    if (!isQaOrGasFinding && (!state.linesOfCode[0].value || hasInvalidLinks)) {
+      hasErrors = true;
+    }
+
+    setHasValidationErrors(hasErrors);
     if (!hasErrors) {
       submitFinding(submissionUrl, formData);
     }
@@ -335,27 +359,76 @@ const Form = ({ contest, sponsor, repoUrl }) => {
                     name="handle"
                     label="Handle"
                     helpText={
-                      <>
-                        Handle you're competing under (individual or team name)
-                        <br />
-                        Don't see your handle?{" "}
-                        <Link to="/register">Click here</Link> to register.
-                      </>
+                      !currentUser.isLoggedIn && (
+                        <>
+                          Handle you're competing under (individual or team
+                          name)
+                          <br />
+                          Don't see your handle?{" "}
+                          <Link to="/register">Click here</Link> to register.
+                        </>
+                      )
                     }
                     isInvalid={hasValidationErrors && !state.handle}
                   >
-                    <Widget
-                      field={{
-                        name: "handle",
-                        label: "Handle",
-                        widget: "warden",
-                        required: true,
-                        options: wardens,
-                      }}
-                      onChange={handleChange}
-                      fieldState={state}
-                      isInvalid={hasValidationErrors && !state.handle}
-                    />
+                    {/* @todo: add help text for changing handle */}
+                    {currentUser.isLoggedIn ? (
+                      <span
+                        className={clsx(
+                          widgetStyles.Control,
+                          widgetStyles.Text
+                        )}
+                      >
+                        {state.handle}
+                      </span>
+                    ) : (
+                      <Widget
+                        field={{
+                          name: "handle",
+                          label: "Handle",
+                          widget: "warden",
+                          required: true,
+                          options: wardens,
+                        }}
+                        onChange={handleChange}
+                        fieldState={state}
+                        isInvalid={hasValidationErrors && !state.handle}
+                      />
+                    )}
+                  </FormField>
+                  <FormField
+                    name={addressField.name}
+                    label={addressField.label}
+                    helpText={!currentUser.isLoggedIn && addressField.helpText}
+                    isInvalid={hasValidationErrors && !state.polygonAddress}
+                  >
+                    {/* @todo: add help text for changing address */}
+                    {currentUser.isLoggedIn ? (
+                      <span
+                        className={clsx(
+                          widgetStyles.Control,
+                          widgetStyles.Text
+                        )}
+                      >
+                        {state.polygonAddress}
+                      </span>
+                    ) : (
+                      <input
+                        className={clsx(
+                          widgetStyles.Control,
+                          widgetStyles.Text,
+                          hasValidationErrors &&
+                            !state.polygonAddress &&
+                            "input-error"
+                        )}
+                        name={addressField.name}
+                        type="text"
+                        onChange={handleChange}
+                        required={true}
+                        value={state.polygonAddress}
+                        data-form-type="other"
+                      />
+                    )}
                   </FormField>
                   <FormField
                     name={emailField.name}
@@ -368,28 +441,6 @@ const Form = ({ contest, sponsor, repoUrl }) => {
                       onChange={handleChange}
                       fieldState={state}
                       isInvalid={hasValidationErrors && !state.email}
-                    />
-                  </FormField>
-                  <FormField
-                    name={addressField.name}
-                    label={addressField.label}
-                    helpText={addressField.helpText}
-                    isInvalid={hasValidationErrors && !state.polygonAddress}
-                  >
-                    <input
-                      className={clsx(
-                        widgetStyles.Control,
-                        widgetStyles.Text,
-                        hasValidationErrors &&
-                          !state.polygonAddress &&
-                          "input-error"
-                      )}
-                      name={addressField.name}
-                      type="text"
-                      onChange={handleChange}
-                      required={true}
-                      value={state.polygonAddress}
-                      data-form-type="other"
                     />
                   </FormField>
                   {isQaOrGasFinding && (

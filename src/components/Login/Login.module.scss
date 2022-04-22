@@ -23,17 +23,3 @@
     color: var(--orange);
   }
 }
-
-.Button {
-  background: var(--lightest-background-purple);
-  cursor: pointer;
-  border: none;
-  padding: 10px;
-  margin: 0;
-  width: 100%;
-  text-align: left;
-
-  &:hover {
-    background: var(--border-lightest-background);
-  }
-}

@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import Dropdown from "../Dropdown";
 
 import * as styles from "./Login.module.scss";
+import * as dropdownStyles from "../Dropdown.module.scss";
 
 const Login = () => {
   const { logUserOut, login } = useUser();
@@ -78,12 +79,12 @@ const Login = () => {
       triggerButton={loginButton()}
       openOnHover={true}
     >
-      <button onClick={() => handleLogin()} className={styles.Button}>
+      <button onClick={() => handleLogin()} className={dropdownStyles.Button}>
         Login with MetaMask
       </button>
       <button
         onClick={() => handleLogin("walletConnect")}
-        className={styles.Button}
+        className={dropdownStyles.Button}
       >
         Login with WalletConnect
       </button>
