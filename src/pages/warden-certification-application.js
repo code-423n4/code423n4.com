@@ -120,76 +120,79 @@ function ApplyForWardenCertification() {
 
         return (
           <DefaultLayout
-            pageDescription="Apply to become a Certified Warden."
-            pageTitle="Warden Certification Application | Code 423n4"
+            pageDescription="Apply to become a Certified Contributor."
+            pageTitle="Certified Contributor Application | Code 423n4"
           >
-            {(status === FormStatus.Unsubmitted && (
-              <article dangerouslySetInnerHTML={{ __html: data.contributorTermsSummary.html }} />
-            ))}
-            {(status === FormStatus.Unsubmitted ||
-              status === FormStatus.Submitting) && (
-              <form className={styles.Form}>
-                <h1>Warden Certification Application</h1>
-                <fieldset className={widgetStyles.Fields}>
-                  {contactFields.map((field, index) => {
-                    return (
-                      <div key={field.name + index}>
-                        <label>{field.label}</label>
-                        <Widget
-                          field={field}
-                          onChange={handleChange}
-                          fieldState={fieldState}
-                          isInvalid={hasValidationErrors && !fieldState[field.name]}
-                          required={field.required}
-                        />
-                      </div>
-                    );
-                  })}
-                  <Widgets
-                    fields={fields}
-                    onChange={handleChange}
-                    fieldState={fieldState}
-                    showValidationErrors={hasValidationErrors}
-                  />
-                  <label className={clsx(styles.Control, (hasValidationErrors && !acceptedAgreement) && "input-error")}>
-                    <input
-                      type="checkbox"
-                      checked={acceptedAgreement}
-                      onChange={handleAgreement} />
-                    I have read and agree to the terms and conditions
-                  </label>
-                </fieldset>
-                <div className="captcha-container">
-                  <HCaptcha
-                    sitekey="4963abcb-188b-4972-8e44-2887e315af52"
-                    theme="dark"
-                    onVerify={handleCaptchaVerification}
-                  />
+            <div className="wrapper-main">
+              <h1 className="page-header">Certified Contributors</h1>
+              {(status === FormStatus.Unsubmitted && (
+                <article dangerouslySetInnerHTML={{ __html: data.contributorTermsSummary.html }} />
+              ))}
+              {(status === FormStatus.Unsubmitted ||
+                status === FormStatus.Submitting) && (
+                <form className={styles.Form}>
+                  <h1>Certification Application</h1>
+                  <fieldset className={widgetStyles.Fields}>
+                    {contactFields.map((field, index) => {
+                      return (
+                        <div key={field.name + index}>
+                          <label>{field.label}</label>
+                          <Widget
+                            field={field}
+                            onChange={handleChange}
+                            fieldState={fieldState}
+                            isInvalid={hasValidationErrors && !fieldState[field.name]}
+                            required={field.required}
+                          />
+                        </div>
+                      );
+                    })}
+                    <Widgets
+                      fields={fields}
+                      onChange={handleChange}
+                      fieldState={fieldState}
+                      showValidationErrors={hasValidationErrors}
+                    />
+                    <label className={clsx(styles.Control, (hasValidationErrors && !acceptedAgreement) && "input-error")}>
+                      <input
+                        type="checkbox"
+                        checked={acceptedAgreement}
+                        onChange={handleAgreement} />
+                      I have read and agree to the terms and conditions
+                    </label>
+                  </fieldset>
+                  <div className="captcha-container">
+                    <HCaptcha
+                      sitekey="4963abcb-188b-4972-8e44-2887e315af52"
+                      theme="dark"
+                      onVerify={handleCaptchaVerification}
+                    />
+                  </div>
+                  <button
+                    className="button cta-button centered"
+                    type="button"
+                    onClick={handleSubmit}
+                    disabled={status !== FormStatus.Unsubmitted || !captchaToken}
+                  >
+                    {status === FormStatus.Unsubmitted ? "Submit" : "Submitting..."}
+                  </button>
+                </form>
+              )}
+              {status === FormStatus.Error && (
+                <div>
+                  <p>{errorMessage}</p>
                 </div>
-                <button
-                  className="button cta-button centered"
-                  type="button"
-                  onClick={handleSubmit}
-                  disabled={status !== FormStatus.Unsubmitted || !captchaToken}
-                >
-                  {status === FormStatus.Unsubmitted ? "Submit" : "Submitting..."}
-                </button>
-              </form>
-            )}
-            {status === FormStatus.Error && (
-              <div>
-                <p>{errorMessage}</p>
-              </div>
-            )}
-            {status === FormStatus.Submitted && (
-              <div className="centered-text">
-                <h1>Thank you!</h1>
-                <p>Your application has been submitted.</p>
-              </div>
-            )}
-            {status === FormStatus.Unsubmitted && (
-              <article dangerouslySetInnerHTML={{ __html: data.contributorTerms.html }} />
-            )}
+              )}
+              {status === FormStatus.Submitted && (
+                <div className="centered-text">
+                  <h1>Thank you!</h1>
+                  <p>Your application has been submitted.</p>
+                </div>
+              )}
+              {status === FormStatus.Unsubmitted && (
+                <article dangerouslySetInnerHTML={{ __html: data.contributorTerms.html }} />
+              )}
+            </div>
           </DefaultLayout>
         );
       }}
