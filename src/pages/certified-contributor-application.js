@@ -219,10 +219,10 @@ const pageQuery = graphql`
         }
       }
     }
-    contributorTerms: markdownRemark(frontmatter: {title: {eq: "Certified Contributor Terms"}}) {
+    contributorTerms: markdownRemark(frontmatter: {title: {eq: "Certified Contributor Terms and Conditions"}}) {
       html
     }
-    contributorTermsSummary: markdownRemark(frontmatter: {title: {eq: "Certified Contributor Terms Summary"}}) {
+    contributorTermsSummary: markdownRemark(frontmatter: {title: {eq: "Certified Contributor Summary"}}) {
       html
     }
   }
