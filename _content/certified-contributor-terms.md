@@ -1,5 +1,5 @@
 ---
-title: Certified Contributor Terms
+title: Certified Contributor Terms and Conditions
 ---
 
 # CODE4RENA CERTIFIED CONTRIBUTOR TERMS AND CONDITIONS
