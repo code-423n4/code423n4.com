@@ -1,3 +1,7 @@
+---
+title: Certified Contributor Summary
+---
+
 In order to create opportunities for contributions which rely on establishment of trust, Code4rena allows community members to opt into certifying their identity and entering into a simple agreement. You can [read the background on this role here](https://github.com/code-423n4/org/discussions/15).
 
 Nothing about this role is intended to restrict anonymous contributors in good standing from participating as they historically have in Code4rena contests, either now or in the future.
