@@ -15,6 +15,6 @@ title: "Certified Contributor Terms Summary"
 * have their legal identity verified by a third party, who will be bound by a confidentiality agreement,
 * contribute in a timely and professional manner,
 * keep all confidential information secure and confidential,
-* abide by our [Code of Professional Conduct](???link???),
+* abide by our [Code of Professional Conduct](https://www.notion.so/code4rena/Code-of-Professional-Conduct-657c7d80d34045f19eee510ae06fef55),
 * not seek C4-related contributions from others and (explicitly or implicitly) take credit for them, and
 * not speak publicly on behalf of a sponsor, the C4 DAO or foundation, or C4’s agent, outside of general advocacy of C4, and places where it is your role to do so
