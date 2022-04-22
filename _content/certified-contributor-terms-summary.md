@@ -2,7 +2,7 @@
 title: "Certified Contributor Terms Summary"
 ---
 
-# About the Certified contributor role:
+# About the Certified Contributor role:
 * C4 intends to provide opportunities for approved Certified Contributors that include:
 * access to repos after contests conclude, post-contest triage, and mitigation review,
 * participation in private, invitation-only contests,
