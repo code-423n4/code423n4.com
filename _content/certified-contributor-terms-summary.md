@@ -9,7 +9,7 @@ title: "Certified Contributor Terms Summary"
 * serving in multiple roles in a given contest,
 * providing individualized services to third parties arranged or facilitated by C4,
 * participating in C4 referral system to refer Participants to Sponsors for certain individualized services.
-* Note: Some contests may have limited number of opportunities for Certified Contributor participation (moved this into this section as a "note" assuming it is meant to manage expectations that not all contests will provide these extra opportunities?)
+* Note: Some contests may have limited number of opportunities for Certified Contributor participation.
 
 # Certified Contributors agree to:
 * have their legal identity verified by a third party, who will be bound by a confidentiality agreement,
