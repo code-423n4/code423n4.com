@@ -6,7 +6,7 @@ const notionDbId = process.env.NOTION_WARDEN_CERTIFICATION_DATABASE_ID;
 
 const notion = new Client({ auth: notionKey });
 
-interface NotionWardenCertificationApplication {
+interface NotionCertifiedContributorApplication {
   parent: {
     database_id: string;
   };
@@ -74,7 +74,7 @@ async function handler(event) {
   }
 
   try {
-    const body: NotionWardenCertificationApplication = {
+    const body: NotionCertifiedContributorApplication = {
       parent: {
         database_id: notionDbId,
       },

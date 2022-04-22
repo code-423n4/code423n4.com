@@ -10,7 +10,7 @@ import Widgets from "../components/reporter/widgets/Widgets";
 import * as styles from "../components/reporter/Form.module.scss";
 import * as widgetStyles from "../components/reporter/widgets/Widgets.module.scss";
 
-function ApplyForWardenCertification() {
+function ApplyForCertifiedContributor() {
   const fields = [];
 
   const initialState = {
@@ -80,7 +80,7 @@ function ApplyForWardenCertification() {
       return;
     }
     setValidationErrors(false);
-    submit("/.netlify/functions/apply-for-certified-warden", fieldState);
+    submit("/.netlify/functions/apply-for-certified-contributor", fieldState);
   };
 
   const handleCaptchaVerification = useCallback((token) => {
@@ -89,7 +89,7 @@ function ApplyForWardenCertification() {
 
   return (
     <StaticQuery
-      query={wardensQuery}
+      query={pageQuery}
       render={(data) => {
         const wardens = data.allHandlesJson.edges.map(({ node }) => {
           return { value: node.handle, image: node.image };
@@ -200,9 +200,9 @@ function ApplyForWardenCertification() {
   );
 }
 
-export default ApplyForWardenCertification;
+export default ApplyForCertifiedContributor;
 
-const wardensQuery = graphql`
+const pageQuery = graphql`
   query {
     allHandlesJson(sort: { fields: handle, order: ASC }) {
       edges {
