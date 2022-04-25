@@ -21,6 +21,7 @@ interface UserState {
   username: string;
   discordUsername: string;
   moralisId: string;
+  moralisSignature: string;
   isLoggedIn: boolean;
   img?: string | null;
   link?: string | null;
@@ -37,6 +38,7 @@ const DEFAULT_STATE: UserState = {
   username: "",
   discordUsername: "",
   moralisId: "",
+  moralisSignature: "",
   isLoggedIn: false,
   img: null,
   link: null,
@@ -145,6 +147,11 @@ const UserProvider = ({ children }) => {
             throw UserLoginError.Pending;
           }
           const moralisId = registeredUser.node.moralisId;
+          const moralisSignature =
+            user.attributes.authData?.moralisEth?.signature;
+          if (!moralisSignature) {
+            throw "Authentication failed";
+          }
           const address = await user.get("ethAddress");
           const discordUsername = await user.get("discordUsername");
           const link = registeredUser.node.link || null;
@@ -154,6 +161,7 @@ const UserProvider = ({ children }) => {
           setCurrentUser({
             username,
             moralisId,
+            moralisSignature,
             address,
             discordUsername,
             link,
