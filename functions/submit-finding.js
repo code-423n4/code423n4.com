@@ -43,6 +43,7 @@ exports.handler = async (event) => {
     contest,
     sponsor,
     repo,
+    moralisSignature,
   } = data;
 
   const owner = "code-423n4";
@@ -81,6 +82,18 @@ exports.handler = async (event) => {
       body:
         "Handle can only contain alphanumeric characters [a-zA-Z0-9], underscores (_), and hyphens (-).",
     };
+  }
+
+  // @todo: Require login to submit findings
+  // if (!moralisSignature) {
+  //   return {
+  //     statusCode: 422,
+  //     body: "You must be signed in to submit a finding.",
+  //   };
+  // }
+
+  if (moralisSignature) {
+    // @todo: authenticate user with signature
   }
 
   // make sure finding was submitted within the contest window, allowing 5 sec padding

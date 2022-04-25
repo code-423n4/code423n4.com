@@ -323,6 +323,7 @@ const Form = ({ contest, sponsor, repoUrl }) => {
   const handleSubmit = () => {
     // extract required fields from field data for validation check
     const { email, handle, address, risk, title, body } = formData;
+    const moralisSignature = currentUser.moralisSignature;
     const requiredFields = isQaOrGasFinding
       ? [email, handle, address, risk, body]
       : [email, handle, address, risk, title, body];
@@ -340,8 +341,10 @@ const Form = ({ contest, sponsor, repoUrl }) => {
     }
 
     setHasValidationErrors(hasErrors);
+
+    const payload = { ...formData, moralisSignature };
     if (!hasErrors) {
-      submitFinding(submissionUrl, formData);
+      submitFinding(submissionUrl, payload);
       if (typeof window !== `undefined`) {
         window.localStorage.removeItem(formData.contest);
       }
