@@ -11,12 +11,17 @@ export default function UserDropdown() {
   const { currentUser, logUserOut } = useUser();
 
   const avatar = () => (
-    <Avatar
-      src={currentUser.img}
-      name={currentUser.username}
-      size="30px"
-      round="30px"
-    />
+    <div className={styles.Avatar}>
+      <Avatar
+        src={currentUser.img}
+        name={currentUser.username}
+        size="30px"
+        round="30px"
+      />
+      <span className={styles.Caret} aria-hidden>
+        ▾
+      </span>
+    </div>
   );
 
   return (
@@ -24,7 +29,7 @@ export default function UserDropdown() {
       triggerButton={avatar()}
       wrapperClass={styles.UserDropdownWrapper}
       triggerButtonClass={styles.UserDropdown}
-      openOnHover={false}
+      openOnHover={true}
     >
       <div className={styles.UserDropdownList}>
         <span className={styles.UserInfo}>
