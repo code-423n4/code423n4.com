@@ -9,6 +9,7 @@ import React, {
 import { MoralisProvider, useMoralis } from "react-moralis";
 import Moralis from "moralis";
 import { graphql, StaticQuery } from "gatsby";
+import { toast } from "react-toastify";
 
 export enum UserLoginError {
   Unregistered = "unregistered",
@@ -99,10 +100,16 @@ const UserProvider = ({ children }) => {
             await Moralis.link(account);
           } catch (error) {
             console.error(error);
+            if (error.message === "this auth is already used") {
+              toast.error(
+                `Account cannot be linked to ${username} because it is already associated with another user. You have been logged out.`
+              );
+            }
             await logout();
           }
         } catch (error) {
           console.error(error);
+          toast.error(error.message);
           await logout();
         }
       });

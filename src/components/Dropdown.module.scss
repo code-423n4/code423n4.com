@@ -3,19 +3,26 @@
 }
 
 .DropdownListContainer {
-  display: none;
+  visibility: hidden;
   position: absolute;
   top: 100%;
   right: 0;
-  transition: all 3000ms;
+  transition: all 300ms;
   width: 180px;
   background: transparent;
   padding-top: 15px;
+  transform: translateY(-15px);
+  z-index: -1;
+  opacity: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 
   &.Open {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
+    visibility: visible;
+    opacity: 1;
+    z-index: 1;
+    transform: translateY(0);
   }
 }
 
