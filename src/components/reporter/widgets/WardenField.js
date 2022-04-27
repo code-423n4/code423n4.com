@@ -23,18 +23,20 @@ const WardenOptionLabel = ({ value, image }) => {
   );
 };
 
-const WardenField = ({ options, onChange, fieldState, isInvalid }) => {
+const WardenField = ({ name, required, options, onChange, fieldState, isInvalid }) => {
   const handleChange = useCallback(
     (option) => {
       const value = option && option.value ? option.value : "";
-      onChange({ target: { name: "handle", value } });
+      onChange({ target: { name, value } });
     },
-    [onChange]
+    [onChange, name]
   );
 
   return (
     <>
       <Select
+        name={name}
+        required={required}
         value={options.find((o) => o.value === fieldState) || undefined}
         formatOptionLabel={WardenOptionLabel}
         options={options}
