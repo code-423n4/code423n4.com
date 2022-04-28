@@ -1,7 +1,9 @@
 import React, { useCallback } from "react";
 import clsx from "clsx";
 import { Link } from "gatsby";
+
 import Select from "react-select";
+
 import * as baseStyles from "./Widgets.module.scss";
 import * as styles from "./WardenField.module.scss";
 
@@ -21,18 +23,20 @@ const WardenOptionLabel = ({ value, image }) => {
   );
 };
 
-const WardenField = ({ options, onChange, fieldState, isInvalid }) => {
+const WardenField = ({ name, required, options, onChange, fieldState, isInvalid }) => {
   const handleChange = useCallback(
     (option) => {
-      const value = option && option.value ? option.value : '';
-      onChange({ target: { name: "handle", value } });
+      const value = option && option.value ? option.value : "";
+      onChange({ target: { name, value } });
     },
-    [onChange]
+    [onChange, name]
   );
 
   return (
     <>
       <Select
+        name={name}
+        required={required}
         value={options.find((o) => o.value === fieldState) || undefined}
         formatOptionLabel={WardenOptionLabel}
         options={options}

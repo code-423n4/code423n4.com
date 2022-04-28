@@ -1,8 +1,8 @@
 ---
-sponsor: "defiProtocol"
+sponsor: "Kuiper"
 slug: "2021-09-defiprotocol"
 date: "2022-01-26"
-title: "defiProtocol contest"
+title: "Kuiper contest"
 findings: "https://github.com/code-423n4/2021-09-defiprotocol-findings/issues"
 contest: 36
 ---
@@ -15,11 +15,13 @@ Code4rena (C4) is an open organization consisting of security researchers, audit
 
 A C4 code contest is an event in which community participants, referred to as Wardens, review, audit, or analyze smart contract logic in exchange for a bounty provided by sponsoring projects.
 
-During the code contest outlined in this document, C4 conducted an analysis of defiProtocol contest smart contract system written in Solidity. The code contest took place between September 16—September 22 2021.
+During the code contest outlined in this document, C4 conducted an analysis of the Kuiper contest smart contract system written in Solidity. The code contest took place between September 16—September 22 2021.
+
+_Note: this audit contest originally ran under the name `defiProtocol`._
 
 ## Wardens
 
-30 Wardens contributed reports to the defiProtocol contest:
+30 Wardens contributed reports to the Kuiper contest:
 
 1. WatchPug ([jtp](https://github.com/jack-the-pug) and [ming](https://github.com/mingwatch))
 1. [cmichel](https://twitter.com/cmichelio)
@@ -68,7 +70,7 @@ C4 analysis also identified 39 non-critical recommendations and 46 gas optimizat
 
 # Scope
 
-The code under review can be found within the [C4 defiProtocol contest repository](https://github.com/code-423n4/2021-09-defiProtocol), and is composed of 11 smart contracts written in the Solidity programming language and includes 528 lines of Solidity code and 460 lines of JavaScript.
+The code under review can be found within the [C4 Kuiper contest repository](https://github.com/code-423n4/2021-09-defiProtocol), and is composed of 11 smart contracts written in the Solidity programming language and includes 528 lines of Solidity code and 460 lines of JavaScript.
 
 # Severity Criteria
 
@@ -168,7 +170,7 @@ The basket funds can be stolen.
 
 Add re-entrancy checks (for example, OpenZeppelin's "locks") to the `settleAuction` function.
 
-**[frank-beard (defiProtocol) confirmed](https://github.com/code-423n4/2021-09-defiprotocol-findings/issues/223)** 
+**[frank-beard (Kuiper) confirmed](https://github.com/code-423n4/2021-09-defiprotocol-findings/issues/223)** 
 
 **[Alex the Entreprenerd (judge) commented](https://github.com/code-423n4/2021-09-defiprotocol-findings/issues/223#issuecomment-997410663):**
  > Let's dissect the finding to prove whether it's valid or not.
@@ -249,7 +251,7 @@ function auctionBurn(uint256 amount) onlyAuction external override {
 }
 ```
 
-**[frank-beard (defiProtocol) confirmed](https://github.com/code-423n4/2021-09-defiprotocol-findings/issues/134)**
+**[frank-beard (Kuiper) confirmed](https://github.com/code-423n4/2021-09-defiprotocol-findings/issues/134)**
 
 **[Alex the Entreprenerd (judge) commented](https://github.com/code-423n4/2021-09-defiprotocol-findings/issues/134#issuecomment-997303460):**
  > The warden has identified a way for funds to be stuck without a way to recoup them, this is because `ibRatio` is not updated, while `totalSupply` is.
@@ -336,7 +338,7 @@ _Submitted by hack3r-0m, also found by itsmeSTYJ, JMukesh, leastwood, and shenwi
 
 use `safeTransfer()` or check the return value if length of returned data is > 0.
 
-**[frank-beard (defiProtocol) confirmed](https://github.com/code-423n4/2021-09-defiprotocol-findings/issues/196)** 
+**[frank-beard (Kuiper) confirmed](https://github.com/code-423n4/2021-09-defiprotocol-findings/issues/196)** 
 
 **[Alex the Entreprenerd (judge) commented](https://github.com/code-423n4/2021-09-defiprotocol-findings/issues/196#issuecomment-983125327):**
  > Agree with finding, agree with severity given the specific example given as the funds would be stuck in the contract
@@ -376,7 +378,7 @@ It is recommended to find the balance of the current contract before and
 after the `transferFrom` to see how much tokens were received, and
 approve only what was received.
 
-**[frank-beard (defiProtocol) confirmed](https://github.com/code-423n4/2021-09-defiprotocol-findings/issues/236#issuecomment-946911439):**
+**[frank-beard (Kuiper) confirmed](https://github.com/code-423n4/2021-09-defiprotocol-findings/issues/236#issuecomment-946911439):**
  > the protocol for now is only expected to work with defi safe, standard erc-20 tokens. 
 
 **[Alex the Entreprenerd (judge) commented](https://github.com/code-423n4/2021-09-defiprotocol-findings/issues/236#issuecomment-984191431):**
@@ -413,7 +415,7 @@ Manual code review
 
 Consider adding a timelock delay to all functions affecting protocol execution. Alternatively, `bondForRebalance()` can set state variables for any external calls made to `Factory.sol` (i.e. `factory.auctionMultiplier()` and `factory.auctionDecrement()`), ensuring that `settleAuction()` is called according to these expected results.
 
-**[frank-beard (defiProtocol) acknowledged](https://github.com/code-423n4/2021-09-defiprotocol-findings/issues/192#issuecomment-931571215):**
+**[frank-beard (Kuiper) acknowledged](https://github.com/code-423n4/2021-09-defiprotocol-findings/issues/192#issuecomment-931571215):**
  > it is assumed the owner is trustworthy in this version of the protocol, however we will add mitigations and further decentralization in future updates
 
 **[Alex the Entreprenerd (judge) commented](https://github.com/code-423n4/2021-09-defiprotocol-findings/issues/192#issuecomment-997205975):**
@@ -484,7 +486,7 @@ Add a check to `pullUnderlying`:
 I think it makes sense that if a user is trying to mint an amount so small that no tokens could be pulled from him, the mint request should be denied.
 Per my tests, for an initial ibRatio, this number (the minimal amount of shares that can be minted) is 2 for weights in magnitude of 1e18, and if the weights are eg. smaller by 100, this number will be 101.
 
-**[frank-beard (defiProtocol) confirmed](https://github.com/code-423n4/2021-09-defiprotocol-findings/issues/81)**
+**[frank-beard (Kuiper) confirmed](https://github.com/code-423n4/2021-09-defiprotocol-findings/issues/81)**
 
 **[Alex the Entreprenerd (judge) commented](https://github.com/code-423n4/2021-09-defiprotocol-findings/issues/81#issuecomment-997206834):**
  > Great find, because this finding shows a clear POC of how to extract value from the system, I agree with medium severity
@@ -543,7 +545,7 @@ So that's really equivalent to the bonding scenario.
 
 I might be missing something but at the moment I see no detriment to removing the bonding mechanism.
 
-**[frank-beard (defiProtocol) acknowledged and marked as duplicate](https://github.com/code-423n4/2021-09-defiprotocol-findings/issues/66#issuecomment-946921252):**
+**[frank-beard (Kuiper) acknowledged and marked as duplicate](https://github.com/code-423n4/2021-09-defiprotocol-findings/issues/66#issuecomment-946921252):**
  > https://github.com/code-423n4/2021-09-defiprotocol-findings/issues/276
 
 **[Alex the Entreprenerd (judge) commented](https://github.com/code-423n4/2021-09-defiprotocol-findings/issues/66#issuecomment-997207653):**
@@ -591,7 +593,7 @@ Manual analysis, hardhat.
 Add a check to `handleFees`: if `totalSupply= 0`, you can just return, no need to calculate new `ibRatio` / fees.
 You might want to reset `ibRatio` to BASE at this point.
 
-**[frank-beard (defiProtocol) confirmed](https://github.com/code-423n4/2021-09-defiprotocol-findings/issues/64)** 
+**[frank-beard (Kuiper) confirmed](https://github.com/code-423n4/2021-09-defiprotocol-findings/issues/64)** 
 
 **[Alex the Entreprenerd (judge) commented](https://github.com/code-423n4/2021-09-defiprotocol-findings/issues/64#issuecomment-997210497):**
  > I feel like this can also happen right after the contract was created
@@ -631,7 +633,7 @@ None
 
 I recommend setting a minimum `ibRatio` when a publisher publishes a new index. The auction should be killed if the `ibRatio` is too low.
 
-**[frank-beard (defiProtocol) confirmed](https://github.com/code-423n4/2021-09-defiprotocol-findings/issues/42)**
+**[frank-beard (Kuiper) confirmed](https://github.com/code-423n4/2021-09-defiprotocol-findings/issues/42)**
 
 **[Alex the Entreprenerd (judge) commented](https://github.com/code-423n4/2021-09-defiprotocol-findings/issues/42#issuecomment-997215459):**
  > Agree that `newRatio` decreases over time, if nothing is done it will eventually get close to 0, at which point `tokensNeeded` will tend to 0, which would mean that the amount of underlying necessary to redeem the bond decreases over time
@@ -698,7 +700,7 @@ None
 
 Recommend to calculate the new irate in `bondForRebalance`. I understand the `auctionBonder` should take the risk to get the profit. However, the contract should protect the user in the first place when this auction is doomed to fail.
 
-**[frank-beard (defiProtocol) confirmed](https://github.com/code-423n4/2021-09-defiprotocol-findings/issues/41)**
+**[frank-beard (Kuiper) confirmed](https://github.com/code-423n4/2021-09-defiprotocol-findings/issues/41)**
 
 **[Alex the Entreprenerd (judge) commented](https://github.com/code-423n4/2021-09-defiprotocol-findings/issues/41#issuecomment-997222428):**
  > I do not believe the users are at risk of a specific loss as they can always redeem their shares for underlying `Basket.burn`
@@ -725,7 +727,7 @@ When you calculate `feePct`, you expect to get 5e16 since that's 5% and the actu
 
 Solution is to replace `BASE - feePct` in the denominator with `BASE`.
 
-**[frank-beard (defiProtocol) confirmed](https://github.com/code-423n4/2021-09-defiprotocol-findings/issues/129)**
+**[frank-beard (Kuiper) confirmed](https://github.com/code-423n4/2021-09-defiprotocol-findings/issues/129)**
 
 **[Alex the Entreprenerd (judge) commented](https://github.com/code-423n4/2021-09-defiprotocol-findings/issues/129#issuecomment-997228019):**
  > The warden identified an inconsistency with the math that charged more fees than intended
@@ -752,7 +754,7 @@ Slither
 
 Move external calls after state updates. It is best practice to make external calls after updating state in accordance with the check-effect-interact pattern.
 
-**[frank-beard (defiProtocol) acknowledged](https://github.com/code-423n4/2021-09-defiprotocol-findings/issues/248#issuecomment-929628079):**
+**[frank-beard (Kuiper) acknowledged](https://github.com/code-423n4/2021-09-defiprotocol-findings/issues/248#issuecomment-929628079):**
  > For now we are only concerned with 'Defi Safe' tokens that conform to the erc-20 standard. It is expected that publishers and users should do due diligence when adding assets to a basket
 
 **[Alex the Entreprenerd (judge) commented](https://github.com/code-423n4/2021-09-defiprotocol-findings/issues/248#issuecomment-997301870):**
@@ -792,7 +794,7 @@ editor
 
 Consider adding a Timelock to these Factory functions. Otherwise a way to not modify them if an auction is ongoing (maybe Auction saves the values it reads when `startAuction` is called).
 
-**[frank-beard (defiProtocol) confirmed and disagreed with severity](https://github.com/code-423n4/2021-09-defiprotocol-findings/issues/265#issuecomment-929613048):**
+**[frank-beard (Kuiper) confirmed and disagreed with severity](https://github.com/code-423n4/2021-09-defiprotocol-findings/issues/265#issuecomment-929613048):**
  > the owner for this is intended to be a dao that acts in support of the protocol, however this is a good point to the centralization concerns for the protocol, we will most likely manage this by adding a timelock to these function
 
 **[Alex the Entreprenerd (judge) commented](https://github.com/code-423n4/2021-09-defiprotocol-findings/issues/265#issuecomment-997302120):**
@@ -833,7 +835,7 @@ auctionDecrement = newAuctionDecrement;
 }
 ```
 
-**[frank-beard (defiProtocol) acknowledged and disagreed with severity](https://github.com/code-423n4/2021-09-defiprotocol-findings/issues/119#issuecomment-929647365):**
+**[frank-beard (Kuiper) acknowledged and disagreed with severity](https://github.com/code-423n4/2021-09-defiprotocol-findings/issues/119#issuecomment-929647365):**
  > the owner for this is intended to be a dao that acts in support of the protocol, however this is a good point to the centralization concerns for the protocol, we will most likely manage this by adding a timelock to these function
 
 **[Alex the Entreprenerd (judge) commented](https://github.com/code-423n4/2021-09-defiprotocol-findings/issues/119#issuecomment-997302382):**
@@ -865,7 +867,7 @@ Refactor to
             bondPercentDiv = newBondPercentDiv;
         }
 
-**[frank-beard (defiProtocol) acknowledged and disagreed with severity](https://github.com/code-423n4/2021-09-defiprotocol-findings/issues/121#issuecomment-929647297):**
+**[frank-beard (Kuiper) acknowledged and disagreed with severity](https://github.com/code-423n4/2021-09-defiprotocol-findings/issues/121#issuecomment-929647297):**
  > the owner for this is intended to be a dao that acts in support of the protocol, however this is a good point to the centralization concerns for the protocol, we will most likely manage this by adding a timelock to these function
 
 **[Alex the Entreprenerd (judge) commented](https://github.com/code-423n4/2021-09-defiprotocol-findings/issues/121#issuecomment-997302531):**
@@ -920,7 +922,7 @@ Minting and burning of the basket token are being disrupted until the publisher 
 
 Limit the max value of `feePct`.
 
-**[frank-beard (defiProtocol) confirmed](https://github.com/code-423n4/2021-09-defiprotocol-findings/issues/79)**
+**[frank-beard (Kuiper) confirmed](https://github.com/code-423n4/2021-09-defiprotocol-findings/issues/79)**
 
 **[Alex the Entreprenerd (judge) commented](https://github.com/code-423n4/2021-09-defiprotocol-findings/issues/79#issuecomment-997304574):**
  > The finding is valid, there are conditions that would cause `feePct` to be greater than `BASE`
@@ -971,7 +973,7 @@ factory.auctionMultiplier = 2
 
 Calculate and require `newRatio > 0` in `bondForRebalance()`, or limit the max value of decrement and make sure newRatio always > 0 in `settleAuction()`.
 
-**[frank-beard (defiProtocol) confirmed](https://github.com/code-423n4/2021-09-defiprotocol-findings/issues/90)**
+**[frank-beard (Kuiper) confirmed](https://github.com/code-423n4/2021-09-defiprotocol-findings/issues/90)**
 
 **[Alex the Entreprenerd (judge) commented](https://github.com/code-423n4/2021-09-defiprotocol-findings/issues/90#issuecomment-997305014):**
  > Finding is valid, there are cases that can cause a - b to revert
@@ -1027,7 +1029,7 @@ Change to:
 Bounty storage bounty = _bounties[bountyIds[i]];
 ```
 
-[frank-beard (defiProtocol) confirmed and marked as duplicate](https://github.com/code-423n4/2021-09-defiprotocol-findings/issues/136#issuecomment-936623596):**
+[frank-beard (Kuiper) confirmed and marked as duplicate](https://github.com/code-423n4/2021-09-defiprotocol-findings/issues/136#issuecomment-936623596):**
  > duplicate of https://github.com/code-423n4/2021-09-defiprotocol-findings/issues/168
 
 **[Alex the Entreprenerd (judge) commented](https://github.com/code-423n4/2021-09-defiprotocol-findings/issues/136#issuecomment-997414434):**
@@ -1078,7 +1080,7 @@ Recommend to use `safeApprove` instead and set the allowance to 0 before calling
     }
 ```
 
-**[frank-beard (defiProtocol) marked as duplicate](https://github.com/code-423n4/2021-09-defiprotocol-findings/issues/35#issuecomment-929652005):**
+**[frank-beard (Kuiper) marked as duplicate](https://github.com/code-423n4/2021-09-defiprotocol-findings/issues/35#issuecomment-929652005):**
  > duplicate of https://github.com/code-423n4/2021-09-defiprotocol-findings/issues/260
 
 **[Alex the Entreprenerd (judge) commented](https://github.com/code-423n4/2021-09-defiprotocol-findings/issues/35#issuecomment-997415208):**
@@ -1104,7 +1106,7 @@ Add these require statement to the following functions:
 *   Factory.proposeBasketLicense()
     *   `require(licenseFee <= BASE, "proposeBasketLicense: license fee cannot be greater than 100%");`
 
-**[frank-beard (defiProtocol) acknowledged](https://github.com/code-423n4/2021-09-defiprotocol-findings/issues/104)** 
+**[frank-beard (Kuiper) acknowledged](https://github.com/code-423n4/2021-09-defiprotocol-findings/issues/104)** 
 
 **[Alex the Entreprenerd (judge) commented](https://github.com/code-423n4/2021-09-defiprotocol-findings/issues/104#issuecomment-997467988):**
  > Agree with the finding, the warden highlighted an admin exploit that allows to DOS the basket.
@@ -1137,7 +1139,7 @@ IERC20(outputTokens\[i]).safeTransferFrom(address(basket), msg.sender, outputWei
 
 Check outputTokens are part of the previous basket tokens  (e.g. `basket.tokens()` )
 
-**[frank-beard (defiProtocol) acknowledged](https://github.com/code-423n4/2021-09-defiprotocol-findings/issues/56)** 
+**[frank-beard (Kuiper) acknowledged](https://github.com/code-423n4/2021-09-defiprotocol-findings/issues/56)** 
 
 **[Alex the Entreprenerd (judge) commented](https://github.com/code-423n4/2021-09-defiprotocol-findings/issues/56#issuecomment-997468442):**
  > If the Auction contract has any ERC20 that is not checked against the require, those tokens can be taken away for free.
@@ -1171,7 +1173,7 @@ Provide direct links to all referenced code in GitHub. Add screenshots, logs, or
 
 #### Recommended Mitigation Steps
 
-**[frank-beard (defiProtocol) acknowledged and disagreed with severity](https://github.com/code-423n4/2021-09-defiprotocol-findings/issues/242#issuecomment-931568844):**
+**[frank-beard (Kuiper) acknowledged and disagreed with severity](https://github.com/code-423n4/2021-09-defiprotocol-findings/issues/242#issuecomment-931568844):**
  > it is assumed the owner is trustworthy in this version of the protocol, however we will add mitigations and further decentralization in future updates
 
 **[Alex the Entreprenerd (judge) commented](https://github.com/code-423n4/2021-09-defiprotocol-findings/issues/242#issuecomment-997469832):**
@@ -1387,7 +1389,7 @@ Manual Analysis
 
 Recommend changing storage specifier of bounty to "storage" instead of “memory".
 
-**[frank-beard (defiProtocol) confirmed](https://github.com/code-423n4/2021-09-defiprotocol-findings/issues/168)**  
+**[frank-beard (Kuiper) confirmed](https://github.com/code-423n4/2021-09-defiprotocol-findings/issues/168)**  
 
 **[Alex the Entreprenerd (judge) commented](https://github.com/code-423n4/2021-09-defiprotocol-findings/issues/168#issuecomment-997414247):**
  > Great find, adding the same bounty multiple times can allow the exploiter to drain the entire contract as long as the bounties are denominated in the underlying token
@@ -1439,7 +1441,7 @@ Your needed condition/math might be different, and you might also choose to burn
 
     require (newRatio > basket.ibRatio());
 
-**[frank-beard (defiProtocol) confirmed](https://github.com/code-423n4/2021-09-defiprotocol-findings/issues/45)**  
+**[frank-beard (Kuiper) confirmed](https://github.com/code-423n4/2021-09-defiprotocol-findings/issues/45)**  
 
 **[Alex the Entreprenerd (judge) commented](https://github.com/code-423n4/2021-09-defiprotocol-findings/issues/45#issuecomment-997472588):**
  > Would need confirmation from the sponsor here (this finding was also submitted on the more recent contest)

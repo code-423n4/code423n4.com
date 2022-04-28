@@ -1,11 +1,13 @@
 import React, { useCallback, useState } from "react";
 import HCaptcha from "@hcaptcha/react-hcaptcha";
+
 import DefaultLayout from "../templates/DefaultLayout";
-import Widget from "../components/reporter/widgets/Widget";
 import FormField from "../components/reporter/widgets/FormField";
+import Widget from "../components/reporter/widgets/Widget";
+import Widgets from "../components/reporter/widgets/Widgets";
+
 import * as styles from "../components/reporter/Form.module.scss";
 import * as widgetStyles from "../components/reporter/widgets/Widgets.module.scss";
-import { Widgets } from "../components/reporter/widgets";
 
 function ContactUs() {
   const fields = [
@@ -99,9 +101,9 @@ function ContactUs() {
       setStatus(FormStatus.Submitted);
     } else {
       setStatus(FormStatus.Error);
-      const { body } = await response.json();
-      if (body.error) {
-        setErrorMessage(body.error);
+      const res = await response.json();
+      if (res.error) {
+        setErrorMessage(res.error);
       }
     }
   };
@@ -128,6 +130,7 @@ function ContactUs() {
   };
 
   const handleReset = () => {
+    setCaptchaToken("");
     setFieldState(initialState);
     setStatus(FormStatus.Unsubmitted);
   };

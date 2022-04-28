@@ -1,12 +1,15 @@
 import React, { useState } from "react";
 import { graphql, Link } from "gatsby";
 import clsx from "clsx";
-import DefaultLayout from "./DefaultLayout";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
-import Countdown from "../components/Countdown";
+
 import { getDates } from "../utils/time";
+
 import ContestFAQ from "../pages/contests/faq";
 import ContestResults from "../components/ContestResults";
+import Countdown from "../components/Countdown";
+import DefaultLayout from "./DefaultLayout";
+import ClientOnly from "../components/ClientOnly";
 
 const ContestLayout = (props) => {
   const [artOpen, setArtOpen] = useState(false);
@@ -44,7 +47,7 @@ const ContestLayout = (props) => {
       preview={fields.artPath}
       pageDescription={dateDescription}
     >
-      <>
+      <ClientOnly>
         <div className="contest-wrapper contest-artwork-wrapper">
           <div className="contest-tippy-top">
             {t.contestStatus === "soon" || t.contestStatus === "active" ? (
@@ -127,15 +130,17 @@ const ContestLayout = (props) => {
         <section>
           <Tabs className="contest-tabs">
             <TabList>
-              {(props.data.leaderboardFindings.findings.length > 0) && <Tab>Results</Tab>}
+              {props.data.leaderboardFindings.findings.length > 0 && (
+                <Tab>Results</Tab>
+              )}
               <Tab>Details</Tab>
               <Tab>FAQ</Tab>
             </TabList>
 
-            {(props.data.leaderboardFindings.findings.length > 0) && (
+            {props.data.leaderboardFindings.findings.length > 0 && (
               <TabPanel>
                 <div className="contest-wrapper">
-                  <ContestResults results={props.data.leaderboardFindings}/>
+                  <ContestResults results={props.data.leaderboardFindings} />
                 </div>
               </TabPanel>
             )}
@@ -171,7 +176,7 @@ const ContestLayout = (props) => {
             </TabPanel>
           </Tabs>
         </section>
-      </>
+      </ClientOnly>
     </DefaultLayout>
   );
 };
@@ -217,12 +222,13 @@ export const query = graphql`
       }
       title
     }
-    leaderboardFindings: contestsCsv(contestid: {eq: $contestId}) {
+    leaderboardFindings: contestsCsv(contestid: { eq: $contestId }) {
       title
       findings {
         finding
         awardUSD
         risk
+        split
         handle {
           handle
           image {

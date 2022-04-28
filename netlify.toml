@@ -3,6 +3,11 @@
   publish = "public/"
   command = "yarn build"
   environment = { YARN_VERSION = "1.22.10" }
+  
+[[redirects]]
+  from = "/is"
+  to = "/images/code4rena_is.pdf"
+  status = 200  
 
 [[redirects]]
   from = "/*"

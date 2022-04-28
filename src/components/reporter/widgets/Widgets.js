@@ -1,6 +1,8 @@
 import React from "react";
-import { Widget } from "./";
+
 import FormField from "./FormField";
+import Widget from "./Widget";
+
 import * as styles from "./Widgets.module.scss";
 
 const Widgets = (props) => {
@@ -14,7 +16,7 @@ const Widgets = (props) => {
       {fields.map((field, index) => {
         const { name, label, helpText, required } = field;
         const isInvalid = required && showValidationErrors && !fieldState[name];
-        
+
         return (
           <FormField
             key={"widget-" + index}
@@ -30,7 +32,7 @@ const Widgets = (props) => {
               isInvalid={isInvalid}
             />
           </FormField>
-        )
+        );
       })}
     </fieldset>
   );
