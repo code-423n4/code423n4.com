@@ -68,10 +68,20 @@
     .react-select__placeholder {
       color: white;
       opacity: 0.75;
+      font-size: 0.9em;
     }
 
     .react-select__input {
       color: white;
+    }
+
+    .react-select__multi-value {
+      background-color: var(--main-purple);
+    }
+
+    .react-select__multi-value__remove:hover {
+      color: var(--hot-pink);
+      background-color: rgba(255, 255, 255, 0.1);
     }
   }
 }
