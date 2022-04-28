@@ -22,7 +22,7 @@ exports.handler = async (event) => {
     }
 
     const data = JSON.parse(event.body);
-    const { handle, image, link, moralisId } = data;
+    const { handle, image, link, moralisId, members } = data;
 
     // ensure we have the data we need
     if (!handle) {
@@ -60,6 +60,10 @@ exports.handler = async (event) => {
       base64Avatar = data.toString("base64");
       avatarFilename = `${handle}.${info.format}`;
       formattedHandleData.image = `./avatars/${handle}.${info.format}`;
+    }
+
+    if (members && members.length > 2) {
+      formattedHandleData.members = members;
     }
 
     const files = {
@@ -105,14 +109,18 @@ exports.handler = async (event) => {
       }
     }
 
-    const title =
-      event.httpMethod === "PUT"
-        ? `Update warden ${handle}`
-        : `Add warden ${handle}`;
-    const body =
-      event.httpMethod === "PUT"
-        ? `This auto-generated PR updates info for warden ${handle}`
-        : `This auto-generated PR registers the new warden ${handle}`;
+    let sentenceVerb = "Register";
+    let sentenceObject = "warden";
+
+    if (event.httpMethod === "PUT") {
+      sentenceVerb = "Update";
+    }
+    if (members && members.length) {
+      sentenceObject = "team";
+    }
+
+    const title = `${sentenceVerb} ${sentenceObject} ${handle}`;
+    const body = `This auto-generated PR ${sentenceVerb.toLowerCase}s the ${sentenceObject} ${handle}`;
 
     try {
       const res = await octokit.createPullRequest({
@@ -120,7 +128,7 @@ exports.handler = async (event) => {
         repo: "code423n4.com",
         title,
         body,
-        head: `warden-${handle}`,
+        head: `${sentenceObject}-${handle}`,
         changes: [
           {
             files,

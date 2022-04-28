@@ -8,10 +8,15 @@
 .RadioGroup {
   display: flex;
   flex-direction: column;
+  margin-bottom: 20px;
 }
 
 .Radio {
   margin: 10px 10px 10px 0;
+}
+
+.RadioLabel {
+  cursor: pointer;
 }
 
 .Container {
