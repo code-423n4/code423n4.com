@@ -55,11 +55,7 @@ function ApplyForCertifiedContributor() {
   };
 
   const handleChange = useCallback((e) => {
-    // XXX: hack to modify warden field name
-    let { name, value } = e.target;
-    if (name === "handle") {
-      name = "wardenHandle";
-    }
+    const { name, value } = e.target;
     setFieldState((state) => {
       return { ...state, [name]: value };
     });
@@ -138,6 +134,7 @@ function ApplyForCertifiedContributor() {
                         <div key={field.name + index}>
                           <label>{field.label}</label>
                           <Widget
+                            name={field.name}
                             field={field}
                             onChange={handleChange}
                             fieldState={fieldState}
