@@ -71,3 +71,19 @@
   justify-content: center;
   flex-wrap: wrap;
 }
+
+.ReactTabs {
+  :global {
+    .react-tabs__tab-panel--selected {
+      background-color: transparent;
+      border-top: none;
+    }
+
+    .react-tabs__tab-list {
+      max-width: 750px;
+      margin: 40px auto;
+      margin-top: 0;
+      margin-bottom: -40px;
+    }
+  }
+}

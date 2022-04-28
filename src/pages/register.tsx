@@ -1,9 +1,11 @@
 import React, { useState, ReactNode } from "react";
 import { graphql } from "gatsby";
 import clsx from "clsx";
+import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 
 import DefaultLayout from "../templates/DefaultLayout";
 import RegistrationForm from "../components/RegistrationForm";
+import TeamRegistrationForm from "../components/TeamRegistrationForm";
 
 import * as styles from "../components/form/Form.module.scss";
 
@@ -16,8 +18,19 @@ enum FormStatus {
 
 export default function UserRegistration({ data }) {
   const handles = new Set(data.handles.edges.map((h) => h.node.handle));
-  const wardens = data.handles.edges.map(({ node }) => {
-    return { value: node.handle, image: node.image };
+
+  let teams = [];
+  let wardens = [];
+  data.handles.edges.forEach(({ node }) => {
+    if (node.members) {
+      teams.push({
+        value: node.handle,
+        image: node.image,
+        members: node.members,
+      });
+    } else {
+      wardens.push({ value: node.handle, image: node.image });
+    }
   });
 
   const [status, setStatus] = useState<FormStatus>(FormStatus.Unsubmitted);
@@ -42,40 +55,65 @@ export default function UserRegistration({ data }) {
     }
   };
 
+  const resetForm = () => {
+    setErrorMessage("");
+    setStatus(FormStatus.Unsubmitted);
+  };
+
   return (
     <DefaultLayout pageTitle="Registration | Code 423n4">
       <div className="wrapper-main">
-        <h1 className="page-header">Register Your Handle</h1>
-        <div className={clsx(styles.Form)}>
+        <h1 className="page-header">Registration</h1>
+        <div>
           {(status === FormStatus.Unsubmitted ||
             status === FormStatus.Submitting) && (
-            <RegistrationForm
-              handles={handles}
-              wardens={wardens}
-              updateErrorMessage={updateErrorMessage}
-              updateFormStatus={setStatus}
-            />
+            <Tabs className={styles.ReactTabs}>
+              <TabList>
+                <Tab>Warden</Tab>
+                <Tab>Team</Tab>
+              </TabList>
+              <TabPanel>
+                <RegistrationForm
+                  className={clsx(styles.Form)}
+                  handles={handles}
+                  wardens={wardens}
+                  updateErrorMessage={updateErrorMessage}
+                  updateFormStatus={setStatus}
+                />
+              </TabPanel>
+              <TabPanel>
+                <TeamRegistrationForm
+                  className={clsx(styles.Form)}
+                  handles={handles}
+                  wardens={wardens}
+                  teams={teams}
+                  updateErrorMessage={updateErrorMessage}
+                  updateFormStatus={setStatus}
+                />
+              </TabPanel>
+            </Tabs>
           )}
           {status === FormStatus.Error && (
             <div style={{ textAlign: "center" }}>
               <h1>Whoops!</h1>
-              <p>
-                An error occurred while attempting to register your username.
-              </p>
+              <p>An error occurred while processing your registration.</p>
               {errorMessage !== "" && (
                 <p>
                   <small>{errorMessage}</small>
                 </p>
               )}
+              <button className="button cta-button" onClick={resetForm}>
+                Try again
+              </button>
             </div>
           )}
           {status === FormStatus.Submitted && (
             <div className="centered-text">
               <h1>Thank you!</h1>
-              <p>Your username has been submitted for registration.</p>
+              <p>Your registration application has been submitted.</p>
               <h2>One more thing...</h2>
               <p>
-                Before we can register you, please join us in{" "}
+                Before we can complete your registration, please join us in{" "}
                 <a href="https://discord.gg/code4rena">Discord</a> and give us a
                 howl in #i-want-to-be-a-warden! <br />
                 We look forward to seeing you in the arena!
@@ -95,6 +133,10 @@ export const query = graphql`
         node {
           handle
           link
+          moralisId
+          members {
+            handle
+          }
           image {
             childImageSharp {
               resize(width: 64, quality: 90) {

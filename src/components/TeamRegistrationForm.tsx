@@ -6,16 +6,14 @@ import Moralis from "moralis/types";
 import useUser from "../hooks/UserContext";
 
 import WardenField from "../components/reporter/widgets/WardenField";
-import TextArea from "../components/reporter/widgets/TextArea.js";
 
-import * as styles from "../components/form/Form.module.scss";
+import * as styles from "../components/reporter/Form.module.scss";
 import * as widgetStyles from "../components/reporter/widgets/Widgets.module.scss";
 
 const initialState = {
-  username: "",
-  discordUsername: "",
+  teamName: "",
   link: "",
-  qualifications: "",
+  teamMembers: [],
 };
 
 enum FormStatus {
@@ -38,33 +36,20 @@ function getFileAsBase64(file) {
   });
 }
 
-export default function RegistrationForm({
+export default function TeamRegistrationForm({
   handles,
   wardens,
+  teams,
   updateErrorMessage,
   updateFormStatus,
   className,
 }) {
   const [state, setState] = useState(initialState);
-  const [isNewUser, setIsNewUser] = useState(true);
+  const [isNewTeam, setIsNewUser] = useState(true);
   const [hasValidationErrors, setHasValidationErrors] = useState(false);
   const avatarInputRef = useRef<HTMLInputElement>();
   const { logUserOut } = useUser();
   const { authenticate } = useMoralis();
-
-  const instructions = isNewUser ? (
-    <p>
-      To register as a warden, please fill out this form and join us in{" "}
-      <a href="https://discord.gg/code4rena" target="_blank">
-        Discord
-      </a>
-    </p>
-  ) : (
-    <p>
-      If you are an established code4rena Warden, create an account to login
-      with your wallet.
-    </p>
-  );
 
   const handleChange = useCallback((e) => {
     const { name, value } = e.target;
@@ -76,17 +61,20 @@ export default function RegistrationForm({
   const submitRegistration = useCallback(
     (provider: Moralis.Web3ProviderType = "metamask") => {
       const url = `/.netlify/functions/register-warden`;
+
       (async () => {
-        if (
-          !state.username ||
-          !state.discordUsername ||
-          (isNewUser && !state.qualifications) ||
-          (isNewUser && handles.has(state.username))
-        ) {
+        if (!state.teamName) {
           setHasValidationErrors(true);
           return;
         }
-        // @todo: validate discord handle
+        if (state.teamMembers.length < 2) {
+          setHasValidationErrors(true);
+          return;
+        }
+        if (isNewTeam && handles.has(state.teamName)) {
+          setHasValidationErrors(true);
+          return;
+        }
         setHasValidationErrors(false);
         updateFormStatus(FormStatus.Submitting);
 
@@ -104,50 +92,56 @@ export default function RegistrationForm({
           if (user === undefined) {
             // user does not have the corresponding browser extension
             // or user clicked "cancel" when prompted to sign message
+            // or the account in question is not connected to the C4 site
             // @todo: update messaging
             updateFormStatus(FormStatus.Error);
             updateErrorMessage(
-              `Make sure you have the ${provider} browser extension \n You must sign the message to login`
+              `Make sure you have the ${provider} browser extension and the account is connected. ` +
+                "You must sign the message to login. "
             );
             return;
           }
 
           const moralisId = user.id;
-          const username = await user.get("c4Username");
-          if (username) {
+          const teamName = await user.get("c4Username");
+          if (teamName) {
             await logUserOut();
             updateFormStatus(FormStatus.Error);
-            if (username !== state.username) {
+            if (teamName !== state.teamName) {
               // user tried to register more than one account with this address
               updateErrorMessage(
-                `This address is already registered with the username "${username}"`
+                `This address is already registered with the team "${teamName}"`
               );
             } else {
               // registration is pending
-              updateErrorMessage("Reference already exists");
+              // @todo: update messaging
+              updateErrorMessage(
+                "This team's registration is pending. " +
+                  "Someone will reach out to a member of your " +
+                  "team in Discord when your registration has been processed."
+              );
             }
             return;
           }
 
           const requestBody = {
-            handle: state.username,
-            qualifications: state.qualifications,
+            handle: state.teamName,
             moralisId,
+            members: state.teamMembers,
           } as {
             handle: string;
-            qualifications: string;
             moralisId: string;
             link?: string;
             image?: unknown;
           };
 
-          if (isNewUser) {
+          if (isNewTeam) {
             requestBody.link = state.link;
             requestBody.image = image;
           }
 
           const response = await fetch(url, {
-            method: isNewUser ? "POST" : "PUT",
+            method: isNewTeam ? "POST" : "PUT",
             headers: {
               "Content-Type": "application/json",
             },
@@ -156,8 +150,8 @@ export default function RegistrationForm({
 
           if (response.ok) {
             try {
-              await user.set("c4Username", state.username);
-              await user.set("discordUsername", state.discordUsername);
+              await user.set("c4Username", state.teamName);
+              await user.set("members", state.teamMembers);
               // @todo: add role
               await user.save();
               await logUserOut();
@@ -183,186 +177,136 @@ export default function RegistrationForm({
         }
       })();
     },
-    [
-      avatarInputRef,
-      state.username,
-      state.qualifications,
-      state.link,
-      isNewUser,
-      handles,
-      hasValidationErrors,
-    ]
+    [avatarInputRef, state, isNewTeam, hasValidationErrors]
   );
 
   const handleFormChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ): void => {
-    setIsNewUser(event.target.value === "newUser");
+    setIsNewUser(event.target.value === "newTeam");
     setState((prevState) => {
-      return { ...prevState, username: "" };
+      return { ...prevState, teamName: "", teamMembers: [] };
     });
   };
 
   return (
     <form className={className}>
       <fieldset className={clsx(widgetStyles.Fields, widgetStyles.RadioGroup)}>
-        <label className={widgetStyles.RadioLabel}>
+        <label>
           <input
             className={widgetStyles.Radio}
             type="radio"
-            value="newUser"
-            name="isNewUser"
-            checked={isNewUser}
+            value="newTeam"
+            name="isNewTeam"
+            checked={isNewTeam}
             onChange={handleFormChange}
           />
-          I'm new here
+          I'm forming a new team
         </label>
-        <label className={widgetStyles.RadioLabel}>
+        <label>
           <input
             className={widgetStyles.Radio}
             type="radio"
-            value="establishedUser"
-            name="isNewUser"
-            checked={!isNewUser}
+            value="establishedTeam"
+            name="isNewTeam"
+            checked={!isNewTeam}
             onChange={handleFormChange}
           />
-          I'm an established warden
+          I already have an established team
         </label>
       </fieldset>
-      {instructions}
-      {isNewUser ? (
-        <div className={widgetStyles.Container}>
-          <label htmlFor="username" className={widgetStyles.Label}>
-            Code4rena Username *
-          </label>
-          <p className={widgetStyles.Help}>
-            Used to report findings, as well as display your total award amount
-            on the leaderboard. Supports alphanumeric characters, underscores,
-            and hyphens. (Note: for consistency, please ensure your server
-            nickname in our Discord matches the username you provide here)
-          </p>
-          <input
-            className={clsx(
-              widgetStyles.Control,
-              widgetStyles.Text,
-              hasValidationErrors &&
-                (!state.username ||
-                  (isNewUser && handles.has(state.username))) &&
-                "input-error"
+      {isNewTeam ? (
+        <>
+          <div className={widgetStyles.Container}>
+            <label htmlFor="teamName" className={widgetStyles.Label}>
+              Team Name
+            </label>
+            <p className={widgetStyles.Help}>
+              Used to report findings, as well as display your total award
+              amount on the leaderboard. Supports alphanumeric characters,
+              underscores, and hyphens.
+            </p>
+            <input
+              className={clsx(
+                widgetStyles.Control,
+                widgetStyles.Text,
+                hasValidationErrors &&
+                  (!state.teamName ||
+                    (isNewTeam && handles.has(state.teamName))) &&
+                  "input-error"
+              )}
+              style={{ marginBottom: 0 }}
+              type="text"
+              id="teamName"
+              name="teamName"
+              placeholder="Team Name"
+              value={state.teamName}
+              onChange={handleChange}
+              maxLength={25}
+            />
+            {handles.has(state.teamName) && (
+              <p className={widgetStyles.ErrorMessage}>
+                <small>{`${state.teamName} is already registered as a team or warden.`}</small>
+              </p>
             )}
-            style={{ marginBottom: 0 }}
-            type="text"
-            id="username"
-            name="username"
-            placeholder="Username"
-            value={state.username}
-            onChange={handleChange}
-            maxLength={25}
-          />
-          {handles.has(state.username) && (
-            <p className={widgetStyles.ErrorMessage}>
-              <small>{`${state.username} is already a registered username.`}</small>
-            </p>
-          )}
-          {hasValidationErrors && !state.username && (
-            <p className={widgetStyles.ErrorMessage}>
-              <small>This field is required</small>
-            </p>
-          )}
-        </div>
+            {hasValidationErrors && !state.teamName && (
+              <p className={widgetStyles.ErrorMessage}>
+                <small>This field is required</small>
+              </p>
+            )}
+          </div>
+        </>
       ) : (
         <div className={widgetStyles.Container}>
-          <label className={widgetStyles.Label}>Code4rena Username *</label>
+          <label className={widgetStyles.Label}>Team Name</label>
           <p className={widgetStyles.Help}>
-            The username you use to submit your findings
+            The teamName you use to submit your findings
           </p>
           <WardenField
-            name="handle"
-            required={true}
-            options={wardens}
+            options={teams}
             onChange={(e) => {
               setState((state) => {
-                return { ...state, username: e.target.value };
+                return {
+                  ...state,
+                  teamName: e.target.value,
+                  teamMembers: e.target.members,
+                };
               });
             }}
             fieldState={state}
-            isInvalid={hasValidationErrors && !state.username}
+            isInvalid={
+              (hasValidationErrors && !state.teamName) ||
+              (state.teamName && !state.teamMembers.length)
+            }
           />
-          {hasValidationErrors && !state.username && (
+          {hasValidationErrors && !state.teamName && (
             <p className={widgetStyles.ErrorMessage}>
               <small>This field is required</small>
             </p>
           )}
         </div>
       )}
-      <div className={widgetStyles.Container}>
-        <label htmlFor="discordUsername" className={widgetStyles.Label}>
-          Discord Username *
-        </label>
-        <p className={widgetStyles.Help}>
-          Used in case we need to contact you about your submissions or
-          winnings.
-        </p>
-        <input
-          className={clsx(
-            widgetStyles.Control,
-            widgetStyles.Text,
-            hasValidationErrors && !state.discordUsername && "input-error"
-          )}
-          style={{ marginBottom: 0 }}
-          type="text"
-          id="discordUsername"
-          name="discordUsername"
-          placeholder="Warden#1234"
-          value={state.discordUsername}
-          onChange={handleChange}
-        />
-        {hasValidationErrors && !state.discordUsername && (
-          <p className={widgetStyles.ErrorMessage}>
-            <small>This field is required</small>
-          </p>
-        )}
-        {/* @todo: validate discord username
-            {hasValidationErrors && isDiscordUsernameInvalid() && (
-              <p className={widgetStyles.Help}>
-                <small>
-                  Make sure you enter your discord username, and not your server
-                  nickname. It should end with '#' followed by 4 digits.
-                </small>
-              </p>
-            )} */}
-      </div>
-      {isNewUser && (
+      {isNewTeam && (
         <>
           <div className={widgetStyles.Container}>
-            <label htmlFor="link" className={widgetStyles.Label}>
-              Qualifications *
-            </label>
-            <p className={widgetStyles.Help}>
-              Please provide evidence of your ability to be competitive in an
-              EVM-based audit contest, preferably with links. For specifically
-              the OpenSea contest, evidence of experience with assembly is a
-              bonus.
-            </p>
-            <p className={widgetStyles.Help}>
-              <strong>
-                Please note, the qualifications you list here will be public as
-                part of a PR in the{" "}
-                <a href="https://github.com/code-423n4/code423n4.com">
-                  code423n4.com repo.
-                </a>
-              </strong>
-            </p>
-            <TextArea
-              name="qualifications"
-              required={true}
-              onChange={handleChange}
-              fieldState={state.qualifications}
-              isInvalid={!state.qualifications && hasValidationErrors}
+            <label className={widgetStyles.Label}>Members</label>
+            <WardenField
+              options={wardens}
+              onChange={(e) => {
+                setState((state) => {
+                  return {
+                    ...state,
+                    teamMembers: e.target.value || [],
+                  };
+                });
+              }}
+              fieldState={state}
+              isInvalid={hasValidationErrors && state.teamMembers.length < 2}
+              isMulti={true}
             />
-            {!state.qualifications && hasValidationErrors && (
+            {hasValidationErrors && state.teamMembers.length < 2 && (
               <p className={widgetStyles.ErrorMessage}>
-                <small>This field is required</small>
+                <small>You must have at least 2 members on a team</small>
               </p>
             )}
           </div>

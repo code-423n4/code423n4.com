@@ -22,10 +22,24 @@ const WardenOptionLabel = ({ value, image }) => {
   );
 };
 
-const WardenField = ({ name, required, options, onChange, fieldState, isInvalid }) => {
+const WardenField = ({
+  name,
+  options,
+  onChange,
+  fieldState,
+  isInvalid,
+  isMulti = false,
+}) => {
   const handleChange = useCallback(
     (option) => {
-      const value = option && option.value ? option.value : "";
+      if (!option) {
+        onChange({ target: { name, value: "" } });
+        return;
+      }
+      let value = option.value;
+      if (isMulti) {
+        value = option.map((o) => o.value);
+      }
       onChange({ target: { name, value } });
     },
     [onChange, name]
@@ -43,6 +57,7 @@ const WardenField = ({ name, required, options, onChange, fieldState, isInvalid 
         className={clsx(styles.ReactSelect, isInvalid && styles.Invalid)}
         classNamePrefix="react-select"
         isClearable={true}
+        isMulti={isMulti}
       />
     </>
   );

@@ -23,7 +23,7 @@ exports.handler = async (event) => {
     }
 
     const data = JSON.parse(event.body);
-    const { handle, qualifications, image, link, moralisId } = data;
+    const { handle, qualifications, image, link, moralisId, members } = data;
 
     // ensure we have the data we need
     if (!handle) {
@@ -73,6 +73,10 @@ exports.handler = async (event) => {
       formattedHandleData.image = `./avatars/${handle}.${info.format}`;
     }
 
+    if (members && members.length > 2) {
+      formattedHandleData.members = members;
+    }
+
     const files = {
       [`_data/handles/${handle}.json`]: JSON.stringify(
         formattedHandleData,
@@ -116,10 +120,17 @@ exports.handler = async (event) => {
       }
     }
 
-    const title =
-      event.httpMethod === "PUT"
-        ? `Update warden ${handle}`
-        : `Add warden ${handle}`;
+    let sentenceVerb = "Register";
+    let sentenceObject = "warden";
+
+    if (event.httpMethod === "PUT") {
+      sentenceVerb = "Update";
+    }
+    if (members && members.length) {
+      sentenceObject = "team";
+    }
+
+    const title = `${sentenceVerb} ${sentenceObject} ${handle}`;
     const body =
       event.httpMethod === "PUT"
         ? `This auto-generated PR updates info for warden ${handle}`
@@ -135,7 +146,7 @@ exports.handler = async (event) => {
         repo: "code423n4.com",
         title,
         body,
-        head: `warden-${handle}`,
+        head: `${sentenceObject}-${handle}`,
         changes: [
           {
             files,
