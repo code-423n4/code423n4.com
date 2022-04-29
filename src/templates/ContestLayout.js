@@ -44,7 +44,7 @@ const ContestLayout = (props) => {
     <DefaultLayout
       pageTitle={pageTitle}
       bodyClass="contest-page"
-      preview={fields.artPath}
+      preview={fields.artPath} // TODO: possible artPath state issue place
       pageDescription={dateDescription}
     >
       <ClientOnly>
@@ -65,7 +65,7 @@ const ContestLayout = (props) => {
             <p className="days-duration">{t.daysDuration} day contest</p>
           </div>
           <div
-            style={
+            style={ // TODO: possible artPath state issue place
               fields.artPath !== null
                 ? { backgroundImage: `url(${fields.artPath})` }
                 : null
