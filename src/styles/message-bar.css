@@ -18,10 +18,13 @@
   bottom: 0;
   left: 0;
   right: 0;
-  background: url(../../static/images/message-bar-bkg.png) no-repeat;
   background-size: cover;
   background-position: center center;
   display: block;
+}
+
+.message-bar::before.cosmos {
+  background: url(../../static/images/message-bar-bkg.png) no-repeat;
 }
 
 .message-bar::after {
@@ -30,6 +33,12 @@
   bottom: 0;
   left: 0;
   right: 0;
+  background: var(--main-purple);
+  display: block;
+  content: "";
+}
+
+.message-bar::after.cosmos {
   background-image: linear-gradient(
     90deg,
     rgba(53, 65, 248, 0.87) 0%,
@@ -42,12 +51,10 @@
     rgba(133, 0, 255, 0.56) 88%,
     rgba(26, 75, 255, 0.31) 100%
   );
-  display: block;
-  content: "";
 }
 
 @media (max-width: 600px) {
-  .message-bar::before {
+  .message-bar.cosmos::before {
     background-image: radial-gradient(
       90deg,
       rgba(133, 0, 255, 0.72) 0%,
