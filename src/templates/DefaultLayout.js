@@ -1,9 +1,12 @@
 import React from "react";
 import Helmet from "react-helmet";
 import { ToastContainer } from "react-toastify";
+import { differenceInDays } from "date-fns";
+import { Link } from "gatsby";
 
 import Footer from "../components/content/Footer";
 import Header from "../components/content/Header";
+import Banner from "../components/Banner";
 
 const DefaultLayout = (props) => {
   const {
@@ -14,6 +17,17 @@ const DefaultLayout = (props) => {
     url,
     preview,
   } = props;
+
+  // @todo: update deadline
+  const deadline = new Date("2022/5/15");
+  const registrationAnnouncement = (
+    <>
+      Heads up: in {differenceInDays(deadline, Date.now())} days, you will have
+      to be registered with your wallet in order to submit findings.
+      <Link to="/register">Register</Link>
+    </>
+  );
+
   return (
     <>
       <Helmet
@@ -79,14 +93,15 @@ const DefaultLayout = (props) => {
         </title>
         <body className={bodyClass} />
       </Helmet>
-      <div className="message-bar">
+      {/* <div className="message-bar">
         <p>
           ✨ New!✨ &nbsp;C4 Cosmos league
           <a href="https://medium.com/code-423n4/code4rena-comes-to-cosmos-29269f4d13d">
             Read more »
           </a>
         </p>
-      </div>
+      </div> */}
+      <Banner message={registrationAnnouncement} guestOnly={true} />
       <Header />
       <ToastContainer />
       <main>
