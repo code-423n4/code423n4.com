@@ -58,7 +58,7 @@ header nav {
   justify-content: flex-end;
 }
 
-@media (max-width: 830px) {
+@media (max-width: 970px) {
   header {
     margin: 0;
     padding: 0;
@@ -85,6 +85,8 @@ header nav {
     overflow: hidden;
     max-height: 0;
     transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
+    flex-direction: column;
+    align-items: flex-start;
   }
   header nav {
     display: flex;
@@ -107,8 +109,9 @@ header nav {
     display: block;
     text-align: left;
     padding: 10px 0;
-    margin: 15px 0;
+    margin: 15px 0 0 0;
     border-bottom: 1px solid #efefef1a;
+    width: 100%;
   }
   header nav.open .hamburger {
     order: 0;

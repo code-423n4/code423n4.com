@@ -8,14 +8,17 @@ import Dropdown from "../Dropdown";
 
 import * as styles from "./Login.module.scss";
 import * as dropdownStyles from "../Dropdown.module.scss";
+import clsx from "clsx";
 
 const Login = () => {
   const { logUserOut, login } = useUser();
   const { authenticate } = useMoralis();
 
   const handleLogin = async (
+    event: React.MouseEvent,
     provider: Moralis.Web3ProviderType = "metamask"
   ) => {
+    event.preventDefault();
     try {
       const user = await authenticate({ provider });
       if (user === undefined) {
@@ -73,22 +76,40 @@ const Login = () => {
   );
 
   return (
-    <Dropdown
-      wrapperClass={styles.LoginButtonWrapper}
-      triggerButtonClass={styles.LoginButton}
-      triggerButton={loginButton()}
-      openOnHover={true}
-    >
-      <button onClick={() => handleLogin()} className={dropdownStyles.Button}>
+    <>
+      <Dropdown
+        wrapperClass={styles.LoginButtonWrapper}
+        triggerButtonClass={styles.LoginButton}
+        triggerButton={loginButton()}
+        openOnHover={true}
+        className={styles.Desktop}
+      >
+        <button
+          type="button"
+          onClick={(e) => handleLogin(e)}
+          className={clsx(dropdownStyles.Button, styles.Desktop)}
+        >
+          Login with MetaMask
+        </button>
+        <button
+          type="button"
+          onClick={(e) => handleLogin(e, "walletConnect")}
+          className={clsx(dropdownStyles.Button, styles.Desktop)}
+        >
+          Login with WalletConnect
+        </button>
+      </Dropdown>
+      <a href="" onClick={(e) => handleLogin(e)} className={styles.Mobile}>
         Login with MetaMask
-      </button>
-      <button
-        onClick={() => handleLogin("walletConnect")}
-        className={dropdownStyles.Button}
+      </a>
+      <a
+        href=""
+        onClick={(e) => handleLogin(e, "walletConnect")}
+        className={styles.Mobile}
       >
         Login with WalletConnect
-      </button>
-    </Dropdown>
+      </a>
+    </>
   );
 };
 

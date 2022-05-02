@@ -64,10 +64,7 @@ const Header = () => {
           ) : (
             <>
               <Login />
-              <Link
-                to="/register"
-                className={clsx(styles.Register, "button cta-button")}
-              >
+              <Link to="/register" className={clsx(styles.Register)}>
                 Register
               </Link>
             </>

@@ -23,3 +23,15 @@
     color: var(--orange);
   }
 }
+
+.Desktop {
+  @media (max-width: 970px) {
+    display: none;
+  }
+}
+
+.Mobile {
+  @media (min-width: 970px) {
+    display: none;
+  }
+}

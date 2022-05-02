@@ -23,6 +23,7 @@ const WardenOptionLabel = ({ value, image }) => {
 
 const WardenField = ({
   name,
+  required,
   options,
   onChange,
   fieldState,
@@ -31,15 +32,17 @@ const WardenField = ({
 }) => {
   const handleChange = useCallback(
     (option) => {
-      if (!option) {
-        onChange({ target: { name, value: "" } });
-        return;
-      }
-      let value = option.value;
+      // @todo: pass the option object itself to the onChange handler
+      // and process the data in the consumer
+      const value = option && option.value ? option.value : "";
+      const target = {
+        name,
+        value: isMulti ? option.map((o) => o.value) : value,
+      };
       if (isMulti) {
-        value = option.map((o) => o.value);
+        target.members = option.members;
       }
-      onChange({ target: { name, value } });
+      onChange({ target });
     },
     [onChange, name, isMulti]
   );

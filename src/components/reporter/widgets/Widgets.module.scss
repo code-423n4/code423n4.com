@@ -61,7 +61,7 @@
 }
 
 .Placeholder {
-  color: rgba(255, 255, 255, 0.75);
+  color: rgba(255, 255, 255, 0.5);
 }
 
 .Control {
@@ -71,19 +71,39 @@
 }
 
 .Text {
-  height: 50px;
+  height: 40px;
   width: 100%;
   box-sizing: border-box;
 
   &::placeholder {
-    color: rgba(255, 255, 255, 0.75);
+    color: rgba(255, 255, 255, 0.5);
   }
 }
 
 .Select {
-  height: 50px;
+  height: 40px;
   width: 100%;
   cursor: pointer;
+}
+
+input[type="file"].Avatar::file-selector-button {
+  border: none;
+  border-radius: 5px;
+  display: inline-block;
+  font-size: 14px;
+  padding: 8px 16px;
+  width: auto;
+  font-family: "Roboto", sans-serif;
+  text-decoration: none;
+  margin: 0.25rem 0.5rem 0.25rem 0;
+  cursor: pointer;
+  background-color: transparent;
+  color: #fff;
+  box-shadow: inset 0px 0px 0px 2px #fff;
+
+  &:hover {
+    background-color: var(--main-purple);
+  }
 }
 
 .Textarea {

@@ -10,19 +10,36 @@ function isDangerous(s) {
   return s.match(/^[0-9a-zA-Z_\-]+$/) === null;
 }
 
+function getPrData(isUpdate, handle, members) {
+  let sentenceVerb = "Register";
+  let sentenceObject = "warden";
+
+  if (isUpdate) {
+    sentenceVerb = "Update";
+  }
+  if (members && members.length) {
+    sentenceObject = "team";
+  }
+
+  const title = `${sentenceVerb} ${sentenceObject} ${handle}`;
+  const body = `This auto-generated PR ${sentenceVerb.toLowerCase}s the ${sentenceObject} ${handle}`;
+  const branchName = `${sentenceObject}-${handle}`;
+  return { title, body, branchName };
+}
+
 exports.handler = async (event) => {
-  // only allow POST or PUT
+  // only allow POST
   try {
-    if (event.httpMethod !== "POST" && event.httpMethod !== "PUT") {
+    if (event.httpMethod !== "POST") {
       return {
         statusCode: 405,
         body: "Method not allowed",
-        headers: { Allow: ["POST", "PUT"] },
+        headers: { Allow: "POST" },
       };
     }
 
     const data = JSON.parse(event.body);
-    const { handle, image, link, moralisId, members } = data;
+    const { handle, image, link, moralisId, members, isUpdate } = data;
 
     // ensure we have the data we need
     if (!handle) {
@@ -80,7 +97,8 @@ exports.handler = async (event) => {
       };
     }
 
-    if (event.httpMethod === "PUT") {
+    // @todo: delete this once all existing users have completed registration
+    if (isUpdate) {
       try {
         const wardenFile = await octokit.request(
           "GET /repos/{owner}/{repo}/contents/{path}",
@@ -109,26 +127,14 @@ exports.handler = async (event) => {
       }
     }
 
-    let sentenceVerb = "Register";
-    let sentenceObject = "warden";
-
-    if (event.httpMethod === "PUT") {
-      sentenceVerb = "Update";
-    }
-    if (members && members.length) {
-      sentenceObject = "team";
-    }
-
-    const title = `${sentenceVerb} ${sentenceObject} ${handle}`;
-    const body = `This auto-generated PR ${sentenceVerb.toLowerCase}s the ${sentenceObject} ${handle}`;
-
+    const { title, body, branchName } = getPrData(isUpdate, handle, members);
     try {
       const res = await octokit.createPullRequest({
         owner: "code-423n4",
         repo: "code423n4.com",
         title,
         body,
-        head: `${sentenceObject}-${handle}`,
+        head: branchName,
         changes: [
           {
             files,

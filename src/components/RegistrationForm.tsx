@@ -10,10 +10,18 @@ import WardenField from "../components/reporter/widgets/WardenField";
 import * as styles from "../components/reporter/Form.module.scss";
 import * as widgetStyles from "../components/reporter/widgets/Widgets.module.scss";
 
-const initialState = {
+interface userState {
+  username: string;
+  discordUsername: string;
+  link?: string;
+  avatar?: File | null;
+}
+
+const initialState: userState = {
   username: "",
   discordUsername: "",
   link: "",
+  avatar: null,
 };
 
 enum FormStatus {
@@ -71,6 +79,29 @@ export default function RegistrationForm({
     });
   }, []);
 
+  const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    if (!e.target.files || e.target.files.length < 1) {
+      setState((prevState) => {
+        return { ...prevState, avatar: null };
+      });
+      return;
+    }
+    const file = e.target.files[0];
+    setState((prevState) => {
+      return { ...prevState, avatar: file };
+    });
+  };
+
+  const removeAvatar = (): void => {
+    if (!avatarInputRef || !avatarInputRef.current) {
+      return;
+    }
+    avatarInputRef.current.value = "";
+    setState((prevState) => {
+      return { ...prevState, avatar: null };
+    });
+  };
+
   const submitRegistration = useCallback(
     (provider: Moralis.Web3ProviderType = "metamask") => {
       const url = `/.netlify/functions/register-warden`;
@@ -90,12 +121,8 @@ export default function RegistrationForm({
 
         let image = undefined;
         try {
-          if (
-            avatarInputRef &&
-            avatarInputRef.current &&
-            avatarInputRef.current.files.length > 0
-          ) {
-            image = await getFileAsBase64(avatarInputRef.current?.files[0]);
+          if (state.avatar) {
+            image = await getFileAsBase64(state.avatar);
           }
           const user = await authenticate({ provider });
 
@@ -135,15 +162,18 @@ export default function RegistrationForm({
             moralisId: string;
             link?: string;
             image?: unknown;
+            isUpdate?: boolean;
           };
 
           if (isNewUser) {
             requestBody.link = state.link;
             requestBody.image = image;
+          } else {
+            requestBody.isUpdate = true;
           }
 
           const response = await fetch(url, {
-            method: isNewUser ? "POST" : "PUT",
+            method: "POST",
             headers: {
               "Content-Type": "application/json",
             },
@@ -346,13 +376,24 @@ export default function RegistrationForm({
               An avatar displayed next to your name on the leaderboard.
             </p>
             <input
-              className={widgetStyles.Control}
+              className={widgetStyles.Avatar}
               type="file"
               id="avatar"
               name="avatar"
               accept=".png,.jpg,.jpeg,.webp"
               ref={avatarInputRef}
+              onChange={handleAvatarChange}
             />
+            {state.avatar && (
+              <button
+                className="remove-line-button"
+                type="button"
+                onClick={removeAvatar}
+                aria-label="Remove avatar"
+              >
+                &#x2715;
+              </button>
+            )}
           </div>
         </>
       )}

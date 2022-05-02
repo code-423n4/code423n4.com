@@ -9,6 +9,7 @@ export default function Dropdown({
   openOnHover,
   triggerButton,
   children,
+  className,
 }) {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -16,7 +17,7 @@ export default function Dropdown({
     <div
       onMouseEnter={openOnHover ? () => setIsOpen(true) : null}
       onMouseLeave={openOnHover ? () => setIsOpen(false) : null}
-      className={clsx(styles.Wrapper, wrapperClass && wrapperClass)}
+      className={clsx(className, styles.Wrapper, wrapperClass && wrapperClass)}
     >
       <button
         onClick={() => setIsOpen(!isOpen)}

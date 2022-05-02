@@ -28,7 +28,7 @@
   :global {
     .react-select__control {
       background-color: var(--lightest-background-purple);
-      padding: 5px;
+      padding: 0;
       color: white;
       border: 2px solid transparent;
 
@@ -67,7 +67,7 @@
 
     .react-select__placeholder {
       color: white;
-      opacity: 0.75;
+      opacity: 0.5;
       font-size: 0.9em;
     }
 
