@@ -93,14 +93,6 @@ const DefaultLayout = (props) => {
         </title>
         <body className={bodyClass} />
       </Helmet>
-      {/* <div className="message-bar">
-        <p>
-          ✨ New!✨ &nbsp;C4 Cosmos league
-          <a href="https://medium.com/code-423n4/code4rena-comes-to-cosmos-29269f4d13d">
-            Read more »
-          </a>
-        </p>
-      </div> */}
       <Banner message={registrationAnnouncement} guestOnly={true} />
       <Header />
       <ToastContainer />
