@@ -43,6 +43,8 @@ const Widget = ({ field, fieldState, isInvalid, onChange }) => {
 
   const wardenFieldWidget = (
     <WardenField
+      name={name}
+      required={required}
       onChange={handleChange}
       options={options}
       fieldState={fieldState[name]}
