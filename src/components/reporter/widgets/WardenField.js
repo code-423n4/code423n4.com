@@ -41,7 +41,7 @@ const WardenField = ({
       }
       onChange({ target: { name, value } });
     },
-    [onChange, name]
+    [onChange, name, isMulti]
   );
 
   return (
