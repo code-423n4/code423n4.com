@@ -22,7 +22,7 @@ function getPrData(isUpdate, handle, members) {
   }
 
   const title = `${sentenceVerb} ${sentenceObject} ${handle}`;
-  const body = `This auto-generated PR ${sentenceVerb.toLowerCase}s the ${sentenceObject} ${handle}`;
+  const body = `This auto-generated PR ${sentenceVerb.toLowerCase()}s the ${sentenceObject} ${handle}`;
   const branchName = `${sentenceObject}-${handle}`;
   return { title, body, branchName };
 }
