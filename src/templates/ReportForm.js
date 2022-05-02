@@ -1,6 +1,7 @@
 import React from "react";
 import { graphql, Link } from "gatsby";
 
+import DefaultLayout from "./DefaultLayout";
 import Form from "../components/reporter/Form";
 
 const ReportForm = (props) => {
@@ -8,7 +9,7 @@ const ReportForm = (props) => {
   const hasContestEnded = Date.now() > new Date(endTime).getTime();
 
   return (
-    <main>
+    <DefaultLayout>
       {hasContestEnded ? (
         <div className="center">
           <h1>This contest has ended.</h1>
@@ -27,7 +28,7 @@ const ReportForm = (props) => {
           sponsor={props.data.contestsCsv.sponsor.name}
         />
       )}
-    </main>
+    </DefaultLayout>
   );
 };
 
