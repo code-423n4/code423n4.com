@@ -27,7 +27,7 @@ const WardenField = ({ name, required, options, onChange, fieldState, isInvalid,
       const value = option && option.value ? option.value : "";
       onChange({ target: { name, value: isMulti ? option.map((o) => o.value) : value } });
     },
-    [onChange, name]
+    [onChange, name, isMulti]
   );
 
   return (
