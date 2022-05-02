@@ -69,6 +69,7 @@ h1 {
 
 h2 {
   color: var(--text-headers);
+  font-family: "Roboto", sans-serif;
 }
 
 h2 code {
