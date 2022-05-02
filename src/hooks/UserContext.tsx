@@ -176,19 +176,27 @@ const UserProvider = ({ children }) => {
         }, []);
 
         useEffect(() => {
-          const getUser = async () => {
+          const logoutIfNotAuthenticated = async () => {
             if (!isAuthenticated) {
               setCurrentUser(DEFAULT_STATE);
               return;
             }
-            try {
-              await login();
-            } catch (error) {
-              console.error(error);
+          };
+          logoutIfNotAuthenticated();
+        }, [isAuthenticated, user]);
+
+        useEffect(() => {
+          const getUser = async () => {
+            if (isAuthenticated) {
+              try {
+                await login();
+              } catch (error) {
+                console.error(error);
+              }
             }
           };
           getUser();
-        }, [isAuthenticated, user]);
+        }, []);
 
         const userContext = useMemo(() => {
           return { currentUser, logUserOut, login };
