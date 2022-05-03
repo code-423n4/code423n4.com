@@ -166,8 +166,8 @@ ul {
 code {
   font-family: "Roboto Mono", monospace;
   color: var(--text-white);
-  background: var(--lightest-background-purple);
-  border: 1px solid var(--border-lightest-background);
+  /* background: var(--lightest-background-purple);
+  border: 1px solid var(--border-lightest-background); */
   padding: 1px 8px;
   margin: 1px;
   border-radius: 4px;

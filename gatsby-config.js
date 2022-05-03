@@ -87,6 +87,15 @@ module.exports = {
               },
             },
           },
+          {
+            resolve: `gatsby-remark-vscode`,
+            options: {
+              theme: 'Abyss',
+              languageAliases: {
+                solidity: 'js'
+              }
+            }
+          },
         ],
       },
     },
