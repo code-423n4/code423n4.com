@@ -84,7 +84,7 @@ _Submitted by WatchPug_
 
 <https://github.com/pooltogether/v4-periphery/blob/0e94c54774a6fce29daf9cb23353208f80de63eb/contracts/TwabRewards.sol#L88-L116>
 
-```solidity=88
+```solidity
 function createPromotion(
     address _ticket,
     IERC20 _token,
@@ -555,7 +555,7 @@ Call stack: `cancelPromotion()` -> `_getRemainingRewards()` -> `_getCurrentEpoch
 
 <https://github.com/pooltogether/v4-periphery/blob/0e94c54774a6fce29daf9cb23353208f80de63eb/contracts/TwabRewards.sol#L331-L336>
 
-```solidity=331
+```solidity
 function _getRemainingRewards(Promotion memory _promotion) internal view returns (uint256) {
     // _tokensPerEpoch * _numberOfEpochsLeft
     return
@@ -566,7 +566,7 @@ function _getRemainingRewards(Promotion memory _promotion) internal view returns
 
 <https://github.com/pooltogether/v4-periphery/blob/0e94c54774a6fce29daf9cb23353208f80de63eb/contracts/TwabRewards.sol#L276-L279>
 
-```solidity=276
+```solidity
 function _getCurrentEpochId(Promotion memory _promotion) internal view returns (uint256) {
     // elapsedTimestamp / epochDurationTimestamp
     return (block.timestamp - _promotion.startTimestamp) / _promotion.epochDuration;

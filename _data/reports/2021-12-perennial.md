@@ -296,7 +296,7 @@ _Submitted by WatchPug, also found by cmichel, defsec, and ye0lde_
 
 <https://github.com/code-423n4/2021-12-perennial/blob/fd7c38823833a51ae0c6ae3856a3d93a7309c0e4/protocol/contracts/oracle/ChainlinkOracle.sol#L50-L60>
 
-```solidity=50
+```solidity
 function sync() public {
     (, int256 feedPrice, , uint256 timestamp, ) = feed.latestRoundData();
     Fixed18 price = Fixed18Lib.ratio(feedPrice, SafeCast.toInt256(_decimalOffset));

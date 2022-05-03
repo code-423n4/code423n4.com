@@ -237,7 +237,7 @@ Burn 1 BASKET TOKEN will only get back 1 BTC and 1 ETH, which means, there are 1
 
 Change to:
 
-```solidity=
+```solidity
 function auctionBurn(uint256 amount) onlyAuction external override {
     handleFees();
     uint256 startSupply = totalSupply();
@@ -883,7 +883,7 @@ _Submitted by WatchPug_
 
 <https://github.com/code-423n4/2021-09-defiProtocol/blob/main/contracts/contracts/Basket.sol#L110-L129>
 
-```solidity=
+```solidity
 function handleFees() private {
     if (lastFee == 0) {
         lastFee = block.timestamp;
@@ -942,7 +942,7 @@ _Submitted by WatchPug_
 
 The `newRatio` that determines `tokensNeeded` to settle the auction is calculated based on `auctionMultiplier`, `bondTimestamp - auctionStart` and `auctionDecrement`.
 
-```solidity=
+```solidity
 uint256 a = factory.auctionMultiplier() * basket.ibRatio();
 uint256 b = (bondTimestamp - auctionStart) * BASE / factory.auctionDecrement();
 uint256 newRatio = a - b;
@@ -989,7 +989,7 @@ _Submitted by WatchPug_
 
 <https://github.com/code-423n4/2021-09-defiProtocol/blob/main/contracts/contracts/Auction.sol#L143>
 
-```solidity=140
+```solidity
 function withdrawBounty(uint256[] memory bountyIds) internal {
     // withdraw bounties
     for (uint256 i = 0; i < bountyIds.length; i++) {
@@ -1025,7 +1025,7 @@ An auction successfully bonded by a regular user won't be able to be settled if 
 
 Change to:
 
-```solidity=
+```solidity
 Bounty storage bounty = _bounties[bountyIds[i]];
 ```
 

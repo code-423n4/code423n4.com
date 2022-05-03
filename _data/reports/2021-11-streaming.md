@@ -95,7 +95,7 @@ _Submitted by WatchPug, also found by 0x0x0x, ScopeLift, gpersoon, harleythedog,
 
 <https://github.com/code-423n4/2021-11-streaming/blob/56d81204a00fc949d29ddd277169690318b36821/Streaming/src/Locke.sol#L654-L654>
 
-```solidity=654
+```solidity
 uint256 excess = ERC20(token).balanceOf(address(this)) - (depositTokenAmount - redeemedDepositTokens);
 ```
 
@@ -125,7 +125,7 @@ Given:
 
 Change to:
 
-```solidity=654
+```solidity
 uint256 excess = ERC20(token).balanceOf(address(this)) - (depositTokenAmount - redeemedDepositTokens) - depositTokenFlashloanFeeAmount;
 ```
 

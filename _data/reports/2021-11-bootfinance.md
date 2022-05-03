@@ -264,7 +264,7 @@ Consider adding `Swap.targetPrice` and changing the `_xp()` at L661 from:
 
 <https://github.com/code-423n4/2021-11-bootfinance/blob/f102ee73eb320532c5a7c1e833f225c479577e39/customswap/contracts/SwapUtils.sol#L661-L667>
 
-```solidity=661
+```solidity
 function _xp(Swap storage self, uint256[] memory balances)
     internal
     view
@@ -276,7 +276,7 @@ function _xp(Swap storage self, uint256[] memory balances)
 
 To:
 
-```solidity=661
+```solidity
 function _xp(Swap storage self, uint256[] memory balances)
     internal
     view

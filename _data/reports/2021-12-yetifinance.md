@@ -893,7 +893,7 @@ _Submitted by WatchPug_
 
 <https://github.com/code-423n4/2021-12-yetifinance/blob/5f5bf61209b722ba568623d8446111b1ea5cb61c/packages/contracts/contracts/TroveManagerLiquidations.sol#L409-L409>
 
-```solidity=409
+```solidity
     _updateWAssetsRewardOwner(collsToUpdate, _borrower, yetiFinanceTreasury);
 ```
 
@@ -901,7 +901,7 @@ In `_liquidateNormalMode()`, WAsset rewards for collToRedistribute will accrue t
 
 <https://github.com/code-423n4/2021-12-yetifinance/blob/5f5bf61209b722ba568623d8446111b1ea5cb61c/packages/contracts/contracts/AssetWrappers/WJLP/WJLP.sol#L126-L138>
 
-```solidity=126
+```solidity
 function wrap(uint _amount, address _from, address _to, address _rewardOwner) external override {
     JLP.transferFrom(_from, address(this), _amount);
     JLP.approve(address(_MasterChefJoe), _amount);

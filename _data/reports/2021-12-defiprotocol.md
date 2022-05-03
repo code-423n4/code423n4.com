@@ -421,7 +421,7 @@ _Submitted by WatchPug_
 
 [Auction.sol#L97-L102](https://github.com/code-423n4/2021-12-defiprotocol/blob/205d3766044171e325df6a8bf2e79b37856eece1/contracts/contracts/Auction.sol#L97-L102)
 
-```solidity=97
+```solidity
     uint256 a = factory.auctionMultiplier() * basket.ibRatio();
     uint256 b = (bondBlock - auctionStart) * BASE / factory.auctionDecrement();
     uint256 newRatio = a - b;
@@ -458,29 +458,29 @@ Given:
 
 Move the `minIbRatio` check to `bondForRebalance()`:
 
-```solidity=58
+```solidity
 function bondForRebalance() public override {
-        require(auctionOngoing);
-        require(!hasBonded);
+    require(auctionOngoing);
+    require(!hasBonded);
 
-        bondTimestamp = block.timestamp;
-        bondBlock = block.number;
+    bondTimestamp = block.timestamp;
+    bondBlock = block.number;
 
-        uint256 a = factory.auctionMultiplier() * basket.ibRatio();
-        uint256 b = (bondBlock - auctionStart) * BASE / factory.auctionDecrement();
-        uint256 newRatio = a - b;
+    uint256 a = factory.auctionMultiplier() * basket.ibRatio();
+    uint256 b = (bondBlock - auctionStart) * BASE / factory.auctionDecrement();
+    uint256 newRatio = a - b;
 
-        (address[] memory pendingTokens, uint256[] memory pendingWeights, uint256 minIbRatio) = basket.getPendingWeights();
-        require(newRatio >= minIbRatio);
+    (address[] memory pendingTokens, uint256[] memory pendingWeights, uint256 minIbRatio) = basket.getPendingWeights();
+    require(newRatio >= minIbRatio);
 
-        IERC20 basketToken = IERC20(address(basket));
-        bondAmount = basketToken.totalSupply() / factory.bondPercentDiv();
-        basketToken.safeTransferFrom(msg.sender, address(this), bondAmount);
-        hasBonded = true;
-        auctionBonder = msg.sender;
+    IERC20 basketToken = IERC20(address(basket));
+    bondAmount = basketToken.totalSupply() / factory.bondPercentDiv();
+    basketToken.safeTransferFrom(msg.sender, address(this), bondAmount);
+    hasBonded = true;
+    auctionBonder = msg.sender;
 
-        emit Bonded(msg.sender, bondAmount);
-    }
+    emit Bonded(msg.sender, bondAmount);
+}
 ```
 
 **[frank-beard (Kuiper) confirmed](https://github.com/code-423n4/2021-12-defiprotocol-findings/issues/106)**
