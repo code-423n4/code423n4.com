@@ -92,7 +92,7 @@ _Submitted by WatchPug_
 
 <https://github.com/code-423n4/2022-01-sandclock/blob/a90ad3824955327597be00bb0bd183a9c228a4fb/sandclock/contracts/Vault.sol#L390-L401>
 
-```solidity=390
+```solidity
 if (_force && sponsorAmount > totalUnderlying()) {
     sponsorToTransfer = totalUnderlying();
 } else if (!_force) {
