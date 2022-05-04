@@ -509,12 +509,13 @@ In some cases even 7.5% of fees.
 ### Proof of Concept
 
 Division in the midst of a calculation:
+```solidity
+uint256 feePct = timeDiff * licenseFee / ONE_YEAR;
+uint256 fee = startSupply * feePct / (BASE - feePct);
 
-    uint256 feePct = timeDiff * licenseFee / ONE_YEAR;
-    uint256 fee = startSupply * feePct / (BASE - feePct);
-
-    _mint(publisher, fee * (BASE - factory.ownerSplit()) / BASE);
-    _mint(Ownable(address(factory)).owner(), fee * factory.ownerSplit() / BASE);
+_mint(publisher, fee * (BASE - factory.ownerSplit()) / BASE);
+_mint(Ownable(address(factory)).owner(), fee * factory.ownerSplit() / BASE);
+```
 
 [Basket.sol#L140:#L145](https://github.com/code-423n4/2021-12-defiprotocol/blob/main/contracts/contracts/Basket.sol#L140:#L145)<br>
 It's a little hard to share a POC script as it involves changing the .sol file so I tested it manually. But after moving the division to the end using the mitigation below, I saw 1%-7% increases in fees minted. Usually 1%.
@@ -523,8 +524,9 @@ It's a little hard to share a POC script as it involves changing the .sol file s
 
 We want to firstly do all multiplication and lastly do all the division.
 So remove the usage of feePct and instead set fee to be:
-
-    uint256 fee = startSupply * licenseFee * timeDiff / ONE_YEAR / (BASE - licenseFee);
+```solidity
+uint256 fee = startSupply * licenseFee * timeDiff / ONE_YEAR / (BASE - licenseFee);
+```
 
 **[frank-beard (Kuiper) confirmed](https://github.com/code-423n4/2021-12-defiprotocol-findings/issues/60)**
 
@@ -599,11 +601,11 @@ Only divide by BASE.
 _Submitted by gzeon_
 
 The fee calculation
-
-                uint256 timeDiff = (block.timestamp - lastFee);
-                uint256 feePct = timeDiff * licenseFee / ONE_YEAR;
-                uint256 fee = startSupply * feePct / (BASE - feePct);
-
+```solidity
+uint256 timeDiff = (block.timestamp - lastFee);
+uint256 feePct = timeDiff * licenseFee / ONE_YEAR;
+uint256 fee = startSupply * feePct / (BASE - feePct);
+```
 tries to calculate a fee such that fee/(supply+fee) = %fee using a simple interest formula (i.e. no compounding), this lead to slightly less fee collected when fee are collected more frequently (small timeDiff) vs less frequently (big timeDiff).
 
 ### Proof of Concept

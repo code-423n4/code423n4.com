@@ -131,40 +131,41 @@ Rebasing amount is added to `effectiveYetiTokenBalance`, so it should be limited
 It looks like only extra tokens should be used for the check, i.e. `yetiToken.balance - effectiveYetiTokenBalance`.
 
 Now:
-
-    function rebase() external {
-    		...
-    		uint256 yetiTokenBalance = yetiToken.balanceOf(address(this));
-    		uint256 valueOfContract = _getValueOfContract(yetiTokenBalance);
-    		uint256 additionalYetiTokenBalance = ...
-    		if (yetiTokenBalance < additionalYetiTokenBalance) {
-    				additionalYetiTokenBalance = yetiTokenBalance;
-    		}
-    		effectiveYetiTokenBalance = effectiveYetiTokenBalance.add(additionalYetiTokenBalance);
-    ...
-    function _getValueOfContract(uint _yetiTokenBalance) internal view returns (uint256) {
-    		uint256 adjustedYetiTokenBalance = _yetiTokenBalance.sub(effectiveYetiTokenBalance);
-    		uint256 yusdTokenBalance = yusdToken.balanceOf(address(this));
-    		return div(lastBuybackPrice.mul(adjustedYetiTokenBalance), (1e18)).add(yusdTokenBalance);
+```solidity
+function rebase() external {
+        ...
+    uint256 yetiTokenBalance = yetiToken.balanceOf(address(this));
+    uint256 valueOfContract = _getValueOfContract(yetiTokenBalance);
+    uint256 additionalYetiTokenBalance = ...
+    if (yetiTokenBalance < additionalYetiTokenBalance) {
+            additionalYetiTokenBalance = yetiTokenBalance;
     }
-
+    effectiveYetiTokenBalance = effectiveYetiTokenBalance.add(additionalYetiTokenBalance);
+...
+function _getValueOfContract(uint _yetiTokenBalance) internal view returns (uint256) {
+    uint256 adjustedYetiTokenBalance = _yetiTokenBalance.sub(effectiveYetiTokenBalance);
+    uint256 yusdTokenBalance = yusdToken.balanceOf(address(this));
+    return div(lastBuybackPrice.mul(adjustedYetiTokenBalance), (1e18)).add(yusdTokenBalance);
+}
+```
 As the `_getValueOfContract` function isn't used elsewhere, the logic can be simplified.
 To be:
-
-    function rebase() external {
-    		...
-    		uint256 adjustedYetiTokenBalance = (yetiToken.balanceOf(address(this))).sub(effectiveYetiTokenBalance);
-    		uint256 valueOfContract = _getValueOfContract(adjustedYetiTokenBalance);
-    		uint256 additionalYetiTokenBalance = ...
-    		if (additionalYetiTokenBalance > adjustedYetiTokenBalance) {
-    				additionalYetiTokenBalance = adjustedYetiTokenBalance;
-    		}
-    		effectiveYetiTokenBalance = effectiveYetiTokenBalance.add(additionalYetiTokenBalance);
+```solidity
+function rebase() external {
     ...
-    function _getValueOfContract(uint _adjustedYetiTokenBalance) internal view returns (uint256) {
-    		uint256 yusdTokenBalance = yusdToken.balanceOf(address(this));
-    		return div(lastBuybackPrice.mul(_adjustedYetiTokenBalance), (1e18)).add(yusdTokenBalance);
+    uint256 adjustedYetiTokenBalance = (yetiToken.balanceOf(address(this))).sub(effectiveYetiTokenBalance);
+    uint256 valueOfContract = _getValueOfContract(adjustedYetiTokenBalance);
+    uint256 additionalYetiTokenBalance = ...
+    if (additionalYetiTokenBalance > adjustedYetiTokenBalance) {
+            additionalYetiTokenBalance = adjustedYetiTokenBalance;
     }
+    effectiveYetiTokenBalance = effectiveYetiTokenBalance.add(additionalYetiTokenBalance);
+...
+function _getValueOfContract(uint _adjustedYetiTokenBalance) internal view returns (uint256) {
+    uint256 yusdTokenBalance = yusdToken.balanceOf(address(this));
+    return div(lastBuybackPrice.mul(_adjustedYetiTokenBalance), (1e18)).add(yusdTokenBalance);
+}
+```
 
 **[kingyetifinance (Yeti finance) disagreed with severity and confirmed](https://github.com/code-423n4/2021-12-yetifinance-findings/issues/121):**
  > @LilYeti: 
@@ -239,26 +240,25 @@ Example Medium Issue : <https://github.com/code-423n4/2021-08-notional-findings/
 
 2.  Only the following checks are implemented.
 
-```
-        if (!_response.success) {return true;}
-        // Check for an invalid roundId that is 0
-        if (_response.roundId == 0) {return true;}
-        // Check for an invalid timeStamp that is 0, or in the future
-        if (_response.timestamp == 0 || _response.timestamp > block.timestamp) {return true;}
-        // Check for non-positive price
-        if (_response.answer <= 0) {return true;}
-
-
+```js
+    if (!_response.success) {return true;}
+    // Check for an invalid roundId that is 0
+    if (_response.roundId == 0) {return true;}
+    // Check for an invalid timeStamp that is 0, or in the future
+    if (_response.timestamp == 0 || _response.timestamp > block.timestamp) {return true;}
+    // Check for non-positive price
+    if (_response.answer <= 0) {return true;}
 ```
 
 #### Recommended Mitigation Steps
 
 Consider to add checks on the return data with proper revert messages if the price is stale or the round is incomplete, for example:
-
-    (uint80 roundID, int256 price, , uint256 timeStamp, uint80 answeredInRound) = ETH_CHAINLINK.latestRoundData();
-    require(price > 0, "Chainlink price <= 0"); 
-    require(answeredInRound >= roundID, "...");
-    require(timeStamp != 0, "...");
+```solidity
+(uint80 roundID, int256 price, , uint256 timeStamp, uint80 answeredInRound) = ETH_CHAINLINK.latestRoundData();
+require(price > 0, "Chainlink price <= 0"); 
+require(answeredInRound >= roundID, "...");
+require(timeStamp != 0, "...");
+```
 
 **[kingyetifinance (Yeti finance) confirmed](https://github.com/code-423n4/2021-12-yetifinance-findings/issues/91#issuecomment-1005398691):**
  > @LilYeti: 
@@ -281,43 +281,42 @@ Contract instability and financial loss. This will happen if one of the allowed 
 
 2.  Assume sendCollaterals function is called by one of allowed contract with a non whitelisted token and amount as 1
 
-<!---->
+```solidity
+function sendCollaterals(address _to, address[] memory _tokens, uint[] memory _amounts) external override returns (bool) {
+    _requireCallerIsBOorTroveMorTMLorSP();
+    require(_tokens.length == _amounts.length);
+    for (uint i = 0; i < _tokens.length; i++) {
+        _sendCollateral(_to, _tokens[i], _amounts[i]); // reverts if send fails
+    }
 
-    function sendCollaterals(address _to, address[] memory _tokens, uint[] memory _amounts) external override returns (bool) {
-            _requireCallerIsBOorTroveMorTMLorSP();
-            require(_tokens.length == _amounts.length);
-            for (uint i = 0; i < _tokens.length; i++) {
-                _sendCollateral(_to, _tokens[i], _amounts[i]); // reverts if send fails
-            }
-
-            if (_needsUpdateCollateral(_to)) {
-                ICollateralReceiver(_to).receiveCollateral(_tokens, _amounts);
-            }
-            
-            return true;
-        }
+    if (_needsUpdateCollateral(_to)) {
+        ICollateralReceiver(_to).receiveCollateral(_tokens, _amounts);
+    }
+    
+    return true;
+}
+```
 
 3.  This calls \_sendCollateral with our non whitelisted token and amount as 1
 
-<!---->
+```solidity
+function _sendCollateral(address _to, address _collateral, uint _amount) internal returns (bool) {
+    uint index = whitelist.getIndex(_collateral);
+    poolColl.amounts[index] = poolColl.amounts[index].sub(_amount);
+    bool sent = IERC20(_collateral).transfer(_to, _amount);
+    require(sent);
 
-    function _sendCollateral(address _to, address _collateral, uint _amount) internal returns (bool) {
-            uint index = whitelist.getIndex(_collateral);
-            poolColl.amounts[index] = poolColl.amounts[index].sub(_amount);
-            bool sent = IERC20(_collateral).transfer(_to, _amount);
-            require(sent);
-
-            emit ActivePoolBalanceUpdated(_collateral, _amount);
-            emit CollateralSent(_collateral, _to, _amount);
-        }
-
+    emit ActivePoolBalanceUpdated(_collateral, _amount);
+    emit CollateralSent(_collateral, _to, _amount);
+}
+```
 4.  whitelist.getIndex(\_collateral); will return 0 as our collateral is not whitelisted and will not be present in whitelist.getIndex(\_collateral);. This means index will point to whitelisted collateral at index 0
 
 5.  poolColl.amounts\[index] will get updated for whitelisted collateral at index 0 even though this collateral was never meant to be updated
 
-<!---->
-
-    poolColl.amounts[index] = poolColl.amounts[index].sub(_amount);
+```solidity
+poolColl.amounts[index] = poolColl.amounts[index].sub(_amount);
+```
 
 6.  Finally our non supported token gets transferred to recipient and since \_needsUpdateCollateral is true so recipient poolColl.amounts gets increased even though recipient never received the whitelisted collateral
 
@@ -894,7 +893,7 @@ _Submitted by WatchPug_
 <https://github.com/code-423n4/2021-12-yetifinance/blob/5f5bf61209b722ba568623d8446111b1ea5cb61c/packages/contracts/contracts/TroveManagerLiquidations.sol#L409-L409>
 
 ```solidity
-    _updateWAssetsRewardOwner(collsToUpdate, _borrower, yetiFinanceTreasury);
+_updateWAssetsRewardOwner(collsToUpdate, _borrower, yetiFinanceTreasury);
 ```
 
 In `_liquidateNormalMode()`, WAsset rewards for collToRedistribute will accrue to Yeti Finance Treasury, However, if a borrower wrap `WJLP` and set `_rewardOwner` to other address, `_updateWAssetsRewardOwner()` will fail due to failure of `IWAsset(token).updateReward()`.

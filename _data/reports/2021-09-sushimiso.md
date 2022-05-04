@@ -227,7 +227,7 @@ Also the revenues for the last token cannot be retrieved as `finalize()` cannot 
 
 <https://github.com/sushiswap/miso/blob/master/contracts/Auctions/Crowdsale.sol#L374>
 
-```JS
+```js
  function finalize() public nonReentrant {
         require(hasAdminRole(msg.sender) || wallet == msg.sender || hasSmartContractRole(msg.sender) || finalizeTimeExpired(),"Crowdsale: sender must be an admin"); // can be called by admin
         MarketStatus storage status = marketStatus;
