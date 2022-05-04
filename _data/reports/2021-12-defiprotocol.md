@@ -421,7 +421,7 @@ _Submitted by WatchPug_
 
 [Auction.sol#L97-L102](https://github.com/code-423n4/2021-12-defiprotocol/blob/205d3766044171e325df6a8bf2e79b37856eece1/contracts/contracts/Auction.sol#L97-L102)
 
-```solidity=97
+```solidity
     uint256 a = factory.auctionMultiplier() * basket.ibRatio();
     uint256 b = (bondBlock - auctionStart) * BASE / factory.auctionDecrement();
     uint256 newRatio = a - b;
@@ -458,29 +458,29 @@ Given:
 
 Move the `minIbRatio` check to `bondForRebalance()`:
 
-```solidity=58
+```solidity
 function bondForRebalance() public override {
-        require(auctionOngoing);
-        require(!hasBonded);
+    require(auctionOngoing);
+    require(!hasBonded);
 
-        bondTimestamp = block.timestamp;
-        bondBlock = block.number;
+    bondTimestamp = block.timestamp;
+    bondBlock = block.number;
 
-        uint256 a = factory.auctionMultiplier() * basket.ibRatio();
-        uint256 b = (bondBlock - auctionStart) * BASE / factory.auctionDecrement();
-        uint256 newRatio = a - b;
+    uint256 a = factory.auctionMultiplier() * basket.ibRatio();
+    uint256 b = (bondBlock - auctionStart) * BASE / factory.auctionDecrement();
+    uint256 newRatio = a - b;
 
-        (address[] memory pendingTokens, uint256[] memory pendingWeights, uint256 minIbRatio) = basket.getPendingWeights();
-        require(newRatio >= minIbRatio);
+    (address[] memory pendingTokens, uint256[] memory pendingWeights, uint256 minIbRatio) = basket.getPendingWeights();
+    require(newRatio >= minIbRatio);
 
-        IERC20 basketToken = IERC20(address(basket));
-        bondAmount = basketToken.totalSupply() / factory.bondPercentDiv();
-        basketToken.safeTransferFrom(msg.sender, address(this), bondAmount);
-        hasBonded = true;
-        auctionBonder = msg.sender;
+    IERC20 basketToken = IERC20(address(basket));
+    bondAmount = basketToken.totalSupply() / factory.bondPercentDiv();
+    basketToken.safeTransferFrom(msg.sender, address(this), bondAmount);
+    hasBonded = true;
+    auctionBonder = msg.sender;
 
-        emit Bonded(msg.sender, bondAmount);
-    }
+    emit Bonded(msg.sender, bondAmount);
+}
 ```
 
 **[frank-beard (Kuiper) confirmed](https://github.com/code-423n4/2021-12-defiprotocol-findings/issues/106)**
@@ -509,12 +509,13 @@ In some cases even 7.5% of fees.
 ### Proof of Concept
 
 Division in the midst of a calculation:
+```solidity
+uint256 feePct = timeDiff * licenseFee / ONE_YEAR;
+uint256 fee = startSupply * feePct / (BASE - feePct);
 
-    uint256 feePct = timeDiff * licenseFee / ONE_YEAR;
-    uint256 fee = startSupply * feePct / (BASE - feePct);
-
-    _mint(publisher, fee * (BASE - factory.ownerSplit()) / BASE);
-    _mint(Ownable(address(factory)).owner(), fee * factory.ownerSplit() / BASE);
+_mint(publisher, fee * (BASE - factory.ownerSplit()) / BASE);
+_mint(Ownable(address(factory)).owner(), fee * factory.ownerSplit() / BASE);
+```
 
 [Basket.sol#L140:#L145](https://github.com/code-423n4/2021-12-defiprotocol/blob/main/contracts/contracts/Basket.sol#L140:#L145)<br>
 It's a little hard to share a POC script as it involves changing the .sol file so I tested it manually. But after moving the division to the end using the mitigation below, I saw 1%-7% increases in fees minted. Usually 1%.
@@ -523,8 +524,9 @@ It's a little hard to share a POC script as it involves changing the .sol file s
 
 We want to firstly do all multiplication and lastly do all the division.
 So remove the usage of feePct and instead set fee to be:
-
-    uint256 fee = startSupply * licenseFee * timeDiff / ONE_YEAR / (BASE - licenseFee);
+```solidity
+uint256 fee = startSupply * licenseFee * timeDiff / ONE_YEAR / (BASE - licenseFee);
+```
 
 **[frank-beard (Kuiper) confirmed](https://github.com/code-423n4/2021-12-defiprotocol-findings/issues/60)**
 
@@ -599,11 +601,11 @@ Only divide by BASE.
 _Submitted by gzeon_
 
 The fee calculation
-
-                uint256 timeDiff = (block.timestamp - lastFee);
-                uint256 feePct = timeDiff * licenseFee / ONE_YEAR;
-                uint256 fee = startSupply * feePct / (BASE - feePct);
-
+```solidity
+uint256 timeDiff = (block.timestamp - lastFee);
+uint256 feePct = timeDiff * licenseFee / ONE_YEAR;
+uint256 fee = startSupply * feePct / (BASE - feePct);
+```
 tries to calculate a fee such that fee/(supply+fee) = %fee using a simple interest formula (i.e. no compounding), this lead to slightly less fee collected when fee are collected more frequently (small timeDiff) vs less frequently (big timeDiff).
 
 ### Proof of Concept

@@ -135,45 +135,47 @@ function mint(uint256 shares, address to) public virtual returns (uint256 amount
 _Submitted by cccz, also found by CertoraInc and WatchPug_
 
 The TurboRouter contract inherits from the ERC4626RouterBase contract. When the user calls the deposit, mint, createSafeAndDeposit and createSafeAndDepositAndBoost functions of the TurboRouter contract, the deposit and mint functions of the ERC4626RouterBase contract are called.
-
-        function deposit(IERC4626 safe, address to, uint256 amount, uint256 minSharesOut) 
-            public 
-            payable 
-            override 
-            authenticate(address(safe)) 
-            returns (uint256) 
-        {
-            return super.deposit(safe, to, amount, minSharesOut);
-        }
-    ...
-        function deposit(
-            IERC4626 vault, 
-            address to,
-            uint256 amount,
-            uint256 minSharesOut
-        ) public payable virtual override returns (uint256 sharesOut) {
-            if ((sharesOut = vault.deposit(amount, to)) < minSharesOut) {
-                revert MinAmountError();
-            }
-        }
+```solidity
+function deposit(IERC4626 safe, address to, uint256 amount, uint256 minSharesOut) 
+    public 
+    payable 
+    override 
+    authenticate(address(safe)) 
+    returns (uint256) 
+{
+    return super.deposit(safe, to, amount, minSharesOut);
+}
+...
+function deposit(
+    IERC4626 vault, 
+    address to,
+    uint256 amount,
+    uint256 minSharesOut
+) public payable virtual override returns (uint256 sharesOut) {
+    if ((sharesOut = vault.deposit(amount, to)) < minSharesOut) {
+        revert MinAmountError();
+    }
+}
+```
 
 The deposit and mint functions of the ERC4626RouterBase contract will call the deposit and mint functions of the TurboSafe contract. The TurboSafe contract inherits from the ERC4626 contract, that is, the deposit and mint functions of the ERC4626 contract will be called.
 
 The deposit and mint functions of the ERC4626 contract will call the safeTransferFrom function. Since the caller is the TurboRouter contract, msg.sender will be the TurboRouter contract. And because the user calls the deposit, mint, createSafeAndDeposit, and createSafeAndDepositAndBoost functions of the TurboRouter contract without transferring tokens to the TurboRouter contract and approving the TurboSafe contract to use the tokens, the call will fail.
+```solidity
+function deposit(uint256 amount, address to) public virtual returns (uint256 shares) {
+    // Check for rounding error since we round down in previewDeposit.
+    require((shares = previewDeposit(amount)) != 0, "ZERO_SHARES");
 
-        function deposit(uint256 amount, address to) public virtual returns (uint256 shares) {
-            // Check for rounding error since we round down in previewDeposit.
-            require((shares = previewDeposit(amount)) != 0, "ZERO_SHARES");
+    // Need to transfer before minting or ERC777s could reenter.
+    asset.safeTransferFrom(msg.sender, address(this), amount);
 
-            // Need to transfer before minting or ERC777s could reenter.
-            asset.safeTransferFrom(msg.sender, address(this), amount);
+    _mint(to, shares);
 
-            _mint(to, shares);
+    emit Deposit(msg.sender, to, amount, shares);
 
-            emit Deposit(msg.sender, to, amount, shares);
-
-            afterDeposit(amount, shares);
-        }
+    afterDeposit(amount, shares);
+}
+```
 
 ### Proof of Concept
 
@@ -185,16 +187,17 @@ In the deposit, mint, createSafeAndDeposit, and createSafeAndDepositAndBoost fun
 For example:
 
 TurboRouter.sol
+```solidity
++        IERC20(safe.asset).safeTransferFrom(msg.sender,address(this),amount);
++        IERC20(safe.asset).safeApprove(safe,amount);
+    super.deposit(IERC4626(address(safe)), to, amount, minSharesOut);
 
-    +        IERC20(safe.asset).safeTransferFrom(msg.sender,address(this),amount);
-    +        IERC20(safe.asset).safeApprove(safe,amount);
-              super.deposit(IERC4626(address(safe)), to, amount, minSharesOut);
+...
 
-    ...
-
-    +        IERC20(safe.asset).safeTransferFrom(msg.sender,address(this),amount);
-    +        IERC20(safe.asset).safeApprove(safe,amount);
-              super.mint(safe, to, shares, maxAmountIn);
++        IERC20(safe.asset).safeTransferFrom(msg.sender,address(this),amount);
++        IERC20(safe.asset).safeApprove(safe,amount);
+    super.mint(safe, to, shares, maxAmountIn);
+```
 
 **[Joeysantoro (Tribe Turbo) disputed and commented](https://github.com/code-423n4/2022-02-tribe-turbo-findings/issues/16#issuecomment-1050172199):**
  > Router uses Multicall and PeripheryPayments which can be combined to achieve the desired behaviors.
@@ -206,7 +209,7 @@ TurboRouter.sol
 > 
 > However for the functions that deploy a new safe, am not quite sure where the approval happens, see `createSafeAndDeposit` below:
 > 
-> ```
+> ```solidity
 >     function createSafeAndDeposit(ERC20 underlying, address to, uint256 amount, uint256 minSharesOut) external {
 >         (TurboSafe safe, ) = master.createSafe(underlying);
 > 
@@ -548,16 +551,17 @@ Although Gibber is supposed to behind governance timelock, there are still signi
 ### Proof of Concept
 
 [TurboSafe.sol#L335](https://github.com/code-423n4/2022-02-tribe-turbo/blob/66f27fe51083f49f7935e3fe594ab2380b75dee8/src/TurboSafe.sol#L335)<br>
+```solidity
+function gib(address to, uint256 assetAmount) external nonReentrant requiresLocalOrMasterAuth {
+    emit SafeGibbed(msg.sender, to, assetAmount);
 
-    function gib(address to, uint256 assetAmount) external nonReentrant requiresLocalOrMasterAuth {
-            emit SafeGibbed(msg.sender, to, assetAmount);
+    // Withdraw the specified amount of assets from the Turbo Fuse Pool.
+    require(assetTurboCToken.redeemUnderlying(assetAmount) == 0, "REDEEM_FAILED");
 
-            // Withdraw the specified amount of assets from the Turbo Fuse Pool.
-            require(assetTurboCToken.redeemUnderlying(assetAmount) == 0, "REDEEM_FAILED");
-
-            // Transfer the assets to the authorized caller.
-            asset.safeTransfer(to, assetAmount);
-        }
+    // Transfer the assets to the authorized caller.
+    asset.safeTransfer(to, assetAmount);
+}
+```
 
 ### Recommended Mitigation Steps
 
@@ -598,14 +602,15 @@ _The following wardens also submitted reports: [nascent](https://github.com/code
 4.  In case if it is required to lower the boost cap then slurpAndLess function at TurboRouter.sol#L130 must be called to withdraw excess cap amount
 
 ### Recommendation:
+```solidity
+function setBoostCapForVault(ERC4626 vault, uint256 newBoostCap) external requiresAuth {
+require(newBoostCap>getBoostCapForVault[vault], "Invalid boost");
+    // Update the boost cap for the Vault.
+    getBoostCapForVault[vault] = newBoostCap;
 
-    function setBoostCapForVault(ERC4626 vault, uint256 newBoostCap) external requiresAuth {
-    require(newBoostCap>getBoostCapForVault[vault], "Invalid boost");
-            // Update the boost cap for the Vault.
-            getBoostCapForVault[vault] = newBoostCap;
-
-            emit BoostCapUpdatedForVault(msg.sender, vault, newBoostCap);
-        }
+    emit BoostCapUpdatedForVault(msg.sender, vault, newBoostCap);
+}
+```
 
 ## [L-02] More funds extracted than required - Lose Interest
 

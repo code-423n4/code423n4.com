@@ -316,16 +316,16 @@ If everybody burns their shares, in the next mint, `totalSupply` will be 0, `han
 Vulnerable line:
 <https://github.com/code-423n4/2021-09-defiProtocol/blob/52b74824c42acbcd64248f68c40128fe3a82caf6/contracts/contracts/Basket.sol#L124>
 You can add the following test to Basket.test.js and see that it reverts (..after you remove "nonReentrant" from "mint", see other issue):
-`it("should divide by 0", async () => {
+```js
+it("should divide by 0", async () => {
 await basket.connect(addr1).burn(await basket.balanceOf(addr1.address));
-await basket.connect(addr2).burn(await basket.balanceOf(addr2.address));`
-
-    await UNI.connect(addr1).approve(basket.address, ethers.BigNumber.from(1));
-    await COMP.connect(addr1).approve(basket.address, ethers.BigNumber.from(1));
-    await AAVE.connect(addr1).approve(basket.address, ethers.BigNumber.from(1));
-    await basket.connect(addr1).mint(ethers.BigNumber.from(1));
-
+await basket.connect(addr2).burn(await basket.balanceOf(addr2.address));
+await UNI.connect(addr1).approve(basket.address, ethers.BigNumber.from(1));
+await COMP.connect(addr1).approve(basket.address, ethers.BigNumber.from(1));
+await AAVE.connect(addr1).approve(basket.address, ethers.BigNumber.from(1));
+await basket.connect(addr1).mint(ethers.BigNumber.from(1));
 });
+```
 
 #### Tools Used
 
@@ -365,19 +365,18 @@ If for some reason nobody has bonded and settled an auction and the publisher di
 These are the vulnerable lines:
 <https://github.com/code-423n4/2021-10-defiprotocol/blob/main/contracts/contracts/Auction.sol#L95:#L105>
 
-```
-        uint256 a = factory.auctionMultiplier() * basket.ibRatio();
-        uint256 b = (bondBlock - auctionStart) * BASE / factory.auctionDecrement();
-        uint256 newRatio = a - b;
+```solidity
+uint256 a = factory.auctionMultiplier() * basket.ibRatio();
+uint256 b = (bondBlock - auctionStart) * BASE / factory.auctionDecrement();
+uint256 newRatio = a - b;
 
-        (address[] memory pendingTokens, uint256[] memory pendingWeights) = basket.getPendingWeights();
-        IERC20 basketAsERC20 = IERC20(address(basket));
+(address[] memory pendingTokens, uint256[] memory pendingWeights) = basket.getPendingWeights();
+IERC20 basketAsERC20 = IERC20(address(basket));
 
-        for (uint256 i = 0; i < pendingWeights.length; i++) {
-            uint256 tokensNeeded = basketAsERC20.totalSupply() * pendingWeights[i] * newRatio / BASE / BASE;
-            require(IERC20(pendingTokens[i]).balanceOf(address(basket)) >= tokensNeeded);
-        }
-
+for (uint256 i = 0; i < pendingWeights.length; i++) {
+    uint256 tokensNeeded = basketAsERC20.totalSupply() * pendingWeights[i] * newRatio / BASE / BASE;
+    require(IERC20(pendingTokens[i]).balanceOf(address(basket)) >= tokensNeeded);
+}
 ```
 
 The function verifies that `pendingTokens[i].balanceOf(basket) >= basketAsERC20.totalSupply() * pendingWeights[i] * newRatio / BASE / BASE`. This is the formula that will be used later to mint/burn/withdraw user funds.
@@ -391,8 +390,9 @@ Manual analysis, hardhat.
 #### Recommended Mitigation Steps
 
 Your needed condition/math might be different, and you might also choose to burn the bond while you're at it, but I think at the minimum you should add a sanity check in `settleAuction`:
-
-    require (newRatio > basket.ibRatio());
+```solidity
+require (newRatio > basket.ibRatio());
+```
 
 Maybe you would require `newRatio` to be > BASE but not sure.
 

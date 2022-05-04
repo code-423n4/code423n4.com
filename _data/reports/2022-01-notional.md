@@ -193,49 +193,50 @@ However, `_validateOrder` does not validate that `takerFee` and `makerFee` are s
 <https://github.com/0xProject/0x-monorepo/blob/0571244e9e84b9ad778bccb99b837dd6f9baaf6e/contracts/exchange-libs/contracts/src/LibFillResults.sol#L59-L91>
 
 <https://github.com/code-423n4/2022-01-notional/blob/main/contracts/utils/EIP1271Wallet.sol#L147-L188>
+```solidity
+function _validateOrder(bytes memory order) private view {
+    (
+        address makerToken,
+        address takerToken,
+        address feeRecipient,
+        uint256 makerAmount,
+        uint256 takerAmount
+    ) = _extractOrderInfo(order);
 
-    function _validateOrder(bytes memory order) private view {
-        (
-            address makerToken,
-            address takerToken,
-            address feeRecipient,
-            uint256 makerAmount,
-            uint256 takerAmount
-        ) = _extractOrderInfo(order);
+    // No fee recipient allowed
+    require(feeRecipient == address(0), "no fee recipient allowed");
 
-        // No fee recipient allowed
-        require(feeRecipient == address(0), "no fee recipient allowed");
+    // MakerToken should never be WETH
+    require(makerToken != address(WETH), "maker token must not be WETH");
 
-        // MakerToken should never be WETH
-        require(makerToken != address(WETH), "maker token must not be WETH");
+    // TakerToken (proceeds) should always be WETH
+    require(takerToken == address(WETH), "taker token must be WETH");
 
-        // TakerToken (proceeds) should always be WETH
-        require(takerToken == address(WETH), "taker token must be WETH");
+    address priceOracle = priceOracles[makerToken];
 
-        address priceOracle = priceOracles[makerToken];
+    // Price oracle not defined
+    require(priceOracle != address(0), "price oracle not defined");
 
-        // Price oracle not defined
-        require(priceOracle != address(0), "price oracle not defined");
+    uint256 slippageLimit = slippageLimits[makerToken];
 
-        uint256 slippageLimit = slippageLimits[makerToken];
+    // Slippage limit not defined
+    require(slippageLimit != 0, "slippage limit not defined");
 
-        // Slippage limit not defined
-        require(slippageLimit != 0, "slippage limit not defined");
+    uint256 oraclePrice = _toUint(
+        AggregatorV2V3Interface(priceOracle).latestAnswer()
+    );
 
-        uint256 oraclePrice = _toUint(
-            AggregatorV2V3Interface(priceOracle).latestAnswer()
-        );
+    uint256 priceFloor = (oraclePrice * slippageLimit) /
+        SLIPPAGE_LIMIT_PRECISION;
 
-        uint256 priceFloor = (oraclePrice * slippageLimit) /
-            SLIPPAGE_LIMIT_PRECISION;
+    uint256 makerDecimals = 10**ERC20(makerToken).decimals();
 
-        uint256 makerDecimals = 10**ERC20(makerToken).decimals();
+    // makerPrice = takerAmount / makerAmount
+    uint256 makerPrice = (takerAmount * makerDecimals) / makerAmount;
 
-        // makerPrice = takerAmount / makerAmount
-        uint256 makerPrice = (takerAmount * makerDecimals) / makerAmount;
-
-        require(makerPrice >= priceFloor, "slippage is too high");
-    }
+    require(makerPrice >= priceFloor, "slippage is too high");
+}
+```
 
 #### Recommended Mitigation Steps
 
@@ -387,37 +388,38 @@ Hence, the protocol may be put into a state where stakers are unwilling to vote 
 #### Proof of Concept
 
 <https://github.com/code-423n4/2022-01-notional/blob/main/contracts/sNOTE.sol#L99-L129>
+```solidity
+function extractTokensForCollateralShortfall(uint256 requestedWithdraw) external nonReentrant onlyOwner {
+    uint256 bptBalance = BALANCER_POOL_TOKEN.balanceOf(address(this));
+    uint256 maxBPTWithdraw = (bptBalance * MAX_SHORTFALL_WITHDRAW) / 100;
+    // Do not allow a withdraw of more than the MAX_SHORTFALL_WITHDRAW percentage. Specifically don't
+    // revert here since there may be a delay between when governance issues the token amount and when
+    // the withdraw actually occurs.
+    uint256 bptExitAmount = requestedWithdraw > maxBPTWithdraw ? maxBPTWithdraw : requestedWithdraw;
 
-    function extractTokensForCollateralShortfall(uint256 requestedWithdraw) external nonReentrant onlyOwner {
-        uint256 bptBalance = BALANCER_POOL_TOKEN.balanceOf(address(this));
-        uint256 maxBPTWithdraw = (bptBalance * MAX_SHORTFALL_WITHDRAW) / 100;
-        // Do not allow a withdraw of more than the MAX_SHORTFALL_WITHDRAW percentage. Specifically don't
-        // revert here since there may be a delay between when governance issues the token amount and when
-        // the withdraw actually occurs.
-        uint256 bptExitAmount = requestedWithdraw > maxBPTWithdraw ? maxBPTWithdraw : requestedWithdraw;
+    IAsset[] memory assets = new IAsset[](2);
+    assets[0] = IAsset(address(WETH));
+    assets[1] = IAsset(address(NOTE));
+    uint256[] memory minAmountsOut = new uint256[](2);
+    minAmountsOut[0] = 0;
+    minAmountsOut[1] = 0;
 
-        IAsset[] memory assets = new IAsset[](2);
-        assets[0] = IAsset(address(WETH));
-        assets[1] = IAsset(address(NOTE));
-        uint256[] memory minAmountsOut = new uint256[](2);
-        minAmountsOut[0] = 0;
-        minAmountsOut[1] = 0;
-
-        BALANCER_VAULT.exitPool(
-            NOTE_ETH_POOL_ID,
-            address(this),
-            payable(owner), // Owner will receive the NOTE and WETH
-            IVault.ExitPoolRequest(
-                assets,
-                minAmountsOut,
-                abi.encode(
-                    IVault.ExitKind.EXACT_BPT_IN_FOR_TOKENS_OUT,
-                    bptExitAmount
-                ),
-                false // Don't use internal balances
-            )
-        );
-    }
+    BALANCER_VAULT.exitPool(
+        NOTE_ETH_POOL_ID,
+        address(this),
+        payable(owner), // Owner will receive the NOTE and WETH
+        IVault.ExitPoolRequest(
+            assets,
+            minAmountsOut,
+            abi.encode(
+                IVault.ExitKind.EXACT_BPT_IN_FOR_TOKENS_OUT,
+                bptExitAmount
+            ),
+            false // Don't use internal balances
+        )
+    );
+}
+```
 
 #### Recommended Mitigation Steps
 
@@ -443,30 +445,31 @@ As `NOTE` continues to be staked in the `sNOTE` contract, it is important that N
 #### Proof of Concept
 
 <https://github.com/code-423n4/2022-01-notional/blob/main/contracts/sNOTE.sol#L271-L293>
+```solidity
+function getVotingPower(uint256 sNOTEAmount) public view returns (uint256) {
+    // Gets the BPT token price (in ETH)
+    uint256 bptPrice = IPriceOracle(address(BALANCER_POOL_TOKEN)).getLatest(IPriceOracle.Variable.BPT_PRICE);
+    // Gets the NOTE token price (in ETH)
+    uint256 notePrice = IPriceOracle(address(BALANCER_POOL_TOKEN)).getLatest(IPriceOracle.Variable.PAIR_PRICE);
+    
+    // Since both bptPrice and notePrice are denominated in ETH, we can use
+    // this formula to calculate noteAmount
+    // bptBalance * bptPrice = notePrice * noteAmount
+    // noteAmount = bptPrice/notePrice * bptBalance
+    uint256 priceRatio = bptPrice * 1e18 / notePrice;
+    uint256 bptBalance = BALANCER_POOL_TOKEN.balanceOf(address(this));
 
-    function getVotingPower(uint256 sNOTEAmount) public view returns (uint256) {
-        // Gets the BPT token price (in ETH)
-        uint256 bptPrice = IPriceOracle(address(BALANCER_POOL_TOKEN)).getLatest(IPriceOracle.Variable.BPT_PRICE);
-        // Gets the NOTE token price (in ETH)
-        uint256 notePrice = IPriceOracle(address(BALANCER_POOL_TOKEN)).getLatest(IPriceOracle.Variable.PAIR_PRICE);
-        
-        // Since both bptPrice and notePrice are denominated in ETH, we can use
-        // this formula to calculate noteAmount
-        // bptBalance * bptPrice = notePrice * noteAmount
-        // noteAmount = bptPrice/notePrice * bptBalance
-        uint256 priceRatio = bptPrice * 1e18 / notePrice;
-        uint256 bptBalance = BALANCER_POOL_TOKEN.balanceOf(address(this));
+    // Amount_note = Price_NOTE_per_BPT * BPT_supply * 80% (80/20 pool)
+    uint256 noteAmount = priceRatio * bptBalance * 80 / 100;
 
-        // Amount_note = Price_NOTE_per_BPT * BPT_supply * 80% (80/20 pool)
-        uint256 noteAmount = priceRatio * bptBalance * 80 / 100;
+    // Reduce precision down to 1e8 (NOTE token)
+    // priceRatio and bptBalance are both 1e18 (1e36 total)
+    // we divide by 1e28 to get to 1e8
+    noteAmount /= 1e28;
 
-        // Reduce precision down to 1e8 (NOTE token)
-        // priceRatio and bptBalance are both 1e18 (1e36 total)
-        // we divide by 1e28 to get to 1e8
-        noteAmount /= 1e28;
-
-        return (noteAmount * sNOTEAmount) / totalSupply();
-    }
+    return (noteAmount * sNOTEAmount) / totalSupply();
+}
+```
 
 #### Recommended Mitigation Steps
 
@@ -492,57 +495,59 @@ By setting `takerAddress` to the zero address, any user can be the taker of an o
 #### Proof of Concept
 
 <https://github.com/0xProject/0x-monorepo/blob/0571244e9e84b9ad778bccb99b837dd6f9baaf6e/contracts/exchange-libs/contracts/src/LibOrder.sol#L66>
-
-    address takerAddress;   // Address that is allowed to fill the order. If set to 0, any address is allowed to fill the order.
+```solidity
+address takerAddress;   // Address that is allowed to fill the order. If set to 0, any address is allowed to fill the order.
+```
 
 <https://github.com/0xProject/0x-monorepo/blob/0571244e9e84b9ad778bccb99b837dd6f9baaf6e/contracts/exchange/contracts/src/MixinExchangeCore.sol#L196-L250>
 
 <https://github.com/0xProject/0x-monorepo/blob/0571244e9e84b9ad778bccb99b837dd6f9baaf6e/contracts/exchange/contracts/src/MixinExchangeCore.sol#L354-L374>
 
 <https://github.com/code-423n4/2022-01-notional/blob/main/contracts/utils/EIP1271Wallet.sol#L147-L188>
+```solidity
+function _validateOrder(bytes memory order) private view {
+    (
+        address makerToken,
+        address takerToken,
+        address feeRecipient,
+        uint256 makerAmount,
+        uint256 takerAmount
+    ) = _extractOrderInfo(order);
 
-    function _validateOrder(bytes memory order) private view {
-        (
-            address makerToken,
-            address takerToken,
-            address feeRecipient,
-            uint256 makerAmount,
-            uint256 takerAmount
-        ) = _extractOrderInfo(order);
+    // No fee recipient allowed
+    require(feeRecipient == address(0), "no fee recipient allowed");
 
-        // No fee recipient allowed
-        require(feeRecipient == address(0), "no fee recipient allowed");
+    // MakerToken should never be WETH
+    require(makerToken != address(WETH), "maker token must not be WETH");
 
-        // MakerToken should never be WETH
-        require(makerToken != address(WETH), "maker token must not be WETH");
+    // TakerToken (proceeds) should always be WETH
+    require(takerToken == address(WETH), "taker token must be WETH");
 
-        // TakerToken (proceeds) should always be WETH
-        require(takerToken == address(WETH), "taker token must be WETH");
+    address priceOracle = priceOracles[makerToken];
 
-        address priceOracle = priceOracles[makerToken];
+    // Price oracle not defined
+    require(priceOracle != address(0), "price oracle not defined");
 
-        // Price oracle not defined
-        require(priceOracle != address(0), "price oracle not defined");
+    uint256 slippageLimit = slippageLimits[makerToken];
 
-        uint256 slippageLimit = slippageLimits[makerToken];
+    // Slippage limit not defined
+    require(slippageLimit != 0, "slippage limit not defined");
 
-        // Slippage limit not defined
-        require(slippageLimit != 0, "slippage limit not defined");
+    uint256 oraclePrice = _toUint(
+        AggregatorV2V3Interface(priceOracle).latestAnswer()
+    );
 
-        uint256 oraclePrice = _toUint(
-            AggregatorV2V3Interface(priceOracle).latestAnswer()
-        );
+    uint256 priceFloor = (oraclePrice * slippageLimit) /
+        SLIPPAGE_LIMIT_PRECISION;
 
-        uint256 priceFloor = (oraclePrice * slippageLimit) /
-            SLIPPAGE_LIMIT_PRECISION;
+    uint256 makerDecimals = 10**ERC20(makerToken).decimals();
 
-        uint256 makerDecimals = 10**ERC20(makerToken).decimals();
+    // makerPrice = takerAmount / makerAmount
+    uint256 makerPrice = (takerAmount * makerDecimals) / makerAmount;
 
-        // makerPrice = takerAmount / makerAmount
-        uint256 makerPrice = (takerAmount * makerDecimals) / makerAmount;
-
-        require(makerPrice >= priceFloor, "slippage is too high");
-    }
+    require(makerPrice >= priceFloor, "slippage is too high");
+}
+```
 
 #### Tools Used
 

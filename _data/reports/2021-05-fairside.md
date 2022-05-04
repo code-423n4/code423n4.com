@@ -390,7 +390,7 @@ In the function `purchaseMembership` of FSDNetwork.sol, when the membership is e
 This might lead to a `gracePeriod` that is lower than expected. It seems logical to also increase the `gracePeriod`.
 
 FSDNetwork.sol:
-```Solidty
+```solidity
 function purchaseMembership(uint256 costShareBenefit) external {
      ...
       if (membership[msg.sender].creation == 0) {
@@ -603,9 +603,9 @@ Recommend forcing users to wait for (at least) a block to prevent flash minting 
 ## [[L-07] Check if variables are initialized](https://github.com/code-423n4/2021-05-fairside-findings/issues/59)
 
 A variable named `fairSideConviction` is set in the contract FSD function `setFairSideConviction`. However, functions that use this variable do not check that it is already initialized. For example, function `tokenizeConviction` in contract `ERC20ConvictionScore` may transfer tokens to the 0x0 address:
-   ```solidty
+```solidity
    _transfer(msg.sender, address(fairSideConviction), locked);
-   ```
+```
 This will make these tokens inaccessible and basically burned. It would be better if the code explicitly checked before that ```address(fairSideConviction) != address(0)```
 
 Rating this as low because I expect that, in practice, these variables will be initialized as soon as possible.
@@ -674,14 +674,14 @@ But it should be "... meant to be voted onchain".
 The functions `castVote` and  `castVoteBySig` of FairSideDAO.sol have no "returns" parameters,
 however they do call "return" at the end of the function. This is confusing for the readers of the code.
 ```solidity
- function castVote(uint256 proposalId, bool support) public {
-        return _castVote(msg.sender, proposalId, support);
-    }
+function castVote(uint256 proposalId, bool support) public {
+    return _castVote(msg.sender, proposalId, support);
+}
 
- function castVoteBySig( .. ) public {
-       ...
-       return _castVote(signatory, proposalId, support);
-    }
+function castVoteBySig( .. ) public {
+    ...
+    return _castVote(signatory, proposalId, support);
+}
 ```
 Recommend removing the "return" statements from `castVote` and `castVoteBySig`.
 
@@ -694,8 +694,8 @@ The function `purchaseMembership` of FSDNetwork.sol contains a variable that is 
 
 FSDNetwork.sol:
 ```solidity
-   uint256 public totalCostShareBenefits;
-  function purchaseMembership(uint256 costShareBenefit) external {
+    uint256 public totalCostShareBenefits;
+    function purchaseMembership(uint256 costShareBenefit) external {
         uint256 totalCostShareBenefit = membership[msg.sender].availableCostShareBenefits.add(costShareBenefit);
         ...
         totalCostShareBenefits = totalCostShareBenefits.add(costShareBenefit);

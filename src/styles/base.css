@@ -175,6 +175,11 @@ code {
   display: inline-block;
 }
 
+.grvsc-code {
+  background-color: transparent;
+  border: none;
+}
+
 h2 code {
   color: #fff;
 }
