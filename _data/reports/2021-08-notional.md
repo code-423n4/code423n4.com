@@ -473,24 +473,24 @@ Different parameter are being set in `Approval` event in `transferFrom()`
 
 ```solidity
 function transferFrom(
-        address from,
-        address to,
-        uint256 amount
-    ) external override returns (bool) {
-        (bool success, uint256 newAllowance) =
-            proxy.nTokenTransferFrom(currencyId, msg.sender, from, to, amount);
+    address from,
+    address to,
+    uint256 amount
+) external override returns (bool) {
+    (bool success, uint256 newAllowance) =
+        proxy.nTokenTransferFrom(currencyId, msg.sender, from, to, amount);
 
-        // Emit transfer events here so they come from the correct contract
-        emit Transfer(from, to, amount);
+    // Emit transfer events here so they come from the correct contract
+    emit Transfer(from, to, amount);
 
- // here first parameter should be owner and second should be spender
- //   as mentioned in ntokenErc20.sol that is :
+// here first parameter should be owner and second should be spender
+//   as mentioned in ntokenErc20.sol that is :
 // event Approval(address indexed owner, // address indexed spender, uint256 amount);
 
-        emit Approval(msg.sender, from, newAllowance);
+    emit Approval(msg.sender, from, newAllowance);
 
-        return success;
-    }
+    return success;
+}
 ```
 
 The impact is that, this error may negatively impact off-chain tools that are monitoring critical transfer events of the token. See [`nTokenERC20Proxy.sol` L100](https://github.com/code-423n4/2021-08-notional/blob/4b51b0de2b448e4d36809781c097c7bc373312e9/contracts/external/adapters/nTokenERC20Proxy.sol#L100).
@@ -518,12 +518,12 @@ _Submitted by JMukesh_
 
 ```solidity
 function migrateBorrowFromCompound(
-        address cTokenBorrow,
-        uint256 cTokenRepayAmount,
-        uint16[] memory notionalV2CollateralIds,
-        uint256[] memory notionalV2CollateralAmounts,
-        BalanceActionWithTrades[] calldata borrowAction
-    ) ;
+    address cTokenBorrow,
+    uint256 cTokenRepayAmount,
+    uint16[] memory notionalV2CollateralIds,
+    uint256[] memory notionalV2CollateralAmounts,
+    BalanceActionWithTrades[] calldata borrowAction
+) ;
 ```
 
 if the array length of `notionalV2CollateralId` , `notionalV2CollateralAmounts` and `borrowAction` is not equal, it can lead to an error. See [`CompoundToNotionalV2.sol` L24](https://github.com/code-423n4/2021-08-notional/blob/4b51b0de2b448e4d36809781c097c7bc373312e9/contracts/external/adapters/CompoundToNotionalV2.sol#L24).

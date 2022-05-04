@@ -126,35 +126,35 @@ interface IERC20 {}
 error StaticCallFailed();
 
 contract BadEncoding {
-    /// Will return address(1). But address(0) is expected!
-    function f() external view returns (address) {
-        address actual = address(0);
-        address injected = address(1);
+  /// Will return address(1). But address(0) is expected!
+  function f() external view returns (address) {
+    address actual = address(0);
+    address injected = address(1);
 
-        (bool success, bytes memory ret) = address(this).staticcall(abi.encodeWithSelector(this.g.selector, actual, injected));
+    (bool success, bytes memory ret) = address(this).staticcall(abi.encodeWithSelector(this.g.selector, actual, injected));
 
-        if (!success) revert StaticCallFailed();
+    if (!success) revert StaticCallFailed();
 
-        return abi.decode(ret, (address));
+    return abi.decode(ret, (address));
+  }
+  function g(IERC20 _token) external pure returns (IERC20) {
+    // to get rid of the unused warning
+    _token;
+    // Does it always match _token?
+    return bps();
+  }
+  // From Sherlock Protocol: PoolBase.sol
+  function bps() internal pure returns (IERC20 rt) {
+    // These fields are not accessible from assembly
+    bytes memory array = msg.data;
+    uint256 index = msg.data.length;
+
+    // solhint-disable-next-line no-inline-assembly
+    assembly {
+      // Load the 32 bytes word from memory with the address on the lower 20 bytes, and mask those.
+      rt := and(mload(add(array, index)), 0xffffffffffffffffffffffffffffffffffffffff)
     }
-    function g(IERC20 _token) external pure returns (IERC20) {
-        // to get rid of the unused warning
-        _token;
-        // Does it always match _token?
-        return bps();
-    }
-    // From Sherlock Protocol: PoolBase.sol
-    function bps() internal pure returns (IERC20 rt) {
-        // These fields are not accessible from assembly
-        bytes memory array = msg.data;
-        uint256 index = msg.data.length;
-
-        // solhint-disable-next-line no-inline-assembly
-        assembly {
-            // Load the 32 bytes word from memory with the address on the lower 20 bytes, and mask those.
-            rt := and(mload(add(array, index)), 0xffffffffffffffffffffffffffffffffffffffff)
-        }
-    }
+  }
 }
 ```
 
@@ -193,8 +193,8 @@ Here's an example exploit:
 
 ``` solidity
 bytes memory exploitPayload = abi.encodeWithSignature(
-    PoolBase.unstake.selector,
-    (uint256(_id), address(_receiver), address(Token2), address(Token1))
+  PoolBase.unstake.selector,
+  (uint256(_id), address(_receiver), address(Token2), address(Token1))
 );
 poolAddress.call(exploitPayload);
 ```
@@ -257,10 +257,10 @@ Even if this is well intended the project could still be called out resulting in
 Note: there is a function `transferGovDev` which can be used to disable the `updateSolution`
 ```solidity
 // https://github.com/code-423n4/2021-07-sherlock/blob/main/contracts/facets/GovDev.sol#L25
-  function updateSolution(IDiamondCut.FacetCut[] memory _diamondCut,address _init,bytes memory _calldata) external override {
-    require(msg.sender == LibDiamond.contractOwner(), 'NOT_DEV');
-    return LibDiamond.diamondCut(_diamondCut, _init, _calldata);
-  }
+function updateSolution(IDiamondCut.FacetCut[] memory _diamondCut,address _init,bytes memory _calldata) external override {
+  require(msg.sender == LibDiamond.contractOwner(), 'NOT_DEV');
+  return LibDiamond.diamondCut(_diamondCut, _init, _calldata);
+}
 ```
 Recommend applying extra safeguards for example to limit the time period where `updateSolution` can be used.
 
@@ -344,7 +344,7 @@ The function `payout` contains an expression with 3 sequential divs. This is gen
 //https://github.com/code-423n4/2021-07-sherlock/blob/main/contracts/facets/Payout.sol#L108
 function payout(
 ..
- uint256 deduction =  excludeUsd.div(curTotalUsdPool.div(SherXERC20Storage.sx20().totalSupply)).div(10e17);
+uint256 deduction =  excludeUsd.div(curTotalUsdPool.div(SherXERC20Storage.sx20().totalSupply)).div(10e17);
 ```
 
 Recommend verifying the formula and replace with something like:
@@ -404,23 +404,23 @@ A simple implementation to checking the withdrawal amounts is provided below.
 
 ```jsx
 function strategyWithdraw(uint256 _amount, IERC20 _token) external override {
-		...
-		uint256 balanceBefore = _token.balanceOf(address(this));
-    ps.strategy.withdraw(_amount);
-		require(balanceBefore.add(_amount) == _token.balanceOf(address(this)), "REASON");
-    ps.stakeBalance = ps.stakeBalance.add(_amount);
-  }
+  ...
+  uint256 balanceBefore = _token.balanceOf(address(this));
+  ps.strategy.withdraw(_amount);
+  require(balanceBefore.add(_amount) == _token.balanceOf(address(this)), "REASON");
+  ps.stakeBalance = ps.stakeBalance.add(_amount);
+}
 
-  function strategyWithdrawAll(IERC20 _token) external override {
-    PoolStorage.Base storage ps = baseData();
-    _enforceGovPool(ps);
-    _enforceStrategy(ps);
+function strategyWithdrawAll(IERC20 _token) external override {
+  PoolStorage.Base storage ps = baseData();
+  _enforceGovPool(ps);
+  _enforceStrategy(ps);
 
-		uint256 balanceBefore = _token.balanceOf(address(this));
-		ps.strategy.withdrawAll();
-		// alternatively, verify amount returned by withdrawAll() method
-		uint256 amount = _token.balanceOf(address(this)).sub(balanceBefore);
-    ps.stakeBalance = ps.stakeBalance.add(amount);
+  uint256 balanceBefore = _token.balanceOf(address(this));
+  ps.strategy.withdrawAll();
+  // alternatively, verify amount returned by withdrawAll() method
+  uint256 amount = _token.balanceOf(address(this)).sub(balanceBefore);
+  ps.stakeBalance = ps.stakeBalance.add(amount);
   }
 ```
 
@@ -713,19 +713,19 @@ Note: minting from address 0 will not work because that is blocked by the `safem
 ```solidity
 https://github.com/code-423n4/2021-07-sherlock/blob/main/contracts/facets/SherXERC20.sol#L118
 function _transfer(address _from, address _to, uint256 _amount) internal {
-    SherXERC20Storage.Base storage sx20 = SherXERC20Storage.sx20();
-    sx20.balances[_from] = sx20.balances[_from].sub(_amount);
-    sx20.balances[_to] = sx20.balances[_to].add(_amount);
-    emit Transfer(_from, _to, _amount);
-  }
+  SherXERC20Storage.Base storage sx20 = SherXERC20Storage.sx20();
+  sx20.balances[_from] = sx20.balances[_from].sub(_amount);
+  sx20.balances[_to] = sx20.balances[_to].add(_amount);
+  emit Transfer(_from, _to, _amount);
+}
 
 // https://github.com/code-423n4/2021-07-sherlock/blob/main/contracts/libraries/LibSherXERC20.sol#L29
 function burn(address _from, uint256 _amount) internal {
-    SherXERC20Storage.Base storage sx20 = SherXERC20Storage.sx20();
-    sx20.balances[_from] = sx20.balances[_from].sub(_amount);
-    sx20.totalSupply = sx20.totalSupply.sub(_amount);
-    emit Transfer(_from, address(0), _amount);
-  }
+  SherXERC20Storage.Base storage sx20 = SherXERC20Storage.sx20();
+  sx20.balances[_from] = sx20.balances[_from].sub(_amount);
+  sx20.totalSupply = sx20.totalSupply.sub(_amount);
+  emit Transfer(_from, address(0), _amount);
+}
 ```
 
 Recommend adding something like to following to `_transfer` of SherXERC20.sol:
@@ -741,8 +741,8 @@ _Submitted by pauliax_
 
 Contract AaveV2 does not cache the lending pool, it retrieves it when necessary by calling a function `getLp()`. This is great as the implementation may change, however, this contract also approves an unlimited amount of want in the constructor:
 ```solidity
-   ILendingPool lp = getLp();
-   want.approve(address(lp), uint256(-1));
+  ILendingPool lp = getLp();
+  want.approve(address(lp), uint256(-1));
 so if the implementation changes, the approval will reset. This will break the deposit function as it will try to deposit to this new lending pool with 0 approval.
 ```
 For reference, function [`setLendingPoolImpl`](https://github.com/aave/aave-protocol/blob/4b4545fb583fd4f400507b10f3c3114f45b8a037/contracts/configuration/LendingPoolAddressesProvider.sol#L58-L65).
@@ -758,14 +758,14 @@ _Submitted by pauliax_
 
 I think these checks should be inclusive:
 ```solidity
-    require(_unstakeWindow < 25000000, 'MAX');
-    require(_period < 25000000, 'MAX');
-    if (_amount > oldValue) // >= will reduce gas here
+  require(_unstakeWindow < 25000000, 'MAX');
+  require(_period < 25000000, 'MAX');
+  if (_amount > oldValue) // >= will reduce gas here
 ```
 ```solidity
-    require(_unstakeWindow <= 25000000, 'MAX');
-    require(_period <= 25000000, 'MAX');
-    if (_amount >= oldValue)
+  require(_unstakeWindow <= 25000000, 'MAX');
+  require(_period <= 25000000, 'MAX');
+  if (_amount >= oldValue)
 ```
 
 ## [[L-23] Group related data into separate structs](https://github.com/code-423n4/2021-07-sherlock-findings/issues/69)
@@ -776,22 +776,22 @@ In Base struct having 3 separate fields that map from _protocol is error-prone. 
 An example solution, replace:
 
 ```solidity
-    mapping(bytes32 => address) protocolManagers;
-    mapping(bytes32 => address) protocolAgents;
-    mapping(bytes32 => bool) protocolIsCovered;
+  mapping(bytes32 => address) protocolManagers;
+  mapping(bytes32 => address) protocolAgents;
+  mapping(bytes32 => bool) protocolIsCovered;
 ```
 with:
 ```solidity
-   struct ProtocolInfo {
-       address manager;
-       address agent;
-       bool covered;
-   }
-   struct Base {
-       ...
-       mapping(bytes32 => ProtocolInfo) protocolInfo;
-       ...
-   }
+struct ProtocolInfo {
+  address manager;
+  address agent;
+  bool covered;
+}
+struct Base {
+  ...
+  mapping(bytes32 => ProtocolInfo) protocolInfo;
+  ...
+}
 ```
 Then you can delete all fields this way: delete `gs.protocolInfo[_protocol]`; Similar solution may be applied to `PoolStorage` (`protocolBalance`, `protocolPremium`, `isProtocol`).
 

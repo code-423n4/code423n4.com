@@ -154,42 +154,42 @@ However, since `savingsAccountTransfer()` does not return the result of `_saving
 <https://github.com/code-423n4/2021-12-sublime/blob/9df1b7c4247f8631647c7627a8da9bdc16db8b11/contracts/SavingsAccount/SavingsAccountUtil.sol#L11-L26>
 
 ```solidity
-    function depositFromSavingsAccount(
-        ISavingsAccount _savingsAccount,
-        address _from,
-        address _to,
-        uint256 _amount,
-        address _token,
-        address _strategy,
-        bool _withdrawShares,
-        bool _toSavingsAccount
-    ) internal returns (uint256) {
-        if (_toSavingsAccount) {
-            return savingsAccountTransfer(_savingsAccount, _from, _to, _amount, _token, _strategy);
-        } else {
-            return withdrawFromSavingsAccount(_savingsAccount, _from, _to, _amount, _token, _strategy, _withdrawShares);
-        }
+function depositFromSavingsAccount(
+    ISavingsAccount _savingsAccount,
+    address _from,
+    address _to,
+    uint256 _amount,
+    address _token,
+    address _strategy,
+    bool _withdrawShares,
+    bool _toSavingsAccount
+) internal returns (uint256) {
+    if (_toSavingsAccount) {
+        return savingsAccountTransfer(_savingsAccount, _from, _to, _amount, _token, _strategy);
+    } else {
+        return withdrawFromSavingsAccount(_savingsAccount, _from, _to, _amount, _token, _strategy, _withdrawShares);
     }
+}
 ```
 
 <https://github.com/code-423n4/2021-12-sublime/blob/9df1b7c4247f8631647c7627a8da9bdc16db8b11/contracts/SavingsAccount/SavingsAccountUtil.sol#L66-L80>
 
 ```solidity
-    function savingsAccountTransfer(
-        ISavingsAccount _savingsAccount,
-        address _from,
-        address _to,
-        uint256 _amount,
-        address _token,
-        address _strategy
-    ) internal returns (uint256) {
-        if (_from == address(this)) {
-            _savingsAccount.transfer(_amount, _token, _strategy, _to);
-        } else {
-            _savingsAccount.transferFrom(_amount, _token, _strategy, _from, _to);
-        }
-        return _amount;
+function savingsAccountTransfer(
+    ISavingsAccount _savingsAccount,
+    address _from,
+    address _to,
+    uint256 _amount,
+    address _token,
+    address _strategy
+) internal returns (uint256) {
+    if (_from == address(this)) {
+        _savingsAccount.transfer(_amount, _token, _strategy, _to);
+    } else {
+        _savingsAccount.transferFrom(_amount, _token, _strategy, _from, _to);
     }
+    return _amount;
+}
 ```
 
 As a result, the recorded `_sharesReceived` can be wrong.
@@ -197,23 +197,23 @@ As a result, the recorded `_sharesReceived` can be wrong.
 <https://github.com/code-423n4/2021-12-sublime/blob/9df1b7c4247f8631647c7627a8da9bdc16db8b11/contracts/Pool/Pool.sol#L207-L223>
 
 ```solidity
-    function _depositCollateral(
-        address _depositor,
-        uint256 _amount,
-        bool _transferFromSavingsAccount
-    ) internal nonReentrant {
-        uint256 _sharesReceived = _deposit(
-            _transferFromSavingsAccount,
-            true,
-            poolConstants.collateralAsset,
-            _amount,
-            poolConstants.poolSavingsStrategy,
-            _depositor,
-            address(this)
-        );
-        poolVariables.baseLiquidityShares = poolVariables.baseLiquidityShares.add(_sharesReceived);
-        emit CollateralAdded(_depositor, _amount, _sharesReceived);
-    }
+function _depositCollateral(
+    address _depositor,
+    uint256 _amount,
+    bool _transferFromSavingsAccount
+) internal nonReentrant {
+    uint256 _sharesReceived = _deposit(
+        _transferFromSavingsAccount,
+        true,
+        poolConstants.collateralAsset,
+        _amount,
+        poolConstants.poolSavingsStrategy,
+        _depositor,
+        address(this)
+    );
+    poolVariables.baseLiquidityShares = poolVariables.baseLiquidityShares.add(_sharesReceived);
+    emit CollateralAdded(_depositor, _amount, _sharesReceived);
+}
 ```
 
 ##### PoC
@@ -371,24 +371,25 @@ Even worse, when autoLiquidation is set to false, the liquidator does not have t
 The current implementation of liquidate is here: <https://github.com/code-423n4/2021-12-sublime/blob/9df1b7c4247f8631647c7627a8da9bdc16db8b11/contracts/CreditLine/CreditLine.sol#L996>.
 
 Notice that the autoLiquidation value is only used in one place within this function, which is in this segment of the code:
-
-    ...
-    	if (creditLineConstants[_id].autoLiquidation && _lender != msg.sender) {
-    		uint256 _borrowTokens = _borrowTokensToLiquidate(_borrowAsset, _collateralAsset, _totalCollateralTokens);
-    		if (_borrowAsset == address(0)) {
-    			uint256 _returnETH = msg.value.sub(_borrowTokens, 'Insufficient ETH to liquidate');
-    			if (_returnETH != 0) {
-    				(bool success, ) = msg.sender.call{value: _returnETH}('');
-    				require(success, 'Transfer fail');
-    			}
-    		} else {
-    		IERC20(_borrowAsset).safeTransferFrom(msg.sender, _lender, _borrowTokens);
-    		}
-    	}
-    	
-    	_transferCollateral(_id, _collateralAsset, _totalCollateralTokens, _toSavingsAccount); 
-    	emit  CreditLineLiquidated(_id, msg.sender);
+```solidity
+...
+    if (creditLineConstants[_id].autoLiquidation && _lender != msg.sender) {
+        uint256 _borrowTokens = _borrowTokensToLiquidate(_borrowAsset, _collateralAsset, _totalCollateralTokens);
+        if (_borrowAsset == address(0)) {
+            uint256 _returnETH = msg.value.sub(_borrowTokens, 'Insufficient ETH to liquidate');
+            if (_returnETH != 0) {
+                (bool success, ) = msg.sender.call{value: _returnETH}('');
+                require(success, 'Transfer fail');
+            }
+        } else {
+        IERC20(_borrowAsset).safeTransferFrom(msg.sender, _lender, _borrowTokens);
+        }
     }
+    
+    _transferCollateral(_id, _collateralAsset, _totalCollateralTokens, _toSavingsAccount); 
+    emit  CreditLineLiquidated(_id, msg.sender);
+}
+```
 
 So, if `autoLiquidation` is false, the code inside of the if statement will simply not be executed, and there are no further checks that the sender HAS to be the lender if `autoLiquidation` is false. This means that anyone can liquidate a non-autoLiquidation credit line, and receive all of the collateral without first transferring the necessary borrow tokens.
 
@@ -401,11 +402,12 @@ Inspection and confirmed with Hardhat.
 #### Recommended Mitigation Steps
 
 Add the following require statement somewhere in the `liquidate` function:
-
-    require(
-    	creditLineConstants[_id].autoLiquidation || 
-    	msg.sender == creditLineConstants[_id].lender,
-    	"not autoLiquidation and not lender");
+```solidity
+require(
+    creditLineConstants[_id].autoLiquidation || 
+    msg.sender == creditLineConstants[_id].lender,
+    "not autoLiquidation and not lender");
+```
 
 #### [ritik99 (Sublime) labeled](https://github.com/code-423n4/2021-12-sublime-findings/issues/96) sponsor confirmed
 
@@ -483,67 +485,70 @@ Firstly an attacker need to deploy a rogue strategy contract implementing IYield
 and calling switchStrategy() with \_currentStrategy = ROGUE_CONTRACT_ADDRESS (\_newStrategy can be any valid strategy e.g. NoYield)
 
 <https://github.com/code-423n4/2021-12-sublime/blob/main/contracts/SavingsAccount/SavingsAccount.sol#L160>
-
-    require(_amount != 0, 'SavingsAccount::switchStrategy Amount must be greater than zero');
-
+```solidity
+require(_amount != 0, 'SavingsAccount::switchStrategy Amount must be greater than zero');
+```
 Bypass this check by setting \_amount > 0, since it will be overwritten in line
 <https://github.com/code-423n4/2021-12-sublime/blob/main/contracts/SavingsAccount/SavingsAccount.sol#L162>
-
-    _amount = IYield(_currentStrategy).getSharesForTokens(_amount, _token);
-
+```solidity
+_amount = IYield(_currentStrategy).getSharesForTokens(_amount, _token);
+```
 getSharesForTokens() should be implemented to always return 0, hence to bypass the overflow in lines
 <https://github.com/code-423n4/2021-12-sublime/blob/main/contracts/SavingsAccount/SavingsAccount.sol#L164-L167>
-
-    balanceInShares[msg.sender][_token][_currentStrategy] = balanceInShares[msg.sender][_token][_currentStrategy].sub(
-    _amount,
-    'SavingsAccount::switchStrategy Insufficient balance'
-    );
-
+```solidity
+balanceInShares[msg.sender][_token][_currentStrategy] = balanceInShares[msg.sender][_token][_currentStrategy].sub(
+_amount,
+'SavingsAccount::switchStrategy Insufficient balance'
+);
+```
 since balanceInShares\[msg.sender]\[\_token]\[\_currentStrategy] == 0 and 0-0 will not overflow
 
 The actual amount to be locked is saved in line
 <https://github.com/code-423n4/2021-12-sublime/blob/main/contracts/SavingsAccount/SavingsAccount.sol#L169>
-
-    uint256 _tokensReceived = IYield(_currentStrategy).unlockTokens(_token, _amount);
-
+```solidity
+uint256 _tokensReceived = IYield(_currentStrategy).unlockTokens(_token, _amount);
+```
 the rouge unlockTokens() can check asset balance of the contract and return the full amount
 
 After that some adjustment are made to set approval for the token or to handle native assets case
 <https://github.com/code-423n4/2021-12-sublime/blob/main/contracts/SavingsAccount/SavingsAccount.sol#L171-L177>
-
-    uint256 _ethValue;
-    if (_token != address(0)) {
-        IERC20(_token).safeApprove(_newStrategy, _tokensReceived);
-    } else {
-        _ethValue = _tokensReceived;
-    }
-    _amount = _tokensReceived;
-
+```solidity
+uint256 _ethValue;
+if (_token != address(0)) {
+    IERC20(_token).safeApprove(_newStrategy, _tokensReceived);
+} else {
+    _ethValue = _tokensReceived;
+}
+_amount = _tokensReceived;
+```
 Finally the assets are locked in the locked strategy and shares are allocated on attackers acount
 <https://github.com/code-423n4/2021-12-sublime/blob/main/contracts/SavingsAccount/SavingsAccount.sol#L179-L181>
+```solidity
 
-    uint256 _sharesReceived = IYield(_newStrategy).lockTokens{value: _ethValue}(address(this), _token, _tokensReceived);
+uint256 _sharesReceived = IYield(_newStrategy).lockTokens{value: _ethValue}(address(this), _token, _tokensReceived);
 
-    balanceInShares[msg.sender][_token][_newStrategy] = balanceInShares[msg.sender][_token][_newStrategy].add(_sharesReceived);
+balanceInShares[msg.sender][_token][_newStrategy] = balanceInShares[msg.sender][_token][_newStrategy].add(_sharesReceived);
+```
 
 Proof of Concept
 
-    import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+```solidity
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
-    contract Attacker{
-    	function getSharesForTokens(uint256 amount, address token) external payable  returns(uint256){
-    		return 0;
-    	}
-    	function unlockTokens(address token, uint256 amount) external payable returns(uint256){
-    		uint256 bal;
-    		if(token == address(0))
-    			bal = msg.sender.balance;
-    		else
-    			bal = IERC20(token).balanceOf(msg.sender);
-    		return bal;
-    	}
+contract Attacker{
+    function getSharesForTokens(uint256 amount, address token) external payable  returns(uint256){
+        return 0;
     }
-
+    function unlockTokens(address token, uint256 amount) external payable returns(uint256){
+        uint256 bal;
+        if(token == address(0))
+            bal = msg.sender.balance;
+        else
+            bal = IERC20(token).balanceOf(msg.sender);
+        return bal;
+    }
+}
+```
 #### Recommended Mitigation Steps
 
 Add a check for \_currentStrategy to be from strategy list like the one in line
@@ -557,9 +562,9 @@ Add a check for \_currentStrategy to be from strategy list like the one in line
 **[0xean (judge) commented](https://github.com/code-423n4/2021-12-sublime-findings/issues/41#issuecomment-1018063038):**
  > Based on the review of the warden I believe this is a valid attack path.  This line would need to change to the amount of tokens that are to be "stolen" but otherwise this does seem accurate. 
 > 
-> ```
-> 			bal = IERC20(token).balanceOf(msg.sender);
-> ```
+```solidity
+bal = IERC20(token).balanceOf(msg.sender);
+```
 
 
 
@@ -575,21 +580,21 @@ In the same time it's possible to construct mitigation mechanics for such cases,
 #### Proof of Concept
 
 <https://github.com/code-423n4/2021-12-sublime/blob/main/contracts/PriceOracle.sol#L149-L161>
-
-    function getLatestPrice(address num, address den) external view override returns (uint256, uint256) {
-        uint256 _price;
-        uint256 _decimals;
-        (_price, _decimals) = getChainlinkLatestPrice(num, den);
-        if (_decimals != 0) {
-            return (_price, _decimals);
-        }
-        (_price, _decimals) = getUniswapLatestPrice(num, den);
-        if (_decimals != 0) {
-            return (_price, _decimals);
-        }
-        revert("PriceOracle::getLatestPrice - Price Feed doesn't exist");
+```solidity
+function getLatestPrice(address num, address den) external view override returns (uint256, uint256) {
+    uint256 _price;
+    uint256 _decimals;
+    (_price, _decimals) = getChainlinkLatestPrice(num, den);
+    if (_decimals != 0) {
+        return (_price, _decimals);
     }
-
+    (_price, _decimals) = getUniswapLatestPrice(num, den);
+    if (_decimals != 0) {
+        return (_price, _decimals);
+    }
+    revert("PriceOracle::getLatestPrice - Price Feed doesn't exist");
+}
+```
 The above code outlines how prices are utilised regardless of their actual value (assuming it is always a non-zero value).
 
 #### Recommended Mitigation Steps
@@ -611,7 +616,7 @@ _Submitted by WatchPug, also found by 0x1f8b_
 
 <https://github.com/code-423n4/2021-12-sublime/blob/9df1b7c4247f8631647c7627a8da9bdc16db8b11/contracts/yield/NoYield.sol#L78-L83>
 
-```solidity=78{81}
+```solidity
 function emergencyWithdraw(address _asset, address payable _wallet) external onlyOwner returns (uint256 received) {
     require(_wallet != address(0), 'cant burn');
     uint256 amount = IERC20(_asset).balanceOf(address(this));
@@ -628,7 +633,7 @@ As a result, the `emergencyWithdraw()` does not work, in essence.
 
 Change to:
 
-```solidity=78
+```solidity
 function emergencyWithdraw(address _asset, address payable _wallet) external onlyOwner returns (uint256 received) {
     require(_wallet != address(0), 'cant burn');
     received = IERC20(_asset).balanceOf(address(this));
@@ -657,14 +662,14 @@ The `emergencyWithdraw` function is implemented in all yield sources to allow th
 #### Proof of Concept
 
 Consider the case where `_asset == address(0)`. An external call is made to check the contract's token balance for the target `_asset`. However, this call will revert as `_asset` is the zero address. As a result, the `onlyOwner` role will never be able to withdraw ETH tokens during an emergency.
-
-    function emergencyWithdraw(address _asset, address payable _wallet) external onlyOwner returns (uint256 received) {
-        require(_wallet != address(0), 'cant burn');
-        uint256 amount = IERC20(_asset).balanceOf(address(this));
-        IERC20(_asset).safeTransfer(_wallet, received);
-        received = amount;
-    }
-
+```solidity
+function emergencyWithdraw(address _asset, address payable _wallet) external onlyOwner returns (uint256 received) {
+    require(_wallet != address(0), 'cant burn');
+    uint256 amount = IERC20(_asset).balanceOf(address(this));
+    IERC20(_asset).safeTransfer(_wallet, received);
+    received = amount;
+}
+```
 Affected function as per below:
 <https://github.com/code-423n4/2021-12-sublime/blob/main/contracts/yield/NoYield.sol#L78-L83>
 
@@ -740,29 +745,31 @@ ETH sent to CreditLine.liquidate by an external liquidator when `autoLiquidation
 Add transfer to a lender for ETH case:
 
 Now:
+```solidity
 
-    if (_borrowAsset == address(0)) {
-    		uint256 _returnETH = msg.value.sub(_borrowTokens, 'Insufficient ETH to liquidate');
-    		if (_returnETH != 0) {
-    				(bool success, ) = msg.sender.call{value: _returnETH}('');
-    				require(success, 'Transfer fail');
-    		}
-    }
-
+if (_borrowAsset == address(0)) {
+        uint256 _returnETH = msg.value.sub(_borrowTokens, 'Insufficient ETH to liquidate');
+        if (_returnETH != 0) {
+                (bool success, ) = msg.sender.call{value: _returnETH}('');
+                require(success, 'Transfer fail');
+        }
+}
+```
 To be:
+```solidity
 
-    if (_borrowAsset == address(0)) {
-    		uint256 _returnETH = msg.value.sub(_borrowTokens, 'Insufficient ETH to liquidate');
-    		
-    		(bool success, ) = _lender.call{value: _borrowTokens}('');
-    		require(success, 'liquidate: Transfer failed');
-    		
-    		if (_returnETH != 0) {
-    				(success, ) = msg.sender.call{value: _returnETH}('');
-    				require(success, 'liquidate: Return transfer failed');
-    		}
-    }
-
+if (_borrowAsset == address(0)) {
+        uint256 _returnETH = msg.value.sub(_borrowTokens, 'Insufficient ETH to liquidate');
+        
+        (bool success, ) = _lender.call{value: _borrowTokens}('');
+        require(success, 'liquidate: Transfer failed');
+        
+        if (_returnETH != 0) {
+                (success, ) = msg.sender.call{value: _returnETH}('');
+                require(success, 'liquidate: Return transfer failed');
+        }
+}
+```
 **[ritik99 (Sublime) confirmed](https://github.com/code-423n4/2021-12-sublime-findings/issues/90)**
 
 
@@ -805,7 +812,7 @@ Note: a master can prevent this by calling cancelAddressLinkingRequest(), but th
 
 <https://github.com/code-423n4/2021-12-sublime/blob/e688bd6cd3df7fefa3be092529b4e2d013219625/contracts/Verification/Verification.sol#L129-L154>
 
-```JS
+```solidity
     function unlinkAddress(address _linkedAddress) external {
         address _linkedTo = linkedAddresses[_linkedAddress].masterAddress;
         require(_linkedTo != address(0), 'V:UA-Address not linked');
@@ -828,8 +835,8 @@ function cancelAddressLinkingRequest(address _linkedAddress) external {
 
 Add something like to following at the end of linkAddress:
 
-```JS
- delete pendingLinkAddresses[msg.sender][_masterAddress]; 
+```solidity
+delete pendingLinkAddresses[msg.sender][_masterAddress]; 
 ```
 
 **[ritik99 (Sublime) confirmed](https://github.com/code-423n4/2021-12-sublime-findings/issues/54)**
@@ -871,36 +878,36 @@ As a result, in `unlockTokens()`, later users may not be able to successfully wi
 <https://github.com/code-423n4/2021-12-sublime/blob/9df1b7c4247f8631647c7627a8da9bdc16db8b11/contracts/yield/NoYield.sol#L93-L106>
 
 ```solidity
-    function lockTokens(
-        address user,
-        address asset,
-        uint256 amount
-    ) external payable override onlySavingsAccount nonReentrant returns (uint256 sharesReceived) {
-        require(amount != 0, 'Invest: amount');
-        if (asset != address(0)) {
-            IERC20(asset).safeTransferFrom(user, address(this), amount);
-        } else {
-            require(msg.value == amount, 'Invest: ETH amount');
-        }
-        sharesReceived = amount;
-        emit LockedTokens(user, asset, sharesReceived);
+function lockTokens(
+    address user,
+    address asset,
+    uint256 amount
+) external payable override onlySavingsAccount nonReentrant returns (uint256 sharesReceived) {
+    require(amount != 0, 'Invest: amount');
+    if (asset != address(0)) {
+        IERC20(asset).safeTransferFrom(user, address(this), amount);
+    } else {
+        require(msg.value == amount, 'Invest: ETH amount');
     }
+    sharesReceived = amount;
+    emit LockedTokens(user, asset, sharesReceived);
+}
 ```
 
 <https://github.com/code-423n4/2021-12-sublime/blob/9df1b7c4247f8631647c7627a8da9bdc16db8b11/contracts/yield/NoYield.sol#L134-L144>
 
 ```solidity
-    function _unlockTokens(address asset, uint256 amount) internal returns (uint256 received) {
-        require(amount != 0, 'Invest: amount');
-        received = amount;
-        if (asset == address(0)) {
-            (bool success, ) = savingsAccount.call{value: received}('');
-            require(success, 'Transfer failed');
-        } else {
-            IERC20(asset).safeTransfer(savingsAccount, received);
-        }
-        emit UnlockedTokens(asset, received);
+function _unlockTokens(address asset, uint256 amount) internal returns (uint256 received) {
+    require(amount != 0, 'Invest: amount');
+    received = amount;
+    if (asset == address(0)) {
+        (bool success, ) = savingsAccount.call{value: received}('');
+        require(success, 'Transfer failed');
+    } else {
+        IERC20(asset).safeTransfer(savingsAccount, received);
     }
+    emit UnlockedTokens(asset, received);
+}
 ```
 
 ##### Recommendation

@@ -155,16 +155,16 @@ _Submitted by a_delamo, also found by 0xRajeev, cmichel, greiart, and shw_
 On the other hand, calling the method `latestRoundData` allow you to run some extra validations
 
 ```solidity
-       (
-          roundId,
-          rawPrice,
-          ,
-          updateTime,
-          answeredInRound
-        ) = AggregatorV3Interface(XXXXX).latestRoundData();
-        require(rawPrice > 0, "Chainlink price <= 0");
-        require(updateTime != 0, "Incomplete round");
-        require(answeredInRound >= roundId, "Stale price");
+  (
+    roundId,
+    rawPrice,
+    ,
+    updateTime,
+    answeredInRound
+  ) = AggregatorV3Interface(XXXXX).latestRoundData();
+  require(rawPrice > 0, "Chainlink price <= 0");
+  require(updateTime != 0, "Incomplete round");
+  require(answeredInRound >= roundId, "Stale price");
 ```
 
 See the chainlink [documentation](https://docs.chain.link/docs/faq/#how-can-i-check-if-the-answer-to-a-round-is-being-carried-over-from-a-previous-round) for more information.
@@ -342,17 +342,17 @@ If someone is able to Borrow before the function `setMinBorrowUSD` is called, he
 
 `Controller.sol` [#L27](https://github.com/code-423n4/2021-07-wildcredit/blob/main/contracts/Controller.sol#L27)
 ```solidity
-  uint public minBorrowUSD;
+uint public minBorrowUSD;
 
-  function setMinBorrowUSD(uint _value) external onlyOwner {
-    minBorrowUSD = _value;
-  }
+function setMinBorrowUSD(uint _value) external onlyOwner {
+  minBorrowUSD = _value;
+}
 ```
 `LendingPair.sol` [#L553](https://github.com/code-423n4/2021-07-wildcredit/blob/main/contracts/LendingPair.sol#L553)
 ```solidity
 function _checkBorrowLimits(address _token, address _account) internal view {
-   ...
-    require(accountBorrowUSD >= controller.minBorrowUSD(), "LendingPair: borrow amount below minimum");
+  ...
+  require(accountBorrowUSD >= controller.minBorrowUSD(), "LendingPair: borrow amount below minimum");
 ```
 
 Recommend Initializing `minBorrowUSD` via the constructor or set a reasonable default in the contract.
