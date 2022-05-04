@@ -303,12 +303,12 @@ function onERC721Received(address operator, address from, uint256 tokenId, bytes
       _addNft(msg.sender, tokenId);
 
 function _addNft(address nftContract, uint256 tokenId) internal {
-      nfts.push(
-        Nft({
-          tokenId: tokenId,
-          nftContract: nftContract
-        })
-      );
+    nfts.push(
+    Nft({
+        tokenId: tokenId,
+        nftContract: nftContract
+    })
+    );
 ```
 
 Recommend that `In _addNft()` to check if an inputted nft is existing in the "nfts" array. Do not push inputted nft if already added.
@@ -332,18 +332,18 @@ erc20Approvals[keccak256(abi.encodePacked(msg.sender, token))] = erc20Approvals[
 A workaround would be to call `approveTransferERC20` also for the owner.
 
 ```solidity
- function delegatedTransferERC20(address token,address to,uint256 amount) external {
-        if(msg.sender != _getOwner()) {
-            require(erc20Approvals[keccak256(abi.encodePacked(msg.sender, token))] >= amount,"Account not approved to transfer amount");
-        }
-        // check for sufficient balance
-        require(IERC20(token).balanceOf(address(this)) >= (getBalanceLocked(token).add(amount)).add(timelockERC20Balances[token]),"UniversalVault: insufficient balance");
-
-        erc20Approvals[keccak256(abi.encodePacked(msg.sender, token))] = erc20Approvals[keccak256(abi.encodePacked(msg.sender, token))].sub(amount);
-
-        // perform transfer
-        TransferHelper.safeTransfer(token, to, amount);
+function delegatedTransferERC20(address token,address to,uint256 amount) external {
+    if(msg.sender != _getOwner()) {
+        require(erc20Approvals[keccak256(abi.encodePacked(msg.sender, token))] >= amount,"Account not approved to transfer amount");
     }
+    // check for sufficient balance
+    require(IERC20(token).balanceOf(address(this)) >= (getBalanceLocked(token).add(amount)).add(timelockERC20Balances[token]),"UniversalVault: insufficient balance");
+
+    erc20Approvals[keccak256(abi.encodePacked(msg.sender, token))] = erc20Approvals[keccak256(abi.encodePacked(msg.sender, token))].sub(amount);
+
+    // perform transfer
+    TransferHelper.safeTransfer(token, to, amount);
+}
 ```
 
 Recommend also adding `if(msg.sender != _getOwner())` before
@@ -479,17 +479,17 @@ Using public over external has an impact on execution cost.
 
 If we run the following methods on Remix, we can see the difference
 ``` solidity
-    //  transaction cost	21448 gas
-    //  execution cost	176 gas
-    function tt() external returns(uint256) {
-        return 0;
-    }
+//  transaction cost	21448 gas
+//  execution cost	176 gas
+function tt() external returns(uint256) {
+    return 0;
+}
 
-    //  transaction cost	21558 gas
-    //  execution cost	286 gas
-    function tt_public() public returns(uint256) {
-        return 0;
-    }
+//  transaction cost	21558 gas
+//  execution cost	286 gas
+function tt_public() public returns(uint256) {
+    return 0;
+}
 ```
 See [issue page](https://github.com/code-423n4/2021-05-visorfinance-findings/issues/51) for list of methods currently using public that should be declared external.
 
@@ -526,22 +526,22 @@ _Submitted by a_delamo_
 In `Visor.sol`, the functions are using memory keyword, but using storage would reduce the gas cost.
 
 ```solidity
-    function _removeNft(address nftContract, uint256 tokenId) internal {
-        uint256 len = nfts.length;
-        for (uint256 i = 0; i < len; i++) {
-            Nft memory nftInfo = nfts[i];
-            if (
-                nftContract == nftInfo.nftContract && tokenId == nftInfo.tokenId
-            ) {
-                if (i != len - 1) {
-                    nfts[i] = nfts[len - 1];
-                }
-                nfts.pop();
-                emit RemoveNftToken(nftContract, tokenId);
-                break;
+function _removeNft(address nftContract, uint256 tokenId) internal {
+    uint256 len = nfts.length;
+    for (uint256 i = 0; i < len; i++) {
+        Nft memory nftInfo = nfts[i];
+        if (
+            nftContract == nftInfo.nftContract && tokenId == nftInfo.tokenId
+        ) {
+            if (i != len - 1) {
+                nfts[i] = nfts[len - 1];
             }
+            nfts.pop();
+            emit RemoveNftToken(nftContract, tokenId);
+            break;
         }
     }
+}
 ```
 
 **[xyz-ctrl (Visor) confirmed](https://github.com/code-423n4/2021-05-visorfinance-findings/issues/53#issuecomment-862599131):**
