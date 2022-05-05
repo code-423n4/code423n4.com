@@ -150,7 +150,7 @@ It's the superior strategy but it leads to no investments in the strategy to ear
 Recommend that the unlock timestamp should be increased by duration each time, instead of being reset to the duration.
 
 **[asselstine (PoolTogether) confirmed](https://github.com/code-423n4/2021-06-pooltogether-findings/issues/91#issuecomment-868089158):**
- > Mitigation:
+> Mitigation:
 >
 > If a user's timelock balance is non-zero, the prize strategy rejects the ticket burn.
 
@@ -181,7 +181,7 @@ If the existing allowance is non-zero (say, for e.g., previously the entire bala
 Recommend using `safeIncreaseAllowance()` function instead of `safeApprove()`.
 
 **[kamescg (PoolTogether) confirmed and patched](https://github.com/code-423n4/2021-06-pooltogether-findings/issues/71#issuecomment-871928392):**
- > - https://github.com/pooltogether/pooltogether-yearnv2-yield-source/pull/new/fix/71
+> - https://github.com/pooltogether/pooltogether-yearnv2-yield-source/pull/new/fix/71
 > - https://github.com/jmonteer/pooltogether-yearnv2-yield-source/pull/6
 
 ## [[M-02] Return values of ERC20 `transfer` and `transferFrom` are unchecked](https://github.com/code-423n4/2021-06-pooltogether-findings/issues/112)
@@ -194,7 +194,7 @@ If warden's understanding of the `BadgerYieldSource` is correct, the `badger` va
 Recommend using the [`SafeERC20` library implementation](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC20/utils/SafeERC20.sol) from Openzeppelin and call `safeTransfer` or `safeTransferFrom` when transferring ERC20 tokens.
 
 **[kamescg (PoolTogether) confirmed and patched](https://github.com/code-423n4/2021-06-pooltogether-findings/issues/112#issuecomment-870060136):**
- > Sushi
+> Sushi
 > - https://github.com/pooltogether/sushi-pooltogether/pull/new/fix/112
 > - https://github.com/pooltogether/sushi-pooltogether/pull/11
 >
@@ -206,13 +206,13 @@ Recommend using the [`SafeERC20` library implementation](https://github.com/Open
  > Sponsor has repeatedly stated in duplicate issues that: "It's more of a 1 (Low Risk) because the subsequent deposit calls will fail. There is no advantage to be gained; the logic is simply poor."
 >
 > I disagree with this assessment. The function(s) in question do not immediately call deposit or another function that would cause a revert. In fact the balances are updated:
->
-> ```solidity
->         balances[msg.sender] = balances[msg.sender].sub(requiredSharesBalance);
->         badger.transfer(msg.sender, badgerBalanceDiff);
->         return (badgerBalanceDiff);
-> ```
->
+
+```solidity
+  balances[msg.sender] = balances[msg.sender].sub(requiredSharesBalance);
+  badger.transfer(msg.sender, badgerBalanceDiff);
+  return (badgerBalanceDiff);
+```
+
 > The impact that this would have on the rest of the system is substantial, including causing incorrect balances to be returned and potentially lost funds.
 >
 > That said, I do not think this is very likely and so high severity seems excessive here. Im adjusting all of these reports to Medium Risk given that lower likelihood.
@@ -331,16 +331,16 @@ Although unlikely this will introduce problems, it is more consistent to check f
 
 [`YieldSourcePrizePool.sol` L24](https://github.com/code-423n4/2021-06-pooltogether/blob/main/contracts/YieldSourcePrizePool.sol#L24)
 ```solidity
- function initializeYieldSourcePrizePool (... IYieldSource _yieldSource) ... {
+  function initializeYieldSourcePrizePool (... IYieldSource _yieldSource) ... {
 ..
-    require(address(_yieldSource) != address(0), "YieldSourcePrizePool/yield-source-zero");
-    PrizePool.initialize(
+  require(address(_yieldSource) != address(0), "YieldSourcePrizePool/yield-source-zero");
+  PrizePool.initialize(
 ```
 
 [`StakePrizePool.sol` L20](https://github.com/code-423n4/2021-06-pooltogether/blob/main/contracts/StakePrizePool.sol#L20)
 ```solidity
 function initialize ( ..  IERC20Upgradeable _stakeToken)...  {
-    PrizePool.initialize(
+  PrizePool.initialize(
 ```
 
 Recommend adding something like the following in the initialize function of `StakePrizePool.sol`:
@@ -378,25 +378,25 @@ Recommend perhaps a different default would be useful.
 
 [`PrizePool.sol` L783](https://github.com/code-423n4/2021-06-pooltogether/blob/main/contracts/PrizePool.sol#L783)
 ```solidity
- function _estimateCreditAccrualTime( address _controlledToken,uint256 _principal,uint256 _interest ) internal view returns (uint256 durationSeconds)  {
-    uint256 accruedPerSecond = FixedPoint.multiplyUintByMantissa(_principal, _tokenCreditPlans[_controlledToken].creditRateMantissa);
-    if (accruedPerSecond == 0) {
-      return 0;
-    }
-    return _interest.div(accruedPerSecond);
+function _estimateCreditAccrualTime( address _controlledToken,uint256 _principal,uint256 _interest ) internal view returns (uint256 durationSeconds)  {
+  uint256 accruedPerSecond = FixedPoint.multiplyUintByMantissa(_principal, _tokenCreditPlans[_controlledToken].creditRateMantissa);
+  if (accruedPerSecond == 0) {
+    return 0;
   }
+  return _interest.div(accruedPerSecond);
+}
 ```
 
 [`PrizePool.sol` L710](https://github.com/code-423n4/2021-06-pooltogether/blob/main/contracts/PrizePool.sol#L710)
 ```solidity
 function _calculateTimelockDuration( address from, address controlledToken, uint256 amount) internal returns (uint256 durationSeconds, uint256 burnedCredit )  {
 ...
-    uint256 duration = _estimateCreditAccrualTime(controlledToken, amount, exitFee);
-    if (duration > maxTimelockDuration) {
-      duration = maxTimelockDuration;
-    }
-    return (duration, _burnedCredit);
+  uint256 duration = _estimateCreditAccrualTime(controlledToken, amount, exitFee);
+  if (duration > maxTimelockDuration) {
+    duration = maxTimelockDuration;
   }
+  return (duration, _burnedCredit);
+}
 ```
 
 Recommend considering the default duration for the case `_tokenCreditPlans[_controlledToken].creditRateMantissa` isn't set.
@@ -444,33 +444,32 @@ Recommend adding missing modifier `onlyControlledToken` to `calculateEarlyExitFe
 >
 > For example in Pods to calculate the exit fee. Plus this is called statically from JS frontends to get the fee.
 >
-> ```solidity
-> /**
->      * @notice Calculate the cost of withdrawing from the Pod if the
->      * @param amount Amount of tokens to withdraw when calculating early exit fee.
->      * @dev Based of the Pod's total token/ticket balance and totalSupply it calculates the pricePerShare.
->      */
->     function getEarlyExitFee(uint256 amount) external returns (uint256) {
->         uint256 tokenBalance = _podTokenBalance();
->         if (amount <= tokenBalance) {
->             return 0;
->         } else {
->             // Calculate Early Exit Fee
->             (uint256 exitFee, ) =
->                 _prizePool.calculateEarlyExitFee(
->                     address(this),
->                     address(ticket),
->                     amount.sub(tokenBalance)
->                 );
->
->             // Early Exit Fee
->             return exitFee;
->         }
->     }
-> ```
+```solidity
+/**
+  * @notice Calculate the cost of withdrawing from the Pod if the
+  * @param amount Amount of tokens to withdraw when calculating early exit fee.
+  * @dev Based of the Pod's total token/ticket balance and totalSupply it calculates the pricePerShare.
+*/
+function getEarlyExitFee(uint256 amount) external returns (uint256) {
+    uint256 tokenBalance = _podTokenBalance();
+    if (amount <= tokenBalance) {
+        return 0;
+    } else {
+        // Calculate Early Exit Fee
+        (uint256 exitFee, ) =
+            _prizePool.calculateEarlyExitFee(
+                address(this),
+                address(ticket),
+                amount.sub(tokenBalance)
+            );
+        // Early Exit Fee
+        return exitFee;
+    }
+}
+```
 
 **[asselstine (PoolTogether) commented](https://github.com/code-423n4/2021-06-pooltogether-findings/issues/54#issuecomment-874371325):**
- > @kamescg Rajeev is suggesting to add the modifier `onlyControlledToken` to `calculateEarlyExitFee()`
+> @kamescg Rajeev is suggesting to add the modifier `onlyControlledToken` to `calculateEarlyExitFee()`
 >
 > That means it would revert on invalid controlled tokens.  It would still be a static call!
 >

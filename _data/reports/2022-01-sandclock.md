@@ -92,7 +92,7 @@ _Submitted by WatchPug_
 
 <https://github.com/code-423n4/2022-01-sandclock/blob/a90ad3824955327597be00bb0bd183a9c228a4fb/sandclock/contracts/Vault.sol#L390-L401>
 
-```solidity=390
+```solidity
 if (_force && sponsorAmount > totalUnderlying()) {
     sponsorToTransfer = totalUnderlying();
 } else if (!_force) {
@@ -632,14 +632,15 @@ While the strategy's funds could be withdrawn from EthAnchor and migrated to a n
 #### Proof of Concept
 
 The exchangeRateFeeder is being used to calculate the vault's invested assets, which is used extensively to calculate the correct amount of shares and amounts: [(Code ref)](https://github.com/code-423n4/2022-01-sandclock/blob/main/sandclock/contracts/strategy/BaseStrategy.sol#L275)
+```solidity
+function investedAssets() external view virtual override(IStrategy) returns (uint256) {
+    uint256 underlyingBalance = _getUnderlyingBalance() + pendingDeposits;
+    uint256 aUstBalance = _getAUstBalance() + pendingRedeems;
 
-        function investedAssets() external view virtual override(IStrategy) returns (uint256) {
-            uint256 underlyingBalance = _getUnderlyingBalance() + pendingDeposits;
-            uint256 aUstBalance = _getAUstBalance() + pendingRedeems;
-
-            return underlyingBalance + ((exchangeRateFeeder.exchangeRateOf(address(aUstToken), true) 
-                    * aUstBalance) / 1e18);
-        }
+    return underlyingBalance + ((exchangeRateFeeder.exchangeRateOf(address(aUstToken), true) 
+            * aUstBalance) / 1e18);
+}
+```
 
 EthAnchor documentation states that unlike other contracts, exchangeRateFeeder is not proxied and it's address may change in future: "the contract address of ExchangeRateFeeder may change as adjustments occur.
 " [(ref)](https://docs.anchorprotocol.com/ethanchor/ethanchor-contracts/deployed-contracts#core-contracts)
@@ -695,70 +696,72 @@ Therefore, an attacker could avoid paying their fair share of the performance fe
 #### Proof of Concept
 
 <https://github.com/code-423n4/2022-01-sandclock/blob/main/sandclock/contracts/strategy/BaseStrategy.sol#L180-L204>
+```solidity
+function finishRedeemStable(uint256 idx) public virtual {
+    require(redeemOperations.length > idx, "not running");
+    Operation storage operation = redeemOperations[idx];
+    uint256 aUstBalance = _getAUstBalance() + pendingRedeems;
+    uint256 originalUst = (convertedUst * operation.amount) / aUstBalance;
+    uint256 ustBalanceBefore = _getUstBalance();
 
-    function finishRedeemStable(uint256 idx) public virtual {
-        require(redeemOperations.length > idx, "not running");
-        Operation storage operation = redeemOperations[idx];
-        uint256 aUstBalance = _getAUstBalance() + pendingRedeems;
-        uint256 originalUst = (convertedUst * operation.amount) / aUstBalance;
-        uint256 ustBalanceBefore = _getUstBalance();
+    ethAnchorRouter.finishRedeemStable(operation.operator);
 
-        ethAnchorRouter.finishRedeemStable(operation.operator);
-
-        uint256 redeemedAmount = _getUstBalance() - ustBalanceBefore;
-        uint256 perfFee = redeemedAmount > originalUst
-            ? (redeemedAmount - originalUst).percOf(perfFeePct)
-            : 0;
-        if (perfFee > 0) {
-            ustToken.safeTransfer(treasury, perfFee);
-            emit PerfFeeClaimed(perfFee);
-        }
-        convertedUst -= originalUst;
-        pendingRedeems -= operation.amount;
-
-        operation.operator = redeemOperations[redeemOperations.length - 1]
-            .operator;
-        operation.amount = redeemOperations[redeemOperations.length - 1].amount;
-        redeemOperations.pop();
+    uint256 redeemedAmount = _getUstBalance() - ustBalanceBefore;
+    uint256 perfFee = redeemedAmount > originalUst
+        ? (redeemedAmount - originalUst).percOf(perfFeePct)
+        : 0;
+    if (perfFee > 0) {
+        ustToken.safeTransfer(treasury, perfFee);
+        emit PerfFeeClaimed(perfFee);
     }
+    convertedUst -= originalUst;
+    pendingRedeems -= operation.amount;
 
+    operation.operator = redeemOperations[redeemOperations.length - 1]
+        .operator;
+    operation.amount = redeemOperations[redeemOperations.length - 1].amount;
+    redeemOperations.pop();
+}
+```
 <https://github.com/code-423n4/2022-01-sandclock/blob/main/sandclock/contracts/strategy/BaseStrategy.sol#L263-L277>
+```solidity
+function investedAssets()
+    external
+    view
+    virtual
+    override(IStrategy)
+    returns (uint256)
+{
+    uint256 underlyingBalance = _getUnderlyingBalance() + pendingDeposits;
+    uint256 aUstBalance = _getAUstBalance() + pendingRedeems;
 
-    function investedAssets()
-        external
-        view
-        virtual
-        override(IStrategy)
-        returns (uint256)
-    {
-        uint256 underlyingBalance = _getUnderlyingBalance() + pendingDeposits;
-        uint256 aUstBalance = _getAUstBalance() + pendingRedeems;
-
-        return
-            underlyingBalance +
-            ((exchangeRateFeeder.exchangeRateOf(address(aUstToken), true) *
-                aUstBalance) / 1e18);
-    }
+    return
+        underlyingBalance +
+        ((exchangeRateFeeder.exchangeRateOf(address(aUstToken), true) *
+            aUstBalance) / 1e18);
+}
+```
 
 <https://github.com/code-423n4/2022-01-sandclock/blob/main/sandclock/contracts/strategy/NonUSTStrategy.sol#L120-L136>
+```solidity
+function investedAssets()
+    external
+    view
+    override(BaseStrategy)
+    returns (uint256)
+{
+    uint256 underlyingBalance = _getUnderlyingBalance();
+    uint256 aUstBalance = _getAUstBalance() + pendingRedeems;
 
-    function investedAssets()
-        external
-        view
-        override(BaseStrategy)
-        returns (uint256)
-    {
-        uint256 underlyingBalance = _getUnderlyingBalance();
-        uint256 aUstBalance = _getAUstBalance() + pendingRedeems;
-
-        uint256 ustAssets = ((exchangeRateFeeder.exchangeRateOf(
-            address(aUstToken),
-            true
-        ) * aUstBalance) / 1e18) + pendingDeposits;
-        return
-            underlyingBalance +
-            curvePool.get_dy_underlying(ustI, underlyingI, ustAssets);
-    }
+    uint256 ustAssets = ((exchangeRateFeeder.exchangeRateOf(
+        address(aUstToken),
+        true
+    ) * aUstBalance) / 1e18) + pendingDeposits;
+    return
+        underlyingBalance +
+        curvePool.get_dy_underlying(ustI, underlyingI, ustAssets);
+}
+```
 
 #### Tools Used
 
@@ -804,30 +807,31 @@ The `requiresTrust()` modifier is used on the strategy, vault and factory contra
 However, if any single account has its private keys compromised or decides to become malicious on their own, they can remove all other trusted accounts from the `isTrusted` mapping. As a result, they are effectively able to take over the trusted group that controls all restricted functions in the parent contract.
 
 #### Proof of Concept
+```solidity
+abstract contract Trust {
+    event UserTrustUpdated(address indexed user, bool trusted);
 
-    abstract contract Trust {
-        event UserTrustUpdated(address indexed user, bool trusted);
+    mapping(address => bool) public isTrusted;
 
-        mapping(address => bool) public isTrusted;
+    constructor(address initialUser) {
+        isTrusted[initialUser] = true;
 
-        constructor(address initialUser) {
-            isTrusted[initialUser] = true;
-
-            emit UserTrustUpdated(initialUser, true);
-        }
-
-        function setIsTrusted(address user, bool trusted) public virtual requiresTrust {
-            isTrusted[user] = trusted;
-
-            emit UserTrustUpdated(user, trusted);
-        }
-
-        modifier requiresTrust() {
-            require(isTrusted[msg.sender], "UNTRUSTED");
-
-            _;
-        }
+        emit UserTrustUpdated(initialUser, true);
     }
+
+    function setIsTrusted(address user, bool trusted) public virtual requiresTrust {
+        isTrusted[user] = trusted;
+
+        emit UserTrustUpdated(user, trusted);
+    }
+
+    modifier requiresTrust() {
+        require(isTrusted[msg.sender], "UNTRUSTED");
+
+        _;
+    }
+}
+```
 
 #### Recommended Mitigation Steps
 

@@ -74,7 +74,7 @@ An attacker may control the LP price by creating the pool and then call `finaliz
 
 <https://github.com/sushiswap/miso/blob/2cdb1486a55ded55c81898b7be8811cb68cfda9e/contracts/Liquidity/PostAuctionLauncher.sol#L257>
 
-```solidity=216
+```solidity
 /**
  * @notice Finalizes Token sale and launches LP.
  * @return liquidity Number of LPs.
@@ -135,7 +135,7 @@ See [PostAuctionLauncher.getTokenAmounts()](https://github.com/sushiswap/miso/bl
 
 See [UniswapV2Pair.mint(...)](https://github.com/sushiswap/miso/blob/2cdb1486a55ded55c81898b7be8811cb68cfda9e/contracts/UniswapV2/UniswapV2Pair.sol#L135)
 
-```solidity=135
+```solidity
 liquidity = MathUniswap.min(amount0.mul(_totalSupply) / _reserve0, amount1.mul(_totalSupply) / _reserve1);
 ```
 
@@ -227,7 +227,7 @@ Also the revenues for the last token cannot be retrieved as `finalize()` cannot 
 
 <https://github.com/sushiswap/miso/blob/master/contracts/Auctions/Crowdsale.sol#L374>
 
-```JS
+```js
  function finalize() public nonReentrant {
         require(hasAdminRole(msg.sender) || wallet == msg.sender || hasSmartContractRole(msg.sender) || finalizeTimeExpired(),"Crowdsale: sender must be an admin"); // can be called by admin
         MarketStatus storage status = marketStatus;

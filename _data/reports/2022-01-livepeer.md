@@ -110,8 +110,8 @@ At L308-L309, ETH held by `BridgeMinter` is withdrawn to L1Migrator:
 <https://github.com/livepeer/arbitrum-lpt-bridge/blob/ebf68d11879c2798c5ec0735411b08d0bea4f287/contracts/L1/gateway/L1Migrator.sol#L308-L309>
 
 ```solidity
-        uint256 amount = IBridgeMinter(bridgeMinterAddr)
-            .withdrawETHToL1Migrator();
+uint256 amount = IBridgeMinter(bridgeMinterAddr)
+    .withdrawETHToL1Migrator();
 ```
 
 However, when calling `sendTxToL2()` the parameter `_l1CallValue` is only the `msg.value`, therefore, the ETH transferred to L2 does not include any funds from `bridgeMinter`.
@@ -119,16 +119,16 @@ However, when calling `sendTxToL2()` the parameter `_l1CallValue` is only the `m
 <https://github.com/livepeer/arbitrum-lpt-bridge/blob/ebf68d11879c2798c5ec0735411b08d0bea4f287/contracts/L1/gateway/L1Migrator.sol#L318-L327>
 
 ```solidity
-    sendTxToL2(
-        l2MigratorAddr,
-        address(this), // L2 alias of this contract will receive refunds
-        msg.value,
-        amount,
-        _maxSubmissionCost,
-        _maxGas,
-        _gasPriceBid,
-        ""
-    )
+sendTxToL2(
+    l2MigratorAddr,
+    address(this), // L2 alias of this contract will receive refunds
+    msg.value,
+    amount,
+    _maxSubmissionCost,
+    _maxGas,
+    _gasPriceBid,
+    ""
+)
 ```
 
 As a result, due to lack of funds, `call` with value = amount to `l2MigratorAddr` will always fail on L2.
@@ -140,16 +140,16 @@ Since there is no other way to send ETH to L2, all the ETH from `bridgeMinter` i
 Change to:
 
 ```solidity
-    sendTxToL2(
-        l2MigratorAddr,
-        address(this), // L2 alias of this contract will receive refunds
-        msg.value + amount, // the `amount` withdrawn from BridgeMinter should be added
-        amount,
-        _maxSubmissionCost,
-        _maxGas,
-        _gasPriceBid,
-        ""
-    )
+sendTxToL2(
+    l2MigratorAddr,
+    address(this), // L2 alias of this contract will receive refunds
+    msg.value + amount, // the `amount` withdrawn from BridgeMinter should be added
+    amount,
+    _maxSubmissionCost,
+    _maxGas,
+    _gasPriceBid,
+    ""
+)
 ```
 
 **[yondonfu (Livepeer) confirmed and resolved](https://github.com/code-423n4/2022-01-livepeer-findings/issues/205#issuecomment-1021378858):**
@@ -211,8 +211,7 @@ _Submitted by WatchPug, also found by gzeon_.
 <https://github.com/livepeer/arbitrum-lpt-bridge/blob/ebf68d11879c2798c5ec0735411b08d0bea4f287/contracts/L1/gateway/L1Migrator.sol#L308-L310>
 
 ```solidity
-uint256 amount = IBridgeMinter(bridgeMinterAddr)
-            .withdrawETHToL1Migrator();
+uint256 amount = IBridgeMinter(bridgeMinterAddr).withdrawETHToL1Migrator();
 ```
 
 `L1Migrator.sol#migrateETH()` will call `IBridgeMinter(bridgeMinterAddr).withdrawETHToL1Migrator()` to withdraw ETH from `BridgeMinter`.
@@ -265,61 +264,62 @@ Fund can be lost if the L1 call value provided is insufficient to cover `_maxSub
 `outboundTransfer` in `L1LPTGateway` does not check if the call value is sufficient, if it is `< _maxSubmissionCost` the retryable ticket creation will fail and fund is lost; if it is `<_maxSubmissionCost + (_maxGas * _gasPriceBid)` the ticket would require manual execution.
 
 <https://github.com/livepeer/arbitrum-lpt-bridge/blob/ebf68d11879c2798c5ec0735411b08d0bea4f287/contracts/L1/gateway/L1LPTGateway.sol#L80>
+```solidity
+function outboundTransfer(
+    address _l1Token,
+    address _to,
+    uint256 _amount,
+    uint256 _maxGas,
+    uint256 _gasPriceBid,
+    bytes calldata _data
+) external payable override whenNotPaused returns (bytes memory) {
+    require(_l1Token == l1Lpt, "TOKEN_NOT_LPT");
 
-        function outboundTransfer(
-            address _l1Token,
-            address _to,
-            uint256 _amount,
-            uint256 _maxGas,
-            uint256 _gasPriceBid,
-            bytes calldata _data
-        ) external payable override whenNotPaused returns (bytes memory) {
-            require(_l1Token == l1Lpt, "TOKEN_NOT_LPT");
+    // nested scope to avoid stack too deep errors
+    address from;
+    uint256 seqNum;
+    bytes memory extraData;
+    {
+        uint256 maxSubmissionCost;
+        (from, maxSubmissionCost, extraData) = parseOutboundData(_data);
+        require(extraData.length == 0, "CALL_HOOK_DATA_NOT_ALLOWED");
 
-            // nested scope to avoid stack too deep errors
-            address from;
-            uint256 seqNum;
-            bytes memory extraData;
-            {
-                uint256 maxSubmissionCost;
-                (from, maxSubmissionCost, extraData) = parseOutboundData(_data);
-                require(extraData.length == 0, "CALL_HOOK_DATA_NOT_ALLOWED");
+        // transfer tokens to escrow
+        TokenLike(_l1Token).transferFrom(from, l1LPTEscrow, _amount);
 
-                // transfer tokens to escrow
-                TokenLike(_l1Token).transferFrom(from, l1LPTEscrow, _amount);
+        bytes memory outboundCalldata = getOutboundCalldata(
+            _l1Token,
+            from,
+            _to,
+            _amount,
+            extraData
+        );
 
-                bytes memory outboundCalldata = getOutboundCalldata(
-                    _l1Token,
-                    from,
-                    _to,
-                    _amount,
-                    extraData
-                );
+        seqNum = sendTxToL2(
+            l2Counterpart,
+            from,
+            maxSubmissionCost,
+            _maxGas,
+            _gasPriceBid,
+            outboundCalldata
+        );
+    }
 
-                seqNum = sendTxToL2(
-                    l2Counterpart,
-                    from,
-                    maxSubmissionCost,
-                    _maxGas,
-                    _gasPriceBid,
-                    outboundCalldata
-                );
-            }
+    emit DepositInitiated(_l1Token, from, _to, seqNum, _amount);
 
-            emit DepositInitiated(_l1Token, from, _to, seqNum, _amount);
-
-            return abi.encode(seqNum);
-        }
-
+    return abi.encode(seqNum);
+}
+```
 #### Recommended Mitigation Steps
 
 Add check similar to the one used in `L1GatewayRouter` provided by Arbitrum team
 
 <https://github.com/OffchainLabs/arbitrum/blob/b8366005a697000dda1f57a78a7bdb2313db8fe2/packages/arb-bridge-peripherals/contracts/tokenbridge/ethereum/gateway/L1GatewayRouter.sol#L236>
-
-            uint256 expectedEth = _maxSubmissionCost + (_maxGas * _gasPriceBid);
-            require(_maxSubmissionCost > 0, "NO_SUBMISSION_COST");
-            require(msg.value == expectedEth, "WRONG_ETH_VALUE");
+```solidity
+uint256 expectedEth = _maxSubmissionCost + (_maxGas * _gasPriceBid);
+require(_maxSubmissionCost > 0, "NO_SUBMISSION_COST");
+require(msg.value == expectedEth, "WRONG_ETH_VALUE");
+```
 
 **[yondonfu (Livepeer) confirmed and disagreed with severity](https://github.com/code-423n4/2022-01-livepeer-findings/issues/238#issuecomment-1018693125):**
  > Labeled as disagree with severity because we think this is a 2 - Med finding. We think that the likelihood of this occurring is low because in almost all cases users should be interacting with this contract using an application that handles calculating the maxSubmissionCost properly which would prevent the reported issue. However, we do think that the impact *if* this occurs is high since LPT *and* ETH could be lost if the reported issue happens. Thus, we think 2 - Med is appropriate given that assets are not at direct risk, but there is a low probability path for assets to be lost.

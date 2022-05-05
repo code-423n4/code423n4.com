@@ -126,11 +126,14 @@ _Submitted by danb_
 
 <https://github.com/code-423n4/2022-01-behodler/blob/main/contracts/TokenProxies/RebaseProxy.sol#L36>
 
-    uint256 proxy = (baseBalance * ONE) / _redeemRate;
+```solidity
+uint256 proxy = (baseBalance * ONE) / _redeemRate;
+```
 
 should be:
-
-    uint256 proxy = (amount * ONE) / _redeemRate;
+```solidity
+uint256 proxy = (amount * ONE) / _redeemRate;
+```
 
 **[gititGoro (Behodler) confirmed, but disagreed with High severity and commented](https://github.com/code-423n4/2022-01-behodler-findings/issues/297#issuecomment-1030508474):**
  > Should be a balanceBefore and balanceAfter calculation with the diff being wrapped.
@@ -150,19 +153,20 @@ The implementation of the `transferAndCall` function in `ERC677` is incorrect. I
 #### Proof of Concept
 
 Below is the implementation of `transferAndCall`:
-
-    function transferAndCall(
-        address _to,
-        uint256 _value,
-        bytes memory _data
-    ) public returns (bool success) {
-        super.transfer(_to, _value);
-        _transfer(msg.sender, _to, _value);
-        if (isContract(_to)) {
-            contractFallback(_to, _value, _data);
-        }
-        return true;
-    }
+```solidity
+function transferAndCall(
+  address _to,
+  uint256 _value,
+  bytes memory _data
+) public returns (bool success) {
+  super.transfer(_to, _value);
+  _transfer(msg.sender, _to, _value);
+  if (isContract(_to)) {
+      contractFallback(_to, _value, _data);
+  }
+  return true;
+}
+```
 
 We can see that `super.transfer(_to, _value);` and `_transfer(msg.sender, _to, _value);` are doing the same thing - transfering `_value` of tokens from `msg.sender` to `_to`.
 
@@ -216,9 +220,11 @@ The comment on [line 54](https://github.com/code-423n4/2022-01-behodler/blob/ced
 
 [Line 83](https://github.com/code-423n4/2022-01-behodler/blob/cedb81273f6daf2ee39ec765eef5ba74f21b2c6e/contracts/FlanBackstop.sol#L83) of FlanBackstop.sol calculates the price of flan to stablecoin in the Uniswap pool based on the balances at a single point in time. Pool balances at a single point in time can be manipulated with flash loans, which can skew the numbers to the extreme. The single data point of LP balances is used to calculate [the growth variable in line 103](https://github.com/code-423n4/2022-01-behodler/blob/cedb81273f6daf2ee39ec765eef5ba74f21b2c6e/contracts/FlanBackstop.sol#L103), and the growth variable influences the quantity of pyroflan a user receives in [the premium calculation on line 108](https://github.com/code-423n4/2022-01-behodler/blob/cedb81273f6daf2ee39ec765eef5ba74f21b2c6e/contracts/FlanBackstop.sol#L108).
 
-    uint256 priceBefore = (balanceOfFlanBefore * getMagnitude(stablecoin)) / balanceOfStableBefore;
-    uint256 growth = ((priceBefore - tiltedPrice) * 100) / priceBefore;
-    uint256 premium = (flanToMint * (growth / 2)) / 100;
+```solidity
+uint256 priceBefore = (balanceOfFlanBefore * getMagnitude(stablecoin)) / balanceOfStableBefore;
+uint256 growth = ((priceBefore - tiltedPrice) * 100) / priceBefore;
+uint256 premium = (flanToMint * (growth / 2)) / 100;
+```
 
 Problems can occur when the volumes that the `purchasePyroFlan()` function sends to the Uniswap pool are large compared to the pool's liquidity volume, or if the Uniswap pool price is temporarily tilted with a flashloan (or a whale). Because this function purposefully changes the exchange rate of the LP, by transferring tokens to the LP in a 2-to-1 ratio, a large volume could caught a large price impact in the LP. The code attempts to protect against this manipulation in [line 102](https://github.com/code-423n4/2022-01-behodler/blob/cedb81273f6daf2ee39ec765eef5ba74f21b2c6e/contracts/FlanBackstop.sol#L102) with a require statement, but this can be worked around by reducing the volume per flashloan and repeating the attack multiple times. A user can manipulate the LP, especially when the LP is new with low liquidity, in order to achieve large amounts of flan and pyroflan.
 
@@ -247,45 +253,45 @@ The impact of this is worsened by another vulnerability, that is [assertGovernan
 In [assertGovernanceApproved()](https://github.com/code-423n4/2022-01-behodler/blob/main/contracts/DAO/FlashGovernanceArbiter.sol#L60) as seen below, the line`pendingFlashDecision[target][sender] = flashGovernanceConfig` will overwrite the previous contents. Thereby, making any previous rewards unaccounted for and inaccessible to anyone.
 
 Note that we must wait `pendingFlashDecision[target][sender].unlockTime` between calls.
+```solidity
+function assertGovernanceApproved(
+  address sender,
+  address target,
+  bool emergency
+) public {
+  if (
+    IERC20(flashGovernanceConfig.asset).transferFrom(sender, address(this), flashGovernanceConfig.amount) &&
+    pendingFlashDecision[target][sender].unlockTime < block.timestamp
+  ) {
+    require(
+      emergency || (block.timestamp - security.lastFlashGovernanceAct > security.epochSize),
+      "Limbo: flash governance disabled for rest of epoch"
+    );
+    pendingFlashDecision[target][sender] = flashGovernanceConfig;
+    pendingFlashDecision[target][sender].unlockTime += block.timestamp;
 
-      function assertGovernanceApproved(
-        address sender,
-        address target,
-        bool emergency
-      ) public {
-        if (
-          IERC20(flashGovernanceConfig.asset).transferFrom(sender, address(this), flashGovernanceConfig.amount) &&
-          pendingFlashDecision[target][sender].unlockTime < block.timestamp
-        ) {
-          require(
-            emergency || (block.timestamp - security.lastFlashGovernanceAct > security.epochSize),
-            "Limbo: flash governance disabled for rest of epoch"
-          );
-          pendingFlashDecision[target][sender] = flashGovernanceConfig;
-          pendingFlashDecision[target][sender].unlockTime += block.timestamp;
-
-          security.lastFlashGovernanceAct = block.timestamp;
-          emit flashDecision(sender, flashGovernanceConfig.asset, flashGovernanceConfig.amount, target);
-        } else {
-          revert("LIMBO: governance decision rejected.");
-        }
-      }
-
+    security.lastFlashGovernanceAct = block.timestamp;
+    emit flashDecision(sender, flashGovernanceConfig.asset, flashGovernanceConfig.amount, target);
+  } else {
+    revert("LIMBO: governance decision rejected.");
+  }
+}
+```
 #### Recommended Mitigation Steps
 
 Consider updating the initial if statement to ensure the `pendingFlashDecision` for that `target` and `sender` is empty, that is:
-
-      function assertGovernanceApproved(
-        address sender,
-        address target,
-        bool emergency
-      ) public {
-        if (
-          IERC20(flashGovernanceConfig.asset).transferFrom(sender, address(this), flashGovernanceConfig.amount) &&
-          pendingFlashDecision[target][sender].unlockTime == 0
-        ) {
-    ...
-
+```solidity
+function assertGovernanceApproved(
+  address sender,
+  address target,
+  bool emergency
+) public {
+  if (
+    IERC20(flashGovernanceConfig.asset).transferFrom(sender, address(this), flashGovernanceConfig.amount) &&
+    pendingFlashDecision[target][sender].unlockTime == 0
+  ) {
+...
+```
 Note we cannot simply add the new `amount` to the previous `amount` incase the underlying `asset` has been changed.
 
 **[gititGoro (Behodler) confirmed and commented](https://github.com/code-423n4/2022-01-behodler-findings/issues/156#issuecomment-1029451025):**
@@ -346,36 +352,36 @@ _Submitted by csanuragjain_
 
 2.  Observe the assertGovernanceApproved function
 
-<!---->
-
-    function assertGovernanceApproved(
-        address sender,
-        address target,
-        bool emergency
-      ) public {
-    ...
-    pendingFlashDecision[target][sender].unlockTime += block.timestamp;
-    ...
-    }
-
+```solidity
+function assertGovernanceApproved(
+    address sender,
+    address target,
+    bool emergency
+  ) public {
+...
+pendingFlashDecision[target][sender].unlockTime += block.timestamp;
+...
+}
+```
 3.  Assume assertGovernanceApproved is called with sender x and target y and pendingFlashDecision\[target]\[sender].unlockTime is 100 and block.timestamp is 10000 then
 
-<!---->
-
-    pendingFlashDecision[target][sender].unlockTime += block.timestamp; // 10000+100=10100
+```solidity
+pendingFlashDecision[target][sender].unlockTime += block.timestamp; // 10000+100=10100
+```
 
 4.  Again assertGovernanceApproved is called with same argument after timestamp 10100. This time unlockTime is set to very high value  (assume block.timestamp is 10500). This is incorrect
 
-<!---->
-
-    pendingFlashDecision[target][sender].unlockTime += block.timestamp; // 10100+10500=20600
+```solidity
+pendingFlashDecision[target][sender].unlockTime += block.timestamp; // 10100+10500=20600
+```
 
 #### Recommended Mitigation Steps
 
 Unlock time should be calculated like below:
-
-    constant public CONSTANT_UNLOCK_TIME = 1 days; // example
-    pendingFlashDecision[target][sender].unlockTime = CONSTANT_UNLOCK_TIME +  block.timestamp;
+```solidity
+constant public CONSTANT_UNLOCK_TIME = 1 days; // example
+pendingFlashDecision[target][sender].unlockTime = CONSTANT_UNLOCK_TIME +  block.timestamp;
+```
 
 **[gititGoro (Behodler) confirmed and commented](https://github.com/code-423n4/2022-01-behodler-findings/issues/228#issuecomment-1030494067):**
  > Well spotted. This is a variant of a previously reported issue where the recommendation was to not allow flash governing a contract until stake has been withdrawn which is a safer fix.
@@ -399,19 +405,19 @@ Note: this attack assumes the attacker may gain control of the execution flow in
 [withdrawGovernanceAsset()](https://github.com/code-423n4/2022-01-behodler/blob/main/contracts/DAO/FlashGovernanceArbiter.sol#L142) does not follow the check-effects-interactions pattern as seen from the following code snippet, where an external call is made before state modifications.
 
 ```solidity
-  function withdrawGovernanceAsset(address targetContract, address asset) public virtual {
-    require(
-      pendingFlashDecision[targetContract][msg.sender].asset == asset &&
-        pendingFlashDecision[targetContract][msg.sender].amount > 0 &&
-        pendingFlashDecision[targetContract][msg.sender].unlockTime < block.timestamp,
-      "Limbo: Flashgovernance decision pending."
-    );
-    IERC20(pendingFlashDecision[targetContract][msg.sender].asset).transfer(
-      msg.sender,
-      pendingFlashDecision[targetContract][msg.sender].amount
-    );
-    delete pendingFlashDecision[targetContract][msg.sender];
-  }
+function withdrawGovernanceAsset(address targetContract, address asset) public virtual {
+  require(
+    pendingFlashDecision[targetContract][msg.sender].asset == asset &&
+      pendingFlashDecision[targetContract][msg.sender].amount > 0 &&
+      pendingFlashDecision[targetContract][msg.sender].unlockTime < block.timestamp,
+    "Limbo: Flashgovernance decision pending."
+  );
+  IERC20(pendingFlashDecision[targetContract][msg.sender].asset).transfer(
+    msg.sender,
+    pendingFlashDecision[targetContract][msg.sender].amount
+  );
+  delete pendingFlashDecision[targetContract][msg.sender];
+}
 ```
 
 The attacker can exploit this vulnerability through the following steps:
@@ -424,19 +430,20 @@ The attacker can exploit this vulnerability through the following steps:
 #### Recommended Mitigation Steps
 
 There are two possible mitigations, the first is to implement the check-effects-interactions patter. This involves doing as checks and state changes before making external calls. To implement this in the current context delete the `pendingFlashDecision` before making the external call as follows.
-
-      function withdrawGovernanceAsset(address targetContract, address asset) public virtual {
-        require(
-          pendingFlashDecision[targetContract][msg.sender].asset == asset &&
-            pendingFlashDecision[targetContract][msg.sender].amount > 0 &&
-            pendingFlashDecision[targetContract][msg.sender].unlockTime < block.timestamp,
-          "Limbo: Flashgovernance decision pending."
-        );
-        uint256 amount = pendingFlashDecision[targetContract][msg.sender].amount;
-        IERC20 asset = IERC20(pendingFlashDecision[targetContract][msg.sender].asset);
-        delete pendingFlashDecision[targetContract][msg.sender];
-        asset.transfer(msg.sender, amount);
-      }
+```solidity
+function withdrawGovernanceAsset(address targetContract, address asset) public virtual {
+  require(
+    pendingFlashDecision[targetContract][msg.sender].asset == asset &&
+      pendingFlashDecision[targetContract][msg.sender].amount > 0 &&
+      pendingFlashDecision[targetContract][msg.sender].unlockTime < block.timestamp,
+    "Limbo: Flashgovernance decision pending."
+  );
+  uint256 amount = pendingFlashDecision[targetContract][msg.sender].amount;
+  IERC20 asset = IERC20(pendingFlashDecision[targetContract][msg.sender].asset);
+  delete pendingFlashDecision[targetContract][msg.sender];
+  asset.transfer(msg.sender, amount);
+}
+```
 
 **[gititGoro (Behodler) acknowledged and commented](https://github.com/code-423n4/2022-01-behodler-findings/issues/154#issuecomment-1029448627):**
  > I do mention in the documentation that the only eligible assets are EYE and EYE LPs but that rule isn't enforced on a contract level which is why I'm acknowledging this rather than disputing it.
@@ -454,20 +461,20 @@ The proposal to burn a user's tokens for a flash governance proposal does not re
 #### Proof of Concept
 
 The function [burnFlashGovernanceAsset()](https://github.com/code-423n4/2022-01-behodler/blob/main/contracts/DAO/FlashGovernanceArbiter.sol#L124)  will simply overwrite the user's state with `pendingFlashDecision[targetContract][user] = flashGovernanceConfig;` as seen below.
+```solidity
+function burnFlashGovernanceAsset(
+  address targetContract,
+  address user,
+  address asset,
+  uint256 amount
+) public virtual onlySuccessfulProposal {
+  if (pendingFlashDecision[targetContract][user].assetBurnable) {
+    Burnable(asset).burn(amount);
+  }
 
-      function burnFlashGovernanceAsset(
-        address targetContract,
-        address user,
-        address asset,
-        uint256 amount
-      ) public virtual onlySuccessfulProposal {
-        if (pendingFlashDecision[targetContract][user].assetBurnable) {
-          Burnable(asset).burn(amount);
-        }
-
-        pendingFlashDecision[targetContract][user] = flashGovernanceConfig;
-      }
-
+  pendingFlashDecision[targetContract][user] = flashGovernanceConfig;
+}
+```
 Since `flashGovernanceConfig` is not modified in [BurnFlashStakeDeposit.execute()](https://github.com/code-423n4/2022-01-behodler/blob/main/contracts/DAO/Proposals/BurnFlashStakeDeposit.sol#L39) the user will have `amount` set to the current config amount which is likely what they originally transferred in {assertGovernanceApproved()]\(<https://github.com/code-423n4/2022-01-behodler/blob/main/contracts/DAO/FlashGovernanceArbiter.sol#L60>).
 
 Furthermore, `unlockTime` will be set to the config unlock time.  The config unlock time is the length of time in seconds that proposal should lock tokens for not the future timestamp. That is unlock time may be say `7 days` rather than `now + 7 days`. As a result the check in [withdrawGovernanceAsset()](https://github.com/code-423n4/2022-01-behodler/blob/main/contracts/DAO/FlashGovernanceArbiter.sol#L146)  `pendingFlashDecision[targetContract][msg.sender].unlockTime < block.timestamp,` will always pass unless there is a significant misconfiguration.
@@ -522,12 +529,12 @@ _Submitted by CertoraInc_
 
 The flan contract must have balance (and must have more flan then we want to transfer) in order to allow flan transfers. If it doesn't have any balance, the safeTransfer, which is the only way to transfer flan, will call `_transfer()` function with `amount = 0`. It should check `address(msg.sender)`'s balance instead of `address(this)`'s balance.
 
-```sol
+```solidity
 function safeTransfer(address _to, uint256 _amount) external {
-       uint256 flanBal = balanceOf(address(this)); // the problem is in this line
-       uint256 flanToTransfer = _amount > flanBal ? flanBal : _amount;
-       _transfer(_msgSender(), _to, flanToTransfer);
-   }
+  uint256 flanBal = balanceOf(address(this)); // the problem is in this line
+  uint256 flanToTransfer = _amount > flanBal ? flanBal : _amount;
+  _transfer(_msgSender(), _to, flanToTransfer);
+}
 ```
 
 **[gititGoro (Behodler) confirmed but disagreed with High severity](https://github.com/code-423n4/2022-01-behodler-findings/issues/160)**
@@ -550,28 +557,28 @@ Wrong fateCreated value emitted.
 Taking into account the FOT is done almost everywhere important in the solution already. That's a known practice in the solution.
 
 However, it's missing here (see @audit-info tags):
-
-    File: LimboDAO.sol
-    383:   function burnAsset(address asset, uint256 amount) public isLive incrementFate {
-    384:     require(assetApproved[asset], "LimboDAO: illegal asset");
-    385:     address sender = _msgSender();
-    386:     require(ERC677(asset).transferFrom(sender, address(this), amount), "LimboDAO: transferFailed"); //@audit-info FOT not taken into account
-    387:     uint256 fateCreated = fateState[_msgSender()].fateBalance;
-    388:     if (asset == domainConfig.eye) {
-    389:       fateCreated = amount * 10; //@audit-info wrong amount due to lack of FOT calculation
-    390:       ERC677(domainConfig.eye).burn(amount);//@audit-info wrong amount due to lack of FOT calculation
-    391:     } else {
-    392:       uint256 actualEyeBalance = IERC20(domainConfig.eye).balanceOf(asset);
-    393:       require(actualEyeBalance > 0, "LimboDAO: No EYE");
-    394:       uint256 totalSupply = IERC20(asset).totalSupply();
-    395:       uint256 eyePerUnit = (actualEyeBalance * ONE) / totalSupply;
-    396:       uint256 impliedEye = (eyePerUnit * amount) / ONE;//@audit-info wrong amount due to lack of FOT calculation
-    397:       fateCreated = impliedEye * 20;
-    398:     }
-    399:     fateState[_msgSender()].fateBalance += fateCreated; //@audit-info potentially wrong fateCreated as fateCreated can be equal to amount * 10;  
-    400:     emit assetBurnt(_msgSender(), asset, fateCreated);//@audit-info potentially wrong fateCreated emitted
-    401:   }
-
+```js
+File: LimboDAO.sol
+383:   function burnAsset(address asset, uint256 amount) public isLive incrementFate {
+384:     require(assetApproved[asset], "LimboDAO: illegal asset");
+385:     address sender = _msgSender();
+386:     require(ERC677(asset).transferFrom(sender, address(this), amount), "LimboDAO: transferFailed"); //@audit-info FOT not taken into account
+387:     uint256 fateCreated = fateState[_msgSender()].fateBalance;
+388:     if (asset == domainConfig.eye) {
+389:       fateCreated = amount * 10; //@audit-info wrong amount due to lack of FOT calculation
+390:       ERC677(domainConfig.eye).burn(amount);//@audit-info wrong amount due to lack of FOT calculation
+391:     } else {
+392:       uint256 actualEyeBalance = IERC20(domainConfig.eye).balanceOf(asset);
+393:       require(actualEyeBalance > 0, "LimboDAO: No EYE");
+394:       uint256 totalSupply = IERC20(asset).totalSupply();
+395:       uint256 eyePerUnit = (actualEyeBalance * ONE) / totalSupply;
+396:       uint256 impliedEye = (eyePerUnit * amount) / ONE;//@audit-info wrong amount due to lack of FOT calculation
+397:       fateCreated = impliedEye * 20;
+398:     }
+399:     fateState[_msgSender()].fateBalance += fateCreated; //@audit-info potentially wrong fateCreated as fateCreated can be equal to amount * 10;  
+400:     emit assetBurnt(_msgSender(), asset, fateCreated);//@audit-info potentially wrong fateCreated emitted
+401:   }
+```
 #### Tools Used
 
 VS Code
@@ -600,12 +607,14 @@ These quotes are used in the `_ensurePriceStability` function. The last require 
 <https://github.com/code-423n4/2022-01-behodler/blob/71d8e0cfd9388f975d6a90dffba9b502b222bdfe/contracts/UniswapHelper.sol#L283-L285>
 
 This function will revert if this statement is false:
-
-    localFlanQuotes[0].blockProduced - localFlanQuotes[1].blockProduced > VARS.minQuoteWaitDuration
+```solidity
+localFlanQuotes[0].blockProduced - localFlanQuotes[1].blockProduced > VARS.minQuoteWaitDuration
+```
 
 Since `VARS.minQuoteWaitDuration` is a `uint256`, it is at least 0
-
-    localFlanQuotes[0].blockProduced - localFlanQuotes[1].blockProduced > 0
+```solidity
+localFlanQuotes[0].blockProduced - localFlanQuotes[1].blockProduced > 0
+```
 
 But, as we've shown above, we can create a transaction in every block that will make `localFlanQuotes[0].blockProduced - localFlanQuotes[1].blockProduced == 0`. In any block we can make any call to `_ensurePriceStability` revert.
 
@@ -663,21 +672,22 @@ Referenced code:
 #### Recommended Mitigation Steps
 
 Rewrite the `_governanceApproved` function and the `governanceApproved` modifier as follows:
+```solidity
+function _governanceApproved(bool emergency) internal {
+  bool successfulProposal = LimboDAOLike(DAO).successfulProposal(msg.sender);
+  if (successfulProposal) {
+    flashGoverner.setEnforcement(false);
+  } else if (configured) {
+    flashGoverner.setEnforcement(true);
+    flashGoverner.assertGovernanceApproved(msg.sender, address(this), emergency);
+  }
+}
 
-      function _governanceApproved(bool emergency) internal {
-        bool successfulProposal = LimboDAOLike(DAO).successfulProposal(msg.sender);
-        if (successfulProposal) {
-          flashGoverner.setEnforcement(false);
-        } else if (configured) {
-          flashGoverner.setEnforcement(true);
-          flashGoverner.assertGovernanceApproved(msg.sender, address(this), emergency);
-        }
-      }
-
-      modifier governanceApproved(bool emergency) {
-        _governanceApproved(emergency);
-        _;
-      }
+modifier governanceApproved(bool emergency) {
+  _governanceApproved(emergency);
+  _;
+}
+```
 
 **[gititGoro (Behodler) confirmed but disagreed with High severity and commented](https://github.com/code-423n4/2022-01-behodler-findings/issues/306#issuecomment-1030510740):**
  > So this is a vulnerability for the very first execution of flashgovernance decision on a contract, after which it's safe. This is the type of thing that won't be acted upon because it will have gone away by the time the public interacts with Limbo. However, it is technically true so I'm confirming the issue.
@@ -701,8 +711,9 @@ Furthermore, since SCX is needed to ensure the proper functioning of the protoco
 #### Recommended Mitigation Steps
 
 Insert a require statement on line 222:
-
+```solidity
 require (AdjustedRectangle! =0, “ err”)
+```
 
 **[gititGoro (Behodler) acknowledged and commented](https://github.com/code-423n4/2022-01-behodler-findings/issues/335#issuecomment-1030515127):**
  > I really appreciate how deeply you've thought about this. Requires a thorough understanding of Limbo. Indeed your handle is apt (unless you're just naming yourself after the marvel hero in which case I would have to see your archery skills).
