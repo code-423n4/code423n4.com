@@ -89,7 +89,7 @@ const Leaderboard = ({ data }) => {
   const handles = data.handles.edges;
 
   const resultData = useMemo(() => {
-    let result = [];
+    const result = [];
 
     for (const handle of handles) {
       const p = handle.node;
