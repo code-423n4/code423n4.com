@@ -32,31 +32,38 @@
   padding: 10px;
 }
 
-.leaderboard-table td:nth-child(n + 2) {
+.leaderboard-table td:nth-child(n + 2),
+.leaderboard-table td:nth-child(2) {
   text-align: right;
 }
 
-.leaderboard-table tbody tr:nth-child(odd) {
+.leaderboard-table tbody tr:nth-child(odd),
+.leaderboard-table tr:nth-child(2) th:nth-child(6) {
   background: rgba(255, 255, 255, 0.07);
 }
 
-.leaderboard-table td:nth-child(4),
-.leaderboard-table td:nth-child(8),
-.leaderboard-table th:nth-child(4),
-.leaderboard-table tr:nth-child(1) th:nth-child(6),
-.leaderboard-table th:nth-child(8) {
+.leaderboard-table td:nth-child(5),
+.leaderboard-table td:nth-child(9),
+.leaderboard-table th:nth-child(5),
+.leaderboard-table th:nth-child(9),
+.leaderboard-table tr:nth-child(1) th:nth-child(7) {
   border-left: 2px solid rgba(209, 180, 180, 0.22);
   background: rgba(255, 255, 255, 0.07);
 }
 
-.leaderboard-table tr:nth-child(1) th:nth-child(4) {
+.leaderboard-table tr:nth-child(1) th:nth-child(5),
+.leaderboard-table tr:nth-child(2) th:nth-child(6) {
   border-right: 2px solid rgba(255, 255, 255, 0.22);
 }
 
-.leaderboard-table td:nth-child(5),
-.leaderboard-table tr:nth-child(2) th:nth-child(5) {
+.leaderboard-table td:nth-child(6),
+.leaderboard-table tr:nth-child(3) th:nth-child(6) {
   border-right: 2px solid rgba(255, 255, 255, 0.22);
   background: rgba(255, 255, 255, 0.07);
+}
+
+.leaderboard-table td:nth-child(1) {
+  max-width: 20px;
 }
 
 .leaderboard-table td,
@@ -65,7 +72,7 @@
   font-size: 12px;
 }
 
-.leaderboard-table td:nth-child(1) {
+.leaderboard-table td:nth-child(2) {
   width: 100%;
 }
 
@@ -103,6 +110,10 @@
   background: white;
   border: 2px solid white;
   margin-right: 10px;
+}
+
+.wrapper-competitor {
+  text-align: left;
 }
 
 .member {
@@ -276,8 +287,8 @@
   }
 
   /*
-	Label the data
-	*/
+  Label the data
+  */
   .leaderboard-table td:nth-of-type(1):before {
     /* content: "First Name"; */
   }
