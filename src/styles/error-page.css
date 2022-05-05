@@ -8,8 +8,9 @@
 
 .placeholder {
   margin-top: 16px;
-  height: 300px;
+  height: 600px;
   width: auto;
   object-fit: cover;
   border-radius: 5px;
+  box-shadow: 3px 3px 20px rgba(255,255,255,0.6);
 }
