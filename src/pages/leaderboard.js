@@ -108,7 +108,7 @@ const Leaderboard = ({ data }) => {
         gasOptz: 0,
         allFindings: 0,
         awardTotal: 0,
-        rank:0
+        rank: 0,
       };
 
       const filteredFindings = filterFindingsByTimeFrame(p.findings, timeFrame);
