@@ -89,7 +89,7 @@ const Leaderboard = ({ data }) => {
   const handles = data.handles.edges;
 
   const resultData = useMemo(() => {
-    const result = [];
+    let result = [];
 
     for (const handle of handles) {
       const p = handle.node;
@@ -108,6 +108,7 @@ const Leaderboard = ({ data }) => {
         gasOptz: 0,
         allFindings: 0,
         awardTotal: 0,
+        rank:0
       };
 
       const filteredFindings = filterFindingsByTimeFrame(p.findings, timeFrame);
@@ -120,6 +121,14 @@ const Leaderboard = ({ data }) => {
         result.push(combinedData);
       }
     }
+    result.sort((a,b) => {
+      if (a.awardTotal > b.awardTotal) return -1;
+      if (b.awardTotal < a.awardTotal) return 1;
+      return 0;
+    })
+    result = result.map((element, index) => {
+      return {...element, rank: index+1 }
+    })
     return result;
   }, [handles, timeFrame]);
 
