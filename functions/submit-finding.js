@@ -103,6 +103,7 @@ exports.handler = async (event) => {
   const recipients = `${email}, submissions@code423n4.com`;
   const text = dedent`
   C4 finding submitted: (risk = ${labels[1]})
+  Wallet address: ${address}
   
   ${body}
   `;
