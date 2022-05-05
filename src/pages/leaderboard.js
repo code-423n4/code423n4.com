@@ -121,15 +121,14 @@ const Leaderboard = ({ data }) => {
         result.push(combinedData);
       }
     }
-    result.sort((a,b) => {
-      if (a.awardTotal > b.awardTotal) return -1;
-      if (b.awardTotal < a.awardTotal) return 1;
-      return 0;
-    })
-    result = result.map((element, index) => {
-      return {...element, rank: index+1 }
-    })
-    return result;
+
+    return result
+      .sort((a,b) => {
+        return b.awardTotal - a.awardTotal;
+      })
+      .map((element, index) => {
+        return { ...element, rank: index + 1 };
+      });
   }, [handles, timeFrame]);
 
   const handleChange = (e) => {
