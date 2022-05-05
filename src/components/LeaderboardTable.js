@@ -11,7 +11,7 @@ const LeaderboardTable = ({ results }) => {
         Cell: (props) => {
           return (
             <p>{props.row.original.rank}.</p>
-          )
+          );
         }
       },
       {
