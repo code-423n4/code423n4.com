@@ -213,6 +213,7 @@
     justify-content: flex-start;
     align-items: center;
     left: 30px;
+    border:none;
   }
   .leaderboard-table td:nth-of-type(3) {
     grid-area: 1 / 2 / 2 / 2;
@@ -284,9 +285,6 @@
   .leaderboard-table tr:nth-child(1) th:nth-child(6),
   .leaderboard-table th:nth-child(8) {
     border-left: 0;
-  }
-  .leaderboard-table tr:nth-child(0)  {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
   }
 
   .leaderboard-table tr:nth-child(1) th:nth-child(4) {
