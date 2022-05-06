@@ -108,7 +108,6 @@ const Leaderboard = ({ data }) => {
         gasOptz: 0,
         allFindings: 0,
         awardTotal: 0,
-        rank: 0,
       };
 
       const filteredFindings = filterFindingsByTimeFrame(p.findings, timeFrame);
@@ -122,13 +121,7 @@ const Leaderboard = ({ data }) => {
       }
     }
 
-    return result
-      .sort((a,b) => {
-        return b.awardTotal - a.awardTotal;
-      })
-      .map((element, index) => {
-        return { ...element, rank: index + 1 };
-      });
+    return result;
   }, [handles, timeFrame]);
 
   const handleChange = (e) => {
