@@ -192,7 +192,7 @@ const Form = ({ contest, sponsor, repoUrl }) => {
   const [hasValidationErrors, setHasValidationErrors] = useState(false);
   const [errorMessage, setErrorMessage] = useState("An error occurred");
   const [isQaOrGasFinding, setIsQaOrGasFinding] = useState(false);
-  const [isExpended, setIsExpended] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
 
   const locString = state.linesOfCode.map((loc) => loc.value).join("\n");
   const details = isQaOrGasFinding ? state.qaGasDetails : state.details;
@@ -319,16 +319,30 @@ const Form = ({ contest, sponsor, repoUrl }) => {
         });
 
         return (
-          <div className={!isExpended ? clsx(styles.Form) : clsx(styles.Form, styles.FormMax)}>
+          <div
+            className={
+              !isExpanded
+                ? clsx(styles.Form)
+                : clsx(styles.Form, styles.FormMax)
+            }
+          >
             <div className={clsx(styles.FormHeader)}>
               <h1>{sponsor} contest finding</h1>
-              <button
-                className="button cta-button"
-                type="button"
-                onClick={() => setIsExpended(!isExpended)}
-              >
-                {isExpended ? 'Reduce' : 'Expend'}
-              </button>
+                {isExpanded ? (
+                  <img
+                    src="/images/compress.svg"
+                    alt="compress form"
+                    className={clsx(styles.FormIcons)}
+                    onClick={() => setIsExpanded(false)}
+                  />
+                ) : (
+                  <img
+                    src="/images/expand.svg"
+                    alt="expand form"
+                    className={clsx(styles.FormIcons)}
+                    onClick={() => setIsExpanded(true)}
+                  />
+                )}
             </div>
             {(status === FormStatus.Unsubmitted ||
               status === FormStatus.Submitting) && (

@@ -28,6 +28,17 @@
   max-width: 100%;
 }
 
+.FormIcons {
+  height: 30px;
+  width: 30px;
+  cursor:pointer;
+  filter: brightness(0) invert(1);
+  transition: all 0.2s ease-out;
+  &:hover {
+    transform: scale(1.1);
+  }
+}
+
 .Button {
   font-family: inherit;
   display: block;
