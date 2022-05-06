@@ -120,7 +120,6 @@ const Leaderboard = ({ data }) => {
         result.push(combinedData);
       }
     }
-
     return result;
   }, [handles, timeFrame]);
 
