@@ -328,21 +328,12 @@ const Form = ({ contest, sponsor, repoUrl }) => {
           >
             <div className={clsx(styles.FormHeader)}>
               <h1>{sponsor} contest finding</h1>
-                {isExpanded ? (
-                  <img
-                    src="/images/compress.svg"
-                    alt="compress form"
-                    className={clsx(styles.FormIcons)}
-                    onClick={() => setIsExpanded(false)}
-                  />
-                ) : (
-                  <img
-                    src="/images/expand.svg"
-                    alt="expand form"
-                    className={clsx(styles.FormIcons)}
-                    onClick={() => setIsExpanded(true)}
-                  />
-                )}
+                <img
+                  src={isExpanded ? "/images/compress.svg" : "/images/expand.svg"}
+                  alt={isExpanded ? "compress form" : "expand form"}
+                  className={clsx(styles.FormIcons)}
+                  onClick={() => setIsExpanded(!isExpanded)}
+                />
             </div>
             {(status === FormStatus.Unsubmitted ||
               status === FormStatus.Submitting) && (
