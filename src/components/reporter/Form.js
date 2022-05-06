@@ -84,15 +84,21 @@ const qaGasDetailsField = {
 const mdTemplate =
   "## Impact\nDetailed description of the impact of this finding.\n\n## Proof of Concept\nProvide direct links to all referenced code in GitHub. Add screenshots, logs, or any other relevant proof that illustrates the concept.\n\n## Tools Used\n\n## Recommended Mitigation Steps";
 
+const locArray = localStorage.getItem('linesOfCode');
+let index = '';
+if (localStorage.getItem('risk')) {
+  index = riskField.options.findIndex((element)=> element.value === localStorage.getItem('risk'));
+}
+
 const initialState = {
-  title: "",
-  email: "",
-  handle: "",
-  polygonAddress: "",
-  risk: "",
-  details: mdTemplate,
-  qaGasDetails: "",
-  linesOfCode: [
+  title: localStorage.getItem('title') || "",
+  email: localStorage.getItem('email') || "",
+  handle: localStorage.getItem('handle') || "",
+  polygonAddress: localStorage.getItem('polygonAddress') || "",
+  risk: index !== '' ? riskField.options[index].label : "",
+  details: localStorage.getItem('details') || mdTemplate,
+  qaGasDetails: localStorage.getItem('qaGasDetails') || "",
+  linesOfCode: locArray && locArray.length > 0 ? JSON.parse(locArray) :  [
     {
       id: Date.now(),
       value: "",
@@ -224,12 +230,15 @@ const Form = ({ contest, sponsor, repoUrl }) => {
   const handleChange = useCallback((e) => {
     const { name, value } = e.target;
 
+    localStorage.setItem(name, value);
+
     setState((state) => {
       return { ...state, [name]: value };
     });
   }, []);
 
   const handleLocChange = useCallback((linesOfCode) => {
+    localStorage.setItem('linesOfCode', JSON.stringify(linesOfCode));
     setState((state) => {
       return { ...state, linesOfCode };
     });
@@ -270,11 +279,13 @@ const Form = ({ contest, sponsor, repoUrl }) => {
 
     setHasValidationErrors(hasErrors || hasInvalidLinks);
     if (!hasErrors) {
-      submitFinding(submissionUrl, formData);
+      // submitFinding(submissionUrl, formData);
+      localStorage.clear();
     }
   };
-
+  
   const handleReset = () => {
+    localStorage.clear();
     setState({
       ...state,
       title: "",
@@ -482,3 +493,4 @@ const Form = ({ contest, sponsor, repoUrl }) => {
 };
 
 export default Form;
+
