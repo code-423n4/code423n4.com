@@ -7,10 +7,10 @@ const LeaderboardTable = ({ results }) => {
   const columns = React.useMemo(
     () => [
       {
-        Header: 'Rank',
+        Header: '#',
         Cell: (props) => {
           return (
-            <p>{props.row.original.rank}.</p>
+            <p>{props.flatRows.indexOf(props.row) + 1}</p>
           );
         }
       },
