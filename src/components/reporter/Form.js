@@ -492,4 +492,3 @@ const Form = ({ contest, sponsor, repoUrl }) => {
 };
 
 export default Form;
-
