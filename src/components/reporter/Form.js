@@ -192,6 +192,7 @@ const Form = ({ contest, sponsor, repoUrl }) => {
   const [hasValidationErrors, setHasValidationErrors] = useState(false);
   const [errorMessage, setErrorMessage] = useState("An error occurred");
   const [isQaOrGasFinding, setIsQaOrGasFinding] = useState(false);
+  const [isExpended, setIsExpended] = useState(false);
 
   const locString = state.linesOfCode.map((loc) => loc.value).join("\n");
   const details = isQaOrGasFinding ? state.qaGasDetails : state.details;
@@ -318,8 +319,17 @@ const Form = ({ contest, sponsor, repoUrl }) => {
         });
 
         return (
-          <div className={clsx(styles.Form)}>
-            <h1>{sponsor} contest finding</h1>
+          <div className={!isExpended ? clsx(styles.Form) : clsx(styles.Form, styles.FormMax)}>
+            <div className={clsx(styles.FormHeader)}>
+              <h1>{sponsor} contest finding</h1>
+              <button
+                className="button cta-button"
+                type="button"
+                onClick={() => setIsExpended(!isExpended)}
+              >
+                {isExpended ? 'Reduce' : 'Expend'}
+              </button>
+            </div>
             {(status === FormStatus.Unsubmitted ||
               status === FormStatus.Submitting) && (
               <form>
@@ -482,3 +492,4 @@ const Form = ({ contest, sponsor, repoUrl }) => {
 };
 
 export default Form;
+

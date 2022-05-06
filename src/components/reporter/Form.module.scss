@@ -16,6 +16,18 @@
   }
 }
 
+.FormMax {
+  max-width: 97vw!important;
+}
+
+.FormHeader {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 100%;
+}
+
 .Button {
   font-family: inherit;
   display: block;
@@ -46,3 +58,4 @@
     }
   }
 }
+
