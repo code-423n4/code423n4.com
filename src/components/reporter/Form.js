@@ -194,11 +194,10 @@ const Form = ({ contest, sponsor, repoUrl }) => {
   const [isQaOrGasFinding, setIsQaOrGasFinding] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
 
-  const locArray = window.localStorage.getItem("linesOfCode");
-
   
   useEffect(() => {
-    if (typeof window !== `undefined` && window.localStorage){
+    if (typeof window !== `undefined` ){
+      const locArray = window.localStorage.getItem("linesOfCode");
       let riskIndex = null;
       if (window.localStorage.getItem("risk")) {
         riskIndex = riskField.options.findIndex(
@@ -224,7 +223,7 @@ const Form = ({ contest, sponsor, repoUrl }) => {
               ],
       });
     }
-  }, [locArray]);
+  }, []);
 
   const locString = state.linesOfCode.map((loc) => loc.value).join("\n");
   const details = isQaOrGasFinding ? state.qaGasDetails : state.details;
@@ -256,16 +255,18 @@ const Form = ({ contest, sponsor, repoUrl }) => {
   // Event Handlers
   const handleChange = useCallback((e) => {
     const { name, value } = e.target;
-
-    localStorage.setItem(name, value);
-
+    if (typeof window !== `undefined` ){
+      window.localStorage.setItem(name, value);
+    }
     setState((state) => {
       return { ...state, [name]: value };
     });
   }, []);
 
   const handleLocChange = useCallback((linesOfCode) => {
-    localStorage.setItem("linesOfCode", JSON.stringify(linesOfCode));
+    if (typeof window !== `undefined` ){
+      window.localStorage.setItem("linesOfCode", JSON.stringify(linesOfCode));
+    }
     setState((state) => {
       return { ...state, linesOfCode };
     });
@@ -307,12 +308,16 @@ const Form = ({ contest, sponsor, repoUrl }) => {
     setHasValidationErrors(hasErrors || hasInvalidLinks);
     if (!hasErrors) {
       submitFinding(submissionUrl, formData);
-      localStorage.clear();
+      if (typeof window !== `undefined` ){
+        window.localStorage.clear();
+      }
     }
   };
 
   const handleReset = () => {
-    localStorage.clear();
+    if (typeof window !== `undefined` ){
+      window.localStorage.clear();
+    }
     setState({
       ...state,
       title: "",
