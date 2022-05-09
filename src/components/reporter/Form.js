@@ -272,6 +272,7 @@ const Form = ({ contest, sponsor, repoUrl }) => {
     setHasValidationErrors(hasErrors || hasInvalidLinks);
     if (!hasErrors) {
       submitFinding(submissionUrl, formData);
+      setIsExpanded(false);
     }
   };
 
