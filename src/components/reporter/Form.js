@@ -221,6 +221,12 @@ const Form = ({ contest, sponsor, repoUrl }) => {
                 },
               ],
       });
+      if (riskIndex !== null && riskField.options[riskIndex].value) {
+        riskField.options[riskIndex].value.slice(0, 1) === "G" ||
+        riskField.options[riskIndex].value.slice(0, 1) === "Q"
+          ? setIsQaOrGasFinding(true)
+          : setIsQaOrGasFinding(false);
+      }
     }
   }, []);
 
