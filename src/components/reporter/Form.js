@@ -194,9 +194,8 @@ const Form = ({ contest, sponsor, repoUrl }) => {
   const [isQaOrGasFinding, setIsQaOrGasFinding] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
 
-  
   useEffect(() => {
-    if (typeof window !== `undefined` ){
+    if (typeof window !== `undefined`) {
       const locArray = window.localStorage.getItem("linesOfCode");
       let riskIndex = null;
       if (window.localStorage.getItem("risk")) {
@@ -255,7 +254,7 @@ const Form = ({ contest, sponsor, repoUrl }) => {
   // Event Handlers
   const handleChange = useCallback((e) => {
     const { name, value } = e.target;
-    if (typeof window !== `undefined` ){
+    if (typeof window !== `undefined`) {
       window.localStorage.setItem(name, value);
     }
     setState((state) => {
@@ -264,7 +263,7 @@ const Form = ({ contest, sponsor, repoUrl }) => {
   }, []);
 
   const handleLocChange = useCallback((linesOfCode) => {
-    if (typeof window !== `undefined` ){
+    if (typeof window !== `undefined`) {
       window.localStorage.setItem("linesOfCode", JSON.stringify(linesOfCode));
     }
     setState((state) => {
@@ -308,14 +307,14 @@ const Form = ({ contest, sponsor, repoUrl }) => {
     setHasValidationErrors(hasErrors || hasInvalidLinks);
     if (!hasErrors) {
       submitFinding(submissionUrl, formData);
-      if (typeof window !== `undefined` ){
+      if (typeof window !== `undefined`) {
         window.localStorage.clear();
       }
     }
   };
 
   const handleReset = () => {
-    if (typeof window !== `undefined` ){
+    if (typeof window !== `undefined`) {
       window.localStorage.clear();
     }
     setState({
