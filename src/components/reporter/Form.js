@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import clsx from "clsx";
 import { StaticQuery, graphql } from "gatsby";
 
@@ -84,32 +84,20 @@ const qaGasDetailsField = {
 const mdTemplate =
   "## Impact\nDetailed description of the impact of this finding.\n\n## Proof of Concept\nProvide direct links to all referenced code in GitHub. Add screenshots, logs, or any other relevant proof that illustrates the concept.\n\n## Tools Used\n\n## Recommended Mitigation Steps";
 
-const locArray = localStorage.getItem("linesOfCode");
-
-let riskIndex = "";
-if (localStorage.getItem("risk")) {
-  riskIndex = riskField.options.findIndex(
-    (element) => element.value === localStorage.getItem("risk")
-  );
-}
-
 const initialState = {
-  title: localStorage.getItem("title") || "",
-  email: localStorage.getItem("email") || "",
-  handle: localStorage.getItem("handle") || "",
-  polygonAddress: localStorage.getItem("polygonAddress") || "",
-  risk: riskIndex !== "" ? riskField.options[riskIndex].label : "",
-  details: localStorage.getItem("details") || mdTemplate,
-  qaGasDetails: localStorage.getItem("qaGasDetails") || "",
-  linesOfCode:
-    locArray && locArray.length > 0
-      ? JSON.parse(locArray)
-      : [
-          {
-            id: Date.now(),
-            value: "",
-          },
-        ],
+  title: "",
+  email: "",
+  handle: "",
+  polygonAddress: "",
+  risk: "",
+  details: mdTemplate,
+  qaGasDetails: "",
+  linesOfCode:[
+    {
+      id: Date.now(),
+      value: "",
+    },
+  ],
 };
 
 const FormStatus = {
@@ -205,6 +193,36 @@ const Form = ({ contest, sponsor, repoUrl }) => {
   const [errorMessage, setErrorMessage] = useState("An error occurred");
   const [isQaOrGasFinding, setIsQaOrGasFinding] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
+
+  const locArray = window.localStorage.getItem("linesOfCode");
+
+  
+  useEffect(() => {
+    let riskIndex = null;
+    if (window.localStorage.getItem("risk")) {
+      riskIndex = riskField.options.findIndex(
+        (element) => element.value === window.localStorage.getItem("risk")
+      );
+    }
+    setState({
+      title: window.localStorage.getItem("title") || "",
+      email: window.localStorage.getItem("email") || "",
+      handle: window.localStorage.getItem("handle") || "",
+      polygonAddress: window.localStorage.getItem("polygonAddress") || "",
+      risk: riskIndex !== null ? riskField.options[riskIndex].value : "",
+      details: window.localStorage.getItem("details") || mdTemplate,
+      qaGasDetails: window.localStorage.getItem("qaGasDetails") || "",
+      linesOfCode:
+        locArray && locArray.length > 0
+          ? JSON.parse(locArray)
+          : [
+              {
+                id: Date.now(),
+                value: "",
+              },
+            ],
+    });
+  }, [locArray]);
 
   const locString = state.linesOfCode.map((loc) => loc.value).join("\n");
   const details = isQaOrGasFinding ? state.qaGasDetails : state.details;
@@ -345,12 +363,12 @@ const Form = ({ contest, sponsor, repoUrl }) => {
           >
             <div className={clsx(styles.FormHeader)}>
               <h1>{sponsor} contest finding</h1>
-                <img
-                  src={isExpanded ? "/images/compress.svg" : "/images/expand.svg"}
-                  alt={isExpanded ? "compress form" : "expand form"}
-                  className={clsx(styles.FormIcons)}
-                  onClick={() => setIsExpanded(!isExpanded)}
-                />
+              <img
+                src={isExpanded ? "/images/compress.svg" : "/images/expand.svg"}
+                alt={isExpanded ? "compress form" : "expand form"}
+                className={clsx(styles.FormIcons)}
+                onClick={() => setIsExpanded(!isExpanded)}
+              />
             </div>
             {(status === FormStatus.Unsubmitted ||
               status === FormStatus.Submitting) && (
