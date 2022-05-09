@@ -1,44 +1,44 @@
-import React, { useState, useEffect } from "react";
+import React, { useCallback } from "react";
 import clsx from "clsx";
+import Select from "react-select";
 
-import * as styles from "./Widgets.module.scss";
+import * as formStyles from "./WardenField.module.scss";
 
-const SelectField = ({ name, options, onChange, isInvalid, fieldState }) => {
-  const [value, setValue] = useState(null);
+const RiskOptionLabel = ({ label }) => {
+  return (
+    <div className={formStyles.OptionContainer}>
+      <span>{label}</span>
+    </div>
+  );
+};
 
-  useEffect(() => {
-    if (fieldState !== "") {
-      setValue(fieldState);
-    }
-  }, []);
-
-  const handleChange = (e) => {
-    setValue(e.target.value);
-    onChange(e);
-  };
+const SelectField = ({
+  name,
+  options,
+  onChange,
+  isInvalid,
+  fieldState,
+  required,
+}) => {
+  const handleChange = useCallback(
+    (option) => {
+      const value = option && option.value ? option.value : "";
+      onChange({ target: { name, value } });
+    },
+    [onChange, name]
+  );
 
   return (
-    <select
-      className={clsx(
-        styles.Control,
-        styles.Select,
-        isInvalid && "input-error",
-        value === null && styles.Placeholder
-      )}
+    <Select
       name={name}
+      required={required}
+      value={options.find((o) => o.value === fieldState) || "Select ..."}
+      formatOptionLabel={RiskOptionLabel}
+      options={options}
       onChange={handleChange}
-    >
-      <option value="" selected={(value === null) ?? "selected"} >Select...</option>
-      {options.map((option, index) => (
-        <option
-          key={"option-" + index}
-          value={option.value}
-          selected={value !== null ?? "selected"}
-        >
-          {option.label}
-        </option>
-      ))}
-    </select>
+      className={clsx(formStyles.ReactSelect, isInvalid && formStyles.Invalid)}
+      classNamePrefix="react-select"
+    />
   );
 };
 

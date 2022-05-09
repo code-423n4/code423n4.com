@@ -92,7 +92,7 @@ const initialState = {
   risk: "",
   details: mdTemplate,
   qaGasDetails: "",
-  linesOfCode:[
+  linesOfCode: [
     {
       id: Date.now(),
       value: "",
@@ -198,30 +198,32 @@ const Form = ({ contest, sponsor, repoUrl }) => {
 
   
   useEffect(() => {
-    let riskIndex = null;
-    if (window.localStorage.getItem("risk")) {
-      riskIndex = riskField.options.findIndex(
-        (element) => element.value === window.localStorage.getItem("risk")
-      );
+    if (typeof window !== `undefined` && window.localStorage){
+      let riskIndex = null;
+      if (window.localStorage.getItem("risk")) {
+        riskIndex = riskField.options.findIndex(
+          (element) => element.value === window.localStorage.getItem("risk")
+        );
+      }
+      setState({
+        title: window.localStorage.getItem("title") || "",
+        email: window.localStorage.getItem("email") || "",
+        handle: window.localStorage.getItem("handle") || "",
+        polygonAddress: window.localStorage.getItem("polygonAddress") || "",
+        risk: riskIndex !== null ? riskField.options[riskIndex].value : "",
+        details: window.localStorage.getItem("details") || mdTemplate,
+        qaGasDetails: window.localStorage.getItem("qaGasDetails") || "",
+        linesOfCode:
+          locArray && locArray.length > 0
+            ? JSON.parse(locArray)
+            : [
+                {
+                  id: Date.now(),
+                  value: "",
+                },
+              ],
+      });
     }
-    setState({
-      title: window.localStorage.getItem("title") || "",
-      email: window.localStorage.getItem("email") || "",
-      handle: window.localStorage.getItem("handle") || "",
-      polygonAddress: window.localStorage.getItem("polygonAddress") || "",
-      risk: riskIndex !== null ? riskField.options[riskIndex].value : "",
-      details: window.localStorage.getItem("details") || mdTemplate,
-      qaGasDetails: window.localStorage.getItem("qaGasDetails") || "",
-      linesOfCode:
-        locArray && locArray.length > 0
-          ? JSON.parse(locArray)
-          : [
-              {
-                id: Date.now(),
-                value: "",
-              },
-            ],
-    });
   }, [locArray]);
 
   const locString = state.linesOfCode.map((loc) => loc.value).join("\n");
