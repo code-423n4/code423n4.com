@@ -116,11 +116,11 @@ function ApplyForCertifiedContributor() {
 
         return (
           <DefaultLayout
-            pageDescription="Apply to become a Certified Contributor."
-            pageTitle="Certified Contributor Application | Code 423n4"
+            pageDescription="Apply to become a Certified Warden."
+            pageTitle="Certified Warden Application | Code 423n4"
           >
             <div className="wrapper-main">
-              <h1 className="page-header">Certified Contributors</h1>
+              <h1 className="page-header">Certified Wardens</h1>
               {(status === FormStatus.Unsubmitted && (
                 <article dangerouslySetInnerHTML={{ __html: data.contributorTermsSummary.html }} />
               ))}
