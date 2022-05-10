@@ -321,7 +321,7 @@ const Form = ({ contest, sponsor, repoUrl }) => {
     if (!hasErrors) {
       submitFinding(submissionUrl, formData);
       if (typeof window !== `undefined`) {
-        window.localStorage.clear();
+        window.localStorage.removeItem(formData.contest);
       }
       setIsExpanded(false);
     }
