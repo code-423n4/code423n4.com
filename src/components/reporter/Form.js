@@ -193,7 +193,7 @@ const checkTitle = (title, risk) => {
   } else {
     return title;
   }
-}
+};
 
 const Form = ({ contest, sponsor, repoUrl }) => {
   // Component State
@@ -220,10 +220,10 @@ const Form = ({ contest, sponsor, repoUrl }) => {
 
   // const formData = {
   //   contest, // ok -- in state
-  //   sponsor, // ok -- in state 
+  //   sponsor, // ok -- in state
   //   repo: repoUrl.split("/").pop(), // ok -- in state
   //   email: state.email, // ok -- in state
-  //   handle: state.handle, // ok -- in state 
+  //   handle: state.handle, // ok -- in state
   //   address: state.polygonAddress, // ok -- in state
   //   risk: state.risk ? state.risk.slice(0, 1) : "", // ok -- in state
   //   title, // ok -- in state
@@ -234,9 +234,7 @@ const Form = ({ contest, sponsor, repoUrl }) => {
   // fetch initial state from local storage
   useEffect(() => {
     if (typeof window !== `undefined`) {
-      const dataObject = JSON.parse(
-        window.localStorage.getItem(contest)
-      );
+      const dataObject = JSON.parse(window.localStorage.getItem(contest));
       let riskIndex = null;
       if (dataObject && dataObject.risk !== "") {
         riskIndex = riskField.options.findIndex(
@@ -285,10 +283,10 @@ const Form = ({ contest, sponsor, repoUrl }) => {
   // Event Handlers
   const handleChange = useCallback((e) => {
     const { name, value } = e.target;
-    if (name === 'risk') {
+    if (name === "risk") {
       setState((state) => {
-        return {...state, [name]: state.risk ? state.risk.slice(0, 1) : ""}
-      })
+        return { ...state, [name]: state.risk ? state.risk.slice(0, 1) : "" };
+      });
     } else {
       setState((state) => {
         return { ...state, [name]: value };
@@ -340,7 +338,7 @@ const Form = ({ contest, sponsor, repoUrl }) => {
 
     setHasValidationErrors(hasErrors || hasInvalidLinks);
     if (!hasErrors) {
-      submitFinding(submissionUrl, {...state, body: formatedBody ? details : markdownBody});
+      submitFinding(submissionUrl, { ...state, body: formatedBody });
       if (typeof window !== `undefined`) {
         window.localStorage.removeItem(contest);
       }
