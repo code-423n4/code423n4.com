@@ -316,6 +316,7 @@ const Form = ({ contest, sponsor, repoUrl }) => {
       if (typeof window !== `undefined`) {
         window.localStorage.clear();
       }
+      setIsExpanded(false);
     }
   };
 
