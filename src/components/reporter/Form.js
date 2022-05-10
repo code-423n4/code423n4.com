@@ -196,24 +196,27 @@ const Form = ({ contest, sponsor, repoUrl }) => {
 
   useEffect(() => {
     if (typeof window !== `undefined`) {
-      const locArray = window.localStorage.getItem("linesOfCode");
+      const dataObject = JSON.parse(
+        window.localStorage.getItem(formData.contest)
+      );
       let riskIndex = null;
-      if (window.localStorage.getItem("risk")) {
+      if (dataObject && dataObject.risk !== "") {
         riskIndex = riskField.options.findIndex(
-          (element) => element.value === window.localStorage.getItem("risk")
+          (element) => element.value === dataObject.risk
         );
       }
+
       setState({
-        title: window.localStorage.getItem("title") || "",
-        email: window.localStorage.getItem("email") || "",
-        handle: window.localStorage.getItem("handle") || "",
-        polygonAddress: window.localStorage.getItem("polygonAddress") || "",
+        title: dataObject?.title || "",
+        email: dataObject?.email || "",
+        handle: dataObject?.handle || "",
+        polygonAddress: dataObject?.polygonAddress || "",
         risk: riskIndex !== null ? riskField.options[riskIndex].value : "",
-        details: window.localStorage.getItem("details") || mdTemplate,
-        qaGasDetails: window.localStorage.getItem("qaGasDetails") || "",
+        details: dataObject?.details || mdTemplate,
+        qaGasDetails: dataObject?.qaGasDetails || "",
         linesOfCode:
-          locArray && locArray.length > 0
-            ? JSON.parse(locArray)
+          dataObject?.linesOfCode && dataObject?.linesOfCode.length > 0
+            ? dataObject?.linesOfCode
             : [
                 {
                   id: Date.now(),
@@ -257,21 +260,25 @@ const Form = ({ contest, sponsor, repoUrl }) => {
     labels: labelSet,
   };
 
+  useEffect(() => {
+    updateLocalStorage(state);
+  }, [state]);
+
+  const updateLocalStorage = (state) => {
+    if (typeof window !== `undefined`) {
+      window.localStorage.setItem(formData.contest, JSON.stringify(state));
+    }
+  };
+
   // Event Handlers
   const handleChange = useCallback((e) => {
     const { name, value } = e.target;
-    if (typeof window !== `undefined`) {
-      window.localStorage.setItem(name, value);
-    }
     setState((state) => {
       return { ...state, [name]: value };
     });
   }, []);
 
   const handleLocChange = useCallback((linesOfCode) => {
-    if (typeof window !== `undefined`) {
-      window.localStorage.setItem("linesOfCode", JSON.stringify(linesOfCode));
-    }
     setState((state) => {
       return { ...state, linesOfCode };
     });
@@ -316,13 +323,11 @@ const Form = ({ contest, sponsor, repoUrl }) => {
       if (typeof window !== `undefined`) {
         window.localStorage.clear();
       }
+      setIsExpanded(false);
     }
   };
 
   const handleReset = () => {
-    if (typeof window !== `undefined`) {
-      window.localStorage.clear();
-    }
     setState({
       ...state,
       title: "",
