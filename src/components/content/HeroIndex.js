@@ -10,10 +10,14 @@ const HeroIndex = () => {
         <span>than any other method.</span>
       </h1>
       <h5>
-        Book an audit this week. Seriously.
+        Start your audit within 48 hours. Seriously.
         <br />
         <a href="https://discord.gg/code4rena" className="button button-small">
-          Join our Discord
+          Say #i-want-to-be-a-sponsor in our Discord
+        </a>
+        <p>— or —</p>
+        <a href="https://t.me/trebienxyz">
+          Message us on Telegram
         </a>
       </h5>
 
