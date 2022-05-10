@@ -15,7 +15,7 @@ const HeroIndex = () => {
         <a href="https://discord.gg/code4rena" className="button button-small">
           Join #i-want-an-audit in Discord
         </a>
-        <p style="margin: -10px 0 -10px 0">or</p>
+        <p className="hero-or">or</p>
         <a href="https://t.me/trebienxyz" className="button button-small">
           Message us on Telegram
         </a>
