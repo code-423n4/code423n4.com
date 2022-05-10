@@ -33,7 +33,7 @@ const SelectField = ({
       name={name}
       required={required}
       value={options.find((o) => o.value === fieldState) || "Select ..."}
-      formatOptionLabel={RiskOptionLabel}
+      formatOptionLabel={SelectFieldOptionLabel}
       options={options}
       onChange={handleChange}
       className={clsx(formStyles.ReactSelect, isInvalid && formStyles.Invalid)}
