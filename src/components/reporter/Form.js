@@ -185,6 +185,16 @@ const FindingContent = ({
   );
 };
 
+const checkTitle = (title, risk) => {
+  if (risk === "G (Gas Optimization)") {
+    return "Gas Optimizations";
+  } else if (risk === "QA (Quality Assurance)") {
+    return "QA Report";
+  } else {
+    return title;
+  }
+}
+
 const Form = ({ contest, sponsor, repoUrl }) => {
   // Component State
   const [state, setState] = useState(initialState);
@@ -199,33 +209,33 @@ const Form = ({ contest, sponsor, repoUrl }) => {
   const markdownBody = `# Lines of code\n\n${locString}\n\n\n# Vulnerability details\n\n${details}\n\n`;
   const labelSet = [config.labelAll, state.risk ? state.risk : ""];
   const submissionUrl = `/.netlify/functions/submit-finding`;
-  let title = "";
-  if (state.risk === "G (Gas Optimization)") {
-    title = "Gas Optimizations";
-  } else if (state.risk === "QA (Quality Assurance)") {
-    title = "QA Report";
-  } else {
-    title = state.title;
-  }
+  // let title = "";
+  // if (state.risk === "G (Gas Optimization)") {
+  //   title = "Gas Optimizations";
+  // } else if (state.risk === "QA (Quality Assurance)") {
+  //   title = "QA Report";
+  // } else {
+  //   title = state.title;
+  // }
 
-  const formData = {
-    contest,
-    sponsor,
-    repo: repoUrl.split("/").pop(),
-    email: state.email,
-    handle: state.handle,
-    address: state.polygonAddress,
-    risk: state.risk ? state.risk.slice(0, 1) : "",
-    title,
-    body: isQaOrGasFinding ? details : markdownBody,
-    labels: labelSet,
-  };
+  // const formData = {
+  //   contest, // ok -- in state
+  //   sponsor, // ok -- in state 
+  //   repo: repoUrl.split("/").pop(), // ok -- in state
+  //   email: state.email, // ok -- in state
+  //   handle: state.handle, // ok -- in state 
+  //   address: state.polygonAddress, // ok -- in state
+  //   risk: state.risk ? state.risk.slice(0, 1) : "", // ok -- in state
+  //   title, // ok -- in state
+  //   body: isQaOrGasFinding ? details : markdownBody, // ok - in submit
+  //   labels: labelSet, // ok -- in state
+  // };
 
   // fetch initial state from local storage
   useEffect(() => {
     if (typeof window !== `undefined`) {
       const dataObject = JSON.parse(
-        window.localStorage.getItem(formData.contest)
+        window.localStorage.getItem(contest)
       );
       let riskIndex = null;
       if (dataObject && dataObject.risk !== "") {
@@ -235,6 +245,10 @@ const Form = ({ contest, sponsor, repoUrl }) => {
       }
 
       setState({
+        contest: contest,
+        sponsor: sponsor,
+        repo: repoUrl.split("/").pop(),
+        labels: labelSet,
         title: dataObject?.title || "",
         email: dataObject?.email || "",
         handle: dataObject?.handle || "",
@@ -259,21 +273,27 @@ const Form = ({ contest, sponsor, repoUrl }) => {
           : setIsQaOrGasFinding(false);
       }
     }
-  }, [formData.contest]);
+  }, [contest, repoUrl, sponsor]); // if add labelSet --> infinite loop
 
   // update local storage
   useEffect(() => {
     if (typeof window !== `undefined`) {
-      window.localStorage.setItem(formData.contest, JSON.stringify(state));
+      window.localStorage.setItem(contest, JSON.stringify(state));
     }
-  }, [state, formData.contest]);
+  }, [state, contest]);
 
   // Event Handlers
   const handleChange = useCallback((e) => {
     const { name, value } = e.target;
-    setState((state) => {
-      return { ...state, [name]: value };
-    });
+    if (name === 'risk') {
+      setState((state) => {
+        return {...state, [name]: state.risk ? state.risk.slice(0, 1) : ""}
+      })
+    } else {
+      setState((state) => {
+        return { ...state, [name]: value };
+      });
+    }
   }, []);
 
   const handleLocChange = useCallback((linesOfCode) => {
@@ -297,10 +317,13 @@ const Form = ({ contest, sponsor, repoUrl }) => {
 
   const handleSubmit = () => {
     // extract required fields from field data for validation check
-    const { email, handle, address, risk, title, body } = formData;
+    const formatedRisk = state.risk ? state.risk.slice(0, 1) : "";
+    const formatedTitle = checkTitle(state.title, state.risk);
+    const formatedBody = isQaOrGasFinding ? details : markdownBody;
+    const { email, handle, address } = state;
     const requiredFields = isQaOrGasFinding
-      ? [email, handle, address, risk, body]
-      : [email, handle, address, risk, title, body];
+      ? [email, handle, address, formatedRisk, formatedBody]
+      : [email, handle, address, formatedRisk, formatedTitle, formatedBody];
     let hasErrors = requiredFields.some((field) => {
       return field === "" || field === undefined;
     });
@@ -317,9 +340,9 @@ const Form = ({ contest, sponsor, repoUrl }) => {
 
     setHasValidationErrors(hasErrors || hasInvalidLinks);
     if (!hasErrors) {
-      submitFinding(submissionUrl, formData);
+      submitFinding(submissionUrl, {...state, body: formatedBody ? details : markdownBody});
       if (typeof window !== `undefined`) {
-        window.localStorage.removeItem(formData.contest);
+        window.localStorage.removeItem(contest);
       }
       setIsExpanded(false);
     }
