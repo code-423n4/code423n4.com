@@ -194,6 +194,34 @@ const Form = ({ contest, sponsor, repoUrl }) => {
   const [isQaOrGasFinding, setIsQaOrGasFinding] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
 
+  const locString = state.linesOfCode.map((loc) => loc.value).join("\n");
+  const details = isQaOrGasFinding ? state.qaGasDetails : state.details;
+  const markdownBody = `# Lines of code\n\n${locString}\n\n\n# Vulnerability details\n\n${details}\n\n`;
+  const labelSet = [config.labelAll, state.risk ? state.risk : ""];
+  const submissionUrl = `/.netlify/functions/submit-finding`;
+  let title = "";
+  if (state.risk === "G (Gas Optimization)") {
+    title = "Gas Optimizations";
+  } else if (state.risk === "QA (Quality Assurance)") {
+    title = "QA Report";
+  } else {
+    title = state.title;
+  }
+
+  const formData = {
+    contest,
+    sponsor,
+    repo: repoUrl.split("/").pop(),
+    email: state.email,
+    handle: state.handle,
+    address: state.polygonAddress,
+    risk: state.risk ? state.risk.slice(0, 1) : "",
+    title,
+    body: isQaOrGasFinding ? details : markdownBody,
+    labels: labelSet,
+  };
+
+  // fetch initial state from local storage
   useEffect(() => {
     if (typeof window !== `undefined`) {
       const dataObject = JSON.parse(
@@ -231,44 +259,14 @@ const Form = ({ contest, sponsor, repoUrl }) => {
           : setIsQaOrGasFinding(false);
       }
     }
-  }, []);
+  }, [formData.contest]);
 
-  const locString = state.linesOfCode.map((loc) => loc.value).join("\n");
-  const details = isQaOrGasFinding ? state.qaGasDetails : state.details;
-  const markdownBody = `# Lines of code\n\n${locString}\n\n\n# Vulnerability details\n\n${details}\n\n`;
-  const labelSet = [config.labelAll, state.risk ? state.risk : ""];
-  const submissionUrl = `/.netlify/functions/submit-finding`;
-  let title = "";
-  if (state.risk === "G (Gas Optimization)") {
-    title = "Gas Optimizations";
-  } else if (state.risk === "QA (Quality Assurance)") {
-    title = "QA Report";
-  } else {
-    title = state.title;
-  }
-
-  const formData = {
-    contest,
-    sponsor,
-    repo: repoUrl.split("/").pop(),
-    email: state.email,
-    handle: state.handle,
-    address: state.polygonAddress,
-    risk: state.risk ? state.risk.slice(0, 1) : "",
-    title,
-    body: isQaOrGasFinding ? details : markdownBody,
-    labels: labelSet,
-  };
-
+  // update local storage
   useEffect(() => {
-    updateLocalStorage(state);
-  }, [state]);
-
-  const updateLocalStorage = (state) => {
     if (typeof window !== `undefined`) {
       window.localStorage.setItem(formData.contest, JSON.stringify(state));
     }
-  };
+  }, [state, formData.contest]);
 
   // Event Handlers
   const handleChange = useCallback((e) => {
