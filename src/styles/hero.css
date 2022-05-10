@@ -54,6 +54,10 @@
   margin-top: 0.5em;
 }
 
+.hero-or {
+  margin: -10px 0 -10px 0;
+}
+
 @media screen and (max-width: 900px) {
   .hero h1 {
     font-size: 60px;
