@@ -4,7 +4,7 @@ import Select from "react-select";
 
 import * as formStyles from "./WardenField.module.scss";
 
-const RiskOptionLabel = ({ label }) => {
+const SelectFieldOptionLabel = ({ label }) => {
   return (
     <div className={formStyles.OptionContainer}>
       <span>{label}</span>
