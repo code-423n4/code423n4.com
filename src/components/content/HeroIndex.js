@@ -13,10 +13,10 @@ const HeroIndex = () => {
         Start your audit within 48 hours. Seriously.
         <br />
         <a href="https://discord.gg/code4rena" className="button button-small">
-          Say #i-want-to-be-a-sponsor in our Discord
+          Join #i-want-an-audit in Discord
         </a>
-        <p>— or —</p>
-        <a href="https://t.me/trebienxyz">
+        <p>or</p>
+        <a href="https://t.me/trebienxyz" className="button button-small">
           Message us on Telegram
         </a>
       </h5>
