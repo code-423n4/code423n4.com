@@ -35,10 +35,11 @@ const Form = ({
   sponsor,
   repoUrl,
   initialState,
-  riskField,
   fieldsList,
   vulnerabilityDetailsField,
   qaGasDetailsField,
+  submissionUrl,
+  updateLocalStorage,
 }) => {
   // Component State
   const [state, setState] = useState(initialState);
@@ -52,15 +53,15 @@ const Form = ({
   const details = isQaOrGasFinding ? state.qaGasDetails : state.details;
   const markdownBody = `# Lines of code\n\n${locString}\n\n\n# Vulnerability details\n\n${details}\n\n`;
   const labelSet = [config.labelAll, state.risk ? state.risk : ""];
-  const submissionUrl = `/.netlify/functions/submit-finding`;
 
   // fetch initial state from local storage
   useEffect(() => {
     if (typeof window !== `undefined`) {
       const dataObject = JSON.parse(window.localStorage.getItem(contest));
       let riskIndex = null;
+
       if (dataObject && dataObject.risk !== "") {
-        riskIndex = riskField?.options.findIndex(
+        riskIndex = fieldsList[3].options.findIndex(
           (element) => element.value === dataObject.risk
         );
       }
@@ -74,7 +75,7 @@ const Form = ({
         email: dataObject?.email || "",
         handle: dataObject?.handle || "",
         address: dataObject?.address || "",
-        risk: riskIndex !== null ? riskField?.options[riskIndex].value : "",
+        risk: riskIndex !== null ? fieldsList[3].options[riskIndex].value : "",
         details: dataObject?.details || initialState.details,
         qaGasDetails: dataObject?.qaGasDetails || "",
         linesOfCode:
@@ -87,9 +88,9 @@ const Form = ({
                 },
               ],
       });
-      if (riskIndex !== null && riskField.options[riskIndex].value) {
-        riskField.options[riskIndex].value.slice(0, 1) === "G" ||
-        riskField.options[riskIndex].value.slice(0, 1) === "Q"
+      if (riskIndex !== null && fieldsList[3].options[riskIndex].value) {
+        fieldsList[3].options[riskIndex].value.slice(0, 1) === "G" ||
+        fieldsList[3].options[riskIndex].value.slice(0, 1) === "Q"
           ? setIsQaOrGasFinding(true)
           : setIsQaOrGasFinding(false);
       }
@@ -98,9 +99,7 @@ const Form = ({
 
   // update local storage
   useEffect(() => {
-    if (typeof window !== `undefined`) {
-      window.localStorage.setItem(contest, JSON.stringify(state));
-    }
+    updateLocalStorage(state, contest)
   }, [state, contest]);
 
   // Event Handlers
@@ -168,12 +167,15 @@ const Form = ({
       setIsExpanded(false);
     }
   };
-
+  
+  // !! CAN STAY
   const handleReset = () => {
     setState(initialState);
     setStatus(FormStatus.Unsubmitted);
   };
 
+
+  // !! CAN STAY
   const submitFinding = useCallback((url, data) => {
     (async () => {
       setStatus(FormStatus.Submitting);

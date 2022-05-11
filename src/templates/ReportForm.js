@@ -103,6 +103,14 @@ const qaGasDetailsField = {
   required: true,
 };
 
+const submissionUrl = `/.netlify/functions/submit-finding`;
+
+const updateLocalStorage = (state, contest) => {
+  if (typeof window !== `undefined`) {
+    window.localStorage.setItem(contest, JSON.stringify(state));
+  }
+}
+
 const ReportForm = (props) => {
   const endTime = props.data.contestsCsv.end_time;
   const hasContestEnded = Date.now() > new Date(endTime).getTime();
@@ -138,6 +146,8 @@ const ReportForm = (props) => {
           ]}
           vulnerabilityDetailsField={vulnerabilityDetailsField}
           qaGasDetailsField={qaGasDetailsField}
+          submissionUrl={submissionUrl}
+          updateLocalStorage={updateLocalStorage}
         />
       )}
     </main>
