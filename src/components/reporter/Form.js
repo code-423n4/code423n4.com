@@ -30,7 +30,7 @@ const Form = ({
   qaGasDetailsField,
   updateLocalStorage,
   initStateFromStorage,
-  handleSubmit
+  handleSubmit,
 }) => {
   // Component State
   const [state, setState] = useState(initialState);
@@ -64,40 +64,45 @@ const Form = ({
 
   // Event Handlers
   const handleChange = useCallback((e) => {
-    const { name, value } = e.target;
-    if (name === "polygonAddress") {
+    if (Array.isArray(e)) {
       setState((state) => {
-        return { ...state, address: value };
+        return { ...state, linesOfCode: e };
       });
     } else {
-      setState((state) => {
-        return { ...state, [name]: value };
-      });
+      const { name, value } = e?.target;
+      switch (name) {
+        case "risk":
+          const riskLevel = value.slice(0, 1);
+          if (riskLevel === "G" || riskLevel === "Q") {
+            setIsQaOrGasFinding(true);
+          } else {
+            setIsQaOrGasFinding(false);
+          }
+          setState((state) => {
+            return { ...state, [name]: value };
+          });
+          break;
+        default:
+          setState((state) => {
+            return { ...state, [name]: value };
+          });
+          break;
+      }
     }
   }, []);
 
-  const handleLocChange = useCallback((linesOfCode) => {
-    setState((state) => {
-      return { ...state, linesOfCode };
-    });
-  }, []);
-
-  const handleRiskChange = useCallback(
-    (e) => {
-      handleChange(e);
-      const riskLevel = e.target.value.slice(0, 1);
-      if (riskLevel === "G" || riskLevel === "Q") {
-        setIsQaOrGasFinding(true);
-      } else {
-        setIsQaOrGasFinding(false);
-      }
-    },
-    [handleChange]
-  );
-
   const submitHandler = () => {
-    handleSubmit(contest, state, isQaOrGasFinding, details, markdownBody, setHasValidationErrors, submitFinding, setIsExpanded);
-  }
+    handleSubmit(
+      contest,
+      state,
+      isQaOrGasFinding,
+      details,
+      markdownBody,
+      setHasValidationErrors,
+      submitFinding,
+      setIsExpanded
+    );
+  };
 
   const handleReset = () => {
     setState(initialState);
@@ -159,9 +164,7 @@ const Form = ({
                   >
                     <Widget
                       field={field}
-                      onChange={
-                        field.name === "risk" ? handleRiskChange : handleChange
-                      }
+                      onChange={handleChange}
                       fieldState={state}
                       isInvalid={hasValidationErrors && !state[field.name]}
                     />
@@ -177,7 +180,7 @@ const Form = ({
                 hasValidationErrors={hasValidationErrors}
                 state={state}
                 handleChange={handleChange}
-                handleLocChange={handleLocChange}
+                handleLocChange={handleChange}
                 isQaOrGasFinding={isQaOrGasFinding}
                 qaGasDetailsField={qaGasDetailsField}
                 vulnerabilityDetailsField={vulnerabilityDetailsField}
