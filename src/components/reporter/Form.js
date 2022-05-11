@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import clsx from "clsx";
 import { StaticQuery, graphql } from "gatsby";
 
@@ -221,10 +221,56 @@ const Form = ({ contest, sponsor, repoUrl }) => {
     labels: labelSet,
   };
 
+  // fetch initial state from local storage
+  useEffect(() => {
+    if (typeof window !== `undefined`) {
+      const dataObject = JSON.parse(
+        window.localStorage.getItem(formData.contest)
+      );
+      let riskIndex = null;
+      if (dataObject && dataObject.risk !== "") {
+        riskIndex = riskField.options.findIndex(
+          (element) => element.value === dataObject.risk
+        );
+      }
+
+      setState({
+        title: dataObject?.title || "",
+        email: dataObject?.email || "",
+        handle: dataObject?.handle || "",
+        polygonAddress: dataObject?.polygonAddress || "",
+        risk: riskIndex !== null ? riskField.options[riskIndex].value : "",
+        details: dataObject?.details || mdTemplate,
+        qaGasDetails: dataObject?.qaGasDetails || "",
+        linesOfCode:
+          dataObject?.linesOfCode && dataObject?.linesOfCode.length > 0
+            ? dataObject?.linesOfCode
+            : [
+                {
+                  id: Date.now(),
+                  value: "",
+                },
+              ],
+      });
+      if (riskIndex !== null && riskField.options[riskIndex].value) {
+        riskField.options[riskIndex].value.slice(0, 1) === "G" ||
+        riskField.options[riskIndex].value.slice(0, 1) === "Q"
+          ? setIsQaOrGasFinding(true)
+          : setIsQaOrGasFinding(false);
+      }
+    }
+  }, [formData.contest]);
+
+  // update local storage
+  useEffect(() => {
+    if (typeof window !== `undefined`) {
+      window.localStorage.setItem(formData.contest, JSON.stringify(state));
+    }
+  }, [state, formData.contest]);
+
   // Event Handlers
   const handleChange = useCallback((e) => {
     const { name, value } = e.target;
-
     setState((state) => {
       return { ...state, [name]: value };
     });
@@ -272,6 +318,10 @@ const Form = ({ contest, sponsor, repoUrl }) => {
     setHasValidationErrors(hasErrors || hasInvalidLinks);
     if (!hasErrors) {
       submitFinding(submissionUrl, formData);
+      if (typeof window !== `undefined`) {
+        window.localStorage.removeItem(formData.contest);
+      }
+      setIsExpanded(false);
     }
   };
 
@@ -328,12 +378,12 @@ const Form = ({ contest, sponsor, repoUrl }) => {
           >
             <div className={clsx(styles.FormHeader)}>
               <h1>{sponsor} contest finding</h1>
-                <img
-                  src={isExpanded ? "/images/compress.svg" : "/images/expand.svg"}
-                  alt={isExpanded ? "compress form" : "expand form"}
-                  className={clsx(styles.FormIcons)}
-                  onClick={() => setIsExpanded(!isExpanded)}
-                />
+              <img
+                src={isExpanded ? "/images/compress.svg" : "/images/expand.svg"}
+                alt={isExpanded ? "compress form" : "expand form"}
+                className={clsx(styles.FormIcons)}
+                onClick={() => setIsExpanded(!isExpanded)}
+              />
             </div>
             {(status === FormStatus.Unsubmitted ||
               status === FormStatus.Submitting) && (

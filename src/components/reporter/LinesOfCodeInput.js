@@ -89,7 +89,7 @@ const LinesOfCode = ({ onChange, linesOfCode, hasValidationErrors }) => {
   };
 
   return (
-    <div class="lines-of-code-input">
+    <div className="lines-of-code-input">
       <h2>Links to affected code</h2>
       <p>
         Provide GitHub links, including line numbers, to all instances of this
@@ -123,7 +123,7 @@ const LinesOfCode = ({ onChange, linesOfCode, hasValidationErrors }) => {
       >
         Add another code block
       </button>
-      <div class="featured-products"></div>
+      <div className="featured-products"></div>
     </div>
   );
 };
