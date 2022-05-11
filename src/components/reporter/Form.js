@@ -40,6 +40,7 @@ const Form = ({
   qaGasDetailsField,
   submissionUrl,
   updateLocalStorage,
+  initStateFromStorage,
 }) => {
   // Component State
   const [state, setState] = useState(initialState);
@@ -56,50 +57,19 @@ const Form = ({
 
   // fetch initial state from local storage
   useEffect(() => {
-    if (typeof window !== `undefined`) {
-      const dataObject = JSON.parse(window.localStorage.getItem(contest));
-      let riskIndex = null;
-
-      if (dataObject && dataObject.risk !== "") {
-        riskIndex = fieldsList[3].options.findIndex(
-          (element) => element.value === dataObject.risk
-        );
-      }
-
-      setState({
-        contest: contest,
-        sponsor: sponsor,
-        repo: repoUrl.split("/").pop(),
-        labels: labelSet,
-        title: dataObject?.title || "",
-        email: dataObject?.email || "",
-        handle: dataObject?.handle || "",
-        address: dataObject?.address || "",
-        risk: riskIndex !== null ? fieldsList[3].options[riskIndex].value : "",
-        details: dataObject?.details || initialState.details,
-        qaGasDetails: dataObject?.qaGasDetails || "",
-        linesOfCode:
-          dataObject?.linesOfCode && dataObject?.linesOfCode.length > 0
-            ? dataObject?.linesOfCode
-            : [
-                {
-                  id: Date.now(),
-                  value: "",
-                },
-              ],
-      });
-      if (riskIndex !== null && fieldsList[3].options[riskIndex].value) {
-        fieldsList[3].options[riskIndex].value.slice(0, 1) === "G" ||
-        fieldsList[3].options[riskIndex].value.slice(0, 1) === "Q"
-          ? setIsQaOrGasFinding(true)
-          : setIsQaOrGasFinding(false);
-      }
-    }
-  }, [contest, repoUrl, sponsor, initialState.mdTemplate]); // if add labelSet --> infinite loop
+    initStateFromStorage(
+      contest,
+      sponsor,
+      repoUrl,
+      labelSet,
+      setState,
+      setIsQaOrGasFinding
+    );
+  }, [contest, repoUrl, sponsor, initStateFromStorage]); // if add labelSet --> infinite loop
 
   // update local storage
   useEffect(() => {
-    updateLocalStorage(state, contest)
+    updateLocalStorage(state, contest);
   }, [state, contest]);
 
   // Event Handlers
@@ -167,13 +137,12 @@ const Form = ({
       setIsExpanded(false);
     }
   };
-  
+
   // !! CAN STAY
   const handleReset = () => {
     setState(initialState);
     setStatus(FormStatus.Unsubmitted);
   };
-
 
   // !! CAN STAY
   const submitFinding = useCallback((url, data) => {

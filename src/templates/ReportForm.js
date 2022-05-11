@@ -109,7 +109,56 @@ const updateLocalStorage = (state, contest) => {
   if (typeof window !== `undefined`) {
     window.localStorage.setItem(contest, JSON.stringify(state));
   }
-}
+};
+
+const initStateFromStorage = (
+  contest,
+  sponsor,
+  repoUrl,
+  labelSet,
+  setState,
+  setIsQaOrGasFinding
+) => {
+  if (typeof window !== `undefined`) {
+    const dataObject = JSON.parse(window.localStorage.getItem(contest));
+    let riskIndex = null;
+
+    if (dataObject && dataObject.risk !== "") {
+      riskIndex = riskField.options.findIndex(
+        (element) => element.value === dataObject.risk
+      );
+    }
+
+    setState({
+      contest: contest,
+      sponsor: sponsor,
+      repo: repoUrl.split("/").pop(),
+      labels: labelSet,
+      title: dataObject?.title || "",
+      email: dataObject?.email || "",
+      handle: dataObject?.handle || "",
+      address: dataObject?.address || "",
+      risk: riskIndex !== null ? riskField.options[riskIndex].value : "",
+      details: dataObject?.details || initialState.details,
+      qaGasDetails: dataObject?.qaGasDetails || "",
+      linesOfCode:
+        dataObject?.linesOfCode && dataObject?.linesOfCode.length > 0
+          ? dataObject?.linesOfCode
+          : [
+              {
+                id: Date.now(),
+                value: "",
+              },
+            ],
+    });
+    if (riskIndex !== null && riskField.options[riskIndex].value) {
+      riskField.options[riskIndex].value.slice(0, 1) === "G" ||
+      riskField.options[riskIndex].value.slice(0, 1) === "Q"
+        ? setIsQaOrGasFinding(true)
+        : setIsQaOrGasFinding(false);
+    }
+  }
+};
 
 const ReportForm = (props) => {
   const endTime = props.data.contestsCsv.end_time;
@@ -148,6 +197,7 @@ const ReportForm = (props) => {
           qaGasDetailsField={qaGasDetailsField}
           submissionUrl={submissionUrl}
           updateLocalStorage={updateLocalStorage}
+          initStateFromStorage={initStateFromStorage}
         />
       )}
     </main>
