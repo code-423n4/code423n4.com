@@ -9,7 +9,6 @@ const FindingContent = ({
   handleChange,
   handleLocChange,
   isQaOrGasFinding,
-  titleField,
   qaGasDetailsField,
   vulnerabilityDetailsField
 }) => {
@@ -29,19 +28,6 @@ const FindingContent = ({
     </FormField>
   ) : (
     <>
-      <FormField
-        name={titleField.name}
-        label={titleField.label}
-        helpText={titleField.helpText}
-        isInvalid={hasValidationErrors && !state.title}
-      >
-        <Widget
-          field={titleField}
-          onChange={handleChange}
-          fieldState={state}
-          isInvalid={hasValidationErrors && !state.title}
-        />
-      </FormField>
       <LinesOfCode
         onChange={handleLocChange}
         linesOfCode={state.linesOfCode}

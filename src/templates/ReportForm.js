@@ -34,7 +34,7 @@ const emailField = {
 };
 
 const addressField = {
-  name: "polygonAddress",
+  name: "address", // was polygonAddress before
   label: "Polygon address",
   helpText:
     "Address where your prize should go. If you use a smart contract wallet, please contact one of our organizers in Discord in addition to adding the address here.",
@@ -115,10 +115,7 @@ const ReportForm = (props) => {
           contest={props.data.contestsCsv.contestid}
           sponsor={props.data.contestsCsv.sponsor.name}
           initialState={initialState}
-          emailField={emailField}
-          addressField={addressField}
-          titleField={titleField}
-          riskField={riskField}
+          fieldsList={[emailField, addressField, riskField, titleField]}
           vulnerabilityDetailsField={vulnerabilityDetailsField}
           qaGasDetailsField={qaGasDetailsField}
         />

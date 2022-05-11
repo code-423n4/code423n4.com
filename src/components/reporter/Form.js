@@ -57,10 +57,8 @@ const Form = ({
   sponsor,
   repoUrl,
   initialState,
-  emailField,
-  addressField,
-  titleField,
   riskField,
+  fieldsList,
   vulnerabilityDetailsField,
   qaGasDetailsField,
 }) => {
@@ -69,7 +67,7 @@ const Form = ({
   const [status, setStatus] = useState(FormStatus.Unsubmitted);
   const [hasValidationErrors, setHasValidationErrors] = useState(false);
   const [errorMessage, setErrorMessage] = useState("An error occurred");
-  const [isQaOrGasFinding, setIsQaOrGasFinding] = useState(false);
+  const [isQaOrGasFinding, setIsQaOrGasFinding] = useState(true);
   const [isExpanded, setIsExpanded] = useState(false);
 
   const locString = state.linesOfCode.map((loc) => loc.value).join("\n");
@@ -78,26 +76,13 @@ const Form = ({
   const labelSet = [config.labelAll, state.risk ? state.risk : ""];
   const submissionUrl = `/.netlify/functions/submit-finding`;
 
-  // const formData = {
-  //   contest, // ok -- in state
-  //   sponsor, // ok -- in state
-  //   repo: repoUrl.split("/").pop(), // ok -- in state
-  //   email: state.email, // ok -- in state
-  //   handle: state.handle, // ok -- in state
-  //   address: state.polygonAddress, // ok -- in state
-  //   risk: state.risk ? state.risk.slice(0, 1) : "", // ok -- in state
-  //   title, // ok -- in state
-  //   body: isQaOrGasFinding ? details : markdownBody, // ok - in submit
-  //   labels: labelSet, // ok -- in state
-  // };
-
   // fetch initial state from local storage
   useEffect(() => {
     if (typeof window !== `undefined`) {
       const dataObject = JSON.parse(window.localStorage.getItem(contest));
       let riskIndex = null;
       if (dataObject && dataObject.risk !== "") {
-        riskIndex = riskField.options.findIndex(
+        riskIndex = riskField?.options.findIndex(
           (element) => element.value === dataObject.risk
         );
       }
@@ -110,8 +95,8 @@ const Form = ({
         title: dataObject?.title || "",
         email: dataObject?.email || "",
         handle: dataObject?.handle || "",
-        address: dataObject?.polygonAddress || "",
-        risk: riskIndex !== null ? riskField.options[riskIndex].value : "",
+        address: dataObject?.address || "",
+        risk: riskIndex !== null ? riskField?.options[riskIndex].value : "",
         details: dataObject?.details || initialState.details,
         qaGasDetails: dataObject?.qaGasDetails || "",
         linesOfCode:
@@ -178,7 +163,7 @@ const Form = ({
     const formatedRisk = state.risk ? state.risk.slice(0, 1) : "";
     const formatedTitle = checkTitle(state.title, state.risk);
     const formatedBody = isQaOrGasFinding ? details : markdownBody;
-    const { email, handle, address  } = state;
+    const { email, handle, address } = state;
     const requiredFields = isQaOrGasFinding
       ? [email, handle, address, formatedRisk, formatedBody]
       : [email, handle, address, formatedRisk, formatedTitle, formatedBody];
@@ -198,7 +183,7 @@ const Form = ({
 
     setHasValidationErrors(hasErrors || hasInvalidLinks);
     if (!hasErrors) {
-      submitFinding(submissionUrl, { ...state, body: formatedBody });
+      submitFinding(submissionUrl, { ...state, body: formatedBody }); // make sure state is correctly submited
       if (typeof window !== `undefined`) {
         window.localStorage.removeItem(contest);
       }
@@ -288,55 +273,37 @@ const Form = ({
                       isInvalid={hasValidationErrors && !state.handle}
                     />
                   </FormField>
-                  <FormField
-                    name={emailField.name}
-                    label={emailField.label}
-                    helpText={emailField.helpText}
-                    isInvalid={hasValidationErrors && !state.email}
-                  >
-                    <Widget
-                      field={emailField}
-                      onChange={handleChange}
-                      fieldState={state}
-                      isInvalid={hasValidationErrors && !state.email}
-                    />
-                  </FormField>
-                  <FormField
-                    name={addressField.name}
-                    label={addressField.label}
-                    helpText={addressField.helpText}
-                    isInvalid={hasValidationErrors && !state.polygonAddress}
-                  >
-                    <input
-                      className={clsx(
-                        widgetStyles.Control,
-                        widgetStyles.Text,
-                        hasValidationErrors &&
-                          !state.polygonAddress &&
-                          "input-error"
-                      )}
-                      name={addressField.name}
-                      type="text"
-                      onChange={handleChange}
-                      required={true}
-                      value={state.polygonAddress}
-                      data-form-type="other"
-                    />
-                  </FormField>
+
+                  {fieldsList.map((field) => {
+                    if (field.name === "title" && isQaOrGasFinding) {
+                      return;
+                    } else {
+                      return (
+                        <FormField
+                          name={field.name}
+                          label={field.label}
+                          helpText={field.helpText}
+                          isInvalid={hasValidationErrors && !state[field.name]}
+                        >
+                          <Widget
+                            field={field}
+                            onChange={
+                              field.name === "risk"
+                                ? handleRiskChange
+                                : handleChange
+                            }
+                            fieldState={state}
+                            isInvalid={
+                              hasValidationErrors && !state[field.name]
+                            }
+                          />
+                        </FormField>
+                      );
+                    }
+                  })}
+
                   {isQaOrGasFinding && <ContestWarning />}
-                  <FormField
-                    name={riskField.name}
-                    label={riskField.label}
-                    helpText={riskField.helpText}
-                    isInvalid={hasValidationErrors && !state.risk}
-                  >
-                    <Widget
-                      field={riskField}
-                      onChange={handleRiskChange}
-                      fieldState={state}
-                      isInvalid={hasValidationErrors && !state.risk}
-                    />
-                  </FormField>
+
                   {state.risk && (
                     <FindingContent
                       hasValidationErrors={hasValidationErrors}
@@ -344,7 +311,6 @@ const Form = ({
                       handleChange={handleChange}
                       handleLocChange={handleLocChange}
                       isQaOrGasFinding={isQaOrGasFinding}
-                      titleField={titleField}
                       qaGasDetailsField={qaGasDetailsField}
                       vulnerabilityDetailsField={vulnerabilityDetailsField}
                     />
