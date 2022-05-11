@@ -81,25 +81,6 @@ const qaGasDetailsField = {
   required: true,
 };
 
-const mdTemplate =
-  "## Impact\nDetailed description of the impact of this finding.\n\n## Proof of Concept\nProvide direct links to all referenced code in GitHub. Add screenshots, logs, or any other relevant proof that illustrates the concept.\n\n## Tools Used\n\n## Recommended Mitigation Steps";
-
-const initialState = {
-  title: "",
-  email: "",
-  handle: "",
-  polygonAddress: "",
-  risk: "",
-  details: mdTemplate,
-  qaGasDetails: "",
-  linesOfCode: [
-    {
-      id: Date.now(),
-      value: "",
-    },
-  ],
-};
-
 const FormStatus = {
   Unsubmitted: "unsubmitted",
   Submitting: "submitting",
@@ -195,7 +176,7 @@ const checkTitle = (title, risk) => {
   }
 };
 
-const Form = ({ contest, sponsor, repoUrl }) => {
+const Form = ({ contest, sponsor, repoUrl, initialState }) => {
   // Component State
   const [state, setState] = useState(initialState);
   const [status, setStatus] = useState(FormStatus.Unsubmitted);
@@ -209,14 +190,6 @@ const Form = ({ contest, sponsor, repoUrl }) => {
   const markdownBody = `# Lines of code\n\n${locString}\n\n\n# Vulnerability details\n\n${details}\n\n`;
   const labelSet = [config.labelAll, state.risk ? state.risk : ""];
   const submissionUrl = `/.netlify/functions/submit-finding`;
-  // let title = "";
-  // if (state.risk === "G (Gas Optimization)") {
-  //   title = "Gas Optimizations";
-  // } else if (state.risk === "QA (Quality Assurance)") {
-  //   title = "QA Report";
-  // } else {
-  //   title = state.title;
-  // }
 
   // const formData = {
   //   contest, // ok -- in state
@@ -250,9 +223,9 @@ const Form = ({ contest, sponsor, repoUrl }) => {
         title: dataObject?.title || "",
         email: dataObject?.email || "",
         handle: dataObject?.handle || "",
-        polygonAddress: dataObject?.polygonAddress || "",
+        polygonAddress: dataObject?.polygonAddress || "", // attention was address in the formData !
         risk: riskIndex !== null ? riskField.options[riskIndex].value : "",
-        details: dataObject?.details || mdTemplate,
+        details: dataObject?.details || initialState.mdTemplate,
         qaGasDetails: dataObject?.qaGasDetails || "",
         linesOfCode:
           dataObject?.linesOfCode && dataObject?.linesOfCode.length > 0
@@ -271,7 +244,7 @@ const Form = ({ contest, sponsor, repoUrl }) => {
           : setIsQaOrGasFinding(false);
       }
     }
-  }, [contest, repoUrl, sponsor]); // if add labelSet --> infinite loop
+  }, [contest, repoUrl, sponsor, initialState.mdTemplate]); // if add labelSet --> infinite loop
 
   // update local storage
   useEffect(() => {
@@ -283,15 +256,9 @@ const Form = ({ contest, sponsor, repoUrl }) => {
   // Event Handlers
   const handleChange = useCallback((e) => {
     const { name, value } = e.target;
-    if (name === "risk") {
-      setState((state) => {
-        return { ...state, [name]: state.risk ? state.risk.slice(0, 1) : "" };
-      });
-    } else {
       setState((state) => {
         return { ...state, [name]: value };
       });
-    }
   }, []);
 
   const handleLocChange = useCallback((linesOfCode) => {
@@ -347,17 +314,7 @@ const Form = ({ contest, sponsor, repoUrl }) => {
   };
 
   const handleReset = () => {
-    setState({
-      ...state,
-      title: "",
-      details: mdTemplate,
-      linesOfCode: [
-        {
-          id: Date.now(),
-          value: "",
-        },
-      ],
-    });
+    setState(initialState);
     setStatus(FormStatus.Unsubmitted);
   };
 
