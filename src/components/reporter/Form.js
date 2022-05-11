@@ -6,79 +6,13 @@ import Agreement from "../content/Agreement.js";
 import FormField from "./widgets/FormField";
 import LinesOfCode from "../reporter/LinesOfCodeInput.js";
 import Widget from "./widgets/Widget";
+import ContestWarning from "../content/ContestWarning.js";
 
 import * as styles from "./Form.module.scss";
 import * as widgetStyles from "./widgets/Widgets.module.scss";
 
 const config = {
   labelAll: "bug",
-};
-
-const emailField = {
-  name: "email",
-  label: "Email address",
-  helpText: "Used to send a copy of this form for your records",
-  widget: "text",
-  required: true,
-};
-
-const addressField = {
-  name: "polygonAddress",
-  label: "Polygon address",
-  helpText:
-    "Address where your prize should go. If you use a smart contract wallet, please contact one of our organizers in Discord in addition to adding the address here.",
-  widget: "text",
-  required: true,
-};
-
-const titleField = {
-  name: "title",
-  label: "Title",
-  helpText:
-    "Summarize your findings for the bug or vulnerability. (This will be the issue title.)",
-  widget: "text",
-  required: true,
-};
-
-const riskField = {
-  name: "risk",
-  label: "Risk rating",
-  widget: "select",
-  required: true,
-  options: [
-    {
-      label: "Gas Optimizations",
-      value: "G (Gas Optimization)",
-    },
-    {
-      label: "QA Report (low / non-critical)",
-      value: "QA (Quality Assurance)",
-    },
-    {
-      label: "Medium Risk",
-      value: "2 (Med Risk)",
-    },
-    {
-      label: "High Risk",
-      value: "3 (High Risk)",
-    },
-  ],
-};
-
-const vulnerabilityDetailsField = {
-  name: "details",
-  label: "Vulnerability details",
-  helpText: "Link to all referenced sections of code in GitHub",
-  widget: "textarea",
-  required: true,
-};
-
-const qaGasDetailsField = {
-  name: "qaGasDetails",
-  label: "Vulnerability details",
-  helpText: "Link to all referenced sections of code in GitHub",
-  widget: "textarea",
-  required: true,
 };
 
 const FormStatus = {
@@ -114,6 +48,9 @@ const FindingContent = ({
   handleChange,
   handleLocChange,
   isQaOrGasFinding,
+  titleField,
+  qaGasDetailsField,
+  vulnerabilityDetailsField
 }) => {
   return isQaOrGasFinding ? (
     <FormField
@@ -176,7 +113,18 @@ const checkTitle = (title, risk) => {
   }
 };
 
-const Form = ({ contest, sponsor, repoUrl, initialState }) => {
+const Form = ({
+  contest,
+  sponsor,
+  repoUrl,
+  initialState,
+  emailField,
+  addressField,
+  titleField,
+  riskField,
+  vulnerabilityDetailsField,
+  qaGasDetailsField,
+}) => {
   // Component State
   const [state, setState] = useState(initialState);
   const [status, setStatus] = useState(FormStatus.Unsubmitted);
@@ -225,7 +173,7 @@ const Form = ({ contest, sponsor, repoUrl, initialState }) => {
         handle: dataObject?.handle || "",
         polygonAddress: dataObject?.polygonAddress || "", // attention was address in the formData !
         risk: riskIndex !== null ? riskField.options[riskIndex].value : "",
-        details: dataObject?.details || initialState.mdTemplate,
+        details: dataObject?.details || initialState.details,
         qaGasDetails: dataObject?.qaGasDetails || "",
         linesOfCode:
           dataObject?.linesOfCode && dataObject?.linesOfCode.length > 0
@@ -256,9 +204,9 @@ const Form = ({ contest, sponsor, repoUrl, initialState }) => {
   // Event Handlers
   const handleChange = useCallback((e) => {
     const { name, value } = e.target;
-      setState((state) => {
-        return { ...state, [name]: value };
-      });
+    setState((state) => {
+      return { ...state, [name]: value };
+    });
   }, []);
 
   const handleLocChange = useCallback((linesOfCode) => {
@@ -430,38 +378,7 @@ const Form = ({ contest, sponsor, repoUrl, initialState }) => {
                       data-form-type="other"
                     />
                   </FormField>
-                  {isQaOrGasFinding && (
-                    <div>
-                      <p className="warning-message">
-                        👋 Hi there! We've changed the way we are handling low
-                        risk, non-critical, and gas optimization findings.
-                        Please submit all low risk and non critical findings as
-                        one report, and gas optimization findings as another,
-                        separate report. Submissions for medium and high risk
-                        findings are not changing. Check out
-                        <a
-                          href="https://docs.code4rena.com/roles/wardens/judging-criteria"
-                          target="_blank"
-                          rel="noreferrer"
-                          aria-label="the docs (opens in a new window)"
-                        >
-                          {" "}
-                          the docs
-                        </a>{" "}
-                        and
-                        <a
-                          href="https://docs.code4rena.com/roles/wardens/qa-gas-report-faq"
-                          target="_blank"
-                          rel="noreferrer"
-                          aria-label="FAQ about QA and Gas Reports (opens in a new window)"
-                        >
-                          {" "}
-                          FAQ about QA and Gas Reports
-                        </a>{" "}
-                        for more details.
-                      </p>
-                    </div>
-                  )}
+                  {isQaOrGasFinding && <ContestWarning />}
                   <FormField
                     name={riskField.name}
                     label={riskField.label}
@@ -482,6 +399,9 @@ const Form = ({ contest, sponsor, repoUrl, initialState }) => {
                       handleChange={handleChange}
                       handleLocChange={handleLocChange}
                       isQaOrGasFinding={isQaOrGasFinding}
+                      titleField={titleField}
+                      qaGasDetailsField={qaGasDetailsField}
+                      vulnerabilityDetailsField={vulnerabilityDetailsField}
                     />
                   )}
                 </fieldset>
