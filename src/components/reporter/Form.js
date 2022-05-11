@@ -20,16 +20,6 @@ const FormStatus = {
   Error: "error",
 };
 
-const checkTitle = (title, risk) => {
-  if (risk === "G (Gas Optimization)") {
-    return "Gas Optimizations";
-  } else if (risk === "QA (Quality Assurance)") {
-    return "QA Report";
-  } else {
-    return title;
-  }
-};
-
 const Form = ({
   contest,
   sponsor,
@@ -38,9 +28,9 @@ const Form = ({
   fieldsList,
   vulnerabilityDetailsField,
   qaGasDetailsField,
-  submissionUrl,
   updateLocalStorage,
   initStateFromStorage,
+  handleSubmit
 }) => {
   // Component State
   const [state, setState] = useState(initialState);
@@ -105,46 +95,15 @@ const Form = ({
     [handleChange]
   );
 
-  const handleSubmit = () => {
-    // extract required fields from field data for validation check
-    const formatedRisk = state.risk ? state.risk.slice(0, 1) : "";
-    const formatedTitle = checkTitle(state.title, state.risk);
-    const formatedBody = isQaOrGasFinding ? details : markdownBody;
-    const { email, handle, address } = state;
-    const requiredFields = isQaOrGasFinding
-      ? [email, handle, address, formatedRisk, formatedBody]
-      : [email, handle, address, formatedRisk, formatedTitle, formatedBody];
-    let hasErrors = requiredFields.some((field) => {
-      return field === "" || field === undefined;
-    });
+  const submitHandler = () => {
+    handleSubmit(contest, state, isQaOrGasFinding, details, markdownBody, setHasValidationErrors, submitFinding, setIsExpanded);
+  }
 
-    // TODO: verify that loc include code lines and are valid URLs
-    if (!isQaOrGasFinding && !state.linesOfCode[0].value) {
-      hasErrors = true;
-    }
-
-    const regex = new RegExp("#L", "g");
-    const hasInvalidLinks = state.linesOfCode.some((line) => {
-      return !regex.test(line.value);
-    });
-
-    setHasValidationErrors(hasErrors || hasInvalidLinks);
-    if (!hasErrors) {
-      submitFinding(submissionUrl, { ...state, body: formatedBody }); // make sure state is correctly submited
-      if (typeof window !== `undefined`) {
-        window.localStorage.removeItem(contest);
-      }
-      setIsExpanded(false);
-    }
-  };
-
-  // !! CAN STAY
   const handleReset = () => {
     setState(initialState);
     setStatus(FormStatus.Unsubmitted);
   };
 
-  // !! CAN STAY
   const submitFinding = useCallback((url, data) => {
     (async () => {
       setStatus(FormStatus.Submitting);
@@ -186,12 +145,13 @@ const Form = ({
           <input type="hidden" id="contest" name="contest" value={contest} />
           <fieldset className={widgetStyles.Fields}>
             {/* TODO: refactor form fields; move FormField into individual field components */}
-            {fieldsList.map((field) => {
+            {fieldsList.map((field, index) => {
               if (field.name === "title" && isQaOrGasFinding) {
                 return;
               } else {
                 return (
                   <FormField
+                    key={`${field.name} ${index}`}
                     name={field.name}
                     label={field.label}
                     helpText={field.helpText}
@@ -229,7 +189,7 @@ const Form = ({
           <button
             className="button cta-button centered"
             type="button"
-            onClick={handleSubmit}
+            onClick={submitHandler}
             disabled={status !== FormStatus.Unsubmitted}
           >
             {status === FormStatus.Unsubmitted
