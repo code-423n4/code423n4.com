@@ -1,7 +1,7 @@
 import React from 'react';
 import FormField from './widgets/FormField';
 import LinesOfCode from './LinesOfCodeInput';
-import Widget from './widgets/widget';
+import Widget from './widgets/Widget';
 
 const FindingContent = ({
   hasValidationErrors,

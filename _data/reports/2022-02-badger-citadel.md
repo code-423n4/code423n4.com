@@ -244,7 +244,7 @@ Among those, three out of four issues focus on code clarity, conventions and una
 
 Is Solidity `^` is used for `xor` operation, but in [TokenSaleUpgradeable.sol:32](https://github.com/code-423n4/2022-02-badger-citadel/blob/84596551d62f243d13fcb2d486346dde08002f7b/contracts/TokenSaleUpgradeable.sol#L32) it is used to symbolize exponentiation. It is preferable to use `**` instead to avoid ambiguity or confusion.
 
-```sol
+```solidity
 // TokenSaleUpgradeable.sol:32
 /// eg. 1 WBTC (8 decimals) = 40,000 CTDL ==> price = 10^8 / 40,000
 ```
@@ -272,12 +272,12 @@ An open TODO is present in [TokenSaleUpgradeable.sol:13](https://github.com/code
 
 The name of the variable `guestlist` (defined in [TokenSaleUpgradeable.sol:53](https://github.com/code-423n4/2022-02-badger-citadel/blob/84596551d62f243d13fcb2d486346dde08002f7b/contracts/TokenSaleUpgradeable.sol#L53)) and the event `GuestlistUpdated` (defined in [TokenSaleUpgradeable.sol:76](https://github.com/code-423n4/2022-02-badger-citadel/blob/84596551d62f243d13fcb2d486346dde08002f7b/contracts/TokenSaleUpgradeable.sol#L76)) should be changed to `guestList` and `GuestListUpdated` respectively in order to make them more readable and consistent with other parts of the code.
 
-```sol
+```solidity
 // TokenSaleUpgradeable.sol:53
 BadgerGuestListAPI public guestlist;
 ```
 
-```sol
+```solidity
 // TokenSaleUpgradeable.sol:76
 event GuestlistUpdated(address indexed guestlist);
 ```

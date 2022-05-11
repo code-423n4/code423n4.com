@@ -110,7 +110,7 @@ const Form = ({
         title: dataObject?.title || "",
         email: dataObject?.email || "",
         handle: dataObject?.handle || "",
-        polygonAddress: dataObject?.polygonAddress || "", // attention was address in the formData !
+        address: dataObject?.polygonAddress || "",
         risk: riskIndex !== null ? riskField.options[riskIndex].value : "",
         details: dataObject?.details || initialState.details,
         qaGasDetails: dataObject?.qaGasDetails || "",
@@ -143,9 +143,15 @@ const Form = ({
   // Event Handlers
   const handleChange = useCallback((e) => {
     const { name, value } = e.target;
-    setState((state) => {
-      return { ...state, [name]: value };
-    });
+    if (name === "polygonAddress") {
+      setState((state) => {
+        return { ...state, address: value };
+      });
+    } else {
+      setState((state) => {
+        return { ...state, [name]: value };
+      });
+    }
   }, []);
 
   const handleLocChange = useCallback((linesOfCode) => {
@@ -166,17 +172,16 @@ const Form = ({
     },
     [handleChange]
   );
-  console.log(state);
 
   const handleSubmit = () => {
     // extract required fields from field data for validation check
     const formatedRisk = state.risk ? state.risk.slice(0, 1) : "";
     const formatedTitle = checkTitle(state.title, state.risk);
     const formatedBody = isQaOrGasFinding ? details : markdownBody;
-    const { email, handle, polygonAddress  } = state;
+    const { email, handle, address  } = state;
     const requiredFields = isQaOrGasFinding
-      ? [email, handle, polygonAddress, formatedRisk, formatedBody]
-      : [email, handle, polygonAddress, formatedRisk, formatedTitle, formatedBody];
+      ? [email, handle, address, formatedRisk, formatedBody]
+      : [email, handle, address, formatedRisk, formatedTitle, formatedBody];
     let hasErrors = requiredFields.some((field) => {
       return field === "" || field === undefined;
     });
@@ -194,7 +199,6 @@ const Form = ({
     setHasValidationErrors(hasErrors || hasInvalidLinks);
     if (!hasErrors) {
       submitFinding(submissionUrl, { ...state, body: formatedBody });
-      // attention ! must be address and not polygonAddress ! 
       if (typeof window !== `undefined`) {
         window.localStorage.removeItem(contest);
       }
