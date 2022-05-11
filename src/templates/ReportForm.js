@@ -121,7 +121,16 @@ const checkTitle = (title, risk) => {
   }
 };
 
-const handleSubmit = (contest, state, isQaOrGasFinding, details, markdownBody, setHasValidationErrors, submitFinding, setIsExpanded) => {
+const handleSubmit = (
+  contest,
+  state,
+  isQaOrGasFinding,
+  details,
+  markdownBody,
+  setHasValidationErrors,
+  submitFinding,
+  setIsExpanded
+) => {
   // extract required fields from field data for validation check
   const formatedRisk = state.risk ? state.risk.slice(0, 1) : "";
   const formatedTitle = checkTitle(state.title, state.risk);
@@ -150,10 +159,10 @@ const handleSubmit = (contest, state, isQaOrGasFinding, details, markdownBody, s
     if (typeof window !== `undefined`) {
       window.localStorage.removeItem(contest);
     }
-    console.log({ ...state, body: formatedBody })
+    console.log({ ...state, body: formatedBody });
     setIsExpanded(false);
   }
-}
+};
 
 const initStateFromStorage = (
   contest,
@@ -204,6 +213,34 @@ const initStateFromStorage = (
   }
 };
 
+const changeHandler = (setState, e, setIsQaOrGasFinding) => {
+  if (Array.isArray(e)) {
+    setState((state) => {
+      return { ...state, linesOfCode: e };
+    });
+  } else {
+    const { name, value } = e?.target;
+    switch (name) {
+      case "risk":
+        const riskLevel = value.slice(0, 1);
+        if (riskLevel === "G" || riskLevel === "Q") {
+          setIsQaOrGasFinding(true);
+        } else {
+          setIsQaOrGasFinding(false);
+        }
+        setState((state) => {
+          return { ...state, [name]: value };
+        });
+        break;
+      default:
+        setState((state) => {
+          return { ...state, [name]: value };
+        });
+        break;
+    }
+  }
+};
+
 const ReportForm = (props) => {
   const endTime = props.data.contestsCsv.end_time;
   const hasContestEnded = Date.now() > new Date(endTime).getTime();
@@ -242,6 +279,7 @@ const ReportForm = (props) => {
           updateLocalStorage={updateLocalStorage}
           initStateFromStorage={initStateFromStorage}
           handleSubmit={handleSubmit}
+          changeHandler={changeHandler}
         />
       )}
     </main>

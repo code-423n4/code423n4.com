@@ -31,6 +31,7 @@ const Form = ({
   updateLocalStorage,
   initStateFromStorage,
   handleSubmit,
+  changeHandler,
 }) => {
   // Component State
   const [state, setState] = useState(initialState);
@@ -63,33 +64,9 @@ const Form = ({
   }, [state, contest]);
 
   // Event Handlers
-  const handleChange = useCallback((e) => {
-    if (Array.isArray(e)) {
-      setState((state) => {
-        return { ...state, linesOfCode: e };
-      });
-    } else {
-      const { name, value } = e?.target;
-      switch (name) {
-        case "risk":
-          const riskLevel = value.slice(0, 1);
-          if (riskLevel === "G" || riskLevel === "Q") {
-            setIsQaOrGasFinding(true);
-          } else {
-            setIsQaOrGasFinding(false);
-          }
-          setState((state) => {
-            return { ...state, [name]: value };
-          });
-          break;
-        default:
-          setState((state) => {
-            return { ...state, [name]: value };
-          });
-          break;
-      }
-    }
-  }, []);
+  const handleChange = (e) => {
+    changeHandler(setState, e, setIsQaOrGasFinding);
+  };
 
   const submitHandler = () => {
     handleSubmit(
