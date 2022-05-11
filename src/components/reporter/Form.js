@@ -4,9 +4,9 @@ import { StaticQuery, graphql } from "gatsby";
 
 import Agreement from "../content/Agreement.js";
 import FormField from "./widgets/FormField";
-import LinesOfCode from "../reporter/LinesOfCodeInput.js";
 import Widget from "./widgets/Widget";
 import ContestWarning from "../content/ContestWarning.js";
+import FindingContent from "./FindingContent.js";
 
 import * as styles from "./Form.module.scss";
 import * as widgetStyles from "./widgets/Widgets.module.scss";
@@ -41,67 +41,6 @@ const wardensQuery = graphql`
     }
   }
 `;
-
-const FindingContent = ({
-  hasValidationErrors,
-  state,
-  handleChange,
-  handleLocChange,
-  isQaOrGasFinding,
-  titleField,
-  qaGasDetailsField,
-  vulnerabilityDetailsField
-}) => {
-  return isQaOrGasFinding ? (
-    <FormField
-      name={qaGasDetailsField.name}
-      label={qaGasDetailsField.label}
-      helpText={qaGasDetailsField.helpText}
-      isInvalid={hasValidationErrors && !state.qaGasDetails}
-    >
-      <Widget
-        field={qaGasDetailsField}
-        onChange={handleChange}
-        fieldState={state}
-        isInvalid={hasValidationErrors && !state.qaGasDetails}
-      />
-    </FormField>
-  ) : (
-    <>
-      <FormField
-        name={titleField.name}
-        label={titleField.label}
-        helpText={titleField.helpText}
-        isInvalid={hasValidationErrors && !state.title}
-      >
-        <Widget
-          field={titleField}
-          onChange={handleChange}
-          fieldState={state}
-          isInvalid={hasValidationErrors && !state.title}
-        />
-      </FormField>
-      <LinesOfCode
-        onChange={handleLocChange}
-        linesOfCode={state.linesOfCode}
-        hasValidationErrors={hasValidationErrors}
-      />
-      <FormField
-        name={vulnerabilityDetailsField.name}
-        label={vulnerabilityDetailsField.label}
-        helpText={vulnerabilityDetailsField.helpText}
-        isInvalid={hasValidationErrors && !state.details}
-      >
-        <Widget
-          field={vulnerabilityDetailsField}
-          onChange={handleChange}
-          fieldState={state}
-          isInvalid={hasValidationErrors && !state.details}
-        />
-      </FormField>
-    </>
-  );
-};
 
 const checkTitle = (title, risk) => {
   if (risk === "G (Gas Optimization)") {
@@ -227,16 +166,17 @@ const Form = ({
     },
     [handleChange]
   );
+  console.log(state);
 
   const handleSubmit = () => {
     // extract required fields from field data for validation check
     const formatedRisk = state.risk ? state.risk.slice(0, 1) : "";
     const formatedTitle = checkTitle(state.title, state.risk);
     const formatedBody = isQaOrGasFinding ? details : markdownBody;
-    const { email, handle, address } = state;
+    const { email, handle, polygonAddress  } = state;
     const requiredFields = isQaOrGasFinding
-      ? [email, handle, address, formatedRisk, formatedBody]
-      : [email, handle, address, formatedRisk, formatedTitle, formatedBody];
+      ? [email, handle, polygonAddress, formatedRisk, formatedBody]
+      : [email, handle, polygonAddress, formatedRisk, formatedTitle, formatedBody];
     let hasErrors = requiredFields.some((field) => {
       return field === "" || field === undefined;
     });
@@ -254,6 +194,7 @@ const Form = ({
     setHasValidationErrors(hasErrors || hasInvalidLinks);
     if (!hasErrors) {
       submitFinding(submissionUrl, { ...state, body: formatedBody });
+      // attention ! must be address and not polygonAddress ! 
       if (typeof window !== `undefined`) {
         window.localStorage.removeItem(contest);
       }
