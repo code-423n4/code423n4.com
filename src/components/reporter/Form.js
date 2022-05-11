@@ -1,7 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
 import clsx from "clsx";
-import { StaticQuery, graphql } from "gatsby";
-
 import Agreement from "../content/Agreement.js";
 import FormField from "./widgets/FormField";
 import Widget from "./widgets/Widget";
@@ -21,26 +19,6 @@ const FormStatus = {
   Submitted: "submitted",
   Error: "error",
 };
-
-const wardensQuery = graphql`
-  query Wardens {
-    allHandlesJson(sort: { fields: handle, order: ASC }) {
-      edges {
-        node {
-          id
-          handle
-          image {
-            childImageSharp {
-              resize(width: 64, quality: 90) {
-                src
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-`;
 
 const checkTitle = (title, risk) => {
   if (risk === "G (Gas Optimization)") {
@@ -217,141 +195,97 @@ const Form = ({
   }, []);
 
   return (
-    <StaticQuery
-      query={wardensQuery}
-      render={(data) => {
-        const wardens = data.allHandlesJson.edges.map(({ node }) => {
-          return { value: node.handle, image: node.image };
-        });
-
-        return (
-          <div
-            className={
-              !isExpanded
-                ? clsx(styles.Form)
-                : clsx(styles.Form, styles.FormMax)
-            }
-          >
-            <div className={clsx(styles.FormHeader)}>
-              <h1>{sponsor} contest finding</h1>
-              <img
-                src={isExpanded ? "/images/compress.svg" : "/images/expand.svg"}
-                alt={isExpanded ? "compress form" : "expand form"}
-                className={clsx(styles.FormIcons)}
-                onClick={() => setIsExpanded(!isExpanded)}
-              />
-            </div>
-            {(status === FormStatus.Unsubmitted ||
-              status === FormStatus.Submitting) && (
-              <form>
-                <input
-                  type="hidden"
-                  id="contest"
-                  name="contest"
-                  value={contest}
-                />
-                <fieldset className={widgetStyles.Fields}>
-                  {/* TODO: refactor form fields; move FormField into individual field components */}
+    <div
+      className={
+        !isExpanded ? clsx(styles.Form) : clsx(styles.Form, styles.FormMax)
+      }
+    >
+      <div className={clsx(styles.FormHeader)}>
+        <h1>{sponsor} contest finding</h1>
+        <img
+          src={isExpanded ? "/images/compress.svg" : "/images/expand.svg"}
+          alt={isExpanded ? "compress form" : "expand form"}
+          className={clsx(styles.FormIcons)}
+          onClick={() => setIsExpanded(!isExpanded)}
+        />
+      </div>
+      {(status === FormStatus.Unsubmitted ||
+        status === FormStatus.Submitting) && (
+        <form>
+          <input type="hidden" id="contest" name="contest" value={contest} />
+          <fieldset className={widgetStyles.Fields}>
+            {/* TODO: refactor form fields; move FormField into individual field components */}
+            {fieldsList.map((field) => {
+              if (field.name === "title" && isQaOrGasFinding) {
+                return;
+              } else {
+                return (
                   <FormField
-                    name="handle"
-                    label="Handle"
-                    helpText="Handle you're competing under (individual or team name)"
-                    isInvalid={hasValidationErrors && !state.handle}
+                    name={field.name}
+                    label={field.label}
+                    helpText={field.helpText}
+                    isInvalid={hasValidationErrors && !state[field.name]}
                   >
                     <Widget
-                      field={{
-                        name: "handle",
-                        label: "Handle",
-                        helpText:
-                          "Handle you're competing under (individual or team name)",
-                        widget: "warden",
-                        required: true,
-                        options: wardens,
-                      }}
-                      onChange={handleChange}
+                      field={field}
+                      onChange={
+                        field.name === "risk" ? handleRiskChange : handleChange
+                      }
                       fieldState={state}
-                      isInvalid={hasValidationErrors && !state.handle}
+                      isInvalid={hasValidationErrors && !state[field.name]}
                     />
                   </FormField>
+                );
+              }
+            })}
 
-                  {fieldsList.map((field) => {
-                    if (field.name === "title" && isQaOrGasFinding) {
-                      return;
-                    } else {
-                      return (
-                        <FormField
-                          name={field.name}
-                          label={field.label}
-                          helpText={field.helpText}
-                          isInvalid={hasValidationErrors && !state[field.name]}
-                        >
-                          <Widget
-                            field={field}
-                            onChange={
-                              field.name === "risk"
-                                ? handleRiskChange
-                                : handleChange
-                            }
-                            fieldState={state}
-                            isInvalid={
-                              hasValidationErrors && !state[field.name]
-                            }
-                          />
-                        </FormField>
-                      );
-                    }
-                  })}
+            {isQaOrGasFinding && <ContestWarning />}
 
-                  {isQaOrGasFinding && <ContestWarning />}
-
-                  {state.risk && (
-                    <FindingContent
-                      hasValidationErrors={hasValidationErrors}
-                      state={state}
-                      handleChange={handleChange}
-                      handleLocChange={handleLocChange}
-                      isQaOrGasFinding={isQaOrGasFinding}
-                      qaGasDetailsField={qaGasDetailsField}
-                      vulnerabilityDetailsField={vulnerabilityDetailsField}
-                    />
-                  )}
-                </fieldset>
-                <Agreement />
-
-                <button
-                  className="button cta-button centered"
-                  type="button"
-                  onClick={handleSubmit}
-                  disabled={status !== FormStatus.Unsubmitted}
-                >
-                  {status === FormStatus.Unsubmitted
-                    ? "Create issue"
-                    : "Submitting..."}
-                </button>
-              </form>
+            {state.risk && (
+              <FindingContent
+                hasValidationErrors={hasValidationErrors}
+                state={state}
+                handleChange={handleChange}
+                handleLocChange={handleLocChange}
+                isQaOrGasFinding={isQaOrGasFinding}
+                qaGasDetailsField={qaGasDetailsField}
+                vulnerabilityDetailsField={vulnerabilityDetailsField}
+              />
             )}
-            {status === FormStatus.Error && (
-              <div>
-                <p>{errorMessage}</p>
-              </div>
-            )}
-            {status === FormStatus.Submitted && (
-              <div className="centered-text">
-                <h1>Thank you!</h1>
-                <p>Your report has been submitted.</p>
-                <button
-                  className="button cta-button"
-                  type="button"
-                  onClick={handleReset}
-                >
-                  Submit another
-                </button>
-              </div>
-            )}
-          </div>
-        );
-      }}
-    />
+          </fieldset>
+          <Agreement />
+
+          <button
+            className="button cta-button centered"
+            type="button"
+            onClick={handleSubmit}
+            disabled={status !== FormStatus.Unsubmitted}
+          >
+            {status === FormStatus.Unsubmitted
+              ? "Create issue"
+              : "Submitting..."}
+          </button>
+        </form>
+      )}
+      {status === FormStatus.Error && (
+        <div>
+          <p>{errorMessage}</p>
+        </div>
+      )}
+      {status === FormStatus.Submitted && (
+        <div className="centered-text">
+          <h1>Thank you!</h1>
+          <p>Your report has been submitted.</p>
+          <button
+            className="button cta-button"
+            type="button"
+            onClick={handleReset}
+          >
+            Submit another
+          </button>
+        </div>
+      )}
+    </div>
   );
 };
 

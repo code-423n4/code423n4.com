@@ -7,8 +7,8 @@ const mdTemplate =
   "## Impact\nDetailed description of the impact of this finding.\n\n## Proof of Concept\nProvide direct links to all referenced code in GitHub. Add screenshots, logs, or any other relevant proof that illustrates the concept.\n\n## Tools Used\n\n## Recommended Mitigation Steps";
 
 const initialState = {
-  contest:"",
-  sponsor:"",
+  contest: "",
+  sponsor: "",
   repo: "",
   title: "",
   email: "",
@@ -23,6 +23,17 @@ const initialState = {
       value: "",
     },
   ],
+};
+
+const wardenField = (wardens) => {
+  return {
+    name: "handle",
+    label: "Handle",
+    helpText: "Handle you're competing under (individual or team name)",
+    widget: "warden",
+    required: true,
+    options: wardens,
+  };
 };
 
 const emailField = {
@@ -95,6 +106,9 @@ const qaGasDetailsField = {
 const ReportForm = (props) => {
   const endTime = props.data.contestsCsv.end_time;
   const hasContestEnded = Date.now() > new Date(endTime).getTime();
+  const wardens = props.data.allHandlesJson.edges.map(({ node }) => {
+    return { value: node.handle, image: node.image };
+  });
 
   return (
     <main>
@@ -115,7 +129,13 @@ const ReportForm = (props) => {
           contest={props.data.contestsCsv.contestid}
           sponsor={props.data.contestsCsv.sponsor.name}
           initialState={initialState}
-          fieldsList={[emailField, addressField, riskField, titleField]}
+          fieldsList={[
+            wardenField(wardens),
+            emailField,
+            addressField,
+            riskField,
+            titleField,
+          ]}
           vulnerabilityDetailsField={vulnerabilityDetailsField}
           qaGasDetailsField={qaGasDetailsField}
         />
@@ -136,6 +156,21 @@ export const pageQuery = graphql`
       findingsRepo
       sponsor {
         name
+      }
+    }
+    allHandlesJson(sort: { fields: handle, order: ASC }) {
+      edges {
+        node {
+          id
+          handle
+          image {
+            childImageSharp {
+              resize(width: 64, quality: 90) {
+                src
+              }
+            }
+          }
+        }
       }
     }
   }
