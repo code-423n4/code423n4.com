@@ -34,12 +34,14 @@ export const handleSubmit = (
   contest,
   state,
   isQaOrGasFinding,
-  details,
-  markdownBody,
   setHasValidationErrors,
   submitFinding,
   setIsExpanded
 ) => {
+  const locString = state.linesOfCode.map((loc) => loc.value).join("\n");
+  const details = isQaOrGasFinding ? state.qaGasDetails : state.details;
+  const markdownBody = `# Lines of code\n\n${locString}\n\n\n# Vulnerability details\n\n${details}\n\n`;
+
   // extract required fields from field data for validation check
   const formatedRisk = state.risk ? state.risk.slice(0, 1) : "";
   const formatedBody = isQaOrGasFinding ? details : markdownBody;

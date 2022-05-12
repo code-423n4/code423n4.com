@@ -40,10 +40,6 @@ const Form = ({
   const [errorMessage, setErrorMessage] = useState("An error occurred");
   const [isQaOrGasFinding, setIsQaOrGasFinding] = useState(true);
   const [isExpanded, setIsExpanded] = useState(false);
-
-  const locString = state.linesOfCode.map((loc) => loc.value).join("\n");
-  const details = isQaOrGasFinding ? state.qaGasDetails : state.details;
-  const markdownBody = `# Lines of code\n\n${locString}\n\n\n# Vulnerability details\n\n${details}\n\n`;
   const labelSet = [config.labelAll, state.risk ? state.risk : ""];
 
   // fetch initial state from local storage
@@ -73,8 +69,6 @@ const Form = ({
       contest,
       state,
       isQaOrGasFinding,
-      details,
-      markdownBody,
       setHasValidationErrors,
       submitFinding,
       setIsExpanded
