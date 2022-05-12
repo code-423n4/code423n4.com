@@ -46,7 +46,7 @@ const Form = ({
       setState,
       setIsQaOrGasFinding
     );
-  }, [contest, repoUrl, sponsor, initStateFromStorage]); // if add labelSet --> infinite loop
+  }, [contest, repoUrl, sponsor, initStateFromStorage]);
 
   // update local storage
   useEffect(() => {
