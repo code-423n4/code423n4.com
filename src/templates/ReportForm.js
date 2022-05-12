@@ -57,6 +57,7 @@ const ReportForm = (props) => {
           initStateFromStorage={initStateFromStorage}
           handleSubmit={handleSubmit}
           changeHandler={changeHandler}
+          formType={"report"}
         />
       )}
     </main>

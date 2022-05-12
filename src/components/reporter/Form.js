@@ -28,6 +28,7 @@ const Form = ({
   initStateFromStorage,
   handleSubmit,
   changeHandler,
+  formType,
 }) => {
   // Component State
   const [state, setState] = useState(initialState);
@@ -142,9 +143,9 @@ const Form = ({
               }
             })}
 
-            {isQaOrGasFinding && <ContestWarning />}
+            {isQaOrGasFinding && formType === "report" && <ContestWarning />}
 
-            {state.risk && (
+            {state.risk && formType === "report" && (
               <FindingContent
                 hasValidationErrors={hasValidationErrors}
                 state={state}
@@ -177,7 +178,7 @@ const Form = ({
       {status === FormStatus.Submitted && (
         <div className="centered-text">
           <h1>Thank you!</h1>
-          <p>Your report has been submitted.</p>
+          <p>Your {formType} has been submitted.</p>
           <button
             className="button cta-button"
             type="button"
