@@ -9,10 +9,6 @@ import FindingContent from "./FindingContent.js";
 import * as styles from "./Form.module.scss";
 import * as widgetStyles from "./widgets/Widgets.module.scss";
 
-const config = {
-  labelAll: "bug",
-};
-
 const FormStatus = {
   Unsubmitted: "unsubmitted",
   Submitting: "submitting",
@@ -40,7 +36,6 @@ const Form = ({
   const [errorMessage, setErrorMessage] = useState("An error occurred");
   const [isQaOrGasFinding, setIsQaOrGasFinding] = useState(true);
   const [isExpanded, setIsExpanded] = useState(false);
-  const labelSet = [config.labelAll, state.risk ? state.risk : ""];
 
   // fetch initial state from local storage
   useEffect(() => {
@@ -48,7 +43,6 @@ const Form = ({
       contest,
       sponsor,
       repoUrl,
-      labelSet,
       setState,
       setIsQaOrGasFinding
     );
@@ -64,6 +58,7 @@ const Form = ({
     changeHandler(setState, e, setIsQaOrGasFinding);
   };
 
+  // Submit handler
   const submitHandler = () => {
     handleSubmit(
       contest,
@@ -75,11 +70,13 @@ const Form = ({
     );
   };
 
+  // Reset form
   const handleReset = () => {
     setState(initialState);
     setStatus(FormStatus.Unsubmitted);
   };
 
+  // Generic submit
   const submitFinding = useCallback((url, data) => {
     (async () => {
       setStatus(FormStatus.Submitting);

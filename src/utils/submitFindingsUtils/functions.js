@@ -2,6 +2,10 @@ import { riskField } from "./fields";
 import { initialState } from "./state";
 const submissionUrl = `/.netlify/functions/submit-finding`;
 
+const config = {
+  labelAll: "bug",
+};
+
 const checkTitle = (title, risk) => {
   if (risk === "G (Gas Optimization)") {
     return "Gas Optimizations";
@@ -78,7 +82,6 @@ export const initStateFromStorage = (
   contest,
   sponsor,
   repoUrl,
-  labelSet,
   setState,
   setIsQaOrGasFinding
 ) => {
@@ -96,7 +99,7 @@ export const initStateFromStorage = (
       contest: contest,
       sponsor: sponsor,
       repo: repoUrl.split("/").pop(),
-      labels: labelSet,
+      labels: dataObject?.labelSet || [config.labelAll, ""] ,
       title: dataObject?.title || "",
       email: dataObject?.email || "",
       handle: dataObject?.handle || "",
@@ -139,7 +142,7 @@ export const changeHandler = (setState, e, setIsQaOrGasFinding) => {
           setIsQaOrGasFinding(false);
         }
         setState((state) => {
-          return { ...state, [name]: value };
+          return { ...state, [name]: value, labels: [config.labelAll, value ? value : ""]};
         });
         break;
       case "title":
