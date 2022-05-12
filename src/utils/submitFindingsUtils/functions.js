@@ -99,7 +99,7 @@ export const initStateFromStorage = (
       contest: contest,
       sponsor: sponsor,
       repo: repoUrl.split("/").pop(),
-      labels: dataObject?.labelSet || [config.labelAll, ""] ,
+      labels: dataObject?.labels || [config.labelAll, ""] ,
       title: dataObject?.title || "",
       email: dataObject?.email || "",
       handle: dataObject?.handle || "",
