@@ -72,11 +72,15 @@ export const handleSubmit = (
       ...state,
       body: formatedBody,
       title: checkTitle(state.title, state.risk),
+      risk: formatedRisk
     });
-    //!! make sure state is correctly submited
     if (typeof window !== `undefined`) {
       window.localStorage.removeItem(contest);
     }
+    // New in the object passed : 
+    // - LOC
+    // - details
+    // - qaGasDetails
     setIsExpanded(false);
   }
 };
