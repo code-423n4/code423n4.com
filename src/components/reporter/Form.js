@@ -51,7 +51,7 @@ const Form = ({
   // update local storage
   useEffect(() => {
     updateLocalStorage(state, contest);
-  }, [state, contest]);
+  }, [state, contest, updateLocalStorage]);
 
   // Event Handlers
   const handleChange = (e) => {
@@ -105,12 +105,13 @@ const Form = ({
     >
       <div className={clsx(styles.FormHeader)}>
         <h1>{sponsor} contest finding</h1>
-        <img
-          src={isExpanded ? "/images/compress.svg" : "/images/expand.svg"}
-          alt={isExpanded ? "compress form" : "expand form"}
-          className={clsx(styles.FormIcons)}
-          onClick={() => setIsExpanded(!isExpanded)}
-        />
+        <button onClick={() => setIsExpanded(!isExpanded)}>
+          <img
+            src={isExpanded ? "/images/compress.svg" : "/images/expand.svg"}
+            alt={isExpanded ? "compress form" : "expand form"}
+            className={clsx(styles.FormIcons)}
+          />
+        </button>
       </div>
       {(status === FormStatus.Unsubmitted ||
         status === FormStatus.Submitting) && (
@@ -120,7 +121,7 @@ const Form = ({
             {/* TODO: refactor form fields; move FormField into individual field components */}
             {fieldsList.map((field, index) => {
               if (field.name === "title" && isQaOrGasFinding) {
-                return;
+                return "";
               } else {
                 return (
                   <FormField
