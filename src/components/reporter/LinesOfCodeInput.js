@@ -44,7 +44,7 @@ const InputField = ({
         )}
       </div>
       {isInvalid && (
-        <label for={index} className={styles.ErrorMessage}>
+        <label htmlFor={index} className={styles.ErrorMessage}>
           {value === "" ? (
             "This field is required"
           ) : (
