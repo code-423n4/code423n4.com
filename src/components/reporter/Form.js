@@ -148,7 +148,6 @@ const Form = ({
                 hasValidationErrors={hasValidationErrors}
                 state={state}
                 handleChange={handleChange}
-                handleLocChange={handleChange}
                 isQaOrGasFinding={isQaOrGasFinding}
                 qaGasDetailsField={qaGasDetailsField}
                 vulnerabilityDetailsField={vulnerabilityDetailsField}

@@ -16,7 +16,6 @@ const checkTitle = (title, risk) => {
   }
 };
 
-
 export const wardenField = (wardens) => {
   return {
     name: "handle",
@@ -69,11 +68,15 @@ export const handleSubmit = (
 
   setHasValidationErrors(hasErrors || hasInvalidLinks);
   if (!hasErrors) {
-    // submitFinding(submissionUrl, { ...state, body: formatedBody }); //!! make sure state is correctly submited
-    // if (typeof window !== `undefined`) {
-    //   window.localStorage.removeItem(contest);
-    // }
-    console.log(submissionUrl, { ...state, body: formatedBody, title: checkTitle(state.title, state.risk) });
+    submitFinding(submissionUrl, {
+      ...state,
+      body: formatedBody,
+      title: checkTitle(state.title, state.risk),
+    });
+    //!! make sure state is correctly submited
+    if (typeof window !== `undefined`) {
+      window.localStorage.removeItem(contest);
+    }
     setIsExpanded(false);
   }
 };
@@ -99,7 +102,7 @@ export const initStateFromStorage = (
       contest: contest,
       sponsor: sponsor,
       repo: repoUrl.split("/").pop(),
-      labels: dataObject?.labels || [config.labelAll, ""] ,
+      labels: dataObject?.labels || [config.labelAll, ""],
       title: dataObject?.title || "",
       email: dataObject?.email || "",
       handle: dataObject?.handle || "",
@@ -142,7 +145,11 @@ export const changeHandler = (setState, e, setIsQaOrGasFinding) => {
           setIsQaOrGasFinding(false);
         }
         setState((state) => {
-          return { ...state, [name]: value, labels: [config.labelAll, value ? value : ""]};
+          return {
+            ...state,
+            [name]: value,
+            labels: [config.labelAll, value ? value : ""],
+          };
         });
         break;
       case "title":

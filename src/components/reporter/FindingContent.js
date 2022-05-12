@@ -7,7 +7,6 @@ const FindingContent = ({
   hasValidationErrors,
   state,
   handleChange,
-  handleLocChange,
   isQaOrGasFinding,
   qaGasDetailsField,
   vulnerabilityDetailsField
@@ -29,7 +28,7 @@ const FindingContent = ({
   ) : (
     <>
       <LinesOfCode
-        onChange={handleLocChange}
+        onChange={handleChange}
         linesOfCode={state.linesOfCode}
         hasValidationErrors={hasValidationErrors}
       />
