@@ -1,9 +1,8 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import clsx from "clsx";
 import Agreement from "../content/Agreement.js";
 import FormField from "./widgets/FormField";
 import Widget from "./widgets/Widget";
-import ContestWarning from "../content/ContestWarning.js";
 import FindingContent from "./FindingContent.js";
 
 import * as styles from "./Form.module.scss";
@@ -19,64 +18,28 @@ const FormStatus = {
 const Form = ({
   contest,
   sponsor,
-  repoUrl,
   initialState,
   fieldsList,
-  vulnerabilityDetailsField,
-  qaGasDetailsField,
-  updateLocalStorage,
-  initStateFromStorage,
   handleSubmit,
   changeHandler,
   formType,
-  checkQaOrGasFinding
+  checkQaOrGasFinding,
+  setState,
+  state,
 }) => {
   // Component State
-  const [state, setState] = useState(initialState);
   const [status, setStatus] = useState(FormStatus.Unsubmitted);
   const [hasValidationErrors, setHasValidationErrors] = useState(false);
   const [errorMessage, setErrorMessage] = useState("An error occurred");
   const [isExpanded, setIsExpanded] = useState(false);
 
-  // fetch initial state from local storage
-  useEffect(() => {
-    initStateFromStorage(
-      contest,
-      sponsor,
-      repoUrl,
-      setState,
-    );
-  }, [contest, repoUrl, sponsor, initStateFromStorage]);
-
-  // update local storage
-  useEffect(() => {
-    updateLocalStorage(state, contest);
-  }, [state, contest, updateLocalStorage]);
-
-  // Event Handlers
-  const handleChange = (e) => {
-    changeHandler(setState, e);
-  };
-
-  // Submit handler
-  const submitHandler = () => {
-    handleSubmit(
-      contest,
-      state,
-      checkQaOrGasFinding(state.risk),
-      setHasValidationErrors,
-      submitFinding,
-      setIsExpanded
-    );
-  };
-
-  // Reset form
+  // Reset form --> CAN STAY
   const handleReset = () => {
     setState(initialState);
     setStatus(FormStatus.Unsubmitted);
   };
 
-  // Generic submit
+  // Generic submit --> CAN STAY
   const submitFinding = useCallback((url, data) => {
     (async () => {
       setStatus(FormStatus.Submitting);
@@ -120,7 +83,10 @@ const Form = ({
           <fieldset className={widgetStyles.Fields}>
             {/* TODO: refactor form fields; move FormField into individual field components */}
             {fieldsList.map((field, index) => {
-              if (field.name === "title" && checkQaOrGasFinding(state.risk)) {
+              if (
+                field.name === "title" &&
+                (checkQaOrGasFinding(state.risk) || state.risk === "")
+              ) {
                 return "";
               } else {
                 return (
@@ -133,7 +99,7 @@ const Form = ({
                   >
                     <Widget
                       field={field}
-                      onChange={handleChange}
+                      onChange={changeHandler}
                       fieldState={state}
                       isInvalid={hasValidationErrors && !state[field.name]}
                     />
@@ -142,16 +108,12 @@ const Form = ({
               }
             })}
 
-            {checkQaOrGasFinding(state.risk) && formType === "report" && <ContestWarning />}
-
             {state.risk && formType === "report" && (
               <FindingContent
                 hasValidationErrors={hasValidationErrors}
                 state={state}
-                handleChange={handleChange}
+                handleChange={changeHandler}
                 isQaOrGasFinding={checkQaOrGasFinding(state.risk)}
-                qaGasDetailsField={qaGasDetailsField}
-                vulnerabilityDetailsField={vulnerabilityDetailsField}
               />
             )}
           </fieldset>
@@ -160,7 +122,9 @@ const Form = ({
           <button
             className="button cta-button centered"
             type="button"
-            onClick={submitHandler}
+            onClick={() =>
+              handleSubmit(setHasValidationErrors, submitFinding, setIsExpanded)
+            }
             disabled={status !== FormStatus.Unsubmitted}
           >
             {status === FormStatus.Unsubmitted

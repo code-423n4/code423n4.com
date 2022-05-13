@@ -1,30 +1,36 @@
-import React from 'react';
-import FormField from './widgets/FormField';
-import LinesOfCode from './LinesOfCodeInput';
-import Widget from './widgets/Widget';
+import React from "react";
+import FormField from "./widgets/FormField";
+import LinesOfCode from "./LinesOfCodeInput";
+import Widget from "./widgets/Widget";
+import ContestWarning from "../content/ContestWarning";
+import {
+  vulnerabilityDetailsField,
+  qaGasDetailsField,
+} from "../../utils/submitFindingsUtils/fields";
 
 const FindingContent = ({
   hasValidationErrors,
   state,
   handleChange,
   isQaOrGasFinding,
-  qaGasDetailsField,
-  vulnerabilityDetailsField
 }) => {
   return isQaOrGasFinding ? (
-    <FormField
-      name={qaGasDetailsField.name}
-      label={qaGasDetailsField.label}
-      helpText={qaGasDetailsField.helpText}
-      isInvalid={hasValidationErrors && !state.qaGasDetails}
-    >
-      <Widget
-        field={qaGasDetailsField}
-        onChange={handleChange}
-        fieldState={state}
+    <>
+      <ContestWarning />
+      <FormField
+        name={qaGasDetailsField.name}
+        label={qaGasDetailsField.label}
+        helpText={qaGasDetailsField.helpText}
         isInvalid={hasValidationErrors && !state.qaGasDetails}
-      />
-    </FormField>
+      >
+        <Widget
+          field={qaGasDetailsField}
+          onChange={handleChange}
+          fieldState={state}
+          isInvalid={hasValidationErrors && !state.qaGasDetails}
+        />
+      </FormField>
+    </>
   ) : (
     <>
       <LinesOfCode

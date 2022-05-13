@@ -24,6 +24,17 @@ export const titleField = {
   required: true,
 };
 
+export const wardenField = (wardens) => {
+  return {
+    name: "handle",
+    label: "Handle",
+    helpText: "Handle you're competing under (individual or team name)",
+    widget: "warden",
+    required: true,
+    options: wardens,
+  };
+};
+
 export const riskField = {
   name: "risk",
   label: "Risk rating",
