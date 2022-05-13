@@ -15,6 +15,7 @@ import {
   handleSubmit,
   initStateFromStorage,
   changeHandler,
+  checkQaOrGasFinding
 } from "../utils/submitFindingsUtils/functions";
 import Form from "../components/reporter/Form";
 
@@ -58,6 +59,7 @@ const ReportForm = (props) => {
           handleSubmit={handleSubmit}
           changeHandler={changeHandler}
           formType={"report"}
+          checkQaOrGasFinding={checkQaOrGasFinding}
         />
       )}
     </main>

@@ -48,6 +48,10 @@ export const handleSubmit = (
   // extract required fields from field data for validation check
   const formatedRisk = state.risk ? state.risk.slice(0, 1) : "";
   const formatedBody = isQaOrGasFinding ? details : markdownBody;
+  // console.log("state", state);
+  // console.log("details", details);
+  // console.log("gas ?", isQaOrGasFinding);
+  // console.log("markdown", markdownBody);
   const { email, handle, address, title } = state;
   const requiredFields = isQaOrGasFinding
     ? [email, handle, address, formatedRisk, formatedBody]
@@ -77,7 +81,7 @@ export const handleSubmit = (
     if (typeof window !== `undefined`) {
       window.localStorage.removeItem(contest);
     }
-    // New in the object passed : 
+    // New in the object passed :
     // - LOC
     // - details
     // - qaGasDetails
@@ -85,13 +89,7 @@ export const handleSubmit = (
   }
 };
 
-export const initStateFromStorage = (
-  contest,
-  sponsor,
-  repoUrl,
-  setState,
-  setIsQaOrGasFinding
-) => {
+export const initStateFromStorage = (contest, sponsor, repoUrl, setState) => {
   if (typeof window !== `undefined`) {
     const dataObject = JSON.parse(window.localStorage.getItem(contest));
     let riskIndex = null;
@@ -124,16 +122,10 @@ export const initStateFromStorage = (
               },
             ],
     });
-    if (riskIndex !== null && riskField.options[riskIndex].value) {
-      riskField.options[riskIndex].value.slice(0, 1) === "G" ||
-      riskField.options[riskIndex].value.slice(0, 1) === "Q"
-        ? setIsQaOrGasFinding(true)
-        : setIsQaOrGasFinding(false);
-    }
   }
 };
 
-export const changeHandler = (setState, e, setIsQaOrGasFinding) => {
+export const changeHandler = (setState, e) => {
   if (Array.isArray(e)) {
     setState((state) => {
       return { ...state, linesOfCode: e };
@@ -142,12 +134,12 @@ export const changeHandler = (setState, e, setIsQaOrGasFinding) => {
     const { name, value } = e?.target;
     switch (name) {
       case "risk":
-        const riskLevel = value.slice(0, 1);
-        if (riskLevel === "G" || riskLevel === "Q") {
-          setIsQaOrGasFinding(true);
-        } else {
-          setIsQaOrGasFinding(false);
-        }
+        // const riskLevel = value.slice(0, 1);
+        // if (riskLevel === "G" || riskLevel === "Q") {
+        //   setIsQaOrGasFinding(true);
+        // } else {
+        //   setIsQaOrGasFinding(false);
+        // }
         setState((state) => {
           return {
             ...state,
@@ -168,4 +160,8 @@ export const changeHandler = (setState, e, setIsQaOrGasFinding) => {
         break;
     }
   }
+};
+
+export const checkQaOrGasFinding = (risk) => {
+  return risk.slice(0, 1) === "G" || risk.slice(0, 1) === "Q";
 };

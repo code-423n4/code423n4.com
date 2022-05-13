@@ -29,13 +29,13 @@ const Form = ({
   handleSubmit,
   changeHandler,
   formType,
+  checkQaOrGasFinding
 }) => {
   // Component State
   const [state, setState] = useState(initialState);
   const [status, setStatus] = useState(FormStatus.Unsubmitted);
   const [hasValidationErrors, setHasValidationErrors] = useState(false);
   const [errorMessage, setErrorMessage] = useState("An error occurred");
-  const [isQaOrGasFinding, setIsQaOrGasFinding] = useState(true);
   const [isExpanded, setIsExpanded] = useState(false);
 
   // fetch initial state from local storage
@@ -45,7 +45,6 @@ const Form = ({
       sponsor,
       repoUrl,
       setState,
-      setIsQaOrGasFinding
     );
   }, [contest, repoUrl, sponsor, initStateFromStorage]);
 
@@ -56,7 +55,7 @@ const Form = ({
 
   // Event Handlers
   const handleChange = (e) => {
-    changeHandler(setState, e, setIsQaOrGasFinding);
+    changeHandler(setState, e);
   };
 
   // Submit handler
@@ -64,7 +63,7 @@ const Form = ({
     handleSubmit(
       contest,
       state,
-      isQaOrGasFinding,
+      checkQaOrGasFinding(state.risk),
       setHasValidationErrors,
       submitFinding,
       setIsExpanded
@@ -121,7 +120,7 @@ const Form = ({
           <fieldset className={widgetStyles.Fields}>
             {/* TODO: refactor form fields; move FormField into individual field components */}
             {fieldsList.map((field, index) => {
-              if (field.name === "title" && isQaOrGasFinding) {
+              if (field.name === "title" && checkQaOrGasFinding(state.risk)) {
                 return "";
               } else {
                 return (
@@ -143,14 +142,14 @@ const Form = ({
               }
             })}
 
-            {isQaOrGasFinding && formType === "report" && <ContestWarning />}
+            {checkQaOrGasFinding(state.risk) && formType === "report" && <ContestWarning />}
 
             {state.risk && formType === "report" && (
               <FindingContent
                 hasValidationErrors={hasValidationErrors}
                 state={state}
                 handleChange={handleChange}
-                isQaOrGasFinding={isQaOrGasFinding}
+                isQaOrGasFinding={checkQaOrGasFinding(state.risk)}
                 qaGasDetailsField={qaGasDetailsField}
                 vulnerabilityDetailsField={vulnerabilityDetailsField}
               />
