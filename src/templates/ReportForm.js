@@ -121,23 +121,25 @@ const ReportForm = (props) => {
       return !regex.test(line.value);
     });
 
+    const submitData = {
+      contest: props.data.contestsCsv.contestid,
+      sponsor: props.data.contestsCsv.sponsor.name,
+      repo: props.data.contestsCsv.findingsRepo.split("/").pop(),
+      email,
+      handle,
+      address,
+      risk: formatedRisk,
+      title: checkTitle(state.title, state.risk),
+      body: formatedBody,
+      labels: state.labels,
+    };
+
     setHasValidationErrors(hasErrors || hasInvalidLinks);
     if (!hasErrors) {
-      // submitFinding(submissionUrl, {
-      //   ...state,
-      //   body: formatedBody,
-      //   title: checkTitle(state.title, state.risk),
-      //   risk: formatedRisk
-      // });
-      // if (typeof window !== `undefined`) {
-      //   window.localStorage.removeItem(props.data.contestsCsv.contestid);
-      // }
-      console.log({
-        ...state,
-        body: formatedBody,
-        title: checkTitle(state.title, state.risk),
-        risk: formatedRisk,
-      });
+      submitFinding(submissionUrl, submitData);
+      if (typeof window !== `undefined`) {
+        window.localStorage.removeItem(props.data.contestsCsv.contestid);
+      }
       // New in the object passed :
       // - LOC
       // - details

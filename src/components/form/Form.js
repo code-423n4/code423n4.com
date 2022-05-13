@@ -32,13 +32,13 @@ const Form = ({
   const [errorMessage, setErrorMessage] = useState("An error occurred");
   const [isExpanded, setIsExpanded] = useState(false);
 
-  // Reset form --> CAN STAY
+  // Reset form
   const handleReset = () => {
     setState(initialState);
     setStatus(FormStatus.Unsubmitted);
   };
 
-  // Generic submit --> CAN STAY
+  // Generic submit
   const submitFinding = useCallback((url, data) => {
     (async () => {
       setStatus(FormStatus.Submitting);
