@@ -1,12 +1,12 @@
 import React, { useCallback, useState } from "react";
 import clsx from "clsx";
 import Agreement from "../content/Agreement.js";
-import FormField from "./widgets/FormField";
-import Widget from "./widgets/Widget";
-import FindingContent from "./FindingContent.js";
+import FormField from "../reporter/widgets/FormField";
+import Widget from "../reporter/widgets/Widget";
+import FindingContent from "../reporter/FindingContent.js";
 
 import * as styles from "./Form.module.scss";
-import * as widgetStyles from "./widgets/Widgets.module.scss";
+import * as widgetStyles from "../reporter/widgets/Widgets.module.scss";
 
 const FormStatus = {
   Unsubmitted: "unsubmitted",
@@ -16,16 +16,15 @@ const FormStatus = {
 };
 
 const Form = ({
-  contest,
-  sponsor,
+  // contest,
   initialState,
+  state,
+  setState,
   fieldsList,
   handleSubmit,
   changeHandler,
-  formType,
   checkQaOrGasFinding,
-  setState,
-  state,
+  displayedInfo,
 }) => {
   // Component State
   const [status, setStatus] = useState(FormStatus.Unsubmitted);
@@ -67,7 +66,7 @@ const Form = ({
       }
     >
       <div className={clsx(styles.FormHeader)}>
-        <h1>{sponsor} contest finding</h1>
+        <h1>{displayedInfo.title}</h1>
         <button onClick={() => setIsExpanded(!isExpanded)}>
           <img
             src={isExpanded ? "/images/compress.svg" : "/images/expand.svg"}
@@ -79,7 +78,8 @@ const Form = ({
       {(status === FormStatus.Unsubmitted ||
         status === FormStatus.Submitting) && (
         <form>
-          <input type="hidden" id="contest" name="contest" value={contest} />
+          {/* not sure about the use of this one  */}
+          {/* <input type="hidden" id="contest" name="contest" value={contest} /> */}
           <fieldset className={widgetStyles.Fields}>
             {/* TODO: refactor form fields; move FormField into individual field components */}
             {fieldsList.map((field, index) => {
@@ -108,7 +108,7 @@ const Form = ({
               }
             })}
 
-            {state.risk && formType === "report" && (
+            {state.risk && (
               <FindingContent
                 hasValidationErrors={hasValidationErrors}
                 state={state}
@@ -117,6 +117,7 @@ const Form = ({
               />
             )}
           </fieldset>
+
           <Agreement />
 
           <button
@@ -128,7 +129,7 @@ const Form = ({
             disabled={status !== FormStatus.Unsubmitted}
           >
             {status === FormStatus.Unsubmitted
-              ? "Create issue"
+              ? displayedInfo.buttonText
               : "Submitting..."}
           </button>
         </form>
@@ -141,7 +142,7 @@ const Form = ({
       {status === FormStatus.Submitted && (
         <div className="centered-text">
           <h1>Thank you!</h1>
-          <p>Your {formType} has been submitted.</p>
+          <p>{displayedInfo.afterSubmit}</p>
           <button
             className="button cta-button"
             type="button"

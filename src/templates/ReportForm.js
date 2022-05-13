@@ -14,7 +14,7 @@ import {
   checkTitle,
   checkQaOrGasFinding,
 } from "../utils/submitFindingsUtils/functions";
-import Form from "../components/reporter/Form";
+import Form from "../components/form/Form";
 
 const ReportForm = (props) => {
   const [state, setState] = useState(initialState);
@@ -25,6 +25,12 @@ const ReportForm = (props) => {
   const wardens = props.data.allHandlesJson.edges.map(({ node }) => {
     return { value: node.handle, image: node.image };
   });
+
+  const displayedInfo = {
+    title: `${props.data.contestsCsv.sponsor.name} contest finding`,
+    buttonText: "Create issue",
+    afterSubmit: "Your report has been submitted.",
+  };
 
   useEffect(() => {
     initStateFromStorage(
@@ -156,7 +162,6 @@ const ReportForm = (props) => {
       ) : (
         <Form
           contest={props.data.contestsCsv.contestid}
-          sponsor={props.data.contestsCsv.sponsor.name}
           state={state}
           setState={setState}
           initialState={initialState}
@@ -169,8 +174,8 @@ const ReportForm = (props) => {
           ]}
           handleSubmit={handleSubmit}
           changeHandler={changeHandler}
-          formType={"report"}
           checkQaOrGasFinding={checkQaOrGasFinding}
+          displayedInfo={displayedInfo}
         />
       )}
     </main>
