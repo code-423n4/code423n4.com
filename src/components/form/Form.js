@@ -67,7 +67,10 @@ const Form = ({
     >
       <div className={clsx(styles.FormHeader)}>
         <h1>{displayedInfo.title}</h1>
-        <button onClick={() => setIsExpanded(!isExpanded)}>
+        <button
+          onClick={() => setIsExpanded(!isExpanded)}
+          className={clsx(styles.FormIconButton)}
+        >
           <img
             src={isExpanded ? "/images/compress.svg" : "/images/expand.svg"}
             alt={isExpanded ? "compress form" : "expand form"}
@@ -78,34 +81,25 @@ const Form = ({
       {(status === FormStatus.Unsubmitted ||
         status === FormStatus.Submitting) && (
         <form>
-          {/* not sure about the use of this one  */}
-          {/* <input type="hidden" id="contest" name="contest" value={contest} /> */}
           <fieldset className={widgetStyles.Fields}>
             {/* TODO: refactor form fields; move FormField into individual field components */}
             {fieldsList.map((field, index) => {
-              if (
-                field.name === "title" &&
-                (checkQaOrGasFinding(state.risk) || state.risk === "")
-              ) {
-                return "";
-              } else {
-                return (
-                  <FormField
-                    key={`${field.name} ${index}`}
-                    name={field.name}
-                    label={field.label}
-                    helpText={field.helpText}
+              return (
+                <FormField
+                  key={`${field.name} ${index}`}
+                  name={field.name}
+                  label={field.label}
+                  helpText={field.helpText}
+                  isInvalid={hasValidationErrors && !state[field.name]}
+                >
+                  <Widget
+                    field={field}
+                    onChange={changeHandler}
+                    fieldState={state}
                     isInvalid={hasValidationErrors && !state[field.name]}
-                  >
-                    <Widget
-                      field={field}
-                      onChange={changeHandler}
-                      fieldState={state}
-                      isInvalid={hasValidationErrors && !state[field.name]}
-                    />
-                  </FormField>
-                );
-              }
+                  />
+                </FormField>
+              );
             })}
 
             {state.risk && (

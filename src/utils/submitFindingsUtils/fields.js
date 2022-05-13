@@ -7,7 +7,7 @@ export const emailField = {
 };
 
 export const addressField = {
-  name: "address", // was polygonAddress before
+  name: "address",
   label: "Polygon address",
   helpText:
     "Address where your prize should go. If you use a smart contract wallet, please contact one of our organizers in Discord in addition to adding the address here.",

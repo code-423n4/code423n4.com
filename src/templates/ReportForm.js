@@ -17,14 +17,20 @@ import {
 import Form from "../components/form/Form";
 
 const ReportForm = (props) => {
+  const wardens = props.data.allHandlesJson.edges.map(({ node }) => {
+    return { value: node.handle, image: node.image };
+  });
   const [state, setState] = useState(initialState);
+  const [fieldList, setFieldList] = useState([
+    wardenField(wardens),
+    emailField,
+    addressField,
+    riskField,
+  ]);
   const submissionUrl = `/.netlify/functions/submit-finding`;
 
   const endTime = props.data.contestsCsv.end_time;
   const hasContestEnded = Date.now() > new Date(endTime).getTime();
-  const wardens = props.data.allHandlesJson.edges.map(({ node }) => {
-    return { value: node.handle, image: node.image };
-  });
 
   const displayedInfo = {
     title: `${props.data.contestsCsv.sponsor.name} contest finding`,
@@ -148,6 +154,20 @@ const ReportForm = (props) => {
     }
   };
 
+  useEffect(() => {
+    if (checkQaOrGasFinding(state.risk)) {
+      setFieldList([wardenField(wardens), emailField, addressField, riskField]);
+    } else {
+      setFieldList([
+        wardenField(wardens),
+        emailField,
+        addressField,
+        riskField,
+        titleField,
+      ]);
+    }
+  }, [state.risk]);
+
   return (
     <main>
       {hasContestEnded ? (
@@ -167,13 +187,7 @@ const ReportForm = (props) => {
           state={state}
           setState={setState}
           initialState={initialState}
-          fieldsList={[
-            wardenField(wardens),
-            emailField,
-            addressField,
-            riskField,
-            titleField,
-          ]}
+          fieldsList={fieldList}
           handleSubmit={handleSubmit}
           changeHandler={changeHandler}
           checkQaOrGasFinding={checkQaOrGasFinding}
