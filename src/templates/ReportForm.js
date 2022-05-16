@@ -9,14 +9,14 @@ import {
   linesOfCodeField,
   vulnerabilityDetailsField,
   qaGasDetailsField,
-} from "../utils/submitFindingsUtils/fields";
-import { initialState } from "../utils/submitFindingsUtils/state";
+} from "../components/reporter/findings/fields";
+import { initialState } from "../components/reporter/findings/state";
 import {
   initStateFromStorage,
   config,
   checkTitle,
   checkQaOrGasFinding,
-} from "../utils/submitFindingsUtils/functions";
+} from "../components/reporter/findings/functions";
 import Form from "../components/form/Form";
 
 const ReportForm = (props) => {
