@@ -64,7 +64,7 @@ const Form = ({
     >
       <div className={clsx(styles.FormHeader)}>
         <h1>{displayedInfo.title}</h1>
-        <button
+        <div
           onClick={() => setIsExpanded(!isExpanded)}
           className={clsx(styles.FormIconButton)}
         >
@@ -73,7 +73,7 @@ const Form = ({
             alt={isExpanded ? "compress form" : "expand form"}
             className={clsx(styles.FormIcons)}
           />
-        </button>
+        </div>
       </div>
       {(status === FormStatus.Unsubmitted ||
         status === FormStatus.Submitting) && (
