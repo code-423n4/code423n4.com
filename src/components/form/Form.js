@@ -98,11 +98,8 @@ const Form = ({
                 </FormField>
               );
             })}
-
           </fieldset>
-
           <Agreement />
-
           <button
             className="button cta-button centered"
             type="button"
