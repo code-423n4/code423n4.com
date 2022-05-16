@@ -3,7 +3,6 @@ import clsx from "clsx";
 import Agreement from "../content/Agreement.js";
 import FormField from "../reporter/widgets/FormField";
 import Widget from "../reporter/widgets/Widget";
-import FindingContent from "../reporter/FindingContent.js";
 
 import * as styles from "./Form.module.scss";
 import * as widgetStyles from "../reporter/widgets/Widgets.module.scss";
@@ -16,14 +15,12 @@ const FormStatus = {
 };
 
 const Form = ({
-  // contest,
   initialState,
   state,
   setState,
   fieldsList,
   handleSubmit,
   changeHandler,
-  checkQaOrGasFinding,
   displayedInfo,
 }) => {
   // Component State
@@ -102,14 +99,6 @@ const Form = ({
               );
             })}
 
-            {state.risk && (
-              <FindingContent
-                hasValidationErrors={hasValidationErrors}
-                state={state}
-                handleChange={changeHandler}
-                isQaOrGasFinding={checkQaOrGasFinding(state.risk)}
-              />
-            )}
           </fieldset>
 
           <Agreement />

@@ -9,12 +9,11 @@ const InputField = ({
   id,
   handleChange,
   handleRemoveInputField,
-  hasValidationErrors,
+  isInvalid,
 }) => {
   const regex = new RegExp("#L", "g");
   const isComplete = regex.test(value);
-  const isInvalid =
-    hasValidationErrors && ((index === 0 && value === "") || !isComplete);
+  const notValid = isInvalid && ((index === 0 && value === "") || !isComplete);
 
   return (
     <div>
@@ -24,7 +23,7 @@ const InputField = ({
           className={clsx(
             styles.Control,
             styles.Text,
-            isInvalid && "input-error"
+            notValid && "input-error"
           )}
           name={index}
           type="text"
@@ -52,7 +51,8 @@ const InputField = ({
               Please include at least one line number at the end of your URL.{" "}
               <a
                 href="https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/creating-a-permanent-link-to-a-code-snippet#linking-to-code"
-                target="_blank" rel="noreferrer"
+                target="_blank"
+                rel="noreferrer"
                 aria-label="How do I link to line numbers on GitHub? Opens in new window"
               >
                 How do I link to line numbers on GitHub?
@@ -65,7 +65,7 @@ const InputField = ({
   );
 };
 
-const LinesOfCode = ({ onChange, linesOfCode, hasValidationErrors }) => {
+const LinesOfCode = ({ onChange, linesOfCode, isInvalid }) => {
   const handleChange = (e, index) => {
     const { value } = e.target;
     const updatedCodeLines = [...linesOfCode];
@@ -113,7 +113,7 @@ const LinesOfCode = ({ onChange, linesOfCode, hasValidationErrors }) => {
           id={field.id}
           handleChange={handleChange}
           handleRemoveInputField={handleRemoveInputField}
-          hasValidationErrors={hasValidationErrors}
+          isInvalid={isInvalid}
         />
       ))}
       <button

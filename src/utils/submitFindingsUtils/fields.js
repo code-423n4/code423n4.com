@@ -35,6 +35,14 @@ export const wardenField = (wardens) => {
   };
 };
 
+export const linesOfCodeField = {
+  name: "linesOfCode",
+  label: "",
+  helpText:"",
+  widget: "linesOfCode",
+  required: true,
+};
+
 export const riskField = {
   name: "risk",
   label: "Risk rating",

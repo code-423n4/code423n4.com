@@ -6,6 +6,9 @@ import {
   titleField,
   riskField,
   wardenField,
+  linesOfCodeField,
+  vulnerabilityDetailsField,
+  qaGasDetailsField,
 } from "../utils/submitFindingsUtils/fields";
 import { initialState } from "../utils/submitFindingsUtils/state";
 import {
@@ -142,21 +145,25 @@ const ReportForm = (props) => {
 
     setHasValidationErrors(hasErrors || hasInvalidLinks);
     if (!hasErrors) {
-      submitFinding(submissionUrl, submitData);
-      if (typeof window !== `undefined`) {
-        window.localStorage.removeItem(props.data.contestsCsv.contestid);
-      }
-      // New in the object passed :
-      // - LOC
-      // - details
-      // - qaGasDetails
+      // submitFinding(submissionUrl, submitData);
+      // if (typeof window !== `undefined`) {
+      //   window.localStorage.removeItem(props.data.contestsCsv.contestid);
+      // }
+      console.log(submitData);
+
       setIsExpanded(false);
     }
   };
 
   useEffect(() => {
     if (checkQaOrGasFinding(state.risk)) {
-      setFieldList([wardenField(wardens), emailField, addressField, riskField]);
+      setFieldList([
+        wardenField(wardens),
+        emailField,
+        addressField,
+        riskField,
+        qaGasDetailsField,
+      ]);
     } else {
       setFieldList([
         wardenField(wardens),
@@ -164,6 +171,8 @@ const ReportForm = (props) => {
         addressField,
         riskField,
         titleField,
+        linesOfCodeField,
+        vulnerabilityDetailsField,
       ]);
     }
   }, [state.risk]);
