@@ -145,11 +145,10 @@ const ReportForm = (props) => {
 
     setHasValidationErrors(hasErrors || hasInvalidLinks);
     if (!hasErrors) {
-      // submitFinding(submissionUrl, submitData);
-      // if (typeof window !== `undefined`) {
-      //   window.localStorage.removeItem(props.data.contestsCsv.contestid);
-      // }
-      console.log(submitData);
+      submitFinding(submissionUrl, submitData);
+      if (typeof window !== `undefined`) {
+        window.localStorage.removeItem(props.data.contestsCsv.contestid);
+      }
 
       setIsExpanded(false);
     }

@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import clsx from "clsx";
 
 import * as styles from "./widgets/Widgets.module.scss";
@@ -11,9 +11,13 @@ const InputField = ({
   handleRemoveInputField,
   isInvalid,
 }) => {
+  const [isValid, setIsValid] = useState(false);
   const regex = new RegExp("#L", "g");
-  const isComplete = regex.test(value);
-  const notValid = isInvalid && ((index === 0 && value === "") || !isComplete);
+
+  useEffect(() => {
+    const isComplete = regex.test(value);
+    setIsValid((!(index === 0 && value === "") && isComplete) && !isInvalid);
+  }, [value]);
 
   return (
     <div>
@@ -23,7 +27,7 @@ const InputField = ({
           className={clsx(
             styles.Control,
             styles.Text,
-            notValid && "input-error"
+            !isValid && "input-error"
           )}
           name={index}
           type="text"
@@ -42,7 +46,7 @@ const InputField = ({
           </button>
         )}
       </div>
-      {isInvalid && (
+      {(!isValid) && (
         <label htmlFor={index} className={styles.ErrorMessage}>
           {value === "" ? (
             "This field is required"
