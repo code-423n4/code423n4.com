@@ -12,12 +12,12 @@ const InputField = ({
   isInvalid,
 }) => {
   const [isValid, setIsValid] = useState(false);
-  const regex = new RegExp("#L", "g");
-
+  
   useEffect(() => {
+    const regex = new RegExp("#L", "g");
     const isComplete = regex.test(value);
     setIsValid((!(index === 0 && value === "") && isComplete) && !isInvalid);
-  }, [value]);
+  }, [value, index, isInvalid]);
 
   return (
     <div>
