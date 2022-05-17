@@ -84,7 +84,7 @@ function computeResults(findings) {
 }
 
 const Leaderboard = ({ data }) => {
-  const [timeFrame, setTimeFrame] = useState(null);
+  const [timeFrame, setTimeFrame] = useState("2022");
 
   const handles = data.handles.edges;
 
@@ -128,10 +128,11 @@ const Leaderboard = ({ data }) => {
   };
 
   const filterOptions = [
-    { value: "Last 60 days", label: "Last 60 days" },
-    { value: "Last 90 days", label: "Last 90 days" },
     { value: "2022", label: "2022" },
     { value: "2021", label: "2021" },
+    { value: "Last 60 days", label: "Last 60 days" },
+    { value: "Last 90 days", label: "Last 90 days" },
+    { value: "All time", label: "All time" },
   ];
 
   return (
@@ -140,7 +141,6 @@ const Leaderboard = ({ data }) => {
         <h1 className="page-header">Leaderboard</h1>
         <div className="leaderboard-container">
           <select onChange={handleChange} className="dropdown">
-            <option value="All time">All time</option>
             {filterOptions.map((option) => (
               <option value={option.value}>{option.label}</option>
             ))}
