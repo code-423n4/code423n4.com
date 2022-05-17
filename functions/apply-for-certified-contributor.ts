@@ -1,11 +1,13 @@
 const { Client } = require("@notionhq/client");
-const { verify } = require("hcaptcha");
 const dedent = require("dedent");
-const MailComposer = require("nodemailer/lib/mail-composer");
+const formData = require("form-data");
+const Mailgun = require("mailgun.js");
+const { verify } = require("hcaptcha");
 
 const { apiKey, domain } = require("./_config");
 
-const mg = require("mailgun-js")({ apiKey, domain });
+const mailgun = new Mailgun(formData);
+const mg = mailgun.client({ username: "api", key: apiKey });
 
 const notionKey = process.env.NOTION_KEY;
 const notionDbId = process.env.NOTION_WARDEN_CERTIFICATION_DATABASE_ID;
@@ -164,37 +166,20 @@ async function handler(event) {
     html,
   };
 
-  const mail = new MailComposer(mailOptions);
-
-  const emailPromise = new Promise((resolve, reject) => {
-    mail.compile().build((err, message) => {
-      if (err) {
-        reject({
-          statusCode: err.status || 500,
-          body: JSON.stringify({ error: err.message }),
-        });
-      }
-
-      const dataToSend = {
-        to: recipients,
-        message: message.toString("ascii"),
+  return mg.messages
+    .create(domain, mailOptions)
+    .then(() => {
+      return {
+        statusCode: 200,
+        body: "Your request has been submitted",
       };
-      mg.messages().sendMime(dataToSend, (sendError, body) => {
-        if (sendError) {
-          reject({
-            statusCode: sendError.status || 500,
-            body: JSON.stringify({ error: sendError.message }),
-          });
-        }
-        resolve({
-          statusCode: 201,
-          body: "Your request has been submitted",
-        });
-      });
+    })
+    .catch((err) => {
+      return {
+        statusCode: err.status || 500,
+        body: JSON.stringify({ error: err.message }),
+      };
     });
-  });
-
-  return await emailPromise;
 }
 
 export { handler };
