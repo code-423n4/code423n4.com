@@ -162,14 +162,12 @@ const SubmitFindings = ({ wardensList, endTime, sponsor, contest, repo }) => {
 
   return (
     <Form
-      contest={contest}
       state={state}
       setState={setState}
       initialState={initialState}
       fieldsList={fieldList}
       handleSubmit={handleSubmit}
       changeHandler={changeHandler}
-      checkQaOrGasFinding={checkQaOrGasFinding}
       displayedInfo={displayedInfo}
     />
   );

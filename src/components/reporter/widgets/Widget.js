@@ -57,7 +57,7 @@ const Widget = ({ field, fieldState, isInvalid, onChange }) => {
     <LinesOfCode
       name={name}
       onChange={handleChange}
-      linesOfCode={fieldState?.linesOfCode}
+      linesOfCode={fieldState[name]}
       isInvalid={isInvalid}
     />
   );
