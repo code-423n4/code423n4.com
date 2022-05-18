@@ -7,7 +7,7 @@ import DefaultLayout from "../templates/DefaultLayout";
 import Widget from "../components/reporter/widgets/Widget";
 import Widgets from "../components/reporter/widgets/Widgets";
 
-import * as styles from "../components/reporter/Form.module.scss";
+import * as styles from "../components/form/Form.module.scss";
 import * as widgetStyles from "../components/reporter/widgets/Widgets.module.scss";
 
 function ApplyForCertifiedContributor() {
