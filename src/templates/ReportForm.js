@@ -1,6 +1,8 @@
 import React from "react";
-import SubmitFindings from "../components/reporter/SubmitFindings";
 import { graphql, Link } from "gatsby";
+
+import SubmitFindings from "../components/reporter/SubmitFindings";
+
 
 const ReportForm = (props) => {
   const endTime = props.data.contestsCsv.end_time;
