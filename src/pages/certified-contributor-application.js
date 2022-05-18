@@ -67,7 +67,10 @@ function ApplyForCertifiedContributor() {
 
   const handleSubmit = () => {
     if (
-      (!fieldState.wardenHandle || !fieldState.githubUsername || !fieldState.emailAddress || !acceptedAgreement)  ||
+      !fieldState.wardenHandle ||
+      !fieldState.githubUsername ||
+      !fieldState.emailAddress ||
+      !acceptedAgreement ||
       fields.some((field) => {
         return field.required && !fieldState[field.name];
       })
@@ -111,7 +114,7 @@ function ApplyForCertifiedContributor() {
             label: "E-mail Address",
             widget: "text",
             required: true,
-          }
+          },
         ];
 
         return (
@@ -121,9 +124,13 @@ function ApplyForCertifiedContributor() {
           >
             <div className="wrapper-main">
               <h1 className="page-header">Certified Wardens</h1>
-              {(status === FormStatus.Unsubmitted && (
-                <article dangerouslySetInnerHTML={{ __html: data.contributorTermsSummary.html }} />
-              ))}
+              {status === FormStatus.Unsubmitted && (
+                <article
+                  dangerouslySetInnerHTML={{
+                    __html: data.contributorTermsSummary.html,
+                  }}
+                />
+              )}
               {(status === FormStatus.Unsubmitted ||
                 status === FormStatus.Submitting) && (
                 <form className={styles.Form}>
@@ -138,7 +145,9 @@ function ApplyForCertifiedContributor() {
                             field={field}
                             onChange={handleChange}
                             fieldState={fieldState}
-                            isInvalid={hasValidationErrors && !fieldState[field.name]}
+                            isInvalid={
+                              hasValidationErrors && !fieldState[field.name]
+                            }
                             required={field.required}
                           />
                         </div>
@@ -150,15 +159,26 @@ function ApplyForCertifiedContributor() {
                       fieldState={fieldState}
                       showValidationErrors={hasValidationErrors}
                     />
-                    <label className={clsx((hasValidationErrors && !acceptedAgreement) && "input-error")}>
+                    <label
+                      className={clsx(
+                        hasValidationErrors &&
+                          !acceptedAgreement &&
+                          "input-error"
+                      )}
+                    >
                       <input
                         type="checkbox"
                         checked={acceptedAgreement}
-                        onChange={handleAgreement} />
-                      I have read and agree to the terms and conditions (see below)
+                        onChange={handleAgreement}
+                      />
+                      I have read and agree to the terms and conditions (see
+                      below)
                     </label>
                   </fieldset>
-                  <div className="captcha-container" style={{"justify-content": "left", "margin-top": "20px"}}>
+                  <div
+                    className="captcha-container"
+                    style={{ "justify-content": "left", "margin-top": "20px" }}
+                  >
                     <HCaptcha
                       sitekey="4963abcb-188b-4972-8e44-2887e315af52"
                       theme="dark"
@@ -169,9 +189,13 @@ function ApplyForCertifiedContributor() {
                     className="button cta-button"
                     type="button"
                     onClick={handleSubmit}
-                    disabled={status !== FormStatus.Unsubmitted || !captchaToken}
+                    disabled={
+                      status !== FormStatus.Unsubmitted || !captchaToken
+                    }
                   >
-                    {status === FormStatus.Unsubmitted ? "Submit" : "Submitting..."}
+                    {status === FormStatus.Unsubmitted
+                      ? "Submit"
+                      : "Submitting..."}
                   </button>
                 </form>
               )}
@@ -181,13 +205,47 @@ function ApplyForCertifiedContributor() {
                 </div>
               )}
               {status === FormStatus.Submitted && (
-                <div className="centered-text">
-                  <h1>Thank you!</h1>
-                  <p>Your application has been submitted.</p>
+                <div>
+                  <h1 className="centered-text">Thank you!</h1>
+                  <p>
+                    Your application has been submitted, and we will review it
+                    ASAP. Please note:
+                  </p>
+                  <ul>
+                    <li>You should receive a confirmation email shortly</li>
+                    <li>
+                      If you meet the{" "}
+                      <a href="https://docs.code4rena.com/roles/wardens/certified-wardens#who-is-eligible-to-be-a-certified-contributor">
+                        eligibility requirements
+                      </a>
+                      , you will be contacted by the DAO's AML/KYC agent,{" "}
+                      <a href="https://provenance.company/">Provenance</a>, to
+                      certify your identity.{" "}
+                      <strong>
+                        Please watch for an email that will come directly from
+                        Provenance.
+                      </strong>
+                    </li>
+                    <li>
+                      Every application is processed individually, requires
+                      several people's input, and takes time to review. We
+                      appreciate your patience!
+                    </li>
+                  </ul>
+                  <p>
+                    More details on this process can be found in the{" "}
+                    <a href="https://docs.code4rena.com/roles/wardens/certified-wardens#certification-process-and-constraints">
+                      C4 docs.
+                    </a>
+                  </p>
                 </div>
               )}
               {status === FormStatus.Unsubmitted && (
-                <article dangerouslySetInnerHTML={{ __html: data.contributorTerms.html }} />
+                <article
+                  dangerouslySetInnerHTML={{
+                    __html: data.contributorTerms.html,
+                  }}
+                />
               )}
             </div>
           </DefaultLayout>
@@ -216,10 +274,16 @@ const pageQuery = graphql`
         }
       }
     }
-    contributorTerms: markdownRemark(frontmatter: {title: {eq: "Certified Contributor Terms and Conditions"}}) {
+    contributorTerms: markdownRemark(
+      frontmatter: {
+        title: { eq: "Certified Contributor Terms and Conditions" }
+      }
+    ) {
       html
     }
-    contributorTermsSummary: markdownRemark(frontmatter: {title: {eq: "Certified Contributor Summary"}}) {
+    contributorTermsSummary: markdownRemark(
+      frontmatter: { title: { eq: "Certified Contributor Summary" } }
+    ) {
       html
     }
   }
