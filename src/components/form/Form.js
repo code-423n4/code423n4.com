@@ -21,6 +21,7 @@ const Form = ({
   handleSubmit,
   changeHandler,
   displayedInfo,
+  resetForm,
   children,
 }) => {
   // Component State
@@ -31,6 +32,11 @@ const Form = ({
 
   // Reset form
   const handleReset = () => {
+    if (resetForm) {
+      resetForm();
+      setStatus(FormStatus.Unsubmitted);
+      return;
+    }
     setState(initialState);
     setStatus(FormStatus.Unsubmitted);
   };
@@ -39,11 +45,14 @@ const Form = ({
   const submitFinding = useCallback((url, data, headers) => {
     (async () => {
       setStatus(FormStatus.Submitting);
-      const response = await fetch(url, headers || {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
+      const response = await fetch(
+        url,
+        headers || {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+        }
+      );
       if (response.ok) {
         setStatus(FormStatus.Submitted);
       } else {
@@ -82,10 +91,10 @@ const Form = ({
             {/* TODO: refactor form fields; move FormField into individual field components */}
             {fieldsList.map((field, index) => {
               let isInvalid = false;
-              if (field.name === 'linesOfCode') {
+              if (field.name === "linesOfCode") {
                 isInvalid = hasValidationErrors;
               } else {
-                isInvalid = hasValidationErrors && !state[field.name]
+                isInvalid = hasValidationErrors && !state[field.name];
               }
               return (
                 <FormField
