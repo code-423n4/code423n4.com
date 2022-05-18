@@ -1,7 +1,8 @@
 import React from "react";
 import { graphql, Link } from "gatsby";
 
-import Form from "../components/reporter/Form";
+import SubmitFindings from "../components/reporter/SubmitFindings";
+
 
 const ReportForm = (props) => {
   const endTime = props.data.contestsCsv.end_time;
@@ -21,10 +22,11 @@ const ReportForm = (props) => {
           </Link>
         </div>
       ) : (
-        <Form
-          repoUrl={props.data.contestsCsv.findingsRepo}
-          contest={props.data.contestsCsv.contestid}
+        <SubmitFindings
+          wardensList={props.data.allHandlesJson}
           sponsor={props.data.contestsCsv.sponsor.name}
+          contest={props.data.contestsCsv.contestid}
+          repo={props.data.contestsCsv.findingsRepo}
         />
       )}
     </main>
@@ -43,6 +45,21 @@ export const pageQuery = graphql`
       findingsRepo
       sponsor {
         name
+      }
+    }
+    allHandlesJson(sort: { fields: handle, order: ASC }) {
+      edges {
+        node {
+          id
+          handle
+          image {
+            childImageSharp {
+              resize(width: 64, quality: 90) {
+                src
+              }
+            }
+          }
+        }
       }
     }
   }
