@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "gatsby";
 import {
   emailField,
   addressField,
@@ -18,6 +17,7 @@ import {
   checkQaOrGasFinding,
 } from "./findings/functions";
 import Form from "../form/Form";
+import Agreement from "../content/Agreement";
 
 const SubmitFindings = ({ wardensList, endTime, sponsor, contest, repo }) => {
   const wardens = wardensList.edges.map(({ node }) => {
@@ -35,6 +35,7 @@ const SubmitFindings = ({ wardensList, endTime, sponsor, contest, repo }) => {
   const displayedInfo = {
     title: `${sponsor} contest finding`,
     buttonText: "Create issue",
+    successButton: "Submit another",
     afterSubmit: "Your report has been submitted.",
   };
 
@@ -126,7 +127,6 @@ const SubmitFindings = ({ wardensList, endTime, sponsor, contest, repo }) => {
       body: formatedBody,
       labels: state.labels,
     };
-
     setHasValidationErrors(hasErrors || hasInvalidLinks);
     if (!hasErrors) {
       submitFinding(submissionUrl, submitData);
@@ -169,7 +169,9 @@ const SubmitFindings = ({ wardensList, endTime, sponsor, contest, repo }) => {
       handleSubmit={handleSubmit}
       changeHandler={changeHandler}
       displayedInfo={displayedInfo}
-    />
+    >
+      <Agreement />
+    </Form>
   );
 };
 

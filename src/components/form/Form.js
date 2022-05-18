@@ -1,6 +1,5 @@
 import React, { useCallback, useState } from "react";
 import clsx from "clsx";
-import Agreement from "../content/Agreement.js";
 import FormField from "../reporter/widgets/FormField";
 import Widget from "../reporter/widgets/Widget";
 
@@ -22,6 +21,7 @@ const Form = ({
   handleSubmit,
   changeHandler,
   displayedInfo,
+  children,
 }) => {
   // Component State
   const [status, setStatus] = useState(FormStatus.Unsubmitted);
@@ -36,10 +36,10 @@ const Form = ({
   };
 
   // Generic submit
-  const submitFinding = useCallback((url, data) => {
+  const submitFinding = useCallback((url, data, headers) => {
     (async () => {
       setStatus(FormStatus.Submitting);
-      const response = await fetch(url, {
+      const response = await fetch(url, headers || {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
@@ -64,7 +64,7 @@ const Form = ({
     >
       <div className={clsx(styles.FormHeader)}>
         <h1>{displayedInfo.title}</h1>
-        <div
+        <button
           onClick={() => setIsExpanded(!isExpanded)}
           className={clsx(styles.FormIconButton)}
         >
@@ -73,7 +73,7 @@ const Form = ({
             alt={isExpanded ? "compress form" : "expand form"}
             className={clsx(styles.FormIcons)}
           />
-        </div>
+        </button>
       </div>
       {(status === FormStatus.Unsubmitted ||
         status === FormStatus.Submitting) && (
@@ -81,25 +81,31 @@ const Form = ({
           <fieldset className={widgetStyles.Fields}>
             {/* TODO: refactor form fields; move FormField into individual field components */}
             {fieldsList.map((field, index) => {
+              let isInvalid = false;
+              if (field.name === 'linesOfCode') {
+                isInvalid = hasValidationErrors;
+              } else {
+                isInvalid = hasValidationErrors && !state[field.name]
+              }
               return (
                 <FormField
                   key={`${field.name} ${index}`}
                   name={field.name}
                   label={field.label}
                   helpText={field.helpText}
-                  isInvalid={hasValidationErrors && !state[field.name]}
+                  isInvalid={isInvalid}
                 >
                   <Widget
                     field={field}
                     onChange={changeHandler}
                     fieldState={state}
-                    isInvalid={hasValidationErrors && !state[field.name]}
+                    isInvalid={isInvalid}
                   />
                 </FormField>
               );
             })}
           </fieldset>
-          <Agreement />
+          {children}
           <button
             className="button cta-button centered"
             type="button"
@@ -128,7 +134,7 @@ const Form = ({
             type="button"
             onClick={handleReset}
           >
-            Submit another
+            {displayedInfo.successButton}
           </button>
         </div>
       )}

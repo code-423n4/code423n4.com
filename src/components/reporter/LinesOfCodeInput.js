@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback } from "react";
 import clsx from "clsx";
 
 import * as styles from "./widgets/Widgets.module.scss";
@@ -11,14 +11,6 @@ const InputField = ({
   handleRemoveInputField,
   isInvalid,
 }) => {
-  const [isValid, setIsValid] = useState(false);
-  
-  useEffect(() => {
-    const regex = new RegExp("#L", "g");
-    const isComplete = regex.test(value);
-    setIsValid((!(index === 0 && value === "") && isComplete) && !isInvalid);
-  }, [value, index, isInvalid]);
-
   return (
     <div>
       {/* TODO: use an input component once widgets are refactored */}
@@ -27,7 +19,7 @@ const InputField = ({
           className={clsx(
             styles.Control,
             styles.Text,
-            !isValid && "input-error"
+            isInvalid && "input-error"
           )}
           name={index}
           type="text"
@@ -46,8 +38,8 @@ const InputField = ({
           </button>
         )}
       </div>
-      {(!isValid) && (
-        <label htmlFor={index} className={styles.ErrorMessage}>
+      {isInvalid && (
+        <label for={index} className={styles.ErrorMessage}>
           {value === "" ? (
             "This field is required"
           ) : (
@@ -108,7 +100,6 @@ const LinesOfCode = ({ onChange, linesOfCode, isInvalid }) => {
         </a>
         )
       </p>
-      {/* inputfield.map , return an input field component where the name is the index */}
       {linesOfCode.map((field, i) => (
         <InputField
           key={field.id}
