@@ -6,7 +6,7 @@ import HCaptcha from "@hcaptcha/react-hcaptcha";
 import Agreement from "../components/content/Agreement.js";
 import DefaultLayout from "../templates/DefaultLayout";
 
-import * as styles from "../components/reporter/Form.module.scss";
+import * as styles from "../components/form/Form.module.scss";
 import * as widgetStyles from "../components/reporter/widgets/Widgets.module.scss";
 
 const initialState = {

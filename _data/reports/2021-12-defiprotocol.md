@@ -326,11 +326,11 @@ _Submitted by Ruhum_
 
 The `settleAuction()` function allows someone to settle the auction by transferring funds in a way that the new pending index is fulfilled. As a reward, they are able to take out as many tokens as they want as long as the pending index is fulfilled after that. The function verifies that the basket has received everything it wanted using the following logic:
 
-```sol
-        for (uint256 i = 0; i < pendingWeights.length; i++) {
-            uint256 tokensNeeded = basketAsERC20.totalSupply() * pendingWeights[i] * newRatio / BASE / BASE;
-            require(IERC20(pendingTokens[i]).balanceOf(address(basket)) >= tokensNeeded);
-        }
+```solidity
+  for (uint256 i = 0; i < pendingWeights.length; i++) {
+      uint256 tokensNeeded = basketAsERC20.totalSupply() * pendingWeights[i] * newRatio / BASE / BASE;
+      require(IERC20(pendingTokens[i]).balanceOf(address(basket)) >= tokensNeeded);
+  }
 ```
 
 The attack vector here is to manipulate `tokensNeeded` to be 0. That way we can drain the basket completely without the function reverting.
@@ -338,10 +338,10 @@ The attack vector here is to manipulate `tokensNeeded` to be 0. That way we can 
 For that, we manipulate `newRatio` to be 0 then the whole thing will be 0.
 `newRatio` is defined as:
 
-```sol
-        uint256 a = factory.auctionMultiplier() * basket.ibRatio();
-        uint256 b = (bondBlock - auctionStart) * BASE / factory.auctionDecrement();
-        uint256 newRatio = a - b;
+```solidity
+  uint256 a = factory.auctionMultiplier() * basket.ibRatio();
+  uint256 b = (bondBlock - auctionStart) * BASE / factory.auctionDecrement();
+  uint256 newRatio = a - b;
 ```
 
 There's 1 value the attacker controls, `bondBlock`. That value is the block in which the `bondForRebalance()` function was triggered.
