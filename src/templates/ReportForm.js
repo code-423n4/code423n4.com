@@ -3,7 +3,6 @@ import SubmitFindings from "../components/reporter/SubmitFindings";
 import { graphql, Link } from "gatsby";
 
 const ReportForm = (props) => {
-  console.log(props);
   const endTime = props.data.contestsCsv.end_time;
   const hasContestEnded = Date.now() > new Date(endTime).getTime();
 
