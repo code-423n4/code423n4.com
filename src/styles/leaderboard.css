@@ -175,43 +175,59 @@
   font-weight: 600;
 }
 
+.leaderboard-table tbody tr:nth-child(odd),
+.leaderboard-table tr:nth-child(2) th:nth-child(6) {
+  background-color: #2b263b;
+}
+
+.leaderboard-table tbody tr:nth-child(even),
+.leaderboard-table tr:nth-child(2) th:nth-child(1),
+.leaderboard-table tr:nth-child(2) th:nth-child(2),
+thead {
+  background-color: #160f2a;
+
+}
+
+thead {
+  position: sticky;
+  top: -2px;
+  left: 0;
+  width: 100%;
+}
+
 @media only screen and (max-width: 740px),
   (min-device-width: 768px) and (max-device-width: 1024px) {
   .leaderboard-container {
-    overflow-y: auto;
+    overflow: auto;
+    height: 80vh;
   }
 
   .leaderboard-container * {
     font-size: 12px;
   }
+
   .leaderboard-table td {
     padding: 4px;
   }
 
   .leaderboard-table td:nth-child(1),
   .leaderboard-table tr:nth-child(2) th:nth-child(1) {
-    max-width: 100px !important;
     padding: 4px;
     position: sticky;
     top: 0;
     left: 0;
-    z-index: 3000;
+    z-index: 20;
     background-color: inherit;
   }
 
   .leaderboard-container .dropdown {
     position: sticky;
-    top: 0;
     left: 0;
   }
 
   .leaderboard-table th {
     margin: 0;
     min-width: 20px;
-  }
-
-  .leaderboard-table td:nth-child(2) {
-    max-width: 170px;
   }
 
   .team-identifier {
@@ -227,14 +243,14 @@
     text-align: center;
   }
 
-  .leaderboard-table tbody tr:nth-child(odd),
-  .leaderboard-table tr:nth-child(2) th:nth-child(6) {
-    background: #2b263b;
+  .leaderboard-table tr:nth-child(2) th:nth-child(1) {
+    z-index: 30;
   }
-
-  .leaderboard-table tbody tr:nth-child(even),
-  .leaderboard-table tr:nth-child(2) th:nth-child(1),
-  .leaderboard-table tr:nth-child(2) th:nth-child(2) {
-    background: #160f2a;
+  table thead {
+    padding: 4px;
+    position: sticky;
+    top: -5px;
+    left: 0;
+    z-index: 30;
   }
 }
