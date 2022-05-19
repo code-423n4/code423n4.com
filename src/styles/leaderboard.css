@@ -73,14 +73,6 @@
   font-size: 14px;
 }
 
-/* .leaderboard-table td:nth-child(2) {
-  width: max-content;
-}
-
-.leaderboard-table {
-  width: max-content;
-} */
-
 .leaderboard-table tr:nth-child(1) th {
   text-align: center;
 }
@@ -121,7 +113,7 @@
   margin-right: 10px;
 }
 .wrapper-members {
-  cursor:pointer;
+  cursor: pointer;
 }
 
 .wrapper-competitor {
@@ -265,7 +257,7 @@ thead {
     margin: 0;
     min-width: 20px;
   }
-  
+
   .team-identifier {
     margin-top: 2px;
     padding: 2px 6px;
