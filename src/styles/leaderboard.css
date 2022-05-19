@@ -173,6 +173,10 @@
   left: 0;
 }
 
+.leaderboard-header-dropdown {
+  text-align: center
+}
+
 .dropdown {
   padding: 10px;
   margin-bottom: 4px;
@@ -183,6 +187,7 @@
   text-transform: uppercase;
   font-family: var(--font-family);
   font-weight: 600;
+  width:max-content;
 }
 
 .leaderboard-table tbody tr:nth-child(odd),

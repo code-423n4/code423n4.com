@@ -138,7 +138,7 @@ const Leaderboard = ({ data }) => {
   return (
     <DefaultLayout pageTitle="Leaderboard" bodyClass="leaderboard">
       <div className="wrapper-main">
-        <h1 className="page-header">Leaderboard</h1>
+        <h1 className="page-header">{timeFrame} Leaderboard</h1>
         <div className="leaderboard-container">
           <select onChange={handleChange} className="dropdown">
             {filterOptions.map((option) => (
