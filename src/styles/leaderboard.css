@@ -1,6 +1,8 @@
 .leaderboard-container {
   margin: 0 auto;
   max-width: max-content;
+  overflow: auto;
+  height: 80vh;
 }
 
 .leaderboard-table {
@@ -174,7 +176,7 @@
 }
 
 .leaderboard-header-dropdown {
-  text-align: center
+  text-align: center;
 }
 
 .dropdown {
@@ -187,7 +189,7 @@
   text-transform: uppercase;
   font-family: var(--font-family);
   font-weight: 600;
-  width:max-content;
+  width: max-content;
 }
 
 .leaderboard-table tbody tr:nth-child(odd),
