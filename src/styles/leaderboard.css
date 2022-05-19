@@ -105,10 +105,14 @@
   margin-top: 2px;
 }
 
-/* .member:last-of-type {
-  margin-bottom: 5px;
-} */
-
+.wrapper-team-top {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.team-toggle {
+  margin-right: 5px;
+}
 .wrapper-competitor div.sb-avatar {
   border-radius: 50%;
   background: white;
