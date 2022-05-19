@@ -68,12 +68,16 @@
 
 .leaderboard-table td,
 .leaderboard-table th {
-  padding: 10px;
-  font-size: 12px;
+  padding: 6px;
+  font-size: 14px;
 }
 
 .leaderboard-table td:nth-child(2) {
-  width: 100%;
+  width: max-content;
+}
+
+.leaderboard-table {
+  width: max-content;
 }
 
 .leaderboard-table tr:nth-child(1) th {
@@ -98,36 +102,40 @@
 }
 
 .member + .member {
-  margin-top: 10px;
+  margin-top: 2px;
 }
 
-.member:last-of-type {
+/* .member:last-of-type {
   margin-bottom: 5px;
-}
+} */
 
 .wrapper-competitor div.sb-avatar {
   border-radius: 50%;
   background: white;
   border: 2px solid white;
-  margin-right: 10px;
+  margin-right: 6px;
 }
 
 .wrapper-competitor {
   text-align: left;
 }
 
+.team-name {
+  font-weight: 700;
+}
+
 .member {
-  margin-left: 40px;
+  margin-left: 20px;
   text-align: left;
 }
 
 .team-wrapper {
   display: flex;
   align-items: center;
-  margin: 5px 5px 5px 0;
 }
 
-.team-avatar {
+.team-avatar,
+.team-avatar-small {
   height: 27px;
   width: 27px;
   aspect-ratio: 1/1;
@@ -141,25 +149,26 @@
   border: 2px solid white;
 }
 
-.team-identifier {
-  text-transform: uppercase;
-  font-family: var(--font-family);
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 2px;
-  color: white;
-  background: var(--tertiary-background-purple);
-  border-radius: 26px;
-  margin-left: 12px;
-  padding: 4px 12px;
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
+.team-avatar-small {
+  height: 16px;
+  width: 16px;
 }
 
-/* avatars are 27px */
+.team-identifier {
+  font-family: var(--font-family);
+  background: var(--tertiary-background-purple);
+  border-radius: 26px;
+  margin-top: 2px;
+  padding: 2px 6px;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: max-content;
+}
+
 .sb-avatar {
-  /* position: absolute; */
   left: 0;
 }
 
@@ -185,7 +194,6 @@
 .leaderboard-table tr:nth-child(2) th:nth-child(2),
 thead {
   background-color: #160f2a;
-
 }
 
 thead {
@@ -206,6 +214,7 @@ thead {
     font-size: 12px;
   }
 
+  
   .leaderboard-table td {
     padding: 4px;
   }
@@ -214,10 +223,27 @@ thead {
   .leaderboard-table tr:nth-child(2) th:nth-child(1) {
     padding: 4px;
     position: sticky;
-    top: 0;
+    top: -5px;
     left: 0;
     z-index: 20;
     background-color: inherit;
+  }
+
+  .leaderboard-table tr:nth-child(2) th:nth-child(2),
+  .leaderboard-table td:nth-child(2),
+  .leaderboard-table tr:nth-child(1) th:nth-child(1),
+  .leaderboard-table tr:nth-child(1) th:nth-child(2) {
+    position: sticky;
+    top: -5px;
+    left: 31px;
+    z-index: 20;
+    background-color: inherit;
+  }
+  .leaderboard-table tr:nth-child(2) th:nth-child(1),
+  .leaderboard-table tr:nth-child(2) th:nth-child(2),
+  .leaderboard-table tr:nth-child(1) th:nth-child(1),
+  .leaderboard-table tr:nth-child(1) th:nth-child(2) {
+    background-color: #160f2a;
   }
 
   .leaderboard-container .dropdown {
@@ -252,5 +278,9 @@ thead {
     top: -5px;
     left: 0;
     z-index: 30;
+  }
+
+  .member a span {
+    font-size: 10px;
   }
 }

@@ -280,8 +280,8 @@ iframe {
 @media only screen and (max-width: 740px),
   (min-device-width: 768px) and (max-device-width: 1024px) {
     h1.page-header {
-      margin-top: 10px;
-      padding-top: 10px;
+      margin: 4px;
+      padding: 4px;
       text-align: center;
     }
 }

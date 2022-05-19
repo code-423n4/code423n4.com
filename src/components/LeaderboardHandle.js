@@ -2,23 +2,41 @@ import React from "react";
 import Avatar from "react-avatar";
 
 const LeaderboardHandle = ({ handle, image, link, members }) => {
+  let mobileView = false;
+  if (typeof window !== "undefined") {
+    mobileView = window.innerWidth <= 740 ? true : false;
+  }
+
+  const trimHandle = (handle) => {
+    if (handle.split("").length > 15) {
+      return `${handle.substring(0, 12)}...`;
+    } else {
+      return handle;
+    }
+  };
+
   return (
     <div className="wrapper-competitor" key={handle}>
       {members ? (
         <div className="wrapper-members">
           <div className="team-wrapper">
-            <span className="team-avatar">{handle.substring(0, 1)}</span>
+            <span
+              className={
+                mobileView === false ? "team-avatar" : "team-avatar-small"
+              }
+            >
+              {handle.substring(0, 1)}
+            </span>
             <span className="team-name">{handle}</span>
-            <span className="team-identifier">Team</span>
           </div>
           {members.map((member) => (
-            <div className="member" key={member.handle}>
+            <div className="member team-identifier" key={member.handle}>
               <a href={member.link}>
                 <Avatar
                   src={member.image && member.image.childImageSharp.resize.src}
                   name={member.handle}
-                  size="27px"
-                  round="27px"
+                  size="13px"
+                  round="8px"
                 />
                 <span>{member.handle}</span>
               </a>
@@ -30,11 +48,11 @@ const LeaderboardHandle = ({ handle, image, link, members }) => {
           <Avatar
             src={image && image.childImageSharp.resize.src}
             name={handle}
-            size="27px"
-            round="27px"
+            size={mobileView === false ? "27px" : "16px"}
+            round={mobileView === false ? "27px" : "16px"}
           />
 
-          <span>{handle}</span>
+          <span>{mobileView === true ? trimHandle(handle) : handle}</span>
         </a>
       )}
     </div>
