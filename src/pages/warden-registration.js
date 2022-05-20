@@ -99,6 +99,7 @@ const WardenRegistrationForm = ({ handles }) => {
     state.qualifications,
     state.link,
     captchaToken,
+    handles,
   ]);
 
   const updateErrorMessage = (message) => {
@@ -168,6 +169,15 @@ const WardenRegistrationForm = ({ handles }) => {
               EVM-based audit contest, preferably with links. For specifically
               the OpenSea contest, evidence of experience with assembly is a
               bonus.
+            </p>
+            <p className={widgetStyles.Help}>
+              <strong>
+                Please note, the qualifications you list here will be public as
+                part of a PR in the{" "}
+                <a href="https://github.com/code-423n4/code423n4.com">
+                  code423n4.com repo.
+                </a>
+              </strong>
             </p>
             <TextArea
               name="qualifications"
