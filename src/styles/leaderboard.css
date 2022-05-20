@@ -3,6 +3,7 @@
   max-width: max-content;
   overflow: auto;
   height: 80vh;
+  border-top: 4px solid var(--main-purple);
 }
 
 .leaderboard-table {
@@ -13,7 +14,6 @@
   font-family: var(--font-family);
   font-weight: 400;
   width: 100%;
-  border-top: 4px solid var(--main-purple);
 }
 
 .leaderboard-table th {
