@@ -8,10 +8,12 @@ import DefaultLayout from "../templates/DefaultLayout";
 
 import * as styles from "../components/form/Form.module.scss";
 import * as widgetStyles from "../components/reporter/widgets/Widgets.module.scss";
+import TextArea from "../components/reporter/widgets/TextArea.js";
 
 const initialState = {
   handle: "",
   link: "",
+  qualifications: "",
 };
 
 const FormStatus = {
@@ -39,6 +41,7 @@ const WardenRegistrationForm = ({ handles }) => {
   const [status, setStatus] = useState(FormStatus.Unsubmitted);
   const [errorMessage, setErrorMessage] = useState("");
   const [captchaToken, setCaptchaToken] = useState("");
+  const [hasValidationErrors, setHasValidationErrors] = useState(false);
   const avatarInputRef = useRef();
 
   const handleChange = useCallback((e) => {
@@ -50,6 +53,15 @@ const WardenRegistrationForm = ({ handles }) => {
 
   const submitRegistration = useCallback(() => {
     const url = `/.netlify/functions/register-warden`;
+    if (
+      !state.handle ||
+      !state.qualifications ||
+      !captchaToken ||
+      handles.has(state.handle)
+    ) {
+      setHasValidationErrors(true);
+      return;
+    }
     (async () => {
       setStatus(FormStatus.Submitting);
       let image = undefined;
@@ -65,6 +77,7 @@ const WardenRegistrationForm = ({ handles }) => {
         body: JSON.stringify({
           handle: state.handle,
           link: state.link,
+          qualifications: state.qualifications,
           image,
         }),
       });
@@ -80,7 +93,13 @@ const WardenRegistrationForm = ({ handles }) => {
         }
       }
     })();
-  }, [avatarInputRef, state.handle, state.link, captchaToken]);
+  }, [
+    avatarInputRef,
+    state.handle,
+    state.qualifications,
+    state.link,
+    captchaToken,
+  ]);
 
   const updateErrorMessage = (message) => {
     if (!message) {
@@ -105,7 +124,7 @@ const WardenRegistrationForm = ({ handles }) => {
         <form>
           <div className={widgetStyles.Container}>
             <label htmlFor="handle" className={widgetStyles.Label}>
-              Username
+              Username *
             </label>
             <p className={widgetStyles.Help}>
               Used to report findings, as well as display your total award
@@ -115,7 +134,11 @@ const WardenRegistrationForm = ({ handles }) => {
               provide here)
             </p>
             <input
-              className={clsx(widgetStyles.Control, widgetStyles.Text)}
+              className={clsx(
+                widgetStyles.Control,
+                widgetStyles.Text,
+                !state.handle && hasValidationErrors && "input-error"
+              )}
               style={{ marginBottom: 0 }}
               type="text"
               id="handle"
@@ -125,9 +148,37 @@ const WardenRegistrationForm = ({ handles }) => {
               onChange={handleChange}
               maxLength={25}
             />
-            {handles.has(state.handle) && (
-              <p className={widgetStyles.Help}>
+            {handles.has(state.handle) && hasValidationErrors && (
+              <p className={widgetStyles.ErrorMessage}>
                 <small>{`${state.handle} is already a registered handle.`}</small>
+              </p>
+            )}
+            {!state.handle && hasValidationErrors && (
+              <p className={widgetStyles.ErrorMessage}>
+                <small>This field is required</small>
+              </p>
+            )}
+          </div>
+          <div className={widgetStyles.Container}>
+            <label htmlFor="link" className={widgetStyles.Label}>
+              Qualifications *
+            </label>
+            <p className={widgetStyles.Help}>
+              Please provide evidence of your ability to be competitive in an
+              EVM-based audit contest, preferably with links. For specifically
+              the OpenSea contest, evidence of experience with assembly is a
+              bonus.
+            </p>
+            <TextArea
+              name="qualifications"
+              required={true}
+              onChange={handleChange}
+              fieldState={state.qualifications}
+              isInvalid={!state.qualifications && hasValidationErrors}
+            />
+            {!state.qualifications && hasValidationErrors && (
+              <p className={widgetStyles.ErrorMessage}>
+                <small>This field is required</small>
               </p>
             )}
           </div>
@@ -177,12 +228,6 @@ const WardenRegistrationForm = ({ handles }) => {
             className="button cta-button centered"
             type="button"
             onClick={submitRegistration}
-            disabled={
-              captchaToken === "" ||
-              status !== "unsubmitted" ||
-              state.handle === "" ||
-              handles.has(state.handle)
-            }
           >
             {status === FormStatus.Unsubmitted
               ? "Register username"
@@ -224,9 +269,10 @@ export default function WardenRegistration({ data }) {
   return (
     <DefaultLayout pageTitle="Warden Registration | Code 423n4">
       <div className="wrapper-main">
-        <h1 className="page-header">Warden Registration</h1>
+        <h1 className="page-header">Warden Application</h1>
         <p className="center">
-          To register as a warden, please fill out this form and join us in{" "}
+          Warden registration is application only. To apply to be a warden,
+          please fill out this form and join us in{" "}
           <a href="https://discord.gg/code4rena">Discord</a>
         </p>
         <WardenRegistrationForm handles={handles} />

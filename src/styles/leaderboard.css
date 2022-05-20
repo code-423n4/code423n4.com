@@ -1,6 +1,7 @@
 .leaderboard-container {
   margin: 0 auto;
   max-width: 750px;
+  border-top: 4px solid var(--main-purple);
 }
 
 .leaderboard-table {
@@ -10,7 +11,6 @@
   font-family: var(--font-family);
   font-weight: 400;
   width: 100%;
-  border-top: 4px solid var(--main-purple);
 }
 
 .leaderboard-table th {
@@ -213,7 +213,7 @@
     justify-content: flex-start;
     align-items: center;
     left: 30px;
-    border:none;
+    border: none;
   }
   .leaderboard-table td:nth-of-type(3) {
     grid-area: 1 / 2 / 2 / 2;
