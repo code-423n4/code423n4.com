@@ -216,6 +216,19 @@ thead {
   width: 100%;
 }
 
+.triangle {
+  height: 10px;
+  width: 10px;
+  cursor: pointer;
+  filter: brightness(0) invert(1);
+}
+.triangle-down {
+  transform: rotate(180deg);
+}
+.triangle-right {
+  transform: rotate(180deg);
+}
+
 @media only screen and (max-width: 740px),
   (min-device-width: 768px) and (max-device-width: 1024px) {
   .leaderboard-container {
