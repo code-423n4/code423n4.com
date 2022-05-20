@@ -160,6 +160,24 @@ const SubmitFindings = ({ wardensList, endTime, sponsor, contest, repo }) => {
     }
   }, [state.risk]);
 
+  const resetForm = () => {
+    setState((prevState) => {
+      return {
+        ...prevState,
+        title: "",
+        risk: "",
+        details: initialState.details,
+        qaGasDetails: "",
+        linesOfCode: [
+          {
+            id: Date.now(),
+            value: "",
+          },
+        ],
+      };
+    });
+  };
+
   return (
     <Form
       state={state}
@@ -169,6 +187,7 @@ const SubmitFindings = ({ wardensList, endTime, sponsor, contest, repo }) => {
       handleSubmit={handleSubmit}
       changeHandler={changeHandler}
       displayedInfo={displayedInfo}
+      resetForm={resetForm}
     >
       <Agreement />
     </Form>
