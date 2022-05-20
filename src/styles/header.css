@@ -62,7 +62,7 @@ header nav {
   }
 
   .logo img {
-    width: 130px;
+    width: 110px;
   }
 
   .hamburger {
@@ -73,9 +73,6 @@ header nav {
     justify-self: flex-end;
   }
 
-  .page-header {
-    border-bottom: 4px solid var(--main-purple);
-  }
 
   .nav-links {
     width: 100%;
@@ -92,7 +89,7 @@ header nav {
   }
   header nav.open {
     background: var(--secondary-background-purple);
-    padding: 40px;
+    padding: 30px;
   }
   header nav.open .logo {
     text-align: left;
@@ -116,9 +113,9 @@ header nav {
     opacity: 0;
   }
   header nav.open .hamburger .patty {
-    transform: rotate(45deg) translate(0, -50%);
+    transform: rotate(45deg) translate(18%, -45%);
   }
   header nav.open .hamburger .bottom-bun {
-    transform: rotate(-45deg) translate(-50%, -25%);
+    transform: rotate(-45deg) translate(-42%, -17%);
   }
 }
