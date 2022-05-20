@@ -26,19 +26,23 @@ const LeaderboardHandle = ({ handle, image, link, members }) => {
         >
           <div className="wrapper-team-top">
             <div className="team-toggle">
-              {isExpanded ? (
-                <img
-                  src="/images/triangle-down.svg"
-                  alt="picture of a triangle down"
-                  className="triangle triangle-down"
-                />
-              ) : (
-                <img
-                  src="/images/triangle-right.svg"
-                  alt="picture of a triangle right"
-                  className="triangle triangle-right"
-                />
-              )}
+              <img
+                src={
+                  isExpanded
+                    ? "/images/triangle-down.svg"
+                    : "/images/triangle-right.svg"
+                }
+                alt={
+                  isExpanded
+                    ? "picture of a triangle down"
+                    : "picture of a triangle right"
+                }
+                className={
+                  isExpanded
+                    ? "triangle triangle-down"
+                    : "triangle triangle-right"
+                }
+              />
             </div>
             <div className="team-wrapper">
               <span
