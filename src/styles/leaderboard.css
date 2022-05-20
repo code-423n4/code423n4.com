@@ -223,6 +223,10 @@ thead {
     font-size: 12px;
   }
 
+  .leaderboard-table {
+    border-top: none;
+  }
+
   .leaderboard-table td,
   .leaderboard-table th {
     padding: 4px;
@@ -253,6 +257,7 @@ thead {
   .leaderboard-table tr:nth-child(1) th:nth-child(1),
   .leaderboard-table tr:nth-child(1) th:nth-child(2) {
     background-color: #160f2a;
+    
   }
 
   .leaderboard-container .dropdown {

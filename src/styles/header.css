@@ -73,6 +73,10 @@ header nav {
     justify-self: flex-end;
   }
 
+  .page-header {
+    border-bottom: 4px solid var(--main-purple);
+  }
+
   .nav-links {
     width: 100%;
     top: 50px;
