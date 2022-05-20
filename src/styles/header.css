@@ -60,6 +60,11 @@ header nav {
     flex: 1;
     text-align: left;
   }
+
+  .logo img {
+    width: 130px;
+  }
+
   .hamburger {
     display: block;
     cursor: pointer;

@@ -290,7 +290,7 @@ thead {
   table thead {
     padding: 4px;
     position: sticky;
-    top: -5px;
+    top: -2px;
     left: 0;
     z-index: 30;
   }
