@@ -285,8 +285,4 @@ iframe {
       text-align: center;
       font-size: 22px;
     }
-
-    .page-header {
-      border-bottom: 4px solid var(--main-purple);
-    }
 }

@@ -138,13 +138,15 @@ const Leaderboard = ({ data }) => {
   return (
     <DefaultLayout pageTitle="Leaderboard" bodyClass="leaderboard">
       <div className="wrapper-main">
-        <h1 className="page-header">{timeFrame} Leaderboard</h1>
-        <div className="leaderboard-container">
+        <h1 className="page-header">Leaderboard</h1>
+        <div className="dropdown-container">
           <select onChange={handleChange} className="dropdown">
             {filterOptions.map((option) => (
               <option value={option.value}>{option.label}</option>
             ))}
           </select>
+        </div>
+        <div className="leaderboard-container">
           <LeaderboardTable results={resultData} />
         </div>
       </div>

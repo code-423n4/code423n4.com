@@ -13,7 +13,6 @@
   font-family: var(--font-family);
   font-weight: 400;
   width: 100%;
-  border-top: 4px solid var(--main-purple);
 }
 
 .leaderboard-table th {
@@ -183,13 +182,19 @@
   padding: 10px;
   margin-bottom: 4px;
   margin-right: 8px;
-  background-color: var(--background-purple);
+  background-color: transparent;
   border: none;
   font-size: 16px;
   text-transform: uppercase;
   font-family: var(--font-family);
-  font-weight: 600;
-  width: max-content;
+  max-width: max-content;
+}
+
+.dropdown-container {
+  width: 55.5vw;
+  margin:0 auto;
+  text-align: center;
+  background-color: var(--main-purple);
 }
 
 .leaderboard-table tbody tr:nth-child(odd),
@@ -262,7 +267,25 @@ thead {
 
   .leaderboard-container .dropdown {
     position: sticky;
-    left: 0;
+  }
+
+  .dropdown {
+    padding: 0;
+    margin-bottom: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    background-color: transparent;
+    border: none;
+    font-size: 12px;
+    text-transform: uppercase;
+    font-family: var(--font-family);
+    height:20px;
+  }
+  
+  .dropdown-container {
+    width: 100%;
+    text-align: center;
+    background-color: var(--main-purple);
   }
 
   .dropdown:focus {
@@ -279,17 +302,6 @@ thead {
     padding: 2px 6px;
     margin-left: 6px;
     font-size: 8px;
-  }
-
-  .dropdown {
-    background-color: transparent;
-    font-weight: 400;
-  }
-
-  .leaderboard-container .dropdown {
-    position: absolute;
-    left: 3px;
-    z-index: 300;
   }
 
   .team-avatar {
