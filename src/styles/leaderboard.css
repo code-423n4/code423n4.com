@@ -191,10 +191,8 @@
 }
 
 .dropdown-container {
-  width: 55.5vw;
   margin:0 auto;
   text-align: center;
-  background-color: var(--main-purple);
 }
 
 .leaderboard-table tbody tr:nth-child(odd),
