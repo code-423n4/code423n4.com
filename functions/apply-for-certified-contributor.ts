@@ -131,7 +131,7 @@ async function handler(event) {
   const text = dedent`
     Thank you for applying to be a certified Code4rena warden! Here's what to expect next:
 
-    1. If you meet the eligibility requirements, the DAO's AML/KYC agent, Provenance, will contact you to certify your identity. Please watch for an email that will come directly from Provenance (https://provenance.company/).
+    1. The DAO's AML/KYC agent, Provenance, will contact you to certify your identity. Please watch for an email that will come directly from Provenance (https://provenance.company/).
     2. Provenance will lead you through your identity verification process, and ask you to sign an agreement binding you to a code of conduct and non-disclosure. Code4 Corporation and the Code4rena DAO do NOT have access to your personal information, simply the verified knowledge that you have (or have not) been certified.
     3. Code4 Corporation will contact you to let you know when your application has been approved.
 
@@ -143,10 +143,7 @@ async function handler(event) {
   const html =
     "<p>Thank you for applying to be a certified Code4rena warden! Here's what to expect next:</p>" +
     "<ol>" +
-    "<li>If you meet the " +
-    '<a href="https://docs.code4rena.com/roles/wardens/certified-wardens#who-is-eligible-to-be-a-certified-contributor">' +
-    "eligibility requirements</a>" +
-    ', the DAO\'s AML/KYC agent, <a href="https://provenance.company/">Provenance</a>, ' +
+    '<li>The DAO\'s AML/KYC agent, <a href="https://provenance.company/">Provenance</a>, ' +
     "will contact you to certify your identity. <strong>Please watch for an email that will come directly " +
     "from Provenance (https://provenance.company/).</strong></li>" +
     "<li>Provenance will lead you through your identity verification process, and ask you to sign an " +

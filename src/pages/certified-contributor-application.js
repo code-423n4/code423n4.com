@@ -214,16 +214,12 @@ function ApplyForCertifiedContributor() {
                   <ul>
                     <li>You should receive a confirmation email shortly</li>
                     <li>
-                      If you meet the{" "}
-                      <a href="https://docs.code4rena.com/roles/wardens/certified-wardens#who-is-eligible-to-be-a-certified-contributor">
-                        eligibility requirements
-                      </a>
-                      , you will be contacted by the DAO's AML/KYC agent,{" "}
-                      <a href="https://provenance.company/">Provenance</a>, to
-                      certify your identity.{" "}
+                      The DAO's AML/KYC agent,{" "}
+                      <a href="https://provenance.company/">Provenance</a>, will
+                      contact you to certify your identity.{" "}
                       <strong>
                         Please watch for an email that will come directly from
-                        Provenance.
+                        Provenance (https://provenance.company/).
                       </strong>
                     </li>
                     <li>
