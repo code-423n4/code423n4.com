@@ -2,6 +2,7 @@ import React, { useCallback, useState } from "react";
 import HCaptcha from "@hcaptcha/react-hcaptcha";
 import { StaticQuery, graphql } from "gatsby";
 import clsx from "clsx";
+import DOMPurify from "dompurify";
 
 import DefaultLayout from "../templates/DefaultLayout";
 import Widget from "../components/reporter/widgets/Widget";
@@ -127,7 +128,9 @@ function ApplyForCertifiedContributor() {
               {status === FormStatus.Unsubmitted && (
                 <article
                   dangerouslySetInnerHTML={{
-                    __html: data.contributorTermsSummary.html,
+                    __html: DOMPurify.sanitize(
+                      data.contributorTermsSummary.html
+                    ),
                   }}
                 />
               )}
@@ -239,7 +242,7 @@ function ApplyForCertifiedContributor() {
               {status === FormStatus.Unsubmitted && (
                 <article
                   dangerouslySetInnerHTML={{
-                    __html: data.contributorTerms.html,
+                    __html: DOMPurify.sanitize(data.contributorTerms.html),
                   }}
                 />
               )}
