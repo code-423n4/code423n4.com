@@ -64,7 +64,7 @@ const ContestLayout = (props) => {
             )}
             <p className="days-duration">{t.daysDuration} day contest</p>
           </div>
-          <div
+          <button
             style={
               fields.artPath !== null
                 ? { backgroundImage: `url(${fields.artPath})` }
@@ -73,7 +73,8 @@ const ContestLayout = (props) => {
             onClick={() => setArtOpen((isOpen) => !isOpen)}
             className={clsx(
               { open: artOpen },
-              "contest-artwork background-pattern"
+              "contest-artwork background-pattern",
+              "button-div"
             )}
             aria-label={`${title} artwork. Expands on click.`}
           />
