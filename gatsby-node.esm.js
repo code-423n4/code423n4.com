@@ -6,7 +6,6 @@ import { graphql } from "@octokit/graphql";
 import format from 'date-fns/format';
 
 const { token } = require("./functions/_config");
-const FilterWarningsPlugin = require("webpack-filter-warnings-plugin");
 
 const octokit = new Octokit({
   auth: token,
@@ -105,17 +104,6 @@ const queries = {
     }
   }
 `,
-};
-
-exports.onCreateWebpackConfig = ({ actions }) => {
-  actions.setWebpackConfig({
-    plugins: [
-      new FilterWarningsPlugin({
-        exclude:
-          /mini-css-extract-plugin[^]*Conflicting order. Following module has been added:/,
-      }),
-    ],
-  });
 };
 
 exports.createSchemaCustomization = ({ actions }) => {
