@@ -10,6 +10,7 @@ function FormField({
   children,
   errorMessage = "This field is required",
 }) {
+
   return (
     <div className={styles.Container}>
       {label && (
@@ -19,7 +20,7 @@ function FormField({
       )}
       {helpText && <p className={styles.Help}>{helpText}</p>}
       {children}
-      {isInvalid && (
+      {(isInvalid && name !== 'linesOfCode') && (
         <label htmlFor={name} className={styles.ErrorMessage}>
           {errorMessage}
         </label>
