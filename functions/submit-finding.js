@@ -2,9 +2,17 @@ const csv = require("csvtojson");
 const dedent = require("dedent");
 const formData = require("form-data");
 const Mailgun = require("mailgun.js");
+const { Moralis } = require("moralis/node");
 const { Octokit } = require("@octokit/core");
 
-const { token, apiKey, domain } = require("./_config");
+const {
+  token,
+  apiKey,
+  domain,
+  moralisAppId,
+  moralisServerUrl,
+  moralisMasterKey,
+} = require("./_config");
 
 const octokit = new Octokit({ auth: token });
 
@@ -50,6 +58,12 @@ exports.handler = async (event) => {
     repo,
   } = data;
 
+  await Moralis.start({
+    serverUrl: moralisServerUrl,
+    appId: moralisAppId,
+    masterKey: moralisMasterKey,
+  });
+
   const owner = "code-423n4";
 
   // ensure we have the data we need
@@ -69,6 +83,35 @@ exports.handler = async (event) => {
       statusCode: 422,
       body:
         "Email, handle, address, risk, title, body, and labels are required.",
+    };
+  }
+
+  // @todo: add temporary exception for existing wardens who have yet to connect their wallets
+  const authorization = event.headers["x-authorization"];
+  if (!authorization) {
+    return {
+      statusCode: 401,
+      body: "Unauthorized",
+    };
+  }
+
+  try {
+    const sessionToken = authorization.split("Bearer ")[1];
+    const confirmed = await Moralis.Cloud.run("confirmUser", {
+      sessionToken,
+      address,
+      username: handle,
+    });
+    if (!confirmed) {
+      return {
+        statusCode: 401,
+        body: "Unauthorized",
+      };
+    }
+  } catch (err) {
+    return {
+      statusCode: 500,
+      body: err.message || "Internal server error",
     };
   }
 

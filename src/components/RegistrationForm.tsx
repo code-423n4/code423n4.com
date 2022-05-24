@@ -5,6 +5,7 @@ import Moralis from "moralis/types";
 
 import useUser from "../hooks/UserContext";
 
+import Agreement from "./content/Agreement";
 import WardenField from "../components/reporter/widgets/WardenField";
 import TextArea from "../components/reporter/widgets/TextArea.js";
 
@@ -15,6 +16,8 @@ interface userState {
   username: string;
   discordUsername: string;
   qualifications: string;
+  gitHubUsername: string;
+  emailAddress: string;
   link?: string;
   avatar?: File | null;
 }
@@ -23,6 +26,8 @@ const initialState: userState = {
   username: "",
   discordUsername: "",
   qualifications: "",
+  gitHubUsername: "",
+  emailAddress: "",
   link: "",
   avatar: null,
 };
@@ -130,13 +135,10 @@ export default function RegistrationForm({
           const user = await authenticate({ provider });
 
           if (user === undefined) {
-            // user does not have the corresponding browser extension
-            // or user clicked "cancel" when prompted to sign message
+            // user clicked "cancel" when prompted to sign message
             // @todo: update messaging
             updateFormStatus(FormStatus.Error);
-            updateErrorMessage(
-              `Make sure you have the ${provider} browser extension \n You must sign the message to login`
-            );
+            updateErrorMessage("You must sign the message to register");
             return;
           }
 
@@ -187,13 +189,16 @@ export default function RegistrationForm({
 
           if (response.ok) {
             try {
-              await user.set("c4Username", state.username);
-              await user.set("discordUsername", state.discordUsername);
+              user.set("c4Username", state.username);
+              user.set("discordUsername", state.discordUsername);
+              user.set("gitHubUsername", state.gitHubUsername);
+              user.set("emailAddress", state.emailAddress);
               // @todo: add role
               await user.save();
-              await logUserOut();
+              logUserOut();
+              updateFormStatus(FormStatus.Submitted);
             } catch (error) {
-              await logUserOut();
+              logUserOut();
               updateFormStatus(FormStatus.Error);
               updateErrorMessage("");
               console.error(error);
@@ -281,7 +286,6 @@ export default function RegistrationForm({
                   (isNewUser && handles.has(state.username))) &&
                 "input-error"
             )}
-            style={{ marginBottom: 0 }}
             type="text"
             id="username"
             name="username"
@@ -340,7 +344,6 @@ export default function RegistrationForm({
             widgetStyles.Text,
             hasValidationErrors && !state.discordUsername && "input-error"
           )}
-          style={{ marginBottom: 0 }}
           type="text"
           id="discordUsername"
           name="discordUsername"
@@ -362,6 +365,58 @@ export default function RegistrationForm({
                 </small>
               </p>
             )} */}
+      </div>
+      <div className={widgetStyles.Container}>
+        <label htmlFor="gitHubUsername" className={widgetStyles.Label}>
+          GitHub Username *
+        </label>
+        <p className={widgetStyles.Help}>
+          Used in case we need to give you access to certain repositories.
+        </p>
+        <input
+          className={clsx(
+            widgetStyles.Control,
+            widgetStyles.Text,
+            hasValidationErrors && !state.gitHubUsername && "input-error"
+          )}
+          type="text"
+          id="gitHubUsername"
+          name="gitHubUsername"
+          placeholder="Username"
+          value={state.gitHubUsername}
+          onChange={handleChange}
+        />
+        {hasValidationErrors && !state.gitHubUsername && (
+          <p className={widgetStyles.ErrorMessage}>
+            <small>This field is required</small>
+          </p>
+        )}
+      </div>
+      <div className={widgetStyles.Container}>
+        <label htmlFor="emailAddress" className={widgetStyles.Label}>
+          Email Address *
+        </label>
+        <p className={widgetStyles.Help}>
+          Used for sending confirmation emails for each of your submissions.
+        </p>
+        <input
+          className={clsx(
+            widgetStyles.Control,
+            widgetStyles.Text,
+            hasValidationErrors && !state.emailAddress && "input-error"
+          )}
+          type="text"
+          id="emailAddress"
+          name="emailAddress"
+          placeholder="warden@email.com"
+          value={state.emailAddress}
+          onChange={handleChange}
+        />
+        {hasValidationErrors && !state.emailAddress && (
+          <p className={widgetStyles.ErrorMessage}>
+            <small>This field is required</small>
+          </p>
+        )}
       </div>
       {isNewUser && (
         <>
@@ -444,6 +499,7 @@ export default function RegistrationForm({
           </div>
         </>
       )}
+      <Agreement />
       <div className={styles.ButtonsWrapper}>
         <button
           className={clsx("button cta-button", styles.Button)}

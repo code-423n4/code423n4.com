@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Moralis from "moralis";
 
 import {
   emailField,
@@ -135,7 +136,7 @@ const SubmitFindings = ({ wardensList, sponsor, contest, repo }) => {
     }
   };
 
-  const handleSubmit = (
+  const handleSubmit = async (
     setHasValidationErrors,
     submitFinding,
     setIsExpanded
@@ -187,7 +188,15 @@ const SubmitFindings = ({ wardensList, sponsor, contest, repo }) => {
       body: formatedBody,
       labels: [config.labelAll, state.risk],
     };
-    submitFinding(submissionUrl, submitData);
+
+    const user = await Moralis.User.current();
+    const sessionToken = user.attributes.sessionToken;
+    const headers = {
+      "Content-Type": "application/json",
+      "X-Authorization": `Bearer ${sessionToken}`,
+    };
+
+    submitFinding(submissionUrl, submitData, headers);
     if (typeof window !== `undefined`) {
       window.localStorage.removeItem(contest);
     }
@@ -227,12 +236,7 @@ const SubmitFindings = ({ wardensList, sponsor, contest, repo }) => {
         risk: "",
         details: initialState.details,
         qaGasDetails: "",
-        linesOfCode: [
-          {
-            id: Date.now(),
-            value: "",
-          },
-        ],
+        linesOfCode: initialState.linesOfCode,
       };
     });
   };

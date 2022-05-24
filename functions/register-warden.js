@@ -11,21 +11,17 @@ function isDangerous(s) {
   return s.match(/^[0-9a-zA-Z_\-]+$/) === null;
 }
 
-function getPrData(isUpdate, handle, members) {
+function getPrData(isUpdate, handle) {
   let sentenceVerb = "Register";
-  let sentenceObject = "warden";
 
   if (isUpdate) {
     sentenceVerb = "Update";
   }
-  if (members && members.length) {
-    sentenceObject = "team";
-  }
 
-  const title = `${sentenceVerb} ${sentenceObject} ${handle}`;
-  const branchName = `${sentenceObject}/${handle}`;
+  const title = `${sentenceVerb} warden ${handle}`;
+  const branchName = `warden/${handle}`;
   const body = isUpdate
-    ? `This auto-generated PR updates info for ${sentenceObject} ${handle}`
+    ? `This auto-generated PR updates info for warden ${handle}`
     : dedent`
         Auto-generated PR to register the new warden ${handle}
         
@@ -40,21 +36,15 @@ exports.handler = async (event) => {
     if (event.httpMethod !== "POST") {
       return {
         statusCode: 405,
-        body: JSON.stringify({ error: "Method not allowed" }),
+        body: JSON.stringify({
+          error: "Method not allowed",
+        }),
         headers: { Allow: "POST" },
       };
     }
 
     const data = JSON.parse(event.body);
-    const {
-      handle,
-      qualifications,
-      image,
-      link,
-      moralisId,
-      members,
-      isUpdate,
-    } = data;
+    const { handle, qualifications, image, link, moralisId, isUpdate } = data;
 
     // ensure we have the data we need
     if (!handle) {
@@ -77,7 +67,9 @@ exports.handler = async (event) => {
     if (!moralisId) {
       return {
         statusCode: 422,
-        body: "Moralis id is required",
+        body: JSON.stringify({
+          error: "Moralis id is required",
+        }),
       };
     }
 
@@ -91,6 +83,8 @@ exports.handler = async (event) => {
       };
     }
 
+    // @todo: prevent registering wardens who have already connected their wallets
+
     const formattedHandleData = { handle, link, moralisId };
     let avatarFilename = "";
     let base64Avatar = "";
@@ -102,10 +96,6 @@ exports.handler = async (event) => {
       base64Avatar = data.toString("base64");
       avatarFilename = `${handle}.${info.format}`;
       formattedHandleData.image = `./avatars/${handle}.${info.format}`;
-    }
-
-    if (members && members.length > 2) {
-      formattedHandleData.members = members;
     }
 
     const files = {
@@ -152,7 +142,7 @@ exports.handler = async (event) => {
       }
     }
 
-    const { title, body, branchName } = getPrData(isUpdate, handle, members);
+    const { title, body, branchName } = getPrData(isUpdate, handle);
     try {
       const res = await octokit.createPullRequest({
         owner: "code-423n4",

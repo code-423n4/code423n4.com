@@ -37,7 +37,7 @@ footer a:link {
 }
 
 footer a:hover {
-  color: var(--orange) !important;
+  color: var(--light-purple) !important;
   border-bottom: 0px;
 }
 

@@ -9,3 +9,4 @@ public
 .env.production
 .netlify
 yarn-error.log
+cloud

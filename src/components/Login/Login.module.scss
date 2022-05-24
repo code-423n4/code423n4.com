@@ -6,9 +6,10 @@
 }
 
 .LoginButton {
+  display: flex;
+  align-items: center;
   text-align: right;
   margin: 0 10px;
-  display: inline-block;
   color: white;
   font-weight: 800;
   font-family: "Roboto", sans-serif;
@@ -20,7 +21,7 @@
   font-size: 16px;
 
   &:hover {
-    color: var(--orange);
+    color: var(--light-purple);
   }
 }
 
@@ -31,7 +32,19 @@
 }
 
 .Mobile {
+  border-top: 2px solid var(--main-purple);
+  width: 100%;
   @media (min-width: 970px) {
     display: none;
   }
+}
+
+.Icon {
+  margin-right: 10px;
+  height: 20px;
+}
+
+.Link {
+  display: flex !important;
+  align-items: center;
 }

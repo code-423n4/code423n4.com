@@ -49,7 +49,7 @@ const Form = ({
         url,
         headers || {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: headers || { "Content-Type": "application/json" },
           body: JSON.stringify(data),
         }
       );
