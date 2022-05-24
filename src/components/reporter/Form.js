@@ -1,4 +1,5 @@
 import clsx from "clsx";
+import Moralis from "moralis";
 import React, { useCallback, useState, useEffect } from "react";
 import { StaticQuery, graphql, Link } from "gatsby";
 
@@ -231,7 +232,7 @@ const Form = ({ contest, sponsor, repoUrl }) => {
         });
       }
     })();
-  }, [currentUser.isLoggedIn]);
+  }, [currentUser.isLoggedIn, currentUser.address, currentUser.username]);
 
   const formData = {
     contest,
@@ -252,30 +253,34 @@ const Form = ({ contest, sponsor, repoUrl }) => {
       const dataObject = JSON.parse(
         window.localStorage.getItem(formData.contest)
       );
+
+      if (!dataObject) {
+        return;
+      }
       let riskIndex = null;
-      if (dataObject && dataObject.risk !== "") {
+      if (dataObject.risk !== "") {
         riskIndex = riskField.options.findIndex(
           (element) => element.value === dataObject.risk
         );
       }
 
-      setState({
-        title: dataObject?.title || "",
-        email: dataObject?.email || "",
-        handle: dataObject?.handle || "",
-        polygonAddress: dataObject?.polygonAddress || "",
-        risk: riskIndex !== null ? riskField.options[riskIndex].value : "",
-        details: dataObject?.details || mdTemplate,
-        qaGasDetails: dataObject?.qaGasDetails || "",
-        linesOfCode:
-          dataObject?.linesOfCode && dataObject?.linesOfCode.length > 0
-            ? dataObject?.linesOfCode
-            : [
-                {
-                  id: Date.now(),
-                  value: "",
-                },
-              ],
+      setState((prevState) => {
+        return {
+          ...prevState,
+          title: dataObject.title || "",
+          risk: riskIndex !== null ? riskField.options[riskIndex].value : "",
+          details: dataObject.details || mdTemplate,
+          qaGasDetails: dataObject.qaGasDetails || "",
+          linesOfCode:
+            dataObject.linesOfCode && dataObject.linesOfCode.length > 0
+              ? dataObject.linesOfCode
+              : [
+                  {
+                    id: Date.now(),
+                    value: "",
+                  },
+                ],
+        };
       });
       if (riskIndex !== null && riskField.options[riskIndex].value) {
         riskField.options[riskIndex].value.slice(0, 1) === "G" ||
@@ -288,10 +293,21 @@ const Form = ({ contest, sponsor, repoUrl }) => {
 
   // update local storage
   useEffect(() => {
+    const { risk, details, qaGasDetails, linesOfCode, title } = state;
     if (typeof window !== `undefined`) {
-      window.localStorage.setItem(formData.contest, JSON.stringify(state));
+      window.localStorage.setItem(
+        formData.contest,
+        JSON.stringify({ risk, details, qaGasDetails, linesOfCode, title })
+      );
     }
-  }, [state, formData.contest]);
+  }, [
+    state.risk,
+    state.details,
+    state.qaGasDetails,
+    state.linesOfCode,
+    state.title,
+    formData.contest,
+  ]);
 
   // Event Handlers
   const handleChange = useCallback((e) => {
@@ -320,10 +336,9 @@ const Form = ({ contest, sponsor, repoUrl }) => {
     [handleChange]
   );
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     // extract required fields from field data for validation check
     const { email, handle, address, risk, title, body } = formData;
-    const moralisSignature = currentUser.moralisSignature;
     const requiredFields = isQaOrGasFinding
       ? [email, handle, address, risk, body]
       : [email, handle, address, risk, title, body];
@@ -340,16 +355,13 @@ const Form = ({ contest, sponsor, repoUrl }) => {
       hasErrors = true;
     }
 
-    setHasValidationErrors(hasErrors);
-
-    const payload = { ...formData, moralisSignature };
-    if (!hasErrors) {
-      submitFinding(submissionUrl, payload);
-      if (typeof window !== `undefined`) {
-        window.localStorage.removeItem(formData.contest);
-      }
-      setIsExpanded(false);
+    if (hasErrors) {
+      setHasValidationErrors(hasErrors);
+      return;
     }
+
+    submitFinding(submissionUrl, formData);
+    setIsExpanded(false);
   };
 
   const handleReset = () => {
@@ -369,14 +381,22 @@ const Form = ({ contest, sponsor, repoUrl }) => {
 
   const submitFinding = useCallback((url, data) => {
     (async () => {
+      const user = await Moralis.User.current();
+      const sessionToken = user.attributes.sessionToken;
       setStatus(FormStatus.Submitting);
       const response = await fetch(url, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "X-Authorization": `Bearer ${sessionToken}`,
+        },
         body: JSON.stringify(data),
       });
       if (response.ok) {
         setStatus(FormStatus.Submitted);
+        if (typeof window !== `undefined`) {
+          window.localStorage.removeItem(formData.contest);
+        }
       } else {
         setStatus(FormStatus.Error);
         const message = await response.json();
@@ -583,6 +603,12 @@ const Form = ({ contest, sponsor, repoUrl }) => {
             {status === FormStatus.Error && (
               <div>
                 <p>{errorMessage}</p>
+                <button
+                  className="button cta-button"
+                  onClick={() => setStatus(FormStatus.Unsubmitted)}
+                >
+                  Try Again
+                </button>
               </div>
             )}
             {status === FormStatus.Submitted && (

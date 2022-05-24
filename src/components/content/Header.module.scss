@@ -1,8 +1,0 @@
-@import "../../styles/mixins.scss";
-
-.Register {
-  @media (min-width: 970px) {
-    @include primary-button;
-    padding: 6px;
-  }
-}

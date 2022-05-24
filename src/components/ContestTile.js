@@ -65,10 +65,13 @@ const ContestTile = ({ contest: { node }, updateContestStatus }) => {
           >
             {`${findingsRepo === "" ? "Preview" : "View"} Contest`}
           </Link>
-          {(t.contestStatus === "active" && contestRepo) && (
-            <Link to={contestRepo} className="button button-small cta-button secondary">
+          {t.contestStatus === "active" && contestRepo && (
+            <a
+              href={contestRepo}
+              className="button button-small cta-button secondary"
+            >
               View Repo
-            </Link>
+            </a>
           )}
           {t.contestStatus === "active" && findingsRepo && submissionPath ? (
             <Link

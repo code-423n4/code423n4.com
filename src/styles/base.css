@@ -1,9 +1,10 @@
 :root {
-  --main-purple: #8424e2;
-  --light-purple: #a29ab6;
+  --main-purple: #792cda;
+  --light-purple: #cdbef4;
   --light-blue: #5cb8ff;
   --hot-blue: #1a4bff;
   --blue: #361ee0;
+  --dark-purple: #4a00b1;
   --hot-pink: #ff108b;
   --orange: #ff4000;
 
@@ -21,7 +22,7 @@
 
   /* these rgb color values should be identical to their pairs above */
   /* use these to change opacity like this: `rgba(var(--main-purple-rgb), 0.8)` */
-  --main-purple-rgb: 132, 36, 226;
+  --main-purple-rgb: 121, 44, 218;
 
   --page-margin: 40px;
   --page-margin-mobile: 40px;
@@ -221,7 +222,7 @@ a {
 }
 
 a:hover {
-  color: var(--orange);
+  color: var(--light-purple);
 }
 
 p a:hover,
@@ -233,7 +234,7 @@ h4 a:hover,
 h5 a:hover,
 h6 a:hover,
 blockquote a:hover {
-  color: var(--orange);
+  color: var(--light-purple);
 }
 
 h1.page-header {

@@ -1,4 +1,4 @@
-@mixin primary-button {
+@mixin button {
   border: none;
   border-radius: 5px;
   display: inline-block;
@@ -9,10 +9,14 @@
   text-decoration: none;
   margin: 0.25rem 0.5rem 0.25rem 0;
   cursor: pointer;
+  transition: 0.2s ease-out;
+}
+
+@mixin primary-button {
+  @include button;
   background-color: var(--main-purple);
   color: #fff;
   text-transform: uppercase;
-  transition: 0.2s ease-out;
   box-shadow: inset 0 0 0 0 var(--main-purple);
 
   :hover {

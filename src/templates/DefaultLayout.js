@@ -4,7 +4,6 @@ import { ToastContainer } from "react-toastify";
 
 import Footer from "../components/content/Footer";
 import Header from "../components/content/Header";
-import Banner from "../components/content/Banner";
 
 const DefaultLayout = (props) => {
   const {
@@ -81,7 +80,6 @@ const DefaultLayout = (props) => {
         </title>
         <body className={bodyClass} />
       </Helmet>
-      <Banner />
       <Header />
       <ToastContainer />
       <main>

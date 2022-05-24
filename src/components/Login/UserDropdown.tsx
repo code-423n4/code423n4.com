@@ -1,7 +1,9 @@
+import clsx from "clsx";
 import React from "react";
 import Avatar from "react-avatar";
 
 import useUser from "../../hooks/UserContext";
+
 import Dropdown from "../Dropdown";
 
 import * as styles from "./UserDropdown.module.scss";
@@ -25,23 +27,59 @@ export default function UserDropdown() {
   );
 
   return (
-    <Dropdown
-      triggerButton={avatar()}
-      wrapperClass={styles.UserDropdownWrapper}
-      triggerButtonClass={styles.UserDropdown}
-      openOnHover={true}
-    >
-      <div className={styles.UserDropdownList}>
-        <span className={styles.UserInfo}>
-          Address:{" "}
+    <>
+      <Dropdown
+        triggerButton={avatar()}
+        wrapperClass={styles.UserDropdownWrapper}
+        triggerButtonClass={styles.UserDropdown}
+        openOnHover={true}
+        className={styles.Desktop}
+      >
+        <div className={styles.UserDropdownList}>
+          <span className={styles.UserInfo}>
+            Address:{" "}
+            {currentUser.address.slice(0, 5) +
+              "..." +
+              currentUser.address.slice(-4)}
+          </span>
+          <button onClick={logUserOut} className={dropdownStyles.Button}>
+            <img
+              src="/images/sign-out.svg"
+              alt="logout icon"
+              className={styles.Icon}
+              style={{ transform: "rotateY(180deg)" }}
+            />
+            Logout
+          </button>
+        </div>
+      </Dropdown>
+      <div className={styles.Mobile}>
+        <span className={styles.MobileMenuItem}>
+          <span className={styles.Icon}>
+            <Avatar
+              src={currentUser.img}
+              name={currentUser.username}
+              size="30px"
+              round="30px"
+            />
+          </span>
           {currentUser.address.slice(0, 5) +
             "..." +
             currentUser.address.slice(-4)}
         </span>
-        <button onClick={logUserOut} className={dropdownStyles.Button}>
-          logout
+        <button
+          onClick={logUserOut}
+          className={clsx(styles.Button, styles.MobileMenuItem)}
+        >
+          <img
+            src="/images/sign-out.svg"
+            alt="logout icon"
+            className={styles.Icon}
+            style={{ transform: "rotateY(180deg)" }}
+          />
+          Logout
         </button>
       </div>
-    </Dropdown>
+    </>
   );
 }

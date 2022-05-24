@@ -1,5 +1,5 @@
-const { Octokit } = require("@octokit/core");
 const { createPullRequest } = require("octokit-plugin-create-pull-request");
+const { Octokit } = require("@octokit/core");
 const sharp = require("sharp");
 const { token } = require("./_config");
 
@@ -8,19 +8,6 @@ const octokit = new OctokitClient({ auth: token });
 
 function isDangerous(s) {
   return s.match(/^[0-9a-zA-Z_\-]+$/) === null;
-}
-
-function getPrData(isUpdate, handle) {
-  let sentenceVerb = "Register";
-
-  if (isUpdate) {
-    sentenceVerb = "Update";
-  }
-
-  const title = `${sentenceVerb} warden ${handle}`;
-  const body = `This auto-generated PR ${sentenceVerb.toLowerCase()}s the warden ${handle}`;
-  const branchName = `warden/${handle}`;
-  return { title, body, branchName };
 }
 
 exports.handler = async (event) => {
@@ -37,40 +24,53 @@ exports.handler = async (event) => {
     }
 
     const data = JSON.parse(event.body);
-    const { handle, image, link, moralisId, isUpdate } = data;
+    const { teamName, image, link, members, address } = data;
 
     // ensure we have the data we need
-    if (!handle) {
+    if (!teamName) {
       return {
         statusCode: 422,
         body: JSON.stringify({
-          error: "Handle is required",
+          error: "Team name is required",
         }),
       };
     }
 
-    if (!moralisId) {
+    if (!address) {
       return {
         statusCode: 422,
         body: JSON.stringify({
-          error: "Moralis id is required",
+          error: "Polygon address is required",
         }),
       };
     }
 
-    if (isDangerous(handle)) {
+    if (isDangerous(teamName)) {
       return {
         statusCode: 400,
         body: JSON.stringify({
           error:
-            "Handle can only use alphanumeric characters [a-zA-Z0-9], underscores (_), and hyphens (-).",
+            "Team name can only use alphanumeric characters [a-zA-Z0-9], underscores (_), and hyphens (-).",
         }),
       };
     }
 
-    // @todo: prevent registering wardens who have already connected their wallets
+    if (!members || members.length < 2) {
+      return {
+        statusCode: 422,
+        body: JSON.stringify({
+          error: "Teams must have at least 2 members",
+        }),
+      };
+    }
 
-    const formattedHandleData = { handle, link, moralisId };
+    const formattedTeamData: {
+      teamName: string;
+      members: string[];
+      address: string;
+      link?: string;
+      image?: string;
+    } = { teamName, members, address, link };
     let avatarFilename = "";
     let base64Avatar = "";
     if (image) {
@@ -79,13 +79,13 @@ exports.handler = async (event) => {
         .resize({ width: 512 })
         .toBuffer({ resolveWithObject: true });
       base64Avatar = data.toString("base64");
-      avatarFilename = `${handle}.${info.format}`;
-      formattedHandleData.image = `./avatars/${handle}.${info.format}`;
+      avatarFilename = `${teamName}.${info.format}`;
+      formattedTeamData.image = `./avatars/${teamName}.${info.format}`;
     }
 
-    const files = {
-      [`_data/handles/${handle}.json`]: JSON.stringify(
-        formattedHandleData,
+    const files: Record<string, unknown> = {
+      [`_data/handles/${teamName}.json`]: JSON.stringify(
+        formattedTeamData,
         null,
         2
       ),
@@ -97,37 +97,9 @@ exports.handler = async (event) => {
       };
     }
 
-    // @todo: delete this once all existing users have completed registration
-    if (isUpdate) {
-      try {
-        const wardenFile = await octokit.request(
-          "GET /repos/{owner}/{repo}/contents/{path}",
-          {
-            owner: "code-423n4",
-            repo: "code423n4.com",
-            path: `_data/handles/${handle}.json`,
-          }
-        );
-
-        const content = JSON.stringify(
-          {
-            ...JSON.parse(Buffer.from(wardenFile.data.content, "base64")),
-            moralisId,
-          },
-          null,
-          2
-        );
-        files[`_data/handles/${handle}.json`] = content;
-      } catch (error) {
-        console.error(error);
-        return {
-          statusCode: 500,
-          body: JSON.stringify({ error: "Internal server error." }),
-        };
-      }
-    }
-
-    const { title, body, branchName } = getPrData(isUpdate, handle);
+    const title = `Create team ${teamName}`;
+    const body = `This auto-generated PR creates the team ${teamName}`;
+    const branchName = `team/${teamName}`;
     try {
       const res = await octokit.createPullRequest({
         owner: "code-423n4",

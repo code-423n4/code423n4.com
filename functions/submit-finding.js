@@ -1,6 +1,14 @@
+const { Moralis } = require("moralis/node");
 const dedent = require("dedent");
 const { Octokit } = require("@octokit/core");
-const { token, apiKey, domain } = require("./_config");
+const {
+  token,
+  apiKey,
+  domain,
+  moralisAppId,
+  moralisServerUrl,
+  moralisMasterKey,
+} = require("./_config");
 const csv = require("csvtojson");
 
 const octokit = new Octokit({ auth: token });
@@ -43,8 +51,13 @@ exports.handler = async (event) => {
     contest,
     sponsor,
     repo,
-    moralisSignature,
   } = data;
+
+  await Moralis.start({
+    serverUrl: moralisServerUrl,
+    appId: moralisAppId,
+    masterKey: moralisMasterKey,
+  });
 
   const owner = "code-423n4";
 
@@ -68,6 +81,35 @@ exports.handler = async (event) => {
     };
   }
 
+  // @todo: add temporary exception for existing wardens who have yet to connect their wallets
+  const authorization = event.headers["x-authorization"];
+  if (!authorization) {
+    return {
+      statusCode: 401,
+      body: "Unauthorized",
+    };
+  }
+
+  try {
+    const sessionToken = authorization.split("Bearer ")[1];
+    const confirmed = await Moralis.Cloud.run("confirmUser", {
+      sessionToken,
+      address,
+      username: handle,
+    });
+    if (!confirmed) {
+      return {
+        statusCode: 401,
+        body: "Unauthorized",
+      };
+    }
+  } catch (err) {
+    return {
+      statusCode: 500,
+      body: err.message || "Internal server error",
+    };
+  }
+
   if (isDangerousRepo(repo)) {
     return {
       statusCode: 400,
@@ -82,18 +124,6 @@ exports.handler = async (event) => {
       body:
         "Handle can only contain alphanumeric characters [a-zA-Z0-9], underscores (_), and hyphens (-).",
     };
-  }
-
-  // @todo: Require login to submit findings
-  // if (!moralisSignature) {
-  //   return {
-  //     statusCode: 422,
-  //     body: "You must be signed in to submit a finding.",
-  //   };
-  // }
-
-  if (moralisSignature) {
-    // @todo: authenticate user with signature
   }
 
   // make sure finding was submitted within the contest window, allowing 5 sec padding

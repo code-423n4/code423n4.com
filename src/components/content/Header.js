@@ -7,8 +7,6 @@ import useUser from "../../hooks/UserContext";
 import Login from "../Login/Login";
 import UserDropdown from "../Login/UserDropdown";
 
-import * as styles from "./Header.module.scss";
-
 const Hamburger = ({ mobileNavOpen, setMobileNavOpen }) => {
   const ariaLabelContent = mobileNavOpen ? "Close menu" : "Open menu";
 
@@ -59,16 +57,7 @@ const Header = () => {
           <Link to="/cosmos">Cosmos</Link>
           <a href="https://docs.code4rena.com">Docs</a>
           <Link to="/help">Help</Link>
-          {currentUser.isLoggedIn ? (
-            <UserDropdown />
-          ) : (
-            <>
-              <Login />
-              <Link to="/register" className={clsx(styles.Register)}>
-                Register
-              </Link>
-            </>
-          )}
+          {currentUser.isLoggedIn ? <UserDropdown /> : <Login />}
         </div>
       </nav>
       <span id="skip-link"></span>

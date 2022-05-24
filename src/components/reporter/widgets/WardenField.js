@@ -37,11 +37,8 @@ const WardenField = ({
       const value = option && option.value ? option.value : "";
       const target = {
         name,
-        value: isMulti ? option.map((o) => o.value) : value,
+        value: isMulti ? option : value,
       };
-      if (isMulti) {
-        target.members = option.members;
-      }
       onChange({ target });
     },
     [onChange, name, isMulti]
@@ -52,7 +49,11 @@ const WardenField = ({
       <Select
         name={name}
         required={required}
-        value={options.find((o) => o.value === fieldState) || undefined}
+        value={
+          isMulti
+            ? fieldState
+            : options.find((o) => o.value === fieldState) || undefined
+        }
         formatOptionLabel={WardenOptionLabel}
         options={options}
         onChange={handleChange}

@@ -17,7 +17,7 @@
 }
 
 .FormMax {
-  max-width: 97vw!important;
+  max-width: 97vw !important;
 }
 
 .FormHeader {
@@ -32,7 +32,7 @@
 .FormIcons {
   height: 20px;
   width: 20px;
-  cursor:pointer;
+  cursor: pointer;
   filter: brightness(0) invert(1);
   transition: all 0.2s ease-out;
   position: absolute;
@@ -60,20 +60,4 @@
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
-}
-
-.ReactTabs {
-  :global {
-    .react-tabs__tab-panel--selected {
-      background-color: transparent;
-      border-top: none;
-    }
-
-    .react-tabs__tab-list {
-      max-width: 750px;
-      margin: 40px auto;
-      margin-top: 0;
-      margin-bottom: -40px;
-    }
-  }
 }

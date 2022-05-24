@@ -1,17 +1,17 @@
+import clsx from "clsx";
 import React from "react";
-import { useMoralis } from "react-moralis";
-import useUser, { UserLoginError } from "../../hooks/UserContext";
 import Moralis from "moralis/types";
 import { toast } from "react-toastify";
+import { useMoralis } from "react-moralis";
+import useUser, { UserLoginError } from "../../hooks/UserContext";
 
 import Dropdown from "../Dropdown";
 
 import * as styles from "./Login.module.scss";
 import * as dropdownStyles from "../Dropdown.module.scss";
-import clsx from "clsx";
 
 const Login = () => {
-  const { logUserOut, login } = useUser();
+  const { logUserOut, connectWallet } = useUser();
   const { authenticate } = useMoralis();
 
   const handleLogin = async (
@@ -22,12 +22,9 @@ const Login = () => {
     try {
       const user = await authenticate({ provider });
       if (user === undefined) {
-        // user does not have the corresponding browser extension
-        // or user clicked "cancel" when prompted to sign message
+        // user clicked "cancel" when prompted to sign message
         // @todo: update messaging
-        toast.error(
-          `Make sure you have the ${provider} browser extension \n You must sign the message to login`
-        );
+        toast.error("You must sign the message to login");
         return;
       }
     } catch (error) {
@@ -40,8 +37,9 @@ const Login = () => {
     }
 
     try {
-      await login();
+      await connectWallet();
     } catch (error) {
+      logUserOut();
       if (error === UserLoginError.Unregistered) {
         toast.error(
           "There is no account associated with the address you provided. " +
@@ -69,18 +67,12 @@ const Login = () => {
     }
   };
 
-  const loginButton = () => (
-    <span>
-      Login <span aria-hidden>▾</span>
-    </span>
-  );
-
   return (
     <>
       <Dropdown
         wrapperClass={styles.LoginButtonWrapper}
         triggerButtonClass={styles.LoginButton}
-        triggerButton={loginButton()}
+        triggerButton="Connect Wallet"
         openOnHover={true}
         className={styles.Desktop}
       >
@@ -89,26 +81,48 @@ const Login = () => {
           onClick={(e) => handleLogin(e)}
           className={clsx(dropdownStyles.Button, styles.Desktop)}
         >
-          Login with MetaMask
+          <img
+            src="/images/meta-mask-logo.svg"
+            alt="logout icon"
+            className={styles.Icon}
+          />
+          Connect MetaMask
         </button>
         <button
           type="button"
           onClick={(e) => handleLogin(e, "walletConnect")}
           className={clsx(dropdownStyles.Button, styles.Desktop)}
         >
-          Login with WalletConnect
+          <img
+            src="/images/wallet-connect-logo.svg"
+            alt="logout icon"
+            className={styles.Icon}
+          />
+          Connect WalletConnect
         </button>
       </Dropdown>
-      <a href="" onClick={(e) => handleLogin(e)} className={styles.Mobile}>
-        Login with MetaMask
-      </a>
-      <a
-        href=""
-        onClick={(e) => handleLogin(e, "walletConnect")}
-        className={styles.Mobile}
-      >
-        Login with WalletConnect
-      </a>
+      <div className={styles.Mobile}>
+        <a href="" onClick={(e) => handleLogin(e)} className={styles.Link}>
+          <img
+            src="/images/meta-mask-logo.svg"
+            alt="logout icon"
+            className={styles.Icon}
+          />
+          Connect MetaMask
+        </a>
+        <a
+          href=""
+          onClick={(e) => handleLogin(e, "walletConnect")}
+          className={styles.Link}
+        >
+          <img
+            src="/images/wallet-connect-logo.svg"
+            alt="logout icon"
+            className={styles.Icon}
+          />
+          Connect WalletConnect
+        </a>
+      </div>
     </>
   );
 };

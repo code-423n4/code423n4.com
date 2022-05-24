@@ -1,11 +1,9 @@
-import React, { useState, ReactNode } from "react";
-import { graphql } from "gatsby";
 import clsx from "clsx";
-import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
+import { graphql } from "gatsby";
+import React, { useState, ReactNode } from "react";
 
 import DefaultLayout from "../templates/DefaultLayout";
 import RegistrationForm from "../components/RegistrationForm";
-import TeamRegistrationForm from "../components/TeamRegistrationForm";
 
 import * as styles from "../components/reporter/Form.module.scss";
 
@@ -19,16 +17,10 @@ enum FormStatus {
 export default function UserRegistration({ data }) {
   const handles = new Set(data.handles.edges.map((h) => h.node.handle));
 
-  let teams = [];
   let wardens = [];
   data.handles.edges.forEach(({ node }) => {
-    if (node.members) {
-      teams.push({
-        value: node.handle,
-        image: node.image,
-        members: node.members,
-      });
-    } else {
+    if (!node.members) {
+      // @todo: filter out leaderboard wardens and wardens who have already connected their wallets
       wardens.push({ value: node.handle, image: node.image });
     }
   });
@@ -63,35 +55,17 @@ export default function UserRegistration({ data }) {
   return (
     <DefaultLayout pageTitle="Registration | Code 423n4">
       <div className="wrapper-main">
-        <h1 className="page-header">Registration</h1>
+        <h1 className="page-header">Warden Registration</h1>
         <div>
           {(status === FormStatus.Unsubmitted ||
             status === FormStatus.Submitting) && (
-            <Tabs className={styles.ReactTabs}>
-              <TabList>
-                <Tab>Warden</Tab>
-                <Tab>Team</Tab>
-              </TabList>
-              <TabPanel>
-                <RegistrationForm
-                  className={clsx(styles.Form)}
-                  handles={handles}
-                  wardens={wardens}
-                  updateErrorMessage={updateErrorMessage}
-                  updateFormStatus={setStatus}
-                />
-              </TabPanel>
-              <TabPanel>
-                <TeamRegistrationForm
-                  className={clsx(styles.Form)}
-                  handles={handles}
-                  wardens={wardens}
-                  teams={teams}
-                  updateErrorMessage={updateErrorMessage}
-                  updateFormStatus={setStatus}
-                />
-              </TabPanel>
-            </Tabs>
+            <RegistrationForm
+              className={clsx(styles.Form)}
+              handles={handles}
+              wardens={wardens}
+              updateErrorMessage={updateErrorMessage}
+              updateFormStatus={setStatus}
+            />
           )}
           {status === FormStatus.Error && (
             <div style={{ textAlign: "center" }}>

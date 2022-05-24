@@ -8,20 +8,22 @@ import React, {
 } from "react";
 import { MoralisProvider, useMoralis } from "react-moralis";
 import Moralis from "moralis";
-import { graphql, StaticQuery } from "gatsby";
 import { toast } from "react-toastify";
+import { navigate } from "gatsby";
 
 export enum UserLoginError {
   Unregistered = "unregistered",
   Pending = "registration pending",
+  Unknown = "",
 }
 
 interface UserState {
   address: string;
   username: string;
   discordUsername: string;
+  gitHubUsername: string;
+  emailAddress: string;
   moralisId: string;
-  moralisSignature: string;
   isLoggedIn: boolean;
   img?: string | null;
   link?: string | null;
@@ -30,15 +32,16 @@ interface UserState {
 interface User {
   currentUser: UserState;
   logUserOut?: () => void;
-  login?: () => Promise<void>;
+  connectWallet?: () => Promise<void>;
 }
 
 const DEFAULT_STATE: UserState = {
   address: "",
   username: "",
   discordUsername: "",
+  gitHubUsername: "",
+  emailAddress: "",
   moralisId: "",
-  moralisSignature: "",
   isLoggedIn: false,
   img: null,
   link: null,
@@ -50,30 +53,8 @@ const UserProvider = ({ children }) => {
   const { isAuthenticated, logout, user } = useMoralis();
   const [currentUser, setCurrentUser] = useState(DEFAULT_STATE);
 
-  const wardensQuery = graphql`
-    query {
-      handles: allHandlesJson(sort: { fields: handle, order: ASC }) {
-        edges {
-          node {
-            handle
-            link
-            moralisId
-            image {
-              childImageSharp {
-                resize(width: 64, quality: 90) {
-                  src
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  `;
-
   useEffect(() => {
     const initializeEventListeners = () => {
-      // @todo: verify expected behavior here and implement/communicate it properly
       Moralis.onAccountChanged(async (account) => {
         const user = await Moralis.User.current();
         if (!user) {
@@ -115,99 +96,129 @@ const UserProvider = ({ children }) => {
           await logout();
         }
       });
+      return Moralis.removeAllListeners();
     };
     initializeEventListeners();
   }, []);
 
-  return (
-    <StaticQuery
-      query={wardensQuery}
-      render={(data) => {
-        const handles = data.handles.edges;
+  const getUserInfo = async (user: Moralis.User): Promise<void> => {
+    const {
+      c4Username,
+      ethAddress,
+      discordUsername,
+      gitHubUsername,
+      emailAddress,
+    } = user.attributes;
+    const response = await fetch(`/.netlify/functions/users?id=${c4Username}`);
+    if (!response.ok) {
+      const error = await response.json();
+      if (error.error === "User not found") {
+        throw UserLoginError.Pending;
+      }
+      throw UserLoginError.Unknown;
+    }
 
-        const login = useCallback(async (): Promise<void> => {
-          const user = Moralis.User.current();
+    const registeredUser = await response.json();
+    if (!registeredUser || !registeredUser.moralisId) {
+      throw UserLoginError.Pending;
+    }
+
+    if (registeredUser.image) {
+      // remove the relative part of the path
+      const imagePath = registeredUser.image.slice(2);
+      const imgResponse = await fetch(
+        `https://raw.githubusercontent.com/code-423n4/code423n4.com/main/_data/handles/${imagePath}`
+      );
+      if (imgResponse.ok) {
+        registeredUser.image = imgResponse.url;
+      }
+    }
+    const moralisId = registeredUser.moralisId;
+    const link = registeredUser.link || null;
+    const img = registeredUser.image || null;
+
+    setCurrentUser({
+      username: c4Username,
+      moralisId,
+      address: ethAddress,
+      discordUsername,
+      gitHubUsername,
+      emailAddress,
+      link,
+      img,
+      isLoggedIn: true,
+    });
+  };
+
+  const connectWallet = useCallback(async (): Promise<void> => {
+    const user = await Moralis.User.current();
+    if (!user) {
+      logUserOut();
+    }
+
+    const username = await user.get("c4Username");
+    const handlesPendingConfirmation = await user.get(
+      "handlesPendingConfirmation"
+    );
+    if (handlesPendingConfirmation) {
+      navigate("/confirm-account");
+      return;
+    }
+    if (!username) {
+      // check for existing user who has submitted with that address/register them
+      const associatedHandles = await Moralis.Cloud.run("findUser");
+      console.log("ASSOCIATED USERS", associatedHandles);
+      if (!associatedHandles || associatedHandles.length < 1) {
+        navigate("/register");
+        return;
+      }
+      user.set("handlesPendingConfirmation", associatedHandles);
+      await user.save();
+      navigate("/confirm-account");
+    } else {
+      try {
+        await getUserInfo(user);
+      } catch (error) {
+        throw error;
+      }
+    }
+  }, []);
+
+  const logUserOut = useCallback(() => {
+    logout();
+    setCurrentUser(DEFAULT_STATE);
+  }, []);
+
+  useEffect(() => {
+    // check if user is logged in when page is refreshed
+    const checkForUser = async () => {
+      if (!isAuthenticated) {
+        setCurrentUser(DEFAULT_STATE);
+        return;
+      } else {
+        try {
+          const user = await Moralis.User.current();
           if (!user) {
             logUserOut();
-          }
-
-          const username = await user.get("c4Username");
-
-          if (!username) {
-            await logUserOut();
-            throw UserLoginError.Unregistered;
-          }
-
-          const registeredUser = handles.find((handle) => {
-            return handle.node.handle === username;
-          });
-
-          if (!registeredUser || !registeredUser.node.moralisId) {
-            await logUserOut();
-            throw UserLoginError.Pending;
-          }
-          const moralisId = registeredUser.node.moralisId;
-          const moralisSignature =
-            user.attributes.authData?.moralisEth?.signature;
-          if (!moralisSignature) {
-            throw "Authentication failed";
-          }
-          const address = await user.get("ethAddress");
-          const discordUsername = await user.get("discordUsername");
-          const link = registeredUser.node.link || null;
-          const img =
-            registeredUser.node.image?.childImageSharp.resize.src || null;
-
-          setCurrentUser({
-            username,
-            moralisId,
-            moralisSignature,
-            address,
-            discordUsername,
-            link,
-            img,
-            isLoggedIn: true,
-          });
-        }, []);
-
-        const logUserOut = useCallback(() => {
-          logout();
-          setCurrentUser(DEFAULT_STATE);
-        }, []);
-
-        useEffect(() => {
-          const logoutIfNotAuthenticated = async () => {
-            if (!isAuthenticated) {
-              setCurrentUser(DEFAULT_STATE);
-              return;
+          } else {
+            const username = await user.get("c4Username");
+            if (username) {
+              await getUserInfo(user);
             }
-          };
-          logoutIfNotAuthenticated();
-        }, [isAuthenticated, user]);
+          }
+        } catch (error) {
+          console.error(error);
+        }
+      }
+    };
+    checkForUser();
+  }, [isAuthenticated, user]);
 
-        useEffect(() => {
-          const getUser = async () => {
-            if (isAuthenticated) {
-              try {
-                await login();
-              } catch (error) {
-                console.error(error);
-              }
-            }
-          };
-          getUser();
-        }, []);
-
-        const userContext = useMemo(() => {
-          return { currentUser, logUserOut, login };
-        }, [currentUser, logUserOut, login]);
-        return (
-          <UserContext.Provider value={userContext}>
-            {children}
-          </UserContext.Provider>
-        );
-      }}
-    />
+  const userContext = useMemo(() => {
+    return { currentUser, logUserOut, connectWallet };
+  }, [currentUser, logUserOut, connectWallet]);
+  return (
+    <UserContext.Provider value={userContext}>{children}</UserContext.Provider>
   );
 };
 

@@ -14,4 +14,4 @@
 
 [functions]
   directory = "functions/"
-  included_files = ["_data/contests/*"]
+  included_files = ["_data/contests/*", "_data/handles/*.json"]
