@@ -2,7 +2,7 @@ import React, { useCallback, useState } from "react";
 import HCaptcha from "@hcaptcha/react-hcaptcha";
 import { StaticQuery, graphql } from "gatsby";
 import clsx from "clsx";
-import DOMPurify from "dompurify";
+import DOMPurify from "isomorphic-dompurify";
 
 import DefaultLayout from "../templates/DefaultLayout";
 import Widget from "../components/reporter/widgets/Widget";

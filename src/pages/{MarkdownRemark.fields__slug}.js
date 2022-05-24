@@ -1,6 +1,6 @@
 import * as React from "react";
 import { graphql } from "gatsby";
-import DOMPurify from "dompurify";
+import DOMPurify from "isomorphic-dompurify";
 
 import DefaultLayout from "../templates/DefaultLayout";
 

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { graphql, Link } from "gatsby";
 import clsx from "clsx";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
-import DOMPurify from "dompurify";
+import DOMPurify from "isomorphic-dompurify";
 
 import { getDates } from "../utils/time";
 
