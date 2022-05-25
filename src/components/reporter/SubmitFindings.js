@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Agreement from "../content/Agreement";
 import {
   emailField,
   addressField,
@@ -9,7 +10,6 @@ import {
   vulnerabilityDetailsField,
   qaGasDetailsField,
 } from "./findings/fields";
-import { initialState } from "./findings/state";
 import {
   initStateFromStorage,
   config,
@@ -17,7 +17,7 @@ import {
   checkQaOrGasFinding,
 } from "./findings/functions";
 import Form from "../form/Form";
-import Agreement from "../content/Agreement";
+import { initialState } from "./findings/state";
 
 const SubmitFindings = ({ wardensList, endTime, sponsor, contest, repo }) => {
   const wardens = wardensList.edges.map(({ node }) => {
@@ -41,7 +41,7 @@ const SubmitFindings = ({ wardensList, endTime, sponsor, contest, repo }) => {
 
   useEffect(() => {
     initStateFromStorage(contest, sponsor, repo, setState);
-  }, [contest, repo, sponsor, initStateFromStorage]);
+  }, [contest, repo, sponsor]);
 
   useEffect(() => {
     if (typeof window !== `undefined`) {
