@@ -201,6 +201,7 @@ function isAuthorized(jwtToken: string, requestedRepo: string): boolean {
 
 const handler: Handler = async (event, context) => {
   const { authorization } = event.headers;
+
   if (!authorization) {
     return {
       statusCode: 401,
