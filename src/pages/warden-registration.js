@@ -1,14 +1,14 @@
-import React, { useCallback, useState, useRef } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import { graphql } from "gatsby";
 import clsx from "clsx";
 import HCaptcha from "@hcaptcha/react-hcaptcha";
 
 import Agreement from "../components/content/Agreement.js";
 import DefaultLayout from "../templates/DefaultLayout";
+import TextArea from "../components/reporter/widgets/TextArea.js";
 
 import * as styles from "../components/form/Form.module.scss";
 import * as widgetStyles from "../components/reporter/widgets/Widgets.module.scss";
-import TextArea from "../components/reporter/widgets/TextArea.js";
 
 const initialState = {
   handle: "",

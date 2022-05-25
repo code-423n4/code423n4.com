@@ -20,8 +20,8 @@ const LeaderboardHandle = ({ handle, image, link, members }) => {
   return (
     <div className="wrapper-competitor" key={handle}>
       {members ? (
-        <div
-          className="wrapper-members"
+        <button
+          className="wrapper-members button-div"
           onClick={() => setIsExpanded(!isExpanded)}
         >
           <div className="wrapper-team-top">
@@ -72,7 +72,7 @@ const LeaderboardHandle = ({ handle, image, link, members }) => {
                 </div>
               ))
             : ""}
-        </div>
+        </button>
       ) : (
         <a href={link}>
           <Avatar
