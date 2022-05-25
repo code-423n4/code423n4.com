@@ -20,12 +20,12 @@ const LeaderboardHandle = ({ handle, image, link, members }) => {
   return (
     <div className="wrapper-competitor" key={handle}>
       {members ? (
-        <button
-          className="wrapper-members button-div"
-          onClick={() => setIsExpanded(!isExpanded)}
-        >
+        <div className="wrapper-members">
           <div className="wrapper-team-top">
-            <div className="team-toggle">
+            <button
+              className="team-toggle button-div"
+              onClick={() => setIsExpanded(!isExpanded)}
+            >
               <img
                 src={
                   isExpanded
@@ -43,9 +43,9 @@ const LeaderboardHandle = ({ handle, image, link, members }) => {
                     : "triangle triangle-right"
                 }
               />
-            </div>
+            </button>
             {image ? (
-              <>
+              <a href={link ? link : "/"}>
                 <Avatar
                   src={image && image.childImageSharp.resize.src}
                   name={handle}
@@ -54,7 +54,7 @@ const LeaderboardHandle = ({ handle, image, link, members }) => {
                 />
 
                 <span>{mobileView === true ? trimHandle(handle) : handle}</span>
-              </>
+              </a>
             ) : (
               <div className="team-wrapper">
                 <span
@@ -85,7 +85,7 @@ const LeaderboardHandle = ({ handle, image, link, members }) => {
                 </div>
               ))
             : ""}
-        </button>
+        </div>
       ) : (
         <a href={link}>
           <Avatar
