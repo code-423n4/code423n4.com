@@ -256,6 +256,22 @@ async function createUpgradedIssue() {
 //   }
 }
 
+async function doUpdateFromGitHub(repo) {
+  const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
+  const issues = await getAllIssues(octokit, repo, "code-423n4");
+  const response = issues
+    .map(simplifyData)
+    .reduce<Record<number, SimplifiedIssue>>((a, b) => {
+      a[b.id] = b;
+      return a;
+    }, {});
+
+  return {
+    statusCode: 200,
+    body: JSON.stringify(response),
+  };
+}
+
 const handler: Handler = async (event, context) => {
   try {
     const { authorization } = event.headers;
@@ -279,19 +295,12 @@ const handler: Handler = async (event, context) => {
 
     const { action, args } = body;
 
-    const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
-    const issues = await getAllIssues(octokit, name, "code-423n4");
-    const response = issues
-      .map(simplifyData)
-      .reduce<Record<number, SimplifiedIssue>>((a, b) => {
-        a[b.id] = b;
-        return a;
-      }, {});
-
-    return {
-      statusCode: 200,
-      body: JSON.stringify(response),
-    };
+    switch (action) {
+      case "update-from-github":
+        return await doUpdateFromGitHub(name);
+      case "upgrade-submission":
+        break;
+    }
   } catch (err) {
     console.error(err);
     return {
