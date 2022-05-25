@@ -199,6 +199,58 @@ function isAuthorized(jwtToken: string, requestedRepo: string): boolean {
   }
 }
 
+// async function createUpgradedIssue() {
+//   const data = JSON.parse(event.body);
+//   const owner = "code-423n4";
+//   const octokit = new Octokit({ auth: token });
+
+//   try {
+//     // create issue
+//     const issueResult = await octokit.request(
+//       "POST /repos/{owner}/{repo}/issues",
+//       {
+//         owner,
+//         repo,
+//         title,
+//         body,
+//         labels,
+//       }
+//     );
+
+//     const issueId = issueResult.data.number;
+//     const issueUrl = issueResult.data.html_url;
+//     const message = `${handle} issue #${issueId}`;
+//     const path = `data/${handle}-${issueId}.json`;
+
+//     const fileData = {
+//       contest,
+//       handle,
+//       address,
+//       risk,
+//       title,
+//       issueId,
+//       issueUrl,
+//     };
+
+//     const content = Buffer.from(JSON.stringify(fileData, null, 2)).toString(
+//       "base64"
+//     );
+
+//     await octokit.request("PUT /repos/{owner}/{repo}/contents/{path}", {
+//       owner,
+//       repo,
+//       path,
+//       message,
+//       content,
+//     });
+//   } catch (error) {
+//     return {
+//       statusCode: 500,
+//       body: "Error creating upgraded submission.",
+//     };
+//   }
+// }
+
 const handler: Handler = async (event, context) => {
   const { authorization } = event.headers;
 
