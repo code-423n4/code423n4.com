@@ -204,7 +204,7 @@ function isAuthorized(jwtToken: string, requestedRepo: string): boolean {
   }
 }
 
-// async function createUpgradedIssue() {
+async function createUpgradedIssue() {
 //   const data = JSON.parse(event.body);
 //   const owner = "code-423n4";
 //   const octokit = new Octokit({ auth: token });
@@ -254,7 +254,7 @@ function isAuthorized(jwtToken: string, requestedRepo: string): boolean {
 //       body: "Error creating upgraded submission.",
 //     };
 //   }
-// }
+}
 
 const handler: Handler = async (event, context) => {
   const { authorization } = event.headers;
