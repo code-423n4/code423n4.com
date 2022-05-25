@@ -257,16 +257,16 @@ async function createUpgradedIssue() {
 }
 
 const handler: Handler = async (event, context) => {
-  const { authorization } = event.headers;
-
-  if (!authorization) {
-    return {
-      statusCode: 401,
-      body: JSON.stringify({ error: "Authorization required" }),
-    };
-  }
-
   try {
+    const { authorization } = event.headers;
+
+    if (!authorization) {
+      return {
+        statusCode: 401,
+        body: JSON.stringify({ error: "Authorization required" }),
+      };
+    }
+
     const { name } = JSON.parse(event.body) as { name: string };
     if (!isAuthorized(authorization, name)) {
       return {
@@ -274,6 +274,7 @@ const handler: Handler = async (event, context) => {
         body: JSON.stringify({ error: "Authorization failed" }),
       };
     }
+
     const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
     const issues = await getAllIssues(octokit, name, "code-423n4");
     const response = issues
