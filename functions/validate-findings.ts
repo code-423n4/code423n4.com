@@ -267,7 +267,9 @@ const handler: Handler = async (event, context) => {
       };
     }
 
-    const { name } = JSON.parse(event.body) as { name: string };
+    const body = JSON.parse(event.body);
+    const { name } = body;
+
     if (!isAuthorized(authorization, name)) {
       return {
         statusCode: 401,
