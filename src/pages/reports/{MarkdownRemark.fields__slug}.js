@@ -1,5 +1,6 @@
 import * as React from "react";
 import { graphql } from "gatsby";
+import DOMPurify from "isomorphic-dompurify";
 
 import ReportLayout from "../../templates/ReportLayout";
 
@@ -32,7 +33,7 @@ function ReportPageTemplate({ data }) {
           </div>
           <div
             className="report-contents"
-            dangerouslySetInnerHTML={{ __html: page.html }}
+            dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(page.html) }}
           />
         </article>
       </div>
