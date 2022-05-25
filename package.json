@@ -41,7 +41,6 @@
     "gatsby-remark-smartypants": "^3.0.0",
     "gatsby-remark-vscode": "^3.3.1",
     "gatsby-source-filesystem": "^3.0.0",
-    "gatsby-source-notion-api": "^0.11.0",
     "gatsby-transformer-csv": "^3.5.0",
     "gatsby-transformer-json": "^3.0.0",
     "gatsby-transformer-remark": "^3.0.0",

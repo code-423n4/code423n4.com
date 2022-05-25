@@ -16,15 +16,6 @@ module.exports = {
   plugins: [
     `gatsby-plugin-react-helmet`,
     {
-      resolve: `gatsby-source-notion-api`,
-      options: {
-        token: `$INTEGRATION_TOKEN`,
-			  databaseId: `$DATABASE_ID`,
-        propsToFrontmatter: true,
-        lowerTitleLevel: true,
-      },
-    },
-    {
       resolve: `gatsby-source-filesystem`,
       options: {
         path: `${__dirname}/_data/orgs`,
