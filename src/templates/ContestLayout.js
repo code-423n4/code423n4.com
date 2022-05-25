@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { graphql, Link } from "gatsby";
 import clsx from "clsx";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
+import DOMPurify from "isomorphic-dompurify";
 
 import { getDates } from "../utils/time";
 
@@ -165,7 +166,9 @@ const ContestLayout = (props) => {
                   </div>
                 ) : (
                   <div
-                    dangerouslySetInnerHTML={{ __html: fields.readmeContent }}
+                    dangerouslySetInnerHTML={{
+                      __html: DOMPurify.sanitize(fields.readmeContent),
+                    }}
                   />
                 )}
               </div>

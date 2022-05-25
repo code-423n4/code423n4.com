@@ -3,7 +3,8 @@ import SchemaCustomization from "./schema";
 import { createFilePath } from "gatsby-source-filesystem";
 import { Octokit } from "@octokit/core";
 import { graphql } from "@octokit/graphql";
-import format from 'date-fns/format';
+import format from "date-fns/format";
+import webpack from "webpack";
 
 const { token } = require("./functions/_config");
 
@@ -30,7 +31,7 @@ function slugify(text) {
 function contestSlug(contestNode) {
   const startDate = new Date(contestNode.start_time);
   const title = slugify(contestNode.title);
-  const slug = `${format(startDate, 'yyyy-MM')}-${title}`;
+  const slug = `${format(startDate, "yyyy-MM")}-${title}`;
 
   return slug;
 }
@@ -194,5 +195,16 @@ exports.createPages = async ({ graphql, actions }) => {
         contestId: contest.node.contestid,
       },
     });
+  });
+};
+
+exports.onCreateWebpackConfig = ({ actions }) => {
+  actions.setWebpackConfig({
+    plugins: [
+      new webpack.IgnorePlugin({
+        resourceRegExp: /canvas/,
+        contextRegExp: /jsdom$/,
+      }),
+    ],
   });
 };
