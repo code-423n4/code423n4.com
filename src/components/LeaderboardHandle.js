@@ -44,16 +44,29 @@ const LeaderboardHandle = ({ handle, image, link, members }) => {
                 }
               />
             </div>
-            <div className="team-wrapper">
-              <span
-                className={
-                  mobileView === false ? "team-avatar" : "team-avatar-small"
-                }
-              >
-                {handle.substring(0, 1)}
-              </span>
-              <span className="team-name">{handle}</span>
-            </div>
+            {image ? (
+              <>
+                <Avatar
+                  src={image && image.childImageSharp.resize.src}
+                  name={handle}
+                  size={mobileView === false ? "27px" : "16px"}
+                  round={mobileView === false ? "27px" : "16px"}
+                />
+
+                <span>{mobileView === true ? trimHandle(handle) : handle}</span>
+              </>
+            ) : (
+              <div className="team-wrapper">
+                <span
+                  className={
+                    mobileView === false ? "team-avatar" : "team-avatar-small"
+                  }
+                >
+                  {handle.substring(0, 1)}
+                </span>
+                <span className="team-name">{handle}</span>
+              </div>
+            )}
           </div>
           {isExpanded
             ? members.map((member) => (
