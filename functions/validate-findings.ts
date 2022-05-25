@@ -205,7 +205,7 @@ const handler: Handler = async (event, context) => {
   if (!authorization) {
     return {
       statusCode: 401,
-      body: JSON.stringify({ error: "Authorization failed" }),
+      body: JSON.stringify({ error: "Authorization required" }),
     };
   }
 
