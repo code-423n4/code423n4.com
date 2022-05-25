@@ -1,12 +1,12 @@
 import React, { useCallback, useState } from "react";
-import HCaptcha from "@hcaptcha/react-hcaptcha";
 import { StaticQuery, graphql } from "gatsby";
+import HCaptcha from "@hcaptcha/react-hcaptcha";
 import clsx from "clsx";
 import DOMPurify from "isomorphic-dompurify";
 
 import DefaultLayout from "../templates/DefaultLayout";
-import Widget from "../components/reporter/widgets/Widget";
 import Widgets from "../components/reporter/widgets/Widgets";
+import Widget from "../components/reporter/widgets/Widget";
 
 import * as styles from "../components/form/Form.module.scss";
 import * as widgetStyles from "../components/reporter/widgets/Widgets.module.scss";

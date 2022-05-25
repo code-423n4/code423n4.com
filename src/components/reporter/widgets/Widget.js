@@ -1,8 +1,8 @@
 import React from "react";
 
 import { SelectField, TextArea, TextField } from "./";
-import WardenField from "./WardenField";
 import LinesOfCode from "../LinesOfCodeInput";
+import WardenField from "./WardenField";
 
 const Widget = ({ field, fieldState, isInvalid, onChange }) => {
   const { widget, name, required, options } = field;
