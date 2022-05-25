@@ -277,6 +277,8 @@ const handler: Handler = async (event, context) => {
       };
     }
 
+    const { action, args } = body;
+
     const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
     const issues = await getAllIssues(octokit, name, "code-423n4");
     const response = issues
