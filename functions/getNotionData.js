@@ -1,0 +1,1 @@
+// get all data from notion DB
