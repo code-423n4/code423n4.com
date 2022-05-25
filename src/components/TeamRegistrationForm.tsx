@@ -6,7 +6,7 @@ import useUser from "../hooks/UserContext";
 
 import WardenField from "../components/reporter/widgets/WardenField";
 
-import * as styles from "../components/reporter/Form.module.scss";
+import * as styles from "../components/form/Form.module.scss";
 import * as widgetStyles from "../components/reporter/widgets/Widgets.module.scss";
 import { navigate } from "gatsby";
 

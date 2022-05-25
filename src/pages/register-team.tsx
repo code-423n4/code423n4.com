@@ -6,7 +6,7 @@ import DefaultLayout from "../templates/DefaultLayout";
 import TeamRegistrationForm from "../components/TeamRegistrationForm";
 import useUser from "../hooks/UserContext";
 
-import * as styles from "../components/reporter/Form.module.scss";
+import * as styles from "../components/form/Form.module.scss";
 
 enum FormStatus {
   Unsubmitted = "unsubmitted",
