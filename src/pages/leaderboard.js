@@ -140,6 +140,7 @@ const Leaderboard = ({ data }) => {
       <div className="wrapper-main">
         <h1 className="page-header">Leaderboard</h1>
         <div className="dropdown-container">
+        {/* browser-native select in firefox inherits the dropdown background color from the select element */}
           <select onChange={handleChange} className="dropdown">
             {filterOptions.map((option) => (
               <option value={option.value}>{option.label}</option>
