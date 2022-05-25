@@ -254,11 +254,9 @@ async function createUpgradedIssue(issue) {
 //       body: "Error creating upgraded submission.",
 //     };
 //   }
-  var issueId = null;
-
   return {
     statusCode: 500,
-    body: JSON.stringify(issueId),
+    body: JSON.stringify(issue),
   }
 }
 
