@@ -8,6 +8,7 @@ query ($name: String!, $owner: String!) {
       issues(first: 100) {
         nodes {
           id
+          title
           state
           labels(first: 10) {
             nodes {
@@ -34,6 +35,7 @@ query ($name: String!, $owner: String!, $after: String!) {
       issues(first: 100, after: $after) {
         nodes {
           id
+          title
           state
           labels(first: 10) {
             nodes {
@@ -59,6 +61,7 @@ interface QueryResponse {
     issues: {
       nodes: {
         id: string;
+        title: string;
         state: "OPEN" | "CLOSED";
         labels: {
           nodes: {
@@ -166,6 +169,7 @@ function getIsInvalidFromLabels(
 
 interface SimplifiedIssue {
   id: number;
+  title: string;
   risk: string;
   isOpen: boolean;
   isDuplicate: boolean;
@@ -177,6 +181,7 @@ function simplifyData(
 ): SimplifiedIssue {
   return {
     id: issue.number,
+    title: issue.title,
     risk: getRiskFromLabels(issue.labels.nodes),
     isOpen: issue.state === "OPEN",
     isDuplicate: getIsDuplicateFromLabels(issue.labels.nodes),
