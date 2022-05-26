@@ -3,26 +3,39 @@ const { notionToken, notionDb } = require("./_config");
 const notion = new Client({ auth: notionToken });
 
 (async () => {
-  const response = await notion.databases.query({
-    database_id: notionDb,
-    page_size: 300
-  });
-  console.log(response)
-  const tempResponse = response.results.map(element => {
-    if (!element.properties.ContestID.number) {
-      return null;
+  const pages = []
+  let cursor = undefined
+  while (true) {
+    const { results, next_cursor } = await notion.databases.query({
+      database_id: notionDb,
+      start_cursor: cursor,
+    })
+    pages.push(...results)
+    if (!next_cursor) {
+      break
     }
-    return {
-      contestId: element.properties.ContestID.number || null,
-      status: element.properties.Status.select?.name ||  element.properties.ContestID.number < 80 ? "Completed" : null,
+    cursor = next_cursor
+  }
+  console.log(`${pages.length} results successfully fetched.`)
+  const tempResponse =  pages.map(page => {
+    if (page.properties.Status.select?.name === "Lost deal" || page.properties.Status.select?.name === "Possible") {
+      return null;
+    } else {
+      return {
+        contestId: page.properties.ContestID.number || null,
+        status: page.properties.Status.select?.name || null,
+      }
     }
   }).filter(el => el !== null);
+  console.log(tempResponse, tempResponse.length)
+
+
   function sortByKey(array, key) {
     return array.sort(function(a, b) {
         var x = a[key]; var y = b[key];
         return ((x < y) ? -1 : ((x > y) ? 1 : 0));
     });
   }
-  return (sortByKey(tempResponse, "contestId"));
+  console.log(sortByKey(tempResponse, "contestId"));
 
 })();
