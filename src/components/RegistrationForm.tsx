@@ -62,9 +62,11 @@ export default function RegistrationForm({
   const [state, setState] = useState(initialState);
   const [isNewUser, setIsNewUser] = useState(true);
   const [hasValidationErrors, setHasValidationErrors] = useState(false);
+  const [isValidDiscord, setIsValidDiscord] = useState(true);
   const avatarInputRef = useRef<HTMLInputElement>();
   const { logUserOut } = useUser();
   const { authenticate } = useMoralis();
+  const regex = new RegExp(/.*#[0-9]{4}/, "g");
 
   const instructions = isNewUser ? (
     <p>
@@ -85,6 +87,9 @@ export default function RegistrationForm({
     setState((prevState) => {
       return { ...prevState, [name]: value };
     });
+    if (name === "discordUsername") {
+      setIsValidDiscord(regex.test(value))
+    }
   }, []);
 
   const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -117,6 +122,7 @@ export default function RegistrationForm({
         if (
           !state.username ||
           !state.discordUsername ||
+          !isValidDiscord||
           (isNewUser && !state.qualifications) ||
           (isNewUser && handles.has(state.username))
         ) {
@@ -356,15 +362,14 @@ export default function RegistrationForm({
             <small>This field is required</small>
           </p>
         )}
-        {/* @todo: validate discord username
-            {hasValidationErrors && isDiscordUsernameInvalid() && (
-              <p className={widgetStyles.Help}>
-                <small>
-                  Make sure you enter your discord username, and not your server
-                  nickname. It should end with '#' followed by 4 digits.
-                </small>
-              </p>
-            )} */}
+        {(!isValidDiscord) ? (
+          <p className={widgetStyles.Help}>
+            <small>
+              Make sure you enter your discord username, and not your server
+              nickname. It should end with '#' followed by 4 digits.
+            </small>
+          </p>
+        ) : ''}
       </div>
       <div className={widgetStyles.Container}>
         <label htmlFor="gitHubUsername" className={widgetStyles.Label}>
