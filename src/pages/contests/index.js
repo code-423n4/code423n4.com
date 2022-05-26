@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { graphql } from "gatsby";
 
 import { contestsByState } from "../../utils/filter";
@@ -9,6 +9,24 @@ import DefaultLayout from "../../templates/DefaultLayout";
 export default function Contests({ data }) {
   // @todo: implement global state management instead of props drilling
   const [contestStatusChanges, updateContestStatusChanges] = useState(0);
+  const [status, setStatus] = useState([]);
+
+  useEffect(() => {
+    fetch("http://localhost:8888/.netlify/functions/getNotionData")
+    .then(res => {
+      if (res.ok) {
+        return res.json();
+      }
+      throw res;
+    })
+    .then(data => {
+      setStatus(data)
+    })
+    .catch(err => {
+      console.log(err)
+    })
+  },  [])
+  console.log(status);
 
   const updateContestStatus = () => {
     updateContestStatusChanges(contestStatusChanges + 1);
