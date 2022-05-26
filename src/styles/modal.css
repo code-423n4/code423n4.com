@@ -65,9 +65,11 @@
 .button-action {
   background-color: var(--main-purple);
 }
+
 .display-block {
   display: block;
 }
+
 .display-none {
   display: none;
 }
