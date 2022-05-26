@@ -205,55 +205,47 @@ function isAuthorized(jwtToken: string, requestedRepo: string): boolean {
 }
 
 async function createUpgradedIssue(repo, issue) {
+  const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
 
-//   try {
-//     // create issue
-//     const issueResult = await octokit.request(
-//       "POST /repos/{owner}/{repo}/issues",
-//       {
-//         owner,
-//         repo,
-//         title,
-//         body,
-//         labels,
-//       }
-//     );
+  // create issue
+  const issueResult = await octokit.request(
+    "POST /repos/{owner}/{repo}/issues",
+    {
+      owner: "code-423n4",
+      repo,
+      title: issue.title,
+      body: issue.body,
+      labels: ["bug", {"H": "3 (High Risk)", "M": "2 (Med Risk)"}[issue.risk]],
+    }
+  );
 
-//     const issueId = issueResult.data.number;
-//     const issueUrl = issueResult.data.html_url;
-//     const message = `${handle} issue #${issueId}`;
-//     const path = `data/${handle}-${issueId}.json`;
+  const issueId = issueResult.data.number;
+  const issueUrl = issueResult.data.html_url;
+  
+  // create submission file
+  const fileData = {
+    contest: issue.contest,
+    handle: issue.handle,
+    address: issue.address,
+    risk: {"H": "3", "M": "2"}[issue.risk],
+    title: issue.title,
+    issueId: issueId,
+    issueUrl: issueUrl,
+  };
 
-//     const fileData = {
-//       contest,
-//       handle,
-//       address,
-//       risk,
-//       title,
-//       issueId,
-//       issueUrl,
-//     };
+  await octokit.request("PUT /repos/{owner}/{repo}/contents/{path}", {
+    owner: "code-423n4",
+    repo,
+    path: `data/${issue.handle}-${issueId}.json`,
+    message: `Upgrade for ${issue.handle} issue #${issueId}`,
+    content: Buffer.from(JSON.stringify(fileData, null, 2)).toString(
+      "base64"
+    ),
+  });
 
-//     const content = Buffer.from(JSON.stringify(fileData, null, 2)).toString(
-//       "base64"
-//     );
-
-//     await octokit.request("PUT /repos/{owner}/{repo}/contents/{path}", {
-//       owner,
-//       repo,
-//       path,
-//       message,
-//       content,
-//     });
-//   } catch (error) {
-//     return {
-//       statusCode: 500,
-//       body: "Error creating upgraded submission.",
-//     };
-//   }
   return {
-    statusCode: 500,
-    body: JSON.stringify(issue),
+    statusCode: 200,
+    body: JSON.stringify(issueId),
   }
 }
 
