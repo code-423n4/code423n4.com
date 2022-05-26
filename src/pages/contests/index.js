@@ -26,7 +26,6 @@ export default function Contests({ data }) {
       console.log(err)
     })
   },  [])
-  console.log(status);
 
   const updateContestStatus = () => {
     updateContestStatusChanges(contestStatusChanges + 1);
@@ -107,6 +106,7 @@ export const query = graphql`
             submissionPath
             contestPath
           }
+          contestid
         }
       }
     }
