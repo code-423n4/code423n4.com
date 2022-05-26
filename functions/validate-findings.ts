@@ -204,10 +204,7 @@ function isAuthorized(jwtToken: string, requestedRepo: string): boolean {
   }
 }
 
-async function createUpgradedIssue(issue) {
-//   const data = JSON.parse(event.body);
-//   const owner = "code-423n4";
-//   const octokit = new Octokit({ auth: token });
+async function createUpgradedIssue(repo, issue) {
 
 //   try {
 //     // create issue
@@ -303,7 +300,7 @@ const handler: Handler = async (event, context) => {
       case "update-from-github":
         return await doUpdateFromGitHub(name);
       case "upgrade-submission":
-        return await createUpgradedIssue(args);
+        return await createUpgradedIssue(name, args);
     }
   } catch (err) {
     console.error(err);
