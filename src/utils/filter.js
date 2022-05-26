@@ -1,7 +1,8 @@
 import { getDates } from "./time";
 import { sortByContestStart } from "./sort";
 
-function contestsByState({ contests }) {
+function contestsByState({ contests, data }) {
+  // console.log("status from filter",status);
   const filteredContests = {
     active: contests.filter(
       (c) => getDates(c.node.start_time, c.node.end_time).contestStatus === "active"
@@ -16,6 +17,7 @@ function contestsByState({ contests }) {
       )
       .sort(sortByContestStart("reverse")),
   };
+
   return filteredContests;
 }
 

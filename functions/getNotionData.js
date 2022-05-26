@@ -4,7 +4,6 @@ const notion = new Client({ auth: notionToken });
 
 exports.handler = async () => {
   try {
-
     const pages = [];
     let cursor = undefined;
     while (true) {
@@ -19,8 +18,6 @@ exports.handler = async () => {
       cursor = next_cursor;
     }
 
-    console.log('in !')
-  
     const tempResponse = pages
       .map((page) => {
         // !! Problem
@@ -42,7 +39,7 @@ exports.handler = async () => {
         }
       })
       .filter((el) => el !== null);
-  
+
     function sortByKey(array, key) {
       return array.sort(function (a, b) {
         var x = a[key];
@@ -51,11 +48,11 @@ exports.handler = async () => {
       });
     }
     // return sortByKey(tempResponse);
-    const finalData= sortByKey(tempResponse)
+    const finalData = sortByKey(tempResponse);
     return {
       statusCode: 201,
       body: JSON.stringify(sortByKey(tempResponse)),
-    }
+    };
   } catch (err) {
     console.log(err);
   }

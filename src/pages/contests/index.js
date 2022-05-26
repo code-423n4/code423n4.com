@@ -10,30 +10,40 @@ export default function Contests({ data }) {
   // @todo: implement global state management instead of props drilling
   const [contestStatusChanges, updateContestStatusChanges] = useState(0);
   const [status, setStatus] = useState([]);
+  const [filteredContests, setFilteredContest] = useState([]);
+  const contests = data.contests.edges;
+
+  const addStatus = (contests, status) => {
+    return contests.map((element) => {
+      const statusObject = status
+        .filter((el) => el.contestId === element.node.contestid)
+        .flat();
+      if (statusObject === []) {
+        console.log(element.node);
+        return;
+      }
+      return { ...element.node, status: statusObject[0]?.status };
+    });
+  };
 
   useEffect(() => {
     fetch("http://localhost:8888/.netlify/functions/getNotionData")
-    .then(res => {
-      if (res.ok) {
-        return res.json();
-      }
-      throw res;
-    })
-    .then(data => {
-      setStatus(data)
-    })
-    .catch(err => {
-      console.log(err)
-    })
-  },  [])
-
-  const updateContestStatus = () => {
-    updateContestStatusChanges(contestStatusChanges + 1);
-  };
-
-  const contests = data.contests.edges;
-
-  const filteredContests = contestsByState({ contests });
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        }
+        throw res;
+      })
+      .then((data) => {
+        setStatus(data);
+        setFilteredContest(addStatus(contests, data));
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    ;
+  }, []);
+  console.log(filteredContests);
 
   return (
     <DefaultLayout
@@ -43,7 +53,7 @@ export default function Contests({ data }) {
       // preview=""
       pageDescription="Current, upcoming, and past audit contests"
     >
-      <div className="wrapper-main">
+      {/* <div className="wrapper-main">
         {filteredContests.active.length > 0 ? (
           <section>
             <h1>Active contests</h1>
@@ -68,7 +78,7 @@ export default function Contests({ data }) {
             <ContestList contests={filteredContests.completed} />
           </section>
         ) : null}
-      </div>
+      </div> */}
     </DefaultLayout>
   );
 }
