@@ -4,7 +4,6 @@ import clsx from "clsx";
 import Select from "react-select";
 
 import * as styles from "./WardenField.module.scss";
-import * as baseStyles from "./Widgets.module.scss";
 
 const WardenOptionLabel = ({ value, image }) => {
   return (

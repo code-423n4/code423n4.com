@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import React from "react";
-import Moralis from "moralis/types";
+import Moralis from "moralis";
 import { toast } from "react-toastify";
 import { useMoralis } from "react-moralis";
 import useUser, { UserLoginError } from "../../hooks/UserContext";
@@ -24,12 +24,12 @@ const Login = () => {
       if (user === undefined) {
         // user clicked "cancel" when prompted to sign message
         // @todo: update messaging
-        toast.error("You must sign the message to login");
+        toast.error("You must sign the message to connect your wallet");
         return;
       }
     } catch (error) {
       console.error(error);
-      await logUserOut();
+      logUserOut();
       toast.error(
         "Something went wrong. Please refresh the page and try again."
       );
@@ -40,14 +40,7 @@ const Login = () => {
       await connectWallet();
     } catch (error) {
       logUserOut();
-      if (error === UserLoginError.Unregistered) {
-        toast.error(
-          "There is no account associated with the address you provided. " +
-            "If you are a new user, please register. " +
-            "If you registered with us previously, you may need to register again " +
-            "to claim your account."
-        );
-      } else if (error === UserLoginError.Pending) {
+      if (error === UserLoginError.Pending) {
         toast.error(
           <span>
             It looks like your account registration is pending. Don't forget to
@@ -59,11 +52,11 @@ const Login = () => {
             registration.
           </span>
         );
-      } else {
-        toast.error(
-          "Something went wrong. Please refresh the page and try again."
-        );
+        return;
       }
+      toast.error(
+        "Something went wrong. Please refresh the page and try again."
+      );
     }
   };
 

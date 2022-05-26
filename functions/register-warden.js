@@ -11,7 +11,7 @@ function isDangerous(s) {
   return s.match(/^[0-9a-zA-Z_\-]+$/) === null;
 }
 
-function getPrData(isUpdate, handle) {
+function getPrData(isUpdate, handle, qualifications) {
   let sentenceVerb = "Register";
 
   if (isUpdate) {
@@ -54,7 +54,7 @@ exports.handler = async (event) => {
       };
     }
 
-    if (!qualifications) {
+    if (!qualifications && !isUpdate) {
       return {
         statusCode: 422,
         body: JSON.stringify({
@@ -142,7 +142,11 @@ exports.handler = async (event) => {
       }
     }
 
-    const { title, body, branchName } = getPrData(isUpdate, handle);
+    const { title, body, branchName } = getPrData(
+      isUpdate,
+      handle,
+      qualifications
+    );
     try {
       const res = await octokit.createPullRequest({
         owner: "code-423n4",

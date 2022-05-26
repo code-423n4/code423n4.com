@@ -8,7 +8,7 @@
   --hot-pink: #ff108b;
   --orange: #ff4000;
 
-  --header-background-purple: #190b3e;
+  --header-background-purple: #1a0c3e;
   --background-purple: #160f29;
   --secondary-background-purple: #291d4d;
   --tertiary-background-purple: #433d55;
@@ -257,7 +257,7 @@ iframe {
 
 .button-div {
   background-color: transparent;
-  border:none;
+  border: none;
 }
 
 @media (max-width: 600px) {
@@ -283,13 +283,12 @@ iframe {
   }
 }
 
-
 @media only screen and (max-width: 740px),
   (min-device-width: 768px) and (max-device-width: 1024px) {
-    h1.page-header {
-      margin: 0;
-      padding: 0;
-      text-align: center;
-      font-size: 22px;
-    }
+  h1.page-header {
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    font-size: 22px;
+  }
 }
