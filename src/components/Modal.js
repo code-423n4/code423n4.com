@@ -1,6 +1,15 @@
 import React from "react";
 
-const Modal = ({ handleClose, show, title, body, onAction }) => {
+const Modal = ({
+  handleClose,
+  show,
+  title,
+  body,
+  primaryButtonAction,
+  primaryButtonText,
+  secondaryButtonAction,
+  secondaryButtonText,
+}) => {
   return (
     <div className={show ? "modal display-block" : "modal display-none"}>
       <div className="modal-main" onClick={handleClose}>
@@ -18,17 +27,26 @@ const Modal = ({ handleClose, show, title, body, onAction }) => {
           <p>{body}</p>
         </div>
         <div className="modal-main-buttons">
-          <button
-            className="button button-modal button-close"
-            onClick={handleClose}
-          >
-            Cancel
-          </button>
+          {!secondaryButtonAction && !secondaryButtonText ? (
+            <button
+              className="button button-modal button-close"
+              onClick={handleClose}
+            >
+              Cancel
+            </button>
+          ) : (
+            <button
+              className="button button-modal button-action"
+              onClick={secondaryButtonAction}
+            >
+              {secondaryButtonText}
+            </button>
+          )}
           <button
             className="button button-modal button-action "
-            onClick={onAction}
+            onClick={primaryButtonAction}
           >
-            ok
+            {primaryButtonText}
           </button>
         </div>
       </div>

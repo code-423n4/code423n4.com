@@ -36,8 +36,6 @@
   cursor: pointer;
 }
 
-.modal-main-title {
-}
 .modal-main-content {
   min-width: 70%;
   margin-bottom: 40px;
@@ -49,17 +47,20 @@
   justify-self: flex-end;
 }
 
+.modal-main-buttons button:first-child {
+  margin-right: 30px;
+}
+
 .button-modal {
   text-transform: uppercase;
   font-weight: 700;
   letter-spacing: 1.5px;
-  width: 150px;
+  min-width: 150px;
 }
 
 .button-close {
   background-color: transparent;
   border: 2px solid white;
-  margin-right: 20px;
 }
 
 .button-action {
