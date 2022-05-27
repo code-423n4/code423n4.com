@@ -71,7 +71,7 @@ exports.handler = async (event) => {
   // ensure we have the data we need
   if (
     !emailAddresses ||
-    !emailAddresses.length > 0 ||
+    emailAddresses.length < 1 ||
     !user ||
     !address ||
     !risk ||
