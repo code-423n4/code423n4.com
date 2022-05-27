@@ -27,26 +27,21 @@ const Modal = ({
           <p>{body}</p>
         </div>
         <div className="modal-main-buttons">
-          {!secondaryButtonAction && !secondaryButtonText ? (
-            <button
-              className="button button-modal button-close"
-              onClick={handleClose}
-            >
-              Cancel
-            </button>
-          ) : (
-            <button
-              className="button button-modal button-action"
-              onClick={secondaryButtonAction}
-            >
-              {secondaryButtonText}
-            </button>
-          )}
+          <button
+            className={`button button-modal ${
+              !secondaryButtonAction && !secondaryButtonText
+                ? "button-close"
+                : "button-action"
+            }`}
+            onClick={secondaryButtonAction || handleClose}
+          >
+            {secondaryButtonText || "Cancel"}
+          </button>
           <button
             className="button button-modal button-action "
             onClick={primaryButtonAction}
           >
-            {primaryButtonText}
+            {primaryButtonText || "Ok"}
           </button>
         </div>
       </div>
