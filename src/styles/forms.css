@@ -1,4 +1,3 @@
-
 .agreement {
   font-size: 0.8em;
   padding: 10px;
@@ -83,7 +82,7 @@ label {
   padding: 10px;
 }
 
-.lines-of-code-input {
+.primary-input-group {
   background: var(--background-purple);
   margin-left: -41px;
   margin-right: -41px;
@@ -91,7 +90,7 @@ label {
   padding: 20px 45px;
 }
 
-.lines-of-code-input p {
+.primary-input-group p {
   font-size: 13px;
 }
 

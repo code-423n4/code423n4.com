@@ -85,7 +85,7 @@ const LinesOfCode = ({ onChange, linesOfCode, isInvalid }) => {
   };
 
   return (
-    <div className="lines-of-code-input">
+    <div className="primary-input-group">
       <h2>Links to affected code</h2>
       <p>
         Provide GitHub links, including line numbers, to all instances of this
