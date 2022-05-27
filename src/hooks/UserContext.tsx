@@ -12,7 +12,6 @@ import { toast } from "react-toastify";
 import { navigate } from "gatsby";
 
 export enum UserLoginError {
-  Unregistered = "unregistered",
   Pending = "registration pending",
   Unknown = "",
 }
@@ -24,6 +23,7 @@ interface UserState {
   gitHubUsername: string;
   emailAddress: string;
   moralisId: string;
+  teams: { username: string; address?: string; img?: string }[];
   isLoggedIn: boolean;
   img?: string | null;
   link?: string | null;
@@ -42,6 +42,7 @@ const DEFAULT_STATE: UserState = {
   gitHubUsername: "",
   emailAddress: "",
   moralisId: "",
+  teams: [],
   isLoggedIn: false,
   img: null,
   link: null,
@@ -52,24 +53,44 @@ const UserContext = createContext<User>({ currentUser: DEFAULT_STATE });
 const UserProvider = ({ children }) => {
   const { isAuthenticated, logout, user } = useMoralis();
   const [currentUser, setCurrentUser] = useState(DEFAULT_STATE);
+  const [
+    accountChangeListenerInitialized,
+    setAccountChangeListenerInitialized,
+  ] = useState(false);
 
   useEffect(() => {
+    if (accountChangeListenerInitialized) {
+      return;
+    }
     const initializeEventListeners = () => {
       Moralis.onAccountChanged(async (account) => {
         const user = await Moralis.User.current();
         if (!user) {
+          toast.error(
+            "Something went wrong; your wallet has been disconnected"
+          );
           logout();
           return;
         }
 
         try {
-          const accounts = user.get("accounts");
+          const accounts = await user.get("accounts");
           if (!accounts) {
+            toast.error(
+              "Something went wrong; your wallet has been disconnected"
+            );
             await logout();
             return;
           }
 
           const username = user.get("c4Username");
+          if (!username) {
+            toast.error(
+              "Only registered users can link accounts; your wallet has been disconnected"
+            );
+            await logout();
+            return;
+          }
           // @todo: implement a custom confirmation modal
           const confirmed = confirm(
             `Are you sure you want to link your account ${account} to ${username}?`
@@ -96,9 +117,9 @@ const UserProvider = ({ children }) => {
           await logout();
         }
       });
-      return Moralis.removeAllListeners();
     };
     initializeEventListeners();
+    setAccountChangeListenerInitialized(true);
   }, []);
 
   const getUserInfo = async (user: Moralis.User): Promise<void> => {
@@ -109,7 +130,9 @@ const UserProvider = ({ children }) => {
       gitHubUsername,
       emailAddress,
     } = user.attributes;
-    const response = await fetch(`/.netlify/functions/users?id=${c4Username}`);
+    const response = await fetch(
+      `/.netlify/functions/get-user?id=${c4Username}`
+    );
     if (!response.ok) {
       const error = await response.json();
       if (error.error === "User not found") {
@@ -146,6 +169,8 @@ const UserProvider = ({ children }) => {
       emailAddress,
       link,
       img,
+      // @todo fetch teams
+      teams: [],
       isLoggedIn: true,
     });
   };
@@ -154,6 +179,7 @@ const UserProvider = ({ children }) => {
     const user = await Moralis.User.current();
     if (!user) {
       logUserOut();
+      return;
     }
 
     const username = await user.get("c4Username");
@@ -162,13 +188,12 @@ const UserProvider = ({ children }) => {
     );
     if (handlesPendingConfirmation) {
       navigate("/confirm-account");
-      return;
     }
     if (!username) {
       // check for existing user who has submitted with that address/register them
       const associatedHandles = await Moralis.Cloud.run("findUser");
-      console.log("ASSOCIATED USERS", associatedHandles);
       if (!associatedHandles || associatedHandles.length < 1) {
+        logUserOut();
         navigate("/register");
         return;
       }

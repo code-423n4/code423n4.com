@@ -4,6 +4,7 @@ const formData = require("form-data");
 const Mailgun = require("mailgun.js");
 const { Moralis } = require("moralis/node");
 const { Octokit } = require("@octokit/core");
+const fetch = require("node-fetch");
 
 const {
   token,
@@ -46,9 +47,10 @@ exports.handler = async (event) => {
 
   const data = JSON.parse(event.body);
   const {
-    email,
+    user,
+    emailAddresses,
     address,
-    handle,
+    attributedTo,
     risk,
     title,
     body,
@@ -68,8 +70,9 @@ exports.handler = async (event) => {
 
   // ensure we have the data we need
   if (
-    !email ||
-    !handle ||
+    !emailAddresses ||
+    emailAddresses.length < 1 ||
+    !user ||
     !address ||
     !risk ||
     !title ||
@@ -77,6 +80,7 @@ exports.handler = async (event) => {
     !labels ||
     !contest ||
     !sponsor ||
+    !attributedTo ||
     !repo
   ) {
     return {
@@ -86,7 +90,6 @@ exports.handler = async (event) => {
     };
   }
 
-  // @todo: add temporary exception for existing wardens who have yet to connect their wallets
   const authorization = event.headers["x-authorization"];
   if (!authorization) {
     return {
@@ -99,14 +102,30 @@ exports.handler = async (event) => {
     const sessionToken = authorization.split("Bearer ")[1];
     const confirmed = await Moralis.Cloud.run("confirmUser", {
       sessionToken,
-      address,
-      username: handle,
+      username: user,
     });
     if (!confirmed) {
       return {
         statusCode: 401,
         body: "Unauthorized",
       };
+    }
+    if (attributedTo !== user) {
+      const url = `${event.headers.origin}/.netlify/functions/get-user?id=${attributedTo}`;
+      const response = await fetch(url);
+      if (!response.ok) {
+        return {
+          statusCode: 401,
+          body: "Unauthorized",
+        };
+      }
+      const team = await response.json();
+      if (!team || !team.members || !team.members.includes(user)) {
+        return {
+          statusCode: 401,
+          body: "Unauthorized",
+        };
+      }
     }
   } catch (err) {
     return {
@@ -123,7 +142,7 @@ exports.handler = async (event) => {
     };
   }
 
-  if (isDangerousHandle(handle)) {
+  if (isDangerousHandle(user) || isDangerousHandle(attributedTo)) {
     return {
       statusCode: 400,
       body:
@@ -148,7 +167,7 @@ exports.handler = async (event) => {
     };
   }
 
-  const recipients = `${email}, submissions@code423n4.com`;
+  const recipients = `${emailAddresses.join(", ")}, submissions@code423n4.com`;
   const text = dedent`
   C4 finding submitted: (risk = ${labels[1]})
   Wallet address: ${address}
@@ -177,12 +196,12 @@ exports.handler = async (event) => {
 
     const issueId = issueResult.data.number;
     const issueUrl = issueResult.data.html_url;
-    const message = `${handle} issue #${issueId}`;
-    const path = `data/${handle}-${issueId}.json`;
+    const message = `${attributedTo} issue #${issueId}`;
+    const path = `data/${attributedTo}-${issueId}.json`;
 
     const fileData = {
       contest,
-      handle,
+      handle: attributedTo,
       address,
       risk,
       title,
@@ -203,7 +222,7 @@ exports.handler = async (event) => {
     });
 
     // Special email used for testing
-    if (email === "@@@") {
+    if (emailAddresses[0] === "@@@") {
       return {
         statusCode: 200,
         body: "Issue posted successfully and confirmation email sent.",
