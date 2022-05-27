@@ -5,7 +5,7 @@ import * as styles from "./Input.module.scss";
 
 // @todo: replace TextField widgets with this component
 
-export interface InputProps {
+interface InputProps {
   key?: string;
   name: string;
   label?: string | ReactNode;
@@ -16,7 +16,7 @@ export interface InputProps {
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleRemoveInputField?: (name: string) => void;
   // returns an array of error messages
-  validator: (value: string | number) => (string | ReactNode)[];
+  validator?: (value: string | number) => (string | ReactNode)[];
 }
 
 export function Input({
@@ -34,13 +34,22 @@ export function Input({
   const [validationErrors, setValidationErrors] = useState([]);
 
   const validate = (): void => {
-    const errorMessages = validator(value);
+    let errorMessages = [];
+    if (validator) {
+      const validationErrors = validator(value);
+      if (validationErrors.length > 0) {
+        errorMessages = errorMessages.concat(validationErrors);
+      }
+    }
     if (required && (value === "" || value === undefined)) {
       errorMessages.push("This field is required");
     }
-    if (errorMessages.length) {
+    if (errorMessages.length > 0) {
       setIsInvalid(true);
       setValidationErrors(errorMessages);
+    } else {
+      setIsInvalid(false);
+      setValidationErrors([]);
     }
   };
 
