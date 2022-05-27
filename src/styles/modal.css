@@ -51,22 +51,6 @@
   margin-right: 30px;
 }
 
-.button-modal {
-  text-transform: uppercase;
-  font-weight: 700;
-  letter-spacing: 1.5px;
-  min-width: 150px;
-}
-
-.button-close {
-  background-color: transparent;
-  border: 2px solid white;
-}
-
-.button-action {
-  background-color: var(--main-purple);
-}
-
 .display-block {
   display: block;
 }

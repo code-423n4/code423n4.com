@@ -28,17 +28,17 @@ const Modal = ({
         </div>
         <div className="modal-main-buttons">
           <button
-            className={`button button-modal ${
+            className={`button ${
               !secondaryButtonAction && !secondaryButtonText
-                ? "button-close"
-                : "button-action"
+                ? "cta-button secondary"
+                : "cta-button primary"
             }`}
             onClick={secondaryButtonAction || handleClose}
           >
             {secondaryButtonText || "Cancel"}
           </button>
           <button
-            className="button button-modal button-action "
+            className="button cta-button primary"
             onClick={primaryButtonAction}
           >
             {primaryButtonText || "Ok"}
