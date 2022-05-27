@@ -82,12 +82,20 @@ label {
   padding: 10px;
 }
 
+.lines-of-code {
+  margin: 0 -45px;
+  padding: 30px 45px;
+  border-top: 2px solid var(--border-lightest-background);
+  border-bottom: 2px solid var(--border-lightest-background);
+}
+
 .primary-input-group {
-  background: var(--background-purple);
-  margin-left: -41px;
-  margin-right: -41px;
-  margin: 0 -41px 20px;
-  padding: 20px 45px;
+  background: var(--header-background-purple);
+  margin: 20px -40px;
+  padding: 30px 45px;
+  border: none;
+  border-top: 2px solid var(--border-lightest-background);
+  border-bottom: 2px solid var(--border-lightest-background);
 }
 
 .primary-input-group p {

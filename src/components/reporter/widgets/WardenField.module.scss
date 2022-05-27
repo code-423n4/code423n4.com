@@ -26,6 +26,8 @@
 
 .ReactSelect {
   :global {
+    margin: 10px 0;
+
     .react-select__control {
       background-color: var(--lightest-background-purple);
       padding: 0;

@@ -30,6 +30,7 @@ import Widget from "./widgets/Widget";
 // styles
 import * as styles from "../form/Form.module.scss";
 import * as widgetStyles from "../reporter/widgets/Widgets.module.scss";
+import { DynamicInputGroup } from "../DynamicInputGroup";
 
 const mdTemplate =
   "## Impact\nDetailed description of the impact of this finding.\n\n## Proof of Concept\nProvide direct links to all referenced code in GitHub. Add screenshots, logs, or any other relevant proof that illustrates the concept.\n\n## Tools Used\n\n## Recommended Mitigation Steps";
@@ -65,7 +66,8 @@ const SubmitFindings = ({ wardensList, sponsor, contest, repo }) => {
   const [errorMessage, setErrorMessage] = useState("An error occurred");
   const [isExpanded, setIsExpanded] = useState(false);
   const [state, setState] = useState(initialState);
-  const [emailAddresses, setEmailAddresses] = useState([]);
+  // @todo: filter empty email addresses
+  const [additionalEmailAddresses, setAdditionalEmailAddresses] = useState([]);
   const [polygonAddress, setPolygonAddress] = useState("");
   const [newTeamAddress, setNewTeamAddress] = useState("");
   const [attributedTo, setAttributedTo] = useState("");
@@ -81,7 +83,6 @@ const SubmitFindings = ({ wardensList, sponsor, contest, repo }) => {
   useEffect(() => {
     (() => {
       if (currentUser.isLoggedIn) {
-        setEmailAddresses([currentUser.emailAddress]);
         setPolygonAddress(currentUser.address);
         setAttributedTo(currentUser.username);
       }
@@ -259,13 +260,16 @@ const SubmitFindings = ({ wardensList, sponsor, contest, repo }) => {
       setHasValidationErrors(hasErrors);
       return;
     }
+    const emailAddressList = additionalEmailAddresses
+      .filter((email) => !!email)
+      .push(currentUser.emailAddress);
 
     const submitData = {
       user: currentUser.username,
       contest,
       sponsor,
       repo: repo.split("/").pop(),
-      emailAddresses,
+      emailAddresses: emailAddressList,
       attributedTo,
       address: polygonAddress,
       risk: formatedRisk,
@@ -307,7 +311,7 @@ const SubmitFindings = ({ wardensList, sponsor, contest, repo }) => {
                 className={clsx(widgetStyles.Fields, widgetStyles.RadioGroup)}
               >
                 <h3>Submitting as</h3>
-                <label>WARDEN</label>
+                <label htmlFor="currentUser">WARDEN</label>
                 <label className={widgetStyles.RadioLabel}>
                   <input
                     className={widgetStyles.Radio}
@@ -323,7 +327,7 @@ const SubmitFindings = ({ wardensList, sponsor, contest, repo }) => {
                     img={currentUser.img}
                   />
                 </label>
-                <label>TEAM MEMBER</label>
+                <label htmlFor="team">TEAM MEMBER</label>
                 {currentUser.teams.map((team, i) => (
                   <label
                     className={widgetStyles.RadioLabel}
@@ -371,8 +375,16 @@ const SubmitFindings = ({ wardensList, sponsor, contest, repo }) => {
                 img={currentUser.img}
               />
             )}
+            <DynamicInputGroup
+              fields={additionalEmailAddresses}
+              onChange={(emails) => setAdditionalEmailAddresses(emails)}
+              fieldName="email address"
+            >
+              <label htmlFor="email">Email</label>
+              <p>{currentUser.emailAddress}</p>
+            </DynamicInputGroup>
           </fieldset>
-          <fieldset className={widgetStyles.Fields}>
+          <fieldset className="primary-input-group">
             {fieldList.map((field, index) => {
               let isInvalid = false;
               if (field.name === "linesOfCode") {
