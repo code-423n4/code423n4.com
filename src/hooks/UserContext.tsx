@@ -131,7 +131,7 @@ const UserProvider = ({ children }) => {
       emailAddress,
     } = user.attributes;
     const response = await fetch(
-      `/.netlify/functions/getUser?id=${c4Username}`
+      `/.netlify/functions/get-user?id=${c4Username}`
     );
     if (!response.ok) {
       const error = await response.json();

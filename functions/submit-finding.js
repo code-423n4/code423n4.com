@@ -111,7 +111,7 @@ exports.handler = async (event) => {
       };
     }
     if (attributedTo !== user) {
-      const url = `${event.headers.origin}/.netlify/functions/getUser?id=${attributedTo}`;
+      const url = `${event.headers.origin}/.netlify/functions/get-user?id=${attributedTo}`;
       const response = await fetch(url);
       if (!response.ok) {
         return {
