@@ -385,6 +385,7 @@ const SubmitFindings = ({ wardensList, sponsor, contest, repo }) => {
             </DynamicInputGroup>
           </fieldset>
           <fieldset className="primary-input-group">
+            <h2>Finding</h2>
             {fieldList.map((field, index) => {
               let isInvalid = false;
               if (field.name === "linesOfCode") {
