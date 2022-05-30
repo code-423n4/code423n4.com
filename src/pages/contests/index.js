@@ -5,23 +5,10 @@ import ContestList from "../../components/ContestList";
 import DefaultLayout from "../../templates/DefaultLayout";
 
 export default function Contests({ data }) {
-  // @todo: implement global state management instead of props drilling
-  const [contestStatusChanges, updateContestStatusChanges] = useState(0);
-  const [status, setStatus] = useState([]);
   const [filteredContests, setFilteredContest] = useState([]);
   const contests = data.contests.edges;
 
   const sortContests = (array, status) => {
-    const rawArray = array.map((element) => {
-      const statusObject = status
-        .filter((el) => el.contestId === element.node.contestid)
-        .flat();
-      if (statusObject === []) {
-        return;
-      }
-      return { ...element.node, status: statusObject[0]?.status };
-    });
-
     const final = {
       upcomingContests: [],
       activeContests: [],
@@ -33,40 +20,50 @@ export default function Contests({ data }) {
       other: [],
     };
 
-    rawArray.forEach((element) => {
-      switch (element.status) {
-        case "Pre-contest":
-          final.upcomingContests.push(element);
-          break;
-        case "Preview wweek":
-          final.upcomingContests.push(element);
-          break;
-        case "Active Contest":
-          final.activeContests.push(element);
-          break;
-        case "Sponsor Review":
-          final.sponsorReview.push(element);
-          break;
-        case "Needs Judging":
-          final.judging.push(element);
-          break;
-        case "Judging Complete":
-          final.judging.push(element);
-          break;
-        case "Awarding":
-          final.awarding.push(element);
-          break;
-        case "Reporting":
-          final.reporting.push(element);
-          break;
-        case "Completed":
-          final.completed.push(element);
-          break;
-        default:
-          final.other.push(element);
-          break;
-      }
-    });
+    array
+      .map((element) => {
+        const statusObject = status
+          .filter((el) => el.contestId === element.node.contestid)
+          .flat();
+        if (statusObject === []) {
+          return;
+        }
+        return { ...element.node, status: statusObject[0]?.status };
+      })
+      .forEach((element) => {
+        switch (element.status) {
+          case "Pre-Contest":
+            final.upcomingContests.push(element);
+            break;
+          case "Preview week":
+            final.upcomingContests.push(element);
+            break;
+          case "Active Contest":
+            final.activeContests.push(element);
+            break;
+          case "Sponsor Review":
+            final.sponsorReview.push(element);
+            break;
+          case "Needs Judging":
+            final.judging.push(element);
+            break;
+          case "Judging Complete":
+            final.judging.push(element);
+            break;
+          case "Awarding":
+            final.awarding.push(element);
+            break;
+          case "Reporting":
+            final.reporting.push(element);
+            break;
+          case "Completed":
+            final.completed.push(element);
+            break;
+          default:
+            final.other.push(element);
+            break;
+        }
+      });
     return final;
   };
 
@@ -79,19 +76,16 @@ export default function Contests({ data }) {
         throw res;
       })
       .then((data) => {
-        setStatus(data);
         setFilteredContest(sortContests(contests, data));
       })
-      // .then(_ => sortContests(filteredContests))
       .catch((err) => {
         console.log(err);
       });
   }, []);
-  console.log(filteredContests);
 
   return (
     <DefaultLayout
-      key={"contests" + contestStatusChanges}
+      // key={"contests" + contestStatusChanges}
       pageTitle="Contests"
       bodyClass="contests-page"
       // preview=""
