@@ -1,8 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { graphql } from "gatsby";
 
-import { contestsByState } from "../../utils/filter";
-
 import ContestList from "../../components/ContestList";
 import DefaultLayout from "../../templates/DefaultLayout";
 
@@ -13,17 +11,63 @@ export default function Contests({ data }) {
   const [filteredContests, setFilteredContest] = useState([]);
   const contests = data.contests.edges;
 
-  const addStatus = (contests, status) => {
-    return contests.map((element) => {
+  const sortContests = (array, status) => {
+    const rawArray = array.map((element) => {
       const statusObject = status
         .filter((el) => el.contestId === element.node.contestid)
         .flat();
       if (statusObject === []) {
-        console.log(element.node);
         return;
       }
       return { ...element.node, status: statusObject[0]?.status };
     });
+
+    const final = {
+      upcomingContests: [],
+      activeContests: [],
+      sponsorReview: [],
+      judging: [],
+      awarding: [],
+      reporting: [],
+      completed: [],
+      other: [],
+    };
+
+    rawArray.forEach((element) => {
+      switch (element.status) {
+        case "Pre-contest":
+          final.upcomingContests.push(element);
+          break;
+        case "Preview wweek":
+          final.upcomingContests.push(element);
+          break;
+        case "Active Contest":
+          final.activeContests.push(element);
+          break;
+        case "Sponsor Review":
+          final.sponsorReview.push(element);
+          break;
+        case "Needs Judging":
+          final.judging.push(element);
+          break;
+        case "Judging Complete":
+          final.judging.push(element);
+          break;
+        case "Awarding":
+          final.awarding.push(element);
+          break;
+        case "Reporting":
+          final.reporting.push(element);
+          break;
+        case "Completed":
+          final.completed.push(element);
+          break;
+        default:
+          final.other.push(element);
+          break;
+      }
+    });
+    return final;
   };
 
   useEffect(() => {
@@ -36,12 +80,12 @@ export default function Contests({ data }) {
       })
       .then((data) => {
         setStatus(data);
-        setFilteredContest(addStatus(contests, data));
+        setFilteredContest(sortContests(contests, data));
       })
+      // .then(_ => sortContests(filteredContests))
       .catch((err) => {
         console.log(err);
       });
-    ;
   }, []);
   console.log(filteredContests);
 
