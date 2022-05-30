@@ -4,6 +4,6 @@ public
 .cache
 .nova
 .env
-yarn-error.log
-# Local Netlify folder
 .netlify
+.env.development
+yarn-error.log
