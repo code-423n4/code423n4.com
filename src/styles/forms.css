@@ -211,3 +211,9 @@ label {
 .error-message a {
   text-decoration: underline;
 }
+
+.finding-error-container {
+  margin: 0 auto;
+  text-align: center;
+  width: 50vw;
+}

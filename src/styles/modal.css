@@ -11,8 +11,8 @@
 .modal-main {
   position: fixed;
   background: #2d1769;
-  min-width: 40vw;
-  max-width: 70vw;
+  min-width: 50vw;
+  max-width: 90vw;
   height: max-content;
   top: 50%;
   left: 50%;

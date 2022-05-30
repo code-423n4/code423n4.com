@@ -24,7 +24,7 @@ const Modal = ({
           <h1>{title}</h1>
         </div>
         <div className="modal-main-content">
-          <p>{body}</p>
+          {body}
         </div>
         <div className="modal-main-buttons">
           <button

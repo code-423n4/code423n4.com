@@ -26,6 +26,7 @@ import Agreement from "../content/Agreement";
 import FormField from "./widgets/FormField";
 import WardenDetails from "../WardenDetails";
 import Widget from "./widgets/Widget";
+import Modal from "../Modal";
 
 // styles
 import * as styles from "../form/Form.module.scss";
@@ -54,11 +55,21 @@ const FormStatus = {
   Error: "error",
 };
 
+const ModalBody = (
+  <p>
+    You need to be a registered warden currently connected via wallet to see
+    this page. Note to existing wardens: As of [date] wardens are required to
+    authenticate with a wallet to submit findings. You can read more about this
+    change <a href="/"> here </a>.
+  </p>
+);
+
 const SubmitFindings = ({ wardensList, sponsor, contest, repo }) => {
   const wardens = wardensList.edges.map(({ node }) => {
     return { value: node.handle, image: node.image };
   });
   const { currentUser } = useUser();
+
   // Component State
   const [status, setStatus] = useState(FormStatus.Unsubmitted);
   const [hasValidationErrors, setHasValidationErrors] = useState(false);
@@ -69,6 +80,9 @@ const SubmitFindings = ({ wardensList, sponsor, contest, repo }) => {
   const [polygonAddress, setPolygonAddress] = useState("");
   const [newTeamAddress, setNewTeamAddress] = useState("");
   const [attributedTo, setAttributedTo] = useState("");
+  const [isOpen, setIsOpen] = useState(
+    currentUser.username === "" ? true : false
+  );
   const [fieldList, setFieldList] = useState([
     wardenField(wardens),
     emailField,
@@ -438,7 +452,19 @@ const SubmitFindings = ({ wardensList, sponsor, contest, repo }) => {
       )}
     </div>
   ) : (
-    <p>You must connect your wallet to submit findings</p>
+    <div className="error-message finding-error-container">
+      <Modal
+        title={"Please log in"}
+        handleClose={() => setIsOpen(!isOpen)}
+        show={isOpen}
+        body={ModalBody}
+        primaryButtonAction={() => console.log("metamask")}
+        primaryButtonText={"Connect with Metamask"}
+        secondaryButtonAction={() => console.log("wallet connect")}
+        secondaryButtonText={"Connect with WalletConnect"}
+      />
+      <p>You must connect your wallet to submit findings</p>
+    </div>
   );
 };
 
