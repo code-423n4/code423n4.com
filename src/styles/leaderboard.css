@@ -191,6 +191,12 @@
   max-width: max-content;
 }
 
+.dropdown option {
+  background-color: var(--background-purple);
+  border: none;
+  text-transform: uppercase;
+}
+
 .dropdown-container {
   margin:0 auto;
   text-align: center;
