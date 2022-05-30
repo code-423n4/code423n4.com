@@ -12,8 +12,8 @@ const Modal = ({
 }) => {
   return (
     <div className={show ? "modal display-block" : "modal display-none"}>
-      <div className="modal-main" onClick={handleClose}>
-        <button className="button-div modal-top">
+      <div className="modal-main">
+        <button className="button-div modal-top" onClick={handleClose}>
           <img
             src="/images/x-icon.svg"
             alt="close modal icon"
@@ -23,27 +23,29 @@ const Modal = ({
         <div className="modal-main-title">
           <h1>{title}</h1>
         </div>
-        <div className="modal-main-content">
-          {body}
-        </div>
-        <div className="modal-main-buttons">
-          <button
-            className={`button ${
-              !secondaryButtonAction && !secondaryButtonText
-                ? "cta-button secondary"
-                : "cta-button primary"
-            }`}
-            onClick={secondaryButtonAction || handleClose}
-          >
-            {secondaryButtonText || "Cancel"}
-          </button>
-          <button
-            className="button cta-button primary"
-            onClick={primaryButtonAction}
-          >
-            {primaryButtonText || "Ok"}
-          </button>
-        </div>
+        <div className="modal-main-content">{body}</div>
+        {primaryButtonAction !== undefined ? (
+          <div className="modal-main-buttons">
+            <button
+              className={`button ${
+                !secondaryButtonAction && !secondaryButtonText
+                  ? "cta-button secondary"
+                  : "cta-button primary"
+              }`}
+              onClick={secondaryButtonAction || handleClose}
+            >
+              {secondaryButtonText || "Cancel"}
+            </button>
+            <button
+              className="button cta-button primary"
+              onClick={primaryButtonAction}
+            >
+              {primaryButtonText || "Ok"}
+            </button>
+          </div>
+        ) : (
+          ""
+        )}
       </div>
     </div>
   );

@@ -25,8 +25,9 @@ import useUser from "../../hooks/UserContext";
 import Agreement from "../content/Agreement";
 import FormField from "./widgets/FormField";
 import WardenDetails from "../WardenDetails";
-import Widget from "./widgets/Widget";
+import Login from "../Login/Login";
 import Modal from "../Modal";
+import Widget from "./widgets/Widget";
 
 // styles
 import * as styles from "../form/Form.module.scss";
@@ -56,12 +57,17 @@ const FormStatus = {
 };
 
 const ModalBody = (
-  <p>
-    You need to be a registered warden currently connected via wallet to see
-    this page. Note to existing wardens: As of [date] wardens are required to
-    authenticate with a wallet to submit findings. You can read more about this
-    change <a href="/"> here </a>.
-  </p>
+  <>
+    <p>
+      You need to be a registered warden currently connected via wallet to see
+      this page. Note to existing wardens: As of [date] wardens are required to
+      authenticate with a wallet to submit findings. You can read more about this
+      change <a href="/"> here </a>.
+    </p>
+    <br />
+    <br />
+    <Login />
+  </>
 );
 
 const SubmitFindings = ({ wardensList, sponsor, contest, repo }) => {
@@ -455,13 +461,10 @@ const SubmitFindings = ({ wardensList, sponsor, contest, repo }) => {
     <div className="error-message finding-error-container">
       <Modal
         title={"Please log in"}
-        handleClose={() => setIsOpen(!isOpen)}
+        handleClose={() => setIsOpen(false)}
         show={isOpen}
         body={ModalBody}
-        primaryButtonAction={() => console.log("metamask")}
-        primaryButtonText={"Connect with Metamask"}
-        secondaryButtonAction={() => console.log("wallet connect")}
-        secondaryButtonText={"Connect with WalletConnect"}
+
       />
       <p>You must connect your wallet to submit findings</p>
     </div>
