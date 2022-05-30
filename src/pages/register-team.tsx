@@ -5,7 +5,8 @@ import React, { useState, ReactNode } from "react";
 import DefaultLayout from "../templates/DefaultLayout";
 import TeamRegistrationForm from "../components/TeamRegistrationForm";
 import useUser from "../hooks/UserContext";
-
+import Login from "../components/Login/Login";
+import Modal from "../components/Modal";
 import * as styles from "../components/form/Form.module.scss";
 
 enum FormStatus {
@@ -15,11 +16,26 @@ enum FormStatus {
   Error = "error",
 }
 
+const ModalBody = (
+  <>
+    <p>
+      You need to be a registered warden, currently connected via wallet to
+      register a team.
+    </p>
+    <br />
+    <br />
+    <Login />
+  </>
+);
+
 export default function TeamRegistration({ data }) {
   const handles = new Set(data.handles.edges.map((h) => h.node.handle));
   const [status, setStatus] = useState<FormStatus>(FormStatus.Unsubmitted);
   const [errorMessage, setErrorMessage] = useState<string | ReactNode>("");
   const { currentUser } = useUser();
+  const [isOpen, setIsOpen] = useState(
+    currentUser.username === "" ? true : false
+  );
 
   let wardens: { value: string; image: string }[] = [];
   data.handles.edges.forEach(({ node }) => {
@@ -105,10 +121,19 @@ export default function TeamRegistration({ data }) {
           </div>
         </div>
       ) : (
-        // @todo: style this
-        <p className="centered-text">
-          You must be logged in to register a team
-        </p>
+        <div className="error-message finding-error-container">
+          <Modal
+            title={"Please log in"}
+            handleClose={() => setIsOpen(false)}
+            show={isOpen}
+            body={ModalBody}
+            primaryButtonAction={undefined}
+            primaryButtonText={undefined}
+            secondaryButtonAction={undefined}
+            secondaryButtonText={undefined}
+          />
+          <p>You must be logged in to register a team</p>
+        </div>
       )}
     </DefaultLayout>
   );

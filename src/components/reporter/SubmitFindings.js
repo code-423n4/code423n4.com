@@ -464,7 +464,6 @@ const SubmitFindings = ({ wardensList, sponsor, contest, repo }) => {
         handleClose={() => setIsOpen(false)}
         show={isOpen}
         body={ModalBody}
-
       />
       <p>You must connect your wallet to submit findings</p>
     </div>
