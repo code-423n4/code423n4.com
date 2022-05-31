@@ -80,7 +80,9 @@ exports.handler = async (event) => {
   if (event.httpMethod !== "POST") {
     return {
       statusCode: 405,
-      body: "Method not allowed",
+      body: JSON.stringify({
+        error: "Method not allowed",
+      }),
       headers: { Allow: "POST" },
     };
   }
@@ -125,8 +127,10 @@ exports.handler = async (event) => {
   ) {
     return {
       statusCode: 422,
-      body:
-        "Email, handle, address, risk, title, body, and labels are required.",
+      body: JSON.stringify({
+        error:
+          "Email, handle, address, risk, title, body, and labels are required.",
+      }),
     };
   }
 
@@ -134,7 +138,9 @@ exports.handler = async (event) => {
   if (!authorization) {
     return {
       statusCode: 401,
-      body: "Unauthorized",
+      body: JSON.stringify({
+        error: "Unauthorized",
+      }),
     };
   }
 
@@ -149,7 +155,9 @@ exports.handler = async (event) => {
     if (!confirmed) {
       return {
         statusCode: 401,
-        body: "Authorization failed",
+        body: JSON.stringify({
+          error: "Authorization failed",
+        }),
       };
     }
     if (isTeamSubmission) {
@@ -158,14 +166,18 @@ exports.handler = async (event) => {
       if (!response.ok) {
         return {
           statusCode: 401,
-          body: "You must be registered to submit findings",
+          body: JSON.stringify({
+            error: "You must be registered to submit findings",
+          }),
         };
       }
       const team = await response.json();
       if (!team || !team.members || !team.members.includes(user)) {
         return {
           statusCode: 401,
-          body: "You cannot submit findings for a team you are not on",
+          body: JSON.stringify({
+            error: "You cannot submit findings for a team you are not on",
+          }),
         };
       }
       // create a PR to update team JSON file with team address
@@ -181,23 +193,29 @@ exports.handler = async (event) => {
   } catch (err) {
     return {
       statusCode: err.status || 500,
-      body: err.message || "Internal server error",
+      body: JSON.stringify({
+        error: err.message || "Internal server error",
+      }),
     };
   }
 
   if (isDangerousRepo(repo)) {
     return {
       statusCode: 400,
-      body:
-        "Repository can only contain alphanumeric characters [a-zA-Z0-9] and hyphens (-).",
+      body: JSON.stringify({
+        error:
+          "Repository can only contain alphanumeric characters [a-zA-Z0-9] and hyphens (-).",
+      }),
     };
   }
 
   if (isDangerousHandle(user) || isDangerousHandle(attributedTo)) {
     return {
       statusCode: 400,
-      body:
-        "Handle can only contain alphanumeric characters [a-zA-Z0-9], underscores (_), and hyphens (-).",
+      body: JSON.stringify({
+        error:
+          "Handle can only contain alphanumeric characters [a-zA-Z0-9], underscores (_), and hyphens (-).",
+      }),
     };
   }
 
@@ -207,14 +225,18 @@ exports.handler = async (event) => {
     if (Date.now() - 5000 > contestEnd) {
       return {
         statusCode: 400,
-        body: "This contest has ended.",
+        body: JSON.stringify({
+          error: "This contest has ended.",
+        }),
       };
     }
   } catch (error) {
     console.error(error);
     return {
       statusCode: 422,
-      body: "Error fetching contest data",
+      body: JSON.stringify({
+        error: "Error fetching contest data",
+      }),
     };
   }
 
@@ -297,7 +319,9 @@ exports.handler = async (event) => {
   } catch (error) {
     return {
       statusCode: 500,
-      body: "Something went wrong with your submission. Please try again.",
+      body: JSON.stringify({
+        error: "Something went wrong with your submission. Please try again.",
+      }),
     };
   }
 };

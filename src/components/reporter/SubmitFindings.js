@@ -235,10 +235,9 @@ const SubmitFindings = ({ wardensList, sponsor, contest, repo }) => {
           }
         } else {
           setStatus(FormStatus.Error);
-          console.error(response);
-          const message = await response.json();
-          if (message) {
-            setErrorMessage(message);
+          const { error } = await response.json();
+          if (error) {
+            setErrorMessage(error);
           }
         }
       } catch (error) {
