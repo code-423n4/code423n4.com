@@ -80,7 +80,6 @@ const UserProvider = ({ children }) => {
     }
     const initializeEventListeners = () => {
       Moralis.onAccountChanged(async (account) => {
-        console.log("account changed");
         const user = await Moralis.User.current();
         if (!user) {
           toast.error(

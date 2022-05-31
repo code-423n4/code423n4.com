@@ -288,7 +288,6 @@ const SubmitFindings = ({ wardensList, sponsor, contest, repo }) => {
     }
 
     if (hasErrors) {
-      console.log("validation errors");
       setHasValidationErrors(hasErrors);
       return;
     }
