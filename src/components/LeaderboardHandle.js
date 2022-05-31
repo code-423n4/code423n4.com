@@ -20,12 +20,12 @@ const LeaderboardHandle = ({ handle, image, link, members }) => {
   return (
     <div className="wrapper-competitor" key={handle}>
       {members ? (
-        <button
-          className="wrapper-members button-div"
-          onClick={() => setIsExpanded(!isExpanded)}
-        >
+        <div className="wrapper-members">
           <div className="wrapper-team-top">
-            <div className="team-toggle">
+            <button
+              className="team-toggle button-div"
+              onClick={() => setIsExpanded(!isExpanded)}
+            >
               <img
                 src={
                   isExpanded
@@ -43,17 +43,30 @@ const LeaderboardHandle = ({ handle, image, link, members }) => {
                     : "triangle triangle-right"
                 }
               />
-            </div>
-            <div className="team-wrapper">
-              <span
-                className={
-                  mobileView === false ? "team-avatar" : "team-avatar-small"
-                }
-              >
-                {handle.substring(0, 1)}
-              </span>
-              <span className="team-name">{handle}</span>
-            </div>
+            </button>
+            {image ? (
+              <a href={link ? link : "/"}>
+                <Avatar
+                  src={image && image.childImageSharp.resize.src}
+                  name={handle}
+                  size={mobileView === false ? "27px" : "16px"}
+                  round={mobileView === false ? "27px" : "16px"}
+                />
+
+                <span>{mobileView === true ? trimHandle(handle) : handle}</span>
+              </a>
+            ) : (
+              <div className="team-wrapper">
+                <span
+                  className={
+                    mobileView === false ? "team-avatar" : "team-avatar-small"
+                  }
+                >
+                  {handle.substring(0, 1)}
+                </span>
+                <span className="team-name">{handle}</span>
+              </div>
+            )}
           </div>
           {isExpanded
             ? members.map((member) => (
@@ -72,7 +85,7 @@ const LeaderboardHandle = ({ handle, image, link, members }) => {
                 </div>
               ))
             : ""}
-        </button>
+        </div>
       ) : (
         <a href={link}>
           <Avatar
