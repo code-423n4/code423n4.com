@@ -229,11 +229,13 @@ const SubmitFindings = ({ wardensList, sponsor, contest, repo }) => {
         });
         if (response.ok) {
           setStatus(FormStatus.Submitted);
+          setShowConfirmationModal(false);
           if (typeof window !== `undefined`) {
             window.localStorage.removeItem(contest);
           }
         } else {
           setStatus(FormStatus.Error);
+          console.error(response);
           const message = await response.json();
           if (message) {
             setErrorMessage(message);
@@ -252,6 +254,7 @@ const SubmitFindings = ({ wardensList, sponsor, contest, repo }) => {
     polygonAddress,
     sponsor,
     repo,
+    attributedTo,
   ]);
 
   const handleSubmit = async (e) => {
@@ -485,7 +488,11 @@ const SubmitFindings = ({ wardensList, sponsor, contest, repo }) => {
           </>
         }
         primaryButtonAction={submitFinding}
-        primaryButtonText="Confirm and Submit"
+        primaryButtonText={
+          status === FormStatus.Submitting
+            ? "Submitting..."
+            : "Confirm and Submit"
+        }
         secondaryButtonAction={() => setShowConfirmationModal(false)}
         secondaryButtonText="Close and Edit"
       />

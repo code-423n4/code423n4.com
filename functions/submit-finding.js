@@ -1,3 +1,4 @@
+const { createPullRequest } = require("octokit-plugin-create-pull-request");
 const csv = require("csvtojson");
 const dedent = require("dedent");
 const formData = require("form-data");
@@ -15,7 +16,8 @@ const {
   moralisMasterKey,
 } = require("./_config");
 
-const octokit = new Octokit({ auth: token });
+const OctokitClient = Octokit.plugin(createPullRequest);
+const octokit = new OctokitClient({ auth: token });
 
 const mailgun = new Mailgun(formData);
 const mg = mailgun.client({ username: "api", key: apiKey });
@@ -33,6 +35,44 @@ async function getContestEnd(contestId) {
 
   const contest = contests.find((c) => c.contestid == contestId);
   return new Date(contest.end_time).getTime();
+}
+
+async function updateTeamData(teamName, newPolygonAddress) {
+  // @todo: delete this once all existing teams have added addresses
+  const teamFile = await octokit.request(
+    "GET /repos/{owner}/{repo}/contents/{path}",
+    {
+      owner: "code-423n4",
+      repo: "code423n4.com",
+      path: `_data/handles/${teamName}.json`,
+    }
+  );
+  const updatedTeamData = JSON.stringify(
+    {
+      ...JSON.parse(Buffer.from(teamFile.data.content, "base64")),
+      address: newPolygonAddress,
+    },
+    null,
+    2
+  );
+  const files = {
+    [`_data/handles/${teamName}.json`]: updatedTeamData,
+  };
+  const body = `This auto-generated PR adds polygon address for team ${teamName}`;
+  const title = `Add address for team ${teamName}`;
+  await octokit.createPullRequest({
+    owner: "code-423n4",
+    repo: "code423n4.com",
+    title,
+    body,
+    head: `warden/${teamName}`,
+    changes: [
+      {
+        files,
+        commit: title,
+      },
+    ],
+  });
 }
 
 exports.handler = async (event) => {
@@ -98,6 +138,8 @@ exports.handler = async (event) => {
     };
   }
 
+  const isTeamSubmission = attributedTo !== user;
+
   try {
     const sessionToken = authorization.split("Bearer ")[1];
     const confirmed = await Moralis.Cloud.run("confirmUser", {
@@ -107,29 +149,38 @@ exports.handler = async (event) => {
     if (!confirmed) {
       return {
         statusCode: 401,
-        body: "Unauthorized",
+        body: "Authorization failed",
       };
     }
-    if (attributedTo !== user) {
+    if (isTeamSubmission) {
       const url = `${event.headers.origin}/.netlify/functions/get-user?id=${attributedTo}`;
       const response = await fetch(url);
       if (!response.ok) {
         return {
           statusCode: 401,
-          body: "Unauthorized",
+          body: "You must be registered to submit findings",
         };
       }
       const team = await response.json();
       if (!team || !team.members || !team.members.includes(user)) {
         return {
           statusCode: 401,
-          body: "Unauthorized",
+          body: "You cannot submit findings for a team you are not on",
         };
+      }
+      // create a PR to update team JSON file with team address
+      try {
+        await updateTeamData(attributedTo, address);
+      } catch (error) {
+        // don't throw error if this PR fails - there likely be duplicates
+        // due to the fact that PRs take some time to review and merge and we
+        // don't want to block teams from submitting findings in the meantime
+        console.error(error);
       }
     }
   } catch (err) {
     return {
-      statusCode: 500,
+      statusCode: err.status || 500,
       body: err.message || "Internal server error",
     };
   }

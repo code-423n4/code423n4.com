@@ -26,11 +26,7 @@ const Modal = ({
         <div className="modal-main-content">{body}</div>
         <div className="modal-main-buttons">
           <button
-            className={`button ${
-              !secondaryButtonAction && !secondaryButtonText
-                ? "cta-button secondary"
-                : "cta-button primary"
-            }`}
+            className="button cta-button secondary"
             onClick={secondaryButtonAction || handleClose}
           >
             {secondaryButtonText || "Cancel"}
