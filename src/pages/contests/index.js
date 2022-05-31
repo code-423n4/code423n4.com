@@ -22,15 +22,16 @@ export default function Contests({ data }) {
 
     array
       .map((element) => {
-        // console.log(element.node)
         const statusObject = status
-        .filter((el) => el.contestId === element.node.contestid)
-        .flat();
+          .filter((el) => el.contestId === element.node.contestid)
+          .flat();
         if (statusObject === []) {
           return null;
         }
-        // console.log(statusObject);
-        return { ...element.node, status: statusObject[0]?.status, end_time: statusObject[0]?.end_time, start_time: statusObject[0]?.start_time };
+        return {
+          ...element.node,
+          status: statusObject[0]?.status
+        };
       })
       .forEach((element) => {
         switch (element.status) {
@@ -73,7 +74,6 @@ export default function Contests({ data }) {
     fetch("/.netlify/functions/getNotionData")
       .then((res) => {
         if (res.ok) {
-          console.log(res)
           return res.json();
         }
         throw res;

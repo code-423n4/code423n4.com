@@ -10,6 +10,16 @@ exports.handler = async () => {
       const { results, next_cursor } = await notion.databases.query({
         database_id: notionDb,
         start_cursor: cursor,
+        filter: {
+          and: [
+            {
+              property: "ContestID",
+              number: {
+                is_not_empty: true
+              }
+            },
+          ]
+        }
       });
       pages.push(...results);
       if (!next_cursor) {
@@ -24,21 +34,22 @@ exports.handler = async () => {
         // 15 Gro Protocol ??
         // 33 PoolTogether ??
         // 46 Silo Finance ??
+
         if (
           page.properties.Status.select?.name === "Lost deal" ||
           page.properties.Status.select?.name === "Possible" ||
           !page.properties.Status.select?.name ||
-          !page.properties.ContestID?.number ||
-          !page.properties.Dates.date.start ||
-          !page.properties.Dates.date.end
+          !page.properties.ContestID?.number
+          // !page.properties.Dates.date.start ||
+          // !page.properties.Dates.date.end
         ) {
           return null;
         } else {
           return {
             contestId: page.properties.ContestID.number || null,
             status: page.properties.Status.select?.name || null,
-            start_time: page.properties.Dates.date.start || null,
-            end_time: page.properties.Dates.date.end || null,
+            // start_time: page.properties.Dates.date.start || null,
+            // end_time: page.properties.Dates.date.end || null,
           };
         }
       })

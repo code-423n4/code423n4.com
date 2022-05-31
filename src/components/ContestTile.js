@@ -54,7 +54,7 @@ const ContestTile = ({ contest }) => {
           />
         ) : (
           <p>
-            Contest ran {t.startDay}-{t.endDay}
+            Contest ran {t.startDay === '' ? '' : t.startDay}-{t.endDay === '' ? '' : t.endDay}
           </p>
         )}
         <ClientOnly>
