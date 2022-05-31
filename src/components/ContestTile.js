@@ -19,8 +19,8 @@ const ContestTile = ({ contest }) => {
     findingsRepo,
     repo: contestRepo,
     fields,
+    status,
   } = contest;
-
   const t = getDates(start_time, end_time);
 
   return (
@@ -41,10 +41,10 @@ const ContestTile = ({ contest }) => {
           {amount ? amount : ""} {title}
         </h4>
         <p>{details}</p>
-        {t && t.contestStatus !== "active" ? (
+        {t.contestStatus !== "active" ? (
           <p className="days-duration">{t.daysDuration} day contest</p>
         ) : null}
-        {t && (t.contestStatus === "soon" || t.contestStatus === "active") ? (
+        {(t.contestStatus === "soon" || t.contestStatus === "active") ? (
           <Countdown
             state={t.contestStatus}
             start={start_time}
@@ -59,7 +59,7 @@ const ContestTile = ({ contest }) => {
         )}
         <ClientOnly>
           <Link
-            to={fields?.contestPath || '/'}
+            to={fields.contestPath}
             className="contest-repo button button-small cta-button primary"
           >
             {`${findingsRepo === "" ? "Preview" : "View"} Contest`}

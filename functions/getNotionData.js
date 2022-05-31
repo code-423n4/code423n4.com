@@ -28,13 +28,17 @@ exports.handler = async () => {
           page.properties.Status.select?.name === "Lost deal" ||
           page.properties.Status.select?.name === "Possible" ||
           !page.properties.Status.select?.name ||
-          !page.properties.ContestID?.number
+          !page.properties.ContestID?.number ||
+          !page.properties.Dates.date.start ||
+          !page.properties.Dates.date.end
         ) {
           return null;
         } else {
           return {
             contestId: page.properties.ContestID.number || null,
             status: page.properties.Status.select?.name || null,
+            start_time: page.properties.Dates.date.start || null,
+            end_time: page.properties.Dates.date.end || null,
           };
         }
       })
@@ -47,8 +51,6 @@ exports.handler = async () => {
         return x < y ? -1 : x > y ? 1 : 0;
       });
     }
-    // return sortByKey(tempResponse);
-    const finalData = sortByKey(tempResponse);
     return {
       statusCode: 201,
       body: JSON.stringify(sortByKey(tempResponse)),
