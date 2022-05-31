@@ -24,9 +24,8 @@ import useUser from "../../hooks/UserContext";
 // components
 import Agreement from "../content/Agreement";
 import FormField from "./widgets/FormField";
-import WardenDetails from "../WardenDetails";
 import Login from "../Login/Login";
-import Modal from "../Modal";
+import WardenDetails from "../WardenDetails";
 import Widget from "./widgets/Widget";
 
 // styles
@@ -56,20 +55,6 @@ const FormStatus = {
   Error: "error",
 };
 
-const ModalBody = (
-  <>
-    <p>
-      You need to be a registered warden currently connected via wallet to see
-      this page. Note to existing wardens: As of [date] wardens are required to
-      authenticate with a wallet to submit findings. You can read more about this
-      change <a href="/"> here </a>.
-    </p>
-    <br />
-    <br />
-    <Login />
-  </>
-);
-
 const SubmitFindings = ({ wardensList, sponsor, contest, repo }) => {
   const wardens = wardensList.edges.map(({ node }) => {
     return { value: node.handle, image: node.image };
@@ -86,9 +71,6 @@ const SubmitFindings = ({ wardensList, sponsor, contest, repo }) => {
   const [polygonAddress, setPolygonAddress] = useState("");
   const [newTeamAddress, setNewTeamAddress] = useState("");
   const [attributedTo, setAttributedTo] = useState("");
-  const [isOpen, setIsOpen] = useState(
-    currentUser.username === "" ? true : false
-  );
   const [fieldList, setFieldList] = useState([
     wardenField(wardens),
     emailField,
@@ -458,14 +440,17 @@ const SubmitFindings = ({ wardensList, sponsor, contest, repo }) => {
       )}
     </div>
   ) : (
-    <div className="error-message finding-error-container">
-      <Modal
-        title={"Please log in"}
-        handleClose={() => setIsOpen(false)}
-        show={isOpen}
-        body={ModalBody}
-      />
-      <p>You must connect your wallet to submit findings</p>
+    <div className="login-container">
+      <div className="finding-error-container">
+        <h1>Please login</h1>
+        <p>
+          You need to be a registered warden currently connected via wallet to see
+          this page. Note to existing wardens: As of [date] wardens are required to
+          authenticate with a wallet to submit findings. You can read more about this
+          change <a href="/"> here</a>.
+        </p>
+        <Login dropDownViewOff={true}/>
+      </div>
     </div>
   );
 };

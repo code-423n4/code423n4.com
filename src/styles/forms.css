@@ -212,8 +212,24 @@ label {
   text-decoration: underline;
 }
 
+.login-container {
+  height: 70vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
 .finding-error-container {
   margin: 0 auto;
   text-align: center;
   width: 50vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: var(--secondary-background-purple);
+  border-radius: 8px;
+  border:1px solid var(--header-background-purple);
+  padding:20px;
+  box-shadow: 0px 4px 10px rgba(0,0,0,0.5);
 }
