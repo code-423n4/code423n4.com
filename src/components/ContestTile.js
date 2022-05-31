@@ -20,7 +20,7 @@ const ContestTile = ({ contest }) => {
     repo: contestRepo,
     fields,
   } = contest;
-  const { submissionPath, contestPath } = fields;
+  // const { submissionPath, fields?. } = fields || '/';
 
   const t = getDates(start_time, end_time);
 
@@ -60,7 +60,7 @@ const ContestTile = ({ contest }) => {
         )}
         <ClientOnly>
           <Link
-            to={contestPath}
+            to={fields?.contestPath || '/'}
             className="contest-repo button button-small cta-button primary"
           >
             {`${findingsRepo === "" ? "Preview" : "View"} Contest`}
@@ -73,9 +73,9 @@ const ContestTile = ({ contest }) => {
               View Repo
             </Link>
           )}
-          {t.contestStatus === "active" && findingsRepo && submissionPath ? (
+          {t.contestStatus === "active" && findingsRepo && fields.submissionPath ? (
             <Link
-              to={submissionPath}
+              to={fields.submissionPath}
               className="button button-small cta-button secondary"
             >
               Submit Finding
