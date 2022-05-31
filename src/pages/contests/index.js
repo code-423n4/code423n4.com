@@ -1,11 +1,11 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { graphql } from "gatsby";
 
 import ContestList from "../../components/ContestList";
 import DefaultLayout from "../../templates/DefaultLayout";
 
 export default function Contests({ data }) {
-  const [filteredContests, setFilteredContest] = useState([]);
+  const [filteredContests, setFilteredContest] = useState(null);
   const contests = data.contests.edges;
 
   const sortContests = (array, status) => {
@@ -26,7 +26,7 @@ export default function Contests({ data }) {
           .filter((el) => el.contestId === element.node.contestid)
           .flat();
         if (statusObject === []) {
-          return;
+          return null;
         }
         return { ...element.node, status: statusObject[0]?.status };
       })
@@ -82,7 +82,7 @@ export default function Contests({ data }) {
         console.log(err);
       });
   }, []);
-
+  console.log(filteredContests);
   return (
     <DefaultLayout
       // key={"contests" + contestStatusChanges}
@@ -91,32 +91,52 @@ export default function Contests({ data }) {
       // preview=""
       pageDescription="Current, upcoming, and past audit contests"
     >
-      {/* <div className="wrapper-main">
-        {filteredContests.active.length > 0 ? (
+        <div className="wrapper-main">
+          {filteredContests && filteredContests.upcomingContests.length > 0 ? (
+            <section>
+              <h1>Upcoming contests ({filteredContests.upcomingContests.length})</h1>
+              <ContestList contests={filteredContests.upcomingContests} />
+            </section>
+          ) : null}
+          {filteredContests && filteredContests.activeContests.length > 0 ? (
           <section>
-            <h1>Active contests</h1>
+            <h1>Active contests ({filteredContests.activeContests.length})</h1>
             <ContestList
-              contests={filteredContests.active}
-              updateContestStatus={updateContestStatus}
+              contests={filteredContests.activeContests}
             />
           </section>
         ) : null}
-        {filteredContests.soon.length > 0 ? (
+        {filteredContests && filteredContests.sponsorReview.length > 0 ? (
           <section>
-            <h1>Upcoming contests</h1>
-            <ContestList
-              contests={filteredContests.soon}
-              updateContestStatus={updateContestStatus}
-            />
+            <h1>Sponsor review in progress ({filteredContests.sponsorReview.length})</h1>
+            <ContestList contests={filteredContests.sponsorReview} />
           </section>
         ) : null}
-        {filteredContests.completed.length > 0 ? (
+        {filteredContests && filteredContests.judging.length > 0 ? (
           <section>
-            <h1>Completed contests</h1>
+            <h1>Judging in progress ({filteredContests.judging.length})</h1>
+            <ContestList contests={filteredContests.judging} />
+          </section>
+        ) : null}
+        {filteredContests && filteredContests.awarding.length > 0 ? (
+          <section>
+            <h1>Awarding in progress ({filteredContests.awarding.length})</h1>
+            <ContestList contests={filteredContests.awarding} />
+          </section>
+        ) : null}
+        {filteredContests && filteredContests.reporting.length > 0 ? (
+          <section>
+            <h1>Reporting in progress ({filteredContests.reporting.length})</h1>
+            <ContestList contests={filteredContests.reporting} />
+          </section>
+        ) : null}
+        {filteredContests && filteredContests.completed.length > 0 ? (
+          <section>
+            <h1>Completed contests ({filteredContests.completed.length})</h1>
             <ContestList contests={filteredContests.completed} />
           </section>
         ) : null}
-      </div> */}
+        </div>
     </DefaultLayout>
   );
 }

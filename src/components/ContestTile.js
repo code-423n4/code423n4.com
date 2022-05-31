@@ -7,7 +7,7 @@ import ClientOnly from "./ClientOnly";
 import Countdown from "./Countdown";
 import SponsorLink from "./SponsorLink";
 
-const ContestTile = ({ contest: { node }, updateContestStatus }) => {
+const ContestTile = ({ contest }) => {
   const {
     sponsor,
     title,
@@ -19,7 +19,7 @@ const ContestTile = ({ contest: { node }, updateContestStatus }) => {
     findingsRepo,
     repo: contestRepo,
     fields,
-  } = node;
+  } = contest;
   const { submissionPath, contestPath } = fields;
 
   const t = getDates(start_time, end_time);
@@ -51,7 +51,7 @@ const ContestTile = ({ contest: { node }, updateContestStatus }) => {
             start={start_time}
             end={end_time}
             isPreview={findingsRepo === ""}
-            updateContestStatus={updateContestStatus}
+            updateContestStatus={null}
           />
         ) : (
           <p>
@@ -65,8 +65,11 @@ const ContestTile = ({ contest: { node }, updateContestStatus }) => {
           >
             {`${findingsRepo === "" ? "Preview" : "View"} Contest`}
           </Link>
-          {(t.contestStatus === "active" && contestRepo) && (
-            <Link to={contestRepo} className="button button-small cta-button secondary">
+          {t.contestStatus === "active" && contestRepo && (
+            <Link
+              to={contestRepo}
+              className="button button-small cta-button secondary"
+            >
               View Repo
             </Link>
           )}
