@@ -12,13 +12,17 @@ const Modal = () => {
     hideModal();
   };
 
+  const handleClose = async () => {
+    if (modalProps.secondaryButtonAction) {
+      await modalProps.secondaryButtonAction();
+    }
+    hideModal();
+  };
+
   return modalProps ? (
     <div className="modal">
       <div className="modal-main">
-        <button
-          className="button-div modal-top"
-          onClick={modalProps.secondaryButtonAction || hideModal}
-        >
+        <button className="button-div modal-top" onClick={handleClose}>
           <img
             src="/images/x-icon.svg"
             alt="close modal icon"
@@ -30,10 +34,7 @@ const Modal = () => {
         </div>
         <div className="modal-main-content">{modalProps.body}</div>
         <div className="modal-main-buttons">
-          <button
-            className="button cta-button secondary"
-            onClick={modalProps.secondaryButtonAction || hideModal}
-          >
+          <button className="button cta-button secondary" onClick={handleClose}>
             {modalProps.secondaryButtonText || "Cancel"}
           </button>
           <button
