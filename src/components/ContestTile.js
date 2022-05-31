@@ -8,27 +8,39 @@ import Countdown from "./Countdown";
 import SponsorLink from "./SponsorLink";
 
 const ContestTile = ({ contest }) => {
-  const {
-    sponsor,
-    title,
-    league,
-    amount,
-    details,
-    start_time,
-    end_time,
-    findingsRepo,
-    repo: contestRepo,
-    fields,
-  } = contest;
-  // const { submissionPath, fields?. } = fields || '/';
+  // const {
+  //   sponsor,
+  //   title,
+  //   league,
+  //   amount,
+  //   details,
+  //   start_time,
+  //   end_time,
+  //   findingsRepo,
+  //   repo: contestRepo,
+  //   fields,
+  // } = contest;
 
-  const t = getDates(start_time, end_time);
+  // if (    
+  //   !sponsor ||
+  //   !title ||
+  //   !league ||
+  //   !amount ||
+  //   !details ||
+  //   !start_time ||
+  //   !end_time ||
+  //   !findingsRepo ||
+  //   !contestRepo ||
+  //   !fields) {
+  //     console.log(contest.details)
+  //   }
+  const t = getDates(contest.start_time, contest.end_time);
 
   return (
     <div className={"wrapper-contest " + t.contestStatus}>
       <SponsorLink sponsor={sponsor} />
       <div className="wrapper-contest-content">
-        {league === "cosmos" ? (
+        {contest.league === "cosmos" ? (
           <Link to="/cosmos">
             <div className="contest-league">
               <img src="/images/cosmos-icon.svg" alt="Cosmos Logo" />
@@ -39,18 +51,18 @@ const ContestTile = ({ contest }) => {
           ""
         )}
         <h4>
-          {amount ? amount : ""} {title}
+          {contest.amount ? contest.amount : ""} {contest.title || ''}
         </h4>
-        <p>{details}</p>
+        <p>{contest.details || ''}</p>
         {t.contestStatus !== "active" ? (
           <p className="days-duration">{t.daysDuration} day contest</p>
         ) : null}
         {t.contestStatus === "soon" || t.contestStatus === "active" ? (
           <Countdown
             state={t.contestStatus}
-            start={start_time}
-            end={end_time}
-            isPreview={findingsRepo === ""}
+            start={contest.start_time}
+            end={contest.end_time}
+            isPreview={contest.findingsRepo === ""}
             updateContestStatus={null}
           />
         ) : (
@@ -60,14 +72,14 @@ const ContestTile = ({ contest }) => {
         )}
         <ClientOnly>
           <Link
-            to={fields?.contestPath || '/'}
+            to={contest.fields?.contestPath || '/'}
             className="contest-repo button button-small cta-button primary"
           >
             {`${findingsRepo === "" ? "Preview" : "View"} Contest`}
           </Link>
           {t.contestStatus === "active" && contestRepo && (
             <Link
-              to={contestRepo}
+              to={contest.contestRepo}
               className="button button-small cta-button secondary"
             >
               View Repo
@@ -75,7 +87,7 @@ const ContestTile = ({ contest }) => {
           )}
           {t.contestStatus === "active" && findingsRepo && fields.submissionPath ? (
             <Link
-              to={fields.submissionPath}
+              to={contest.fields.submissionPath}
               className="button button-small cta-button secondary"
             >
               Submit Finding

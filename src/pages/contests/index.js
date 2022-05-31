@@ -68,7 +68,7 @@ export default function Contests({ data }) {
   };
 
   useEffect(() => {
-    fetch("http://localhost:8888/.netlify/functions/getNotionData")
+    fetch("/.netlify/functions/getNotionData")
       .then((res) => {
         if (res.ok) {
           return res.json();
