@@ -180,14 +180,16 @@ exports.handler = async (event) => {
           }),
         };
       }
-      // create a PR to update team JSON file with team address
-      try {
-        await updateTeamData(attributedTo, address);
-      } catch (error) {
-        // don't throw error if this PR fails - there likely be duplicates
-        // due to the fact that PRs take some time to review and merge and we
-        // don't want to block teams from submitting findings in the meantime
-        console.error(error);
+      if (!team.address) {
+        // create a PR to update team JSON file with team address
+        try {
+          await updateTeamData(attributedTo, address);
+        } catch (error) {
+          // don't throw error if this PR fails - there will likely be duplicates
+          // due to the fact that PRs take some time to review and merge and we
+          // don't want to block teams from submitting findings in the meantime
+          console.error(error);
+        }
       }
     }
   } catch (err) {
