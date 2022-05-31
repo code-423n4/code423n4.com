@@ -6,6 +6,7 @@ import DefaultLayout from "../../templates/DefaultLayout";
 
 export default function Contests({ data }) {
   const [filteredContests, setFilteredContest] = useState(null);
+  const [contestStatusChanges, updateContestStatusChanges] = useState(0);
   const contests = data.contests.edges;
 
   const sortContests = (array, status) => {
@@ -84,10 +85,11 @@ export default function Contests({ data }) {
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  }, [contests]);
 
   return (
     <DefaultLayout
+      key={"contests" + contestStatusChanges}
       pageTitle="Contests"
       bodyClass="contests-page"
       pageDescription="Current, upcoming, and past audit contests"
@@ -98,13 +100,13 @@ export default function Contests({ data }) {
             <h1>
               Upcoming contests ({filteredContests.upcomingContests.length})
             </h1>
-            <ContestList contests={filteredContests.upcomingContests} />
+            <ContestList updateContestStatusChanges={updateContestStatusChanges} contests={filteredContests.upcomingContests} />
           </section>
         ) : null}
         {filteredContests && filteredContests.activeContests.length > 0 ? (
           <section>
             <h1>Active contests ({filteredContests.activeContests.length})</h1>
-            <ContestList contests={filteredContests.activeContests} />
+            <ContestList updateContestStatusChanges={updateContestStatusChanges} contests={filteredContests.activeContests} />
           </section>
         ) : null}
         {filteredContests && filteredContests.sponsorReview.length > 0 ? (
@@ -113,31 +115,31 @@ export default function Contests({ data }) {
               Sponsor review in progress (
               {filteredContests.sponsorReview.length})
             </h1>
-            <ContestList contests={filteredContests.sponsorReview} />
+            <ContestList updateContestStatusChanges={updateContestStatusChanges} contests={filteredContests.sponsorReview} />
           </section>
         ) : null}
         {filteredContests && filteredContests.judging.length > 0 ? (
           <section>
             <h1>Judging in progress ({filteredContests.judging.length})</h1>
-            <ContestList contests={filteredContests.judging} />
+            <ContestList updateContestStatusChanges={updateContestStatusChanges} contests={filteredContests.judging} />
           </section>
         ) : null}
         {filteredContests && filteredContests.awarding.length > 0 ? (
           <section>
             <h1>Awarding in progress ({filteredContests.awarding.length})</h1>
-            <ContestList contests={filteredContests.awarding} />
+            <ContestList updateContestStatusChanges={updateContestStatusChanges} contests={filteredContests.awarding} />
           </section>
         ) : null}
         {filteredContests && filteredContests.reporting.length > 0 ? (
           <section>
             <h1>Reporting in progress ({filteredContests.reporting.length})</h1>
-            <ContestList contests={filteredContests.reporting} />
+            <ContestList updateContestStatusChanges={updateContestStatusChanges} contests={filteredContests.reporting} />
           </section>
         ) : null}
         {filteredContests && filteredContests.completed.length > 0 ? (
           <section>
             <h1>Completed contests ({filteredContests.completed.length})</h1>
-            <ContestList contests={filteredContests.completed} />
+            <ContestList updateContestStatusChanges={updateContestStatusChanges} contests={filteredContests.completed} />
           </section>
         ) : null}
       </div>

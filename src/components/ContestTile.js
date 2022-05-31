@@ -7,7 +7,7 @@ import ClientOnly from "./ClientOnly";
 import Countdown from "./Countdown";
 import SponsorLink from "./SponsorLink";
 
-const ContestTile = ({ contest }) => {
+const ContestTile = ({ contest, updateContestStatus }) => {
   const {
     sponsor,
     title,
@@ -50,7 +50,7 @@ const ContestTile = ({ contest }) => {
             start={start_time}
             end={end_time}
             isPreview={findingsRepo === ""}
-            updateContestStatus={null}
+            updateContestStatus={updateContestStatus}
           />
         ) : (
           <p>
