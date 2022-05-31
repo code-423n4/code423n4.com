@@ -82,13 +82,11 @@ export default function Contests({ data }) {
         console.log(err);
       });
   }, []);
-  console.log(filteredContests);
+
   return (
     <DefaultLayout
-      // key={"contests" + contestStatusChanges}
       pageTitle="Contests"
       bodyClass="contests-page"
-      // preview=""
       pageDescription="Current, upcoming, and past audit contests"
     >
         <div className="wrapper-main">
