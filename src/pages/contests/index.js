@@ -8,6 +8,9 @@ export default function Contests({ data }) {
   const [filteredContests, setFilteredContest] = useState(null);
   const [contestStatusChanges, updateContestStatusChanges] = useState(0);
   const contests = data.contests.edges;
+  const updateContestStatus = () => {
+    updateContestStatusChanges(contestStatusChanges + 1);
+  };
 
   const sortContests = (array, status) => {
     const final = {
@@ -100,13 +103,13 @@ export default function Contests({ data }) {
             <h1>
               Upcoming contests ({filteredContests.upcomingContests.length})
             </h1>
-            <ContestList updateContestStatusChanges={updateContestStatusChanges} contests={filteredContests.upcomingContests} />
+            <ContestList updateContestStatus={updateContestStatus} contests={filteredContests.upcomingContests} />
           </section>
         ) : null}
         {filteredContests && filteredContests.activeContests.length > 0 ? (
           <section>
             <h1>Active contests ({filteredContests.activeContests.length})</h1>
-            <ContestList updateContestStatusChanges={updateContestStatusChanges} contests={filteredContests.activeContests} />
+            <ContestList updateContestStatus={updateContestStatus} contests={filteredContests.activeContests} />
           </section>
         ) : null}
         {filteredContests && filteredContests.sponsorReview.length > 0 ? (
@@ -115,31 +118,31 @@ export default function Contests({ data }) {
               Sponsor review in progress (
               {filteredContests.sponsorReview.length})
             </h1>
-            <ContestList updateContestStatusChanges={updateContestStatusChanges} contests={filteredContests.sponsorReview} />
+            <ContestList updateContestStatus={updateContestStatus} contests={filteredContests.sponsorReview} />
           </section>
         ) : null}
         {filteredContests && filteredContests.judging.length > 0 ? (
           <section>
             <h1>Judging in progress ({filteredContests.judging.length})</h1>
-            <ContestList updateContestStatusChanges={updateContestStatusChanges} contests={filteredContests.judging} />
+            <ContestList updateContestStatus={updateContestStatus} contests={filteredContests.judging} />
           </section>
         ) : null}
         {filteredContests && filteredContests.awarding.length > 0 ? (
           <section>
             <h1>Awarding in progress ({filteredContests.awarding.length})</h1>
-            <ContestList updateContestStatusChanges={updateContestStatusChanges} contests={filteredContests.awarding} />
+            <ContestList updateContestStatus={updateContestStatus} contests={filteredContests.awarding} />
           </section>
         ) : null}
         {filteredContests && filteredContests.reporting.length > 0 ? (
           <section>
             <h1>Reporting in progress ({filteredContests.reporting.length})</h1>
-            <ContestList updateContestStatusChanges={updateContestStatusChanges} contests={filteredContests.reporting} />
+            <ContestList updateContestStatus={updateContestStatus} contests={filteredContests.reporting} />
           </section>
         ) : null}
         {filteredContests && filteredContests.completed.length > 0 ? (
           <section>
             <h1>Completed contests ({filteredContests.completed.length})</h1>
-            <ContestList updateContestStatusChanges={updateContestStatusChanges} contests={filteredContests.completed} />
+            <ContestList updateContestStatus={updateContestStatus} contests={filteredContests.completed} />
           </section>
         ) : null}
       </div>
