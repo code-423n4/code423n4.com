@@ -20,6 +20,7 @@ import {
   checkQaOrGasFinding,
 } from "./findings/functions";
 import useUser from "../../hooks/UserContext";
+import { useModalContext } from "../../hooks/ModalContext";
 
 // components
 import Agreement from "../content/Agreement";
@@ -74,13 +75,13 @@ const SubmitFindings = ({ wardensList, sponsor, contest, repo }) => {
   const [polygonAddress, setPolygonAddress] = useState("");
   const [newTeamAddress, setNewTeamAddress] = useState("");
   const [attributedTo, setAttributedTo] = useState("");
-  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const [fieldList, setFieldList] = useState([
     wardenField(wardens),
     emailField,
     addressField,
     riskField,
   ]);
+  const { showModal } = useModalContext();
 
   // effects
   useEffect(() => {
@@ -229,7 +230,6 @@ const SubmitFindings = ({ wardensList, sponsor, contest, repo }) => {
         });
         if (response.ok) {
           setStatus(FormStatus.Submitted);
-          setShowConfirmationModal(false);
           if (typeof window !== `undefined`) {
             window.localStorage.removeItem(contest);
           }
@@ -242,7 +242,6 @@ const SubmitFindings = ({ wardensList, sponsor, contest, repo }) => {
         }
       } catch (error) {
         setStatus(FormStatus.Error);
-        console.error(error);
       }
     })();
   }, [
@@ -289,6 +288,7 @@ const SubmitFindings = ({ wardensList, sponsor, contest, repo }) => {
     }
 
     if (hasErrors) {
+      console.log("validation errors");
       setHasValidationErrors(hasErrors);
       return;
     }
@@ -297,8 +297,24 @@ const SubmitFindings = ({ wardensList, sponsor, contest, repo }) => {
       (team) => team.username === attributedTo
     );
     if (team && !team.address) {
+      console.log("showing modal");
       // confirm saving the team's address
-      setShowConfirmationModal(true);
+      showModal({
+        title: `Save address for team ${attributedTo}`,
+        body: (
+          <>
+            <p>
+              When you submit this finding, the polygon address you entered here
+              will be saved for your team. Are you sure you entered it
+              correctly?
+            </p>
+            <p>{polygonAddress}</p>
+          </>
+        ),
+        primaryButtonAction: submitFinding,
+        primaryButtonText: "Confirm and Submit",
+        secondaryButtonText: "Close and Edit",
+      });
     } else {
       submitFinding();
       setIsExpanded(false);
@@ -312,7 +328,7 @@ const SubmitFindings = ({ wardensList, sponsor, contest, repo }) => {
       }
     >
       <div className={clsx(styles.FormHeader)}>
-        <h1>{`${sponsor} contest finding`}</h1>
+        <h1 className={styles.Heading1}>{`${sponsor} contest finding`}</h1>
         <button
           onClick={() => setIsExpanded(!isExpanded)}
           className={clsx(styles.FormIconButton)}
@@ -328,13 +344,13 @@ const SubmitFindings = ({ wardensList, sponsor, contest, repo }) => {
         status === FormStatus.Submitting) && (
         <form>
           <fieldset className={widgetStyles.Fields}>
-            <h2>User Info</h2>
+            <h2 className={styles.Heading2}>User Info</h2>
             {currentUser.teams.length > 0 ? (
               <fieldset
                 className={clsx(widgetStyles.Fields, widgetStyles.RadioGroup)}
               >
-                <h3>Submitting as</h3>
-                <label htmlFor="currentUser">WARDEN</label>
+                <h3 className={styles.Heading3}>Submitting as</h3>
+                <h4 className={styles.Heading4}>WARDEN</h4>
                 <label className={widgetStyles.RadioLabel}>
                   <input
                     className={widgetStyles.Radio}
@@ -350,7 +366,7 @@ const SubmitFindings = ({ wardensList, sponsor, contest, repo }) => {
                     img={currentUser.img}
                   />
                 </label>
-                <label htmlFor="team">TEAM MEMBER</label>
+                <h4 className={styles.Heading4}>TEAM MEMBER</h4>
                 {currentUser.teams.map((team, i) => (
                   <label
                     className={widgetStyles.RadioLabel}
@@ -461,7 +477,7 @@ const SubmitFindings = ({ wardensList, sponsor, contest, repo }) => {
       )}
       {status === FormStatus.Submitted && (
         <div className="centered-text">
-          <h1>Thank you!</h1>
+          <h2 className={styles.Heading2}>Thank you!</h2>
           <p>Your report has been submitted.</p>
           <button
             className="button cta-button"
@@ -472,29 +488,6 @@ const SubmitFindings = ({ wardensList, sponsor, contest, repo }) => {
           </button>
         </div>
       )}
-      <Modal
-        show={showConfirmationModal}
-        handleClose={() => setShowConfirmationModal(false)}
-        title={`Save address for team ${attributedTo}`}
-        body={
-          <>
-            <p>
-              When you submit this finding, the polygon address you entered here
-              will be saved for your team. Are you sure you entered it
-              correctly?
-            </p>
-            <p>{polygonAddress}</p>
-          </>
-        }
-        primaryButtonAction={submitFinding}
-        primaryButtonText={
-          status === FormStatus.Submitting
-            ? "Submitting..."
-            : "Confirm and Submit"
-        }
-        secondaryButtonAction={() => setShowConfirmationModal(false)}
-        secondaryButtonText="Close and Edit"
-      />
     </div>
   ) : (
     <div className="centered-text">

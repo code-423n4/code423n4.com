@@ -10,6 +10,7 @@ import { MoralisProvider, useMoralis } from "react-moralis";
 import Moralis from "moralis";
 import { toast } from "react-toastify";
 import { navigate } from "gatsby";
+import { ModalProvider } from "./ModalContext";
 
 export enum UserLoginError {
   Pending = "registration pending",
@@ -48,7 +49,7 @@ const DEFAULT_STATE: UserState = {
   link: null,
 };
 
-const UserContext = createContext<User>({ currentUser: DEFAULT_STATE });
+const UserContext = createContext({ currentUser: DEFAULT_STATE });
 
 const UserProvider = ({ children }) => {
   const { isAuthenticated, logout, user } = useMoralis();
@@ -247,12 +248,15 @@ const UserProvider = ({ children }) => {
   );
 };
 
+// @todo: move this into root context
 export const wrapRootElement = ({ element }) => (
   <MoralisProvider
     appId={process.env.GATSBY_MORALIS_APP_ID}
     serverUrl={process.env.GATSBY_MORALIS_SERVER}
   >
-    <UserProvider>{element}</UserProvider>
+    <UserProvider>
+      <ModalProvider>{element}</ModalProvider>
+    </UserProvider>
   </MoralisProvider>
 );
 

@@ -37,19 +37,11 @@ async function getContestEnd(contestId) {
   return new Date(contest.end_time).getTime();
 }
 
-async function updateTeamData(teamName, newPolygonAddress) {
+async function updateTeamData(team, newPolygonAddress) {
   // @todo: delete this once all existing teams have added addresses
-  const teamFile = await octokit.request(
-    "GET /repos/{owner}/{repo}/contents/{path}",
-    {
-      owner: "code-423n4",
-      repo: "code423n4.com",
-      path: `_data/handles/${teamName}.json`,
-    }
-  );
   const updatedTeamData = JSON.stringify(
     {
-      ...JSON.parse(Buffer.from(teamFile.data.content, "base64")),
+      ...team,
       address: newPolygonAddress,
     },
     null,
@@ -183,7 +175,7 @@ exports.handler = async (event) => {
       if (!team.address) {
         // create a PR to update team JSON file with team address
         try {
-          await updateTeamData(attributedTo, address);
+          await updateTeamData(team, address);
         } catch (error) {
           // don't throw error if this PR fails - there will likely be duplicates
           // due to the fact that PRs take some time to review and merge and we
