@@ -1,17 +1,30 @@
-const { Octokit } = require("@octokit/core");
 const { createPullRequest } = require("octokit-plugin-create-pull-request");
-const sharp = require("sharp");
-const { token } = require("./_config");
 const dedent = require("dedent");
+const formData = require("form-data");
+const Mailgun = require("mailgun.js");
+const { Octokit } = require("@octokit/core");
+const sharp = require("sharp");
+
+const {
+  token,
+  apiKey,
+  domain,
+  moralisAppId,
+  moralisServerUrl,
+  moralisMasterKey,
+} = require("./_config");
 
 const OctokitClient = Octokit.plugin(createPullRequest);
 const octokit = new OctokitClient({ auth: token });
+
+const mailgun = new Mailgun(formData);
+const mg = mailgun.client({ username: "api", key: apiKey });
 
 function isDangerous(s) {
   return s.match(/^[0-9a-zA-Z_\-]+$/) === null;
 }
 
-function getPrData(isUpdate, handle, qualifications) {
+function getPrData(isUpdate, handle, gitHubUsername, qualifications) {
   let sentenceVerb = "Register";
 
   if (isUpdate) {
@@ -21,9 +34,15 @@ function getPrData(isUpdate, handle, qualifications) {
   const title = `${sentenceVerb} warden ${handle}`;
   const branchName = `warden/${handle}`;
   const body = isUpdate
-    ? `This auto-generated PR updates info for warden ${handle}`
+    ? dedent`
+      This auto-generated PR updates info for warden ${handle}
+
+      @${gitHubUsername}
+    `
     : dedent`
         Auto-generated PR to register the new warden ${handle}
+
+        @${gitHubUsername}
         
         ${qualifications}
         `;
@@ -44,13 +63,36 @@ exports.handler = async (event) => {
     }
 
     const data = JSON.parse(event.body);
-    const { handle, qualifications, image, link, moralisId, isUpdate } = data;
+    const {
+      handle,
+      qualifications,
+      image,
+      link,
+      moralisId,
+      gitHubUsername,
+      emailAddress,
+      isUpdate,
+    } = data;
 
     // ensure we have the data we need
     if (!handle) {
       return {
         statusCode: 422,
         body: JSON.stringify({ error: "Handle is required" }),
+      };
+    }
+
+    if (!gitHubUsername) {
+      return {
+        statusCode: 422,
+        body: JSON.stringify({ error: "GitHub username is required" }),
+      };
+    }
+
+    if (!emailAddress) {
+      return {
+        statusCode: 422,
+        body: JSON.stringify({ error: "Email address is required" }),
       };
     }
 
@@ -145,6 +187,7 @@ exports.handler = async (event) => {
     const { title, body, branchName } = getPrData(
       isUpdate,
       handle,
+      gitHubUsername,
       qualifications
     );
     try {
@@ -162,10 +205,37 @@ exports.handler = async (event) => {
         ],
       });
 
-      return {
-        statusCode: 201,
-        body: JSON.stringify({ message: `Created PR ${res.data.number}` }),
+      const emailBody = dedent`
+        Your registration is being processed.
+
+        You can monitor the pull request here: ${res.url}
+
+        Once this pull request is merged, you can log in and compete in contests.
+      `;
+
+      const emailData = {
+        from: "submissions@code423n4.com",
+        to: emailAddress,
+        subject: `Registration pending for ${handle}`,
+        text: emailBody,
       };
+
+      return mg.messages
+        .create(domain, emailData)
+        .then(() => {
+          return {
+            statusCode: 201,
+            body: JSON.stringify({
+              message: `Created PR ${res.data.number} and sent confirmation email`,
+            }),
+          };
+        })
+        .catch((err) => {
+          return {
+            statusCode: err.status || 500,
+            body: JSON.stringify({ error: err.message || err }),
+          };
+        });
     } catch (error) {
       return {
         statusCode: error.response.status,

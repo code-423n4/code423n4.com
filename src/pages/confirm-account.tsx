@@ -20,8 +20,11 @@ enum FormStatus {
 }
 
 export default function ConfirmAccount() {
+  // hooks
   const { isAuthenticated, user } = useMoralis();
   const { logUserOut } = useUser();
+
+  // state
   const [handles, setHandles] = useState<string[]>([]);
   const [confirmedHandle, setConfirmedHandle] = useState<string>("");
   const [discordUsername, setDiscordUsername] = useState<string>("");
@@ -30,8 +33,12 @@ export default function ConfirmAccount() {
   const [hasValidationErrors, setHasValidationErrors] = useState<boolean>(
     false
   );
+  const [isValidDiscord, setIsValidDiscord] = useState(true);
   const [status, setStatus] = useState<FormStatus>(FormStatus.Loading);
   const [errorMessage, setErrorMessage] = useState<string>("");
+
+  // global variables
+  const regex = new RegExp(/.*#[0-9]{4}/, "g");
 
   useEffect(() => {
     const getUser = async (): Promise<void> => {
@@ -58,11 +65,21 @@ export default function ConfirmAccount() {
     getUser();
   }, [isAuthenticated, user]);
 
+  const handleDiscordUsernameChange = (e) => {
+    setDiscordUsername(e.target.value);
+    setIsValidDiscord(regex.test(e.target.value));
+  };
+
   const handleSubmit = useCallback(
     async (e: MouseEvent<HTMLButtonElement>): Promise<void> => {
       e.preventDefault();
       const url = `/.netlify/functions/register-warden`;
-      if (!discordUsername || !gitHubUsername || !emailAddress) {
+      if (
+        !discordUsername ||
+        !isValidDiscord ||
+        !gitHubUsername ||
+        !emailAddress
+      ) {
         setHasValidationErrors(true);
         return;
       }
@@ -70,6 +87,8 @@ export default function ConfirmAccount() {
       const requestBody = {
         handle: confirmedHandle,
         moralisId: user.id,
+        gitHubUsername,
+        emailAddress,
         isUpdate: true,
       };
 
@@ -83,7 +102,6 @@ export default function ConfirmAccount() {
 
       if (response.ok) {
         try {
-          console.log(user);
           user.set("c4Username", confirmedHandle);
           user.set("discordUsername", discordUsername);
           user.set("gitHubUsername", gitHubUsername);
@@ -170,29 +188,31 @@ export default function ConfirmAccount() {
                 className={clsx(
                   widgetStyles.Control,
                   widgetStyles.Text,
-                  hasValidationErrors && !discordUsername && "input-error"
+                  hasValidationErrors &&
+                    (!discordUsername || !isValidDiscord) &&
+                    "input-error"
                 )}
                 type="text"
                 id="discordUsername"
                 name="discordUsername"
                 placeholder="Warden#1234"
                 value={discordUsername}
-                onChange={(e) => setDiscordUsername(e.target.value)}
+                onChange={handleDiscordUsernameChange}
               />
               {!discordUsername && hasValidationErrors && (
                 <p className={widgetStyles.ErrorMessage}>
                   <small>This field is required</small>
                 </p>
               )}
-              {/* @todo: validate discord username
-            {isDiscordUsernameInvalid() && (
-              <p className={widgetStyles.Help}>
-                <small>
-                  Make sure you enter your discord username, and not your server
-                  nickname. It should end with '#' followed by 4 digits.
-                </small>
-              </p>
-            )} */}
+              {hasValidationErrors && !isValidDiscord && (
+                <p className={widgetStyles.ErrorMessage}>
+                  <small>
+                    Make sure you enter your discord username, and not your
+                    server nickname. It should end with '#' followed by 4
+                    digits.
+                  </small>
+                </p>
+              )}
             </div>
             <div className={widgetStyles.Container}>
               <label htmlFor="gitHubUsername" className={widgetStyles.Label}>
