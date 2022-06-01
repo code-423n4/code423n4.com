@@ -105,14 +105,14 @@ export default function TeamRegistration({ data }) {
           </div>
         </div>
       ) : (
-        <div className="login-container">
-          <div className="finding-error-container">
+        <div className="centered-text">
+          <div className={clsx(styles.Form)}>
             <h1>Please login</h1>
             <p>
               You need to be a registered warden, currently connected via wallet
               to register a team.
             </p>
-            <Login dropDownViewOff={true} />
+            <Login displayAsButtons={true} />
           </div>
         </div>
       )}

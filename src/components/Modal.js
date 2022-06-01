@@ -24,28 +24,24 @@ const Modal = ({
           <h1>{title}</h1>
         </div>
         <div className="modal-main-content">{body}</div>
-        {primaryButtonAction !== undefined ? (
-          <div className="modal-main-buttons">
-            <button
-              className={`button ${
-                !secondaryButtonAction && !secondaryButtonText
-                  ? "cta-button secondary"
-                  : "cta-button primary"
-              }`}
-              onClick={secondaryButtonAction || handleClose}
-            >
-              {secondaryButtonText || "Cancel"}
-            </button>
-            <button
-              className="button cta-button primary"
-              onClick={primaryButtonAction}
-            >
-              {primaryButtonText || "Ok"}
-            </button>
-          </div>
-        ) : (
-          ""
-        )}
+        <div className="modal-main-buttons">
+          <button
+            className={`button ${
+              !secondaryButtonAction && !secondaryButtonText
+                ? "cta-button secondary"
+                : "cta-button primary"
+            }`}
+            onClick={secondaryButtonAction || handleClose}
+          >
+            {secondaryButtonText || "Cancel"}
+          </button>
+          <button
+            className="button cta-button primary"
+            onClick={primaryButtonAction}
+          >
+            {primaryButtonText || "Ok"}
+          </button>
+        </div>
       </div>
     </div>
   );

@@ -440,16 +440,17 @@ const SubmitFindings = ({ wardensList, sponsor, contest, repo }) => {
       )}
     </div>
   ) : (
-    <div className="login-container">
-      <div className="finding-error-container">
+    <div className="centered-text">
+      <div className={clsx(styles.Form)}>
         <h1>Please login</h1>
+        {/* TODO: add date and link */}
         <p>
           You need to be a registered warden currently connected via wallet to see
           this page. Note to existing wardens: As of [date] wardens are required to
           authenticate with a wallet to submit findings. You can read more about this
           change <a href="/"> here</a>.
         </p>
-        <Login dropDownViewOff={true}/>
+        <Login displayAsButtons={true}/>
       </div>
     </div>
   );

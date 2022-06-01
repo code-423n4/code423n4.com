@@ -10,7 +10,7 @@ import Dropdown from "../Dropdown";
 import * as styles from "./Login.module.scss";
 import * as dropdownStyles from "../Dropdown.module.scss";
 
-const Login = ({ dropDownViewOff }) => {
+const Login = ({ displayAsButtons = false }) => {
   const { logUserOut, connectWallet } = useUser();
   const { authenticate } = useMoralis();
 
@@ -62,7 +62,7 @@ const Login = ({ dropDownViewOff }) => {
 
   return (
     <>
-      {dropDownViewOff ? (
+      {displayAsButtons ? (
         <div className={clsx(styles.NoDropdown)}>
           <button
             type="button"
