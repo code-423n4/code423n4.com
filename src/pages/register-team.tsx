@@ -5,7 +5,7 @@ import React, { useState, ReactNode } from "react";
 import DefaultLayout from "../templates/DefaultLayout";
 import TeamRegistrationForm from "../components/TeamRegistrationForm";
 import useUser from "../hooks/UserContext";
-
+import Login from "../components/Login/Login";
 import * as styles from "../components/form/Form.module.scss";
 
 enum FormStatus {
@@ -105,10 +105,16 @@ export default function TeamRegistration({ data }) {
           </div>
         </div>
       ) : (
-        // @todo: style this
-        <p className="centered-text">
-          You must be logged in to register a team
-        </p>
+        <div className="centered-text">
+          <div className={clsx(styles.Form)}>
+            <h1>Please login</h1>
+            <p>
+              You need to be a registered warden, currently connected via wallet
+              to register a team.
+            </p>
+            <Login displayAsButtons={true} />
+          </div>
+        </div>
       )}
     </DefaultLayout>
   );

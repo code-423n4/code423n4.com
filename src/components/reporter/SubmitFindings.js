@@ -24,6 +24,7 @@ import useUser from "../../hooks/UserContext";
 // components
 import Agreement from "../content/Agreement";
 import FormField from "./widgets/FormField";
+import Login from "../Login/Login";
 import WardenDetails from "../WardenDetails";
 import Widget from "./widgets/Widget";
 
@@ -60,6 +61,7 @@ const SubmitFindings = ({ wardensList, sponsor, contest, repo }) => {
     return { value: node.handle, image: node.image };
   });
   const { currentUser } = useUser();
+
   // Component State
   const [status, setStatus] = useState(FormStatus.Unsubmitted);
   const [hasValidationErrors, setHasValidationErrors] = useState(false);
@@ -451,7 +453,19 @@ const SubmitFindings = ({ wardensList, sponsor, contest, repo }) => {
       )}
     </div>
   ) : (
-    <p>You must connect your wallet to submit findings</p>
+    <div className="centered-text">
+      <div className={clsx(styles.Form)}>
+        <h1>Please login</h1>
+        {/* TODO: add date and link */}
+        <p>
+          You need to be a registered warden currently connected via wallet to see
+          this page. Note to existing wardens: As of [date] wardens are required to
+          authenticate with a wallet to submit findings. You can read more about this
+          change <a href="/"> here</a>.
+        </p>
+        <Login displayAsButtons={true}/>
+      </div>
+    </div>
   );
 };
 

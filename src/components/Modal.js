@@ -12,8 +12,8 @@ const Modal = ({
 }) => {
   return (
     <div className={show ? "modal display-block" : "modal display-none"}>
-      <div className="modal-main" onClick={handleClose}>
-        <button className="button-div modal-top">
+      <div className="modal-main">
+        <button className="button-div modal-top" onClick={handleClose}>
           <img
             src="/images/x-icon.svg"
             alt="close modal icon"
@@ -23,9 +23,7 @@ const Modal = ({
         <div className="modal-main-title">
           <h1>{title}</h1>
         </div>
-        <div className="modal-main-content">
-          <p>{body}</p>
-        </div>
+        <div className="modal-main-content">{body}</div>
         <div className="modal-main-buttons">
           <button
             className={`button ${
