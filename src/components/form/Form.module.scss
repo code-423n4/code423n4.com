@@ -17,26 +17,40 @@
 }
 
 .FormMax {
-  max-width: 97vw!important;
+  max-width: 97vw !important;
 }
 
 .FormHeader {
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   max-width: 100%;
+  position: relative;
+}
+
+.FormIconButton {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 20px;
+  width: 20px;
+  background-color: transparent;
+  border: none;
 }
 
 .FormIcons {
-  height: 30px;
-  width: 30px;
-  cursor:pointer;
+  height: 20px;
+  width: 20px;
+  cursor: pointer;
   filter: brightness(0) invert(1);
   transition: all 0.2s ease-out;
+  position: absolute;
   &:hover {
     transform: scale(1.1);
   }
+  top: 0;
+  right: 0;
 }
 
 .Button {

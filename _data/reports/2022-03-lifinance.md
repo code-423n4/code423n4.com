@@ -114,7 +114,7 @@ Further information regarding the severity criteria referenced throughout the su
 
 # High Risk Findings (2)
 ## [[H-01] Reliance on `lifiData.receivingAssetId` can cause loss of funds](https://github.com/code-423n4/2022-03-lifinance-findings/issues/75)
-_Submitted by 0xDjango, also found by kirk-baird_
+_Submitted by 0xDjango, also found by hake, kirk-baird, rayn, and shenwilly_
 
 [GenericSwapFacet.sol#L23-L30](https://github.com/code-423n4/2022-03-lifinance/blob/699c2305fcfb6fe8862b75b26d1d8a2f46a551e6/src/Facets/GenericSwapFacet.sol#L23-L30)<br>
 
@@ -1100,20 +1100,6 @@ I recommend implementing `call` instead:
 
     (bool success, ) = sendTo.call.value(_amount)("");
     require(success, "Transfer failed.");
-
-## [L-05] Function `swapTokensGeneric` incorrect as to spec.
-
-[swapTokensGeneric](https://github.com/code-423n4/2022-03-lifinance/blob/main/src/Facets/GenericSwapFacet.sol#L18-L30)
-
-    * @param _lifiData data used purely for tracking and analytics
-
-The above statement in the code snippet is incorrect because `_lifiData` is used to calculate the amount to be transfered back to user after swap.
-
-    uint256 postSwapBalance = LibAsset.getOwnBalance(_lifiData.receivingAssetId) - receivingAssetIdBalance;
-
-            LibAsset.transferAsset(_lifiData.receivingAssetId, payable(msg.sender), postSwapBalance);
-
-I recommend either exchanging the use of `_lifiData` for `_swapData` or changing the comments.
 
 ## [N-01] `initNXTP` and `initHop` emit no event.
 
