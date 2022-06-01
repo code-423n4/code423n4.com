@@ -215,7 +215,11 @@ async function createUpgradedIssue(repo, issue) {
       repo,
       title: issue.title,
       body: issue.body,
-      labels: ["bug", {"H": "3 (High Risk)", "M": "2 (Med Risk)"}[issue.risk]],
+      labels: [
+        "bug",
+        "upgraded by judge",
+        {"H": "3 (High Risk)", "M": "2 (Med Risk)"}[issue.risk],
+      ],
     }
   );
 
