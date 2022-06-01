@@ -120,6 +120,15 @@ exports.handler = async (event) => {
         ],
       });
 
+      await octokit.request("POST /repos/{owner}/{repo}/issues/{issue_number}/labels", {
+        owner: "code-423n4",
+        repo: "code423n4.com",
+        issue_number: res.data.number,
+        labels: [
+          "app-warden",
+        ]
+      });
+
       return {
         statusCode: 201,
         body: JSON.stringify({ message: `Created PR ${res.data.number}` }),
