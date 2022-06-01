@@ -1,6 +1,7 @@
 import React from "react";
 
 import { SelectField, TextArea, TextField } from "./";
+import LinesOfCode from "../LinesOfCodeInput";
 import WardenField from "./WardenField";
 
 const Widget = ({ field, fieldState, isInvalid, onChange }) => {
@@ -52,11 +53,21 @@ const Widget = ({ field, fieldState, isInvalid, onChange }) => {
     />
   );
 
+  const linesOfCodeWidget = (
+    <LinesOfCode
+      name={name}
+      onChange={handleChange}
+      linesOfCode={fieldState[name]}
+      isInvalid={isInvalid}
+    />
+  );
+
   const widgets = {
     text: textFieldWidget,
     textarea: textAreaWidget,
     select: selectFieldWidget,
     warden: wardenFieldWidget,
+    linesOfCode: linesOfCodeWidget,
   };
 
   return widgets[widget];

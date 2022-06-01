@@ -8,6 +8,7 @@ query ($name: String!, $owner: String!) {
       issues(first: 100) {
         nodes {
           id
+          title
           state
           labels(first: 10) {
             nodes {
@@ -34,6 +35,7 @@ query ($name: String!, $owner: String!, $after: String!) {
       issues(first: 100, after: $after) {
         nodes {
           id
+          title
           state
           labels(first: 10) {
             nodes {
@@ -59,6 +61,7 @@ interface QueryResponse {
     issues: {
       nodes: {
         id: string;
+        title: string;
         state: "OPEN" | "CLOSED";
         labels: {
           nodes: {
@@ -166,6 +169,7 @@ function getIsInvalidFromLabels(
 
 interface SimplifiedIssue {
   id: number;
+  title: string;
   risk: string;
   isOpen: boolean;
   isDuplicate: boolean;
@@ -177,6 +181,7 @@ function simplifyData(
 ): SimplifiedIssue {
   return {
     id: issue.number,
+    title: issue.title,
     risk: getRiskFromLabels(issue.labels.nodes),
     isOpen: issue.state === "OPEN",
     isDuplicate: getIsDuplicateFromLabels(issue.labels.nodes),
@@ -199,36 +204,96 @@ function isAuthorized(jwtToken: string, requestedRepo: string): boolean {
   }
 }
 
-const handler: Handler = async (event, context) => {
-  const { authorization } = event.headers;
-  if (!authorization) {
-    return {
-      statusCode: 401,
-      body: JSON.stringify({ error: "Authorization failed" }),
-    };
-  }
+async function createUpgradedIssue(repo, issue) {
+  const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
 
+  // create issue
+  const issueResult = await octokit.request(
+    "POST /repos/{owner}/{repo}/issues",
+    {
+      owner: "code-423n4",
+      repo,
+      title: issue.title,
+      body: issue.body,
+      labels: ["bug", {"H": "3 (High Risk)", "M": "2 (Med Risk)"}[issue.risk]],
+    }
+  );
+
+  const issueId = issueResult.data.number;
+  const issueUrl = issueResult.data.html_url;
+  
+  // create submission file
+  const fileData = {
+    contest: issue.contest,
+    handle: issue.handle,
+    address: issue.address,
+    risk: {"H": "3", "M": "2"}[issue.risk],
+    title: issue.title,
+    issueId: issueId,
+    issueUrl: issueUrl,
+  };
+
+  await octokit.request("PUT /repos/{owner}/{repo}/contents/{path}", {
+    owner: "code-423n4",
+    repo,
+    path: `data/${issue.handle}-${issueId}.json`,
+    message: `Upgrade for ${issue.handle} issue #${issueId}`,
+    content: Buffer.from(JSON.stringify(fileData, null, 2)).toString(
+      "base64"
+    ),
+  });
+
+  return {
+    statusCode: 200,
+    body: JSON.stringify(issueId),
+  }
+}
+
+async function doUpdateFromGitHub(repo) {
+  const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
+  const issues = await getAllIssues(octokit, repo, "code-423n4");
+  const response = issues
+    .map(simplifyData)
+    .reduce<Record<number, SimplifiedIssue>>((a, b) => {
+      a[b.id] = b;
+      return a;
+    }, {});
+
+  return {
+    statusCode: 200,
+    body: JSON.stringify(response),
+  };
+}
+
+const handler: Handler = async (event, context) => {
   try {
-    const { name } = JSON.parse(event.body) as { name: string };
+    const { authorization } = event.headers;
+
+    if (!authorization) {
+      return {
+        statusCode: 401,
+        body: JSON.stringify({ error: "Authorization required" }),
+      };
+    }
+
+    const body = JSON.parse(event.body);
+    const { name } = body;
+
     if (!isAuthorized(authorization, name)) {
       return {
         statusCode: 401,
         body: JSON.stringify({ error: "Authorization failed" }),
       };
     }
-    const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
-    const issues = await getAllIssues(octokit, name, "code-423n4");
-    const response = issues
-      .map(simplifyData)
-      .reduce<Record<number, SimplifiedIssue>>((a, b) => {
-        a[b.id] = b;
-        return a;
-      }, {});
 
-    return {
-      statusCode: 200,
-      body: JSON.stringify(response),
-    };
+    const { action, args } = body;
+
+    switch (action) {
+      case "update-from-github":
+        return await doUpdateFromGitHub(name);
+      case "upgrade-submission":
+        return await createUpgradedIssue(name, args);
+    }
   } catch (err) {
     console.error(err);
     return {
