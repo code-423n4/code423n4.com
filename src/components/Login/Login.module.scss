@@ -37,6 +37,11 @@
     flex-direction: column;
   }
 }
+
+.SmallerButton {
+  max-width: 250px;
+}
+
 .ButtonMargin {
   @media (max-width: 970px) {
     margin-bottom: 10px;
