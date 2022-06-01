@@ -3,6 +3,7 @@ const { createPullRequest } = require("octokit-plugin-create-pull-request");
 const sharp = require("sharp");
 const { verify } = require("hcaptcha");
 const { token } = require("./_config");
+const dedent = require("dedent");
 
 const OctokitClient = Octokit.plugin(createPullRequest);
 const octokit = new OctokitClient({ auth: token });
@@ -17,7 +18,7 @@ exports.handler = async (event) => {
     if (event.httpMethod !== "POST") {
       return {
         statusCode: 405,
-        body: "Method not allowed",
+        body: JSON.stringify({ error: "Method not allowed" }),
         headers: { Allow: "POST" },
       };
     }
@@ -41,13 +42,23 @@ exports.handler = async (event) => {
     }
 
     const data = JSON.parse(event.body);
-    let { handle, image, link } = data;
+    let { handle, qualifications, image, link } = data;
 
     // ensure we have the data we need
     if (!handle) {
       return {
         statusCode: 422,
-        body: "Handle is required",
+        body: JSON.stringify({ error: "Handle is required" }),
+      };
+    }
+
+    if (!qualifications) {
+      return {
+        statusCode: 422,
+        body: JSON.stringify({
+          error:
+            "Please provide evidence of your ability to compete in an EVM-base audit contest",
+        }),
       };
     }
 
@@ -88,12 +99,18 @@ exports.handler = async (event) => {
       };
     }
 
+    const body = dedent`
+      Auto-generated PR to register the new warden ${handle}
+      
+      ${qualifications}
+      `;
+
     try {
       const res = await octokit.createPullRequest({
         owner: "code-423n4",
         repo: "code423n4.com",
         title: `Add warden ${handle}`,
-        body: `This auto-generated PR registers the new warden ${handle}`,
+        body,
         head: `warden-${handle}`,
         changes: [
           {
@@ -101,6 +118,15 @@ exports.handler = async (event) => {
             commit: `Add warden ${handle}`,
           },
         ],
+      });
+
+      await octokit.request("POST /repos/{owner}/{repo}/issues/{issue_number}/labels", {
+        owner: "code-423n4",
+        repo: "code423n4.com",
+        issue_number: res.data.number,
+        labels: [
+          "app-warden",
+        ]
       });
 
       return {
@@ -111,7 +137,7 @@ exports.handler = async (event) => {
       return {
         statusCode: err.response.status,
         body: JSON.stringify({ error: err.response.data.message.toString() }),
-      }
+      };
     }
   } catch (err) {
     return {

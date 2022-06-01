@@ -1,10 +1,15 @@
-const dedent = require("dedent");
-const { Octokit } = require("@octokit/core");
-const { token, apiKey, domain } = require("./_config");
 const csv = require("csvtojson");
+const dedent = require("dedent");
+const formData = require("form-data");
+const Mailgun = require("mailgun.js");
+const { Octokit } = require("@octokit/core");
+
+const { token, apiKey, domain } = require("./_config");
 
 const octokit = new Octokit({ auth: token });
-const mg = require("mailgun-js")({ apiKey, domain });
+
+const mailgun = new Mailgun(formData);
+const mg = mailgun.client({ username: "api", key: apiKey });
 
 function isDangerousHandle(s) {
   return s.match(/^[0-9a-zA-Z_\-]+$/) === null;
@@ -162,17 +167,20 @@ exports.handler = async (event) => {
       };
     }
 
-    return mg
-      .messages()
-      .send(emailData)
-      .then(() => ({
-        statusCode: 200,
-        body: "Issue posted successfully and confirmation email sent.",
-      }))
-      .catch((error) => ({
-        statusCode: 500,
-        body: `Error: ${error}`,
-      }));
+    return mg.messages
+      .create(domain, emailData)
+      .then(() => {
+        return {
+          statusCode: 200,
+          body: "Issue posted successfully and confirmation email sent.",
+        };
+      })
+      .catch((err) => {
+        return {
+          statusCode: err.status || 500,
+          body: JSON.stringify({ error: err.message || err }),
+        };
+      });
   } catch (error) {
     return {
       statusCode: 500,
