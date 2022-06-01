@@ -24,7 +24,7 @@
   --main-purple-rgb: 132, 36, 226;
 
   --page-margin: 40px;
-  --page-margin-mobile: 40px;
+  --page-margin-mobile: 8px;
 
   --font-family: "Roboto", sans-serif;
 }
@@ -253,6 +253,11 @@ iframe {
   color-scheme: light;
 }
 
+.button-div {
+  background-color: transparent;
+  border:none;
+}
+
 @media (max-width: 600px) {
   body {
     margin: 0;
@@ -274,4 +279,15 @@ iframe {
     font-size: 20px;
     margin-bottom: 20px;
   }
+}
+
+
+@media only screen and (max-width: 740px),
+  (min-device-width: 768px) and (max-device-width: 1024px) {
+    h1.page-header {
+      margin: 0;
+      padding: 0;
+      text-align: center;
+      font-size: 22px;
+    }
 }
