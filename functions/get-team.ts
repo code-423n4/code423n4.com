@@ -1,6 +1,6 @@
-const { readFileSync } = require("fs");
-const path = require("path");
-const fs = require("fs");
+import { readFileSync } from "fs";
+import path from "path";
+import fs from "fs";
 
 exports.handler = async (event) => {
   // only allow GET
