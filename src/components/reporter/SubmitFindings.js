@@ -27,7 +27,6 @@ import Agreement from "../content/Agreement";
 import { DynamicInputGroup } from "../DynamicInputGroup";
 import FormField from "./widgets/FormField";
 import Login from "../Login/Login";
-import Modal from "../Modal";
 import WardenDetails from "../WardenDetails";
 import Widget from "./widgets/Widget";
 
