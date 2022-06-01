@@ -141,6 +141,11 @@ const UserProvider = ({ children }) => {
       throw UserLoginError.Unknown;
     }
 
+    // const team = await fetch(
+    //   `/.netlify/functions/get-team?id=${c4Username}`
+    // );
+    // console.log(team);
+
     const registeredUser = await response.json();
     if (!registeredUser || !registeredUser.moralisId) {
       throw UserLoginError.Pending;

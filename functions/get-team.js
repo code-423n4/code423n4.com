@@ -25,11 +25,21 @@ exports.handler = async (event) => {
           return null;
         }
       })
+      .filter((el) => el !== null)
+      .filter((el) => el.members !== undefined)
+      .filter((el) => el.members.includes(userHandle));
 
-    return {
-      statusCode: 200,
-      body: JSON.stringify(teams),
-    };
+    if (teams.length > 0) {
+      return {
+        statusCode: 200,
+        body: JSON.stringify(teams[0]),
+      };
+    } else {
+      return {
+        statusCode: 401,
+        body: JSON.stringify({ error: "Team not found" }),
+      };
+    }
   } catch (err) {
     console.log(err);
     return {
@@ -38,5 +48,3 @@ exports.handler = async (event) => {
     };
   }
 };
-
-test();
