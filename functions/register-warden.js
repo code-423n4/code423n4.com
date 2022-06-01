@@ -111,6 +111,7 @@ exports.handler = async (event) => {
         repo: "code423n4.com",
         title: `Add warden ${handle}`,
         body,
+        labels: ["app-warden"],
         head: `warden-${handle}`,
         changes: [
           {
