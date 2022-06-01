@@ -15,11 +15,11 @@ exports.handler = async () => {
             {
               property: "ContestID",
               number: {
-                is_not_empty: true
-              }
+                is_not_empty: true,
+              },
             },
-          ]
-        }
+          ],
+        },
       });
       pages.push(...results);
       if (!next_cursor) {
@@ -40,16 +40,12 @@ exports.handler = async () => {
           page.properties.Status.select?.name === "Possible" ||
           !page.properties.Status.select?.name ||
           !page.properties.ContestID?.number
-          // !page.properties.Dates.date.start ||
-          // !page.properties.Dates.date.end
         ) {
           return null;
         } else {
           return {
             contestId: page.properties.ContestID.number || null,
             status: page.properties.Status.select?.name || null,
-            // start_time: page.properties.Dates.date.start || null,
-            // end_time: page.properties.Dates.date.end || null,
           };
         }
       })
