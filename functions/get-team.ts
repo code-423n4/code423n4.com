@@ -32,7 +32,7 @@ exports.handler = async (event) => {
     if (teams.length > 0) {
       return {
         statusCode: 200,
-        body: JSON.stringify(teams[0]),
+        body: JSON.stringify(teams),
       };
     } else {
       return {
