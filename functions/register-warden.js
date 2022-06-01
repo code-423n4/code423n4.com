@@ -111,7 +111,6 @@ exports.handler = async (event) => {
         repo: "code423n4.com",
         title: `Add warden ${handle}`,
         body,
-        labels: ["app-warden"],
         head: `warden-${handle}`,
         changes: [
           {
@@ -119,6 +118,15 @@ exports.handler = async (event) => {
             commit: `Add warden ${handle}`,
           },
         ],
+      });
+
+      await octokit.request("POST /repos/{owner}/{repo}/issues/{issue_number}/labels", {
+        owner: "code-423n4",
+        repo: "code423n4.com",
+        issue_number: res.data.number,
+        labels: [
+          "app-warden",
+        ]
       });
 
       return {
