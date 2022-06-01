@@ -141,10 +141,15 @@ const UserProvider = ({ children }) => {
       throw UserLoginError.Unknown;
     }
 
-    // const team = await fetch(
-    //   `/.netlify/functions/get-team?id=${c4Username}`
-    // );
-    // console.log(team);
+
+    // fetching team
+    const teamResponse = await fetch(
+      `/.netlify/functions/get-team?id=${c4Username}`
+    );
+    let team = [];
+    if (teamResponse.status === 200) {
+      team = await teamResponse.json();
+    } 
 
     const registeredUser = await response.json();
     if (!registeredUser || !registeredUser.moralisId) {
@@ -174,8 +179,7 @@ const UserProvider = ({ children }) => {
       emailAddress,
       link,
       img,
-      // @todo fetch teams
-      teams: [],
+      teams: team,
       isLoggedIn: true,
     });
   };

@@ -40,8 +40,7 @@ exports.handler = async (event) => {
         body: JSON.stringify({ error: "Team not found" }),
       };
     }
-  } catch (err) {
-    console.log(err);
+  } catch (error) {
     return {
       statusCode: 401,
       body: JSON.stringify({ error: "Team not found" }),
