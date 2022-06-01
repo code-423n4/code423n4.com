@@ -4,8 +4,8 @@ import { Link } from "gatsby";
 
 import Select from "react-select";
 
-import * as baseStyles from "./Widgets.module.scss";
 import * as styles from "./WardenField.module.scss";
+import * as baseStyles from "./Widgets.module.scss";
 
 const WardenOptionLabel = ({ value, image }) => {
   return (

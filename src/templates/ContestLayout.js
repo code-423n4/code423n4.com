@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { graphql, Link } from "gatsby";
 import clsx from "clsx";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
+import DOMPurify from "isomorphic-dompurify";
 
 import { getDates } from "../utils/time";
 
@@ -64,7 +65,7 @@ const ContestLayout = (props) => {
             )}
             <p className="days-duration">{t.daysDuration} day contest</p>
           </div>
-          <div
+          <button
             style={
               fields.artPath !== null
                 ? { backgroundImage: `url(${fields.artPath})` }
@@ -73,7 +74,8 @@ const ContestLayout = (props) => {
             onClick={() => setArtOpen((isOpen) => !isOpen)}
             className={clsx(
               { open: artOpen },
-              "contest-artwork background-pattern"
+              "contest-artwork background-pattern",
+              "button-div"
             )}
             aria-label={`${title} artwork. Expands on click.`}
           />
@@ -164,7 +166,9 @@ const ContestLayout = (props) => {
                   </div>
                 ) : (
                   <div
-                    dangerouslySetInnerHTML={{ __html: fields.readmeContent }}
+                    dangerouslySetInnerHTML={{
+                      __html: DOMPurify.sanitize(fields.readmeContent),
+                    }}
                   />
                 )}
               </div>
