@@ -51,16 +51,9 @@ exports.handler = async () => {
       })
       .filter((el) => el !== null);
 
-    function sortByKey(array, key) {
-      return array.sort(function (a, b) {
-        var x = a[key];
-        var y = b[key];
-        return x < y ? -1 : x > y ? 1 : 0;
-      });
-    }
     return {
       statusCode: 201,
-      body: JSON.stringify(sortByKey(tempResponse)),
+      body: JSON.stringify(tempResponse),
     };
   } catch (err) {
     console.log(err);
