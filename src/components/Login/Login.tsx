@@ -40,7 +40,7 @@ const Login = () => {
       await connectWallet();
     } catch (error) {
       logUserOut();
-      if (error === UserLoginError.Pending) {
+      if (error === UserLoginError.RegistrationPending) {
         toast.error(
           <span>
             It looks like your account registration is pending. Don't forget to
@@ -53,6 +53,11 @@ const Login = () => {
           </span>
         );
         return;
+      }
+      if (error === UserLoginError.ConnectionPending) {
+        toast.error(
+          "Your request to connect your wallet is pending review. Check the progress in GitHub"
+        );
       }
       toast.error(
         "Something went wrong. Please refresh the page and try again."

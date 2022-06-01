@@ -12,7 +12,8 @@ import { toast } from "react-toastify";
 import { navigate } from "gatsby";
 
 export enum UserLoginError {
-  Pending = "registration pending",
+  RegistrationPending = "registration pending",
+  ConnectionPending = "connect wallet pending",
   Unknown = "",
 }
 
@@ -136,14 +137,18 @@ const UserProvider = ({ children }) => {
     if (!response.ok) {
       const error = await response.json();
       if (error.error === "User not found") {
-        throw UserLoginError.Pending;
+        throw UserLoginError.RegistrationPending;
       }
       throw UserLoginError.Unknown;
     }
 
     const registeredUser = await response.json();
-    if (!registeredUser || !registeredUser.moralisId) {
-      throw UserLoginError.Pending;
+    if (!registeredUser) {
+      throw UserLoginError.RegistrationPending;
+    }
+
+    if (!registeredUser.moralisId) {
+      throw UserLoginError.ConnectionPending;
     }
 
     if (registeredUser.image) {

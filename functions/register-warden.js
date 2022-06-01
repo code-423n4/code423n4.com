@@ -2,6 +2,7 @@ const { createPullRequest } = require("octokit-plugin-create-pull-request");
 const dedent = require("dedent");
 const formData = require("form-data");
 const Mailgun = require("mailgun.js");
+const { Moralis } = require("moralis/node");
 const { Octokit } = require("@octokit/core");
 const sharp = require("sharp");
 
@@ -71,6 +72,7 @@ exports.handler = async (event) => {
       moralisId,
       gitHubUsername,
       emailAddress,
+      polygonAddress,
       isUpdate,
     } = data;
 
@@ -125,7 +127,50 @@ exports.handler = async (event) => {
       };
     }
 
-    // @todo: prevent registering wardens who have already connected their wallets
+    const url = `${event.headers.origin}/.netlify/functions/get-user?id=${handle}`;
+    // make sure that an update has a valid warden file, and a new registration does not
+    const response = await fetch(url);
+    if (isUpdate && !response.ok) {
+      return {
+        statusCode: 422,
+        body: "Account does not exist",
+      };
+    }
+    const userData = await response.json();
+    if ((!isUpdate && response.ok) || userData.moralisId) {
+      return {
+        statusCode: 422,
+        body: "This user is already registered",
+      };
+    }
+
+    await Moralis.start({
+      serverUrl: moralisServerUrl,
+      appId: moralisAppId,
+      masterKey: moralisMasterKey,
+    });
+
+    try {
+      const isValidUser = await Moralis.Cloud.run(
+        "checkHandleAgainstPreviousSubmissions",
+        {
+          username: handle,
+          moralisId,
+          polygonAddress,
+        }
+      );
+      if (!isValidUser) {
+        return {
+          statusCode: 422,
+          body: "Unauthorized",
+        };
+      }
+    } catch (error) {
+      return {
+        statusCode: 422,
+        body: "Unauthorized",
+      };
+    }
 
     const formattedHandleData = { handle, link, moralisId };
     let avatarFilename = "";
@@ -244,8 +289,10 @@ exports.handler = async (event) => {
     }
   } catch (error) {
     return {
-      statusCode: 500,
-      body: JSON.stringify({ error: "Internal server error." }),
+      statusCode: error.status || 500,
+      body: JSON.stringify({
+        error: error.message || "Internal server error.",
+      }),
     };
   }
 };

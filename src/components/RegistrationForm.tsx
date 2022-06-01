@@ -153,6 +153,7 @@ export default function RegistrationForm({
           }
 
           const moralisId = user.id;
+          const polygonAddress = user.get("ethAddress");
           const username = await user.get("c4Username");
           if (username) {
             await logUserOut();
@@ -174,6 +175,7 @@ export default function RegistrationForm({
             qualifications: state.qualifications,
             gitHubUsername: state.gitHubUsername,
             emailAddress: state.emailAddress,
+            polygonAddress,
             moralisId,
           } as {
             handle: string;
@@ -219,6 +221,7 @@ export default function RegistrationForm({
             }
             updateFormStatus(FormStatus.Submitted);
           } else {
+            logUserOut();
             updateFormStatus(FormStatus.Error);
             try {
               const res = await response.json();
@@ -228,6 +231,7 @@ export default function RegistrationForm({
             }
           }
         } catch (error) {
+          logUserOut();
           updateFormStatus(FormStatus.Error);
           updateErrorMessage(error);
         }
@@ -241,6 +245,7 @@ export default function RegistrationForm({
       isNewUser,
       handles,
       hasValidationErrors,
+      isValidDiscord,
     ]
   );
 

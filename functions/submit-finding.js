@@ -99,9 +99,26 @@ exports.handler = async (event) => {
   }
 
   try {
+    const url = `${event.headers.origin}/.netlify/functions/get-user?id=${attributedTo}`;
+    const response = await fetch(url);
+    if (!response.ok) {
+      return {
+        statusCode: 401,
+        body: "Unauthorized",
+      };
+    }
+    const userData = await response.json();
+    if (!userData || !userData.moralisId) {
+      return {
+        statusCode: 401,
+        body: "Unauthorized",
+      };
+    }
+    const { moralisId } = userData;
     const sessionToken = authorization.split("Bearer ")[1];
     const confirmed = await Moralis.Cloud.run("confirmUser", {
       sessionToken,
+      moralisId,
       username: user,
     });
     if (!confirmed) {
@@ -110,17 +127,10 @@ exports.handler = async (event) => {
         body: "Unauthorized",
       };
     }
-    if (attributedTo !== user) {
-      const url = `${event.headers.origin}/.netlify/functions/get-user?id=${attributedTo}`;
-      const response = await fetch(url);
-      if (!response.ok) {
-        return {
-          statusCode: 401,
-          body: "Unauthorized",
-        };
-      }
-      const team = await response.json();
-      if (!team || !team.members || !team.members.includes(user)) {
+
+    const isTeamSubmission = attributedTo !== user;
+    if (isTeamSubmission) {
+      if (!userData.members || !userData.members.includes(user)) {
         return {
           statusCode: 401,
           body: "Unauthorized",
@@ -129,7 +139,7 @@ exports.handler = async (event) => {
     }
   } catch (err) {
     return {
-      statusCode: 500,
+      statusCode: err.status || 500,
       body: err.message || "Internal server error",
     };
   }
