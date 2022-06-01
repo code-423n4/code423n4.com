@@ -44,7 +44,7 @@ const ContestTile = ({ contest, updateContestStatus }) => {
         {t.contestStatus !== "active" ? (
           <p className="days-duration">{t.daysDuration} day contest</p>
         ) : null}
-        {(t.contestStatus === "soon" || t.contestStatus === "active") ? (
+        {t.contestStatus === "soon" || t.contestStatus === "active" ? (
           <Countdown
             state={t.contestStatus}
             start={start_time}
@@ -54,12 +54,13 @@ const ContestTile = ({ contest, updateContestStatus }) => {
           />
         ) : (
           <p>
-            Contest ran {t.startDay === '' ? '' : t.startDay}-{t.endDay === '' ? '' : t.endDay}
+            Contest ran {t.startDay === "" ? "" : t.startDay}-
+            {t.endDay === "" ? "" : t.endDay}
           </p>
         )}
         <ClientOnly>
           <Link
-            to={fields?.contestPath || '/'}
+            to={fields?.contestPath || "/"}
             className="contest-repo button button-small cta-button primary"
           >
             {`${findingsRepo === "" ? "Preview" : "View"} Contest`}
@@ -72,9 +73,11 @@ const ContestTile = ({ contest, updateContestStatus }) => {
               View Repo
             </Link>
           )}
-          {(t.contestStatus === "active" || status === 'Active Contest')&& findingsRepo && fields.submissionPath ? (
+          {(t.contestStatus === "active" || status === "Active Contest") &&
+          findingsRepo &&
+          fields.submissionPath ? (
             <Link
-              to={fields?.submissionPath || '/'}
+              to={fields?.submissionPath || "/"}
               className="button button-small cta-button secondary"
             >
               Submit Finding
