@@ -13,7 +13,7 @@ export default function Contests({ data }) {
   };
 
   const sortContests = (array, status) => {
-    const final = {
+    let statusObject = {
       upcomingContests: [],
       activeContests: [],
       sponsorReview: [],
@@ -34,44 +34,53 @@ export default function Contests({ data }) {
         }
         return {
           ...element.node,
-          status: statusObject[0]?.status
+          status: statusObject[0]?.status,
         };
       })
       .forEach((element) => {
         switch (element.status) {
           case "Pre-Contest":
-            final.upcomingContests.push(element);
+            statusObject.upcomingContests.push(element);
             break;
           case "Preview week":
-            final.upcomingContests.push(element);
+            statusObject.upcomingContests.push(element);
             break;
           case "Active Contest":
-            final.activeContests.push(element);
+            statusObject.activeContests.push(element);
             break;
           case "Sponsor Review":
-            final.sponsorReview.push(element);
+            statusObject.sponsorReview.push(element);
             break;
           case "Needs Judging":
-            final.judging.push(element);
+            statusObject.judging.push(element);
             break;
           case "Judging Complete":
-            final.judging.push(element);
+            statusObject.judging.push(element);
             break;
           case "Awarding":
-            final.awarding.push(element);
+            statusObject.awarding.push(element);
             break;
           case "Reporting":
-            final.reporting.push(element);
+            statusObject.reporting.push(element);
             break;
           case "Completed":
-            final.completed.push(element);
+            statusObject.completed.push(element);
             break;
           default:
-            final.other.push(element);
+            statusObject.other.push(element);
             break;
         }
       });
-    return final;
+    for (const keys in statusObject) {
+      statusObject[keys].sort(function (a, b) {
+        let keyA = new Date(a.start_time);
+        let keyB = new Date(b.start_time);
+        if (keyA < keyB) return 1;
+        if (keyA > keyB) return -1;
+        return 0;
+      });
+    }
+    return statusObject;
   };
 
   useEffect(() => {
@@ -103,13 +112,19 @@ export default function Contests({ data }) {
             <h1>
               Upcoming contests ({filteredContests.upcomingContests.length})
             </h1>
-            <ContestList updateContestStatus={updateContestStatus} contests={filteredContests.upcomingContests} />
+            <ContestList
+              updateContestStatus={updateContestStatus}
+              contests={filteredContests.upcomingContests}
+            />
           </section>
         ) : null}
         {filteredContests && filteredContests.activeContests.length > 0 ? (
           <section>
             <h1>Active contests ({filteredContests.activeContests.length})</h1>
-            <ContestList updateContestStatus={updateContestStatus} contests={filteredContests.activeContests} />
+            <ContestList
+              updateContestStatus={updateContestStatus}
+              contests={filteredContests.activeContests}
+            />
           </section>
         ) : null}
         {filteredContests && filteredContests.sponsorReview.length > 0 ? (
@@ -118,31 +133,46 @@ export default function Contests({ data }) {
               Sponsor review in progress (
               {filteredContests.sponsorReview.length})
             </h1>
-            <ContestList updateContestStatus={updateContestStatus} contests={filteredContests.sponsorReview} />
+            <ContestList
+              updateContestStatus={updateContestStatus}
+              contests={filteredContests.sponsorReview}
+            />
           </section>
         ) : null}
         {filteredContests && filteredContests.judging.length > 0 ? (
           <section>
             <h1>Judging in progress ({filteredContests.judging.length})</h1>
-            <ContestList updateContestStatus={updateContestStatus} contests={filteredContests.judging} />
+            <ContestList
+              updateContestStatus={updateContestStatus}
+              contests={filteredContests.judging}
+            />
           </section>
         ) : null}
         {filteredContests && filteredContests.awarding.length > 0 ? (
           <section>
             <h1>Awarding in progress ({filteredContests.awarding.length})</h1>
-            <ContestList updateContestStatus={updateContestStatus} contests={filteredContests.awarding} />
+            <ContestList
+              updateContestStatus={updateContestStatus}
+              contests={filteredContests.awarding}
+            />
           </section>
         ) : null}
         {filteredContests && filteredContests.reporting.length > 0 ? (
           <section>
             <h1>Reporting in progress ({filteredContests.reporting.length})</h1>
-            <ContestList updateContestStatus={updateContestStatus} contests={filteredContests.reporting} />
+            <ContestList
+              updateContestStatus={updateContestStatus}
+              contests={filteredContests.reporting}
+            />
           </section>
         ) : null}
         {filteredContests && filteredContests.completed.length > 0 ? (
           <section>
             <h1>Completed contests ({filteredContests.completed.length})</h1>
-            <ContestList updateContestStatus={updateContestStatus} contests={filteredContests.completed} />
+            <ContestList
+              updateContestStatus={updateContestStatus}
+              contests={filteredContests.completed}
+            />
           </section>
         ) : null}
       </div>
