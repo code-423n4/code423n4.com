@@ -15,20 +15,17 @@ exports.handler = async (event) => {
 
   try {
     const handleDir = path.join(__dirname + "/../_data/handles");
-    let data = fs.readdirSync(handleDir);
-    const teams = data
-      .map((handle) => {
-        if (handle.includes(".json")) {
-          const warden = readFileSync(`./_data/handles/${handle}`);
-          return JSON.parse(warden.toString());
-        } else {
-          return null;
+    let file = fs.readdirSync(handleDir);
+    let teams = [];
+    file.forEach((handle) => {
+      if (handle.includes(".json")) {
+        const wardenFile = readFileSync(`./_data/handles/${handle}`);
+        const warden = JSON.parse(wardenFile.toString());
+        if (warden && warden.members && warden.members.includes(userHandle)) {
+          teams.push(warden);
         }
-      })
-      .filter((el) => el !== null)
-      .filter((el) => el.members !== undefined)
-      .filter((el) => el.members.includes(userHandle));
-
+      }
+    });
     if (teams.length > 0) {
       return {
         statusCode: 200,
