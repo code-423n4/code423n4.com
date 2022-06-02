@@ -1,6 +1,7 @@
 import clsx from "clsx";
 import React, { useEffect, useState, useCallback } from "react";
 import Moralis from "moralis";
+import { toast } from "react-toastify";
 
 // helpers
 import {
@@ -233,10 +234,18 @@ const SubmitFindings = ({ wardensList, sponsor, contest, repo }) => {
             window.localStorage.removeItem(contest);
           }
         } else {
-          setStatus(FormStatus.Error);
           const { error } = await response.json();
-          if (error) {
-            setErrorMessage(error);
+          if (error.startsWith("Failed to send confirmation email")) {
+            setStatus(FormStatus.Submitted);
+            if (typeof window !== `undefined`) {
+              window.localStorage.removeItem(contest);
+            }
+            toast.error(error);
+          } else {
+            setStatus(FormStatus.Error);
+            if (error) {
+              setErrorMessage(error);
+            }
           }
         }
       } catch (error) {

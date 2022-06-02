@@ -2,6 +2,7 @@ import React, { useCallback, useState, useRef } from "react";
 import clsx from "clsx";
 import { useMoralis } from "react-moralis";
 import Moralis from "moralis/types";
+import { toast } from "react-toastify";
 
 import useUser from "../hooks/UserContext";
 
@@ -211,25 +212,32 @@ export default function RegistrationForm({
               user.set("emailAddress", state.emailAddress);
               // @todo: add role
               await user.save();
-              logUserOut();
               updateFormStatus(FormStatus.Submitted);
             } catch (error) {
-              logUserOut();
               updateFormStatus(FormStatus.Error);
               updateErrorMessage("");
               console.error(error);
             }
             updateFormStatus(FormStatus.Submitted);
           } else {
-            logUserOut();
-            updateFormStatus(FormStatus.Error);
-            try {
-              const res = await response.json();
-              updateErrorMessage(res.error);
-            } catch (error) {
-              updateErrorMessage("");
+            const { error } = await response.json();
+            if (error.startsWith("Failed to send confirmation email")) {
+              // allow confirmation email to fail; don't save a bad email address
+              user.set("c4Username", state.username);
+              user.set("discordUsername", state.discordUsername);
+              user.set("gitHubUsername", state.gitHubUsername);
+              // @todo: add role
+              await user.save();
+              updateFormStatus(FormStatus.Submitted);
+              toast.error(
+                "The email you entered was invalid. Confirmation email failed to send and email address has not been saved"
+              );
+            } else {
+              updateFormStatus(FormStatus.Error);
+              updateErrorMessage(error);
             }
           }
+          logUserOut();
         } catch (error) {
           logUserOut();
           updateFormStatus(FormStatus.Error);

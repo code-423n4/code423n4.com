@@ -328,7 +328,9 @@ exports.handler = async (event) => {
       .catch((err) => {
         return {
           statusCode: err.status || 500,
-          body: JSON.stringify({ error: err.message || err }),
+          body: JSON.stringify({
+            error: "Failed to send confirmation email. " + (err.message || err),
+          }),
         };
       });
   } catch (error) {
