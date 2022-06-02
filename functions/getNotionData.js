@@ -6,6 +6,7 @@ exports.handler = async () => {
   try {
     const pages = [];
     let cursor = undefined;
+    //cursor is to handle pagination in notion query
     while (true) {
       const { results, next_cursor } = await notion.databases.query({
         database_id: notionDb,
@@ -28,34 +29,32 @@ exports.handler = async () => {
       cursor = next_cursor;
     }
 
-    const tempResponse = pages
-      .map((page) => {
-        // !! Problem
-        // 15 Gro Protocol ??
-        // 33 PoolTogether ??
-        // 46 Silo Finance ??
+    const statusObject = pages.map((page) => {
+      // !! Problem
+      // 15 Gro Protocol ??
+      // 33 PoolTogether ??
+      // 46 Silo Finance ??
 
-        if (
-          page.properties.Status.select?.name === "Lost deal" ||
-          page.properties.Status.select?.name === "Possible" ||
-          !page.properties.Status.select?.name ||
-          !page.properties.ContestID?.number
-        ) {
-          return null;
-        } else {
-          return {
-            contestId: page.properties.ContestID.number || null,
-            status: page.properties.Status.select?.name || null,
-          };
-        }
-      })
-      .filter((el) => el !== null);
-
+      if (
+        page.properties.Status.select?.name !== "Lost deal" ||
+        page.properties.Status.select?.name !== "Possible" ||
+        page.properties.Status.select?.name ||
+        page.properties.ContestID?.number
+      ) {
+        return {
+          contestId: page.properties.ContestID.number || null,
+          status: page.properties.Status.select?.name || null,
+        };
+      }
+    });
     return {
       statusCode: 201,
-      body: JSON.stringify(tempResponse),
+      body: JSON.stringify(statusObject),
     };
   } catch (err) {
-    console.log(err);
+    return {
+      statusCode: err.status,
+      body: JSON.stringify({ error: err.message }),
+    };
   }
 };
