@@ -19,18 +19,22 @@ const TextArea = ({ name, required, fieldState, isInvalid, onChange }) => {
         <Tab>Preview</Tab>
       </TabList>
       <TabPanel>
-        <textarea
-          className={clsx(
-            styles.Control,
-            styles.Text,
-            styles.Textarea,
-            isInvalid && "input-error"
-          )}
-          name={name}
-          onChange={handleChange}
-          required={required}
-          value={fieldState}
-        />
+        <div className={clsx(styles.TextAreaContainer)}>
+          <textarea
+            className={clsx(
+              styles.Control,
+              styles.Text,
+              styles.Textarea,
+              isInvalid && "input-error"
+            )}
+            name={name}
+            onChange={handleChange}
+            required={required}
+            value={fieldState}
+            maxLength={65536}
+          />
+          <span className={clsx(styles.TextAreaCounter)}>{fieldState.length}/65,536</span>
+        </div>
       </TabPanel>
       <TabPanel>
         <ReactMarkdown
