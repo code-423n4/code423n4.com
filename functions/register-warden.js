@@ -1,17 +1,31 @@
-const { Octokit } = require("@octokit/core");
 const { createPullRequest } = require("octokit-plugin-create-pull-request");
-const sharp = require("sharp");
-const { token } = require("./_config");
 const dedent = require("dedent");
+const formData = require("form-data");
+const Mailgun = require("mailgun.js");
+const { Moralis } = require("moralis/node");
+const { Octokit } = require("@octokit/core");
+const sharp = require("sharp");
+
+const {
+  token,
+  apiKey,
+  domain,
+  moralisAppId,
+  moralisServerUrl,
+  moralisMasterKey,
+} = require("./_config");
 
 const OctokitClient = Octokit.plugin(createPullRequest);
 const octokit = new OctokitClient({ auth: token });
+
+const mailgun = new Mailgun(formData);
+const mg = mailgun.client({ username: "api", key: apiKey });
 
 function isDangerous(s) {
   return s.match(/^[0-9a-zA-Z_\-]+$/) === null;
 }
 
-function getPrData(isUpdate, handle, qualifications) {
+function getPrData(isUpdate, handle, gitHubUsername, qualifications) {
   let sentenceVerb = "Register";
 
   if (isUpdate) {
@@ -21,9 +35,15 @@ function getPrData(isUpdate, handle, qualifications) {
   const title = `${sentenceVerb} warden ${handle}`;
   const branchName = `warden/${handle}`;
   const body = isUpdate
-    ? `This auto-generated PR updates info for warden ${handle}`
+    ? dedent`
+      This auto-generated PR updates info for warden ${handle}
+
+      @${gitHubUsername}
+    `
     : dedent`
         Auto-generated PR to register the new warden ${handle}
+
+        @${gitHubUsername}
         
         ${qualifications}
         `;
@@ -44,13 +64,37 @@ exports.handler = async (event) => {
     }
 
     const data = JSON.parse(event.body);
-    const { handle, qualifications, image, link, moralisId, isUpdate } = data;
+    const {
+      handle,
+      qualifications,
+      image,
+      link,
+      moralisId,
+      gitHubUsername,
+      emailAddress,
+      polygonAddress,
+      isUpdate,
+    } = data;
 
     // ensure we have the data we need
     if (!handle) {
       return {
         statusCode: 422,
         body: JSON.stringify({ error: "Handle is required" }),
+      };
+    }
+
+    if (!gitHubUsername) {
+      return {
+        statusCode: 422,
+        body: JSON.stringify({ error: "GitHub username is required" }),
+      };
+    }
+
+    if (!emailAddress) {
+      return {
+        statusCode: 422,
+        body: JSON.stringify({ error: "Email address is required" }),
       };
     }
 
@@ -83,7 +127,50 @@ exports.handler = async (event) => {
       };
     }
 
-    // @todo: prevent registering wardens who have already connected their wallets
+    const url = `${event.headers.origin}/.netlify/functions/get-user?id=${handle}`;
+    // make sure that an update has a valid warden file, and a new registration does not
+    const response = await fetch(url);
+    if (isUpdate && !response.ok) {
+      return {
+        statusCode: 422,
+        body: "Account does not exist",
+      };
+    }
+    const userData = await response.json();
+    if ((!isUpdate && response.ok) || userData.moralisId) {
+      return {
+        statusCode: 422,
+        body: "This user is already registered",
+      };
+    }
+
+    await Moralis.start({
+      serverUrl: moralisServerUrl,
+      appId: moralisAppId,
+      masterKey: moralisMasterKey,
+    });
+
+    try {
+      const isValidUser = await Moralis.Cloud.run(
+        "checkHandleAgainstPreviousSubmissions",
+        {
+          username: handle,
+          moralisId,
+          polygonAddress,
+        }
+      );
+      if (!isValidUser) {
+        return {
+          statusCode: 422,
+          body: "Unauthorized",
+        };
+      }
+    } catch (error) {
+      return {
+        statusCode: 422,
+        body: "Unauthorized",
+      };
+    }
 
     const formattedHandleData = { handle, link, moralisId };
     let avatarFilename = "";
@@ -145,6 +232,7 @@ exports.handler = async (event) => {
     const { title, body, branchName } = getPrData(
       isUpdate,
       handle,
+      gitHubUsername,
       qualifications
     );
     try {
@@ -162,10 +250,37 @@ exports.handler = async (event) => {
         ],
       });
 
-      return {
-        statusCode: 201,
-        body: JSON.stringify({ message: `Created PR ${res.data.number}` }),
+      const emailBody = dedent`
+        Your registration is being processed.
+
+        You can monitor the pull request here: ${res.url}
+
+        Once this pull request is merged, you can log in and compete in contests.
+      `;
+
+      const emailData = {
+        from: "submissions@code423n4.com",
+        to: emailAddress,
+        subject: `Registration pending for ${handle}`,
+        text: emailBody,
       };
+
+      return mg.messages
+        .create(domain, emailData)
+        .then(() => {
+          return {
+            statusCode: 201,
+            body: JSON.stringify({
+              message: `Created PR ${res.data.number} and sent confirmation email`,
+            }),
+          };
+        })
+        .catch((err) => {
+          return {
+            statusCode: err.status || 500,
+            body: JSON.stringify({ error: err.message || err }),
+          };
+        });
     } catch (error) {
       return {
         statusCode: error.response.status,
@@ -174,8 +289,10 @@ exports.handler = async (event) => {
     }
   } catch (error) {
     return {
-      statusCode: 500,
-      body: JSON.stringify({ error: "Internal server error." }),
+      statusCode: error.status || 500,
+      body: JSON.stringify({
+        error: error.message || "Internal server error.",
+      }),
     };
   }
 };

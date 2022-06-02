@@ -59,15 +59,19 @@ export default function RegistrationForm({
   updateFormStatus,
   className,
 }) {
+  // hooks
+  const { logUserOut } = useUser();
+  const { authenticate } = useMoralis();
+
+  // state
   const [state, setState] = useState(initialState);
   const [isNewUser, setIsNewUser] = useState(true);
   const [hasValidationErrors, setHasValidationErrors] = useState(false);
   const [isValidDiscord, setIsValidDiscord] = useState(true);
-  const avatarInputRef = useRef<HTMLInputElement>();
-  const { logUserOut } = useUser();
-  const { authenticate } = useMoralis();
-  const regex = new RegExp(/.*#[0-9]{4}/, "g");
 
+  // global variables
+  const avatarInputRef = useRef<HTMLInputElement>();
+  const discordUsernameRegex = new RegExp(/.*#[0-9]{4}/, "g");
   const instructions = isNewUser ? (
     <p>
       To register as a warden, please fill out this form and join us in{" "}
@@ -88,7 +92,7 @@ export default function RegistrationForm({
       return { ...prevState, [name]: value };
     });
     if (name === "discordUsername") {
-      setIsValidDiscord(regex.test(value))
+      setIsValidDiscord(discordUsernameRegex.test(value));
     }
   }, []);
 
@@ -122,7 +126,7 @@ export default function RegistrationForm({
         if (
           !state.username ||
           !state.discordUsername ||
-          !isValidDiscord||
+          !isValidDiscord ||
           (isNewUser && !state.qualifications) ||
           (isNewUser && handles.has(state.username))
         ) {
@@ -149,6 +153,7 @@ export default function RegistrationForm({
           }
 
           const moralisId = user.id;
+          const polygonAddress = user.get("ethAddress");
           const username = await user.get("c4Username");
           if (username) {
             await logUserOut();
@@ -168,10 +173,15 @@ export default function RegistrationForm({
           const requestBody = {
             handle: state.username,
             qualifications: state.qualifications,
+            gitHubUsername: state.gitHubUsername,
+            emailAddress: state.emailAddress,
+            polygonAddress,
             moralisId,
           } as {
             handle: string;
             qualifications: string;
+            gitHubUsername: string;
+            emailAddress: string;
             moralisId: string;
             link?: string;
             image?: unknown;
@@ -211,6 +221,7 @@ export default function RegistrationForm({
             }
             updateFormStatus(FormStatus.Submitted);
           } else {
+            logUserOut();
             updateFormStatus(FormStatus.Error);
             try {
               const res = await response.json();
@@ -220,6 +231,7 @@ export default function RegistrationForm({
             }
           }
         } catch (error) {
+          logUserOut();
           updateFormStatus(FormStatus.Error);
           updateErrorMessage(error);
         }
@@ -233,6 +245,7 @@ export default function RegistrationForm({
       isNewUser,
       handles,
       hasValidationErrors,
+      isValidDiscord,
     ]
   );
 
@@ -348,7 +361,9 @@ export default function RegistrationForm({
           className={clsx(
             widgetStyles.Control,
             widgetStyles.Text,
-            hasValidationErrors && !state.discordUsername && "input-error"
+            hasValidationErrors &&
+              (!state.discordUsername || !isValidDiscord) &&
+              "input-error"
           )}
           type="text"
           id="discordUsername"
@@ -362,14 +377,14 @@ export default function RegistrationForm({
             <small>This field is required</small>
           </p>
         )}
-        {(!isValidDiscord) ? (
-          <p className={widgetStyles.Help}>
+        {hasValidationErrors && !isValidDiscord && (
+          <p className={widgetStyles.ErrorMessage}>
             <small>
               Make sure you enter your discord username, and not your server
               nickname. It should end with '#' followed by 4 digits.
             </small>
           </p>
-        ) : ''}
+        )}
       </div>
       <div className={widgetStyles.Container}>
         <label htmlFor="gitHubUsername" className={widgetStyles.Label}>

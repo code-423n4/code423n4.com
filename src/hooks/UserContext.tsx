@@ -13,7 +13,8 @@ import { navigate } from "gatsby";
 import { ModalProvider, useModalContext } from "./ModalContext";
 
 export enum UserLoginError {
-  Pending = "registration pending",
+  RegistrationPending = "registration pending",
+  ConnectionPending = "connect wallet pending",
   Unknown = "",
 }
 
@@ -49,7 +50,7 @@ const DEFAULT_STATE: UserState = {
   link: null,
 };
 
-const UserContext = createContext({ currentUser: DEFAULT_STATE });
+const UserContext = createContext<User>({ currentUser: DEFAULT_STATE });
 
 const UserProvider = ({ children }) => {
   const { isAuthenticated, logout, user } = useMoralis();
@@ -145,30 +146,24 @@ const UserProvider = ({ children }) => {
       gitHubUsername,
       emailAddress,
     } = user.attributes;
-    const response = await fetch(
+    const userResponse = await fetch(
       `/.netlify/functions/get-user?id=${c4Username}`
     );
-    if (!response.ok) {
-      const error = await response.json();
+    if (!userResponse.ok) {
+      const error = await userResponse.json();
       if (error.error === "User not found") {
-        throw UserLoginError.Pending;
+        throw UserLoginError.RegistrationPending;
       }
       throw UserLoginError.Unknown;
     }
 
+    const registeredUser = await userResponse.json();
+    if (!registeredUser) {
+      throw UserLoginError.RegistrationPending;
+    }
 
-    // fetching team
-    const teamResponse = await fetch(
-      `/.netlify/functions/get-team?id=${c4Username}`
-    );
-    let team = [];
-    if (teamResponse.status === 200) {
-      team = await teamResponse.json();
-    } 
-
-    const registeredUser = await response.json();
-    if (!registeredUser || !registeredUser.moralisId) {
-      throw UserLoginError.Pending;
+    if (!registeredUser.moralisId) {
+      throw UserLoginError.ConnectionPending;
     }
 
     if (registeredUser.image) {
@@ -185,6 +180,15 @@ const UserProvider = ({ children }) => {
     const link = registeredUser.link || null;
     const img = registeredUser.image || null;
 
+    // fetching teams
+    const teamsResponse = await fetch(
+      `/.netlify/functions/get-team?id=${c4Username}`
+    );
+    let teams = [];
+    if (teamsResponse.status === 200) {
+      teams = await teamsResponse.json();
+    }
+
     setCurrentUser({
       username: c4Username,
       moralisId,
@@ -194,7 +198,7 @@ const UserProvider = ({ children }) => {
       emailAddress,
       link,
       img,
-      teams: team,
+      teams,
       isLoggedIn: true,
     });
   };

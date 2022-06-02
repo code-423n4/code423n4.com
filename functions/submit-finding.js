@@ -136,12 +136,29 @@ exports.handler = async (event) => {
     };
   }
 
-  const isTeamSubmission = attributedTo !== user;
-
   try {
+    const userUrl = `${event.headers.origin}/.netlify/functions/get-user?id=${user}`;
+    const userResponse = await fetch(userUrl);
+    if (!userResponse.ok) {
+      return {
+        statusCode: 401,
+        body: "You must be registered to submit findings",
+      };
+    }
+
+    const userData = await userResponse.json();
+    if (!userData || !userData.moralisId) {
+      return {
+        statusCode: 401,
+        body: "You must be registered to submit findings",
+      };
+    }
+
+    const { moralisId } = userData;
     const sessionToken = authorization.split("Bearer ")[1];
     const confirmed = await Moralis.Cloud.run("confirmUser", {
       sessionToken,
+      moralisId,
       username: user,
     });
     if (!confirmed) {
@@ -152,19 +169,19 @@ exports.handler = async (event) => {
         }),
       };
     }
+
+    const isTeamSubmission = attributedTo !== user;
     if (isTeamSubmission) {
-      const url = `${event.headers.origin}/.netlify/functions/get-user?id=${attributedTo}`;
-      const response = await fetch(url);
-      if (!response.ok) {
+      const teamUrl = `${event.headers.origin}/.netlify/functions/get-user?id=${attributedTo}`;
+      const teamResponse = await fetch(teamUrl);
+      if (!teamResponse.ok) {
         return {
           statusCode: 401,
-          body: JSON.stringify({
-            error: "You must be registered to submit findings",
-          }),
+          body: "You must be registered to submit findings",
         };
       }
-      const team = await response.json();
-      if (!team || !team.members || !team.members.includes(user)) {
+      const teamData = await teamResponse.json();
+      if (!teamData.members || !teamData.members.includes(user)) {
         return {
           statusCode: 401,
           body: JSON.stringify({
@@ -172,10 +189,10 @@ exports.handler = async (event) => {
           }),
         };
       }
-      if (!team.address) {
+      if (!teamData.address) {
         // create a PR to update team JSON file with team address
         try {
-          await updateTeamData(team, address);
+          await updateTeamData(teamData, address);
         } catch (error) {
           // don't throw error if this PR fails - there will likely be duplicates
           // due to the fact that PRs take some time to review and merge and we

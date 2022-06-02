@@ -277,9 +277,9 @@ const SubmitFindings = ({ wardensList, sponsor, contest, repo }) => {
       hasErrors = true;
     }
 
-    const regex = new RegExp("#L", "g");
+    const locRegex = new RegExp("#L", "g");
     const hasInvalidLinks = state.linesOfCode.some((line) => {
-      return !regex.test(line.value);
+      return !locRegex.test(line.value);
     });
 
     if (!isQaOrGasFinding && (!state.linesOfCode[0].value || hasInvalidLinks)) {
