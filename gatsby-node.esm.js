@@ -7,7 +7,7 @@ import webpack from "webpack";
 
 import SchemaCustomization from "./schema";
 
-const { token } = require("./functions/_config");
+const { token } = require("./_config");
 
 const octokit = new Octokit({
   auth: token,

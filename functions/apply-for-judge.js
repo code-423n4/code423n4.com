@@ -2,7 +2,7 @@ const dedent = require("dedent");
 const { Moralis } = require("moralis/node");
 const { Octokit } = require("@octokit/core");
 
-const { token, moralisAppId, moralisServerUrl } = require("./_config");
+const { token, moralisAppId, moralisServerUrl } = require("../_config");
 
 const octokit = new Octokit({ auth: token });
 

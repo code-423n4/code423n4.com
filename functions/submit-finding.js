@@ -13,7 +13,7 @@ const {
   domain,
   moralisAppId,
   moralisServerUrl,
-} = require("./_config");
+} = require("../_config");
 
 const OctokitClient = Octokit.plugin(createPullRequest);
 const octokit = new OctokitClient({ auth: token });
