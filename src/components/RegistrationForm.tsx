@@ -71,7 +71,7 @@ export default function RegistrationForm({
 
   // global variables
   const avatarInputRef = useRef<HTMLInputElement>();
-  const regex = new RegExp(/.*#[0-9]{4}/, "g");
+  const discordUsernameRegex = new RegExp(/.*#[0-9]{4}/, "g");
   const instructions = isNewUser ? (
     <p>
       To register as a warden, please fill out this form and join us in{" "}
@@ -92,7 +92,7 @@ export default function RegistrationForm({
       return { ...prevState, [name]: value };
     });
     if (name === "discordUsername") {
-      setIsValidDiscord(regex.test(value));
+      setIsValidDiscord(discordUsernameRegex.test(value));
     }
   }, []);
 

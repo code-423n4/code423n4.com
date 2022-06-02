@@ -38,7 +38,7 @@ export default function ConfirmAccount() {
   const [errorMessage, setErrorMessage] = useState<string>("");
 
   // global variables
-  const regex = new RegExp(/.*#[0-9]{4}/, "g");
+  const discordUsernameRegex = new RegExp(/.*#[0-9]{4}/, "g");
 
   useEffect(() => {
     const getUser = async (): Promise<void> => {
@@ -67,7 +67,7 @@ export default function ConfirmAccount() {
 
   const handleDiscordUsernameChange = (e) => {
     setDiscordUsername(e.target.value);
-    setIsValidDiscord(regex.test(e.target.value));
+    setIsValidDiscord(discordUsernameRegex.test(e.target.value));
   };
 
   const handleSubmit = useCallback(

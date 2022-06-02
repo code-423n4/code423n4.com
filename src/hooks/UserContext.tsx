@@ -50,7 +50,7 @@ const DEFAULT_STATE: UserState = {
   link: null,
 };
 
-const UserContext = createContext({ currentUser: DEFAULT_STATE });
+const UserContext = createContext<User>({ currentUser: DEFAULT_STATE });
 
 const UserProvider = ({ children }) => {
   const { isAuthenticated, logout, user } = useMoralis();
@@ -146,28 +146,18 @@ const UserProvider = ({ children }) => {
       gitHubUsername,
       emailAddress,
     } = user.attributes;
-    const response = await fetch(
+    const userResponse = await fetch(
       `/.netlify/functions/get-user?id=${c4Username}`
     );
-    if (!response.ok) {
-      const error = await response.json();
+    if (!userResponse.ok) {
+      const error = await userResponse.json();
       if (error.error === "User not found") {
         throw UserLoginError.RegistrationPending;
       }
       throw UserLoginError.Unknown;
     }
 
-
-    // fetching team
-    const teamResponse = await fetch(
-      `/.netlify/functions/get-team?id=${c4Username}`
-    );
-    let team = [];
-    if (teamResponse.status === 200) {
-      team = await teamResponse.json();
-    } 
-
-    const registeredUser = await response.json();
+    const registeredUser = await userResponse.json();
     if (!registeredUser) {
       throw UserLoginError.RegistrationPending;
     }
@@ -190,6 +180,15 @@ const UserProvider = ({ children }) => {
     const link = registeredUser.link || null;
     const img = registeredUser.image || null;
 
+    // fetching teams
+    const teamsResponse = await fetch(
+      `/.netlify/functions/get-team?id=${c4Username}`
+    );
+    let teams = [];
+    if (teamsResponse.status === 200) {
+      teams = await teamsResponse.json();
+    }
+
     setCurrentUser({
       username: c4Username,
       moralisId,
@@ -199,7 +198,7 @@ const UserProvider = ({ children }) => {
       emailAddress,
       link,
       img,
-      teams: team,
+      teams,
       isLoggedIn: true,
     });
   };
