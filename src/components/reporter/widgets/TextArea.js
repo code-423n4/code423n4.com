@@ -31,9 +31,14 @@ const TextArea = ({ name, required, fieldState, isInvalid, onChange }) => {
             onChange={handleChange}
             required={required}
             value={fieldState}
-            maxLength={65536}
+            maxLength={window.location.href.includes('/help') ? 2000 : 65536}
           />
-          <span className={clsx(styles.TextAreaCounter)}>{fieldState.length}/65,536</span>
+
+          {fieldState.length > 1900 && window.location.href.includes('/help') ? (
+            <span className={clsx(styles.TextAreaCounter)}>
+              {2000 - fieldState.length} chars remaining
+            </span>
+          ): ''}
         </div>
       </TabPanel>
       <TabPanel>

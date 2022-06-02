@@ -120,7 +120,7 @@ function ContactUs() {
       (!fieldState.discordHandle && !fieldState.email) ||
       fields.some((field) => {
         return field.required && !fieldState[field.name];
-      })
+      }) || fieldState.description.length > 2000
     ) {
       setValidationErrors(true);
       return;
@@ -179,6 +179,9 @@ function ContactUs() {
               fieldState={fieldState}
               showValidationErrors={hasValidationErrors}
             />
+            {
+              fieldState.description.length > 1900 ? <p>Max 2000 characters</p>: ''
+            }
           </fieldset>
           <div className="captcha-container">
             <HCaptcha
@@ -191,7 +194,7 @@ function ContactUs() {
             className="button cta-button centered"
             type="button"
             onClick={handleSubmit}
-            disabled={status !== FormStatus.Unsubmitted || !captchaToken}
+            disabled={status !== FormStatus.Unsubmitted || !captchaToken || fieldState.description.length > 2000}
           >
             {status === FormStatus.Unsubmitted ? "Submit" : "Submitting..."}
           </button>
