@@ -1,3 +1,4 @@
+const { createPullRequest } = require("octokit-plugin-create-pull-request");
 const csv = require("csvtojson");
 const dedent = require("dedent");
 const formData = require("form-data");
@@ -15,7 +16,8 @@ const {
   moralisMasterKey,
 } = require("./_config");
 
-const octokit = new Octokit({ auth: token });
+const OctokitClient = Octokit.plugin(createPullRequest);
+const octokit = new OctokitClient({ auth: token });
 
 const mailgun = new Mailgun(formData);
 const mg = mailgun.client({ username: "api", key: apiKey });
@@ -35,12 +37,44 @@ async function getContestEnd(contestId) {
   return new Date(contest.end_time).getTime();
 }
 
+async function updateTeamData(team, newPolygonAddress) {
+  // @todo: delete this once all existing teams have added addresses
+  const updatedTeamData = JSON.stringify(
+    {
+      ...team,
+      address: newPolygonAddress,
+    },
+    null,
+    2
+  );
+  const files = {
+    [`_data/handles/${teamName}.json`]: updatedTeamData,
+  };
+  const body = `This auto-generated PR adds polygon address for team ${teamName}`;
+  const title = `Add address for team ${teamName}`;
+  await octokit.createPullRequest({
+    owner: "code-423n4",
+    repo: "code423n4.com",
+    title,
+    body,
+    head: `warden/${teamName}`,
+    changes: [
+      {
+        files,
+        commit: title,
+      },
+    ],
+  });
+}
+
 exports.handler = async (event) => {
   // only allow POST
   if (event.httpMethod !== "POST") {
     return {
       statusCode: 405,
-      body: "Method not allowed",
+      body: JSON.stringify({
+        error: "Method not allowed",
+      }),
       headers: { Allow: "POST" },
     };
   }
@@ -85,8 +119,10 @@ exports.handler = async (event) => {
   ) {
     return {
       statusCode: 422,
-      body:
-        "Email, handle, address, risk, title, body, and labels are required.",
+      body: JSON.stringify({
+        error:
+          "Email, handle, address, risk, title, body, and labels are required.",
+      }),
     };
   }
 
@@ -94,9 +130,13 @@ exports.handler = async (event) => {
   if (!authorization) {
     return {
       statusCode: 401,
-      body: "Unauthorized",
+      body: JSON.stringify({
+        error: "Unauthorized",
+      }),
     };
   }
+
+  const isTeamSubmission = attributedTo !== user;
 
   try {
     const sessionToken = authorization.split("Bearer ")[1];
@@ -107,46 +147,69 @@ exports.handler = async (event) => {
     if (!confirmed) {
       return {
         statusCode: 401,
-        body: "Unauthorized",
+        body: JSON.stringify({
+          error: "Authorization failed",
+        }),
       };
     }
-    if (attributedTo !== user) {
+    if (isTeamSubmission) {
       const url = `${event.headers.origin}/.netlify/functions/get-user?id=${attributedTo}`;
       const response = await fetch(url);
       if (!response.ok) {
         return {
           statusCode: 401,
-          body: "Unauthorized",
+          body: JSON.stringify({
+            error: "You must be registered to submit findings",
+          }),
         };
       }
       const team = await response.json();
       if (!team || !team.members || !team.members.includes(user)) {
         return {
           statusCode: 401,
-          body: "Unauthorized",
+          body: JSON.stringify({
+            error: "You cannot submit findings for a team you are not on",
+          }),
         };
+      }
+      if (!team.address) {
+        // create a PR to update team JSON file with team address
+        try {
+          await updateTeamData(team, address);
+        } catch (error) {
+          // don't throw error if this PR fails - there will likely be duplicates
+          // due to the fact that PRs take some time to review and merge and we
+          // don't want to block teams from submitting findings in the meantime
+          console.error(error);
+        }
       }
     }
   } catch (err) {
     return {
-      statusCode: 500,
-      body: err.message || "Internal server error",
+      statusCode: err.status || 500,
+      body: JSON.stringify({
+        error: err.message || "Internal server error",
+      }),
     };
   }
 
   if (isDangerousRepo(repo)) {
     return {
       statusCode: 400,
-      body:
-        "Repository can only contain alphanumeric characters [a-zA-Z0-9] and hyphens (-).",
+      body: JSON.stringify({
+        error:
+          "Repository can only contain alphanumeric characters [a-zA-Z0-9] and hyphens (-).",
+      }),
     };
   }
 
   if (isDangerousHandle(user) || isDangerousHandle(attributedTo)) {
     return {
       statusCode: 400,
-      body:
-        "Handle can only contain alphanumeric characters [a-zA-Z0-9], underscores (_), and hyphens (-).",
+      body: JSON.stringify({
+        error:
+          "Handle can only contain alphanumeric characters [a-zA-Z0-9], underscores (_), and hyphens (-).",
+      }),
     };
   }
 
@@ -156,14 +219,18 @@ exports.handler = async (event) => {
     if (Date.now() - 5000 > contestEnd) {
       return {
         statusCode: 400,
-        body: "This contest has ended.",
+        body: JSON.stringify({
+          error: "This contest has ended.",
+        }),
       };
     }
   } catch (error) {
     console.error(error);
     return {
       statusCode: 422,
-      body: "Error fetching contest data",
+      body: JSON.stringify({
+        error: "Error fetching contest data",
+      }),
     };
   }
 
@@ -246,7 +313,9 @@ exports.handler = async (event) => {
   } catch (error) {
     return {
       statusCode: 500,
-      body: "Something went wrong with your submission. Please try again.",
+      body: JSON.stringify({
+        error: "Something went wrong with your submission. Please try again.",
+      }),
     };
   }
 };
