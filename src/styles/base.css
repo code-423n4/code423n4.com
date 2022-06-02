@@ -253,6 +253,11 @@ iframe {
   color-scheme: light;
 }
 
+.button-div {
+  background-color: transparent;
+  border:none;
+}
+
 @media (max-width: 600px) {
   body {
     margin: 0;
