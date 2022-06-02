@@ -94,11 +94,11 @@ module.exports = {
           {
             resolve: `gatsby-remark-vscode`,
             options: {
-              theme: 'Dark+ (default dark)',
+              theme: "Dark+ (default dark)",
               languageAliases: {
-                solidity: 'js'
-              }
-            }
+                solidity: "js",
+              },
+            },
           },
         ],
       },

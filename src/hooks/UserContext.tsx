@@ -275,17 +275,30 @@ const UserProvider = ({ children }) => {
   );
 };
 
-// @todo: move this into root context
-export const wrapRootElement = ({ element }) => (
-  <MoralisProvider
-    appId={process.env.GATSBY_MORALIS_APP_ID}
-    serverUrl={process.env.GATSBY_MORALIS_SERVER}
-  >
-    <ModalProvider>
-      <UserProvider>{element}</UserProvider>
-    </ModalProvider>
-  </MoralisProvider>
-);
+export const wrapRootElement = ({ element }) => {
+  const environment = process.env.NODE_ENV;
+  let appId;
+  let serverUrl;
+
+  if (environment === "staging") {
+    serverUrl = process.env.STAGING_MORALIS_SERVER;
+    appId = process.env.STAGING_MORALIS_APP_ID;
+  } else if (environment === "production") {
+    serverUrl = process.env.PRODUCTION_MORALIS_SERVER;
+    appId = process.env.PRODUCTION_MORALIS_APP_ID;
+  } else {
+    serverUrl = process.env.DEV_MORALIS_SERVER;
+    appId = process.env.DEV_MORALIS_APP_ID;
+  }
+
+  return (
+    <MoralisProvider appId={appId} serverUrl={serverUrl}>
+      <ModalProvider>
+        <UserProvider>{element}</UserProvider>
+      </ModalProvider>
+    </MoralisProvider>
+  );
+};
 
 const useUser = () => {
   const currentUser = useContext(UserContext);

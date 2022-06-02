@@ -5,8 +5,8 @@ public
 .cache
 .nova
 .env
-.env.development
-.env.production
+.env.*
+!.env.sample
 .netlify
 yarn-error.log
 cloud
