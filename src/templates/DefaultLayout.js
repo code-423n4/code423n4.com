@@ -4,6 +4,7 @@ import { ToastContainer } from "react-toastify";
 
 import Footer from "../components/content/Footer";
 import Header from "../components/content/Header";
+import Modal from "../components/Modal";
 
 const DefaultLayout = (props) => {
   const {
@@ -81,6 +82,7 @@ const DefaultLayout = (props) => {
       </Helmet>
       <Header />
       <ToastContainer />
+      <Modal />
       <main>
         {children}
         <Footer />

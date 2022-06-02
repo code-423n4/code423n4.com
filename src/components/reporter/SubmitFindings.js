@@ -20,17 +20,19 @@ import {
   checkQaOrGasFinding,
 } from "./findings/functions";
 import useUser from "../../hooks/UserContext";
+import { useModalContext } from "../../hooks/ModalContext";
 
 // components
 import Agreement from "../content/Agreement";
+import { DynamicInputGroup } from "../DynamicInputGroup";
 import FormField from "./widgets/FormField";
+import Login from "../Login/Login";
 import WardenDetails from "../WardenDetails";
 import Widget from "./widgets/Widget";
 
 // styles
 import * as styles from "../form/Form.module.scss";
 import * as widgetStyles from "../reporter/widgets/Widgets.module.scss";
-import { DynamicInputGroup } from "../DynamicInputGroup";
 
 const mdTemplate =
   "## Impact\nDetailed description of the impact of this finding.\n\n## Proof of Concept\nProvide direct links to all referenced code in GitHub. Add screenshots, logs, or any other relevant proof that illustrates the concept.\n\n## Tools Used\n\n## Recommended Mitigation Steps";
@@ -60,6 +62,7 @@ const SubmitFindings = ({ wardensList, sponsor, contest, repo }) => {
     return { value: node.handle, image: node.image };
   });
   const { currentUser } = useUser();
+
   // Component State
   const [status, setStatus] = useState(FormStatus.Unsubmitted);
   const [hasValidationErrors, setHasValidationErrors] = useState(false);
@@ -77,7 +80,7 @@ const SubmitFindings = ({ wardensList, sponsor, contest, repo }) => {
     addressField,
     riskField,
   ]);
-  const submissionUrl = `/.netlify/functions/submit-finding`;
+  const { showModal } = useModalContext();
 
   // effects
   useEffect(() => {
@@ -181,45 +184,75 @@ const SubmitFindings = ({ wardensList, sponsor, contest, repo }) => {
     setStatus(FormStatus.Unsubmitted);
   };
 
-  const submitFinding = useCallback(
-    (url, data) => {
-      (async () => {
-        setStatus(FormStatus.Submitting);
-        const user = await Moralis.User.current();
-        if (!user) {
-          setStatus(FormStatus.Error);
-          return;
-        }
-        const sessionToken = user.attributes.sessionToken;
-        try {
-          const response = await fetch(url, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              "X-Authorization": `Bearer ${sessionToken}`,
-            },
-            body: JSON.stringify(data),
-          });
-          if (response.ok) {
-            setStatus(FormStatus.Submitted);
-            if (typeof window !== `undefined`) {
-              window.localStorage.removeItem(contest);
-            }
-          } else {
-            setStatus(FormStatus.Error);
-            const message = await response.json();
-            if (message) {
-              setErrorMessage(message);
-            }
+  const submitFinding = useCallback(() => {
+    const url = `/.netlify/functions/submit-finding`;
+    const isQaOrGasFinding = checkQaOrGasFinding(state.risk);
+
+    const locString = state.linesOfCode.map((loc) => loc.value).join("\n");
+    const details = isQaOrGasFinding ? state.qaGasDetails : state.details;
+    const markdownBody = `# Lines of code\n\n${locString}\n\n\n# Vulnerability details\n\n${details}\n\n`;
+    const formattedRisk = state.risk ? state.risk.slice(0, 1) : "";
+    const formattedBody = isQaOrGasFinding ? details : markdownBody;
+    const emailAddressList = additionalEmailAddresses
+      .filter((email) => !!email)
+      .push(currentUser.emailAddress);
+
+    const data = {
+      user: currentUser.username,
+      contest,
+      sponsor,
+      repo: repo.split("/").pop(),
+      emailAddresses: emailAddressList,
+      attributedTo,
+      address: polygonAddress,
+      risk: formattedRisk,
+      title: checkTitle(state.title, state.risk),
+      body: formattedBody,
+      labels: [config.labelAll, state.risk],
+    };
+    (async () => {
+      setStatus(FormStatus.Submitting);
+      const user = await Moralis.User.current();
+      if (!user) {
+        setStatus(FormStatus.Error);
+        return;
+      }
+      const sessionToken = user.attributes.sessionToken;
+      try {
+        const response = await fetch(url, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-Authorization": `Bearer ${sessionToken}`,
+          },
+          body: JSON.stringify(data),
+        });
+        if (response.ok) {
+          setStatus(FormStatus.Submitted);
+          if (typeof window !== `undefined`) {
+            window.localStorage.removeItem(contest);
           }
-        } catch (error) {
+        } else {
           setStatus(FormStatus.Error);
-          console.error(error);
+          const { error } = await response.json();
+          if (error) {
+            setErrorMessage(error);
+          }
         }
-      })();
-    },
-    [contest]
-  );
+      } catch (error) {
+        setStatus(FormStatus.Error);
+      }
+    })();
+  }, [
+    contest,
+    currentUser,
+    state,
+    additionalEmailAddresses,
+    polygonAddress,
+    sponsor,
+    repo,
+    attributedTo,
+  ]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -228,22 +261,18 @@ const SubmitFindings = ({ wardensList, sponsor, contest, repo }) => {
     }
 
     const isQaOrGasFinding = checkQaOrGasFinding(state.risk);
-    const locString = state.linesOfCode.map((loc) => loc.value).join("\n");
-    const details = isQaOrGasFinding ? state.qaGasDetails : state.details;
-    const markdownBody = `# Lines of code\n\n${locString}\n\n\n# Vulnerability details\n\n${details}\n\n`;
-
     // extract required fields from field data for validation check
-    const formatedRisk = state.risk ? state.risk.slice(0, 1) : "";
-    const formatedBody = isQaOrGasFinding ? details : markdownBody;
-
     const requiredFields = isQaOrGasFinding
-      ? [formatedRisk, formatedBody]
-      : [formatedRisk, state.title, formatedBody];
+      ? [state.risk, state.qaGasDetails]
+      : [state.risk, state.title, state.details];
     let hasErrors = requiredFields.some((field) => {
       return field === "" || field === undefined;
     });
 
-    // TODO: verify that loc include code lines and are valid URLs
+    if (!polygonAddress) {
+      hasErrors = true;
+    }
+
     if (!isQaOrGasFinding && !state.linesOfCode[0].value) {
       hasErrors = true;
     }
@@ -256,30 +285,38 @@ const SubmitFindings = ({ wardensList, sponsor, contest, repo }) => {
     if (!isQaOrGasFinding && (!state.linesOfCode[0].value || hasInvalidLinks)) {
       hasErrors = true;
     }
+
     if (hasErrors) {
       setHasValidationErrors(hasErrors);
       return;
     }
-    const emailAddressList = additionalEmailAddresses
-      .filter((email) => !!email)
-      .push(currentUser.emailAddress);
 
-    const submitData = {
-      user: currentUser.username,
-      contest,
-      sponsor,
-      repo: repo.split("/").pop(),
-      emailAddresses: emailAddressList,
-      attributedTo,
-      address: polygonAddress,
-      risk: formatedRisk,
-      title: checkTitle(state.title, state.risk),
-      body: formatedBody,
-      labels: [config.labelAll, state.risk],
-    };
-
-    submitFinding(submissionUrl, submitData);
-    setIsExpanded(false);
+    const team = currentUser.teams.find(
+      (team) => team.username === attributedTo
+    );
+    if (team && !team.address) {
+      console.log("showing modal");
+      // confirm saving the team's address
+      showModal({
+        title: `Save address for team ${attributedTo}`,
+        body: (
+          <>
+            <p>
+              When you submit this finding, the polygon address you entered here
+              will be saved for your team. Are you sure you entered it
+              correctly?
+            </p>
+            <p>{polygonAddress}</p>
+          </>
+        ),
+        primaryButtonAction: submitFinding,
+        primaryButtonText: "Confirm and Submit",
+        secondaryButtonText: "Close and Edit",
+      });
+    } else {
+      submitFinding();
+      setIsExpanded(false);
+    }
   };
 
   return currentUser.isLoggedIn ? (
@@ -289,7 +326,7 @@ const SubmitFindings = ({ wardensList, sponsor, contest, repo }) => {
       }
     >
       <div className={clsx(styles.FormHeader)}>
-        <h1>{`${sponsor} contest finding`}</h1>
+        <h1 className={styles.Heading1}>{`${sponsor} contest finding`}</h1>
         <button
           onClick={() => setIsExpanded(!isExpanded)}
           className={clsx(styles.FormIconButton)}
@@ -305,13 +342,13 @@ const SubmitFindings = ({ wardensList, sponsor, contest, repo }) => {
         status === FormStatus.Submitting) && (
         <form>
           <fieldset className={widgetStyles.Fields}>
-            <h2>User Info</h2>
+            <h2 className={styles.Heading2}>User Info</h2>
             {currentUser.teams.length > 0 ? (
               <fieldset
                 className={clsx(widgetStyles.Fields, widgetStyles.RadioGroup)}
               >
-                <h3>Submitting as</h3>
-                <label htmlFor="currentUser">WARDEN</label>
+                <h3 className={styles.Heading3}>Submitting as</h3>
+                <h4 className={styles.Heading4}>WARDEN</h4>
                 <label className={widgetStyles.RadioLabel}>
                   <input
                     className={widgetStyles.Radio}
@@ -327,7 +364,7 @@ const SubmitFindings = ({ wardensList, sponsor, contest, repo }) => {
                     img={currentUser.img}
                   />
                 </label>
-                <label htmlFor="team">TEAM MEMBER</label>
+                <h4 className={styles.Heading4}>TEAM MEMBER</h4>
                 {currentUser.teams.map((team, i) => (
                   <label
                     className={widgetStyles.RadioLabel}
@@ -438,7 +475,7 @@ const SubmitFindings = ({ wardensList, sponsor, contest, repo }) => {
       )}
       {status === FormStatus.Submitted && (
         <div className="centered-text">
-          <h1>Thank you!</h1>
+          <h2 className={styles.Heading2}>Thank you!</h2>
           <p>Your report has been submitted.</p>
           <button
             className="button cta-button"
@@ -451,7 +488,19 @@ const SubmitFindings = ({ wardensList, sponsor, contest, repo }) => {
       )}
     </div>
   ) : (
-    <p>You must connect your wallet to submit findings</p>
+    <div className="centered-text">
+      <div className={clsx(styles.Form)}>
+        <h1>Please login</h1>
+        {/* TODO: add date and link */}
+        <p>
+          You need to be a registered warden currently connected via wallet to
+          see this page. Note to existing wardens: As of [date] wardens are
+          required to authenticate with a wallet to submit findings. You can
+          read more about this change <a href="/"> here</a>.
+        </p>
+        <Login displayAsButtons={true} />
+      </div>
+    </div>
   );
 };
 

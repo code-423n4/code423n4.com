@@ -10,6 +10,7 @@ import { MoralisProvider, useMoralis } from "react-moralis";
 import Moralis from "moralis";
 import { toast } from "react-toastify";
 import { navigate } from "gatsby";
+import { ModalProvider, useModalContext } from "./ModalContext";
 
 export enum UserLoginError {
   RegistrationPending = "registration pending",
@@ -49,15 +50,30 @@ const DEFAULT_STATE: UserState = {
   link: null,
 };
 
-const UserContext = createContext<User>({ currentUser: DEFAULT_STATE });
+const UserContext = createContext({ currentUser: DEFAULT_STATE });
 
 const UserProvider = ({ children }) => {
   const { isAuthenticated, logout, user } = useMoralis();
+  const { showModal } = useModalContext();
   const [currentUser, setCurrentUser] = useState(DEFAULT_STATE);
   const [
     accountChangeListenerInitialized,
     setAccountChangeListenerInitialized,
   ] = useState(false);
+
+  const linkAccount = async (account, username) => {
+    try {
+      await Moralis.link(account);
+    } catch (error) {
+      console.error(error);
+      if (error.message === "this auth is already used") {
+        toast.error(
+          `Account cannot be linked to ${username} because it is already associated with another user. You have been logged out.`
+        );
+      }
+      await logout();
+    }
+  };
 
   useEffect(() => {
     if (accountChangeListenerInitialized) {
@@ -92,28 +108,27 @@ const UserProvider = ({ children }) => {
             await logout();
             return;
           }
-          // @todo: implement a custom confirmation modal
-          const confirmed = confirm(
-            `Are you sure you want to link your account ${account} to ${username}?`
-          );
-          if (!confirmed) {
-            await logout();
-            return;
-          }
-
-          try {
-            await Moralis.link(account);
-          } catch (error) {
-            console.error(error);
-            if (error.message === "this auth is already used") {
-              toast.error(
-                `Account cannot be linked to ${username} because it is already associated with another user. You have been logged out.`
-              );
-            }
-            await logout();
-          }
+          showModal({
+            title: "Link this address to your account",
+            body: (
+              <>
+                <p>
+                  {username}, are you sure you want to link the address{" "}
+                  {account} to your account?
+                </p>
+                <p>
+                  If you do not want to link the address to your account, you
+                  must log out
+                </p>
+              </>
+            ),
+            primaryButtonText: "Link address",
+            secondaryButtonText: "Logout",
+            primaryButtonAction: async () =>
+              await linkAccount(account, username),
+            secondaryButtonAction: logout,
+          });
         } catch (error) {
-          console.error(error);
           toast.error(error.message);
           await logout();
         }
@@ -141,6 +156,16 @@ const UserProvider = ({ children }) => {
       }
       throw UserLoginError.Unknown;
     }
+
+
+    // fetching team
+    const teamResponse = await fetch(
+      `/.netlify/functions/get-team?id=${c4Username}`
+    );
+    let team = [];
+    if (teamResponse.status === 200) {
+      team = await teamResponse.json();
+    } 
 
     const registeredUser = await response.json();
     if (!registeredUser) {
@@ -174,8 +199,7 @@ const UserProvider = ({ children }) => {
       emailAddress,
       link,
       img,
-      // @todo fetch teams
-      teams: [],
+      teams: team,
       isLoggedIn: true,
     });
   };
@@ -252,12 +276,15 @@ const UserProvider = ({ children }) => {
   );
 };
 
+// @todo: move this into root context
 export const wrapRootElement = ({ element }) => (
   <MoralisProvider
     appId={process.env.GATSBY_MORALIS_APP_ID}
     serverUrl={process.env.GATSBY_MORALIS_SERVER}
   >
-    <UserProvider>{element}</UserProvider>
+    <ModalProvider>
+      <UserProvider>{element}</UserProvider>
+    </ModalProvider>
   </MoralisProvider>
 );
 

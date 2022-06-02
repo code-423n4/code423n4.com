@@ -25,6 +25,29 @@
   }
 }
 
+.NoDropdown {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  @media (max-width: 970px) {
+    flex-direction: column;
+  }
+}
+
+.SmallerButton {
+  max-width: 250px;
+}
+
+.ButtonMargin {
+  @media (max-width: 970px) {
+    margin-bottom: 10px;
+  }
+}
+
 .Desktop {
   @media (max-width: 970px) {
     display: none;

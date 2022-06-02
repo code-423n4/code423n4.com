@@ -10,7 +10,7 @@ import Dropdown from "../Dropdown";
 import * as styles from "./Login.module.scss";
 import * as dropdownStyles from "../Dropdown.module.scss";
 
-const Login = () => {
+const Login = ({ displayAsButtons = false }) => {
   const { logUserOut, connectWallet } = useUser();
   const { authenticate } = useMoralis();
 
@@ -67,60 +67,91 @@ const Login = () => {
 
   return (
     <>
-      <Dropdown
-        wrapperClass={styles.LoginButtonWrapper}
-        triggerButtonClass={styles.LoginButton}
-        triggerButton="Connect Wallet"
-        openOnHover={true}
-        className={styles.Desktop}
-      >
-        <button
-          type="button"
-          onClick={(e) => handleLogin(e)}
-          className={clsx(dropdownStyles.Button, styles.Desktop)}
-        >
-          <img
-            src="/images/meta-mask-logo.svg"
-            alt="logout icon"
-            className={styles.Icon}
-          />
-          Connect MetaMask
-        </button>
-        <button
-          type="button"
-          onClick={(e) => handleLogin(e, "walletConnect")}
-          className={clsx(dropdownStyles.Button, styles.Desktop)}
-        >
-          <img
-            src="/images/wallet-connect-logo.svg"
-            alt="logout icon"
-            className={styles.Icon}
-          />
-          Connect WalletConnect
-        </button>
-      </Dropdown>
-      <div className={styles.Mobile}>
-        <a href="" onClick={(e) => handleLogin(e)} className={styles.Link}>
-          <img
-            src="/images/meta-mask-logo.svg"
-            alt="logout icon"
-            className={styles.Icon}
-          />
-          Connect MetaMask
-        </a>
-        <a
-          href=""
-          onClick={(e) => handleLogin(e, "walletConnect")}
-          className={styles.Link}
-        >
-          <img
-            src="/images/wallet-connect-logo.svg"
-            alt="logout icon"
-            className={styles.Icon}
-          />
-          Connect WalletConnect
-        </a>
-      </div>
+      {displayAsButtons ? (
+        <div className={clsx(styles.NoDropdown)}>
+          <button
+            type="button"
+            onClick={(e) => handleLogin(e)}
+            className={clsx(dropdownStyles.Button, styles.ButtonMargin, styles.SmallerButton)}
+          >
+            <img
+              src="/images/meta-mask-logo.svg"
+              alt="logout icon"
+              className={styles.Icon}
+            />
+            Connect MetaMask
+          </button>
+          <button
+            type="button"
+            onClick={(e) => handleLogin(e, "walletConnect")}
+            className={clsx(dropdownStyles.Button, styles.SmallerButton)}
+          >
+            <img
+              src="/images/wallet-connect-logo.svg"
+              alt="logout icon"
+              className={styles.Icon}
+            />
+            Connect WalletConnect
+          </button>
+        </div>
+      ) : (
+        <>
+          <Dropdown
+            wrapperClass={styles.LoginButtonWrapper}
+            triggerButtonClass={styles.LoginButton}
+            triggerButton="Connect Wallet"
+            openOnHover={true}
+            className={styles.Desktop}
+          >
+            <button
+              type="button"
+              onClick={(e) => handleLogin(e)}
+              className={clsx(dropdownStyles.Button, styles.Desktop)}
+            >
+              <img
+                src="/images/meta-mask-logo.svg"
+                alt="logout icon"
+                className={styles.Icon}
+              />
+              Connect MetaMask
+            </button>
+            <button
+              type="button"
+              onClick={(e) => handleLogin(e, "walletConnect")}
+              className={clsx(dropdownStyles.Button, styles.Desktop)}
+            >
+              <img
+                src="/images/wallet-connect-logo.svg"
+                alt="logout icon"
+                className={styles.Icon}
+              />
+              Connect WalletConnect
+            </button>
+          </Dropdown>
+          <div className={styles.Mobile}>
+            <a href="" onClick={(e) => handleLogin(e)} className={styles.Link}>
+              <img
+                src="/images/meta-mask-logo.svg"
+                alt="logout icon"
+                className={styles.Icon}
+              />
+              Connect MetaMask
+            </a>
+            <a
+              href=""
+              onClick={(e) => handleLogin(e, "walletConnect")}
+              className={styles.Link}
+            >
+              <img
+                src="/images/wallet-connect-logo.svg"
+                alt="logout icon"
+                className={styles.Icon}
+              />
+              Connect WalletConnect
+            </a>
+          </div>
+        </>
+      )}
     </>
   );
 };

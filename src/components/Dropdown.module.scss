@@ -37,8 +37,8 @@
 
 .Button {
   @include button;
-  background: var(--dark-purple);
   width: 100%;
+  background: var(--dark-purple);
   text-align: left;
   margin: 0;
   padding: 10px;
