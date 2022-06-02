@@ -12,6 +12,16 @@ const TextArea = ({ name, required, fieldState, isInvalid, onChange }) => {
     onChange(e);
   }
 
+  const checkPageLocation = () => {
+    if (typeof window !== `undefined`) {
+      if (window.location.href.includes('/help') ) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+  }
+
   return (
     <Tabs className="alternate-tab">
       <TabList>
@@ -31,10 +41,10 @@ const TextArea = ({ name, required, fieldState, isInvalid, onChange }) => {
             onChange={handleChange}
             required={required}
             value={fieldState}
-            maxLength={window.location.href.includes('/help') ? 2000 : 65536}
+            maxLength={checkPageLocation() ? 2000 : 65536}
           />
 
-          {fieldState.length > 1900 && window.location.href.includes('/help') ? (
+          {fieldState.length > 1900 && checkPageLocation() ? (
             <span className={clsx(styles.TextAreaCounter)}>
               {2000 - fieldState.length} chars remaining
             </span>
