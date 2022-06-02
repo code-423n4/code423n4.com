@@ -272,6 +272,7 @@ exports.handler = async (event) => {
         to: emailAddress,
         subject: `Registration pending for ${handle}`,
         text: emailBody,
+      };
 
       return mg.messages
         .create(domain, emailData)
