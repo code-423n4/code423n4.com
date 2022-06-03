@@ -1,7 +1,7 @@
 require("dotenv").config();
 
 const environment = process.env.NODE_ENV;
-const isStaging = process.env.STAGING;
+const isStaging = process.env.GATSBY_STAGING;
 let moralisServerUrl;
 let moralisAppId;
 

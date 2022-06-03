@@ -277,7 +277,7 @@ const UserProvider = ({ children }) => {
 
 export const wrapRootElement = ({ element }) => {
   const environment = process.env.NODE_ENV;
-  const isStaging = process.env.STAGING;
+  const isStaging = process.env.GATSBY_STAGING;
   let appId;
   let serverUrl;
 
