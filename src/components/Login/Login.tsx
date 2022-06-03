@@ -37,7 +37,16 @@ const Login = ({ displayAsButtons = false }) => {
     }
 
     try {
-      await connectWallet();
+      const connectWalletHandler = async () => {
+        await connectWallet();
+      }
+
+      toast.promise(connectWalletHandler, {
+        pending: "Loggin in",
+        success: "Logged in ✅",
+        error: "Something went wrong ❌",
+      });
+
     } catch (error) {
       logUserOut();
       if (error === UserLoginError.RegistrationPending) {
@@ -72,7 +81,11 @@ const Login = ({ displayAsButtons = false }) => {
           <button
             type="button"
             onClick={(e) => handleLogin(e)}
-            className={clsx(dropdownStyles.Button, styles.ButtonMargin, styles.SmallerButton)}
+            className={clsx(
+              dropdownStyles.Button,
+              styles.ButtonMargin,
+              styles.SmallerButton
+            )}
           >
             <img
               src="/images/meta-mask-logo.svg"

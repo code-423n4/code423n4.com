@@ -33,7 +33,7 @@ exports.handler = async (event) => {
       };
     } else {
       return {
-        statusCode: 401,
+        statusCode: 200,
         body: JSON.stringify({ error: "Team not found" }),
       };
     }
