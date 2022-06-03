@@ -239,9 +239,7 @@ export default function RegistrationForm({
     },
     [
       avatarInputRef,
-      state.username,
-      state.qualifications,
-      state.link,
+      state,
       isNewUser,
       handles,
       hasValidationErrors,
