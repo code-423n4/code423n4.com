@@ -276,21 +276,23 @@ const UserProvider = ({ children }) => {
 };
 
 export const wrapRootElement = ({ element }) => {
-  const environment = process.env.NODE_ENV;
-  const isStaging = process.env.GATSBY_STAGING;
-  let appId;
-  let serverUrl;
+  // const environment = process.env.NODE_ENV;
+  // const isStaging = process.env.GATSBY_STAGING;
+  // let appId;
+  // let serverUrl;
 
-  if (isStaging) {
-    serverUrl = process.env.GATSBY_STAGING_MORALIS_SERVER;
-    appId = process.env.GATSBY_STAGING_MORALIS_APP_ID;
-  } else if (environment === "production") {
-    serverUrl = process.env.GATSBY_PRODUCTION_MORALIS_SERVER;
-    appId = process.env.GATSBY_PRODUCTION_MORALIS_APP_ID;
-  } else {
-    serverUrl = process.env.GATSBY_DEV_MORALIS_SERVER;
-    appId = process.env.GATSBY_DEV_MORALIS_APP_ID;
-  }
+  // if (isStaging) {
+  //   serverUrl = process.env.GATSBY_STAGING_MORALIS_SERVER;
+  //   appId = process.env.GATSBY_STAGING_MORALIS_APP_ID;
+  // } else if (environment === "production") {
+  //   serverUrl = process.env.GATSBY_PRODUCTION_MORALIS_SERVER;
+  //   appId = process.env.GATSBY_PRODUCTION_MORALIS_APP_ID;
+  // } else {
+  //   serverUrl = process.env.GATSBY_DEV_MORALIS_SERVER;
+  //   appId = process.env.GATSBY_DEV_MORALIS_APP_ID;
+  // }
+  const appId = process.env.GATSBY_MORALIS_APP_ID;
+  const serverUrl = process.env.GATSBY_MORALIS_SERVER;
 
   return (
     <MoralisProvider appId={appId} serverUrl={serverUrl}>
