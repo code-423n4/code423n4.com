@@ -249,15 +249,16 @@ exports.handler = async (event) => {
           },
         ],
       });
-      
-       await octokit.request("POST /repos/{owner}/{repo}/issues/{issue_number}/labels", {
-        owner: "code-423n4",
-        repo: "code423n4.com",
-        issue_number: res.data.number,
-        labels: [
-          "app-warden",
-        ]
-      });
+
+      await octokit.request(
+        "POST /repos/{owner}/{repo}/issues/{issue_number}/labels",
+        {
+          owner: "code-423n4",
+          repo: "code423n4.com",
+          issue_number: res.data.number,
+          labels: ["app-warden"],
+        }
+      );
 
       const emailBody = dedent`
         Your registration is being processed.
@@ -272,6 +273,7 @@ exports.handler = async (event) => {
         to: emailAddress,
         subject: `Registration pending for ${handle}`,
         text: emailBody,
+      };
 
       return mg.messages
         .create(domain, emailData)
