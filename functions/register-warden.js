@@ -12,7 +12,6 @@ const {
   domain,
   moralisAppId,
   moralisServerUrl,
-  moralisMasterKey,
 } = require("./_config");
 
 const OctokitClient = Octokit.plugin(createPullRequest);
@@ -147,7 +146,6 @@ exports.handler = async (event) => {
     await Moralis.start({
       serverUrl: moralisServerUrl,
       appId: moralisAppId,
-      masterKey: moralisMasterKey,
     });
 
     try {
