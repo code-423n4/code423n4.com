@@ -361,7 +361,7 @@ const SubmitFindings = ({ wardensList, sponsor, contest, repo }) => {
                   <WardenDetails
                     username={currentUser.username}
                     address={currentUser.address}
-                    img={currentUser.img}
+                    image={currentUser.image}
                   />
                 </label>
                 <h4 className={styles.Heading4}>TEAM MEMBER</h4>
@@ -381,7 +381,7 @@ const SubmitFindings = ({ wardensList, sponsor, contest, repo }) => {
                     <WardenDetails
                       username={team.username}
                       address={team.address}
-                      img={team.img}
+                      image={team.image}
                     />
                     {!team.address && attributedTo === team.username && (
                       <div>
@@ -409,7 +409,7 @@ const SubmitFindings = ({ wardensList, sponsor, contest, repo }) => {
               <WardenDetails
                 username={currentUser.username}
                 address={currentUser.address}
-                img={currentUser.img}
+                image={currentUser.image}
               />
             )}
             <DynamicInputGroup

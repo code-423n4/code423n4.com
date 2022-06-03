@@ -21,8 +21,12 @@ exports.handler = async (event) => {
       if (handle.includes(".json")) {
         const wardenFile = readFileSync(`./_data/handles/${handle}`);
         const warden = JSON.parse(wardenFile.toString());
+        if (warden.image) {
+          const imagePath = warden.image.slice(2);
+          warden.image = `https://raw.githubusercontent.com/code-423n4/code423n4.com/main/_data/handles/${imagePath}`;
+        }
         if (warden && warden.members && warden.members.includes(userHandle)) {
-          teams.push(warden);
+          teams.push({ ...warden, username: warden.handle });
         }
       }
     });
