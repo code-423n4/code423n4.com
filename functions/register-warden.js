@@ -132,14 +132,14 @@ exports.handler = async (event) => {
     if (isUpdate && !response.ok) {
       return {
         statusCode: 422,
-        body: "Account does not exist",
+        body: JSON.stringify({ error: "Account does not exist" }),
       };
     }
     const userData = await response.json();
     if ((!isUpdate && response.ok) || userData.moralisId) {
       return {
         statusCode: 422,
-        body: "This user is already registered",
+        body: JSON.stringify({ error: "This user is already registered" }),
       };
     }
 
@@ -160,13 +160,13 @@ exports.handler = async (event) => {
       if (!isValidUser) {
         return {
           statusCode: 422,
-          body: "Unauthorized",
+          body: JSON.stringify({ error: "Unauthorized" }),
         };
       }
     } catch (error) {
       return {
         statusCode: 422,
-        body: "Unauthorized",
+        body: JSON.stringify({ error: "Unauthorized" }),
       };
     }
 

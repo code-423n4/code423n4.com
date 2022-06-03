@@ -140,7 +140,9 @@ exports.handler = async (event) => {
     if (!userResponse.ok) {
       return {
         statusCode: 401,
-        body: "You must be registered to submit findings",
+        body: JSON.stringify({
+          error: "You must be registered to submit findings",
+        }),
       };
     }
 
@@ -148,7 +150,9 @@ exports.handler = async (event) => {
     if (!userData || !userData.moralisId) {
       return {
         statusCode: 401,
-        body: "You must be registered to submit findings",
+        body: JSON.stringify({
+          error: "You must be registered to submit findings",
+        }),
       };
     }
 
@@ -175,7 +179,9 @@ exports.handler = async (event) => {
       if (!teamResponse.ok) {
         return {
           statusCode: 401,
-          body: "You must be registered to submit findings",
+          body: JSON.stringify({
+            error: "You must be registered to submit findings",
+          }),
         };
       }
       const teamData = await teamResponse.json();
