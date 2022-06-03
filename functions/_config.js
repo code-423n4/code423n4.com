@@ -6,14 +6,14 @@ let moralisServerUrl;
 let moralisAppId;
 
 if (isStaging) {
-  moralisServerUrl = process.env.STAGING_MORALIS_SERVER;
-  moralisAppId = process.env.STAGING_MORALIS_APP_ID;
+  moralisServerUrl = process.env.GATSBY_STAGING_MORALIS_SERVER;
+  moralisAppId = process.env.GATSBY_STAGING_MORALIS_APP_ID;
 } else if (environment === "production") {
-  moralisServerUrl = process.env.PRODUCTION_MORALIS_SERVER;
-  moralisAppId = process.env.PRODUCTION_MORALIS_APP_ID;
+  moralisServerUrl = process.env.GATSBY_PRODUCTION_MORALIS_SERVER;
+  moralisAppId = process.env.GATSBY_PRODUCTION_MORALIS_APP_ID;
 } else {
-  moralisServerUrl = process.env.DEV_MORALIS_SERVER;
-  moralisAppId = process.env.DEV_MORALIS_APP_ID;
+  moralisServerUrl = process.env.GATSBY_DEV_MORALIS_SERVER;
+  moralisAppId = process.env.GATSBY_DEV_MORALIS_APP_ID;
 }
 
 module.exports = {
