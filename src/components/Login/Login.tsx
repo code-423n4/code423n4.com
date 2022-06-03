@@ -42,7 +42,7 @@ const Login = ({ displayAsButtons = false }) => {
       }
 
       toast.promise(connectWalletHandler, {
-        pending: "Loggin in",
+        pending: "Logging in",
         success: "Logged in ✅",
         error: "Something went wrong ❌",
       });
