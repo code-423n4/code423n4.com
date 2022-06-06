@@ -48,6 +48,9 @@ export default function Contests({ data }) {
           case "Active Contest":
             statusObject.activeContests.push(element);
             break;
+          case "Active":
+            statusObject.activeContests.push(element);
+            break;
           case "Sponsor Review":
             statusObject.sponsorReview.push(element);
             break;
