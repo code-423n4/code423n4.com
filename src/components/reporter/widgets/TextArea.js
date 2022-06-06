@@ -14,11 +14,7 @@ const TextArea = ({ name, required, fieldState, isInvalid, onChange }) => {
 
   const checkPageLocation = () => {
     if (typeof window !== `undefined`) {
-      if (window.location.href.includes("/help")) {
-        return true;
-      } else {
-        return false;
-      }
+      return window.location.href.includes("/help");
     }
   };
 
@@ -46,13 +42,15 @@ const TextArea = ({ name, required, fieldState, isInvalid, onChange }) => {
 
           {fieldState.length > 1900 && checkPageLocation() ? (
             <span className={clsx(styles.TextAreaCounter)}>
-              {2000 - fieldState.length} chars remaining
+              {2000 - fieldState.length} char. remaining
             </span>
           ) : fieldState.length > 64000 ? (
             <span className={clsx(styles.TextAreaCounter)}>
-              {65536 - fieldState.length} chars remaining
+              {65536 - fieldState.length} char. remaining
             </span>
-          ) : ''}
+          ) : (
+            ""
+          )}
         </div>
       </TabPanel>
       <TabPanel>
