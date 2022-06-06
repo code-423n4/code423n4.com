@@ -1,6 +1,6 @@
 {
-    "image": "./avatars/nethermind.png",
     "handle": "Nethermind",
+    "image": "./avatars/nethermind.png",
     "link": "https://nethermind.io/",
     "members": [
         "mauricio1802",
