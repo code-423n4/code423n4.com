@@ -92,7 +92,8 @@ module.exports = {
             options: {
               theme: 'Dark+ (default dark)',
               languageAliases: {
-                solidity: 'js'
+                solidity: 'js',
+                sol:'js'
               }
             }
           },
