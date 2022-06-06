@@ -24,56 +24,82 @@ export default function Contests({ data }) {
       other: [],
     };
 
-    array
-      .map((element) => {
-        const statusObject = status
-          .filter((el) => el.contestId === element.node.contestid)
-          .flat();
-        if (statusObject === []) {
-          return null;
-        }
-        return {
-          ...element.node,
-          status: statusObject[0]?.status,
-        };
-      })
-      .forEach((element) => {
-        switch (element.status) {
-          case "Pre-Contest":
-            statusObject.upcomingContests.push(element);
-            break;
-          case "Preview week":
-            statusObject.upcomingContests.push(element);
-            break;
-          case "Active Contest":
-            statusObject.activeContests.push(element);
-            break;
-          case "Active":
-            statusObject.activeContests.push(element);
-            break;
-          case "Sponsor Review":
-            statusObject.sponsorReview.push(element);
-            break;
-          case "Needs Judging":
-            statusObject.judging.push(element);
-            break;
-          case "Judging Complete":
-            statusObject.judging.push(element);
-            break;
-          case "Awarding":
-            statusObject.awarding.push(element);
-            break;
-          case "Reporting":
-            statusObject.reporting.push(element);
-            break;
-          case "Completed":
-            statusObject.completed.push(element);
-            break;
-          default:
-            statusObject.other.push(element);
-            break;
-        }
-      });
+    array.forEach((element) => {
+      const statusAndIdObj = status
+        .filter((el) => el.contestId === element.node.contestid)
+        .flat();
+      if (statusAndIdObj === []) {
+        return null;
+      }
+      switch (statusAndIdObj[0]?.status) {
+        case "Pre-Contest":
+          statusObject.upcomingContests.push({
+            ...element.node,
+            status: statusObject[0]?.status,
+          });
+          break;
+        case "Preview week":
+          statusObject.upcomingContests.push({
+            ...element.node,
+            status: statusObject[0]?.status,
+          });
+          break;
+        case "Active Contest":
+          statusObject.activeContests.push({
+            ...element.node,
+            status: statusObject[0]?.status,
+          });
+          break;
+        case "Active":
+          statusObject.activeContests.push({
+            ...element.node,
+            status: statusObject[0]?.status,
+          });
+          break;
+        case "Sponsor Review":
+          statusObject.sponsorReview.push({
+            ...element.node,
+            status: statusObject[0]?.status,
+          });
+          break;
+        case "Needs Judging":
+          statusObject.judging.push({
+            ...element.node,
+            status: statusObject[0]?.status,
+          });
+          break;
+        case "Judging Complete":
+          statusObject.judging.push({
+            ...element.node,
+            status: statusObject[0]?.status,
+          });
+          break;
+        case "Awarding":
+          statusObject.awarding.push({
+            ...element.node,
+            status: statusObject[0]?.status,
+          });
+          break;
+        case "Reporting":
+          statusObject.reporting.push({
+            ...element.node,
+            status: statusObject[0]?.status,
+          });
+          break;
+        case "Completed":
+          statusObject.completed.push({
+            ...element.node,
+            status: statusObject[0]?.status,
+          });
+          break;
+        default:
+          statusObject.other.push({
+            ...element.node,
+            status: statusObject[0]?.status,
+          });
+          break;
+      }
+    });
     for (const keys in statusObject) {
       statusObject[keys].sort(function (a, b) {
         let keyA = new Date(a.start_time);
