@@ -37,9 +37,9 @@ const Login = ({ displayAsButtons = false }) => {
     }
 
     try {
-      const connectWalletHandler = async () => {
-        await connectWallet();
-      }
+      const connectWalletHandler = new Promise(resolve => {
+        resolve(connectWallet());
+      });
 
       toast.promise(connectWalletHandler, {
         pending: "Logging in",
