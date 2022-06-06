@@ -25,78 +25,49 @@ export default function Contests({ data }) {
     };
 
     array.forEach((element) => {
-      const statusAndIdObj = status
-        .filter((el) => el.contestId === element.node.contestid)
-        .flat();
+      const statusAndIdObj = status.filter(
+        (el) => el.contestId === element.node.contestid
+      );
       if (statusAndIdObj === []) {
         return null;
       }
+      const data = {
+        ...element.node,
+        status: statusObject[0]?.status,
+      };
       switch (statusAndIdObj[0]?.status) {
         case "Pre-Contest":
-          statusObject.upcomingContests.push({
-            ...element.node,
-            status: statusObject[0]?.status,
-          });
+          statusObject.upcomingContests.push(data);
           break;
         case "Preview week":
-          statusObject.upcomingContests.push({
-            ...element.node,
-            status: statusObject[0]?.status,
-          });
+          statusObject.upcomingContests.push(data);
           break;
         case "Active Contest":
-          statusObject.activeContests.push({
-            ...element.node,
-            status: statusObject[0]?.status,
-          });
+          statusObject.activeContests.push(data);
           break;
         case "Active":
-          statusObject.activeContests.push({
-            ...element.node,
-            status: statusObject[0]?.status,
-          });
+          statusObject.activeContests.push(data);
           break;
         case "Sponsor Review":
-          statusObject.sponsorReview.push({
-            ...element.node,
-            status: statusObject[0]?.status,
-          });
+          statusObject.sponsorReview.push(data);
           break;
         case "Needs Judging":
-          statusObject.judging.push({
-            ...element.node,
-            status: statusObject[0]?.status,
-          });
+          statusObject.judging.push(data);
           break;
         case "Judging Complete":
-          statusObject.judging.push({
-            ...element.node,
-            status: statusObject[0]?.status,
-          });
+          statusObject.judging.push(data);
           break;
         case "Awarding":
-          statusObject.awarding.push({
-            ...element.node,
-            status: statusObject[0]?.status,
-          });
+          statusObject.awarding.push(data);
           break;
         case "Reporting":
-          statusObject.reporting.push({
-            ...element.node,
-            status: statusObject[0]?.status,
-          });
+          statusObject.reporting.push(data);
           break;
         case "Completed":
-          statusObject.completed.push({
-            ...element.node,
-            status: statusObject[0]?.status,
-          });
+          statusObject.completed.push(data);
           break;
         default:
-          statusObject.other.push({
-            ...element.node,
-            status: statusObject[0]?.status,
-          });
+          statusObject.other.push(data);
           break;
       }
     });
