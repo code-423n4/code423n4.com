@@ -9,6 +9,7 @@ const Modal = () => {
   const handlePrimaryButtonClick = async () => {
     setIsLoading(true);
     await modalProps.primaryButtonAction();
+    setIsLoading(false);
     hideModal();
   };
 
@@ -16,6 +17,7 @@ const Modal = () => {
     if (modalProps.secondaryButtonAction) {
       await modalProps.secondaryButtonAction();
     }
+    setIsLoading(false);
     hideModal();
   };
 

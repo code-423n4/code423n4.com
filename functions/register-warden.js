@@ -1,6 +1,7 @@
 const { createPullRequest } = require("octokit-plugin-create-pull-request");
 const dedent = require("dedent");
 const formData = require("form-data");
+const Kickbox = require("kickbox");
 const Mailgun = require("mailgun.js");
 const { Moralis } = require("moralis/node");
 const { Octokit } = require("@octokit/core");
@@ -12,7 +13,11 @@ const {
   domain,
   moralisAppId,
   moralisServerUrl,
+  kickboxApiKey,
 } = require("./_config");
+const { resolve } = require("core-js/fn/promise");
+
+const kickbox = Kickbox.client(kickboxApiKey).kickbox();
 
 const OctokitClient = Octokit.plugin(createPullRequest);
 const octokit = new OctokitClient({ auth: token });
@@ -122,6 +127,26 @@ exports.handler = async (event) => {
         body: JSON.stringify({
           error:
             "Handle can only use alphanumeric characters [a-zA-Z0-9], underscores (_), and hyphens (-).",
+        }),
+      };
+    }
+
+    const kickboxPromise = new Promise((resolve, reject) => {
+      kickbox.verify(emailAddress, async function (err, kickboxResponse) {
+        // @todo: determine which results we should reject
+        if (kickboxResponse.body.result === "undeliverable") {
+          reject(kickboxResponse.body.message || "");
+        }
+        resolve();
+      });
+    });
+    try {
+      await kickboxPromise;
+    } catch (error) {
+      return {
+        statusCode: 422,
+        body: JSON.stringify({
+          error: "The email address you entered is not valid. " + error,
         }),
       };
     }
@@ -295,7 +320,9 @@ exports.handler = async (event) => {
     } catch (error) {
       return {
         statusCode: error.response.status,
-        body: JSON.stringify({ error: error.response.data.message.toString() }),
+        body: JSON.stringify({
+          error: error.response.data.message.toString(),
+        }),
       };
     }
   } catch (error) {
