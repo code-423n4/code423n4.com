@@ -528,17 +528,27 @@ export default function RegistrationForm({
       <Agreement />
       <div className={styles.ButtonsWrapper}>
         <button
-          className={clsx("button cta-button", styles.Button)}
+          className={clsx("button", styles.Button)}
           type="button"
           onClick={() => submitRegistration()}
         >
+          <img
+            src="/images/meta-mask-logo.svg"
+            alt="logout icon"
+            className={styles.Icon}
+          />
           Register with MetaMask
         </button>
         <button
-          className={clsx("button cta-button", styles.Button)}
+          className={clsx("button", styles.Button)}
           type="button"
           onClick={() => submitRegistration("walletConnect")}
         >
+          <img
+            src="/images/wallet-connect-logo.svg"
+            alt="logout icon"
+            className={styles.Icon}
+          />
           Register with WalletConnect
         </button>
       </div>
