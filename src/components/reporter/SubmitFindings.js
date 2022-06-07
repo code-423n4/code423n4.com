@@ -304,7 +304,6 @@ const SubmitFindings = ({ wardensList, sponsor, contest, repo }) => {
       (team) => team.username === attributedTo
     );
     if (team && !team.address) {
-      console.log("showing modal");
       // confirm saving the team's address
       showModal({
         title: `Save address for team ${attributedTo}`,

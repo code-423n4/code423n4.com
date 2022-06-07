@@ -39,12 +39,16 @@ const Modal = () => {
           <button className="button cta-button secondary" onClick={handleClose}>
             {modalProps.secondaryButtonText || "Cancel"}
           </button>
-          <button
-            className="button cta-button primary"
-            onClick={handlePrimaryButtonClick}
-          >
-            {isLoading ? "Submitting..." : modalProps.primaryButtonText || "Ok"}
-          </button>
+          {modalProps.primaryButtonText && (
+            <button
+              className="button cta-button primary"
+              onClick={handlePrimaryButtonClick}
+            >
+              {isLoading
+                ? "Submitting..."
+                : modalProps.primaryButtonText || "Ok"}
+            </button>
+          )}
         </div>
       </div>
     </div>
