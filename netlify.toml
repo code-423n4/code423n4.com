@@ -11,10 +11,10 @@
 
 [context.deploy-preview]
   ignore = "bash ./netlify-ignore-branch.sh"
-  environment = { STAGING = "true" }
+  environment = { GATSBY_STAGING = "true" }
 
 [context.staging]
-  environment = { STAGING = "true" }
+  environment = { GATSBY_STAGING = "true" }
 
 [functions]
   directory = "functions/"

@@ -58,6 +58,7 @@ const Login = ({ displayAsButtons = false }) => {
         toast.error(
           "Your request to connect your wallet is pending review. Check the progress in GitHub"
         );
+        return;
       }
       toast.error(
         "Something went wrong. Please refresh the page and try again."
@@ -72,7 +73,7 @@ const Login = ({ displayAsButtons = false }) => {
           <button
             type="button"
             onClick={(e) => handleLogin(e)}
-            className={clsx(dropdownStyles.Button, styles.ButtonMargin, styles.SmallerButton)}
+            className={clsx("button", styles.SmallerButton)}
           >
             <img
               src="/images/meta-mask-logo.svg"
@@ -84,7 +85,7 @@ const Login = ({ displayAsButtons = false }) => {
           <button
             type="button"
             onClick={(e) => handleLogin(e, "walletConnect")}
-            className={clsx(dropdownStyles.Button, styles.SmallerButton)}
+            className={clsx("button", styles.SmallerButton)}
           >
             <img
               src="/images/wallet-connect-logo.svg"

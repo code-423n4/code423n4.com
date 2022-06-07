@@ -2,6 +2,7 @@ import React, { useCallback, useState, useRef } from "react";
 import clsx from "clsx";
 import { useMoralis } from "react-moralis";
 import Moralis from "moralis/types";
+import { toast } from "react-toastify";
 
 import useUser from "../hooks/UserContext";
 
@@ -250,6 +251,7 @@ export default function RegistrationForm({ handles, wardens, className }) {
               updateErrorMessage("");
             }
           }
+          logUserOut();
         } catch (error) {
           logUserOut();
           setStatus(FormStatus.Error);
@@ -259,9 +261,7 @@ export default function RegistrationForm({ handles, wardens, className }) {
     },
     [
       avatarInputRef,
-      state.username,
-      state.qualifications,
-      state.link,
+      state,
       isNewUser,
       handles,
       hasValidationErrors,

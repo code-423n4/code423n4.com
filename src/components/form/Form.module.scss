@@ -71,6 +71,8 @@
 .Button {
   font-family: inherit;
   margin: 10px;
+  display: flex;
+  align-items: center;
 
   &:disabled {
     opacity: 0.3;
@@ -85,4 +87,9 @@
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
+}
+
+.Icon {
+  margin-right: 10px;
+  height: 20px;
 }

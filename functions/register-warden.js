@@ -1,6 +1,7 @@
 const { createPullRequest } = require("octokit-plugin-create-pull-request");
 const dedent = require("dedent");
 const formData = require("form-data");
+const Kickbox = require("kickbox");
 const Mailgun = require("mailgun.js");
 const { Moralis } = require("moralis/node");
 const { Octokit } = require("@octokit/core");
@@ -12,7 +13,11 @@ const {
   domain,
   moralisAppId,
   moralisServerUrl,
+  kickboxApiKey,
 } = require("./_config");
+const { resolve } = require("core-js/fn/promise");
+
+const kickbox = Kickbox.client(kickboxApiKey).kickbox();
 
 const OctokitClient = Octokit.plugin(createPullRequest);
 const octokit = new OctokitClient({ auth: token });
@@ -126,20 +131,40 @@ exports.handler = async (event) => {
       };
     }
 
+    const kickboxPromise = new Promise((resolve, reject) => {
+      kickbox.verify(emailAddress, async function (err, kickboxResponse) {
+        // @todo: determine which results we should reject
+        if (kickboxResponse.body.result === "undeliverable") {
+          reject(kickboxResponse.body.message || "");
+        }
+        resolve();
+      });
+    });
+    try {
+      await kickboxPromise;
+    } catch (error) {
+      return {
+        statusCode: 422,
+        body: JSON.stringify({
+          error: "The email address you entered is not valid. " + error,
+        }),
+      };
+    }
+
     const url = `${event.headers.origin}/.netlify/functions/get-user?id=${handle}`;
     // make sure that an update has a valid warden file, and a new registration does not
     const response = await fetch(url);
     if (isUpdate && !response.ok) {
       return {
         statusCode: 422,
-        body: "Account does not exist",
+        body: JSON.stringify({ error: "Account does not exist" }),
       };
     }
     const userData = await response.json();
     if ((!isUpdate && response.ok) || userData.moralisId) {
       return {
         statusCode: 422,
-        body: "This user is already registered",
+        body: JSON.stringify({ error: "This user is already registered" }),
       };
     }
 
@@ -160,13 +185,13 @@ exports.handler = async (event) => {
       if (!isValidUser) {
         return {
           statusCode: 422,
-          body: "Unauthorized",
+          body: JSON.stringify({ error: "Unauthorized" }),
         };
       }
     } catch (error) {
       return {
         statusCode: 422,
-        body: "Unauthorized",
+        body: JSON.stringify({ error: "Unauthorized" }),
       };
     }
 
@@ -286,13 +311,18 @@ exports.handler = async (event) => {
         .catch((err) => {
           return {
             statusCode: err.status || 500,
-            body: JSON.stringify({ error: err.message || err }),
+            body: JSON.stringify({
+              error:
+                "Failed to send confirmation email. " + (err.message || err),
+            }),
           };
         });
     } catch (error) {
       return {
         statusCode: error.response.status,
-        body: JSON.stringify({ error: error.response.data.message.toString() }),
+        body: JSON.stringify({
+          error: error.response.data.message.toString(),
+        }),
       };
     }
   } catch (error) {
