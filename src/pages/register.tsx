@@ -1,6 +1,8 @@
 import clsx from "clsx";
 import { graphql } from "gatsby";
-import React, { useState, ReactNode } from "react";
+import Moralis from "moralis";
+import { useMoralis } from "react-moralis";
+import React, { useEffect, useState } from "react";
 
 import DefaultLayout from "../templates/DefaultLayout";
 import RegistrationForm from "../components/RegistrationForm";
@@ -9,14 +11,33 @@ import * as styles from "../components/form/Form.module.scss";
 
 export default function UserRegistration({ data }) {
   const handles = new Set(data.handles.edges.map((h) => h.node.handle));
+  const [wardens, setWardens] = useState([]);
+  const { isInitialized } = useMoralis();
 
-  let wardens = [];
-  data.handles.edges.forEach(({ node }) => {
-    if (!node.members) {
-      // @todo: filter out leaderboard wardens and wardens who have already connected their wallets
-      wardens.push({ value: node.handle, image: node.image });
+  useEffect((): void => {
+    async function filterWardens(): Promise<void> {
+      if (!isInitialized) {
+        return;
+      }
+      const wardensWithSubmissions = await Moralis.Cloud.run(
+        "getWardensWithSubmissions"
+      );
+
+      const wardens = data.handles.edges
+        .filter(({ node }) => {
+          if (node.members) {
+            return false;
+          }
+          if (wardensWithSubmissions.includes(node.handle)) {
+            return false;
+          }
+          return true;
+        })
+        .map(({ node }) => ({ value: node.handle, image: node.image }));
+      setWardens(wardens);
     }
-  });
+    filterWardens();
+  }, [data, isInitialized]);
 
   return (
     <DefaultLayout pageTitle="Registration | Code 423n4">
