@@ -37,7 +37,7 @@ const Modal = () => {
           <button className="button cta-button secondary" onClick={handleClose}>
             {modalProps.secondaryButtonText || "Cancel"}
           </button>
-          {modalProps.primaryButtonText ? (
+          {modalProps.primaryButtonText && (
             <button
               className="button cta-button primary"
               onClick={handlePrimaryButtonClick}
@@ -46,8 +46,6 @@ const Modal = () => {
                 ? "Submitting..."
                 : modalProps.primaryButtonText || "Ok"}
             </button>
-          ) : (
-            ""
           )}
         </div>
       </div>
