@@ -235,6 +235,7 @@ const UserProvider = ({ children }) => {
         throw error;
       }
     }
+    return "connected";
   }, []);
 
   const logUserOut = useCallback(() => {
