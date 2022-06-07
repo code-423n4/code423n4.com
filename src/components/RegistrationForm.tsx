@@ -232,23 +232,29 @@ export default function RegistrationForm({ handles, wardens, className }) {
               user.set("emailAddress", state.emailAddress);
               // @todo: add role
               await user.save();
-              logUserOut();
               setStatus(FormStatus.Submitted);
             } catch (error) {
-              logUserOut();
               setStatus(FormStatus.Error);
               updateErrorMessage("");
               console.error(error);
             }
             setStatus(FormStatus.Submitted);
           } else {
-            logUserOut();
-            setStatus(FormStatus.Error);
-            try {
-              const res = await response.json();
-              updateErrorMessage(res.error);
-            } catch (error) {
-              updateErrorMessage("");
+            const { error } = await response.json();
+            if (error.startsWith("Failed to send confirmation email")) {
+              // allow confirmation email to fail; don't save a bad email address
+              user.set("c4Username", state.username);
+              user.set("discordUsername", state.discordUsername);
+              user.set("gitHubUsername", state.gitHubUsername);
+              // @todo: add role
+              await user.save();
+              setStatus(FormStatus.Submitted);
+              toast.error(
+                "The email you entered was invalid. Confirmation email failed to send and email address has not been saved"
+              );
+            } else {
+              setStatus(FormStatus.Error);
+              updateErrorMessage(error);
             }
           }
           logUserOut();
