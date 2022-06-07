@@ -58,7 +58,6 @@ export default function RegistrationForm({
   updateErrorMessage,
   updateFormStatus,
   className,
-  resetForm,
 }) {
   // hooks
   const { logUserOut } = useUser();
@@ -221,7 +220,6 @@ export default function RegistrationForm({
               console.error(error);
             }
             updateFormStatus(FormStatus.Submitted);
-            resetForm();
           } else {
             logUserOut();
             updateFormStatus(FormStatus.Error);

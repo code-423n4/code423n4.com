@@ -4,7 +4,6 @@ import React, { useState, ReactNode } from "react";
 
 import DefaultLayout from "../templates/DefaultLayout";
 import RegistrationForm from "../components/RegistrationForm";
-import { useModalContext } from "../hooks/ModalContext";
 
 import * as styles from "../components/form/Form.module.scss";
 
@@ -28,7 +27,6 @@ export default function UserRegistration({ data }) {
 
   const [status, setStatus] = useState<FormStatus>(FormStatus.Unsubmitted);
   const [errorMessage, setErrorMessage] = useState<string | ReactNode>("");
-  const { showModal } = useModalContext();
 
   const updateErrorMessage = (message: string | undefined): void => {
     if (!message) {
@@ -47,7 +45,6 @@ export default function UserRegistration({ data }) {
     } else {
       setErrorMessage(message);
     }
-    showModalHandler();
   };
 
   const resetForm = () => {
@@ -55,21 +52,21 @@ export default function UserRegistration({ data }) {
     setStatus(FormStatus.Unsubmitted);
   };
 
-  const showModalHandler = () => {
-    showModal({
-      title: `Whoops!`,
-      body: (
-        <>
-          <p>An error occurred while processing your registration.</p>
-          {errorMessage !== "" && (
-            <p>
-              <small>{errorMessage}</small>
-            </p>
-          )}
-        </>
-      ),
-    });
-  };
+  // const showModalHandler = () => {
+  //   showModal({
+  //     title: `Whoops!`,
+  //     body: (
+  //       <>
+  //         <p>An error occurred while processing your registration.</p>
+  //         {errorMessage !== "" && (
+  //           <p>
+  //             <small>{errorMessage}</small>
+  //           </p>
+  //         )}
+  //       </>
+  //     ),
+  //   });
+  // };
 
   return (
     <DefaultLayout pageTitle="Registration | Code 423n4">
@@ -77,16 +74,28 @@ export default function UserRegistration({ data }) {
         <h1 className="page-header">Warden Registration</h1>
         <div>
           {(status === FormStatus.Unsubmitted ||
-            status === FormStatus.Submitting ||
-            status === FormStatus.Error) && (
+            status === FormStatus.Submitting) && (
             <RegistrationForm
               className={clsx(styles.Form)}
               handles={handles}
               wardens={wardens}
               updateErrorMessage={updateErrorMessage}
               updateFormStatus={setStatus}
-              resetForm={resetForm}
             />
+          )}
+          {status === FormStatus.Error && (
+            <div style={{ textAlign: "center" }}>
+              <h1>Whoops!</h1>
+              <p>An error occurred while processing your registration.</p>
+              {errorMessage !== "" && (
+                <p>
+                  <small>{errorMessage}</small>
+                </p>
+              )}
+              <button className="button cta-button" onClick={resetForm}>
+                Try again
+              </button>
+            </div>
           )}
           {status === FormStatus.Submitted && (
             <div className="centered-text">
