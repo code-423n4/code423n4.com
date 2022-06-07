@@ -22,6 +22,13 @@ interface userState {
   avatar?: File | null;
 }
 
+enum FormStatus {
+  Unsubmitted = "unsubmitted",
+  Submitting = "submitting",
+  Submitted = "submitted",
+  Error = "error",
+}
+
 const initialState: userState = {
   username: "",
   discordUsername: "",
@@ -31,13 +38,6 @@ const initialState: userState = {
   link: "",
   avatar: null,
 };
-
-enum FormStatus {
-  Unsubmitted = "unsubmitted",
-  Submitting = "submitting",
-  Submitted = "submitted",
-  Error = "error",
-}
 
 function getFileAsBase64(file) {
   return new Promise((resolve, reject) => {
@@ -52,13 +52,7 @@ function getFileAsBase64(file) {
   });
 }
 
-export default function RegistrationForm({
-  handles,
-  wardens,
-  updateErrorMessage,
-  updateFormStatus,
-  className,
-}) {
+export default function RegistrationForm({ handles, wardens, className }) {
   // hooks
   const { logUserOut } = useUser();
   const { authenticate } = useMoralis();
@@ -68,6 +62,8 @@ export default function RegistrationForm({
   const [isNewUser, setIsNewUser] = useState(true);
   const [hasValidationErrors, setHasValidationErrors] = useState(false);
   const [isValidDiscord, setIsValidDiscord] = useState(true);
+  const [status, setStatus] = useState<FormStatus>(FormStatus.Unsubmitted);
+  const [errorMessage, setErrorMessage] = useState<string | ReactNode>("");
 
   // global variables
   const avatarInputRef = useRef<HTMLInputElement>();
@@ -85,6 +81,30 @@ export default function RegistrationForm({
       with your wallet.
     </p>
   );
+
+  const updateErrorMessage = (message: string | undefined): void => {
+    if (!message) {
+      setErrorMessage("");
+    } else if (message === "Reference already exists") {
+      setErrorMessage(
+        <span>
+          It looks like this username has already been registered. Don't forget
+          to join us in{" "}
+          <a href="https://discord.gg/code4rena" target="_blank">
+            Discord
+          </a>{" "}
+          and give us a howl in #i-want-to-be-a-warden"
+        </span>
+      );
+    } else {
+      setErrorMessage(message);
+    }
+  };
+
+  const resetForm = () => {
+    setErrorMessage("");
+    setStatus(FormStatus.Unsubmitted);
+  };
 
   const handleChange = useCallback((e) => {
     const { name, value } = e.target;
@@ -135,7 +155,7 @@ export default function RegistrationForm({
         }
         // @todo: validate discord handle
         setHasValidationErrors(false);
-        updateFormStatus(FormStatus.Submitting);
+        setStatus(FormStatus.Submitting);
 
         let image = undefined;
         try {
@@ -147,7 +167,7 @@ export default function RegistrationForm({
           if (user === undefined) {
             // user clicked "cancel" when prompted to sign message
             // @todo: update messaging
-            updateFormStatus(FormStatus.Error);
+            setStatus(FormStatus.Error);
             updateErrorMessage("You must sign the message to register");
             return;
           }
@@ -157,7 +177,7 @@ export default function RegistrationForm({
           const username = await user.get("c4Username");
           if (username) {
             await logUserOut();
-            updateFormStatus(FormStatus.Error);
+            setStatus(FormStatus.Error);
             if (username !== state.username) {
               // user tried to register more than one account with this address
               updateErrorMessage(
@@ -212,17 +232,17 @@ export default function RegistrationForm({
               // @todo: add role
               await user.save();
               logUserOut();
-              updateFormStatus(FormStatus.Submitted);
+              setStatus(FormStatus.Submitted);
             } catch (error) {
               logUserOut();
-              updateFormStatus(FormStatus.Error);
+              setStatus(FormStatus.Error);
               updateErrorMessage("");
               console.error(error);
             }
-            updateFormStatus(FormStatus.Submitted);
+            setStatus(FormStatus.Submitted);
           } else {
             logUserOut();
-            updateFormStatus(FormStatus.Error);
+            setStatus(FormStatus.Error);
             try {
               const res = await response.json();
               updateErrorMessage(res.error);
@@ -232,7 +252,7 @@ export default function RegistrationForm({
           }
         } catch (error) {
           logUserOut();
-          updateFormStatus(FormStatus.Error);
+          setStatus(FormStatus.Error);
           updateErrorMessage(error);
         }
       })();
@@ -259,283 +279,315 @@ export default function RegistrationForm({
   };
 
   return (
-    <form className={className}>
-      <fieldset className={clsx(widgetStyles.Fields, widgetStyles.RadioGroup)}>
-        <label className={widgetStyles.RadioLabel}>
-          <input
-            className={widgetStyles.Radio}
-            type="radio"
-            value="newUser"
-            name="isNewUser"
-            checked={isNewUser}
-            onChange={handleFormChange}
-          />
-          I'm new here
-        </label>
-        <label className={widgetStyles.RadioLabel}>
-          <input
-            className={widgetStyles.Radio}
-            type="radio"
-            value="establishedUser"
-            name="isNewUser"
-            checked={!isNewUser}
-            onChange={handleFormChange}
-          />
-          I'm an established warden
-        </label>
-      </fieldset>
-      {instructions}
-      {isNewUser ? (
-        <div className={widgetStyles.Container}>
-          <label htmlFor="username" className={widgetStyles.Label}>
-            Code4rena Username *
-          </label>
-          <p className={widgetStyles.Help}>
-            Used to report findings, as well as display your total award amount
-            on the leaderboard. Supports alphanumeric characters, underscores,
-            and hyphens. (Note: for consistency, please ensure your server
-            nickname in our Discord matches the username you provide here)
-          </p>
-          <input
-            className={clsx(
-              widgetStyles.Control,
-              widgetStyles.Text,
-              hasValidationErrors &&
-                (!state.username ||
-                  (isNewUser && handles.has(state.username))) &&
-                "input-error"
-            )}
-            type="text"
-            id="username"
-            name="username"
-            placeholder="Username"
-            value={state.username}
-            onChange={handleChange}
-            maxLength={25}
-          />
-          {handles.has(state.username) && (
-            <p className={widgetStyles.ErrorMessage}>
-              <small>{`${state.username} is already a registered username.`}</small>
-            </p>
+    <>
+      {status === FormStatus.Unsubmitted || status === FormStatus.Submitting ? (
+        <form className={className}>
+          <fieldset
+            className={clsx(widgetStyles.Fields, widgetStyles.RadioGroup)}
+          >
+            <label className={widgetStyles.RadioLabel}>
+              <input
+                className={widgetStyles.Radio}
+                type="radio"
+                value="newUser"
+                name="isNewUser"
+                checked={isNewUser}
+                onChange={handleFormChange}
+              />
+              I'm new here
+            </label>
+            <label className={widgetStyles.RadioLabel}>
+              <input
+                className={widgetStyles.Radio}
+                type="radio"
+                value="establishedUser"
+                name="isNewUser"
+                checked={!isNewUser}
+                onChange={handleFormChange}
+              />
+              I'm an established warden
+            </label>
+          </fieldset>
+          {instructions}
+          {isNewUser ? (
+            <div className={widgetStyles.Container}>
+              <label htmlFor="username" className={widgetStyles.Label}>
+                Code4rena Username *
+              </label>
+              <p className={widgetStyles.Help}>
+                Used to report findings, as well as display your total award
+                amount on the leaderboard. Supports alphanumeric characters,
+                underscores, and hyphens. (Note: for consistency, please ensure
+                your server nickname in our Discord matches the username you
+                provide here)
+              </p>
+              <input
+                className={clsx(
+                  widgetStyles.Control,
+                  widgetStyles.Text,
+                  hasValidationErrors &&
+                    (!state.username ||
+                      (isNewUser && handles.has(state.username))) &&
+                    "input-error"
+                )}
+                type="text"
+                id="username"
+                name="username"
+                placeholder="Username"
+                value={state.username}
+                onChange={handleChange}
+                maxLength={25}
+              />
+              {handles.has(state.username) && (
+                <p className={widgetStyles.ErrorMessage}>
+                  <small>{`${state.username} is already a registered username.`}</small>
+                </p>
+              )}
+              {hasValidationErrors && !state.username && (
+                <p className={widgetStyles.ErrorMessage}>
+                  <small>This field is required</small>
+                </p>
+              )}
+            </div>
+          ) : (
+            <div className={widgetStyles.Container}>
+              <label className={widgetStyles.Label}>Code4rena Username *</label>
+              <p className={widgetStyles.Help}>
+                The username you use to submit your findings
+              </p>
+              <WardenField
+                name="handle"
+                required={true}
+                options={wardens}
+                onChange={(e) => {
+                  setState((state) => {
+                    return { ...state, username: e.target.value };
+                  });
+                }}
+                fieldState={state}
+                isInvalid={hasValidationErrors && !state.username}
+              />
+              {hasValidationErrors && !state.username && (
+                <p className={widgetStyles.ErrorMessage}>
+                  <small>This field is required</small>
+                </p>
+              )}
+            </div>
           )}
-          {hasValidationErrors && !state.username && (
-            <p className={widgetStyles.ErrorMessage}>
-              <small>This field is required</small>
-            </p>
-          )}
-        </div>
-      ) : (
-        <div className={widgetStyles.Container}>
-          <label className={widgetStyles.Label}>Code4rena Username *</label>
-          <p className={widgetStyles.Help}>
-            The username you use to submit your findings
-          </p>
-          <WardenField
-            name="handle"
-            required={true}
-            options={wardens}
-            onChange={(e) => {
-              setState((state) => {
-                return { ...state, username: e.target.value };
-              });
-            }}
-            fieldState={state}
-            isInvalid={hasValidationErrors && !state.username}
-          />
-          {hasValidationErrors && !state.username && (
-            <p className={widgetStyles.ErrorMessage}>
-              <small>This field is required</small>
-            </p>
-          )}
-        </div>
-      )}
-      <div className={widgetStyles.Container}>
-        <label htmlFor="discordUsername" className={widgetStyles.Label}>
-          Discord Username *
-        </label>
-        <p className={widgetStyles.Help}>
-          Used in case we need to contact you about your submissions or
-          winnings.
-        </p>
-        <input
-          className={clsx(
-            widgetStyles.Control,
-            widgetStyles.Text,
-            hasValidationErrors &&
-              (!state.discordUsername || !isValidDiscord) &&
-              "input-error"
-          )}
-          type="text"
-          id="discordUsername"
-          name="discordUsername"
-          placeholder="Warden#1234"
-          value={state.discordUsername}
-          onChange={handleChange}
-        />
-        {hasValidationErrors && !state.discordUsername && (
-          <p className={widgetStyles.ErrorMessage}>
-            <small>This field is required</small>
-          </p>
-        )}
-        {hasValidationErrors && !isValidDiscord && (
-          <p className={widgetStyles.ErrorMessage}>
-            <small>
-              Make sure you enter your discord username, and not your server
-              nickname. It should end with '#' followed by 4 digits.
-            </small>
-          </p>
-        )}
-      </div>
-      <div className={widgetStyles.Container}>
-        <label htmlFor="gitHubUsername" className={widgetStyles.Label}>
-          GitHub Username *
-        </label>
-        <p className={widgetStyles.Help}>
-          Used in case we need to give you access to certain repositories.
-        </p>
-        <input
-          className={clsx(
-            widgetStyles.Control,
-            widgetStyles.Text,
-            hasValidationErrors && !state.gitHubUsername && "input-error"
-          )}
-          type="text"
-          id="gitHubUsername"
-          name="gitHubUsername"
-          placeholder="Username"
-          value={state.gitHubUsername}
-          onChange={handleChange}
-        />
-        {hasValidationErrors && !state.gitHubUsername && (
-          <p className={widgetStyles.ErrorMessage}>
-            <small>This field is required</small>
-          </p>
-        )}
-      </div>
-      <div className={widgetStyles.Container}>
-        <label htmlFor="emailAddress" className={widgetStyles.Label}>
-          Email Address *
-        </label>
-        <p className={widgetStyles.Help}>
-          Used for sending confirmation emails for each of your submissions.
-        </p>
-        <input
-          className={clsx(
-            widgetStyles.Control,
-            widgetStyles.Text,
-            hasValidationErrors && !state.emailAddress && "input-error"
-          )}
-          type="text"
-          id="emailAddress"
-          name="emailAddress"
-          placeholder="warden@email.com"
-          value={state.emailAddress}
-          onChange={handleChange}
-        />
-        {hasValidationErrors && !state.emailAddress && (
-          <p className={widgetStyles.ErrorMessage}>
-            <small>This field is required</small>
-          </p>
-        )}
-      </div>
-      {isNewUser && (
-        <>
           <div className={widgetStyles.Container}>
-            <label htmlFor="link" className={widgetStyles.Label}>
-              Qualifications *
+            <label htmlFor="discordUsername" className={widgetStyles.Label}>
+              Discord Username *
             </label>
             <p className={widgetStyles.Help}>
-              Please provide evidence of your ability to be competitive in an
-              EVM-based audit contest, preferably with links. For specifically
-              the OpenSea contest, evidence of experience with assembly is a
-              bonus.
+              Used in case we need to contact you about your submissions or
+              winnings.
             </p>
-            <p className={widgetStyles.Help}>
-              <strong>
-                Please note, the qualifications you list here will be public as
-                part of a PR in the{" "}
-                <a href="https://github.com/code-423n4/code423n4.com">
-                  code423n4.com repo.
-                </a>
-              </strong>
-            </p>
-            <TextArea
-              name="qualifications"
-              required={true}
+            <input
+              className={clsx(
+                widgetStyles.Control,
+                widgetStyles.Text,
+                hasValidationErrors &&
+                  (!state.discordUsername || !isValidDiscord) &&
+                  "input-error"
+              )}
+              type="text"
+              id="discordUsername"
+              name="discordUsername"
+              placeholder="Warden#1234"
+              value={state.discordUsername}
               onChange={handleChange}
-              fieldState={state.qualifications}
-              isInvalid={!state.qualifications && hasValidationErrors}
             />
-            {!state.qualifications && hasValidationErrors && (
+            {hasValidationErrors && !state.discordUsername && (
+              <p className={widgetStyles.ErrorMessage}>
+                <small>This field is required</small>
+              </p>
+            )}
+            {hasValidationErrors && !isValidDiscord && (
+              <p className={widgetStyles.ErrorMessage}>
+                <small>
+                  Make sure you enter your discord username, and not your server
+                  nickname. It should end with '#' followed by 4 digits.
+                </small>
+              </p>
+            )}
+          </div>
+          <div className={widgetStyles.Container}>
+            <label htmlFor="gitHubUsername" className={widgetStyles.Label}>
+              GitHub Username *
+            </label>
+            <p className={widgetStyles.Help}>
+              Used in case we need to give you access to certain repositories.
+            </p>
+            <input
+              className={clsx(
+                widgetStyles.Control,
+                widgetStyles.Text,
+                hasValidationErrors && !state.gitHubUsername && "input-error"
+              )}
+              type="text"
+              id="gitHubUsername"
+              name="gitHubUsername"
+              placeholder="Username"
+              value={state.gitHubUsername}
+              onChange={handleChange}
+            />
+            {hasValidationErrors && !state.gitHubUsername && (
               <p className={widgetStyles.ErrorMessage}>
                 <small>This field is required</small>
               </p>
             )}
           </div>
           <div className={widgetStyles.Container}>
-            <label htmlFor="link" className={widgetStyles.Label}>
-              Link (Optional)
+            <label htmlFor="emailAddress" className={widgetStyles.Label}>
+              Email Address *
             </label>
             <p className={widgetStyles.Help}>
-              Link your leaderboard entry to a personal website or social media
-              account.
+              Used for sending confirmation emails for each of your submissions.
             </p>
             <input
-              className={clsx(widgetStyles.Control, widgetStyles.Text)}
+              className={clsx(
+                widgetStyles.Control,
+                widgetStyles.Text,
+                hasValidationErrors && !state.emailAddress && "input-error"
+              )}
               type="text"
-              id="link"
-              name="link"
-              placeholder="https://twitter.com/code4rena"
-              value={state.link}
+              id="emailAddress"
+              name="emailAddress"
+              placeholder="warden@email.com"
+              value={state.emailAddress}
               onChange={handleChange}
             />
-          </div>
-          <div className={widgetStyles.Container}>
-            <label htmlFor="avatar" className={widgetStyles.Label}>
-              Avatar (Optional)
-            </label>
-            <p className={widgetStyles.Help}>
-              An avatar displayed next to your name on the leaderboard.
-            </p>
-            <input
-              className={widgetStyles.Avatar}
-              type="file"
-              id="avatar"
-              name="avatar"
-              accept=".png,.jpg,.jpeg,.webp"
-              ref={avatarInputRef}
-              onChange={handleAvatarChange}
-            />
-            {state.avatar && (
-              <button
-                className="remove-line-button"
-                type="button"
-                onClick={removeAvatar}
-                aria-label="Remove avatar"
-              >
-                &#x2715;
-              </button>
+            {hasValidationErrors && !state.emailAddress && (
+              <p className={widgetStyles.ErrorMessage}>
+                <small>This field is required</small>
+              </p>
             )}
           </div>
-        </>
+          {isNewUser && (
+            <>
+              <div className={widgetStyles.Container}>
+                <label htmlFor="link" className={widgetStyles.Label}>
+                  Qualifications *
+                </label>
+                <p className={widgetStyles.Help}>
+                  Please provide evidence of your ability to be competitive in
+                  an EVM-based audit contest, preferably with links. For
+                  specifically the OpenSea contest, evidence of experience with
+                  assembly is a bonus.
+                </p>
+                <p className={widgetStyles.Help}>
+                  <strong>
+                    Please note, the qualifications you list here will be public
+                    as part of a PR in the{" "}
+                    <a href="https://github.com/code-423n4/code423n4.com">
+                      code423n4.com repo.
+                    </a>
+                  </strong>
+                </p>
+                <TextArea
+                  name="qualifications"
+                  required={true}
+                  onChange={handleChange}
+                  fieldState={state.qualifications}
+                  isInvalid={!state.qualifications && hasValidationErrors}
+                />
+                {!state.qualifications && hasValidationErrors && (
+                  <p className={widgetStyles.ErrorMessage}>
+                    <small>This field is required</small>
+                  </p>
+                )}
+              </div>
+              <div className={widgetStyles.Container}>
+                <label htmlFor="link" className={widgetStyles.Label}>
+                  Link (Optional)
+                </label>
+                <p className={widgetStyles.Help}>
+                  Link your leaderboard entry to a personal website or social
+                  media account.
+                </p>
+                <input
+                  className={clsx(widgetStyles.Control, widgetStyles.Text)}
+                  type="text"
+                  id="link"
+                  name="link"
+                  placeholder="https://twitter.com/code4rena"
+                  value={state.link}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className={widgetStyles.Container}>
+                <label htmlFor="avatar" className={widgetStyles.Label}>
+                  Avatar (Optional)
+                </label>
+                <p className={widgetStyles.Help}>
+                  An avatar displayed next to your name on the leaderboard.
+                </p>
+                <input
+                  className={widgetStyles.Avatar}
+                  type="file"
+                  id="avatar"
+                  name="avatar"
+                  accept=".png,.jpg,.jpeg,.webp"
+                  ref={avatarInputRef}
+                  onChange={handleAvatarChange}
+                />
+                {state.avatar && (
+                  <button
+                    className="remove-line-button"
+                    type="button"
+                    onClick={removeAvatar}
+                    aria-label="Remove avatar"
+                  >
+                    &#x2715;
+                  </button>
+                )}
+              </div>
+            </>
+          )}
+          <Agreement />
+          <div className={styles.ButtonsWrapper}>
+            <button
+              className={clsx("button cta-button", styles.Button)}
+              type="button"
+              onClick={() => submitRegistration()}
+            >
+              Register with MetaMask
+            </button>
+            <button
+              className={clsx("button cta-button", styles.Button)}
+              type="button"
+              onClick={() => submitRegistration("walletConnect")}
+            >
+              Register with WalletConnect
+            </button>
+          </div>
+        </form>
+      ) : status === FormStatus.Error ? (
+        <div style={{ textAlign: "center" }}>
+          <h1>Whoops!</h1>
+          <p>An error occurred while processing your registration.</p>
+          {errorMessage !== "" && (
+            <p>
+              <small>{errorMessage}</small>
+            </p>
+          )}
+          <button className="button cta-button" onClick={resetForm}>
+            Try again
+          </button>
+        </div>
+      ) : (
+        <div className="centered-text">
+          <h1>Thank you!</h1>
+          <p>Your registration application has been submitted.</p>
+          <h2>One more thing...</h2>
+          <p>
+            Before we can complete your registration, please join us in{" "}
+            <a href="https://discord.gg/code4rena">Discord</a> and give us a
+            howl in #i-want-to-be-a-warden! <br />
+            We look forward to seeing you in the arena!
+          </p>
+        </div>
       )}
-      <Agreement />
-      <div className={styles.ButtonsWrapper}>
-        <button
-          className={clsx("button cta-button", styles.Button)}
-          type="button"
-          onClick={() => submitRegistration()}
-        >
-          Register with MetaMask
-        </button>
-        <button
-          className={clsx("button cta-button", styles.Button)}
-          type="button"
-          onClick={() => submitRegistration("walletConnect")}
-        >
-          Register with WalletConnect
-        </button>
-      </div>
-    </form>
+    </>
   );
 }
