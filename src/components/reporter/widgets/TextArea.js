@@ -7,16 +7,10 @@ import clsx from "clsx";
 
 import * as styles from "./Widgets.module.scss";
 
-const TextArea = ({ name, required, fieldState, isInvalid, onChange }) => {
+const TextArea = ({ name, required, fieldState, isInvalid, onChange, maxSize }) => {
   function handleChange(e) {
     onChange(e);
   }
-
-  const checkPageLocation = () => {
-    if (typeof window !== `undefined`) {
-      return window.location.href.includes("/help");
-    }
-  };
 
   return (
     <Tabs className="alternate-tab">
@@ -37,20 +31,14 @@ const TextArea = ({ name, required, fieldState, isInvalid, onChange }) => {
             onChange={handleChange}
             required={required}
             value={fieldState}
-            maxLength={checkPageLocation() ? 2000 : 65536}
+            maxLength={maxSize}
           />
 
-          {fieldState.length > 1900 && checkPageLocation() ? (
+          {fieldState.length > (maxSize-100) ? (
             <span className={clsx(styles.TextAreaCounter)}>
-              {2000 - fieldState.length} char. remaining
+              {(maxSize) - fieldState.length} char. remaining
             </span>
-          ) : fieldState.length > 64000 ? (
-            <span className={clsx(styles.TextAreaCounter)}>
-              {65536 - fieldState.length} char. remaining
-            </span>
-          ) : (
-            ""
-          )}
+          ) : ''}
         </div>
       </TabPanel>
       <TabPanel>

@@ -49,6 +49,7 @@ function ContactUs() {
       name: "description",
       label: "Description",
       widget: "textarea",
+      maxSize: 2000,
       required: true,
     },
   ];
@@ -179,9 +180,6 @@ function ContactUs() {
               fieldState={fieldState}
               showValidationErrors={hasValidationErrors}
             />
-            {
-              fieldState.description.length > 1900 ? <p>Max 2000 characters</p>: ''
-            }
           </fieldset>
           <div className="captcha-container">
             <HCaptcha
