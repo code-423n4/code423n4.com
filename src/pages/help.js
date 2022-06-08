@@ -51,7 +51,7 @@ function ContactUs() {
       widget: "textarea",
       maxSize: 2000,
       required: true,
-      helpText: "For submission longer than 2000 characters, add a link to a gist"
+      helpText: "For content longer than 2000 characters, please include a link to a gist in GitHub"
     },
   ];
 
