@@ -253,6 +253,11 @@
   justify-content: center;
 }
 
+.report-toc ul li {
+  margin:0;
+  padding:0;
+}
+
 /* TODO: Find out why this media query doesn't fire until +15 pixels off
 - Happens in Chrome and Firefox
 - It's not zoom, and it's not an initial device scale issue
