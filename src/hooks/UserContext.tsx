@@ -15,6 +15,7 @@ import { ModalProvider, useModalContext } from "./ModalContext";
 export enum UserLoginError {
   RegistrationPending = "registration pending",
   ConnectionPending = "connect wallet pending",
+  Unregistered = "unregistered",
   Unknown = "",
 }
 
@@ -212,8 +213,7 @@ const UserProvider = ({ children }) => {
       const associatedHandles = await Moralis.Cloud.run("findUser");
       if (!associatedHandles || associatedHandles.length < 1) {
         logUserOut();
-        navigate("/register");
-        return;
+        throw UserLoginError.Unregistered;
       }
       user.set("handlesPendingConfirmation", associatedHandles);
       await user.save();
@@ -225,7 +225,6 @@ const UserProvider = ({ children }) => {
         throw error;
       }
     }
-    return "connected";
   }, []);
 
   const logUserOut = useCallback(() => {

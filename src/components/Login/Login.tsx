@@ -1,6 +1,7 @@
 import clsx from "clsx";
 import React from "react";
 import Moralis from "moralis";
+import { navigate } from "gatsby";
 import { toast } from "react-toastify";
 import { useMoralis } from "react-moralis";
 import useUser, { UserLoginError } from "../../hooks/UserContext";
@@ -19,7 +20,7 @@ const Login = ({ displayAsButtons = false }) => {
     provider: Moralis.Web3ProviderType = "metamask"
   ) => {
     event.preventDefault();
-    const id = toast.loading("Logging in...", { autoClose: 2000 });
+    const id = toast.loading("Logging in...", { autoClose: 5000 });
 
     try {
       const user = await authenticate({ provider });
@@ -30,7 +31,7 @@ const Login = ({ displayAsButtons = false }) => {
           render: "You must sign the message to connect your wallet",
           type: "error",
           isLoading: false,
-          autoClose: 2000,
+          autoClose: 4000,
         });
         return;
       }
@@ -40,30 +41,31 @@ const Login = ({ displayAsButtons = false }) => {
         render: "Something went wrong. Please refresh the page and try again.",
         type: "error",
         isLoading: false,
-        autoClose: 2000,
+        autoClose: 4000,
       });
       return;
     }
 
     try {
-      const connection = await connectWallet();
-      if (connection) {
-        toast.update(id, {
-          render: "Logged in",
-          type: "success",
-          isLoading: false,
-          autoClose: 2000,
-        });
-      } else {
+      await connectWallet();
+      toast.update(id, {
+        render: "Logged in",
+        type: "success",
+        isLoading: false,
+        autoClose: 4000,
+      });
+    } catch (error) {
+      logUserOut();
+      if (error === UserLoginError.Unregistered) {
         toast.update(id, {
           render: "Please register as warden",
           type: "error",
           isLoading: false,
-          autoClose: 2000,
+          autoClose: 4000,
         });
+        navigate("/register");
+        return;
       }
-    } catch (error) {
-      logUserOut();
       if (error === UserLoginError.RegistrationPending) {
         toast.update(id, {
           render: (
@@ -79,7 +81,7 @@ const Login = ({ displayAsButtons = false }) => {
           ),
           type: "error",
           isLoading: false,
-          autoClose: 2000,
+          autoClose: 5000,
         });
         return;
       }
@@ -89,7 +91,7 @@ const Login = ({ displayAsButtons = false }) => {
             "Your request to connect your wallet is pending review. Check the progress in GitHub",
           type: "error",
           isLoading: false,
-          autoClose: 2000,
+          autoClose: 5000,
         });
         return;
       }
@@ -97,7 +99,7 @@ const Login = ({ displayAsButtons = false }) => {
         render: "Something went wrong. Please refresh the page and try again.",
         type: "error",
         isLoading: false,
-        autoClose: 2000,
+        autoClose: 4000,
       });
     }
   };
