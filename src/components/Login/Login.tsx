@@ -35,7 +35,6 @@ const Login = ({ displayAsButtons = false }) => {
         return;
       }
     } catch (error) {
-      console.error(error);
       logUserOut();
       toast.update(id, {
         render: "Something went wrong. Please refresh the page and try again.",
@@ -48,7 +47,6 @@ const Login = ({ displayAsButtons = false }) => {
 
     try {
       const connection = await connectWallet();
-      console.log(connection);
       if (connection) {
         toast.update(id, {
           render: "Logged in",
