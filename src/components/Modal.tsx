@@ -9,6 +9,7 @@ const Modal = () => {
   const handlePrimaryButtonClick = async () => {
     setIsLoading(true);
     await modalProps.primaryButtonAction();
+    setIsLoading(false);
     hideModal();
   };
 
@@ -16,6 +17,7 @@ const Modal = () => {
     if (modalProps.secondaryButtonAction) {
       await modalProps.secondaryButtonAction();
     }
+    setIsLoading(false);
     hideModal();
   };
 
@@ -37,12 +39,16 @@ const Modal = () => {
           <button className="button cta-button secondary" onClick={handleClose}>
             {modalProps.secondaryButtonText || "Cancel"}
           </button>
-          <button
-            className="button cta-button primary"
-            onClick={handlePrimaryButtonClick}
-          >
-            {isLoading ? "Submitting..." : modalProps.primaryButtonText || "Ok"}
-          </button>
+          {modalProps.primaryButtonText && (
+            <button
+              className="button cta-button primary"
+              onClick={handlePrimaryButtonClick}
+            >
+              {isLoading
+                ? "Submitting..."
+                : modalProps.primaryButtonText || "Ok"}
+            </button>
+          )}
         </div>
       </div>
     </div>

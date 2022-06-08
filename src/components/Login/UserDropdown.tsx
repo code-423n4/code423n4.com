@@ -15,7 +15,7 @@ export default function UserDropdown() {
   const avatar = () => (
     <div className={styles.Avatar}>
       <Avatar
-        src={currentUser.img}
+        src={currentUser.image}
         name={currentUser.username}
         size="30px"
         round="30px"
@@ -57,7 +57,7 @@ export default function UserDropdown() {
         <span className={styles.MobileMenuItem}>
           <span className={styles.Icon}>
             <Avatar
-              src={currentUser.img}
+              src={currentUser.image}
               name={currentUser.username}
               size="30px"
               round="30px"

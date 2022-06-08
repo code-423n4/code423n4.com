@@ -14,8 +14,12 @@ exports.handler = async (event) => {
 
   try {
     const userFile = readFileSync(`./_data/handles/${userHandle}.json`);
-
     const user = JSON.parse(userFile.toString());
+    if (user.image) {
+      const imagePath = user.image.slice(2);
+      user.image = `https://raw.githubusercontent.com/code-423n4/code423n4.com/main/_data/handles/${imagePath}`;
+    }
+
     return {
       statusCode: 200,
       body: JSON.stringify(user),

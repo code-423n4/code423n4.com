@@ -1,6 +1,7 @@
 import clsx from "clsx";
 import React, { useEffect, useState, useCallback } from "react";
 import Moralis from "moralis";
+import { toast } from "react-toastify";
 
 // helpers
 import {
@@ -233,10 +234,18 @@ const SubmitFindings = ({ wardensList, sponsor, contest, repo }) => {
             window.localStorage.removeItem(contest);
           }
         } else {
-          setStatus(FormStatus.Error);
           const { error } = await response.json();
-          if (error) {
-            setErrorMessage(error);
+          if (error.startsWith("Failed to send confirmation email")) {
+            setStatus(FormStatus.Submitted);
+            if (typeof window !== `undefined`) {
+              window.localStorage.removeItem(contest);
+            }
+            toast.error(error);
+          } else {
+            setStatus(FormStatus.Error);
+            if (error) {
+              setErrorMessage(error);
+            }
           }
         }
       } catch (error) {
@@ -295,7 +304,6 @@ const SubmitFindings = ({ wardensList, sponsor, contest, repo }) => {
       (team) => team.username === attributedTo
     );
     if (team && !team.address) {
-      console.log("showing modal");
       // confirm saving the team's address
       showModal({
         title: `Save address for team ${attributedTo}`,
@@ -361,7 +369,7 @@ const SubmitFindings = ({ wardensList, sponsor, contest, repo }) => {
                   <WardenDetails
                     username={currentUser.username}
                     address={currentUser.address}
-                    img={currentUser.img}
+                    image={currentUser.image}
                   />
                 </label>
                 <h4 className={styles.Heading4}>TEAM MEMBER</h4>
@@ -381,7 +389,7 @@ const SubmitFindings = ({ wardensList, sponsor, contest, repo }) => {
                     <WardenDetails
                       username={team.username}
                       address={team.address}
-                      img={team.img}
+                      image={team.image}
                     />
                     {!team.address && attributedTo === team.username && (
                       <div>
@@ -409,7 +417,7 @@ const SubmitFindings = ({ wardensList, sponsor, contest, repo }) => {
               <WardenDetails
                 username={currentUser.username}
                 address={currentUser.address}
-                img={currentUser.img}
+                image={currentUser.image}
               />
             )}
             <DynamicInputGroup

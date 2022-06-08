@@ -3,12 +3,12 @@ import Avatar from "react-avatar";
 
 import * as styles from "./WardenDetails.module.scss";
 
-export default function WardenDetails({ img, username, address }) {
+export default function WardenDetails({ image, username, address }) {
   return (
     <div className={styles.Wrapper}>
       <span>
         <span className={styles.Icon}>
-          <Avatar src={img} name={username} size="32px" round="32px" />
+          <Avatar src={image} name={username} size="32px" round="32px" />
         </span>
         {username}
       </span>

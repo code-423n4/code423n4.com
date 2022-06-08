@@ -65,12 +65,12 @@ exports.handler = async (event) => {
     }
 
     const formattedTeamData: {
-      teamName: string;
+      handle: string;
       members: string[];
       address: string;
       link?: string;
       image?: string;
-    } = { teamName, members, address, link };
+    } = { handle: teamName, members, address, link };
     let avatarFilename = "";
     let base64Avatar = "";
     if (image) {

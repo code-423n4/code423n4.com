@@ -25,9 +25,9 @@ interface UserState {
   gitHubUsername: string;
   emailAddress: string;
   moralisId: string;
-  teams: { username: string; address?: string; img?: string }[];
+  teams: { username: string; address?: string; image?: string }[];
   isLoggedIn: boolean;
-  img?: string | null;
+  image?: string | null;
   link?: string | null;
 }
 
@@ -46,7 +46,7 @@ const DEFAULT_STATE: UserState = {
   moralisId: "",
   teams: [],
   isLoggedIn: false,
-  img: null,
+  image: null,
   link: null,
 };
 
@@ -166,19 +166,9 @@ const UserProvider = ({ children }) => {
       throw UserLoginError.ConnectionPending;
     }
 
-    if (registeredUser.image) {
-      // remove the relative part of the path
-      const imagePath = registeredUser.image.slice(2);
-      const imgResponse = await fetch(
-        `https://raw.githubusercontent.com/code-423n4/code423n4.com/main/_data/handles/${imagePath}`
-      );
-      if (imgResponse.ok) {
-        registeredUser.image = imgResponse.url;
-      }
-    }
     const moralisId = registeredUser.moralisId;
     const link = registeredUser.link || null;
-    const img = registeredUser.image || null;
+    const image = registeredUser.image || null;
 
     // fetching teams
     const teamsResponse = await fetch(
@@ -197,7 +187,7 @@ const UserProvider = ({ children }) => {
       gitHubUsername,
       emailAddress,
       link,
-      img,
+      image,
       teams,
       isLoggedIn: true,
     });
@@ -277,20 +267,23 @@ const UserProvider = ({ children }) => {
 };
 
 export const wrapRootElement = ({ element }) => {
-  const environment = process.env.NODE_ENV;
-  let appId;
-  let serverUrl;
+  // const environment = process.env.NODE_ENV;
+  // const isStaging = process.env.GATSBY_STAGING;
+  // let appId;
+  // let serverUrl;
 
-  if (environment === "staging") {
-    serverUrl = process.env.STAGING_MORALIS_SERVER;
-    appId = process.env.STAGING_MORALIS_APP_ID;
-  } else if (environment === "production") {
-    serverUrl = process.env.PRODUCTION_MORALIS_SERVER;
-    appId = process.env.PRODUCTION_MORALIS_APP_ID;
-  } else {
-    serverUrl = process.env.DEV_MORALIS_SERVER;
-    appId = process.env.DEV_MORALIS_APP_ID;
-  }
+  // if (isStaging) {
+  //   serverUrl = process.env.GATSBY_STAGING_MORALIS_SERVER;
+  //   appId = process.env.GATSBY_STAGING_MORALIS_APP_ID;
+  // } else if (environment === "production") {
+  //   serverUrl = process.env.GATSBY_PRODUCTION_MORALIS_SERVER;
+  //   appId = process.env.GATSBY_PRODUCTION_MORALIS_APP_ID;
+  // } else {
+  //   serverUrl = process.env.GATSBY_DEV_MORALIS_SERVER;
+  //   appId = process.env.GATSBY_DEV_MORALIS_APP_ID;
+  // }
+  const appId = process.env.GATSBY_MORALIS_APP_ID;
+  const serverUrl = process.env.GATSBY_MORALIS_SERVER;
 
   return (
     <MoralisProvider appId={appId} serverUrl={serverUrl}>
