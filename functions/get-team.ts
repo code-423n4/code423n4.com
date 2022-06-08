@@ -37,8 +37,7 @@ exports.handler = async (event) => {
       };
     } else {
       return {
-        statusCode: 401,
-        body: JSON.stringify({ error: "Team not found" }),
+        statusCode: 204
       };
     }
   } catch (error) {

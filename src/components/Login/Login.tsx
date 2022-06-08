@@ -1,6 +1,7 @@
 import clsx from "clsx";
 import React from "react";
 import Moralis from "moralis";
+import { navigate } from "gatsby";
 import { toast } from "react-toastify";
 import { useMoralis } from "react-moralis";
 import useUser, { UserLoginError } from "../../hooks/UserContext";
@@ -19,50 +20,87 @@ const Login = ({ displayAsButtons = false }) => {
     provider: Moralis.Web3ProviderType = "metamask"
   ) => {
     event.preventDefault();
+    const id = toast.loading("Logging in...", { autoClose: 5000 });
+
     try {
       const user = await authenticate({ provider });
       if (user === undefined) {
         // user clicked "cancel" when prompted to sign message
         // @todo: update messaging
-        toast.error("You must sign the message to connect your wallet");
+        toast.update(id, {
+          render: "You must sign the message to connect your wallet",
+          type: "error",
+          isLoading: false,
+          autoClose: 4000,
+        });
         return;
       }
     } catch (error) {
-      console.error(error);
       logUserOut();
-      toast.error(
-        "Something went wrong. Please refresh the page and try again."
-      );
+      toast.update(id, {
+        render: "Something went wrong. Please refresh the page and try again.",
+        type: "error",
+        isLoading: false,
+        autoClose: 4000,
+      });
       return;
     }
 
     try {
       await connectWallet();
+      toast.update(id, {
+        render: "Logged in",
+        type: "success",
+        isLoading: false,
+        autoClose: 4000,
+      });
     } catch (error) {
       logUserOut();
+      if (error === UserLoginError.Unregistered) {
+        toast.update(id, {
+          render: "Please register as warden",
+          type: "error",
+          isLoading: false,
+          autoClose: 4000,
+        });
+        navigate("/register");
+        return;
+      }
       if (error === UserLoginError.RegistrationPending) {
-        toast.error(
-          <span>
-            It looks like your account registration is pending. Don't forget to
-            join us in{" "}
-            <a href="https://discord.gg/code4rena" target="_blank">
-              Discord
-            </a>{" "}
-            and give us a howl in #i-want-to-be-a-warden so we can complete your
-            registration.
-          </span>
-        );
+        toast.update(id, {
+          render: (
+            <span>
+              It looks like your account registration is pending. Don't forget
+              to join us in{" "}
+              <a href="https://discord.gg/code4rena" target="_blank">
+                Discord
+              </a>{" "}
+              and give us a howl in #i-want-to-be-a-warden so we can complete
+              your registration.
+            </span>
+          ),
+          type: "error",
+          isLoading: false,
+          autoClose: 5000,
+        });
         return;
       }
       if (error === UserLoginError.ConnectionPending) {
-        toast.error(
-          "Your request to connect your wallet is pending review. Check the progress in GitHub"
-        );
+        toast.update(id, {
+          render:
+            "Your request to connect your wallet is pending review. Check the progress in GitHub",
+          type: "error",
+          isLoading: false,
+          autoClose: 5000,
+        });
         return;
       }
-      toast.error(
-        "Something went wrong. Please refresh the page and try again."
-      );
+      toast.update(id, {
+        render: "Something went wrong. Please refresh the page and try again.",
+        type: "error",
+        isLoading: false,
+        autoClose: 4000,
+      });
     }
   };
 
