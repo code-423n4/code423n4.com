@@ -46,6 +46,15 @@ interface NotionCertifiedContributorApplication {
 }
 
 async function handler(event) {
+  return {
+    statusCode: 200,
+    body: `Testing:
+    1 ${process.env["C4_ENV"]}
+    2 ${process.env["BRANCH"]}
+    3 ${process.env["CONTEXT"]}
+    `,
+  };
+
   if (event.httpMethod !== "POST") {
     return {
       statusCode: 405,
