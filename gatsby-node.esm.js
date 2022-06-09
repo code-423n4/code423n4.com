@@ -10,12 +10,12 @@ import SchemaCustomization from "./schema";
 const { token } = require("./_config");
 
 const octokit = new Octokit({
-  auth: token,
+  auth: process.env.GITHUB_TOKEN,
 });
 
 const graphqlWithAuth = graphql.defaults({
   headers: {
-    authorization: `Bearer ${token}`,
+    authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
   },
 });
 
