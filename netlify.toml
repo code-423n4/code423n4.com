@@ -4,6 +4,9 @@
   command = "yarn build"
   environment = { YARN_VERSION = "1.22.10" }
 
+[[plugins]]
+  package = "./netlify/plugins/netlify-plugin-env-config"
+
 [[redirects]]
   from = "/is"
   to = "/images/code4rena_is.pdf"
