@@ -17,12 +17,21 @@
   to = "/register"
   status = 200
 
+[context.production.environment]
+  C4_ENV = "production"
+
 [context.deploy-preview]
   ignore = "bash ./netlify-ignore-branch.sh"
   environment = { GATSBY_STAGING = "true" }
 
 [context.staging]
   environment = { GATSBY_STAGING = "true" }
+
+[context.deploy-preview.environment]
+  C4_ENV = "staging"
+
+[context.staging.environment]
+  C4_ENV = "staging"
 
 [functions]
   directory = "functions/"
