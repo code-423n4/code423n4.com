@@ -76,6 +76,21 @@
   margin-top: 0;
 }
 
+.TextAreaContainer {
+  position: relative;
+}
+
+.TextAreaCounter {
+  text-align: right;
+  position: absolute;
+  bottom: 3px;
+  left: 3px;
+  background-color: rgba(204, 204, 204, 1);
+  padding: 1px;
+  border-radius: 2px;
+  color:black;
+}
+
 .Markdown {
   height: 250px;
   overflow: auto;
