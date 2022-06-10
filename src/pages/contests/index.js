@@ -75,8 +75,8 @@ export default function Contests({ data }) {
       statusObject[keys].sort(function (a, b) {
         let keyA = new Date(a.start_time);
         let keyB = new Date(b.start_time);
-        if (keyA < keyB) return 1;
-        if (keyA > keyB) return -1;
+        if (keyA < keyB) return -1;
+        if (keyA > keyB) return 1;
         return 0;
       });
     }
@@ -171,7 +171,7 @@ export default function Contests({ data }) {
             <h1>Completed contests ({filteredContests.completed.length})</h1>
             <ContestList
               updateContestStatus={updateContestStatus}
-              contests={filteredContests.completed}
+              contests={filteredContests.completed.reverse()}
             />
           </section>
         ) : null}
