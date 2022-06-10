@@ -4,5 +4,6 @@ public
 .cache
 .nova
 .env
+.netlify
 .env.development
 yarn-error.log

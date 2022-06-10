@@ -7,7 +7,15 @@ import clsx from "clsx";
 
 import * as styles from "./Widgets.module.scss";
 
-const TextArea = ({ name, required, fieldState, isInvalid, onChange }) => {
+const TextArea = ({
+  name,
+  required,
+  fieldState,
+  isInvalid,
+  onChange,
+  maxSize,
+  helpText,
+}) => {
   function handleChange(e) {
     onChange(e);
   }
@@ -19,19 +27,31 @@ const TextArea = ({ name, required, fieldState, isInvalid, onChange }) => {
         <Tab>Preview</Tab>
       </TabList>
       <TabPanel>
-        <textarea
-          className={clsx(
-            styles.Control,
-            styles.Text,
-            styles.Textarea,
-            isInvalid && "input-error"
+        <div className={clsx(styles.TextAreaContainer)}>
+          <textarea
+            className={clsx(
+              styles.Control,
+              styles.Text,
+              styles.Textarea,
+              isInvalid && "input-error"
+            )}
+            name={name}
+            onChange={handleChange}
+            required={required}
+            value={fieldState}
+            maxLength={maxSize}
+          />
+
+          {fieldState.length > maxSize - 100 ? (
+            <span className={clsx(styles.TextAreaCounter)}>
+              {maxSize - fieldState.length} char. remaining
+            </span>
+          ) : (
+            ""
           )}
-          name={name}
-          onChange={handleChange}
-          required={required}
-          value={fieldState}
-        />
+        </div>
       </TabPanel>
+      {helpText ?? <p>{helpText}</p>}
       <TabPanel>
         <ReactMarkdown
           className={clsx(styles.Control, styles.Markdown)}
