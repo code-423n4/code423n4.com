@@ -18,7 +18,12 @@ export default function SiteIndex({ data }) {
 
   const contests = data.contests.edges;
   const filteredContests = contestsByState({ contests });
-
+  // TODO change this to fetch from notion
+  const returnContests = (contestArray) => {
+    return contestArray.map(contest => {
+      return contest.node;
+    })
+  }
   return (
     <DefaultLayout bodyClass="landing" key={"landing" + contestStatusChanges}>
       <div className="hero-wrapper">
@@ -28,14 +33,14 @@ export default function SiteIndex({ data }) {
         <section>
           {filteredContests.active.length > 0 ? (
             <ContestList
-              contests={filteredContests.active}
+              contests={returnContests(filteredContests.active)}
               updateContestStatus={updateContestStatus}
             />
           ) : null}
           <h1 className="upcoming-header">Upcoming Contests</h1>
           {filteredContests.soon.length > 0 ? (
             <ContestList
-              contests={filteredContests.soon}
+              contests={returnContests(filteredContests.soon)}
               updateContestStatus={updateContestStatus}
             />
           ) : null}
