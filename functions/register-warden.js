@@ -67,6 +67,7 @@ exports.handler = async (event) => {
       };
     }
 
+    const owner = process.env.GITHUB_OWNER;
     const data = JSON.parse(event.body);
     const {
       handle,
@@ -228,7 +229,7 @@ exports.handler = async (event) => {
         const wardenFile = await octokit.request(
           "GET /repos/{owner}/{repo}/contents/{path}",
           {
-            owner: "code-423n4",
+            owner,
             repo: "code423n4.com",
             path: `_data/handles/${handle}.json`,
           }
@@ -260,7 +261,7 @@ exports.handler = async (event) => {
     );
     try {
       const res = await octokit.createPullRequest({
-        owner: "code-423n4",
+        owner,
         repo: "code423n4.com",
         title,
         body,
@@ -276,7 +277,7 @@ exports.handler = async (event) => {
       await octokit.request(
         "POST /repos/{owner}/{repo}/issues/{issue_number}/labels",
         {
-          owner: "code-423n4",
+          owner,
           repo: "code423n4.com",
           issue_number: res.data.number,
           labels: ["app-warden"],
@@ -292,7 +293,7 @@ exports.handler = async (event) => {
       `;
 
       const emailData = {
-        from: "submissions@code423n4.com",
+        from: process.env.EMAIL_SENDER,
         to: emailAddress,
         subject: `Registration pending for ${handle}`,
         text: emailBody,

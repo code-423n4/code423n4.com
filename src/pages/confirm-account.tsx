@@ -21,7 +21,7 @@ enum FormStatus {
 
 export default function ConfirmAccount() {
   // hooks
-  const { isAuthenticated, user } = useMoralis();
+  const { isAuthenticated, user, isInitialized, isInitializing } = useMoralis();
   const { logUserOut } = useUser();
 
   // state
@@ -41,6 +41,9 @@ export default function ConfirmAccount() {
   const discordUsernameRegex = new RegExp(/.*#[0-9]{4}/, "g");
 
   useEffect(() => {
+    if (!isInitialized) {
+      return;
+    }
     const getUser = async (): Promise<void> => {
       if (!isAuthenticated || !user) {
         navigate("/");
@@ -63,7 +66,7 @@ export default function ConfirmAccount() {
       setStatus(FormStatus.Unsubmitted);
     };
     getUser();
-  }, [isAuthenticated, user]);
+  }, [isAuthenticated, user, isInitialized]);
 
   const handleDiscordUsernameChange = (e) => {
     setDiscordUsername(e.target.value);
@@ -138,7 +141,7 @@ export default function ConfirmAccount() {
     setStatus(FormStatus.Unsubmitted);
   };
 
-  return status === FormStatus.Loading ? (
+  return status === FormStatus.Loading || isInitializing ? (
     // @todo: style a loading state
     <div>LOADING...</div>
   ) : (

@@ -20,7 +20,7 @@ const Login = ({ displayAsButtons = false }) => {
     provider: Moralis.Web3ProviderType = "metamask"
   ) => {
     event.preventDefault();
-    const id = toast.loading("Logging in...", { autoClose: 5000 });
+    const id = toast.loading("Logging in...", { autoClose: 4000 });
 
     try {
       const user = await authenticate({ provider });
@@ -31,7 +31,7 @@ const Login = ({ displayAsButtons = false }) => {
           render: "You must sign the message to connect your wallet",
           type: "error",
           isLoading: false,
-          autoClose: 4000,
+          autoClose: 3000,
         });
         return;
       }
@@ -41,7 +41,7 @@ const Login = ({ displayAsButtons = false }) => {
         render: "Something went wrong. Please refresh the page and try again.",
         type: "error",
         isLoading: false,
-        autoClose: 4000,
+        autoClose: 3000,
       });
       return;
     }
@@ -52,7 +52,7 @@ const Login = ({ displayAsButtons = false }) => {
         render: "Logged in",
         type: "success",
         isLoading: false,
-        autoClose: 4000,
+        autoClose: 2000,
       });
     } catch (error) {
       logUserOut();
@@ -81,7 +81,7 @@ const Login = ({ displayAsButtons = false }) => {
           ),
           type: "error",
           isLoading: false,
-          autoClose: 5000,
+          autoClose: 4000,
         });
         return;
       }
@@ -91,7 +91,7 @@ const Login = ({ displayAsButtons = false }) => {
             "Your request to connect your wallet is pending review. Check the progress in GitHub",
           type: "error",
           isLoading: false,
-          autoClose: 5000,
+          autoClose: 4000,
         });
         return;
       }

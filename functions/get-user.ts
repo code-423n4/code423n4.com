@@ -17,7 +17,7 @@ exports.handler = async (event) => {
     const user = JSON.parse(userFile.toString());
     if (user.image) {
       const imagePath = user.image.slice(2);
-      user.image = `https://raw.githubusercontent.com/code-423n4/code423n4.com/main/_data/handles/${imagePath}`;
+      user.image = `https://raw.githubusercontent.com/${process.env.GITHUB_OWNER}/code423n4.com/main/_data/handles/${imagePath}`;
     }
 
     return {

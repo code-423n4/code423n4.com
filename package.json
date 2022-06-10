@@ -82,11 +82,13 @@
   "devDependencies": {
     "@types/jsonwebtoken": "^8.5.5",
     "@types/react": "^18.0.9",
+    "netlify-cli": "^10.5.0",
     "prettier": "2.2.1",
     "tiny-glob": "^0.2.8"
   },
   "license": "MIT",
   "scripts": {
+    "dev": "netlify dev",
     "build": "gatsby build",
     "develop": "gatsby develop",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\"",

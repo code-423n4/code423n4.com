@@ -194,9 +194,10 @@ const SubmitFindings = ({ wardensList, sponsor, contest, repo }) => {
     const markdownBody = `# Lines of code\n\n${locString}\n\n\n# Vulnerability details\n\n${details}\n\n`;
     const formattedRisk = state.risk ? state.risk.slice(0, 1) : "";
     const formattedBody = isQaOrGasFinding ? details : markdownBody;
-    const emailAddressList = additionalEmailAddresses
-      .filter((email) => !!email)
-      .push(currentUser.emailAddress);
+    const emailAddressList = additionalEmailAddresses.filter(
+      (email) => !!email
+    );
+    emailAddressList.push(currentUser.emailAddress);
 
     const data = {
       user: currentUser.username,

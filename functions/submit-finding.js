@@ -49,10 +49,11 @@ async function updateTeamData(team, newPolygonAddress) {
   const files = {
     [`_data/handles/${teamName}.json`]: updatedTeamData,
   };
+  const owner = process.env.GITHUB_OWNER;
   const body = `This auto-generated PR adds polygon address for team ${teamName}`;
   const title = `Add address for team ${teamName}`;
   await octokit.createPullRequest({
-    owner: "code-423n4",
+    owner,
     repo: "code423n4.com",
     title,
     body,
@@ -97,8 +98,6 @@ exports.handler = async (event) => {
     serverUrl: moralisServerUrl,
     appId: moralisAppId,
   });
-
-  const owner = "code-423n4";
 
   // ensure we have the data we need
   if (
@@ -255,7 +254,10 @@ exports.handler = async (event) => {
     };
   }
 
-  const recipients = `${emailAddresses.join(", ")}, submissions@code423n4.com`;
+  const owner = process.env.GITHUB_OWNER;
+  const recipients = `${emailAddresses.join(", ")}, ${
+    process.env.EMAIL_SENDER
+  }`;
   const text = dedent`
   C4 finding submitted: (risk = ${labels[1]})
   Wallet address: ${address}
@@ -264,7 +266,7 @@ exports.handler = async (event) => {
   `;
 
   const emailData = {
-    from: "submissions@code423n4.com",
+    from: process.env.EMAIL_SENDER,
     to: recipients,
     subject: `C4 ${sponsor} finding: ${title}`,
     text,
@@ -335,9 +337,11 @@ exports.handler = async (event) => {
       });
   } catch (error) {
     return {
-      statusCode: 500,
+      statusCode: error.status || 500,
       body: JSON.stringify({
-        error: "Something went wrong with your submission. Please try again.",
+        error:
+          error.message ||
+          "Something went wrong with your submission. Please try again.",
       }),
     };
   }

@@ -1,6 +1,5 @@
 import React, { useCallback, useState, useRef } from "react";
 import clsx from "clsx";
-import Moralis from "moralis";
 
 import useUser from "../hooks/UserContext";
 

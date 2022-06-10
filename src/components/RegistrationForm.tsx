@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useRef } from "react";
+import React, { useCallback, useState, useRef, ReactNode } from "react";
 import clsx from "clsx";
 import { useMoralis } from "react-moralis";
 import Moralis from "moralis/types";
@@ -311,7 +311,7 @@ export default function RegistrationForm({ handles, wardens, className }) {
                 checked={!isNewUser}
                 onChange={handleFormChange}
               />
-              I'm an established warden
+              I'm a registered warden
             </label>
           </fieldset>
           {instructions}

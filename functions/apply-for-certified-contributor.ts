@@ -127,7 +127,7 @@ async function handler(event) {
   }
 
   // Send confirmation email
-  const recipients = `${ticket.emailAddress}, submissions@code423n4.com`;
+  const recipients = `${ticket.emailAddress}, ${process.env.EMAIL_SENDER}`;
   const text = dedent`
     Thank you for applying to be a certified Code4rena warden! Here's what to expect next:
 
@@ -156,7 +156,7 @@ async function handler(event) {
     "<p>The Code4 team</p>";
 
   const mailOptions = {
-    from: "submissions@code423n4.com",
+    from: process.env.EMAIL_SENDER,
     to: recipients,
     subject: `Certified warden application for ${ticket.wardenHandle} has been received!`,
     text,
