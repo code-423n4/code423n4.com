@@ -1,0 +1,10 @@
+{
+  "handle": "MangoBurger",
+  "members": [
+    "BurgerTime",
+    "CaptainMango"
+  ],
+  "link": "",
+  "image": "https://raw.githubusercontent.com/code-423n4/code423n4.com/main/_data/handles/avatars/CaptainMango.jpeg",
+  "address": "test"
+}
