@@ -54,7 +54,7 @@ export function Input({
   };
 
   return (
-    <div className={styles.Container}>
+    <div>
       {label && (
         <label className={styles.Label} htmlFor={name}>
           {label}

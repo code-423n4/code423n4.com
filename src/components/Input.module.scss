@@ -62,3 +62,19 @@ input[type="text"].InputError,
 .InputError {
   border: 2px solid var(--hot-pink);
 }
+
+.ErrorMessage {
+  display: flex;
+  &::before {
+    content: "";
+    width: 8px;
+    height: 8px;
+    aspect-ratio: 1/1;
+    margin-top: 6px;
+
+    border-radius: 100%;
+    background-color: var(--hot-pink);
+    display: inline-block;
+    margin-right: 5px;
+  }
+}

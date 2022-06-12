@@ -22,9 +22,9 @@ Edit security settings in the dashboard for your server.
 
 To update class level permissions (CLP) or protected fields, select the class you want to update and click on "Security". To update access control lists (ACL), edit the "ACL" field on an object.
 
-- Set CLP for the `_User` class to Authenticated "read" and "write" (remove all Public permissions, as well as "add field" permission for Authenticated)
+- Set CLP for the `_User` and `_EthAddress` classes to Public "read" and "write" (remove "add field" permission)
 - Set CLP for `AddressesFromPreviousSubmissions` to Authenticated "read" only (remove all Public permissions, as well as permissions to "write" or "add field" for Authenticated)
-- Remove all Public and Authenticated permissions for `_Session`, `_AddressSyncStatus`, `_EthAddress`, and `_Role`.
+- Remove all Public and Authenticated permissions for `_Session`, `_AddressSyncStatus`, and `_Role`.
 
 # Cloud code
 

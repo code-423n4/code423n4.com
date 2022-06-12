@@ -58,7 +58,7 @@ const FormStatus = {
   Error: "error",
 };
 
-const SubmitFindings = ({ wardensList, sponsor, contest, repo }) => {
+const SubmitFindings = ({ wardensList, sponsor, contest, repo, title }) => {
   const wardens = wardensList.edges.map(({ node }) => {
     return { value: node.handle, image: node.image };
   });
@@ -335,7 +335,7 @@ const SubmitFindings = ({ wardensList, sponsor, contest, repo }) => {
       }
     >
       <div className={clsx(styles.FormHeader)}>
-        <h1 className={styles.Heading1}>{`${sponsor} contest finding`}</h1>
+        <h1 className={styles.Heading1}>{`${title} finding`}</h1>
         <button
           onClick={() => setIsExpanded(!isExpanded)}
           className={clsx(styles.FormIconButton)}
@@ -471,7 +471,7 @@ const SubmitFindings = ({ wardensList, sponsor, contest, repo }) => {
         </form>
       )}
       {status === FormStatus.Error && (
-        <div>
+        <div className="centered-text">
           <p>{errorMessage}</p>
           <button
             className="button cta-button"

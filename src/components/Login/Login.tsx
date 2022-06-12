@@ -32,6 +32,7 @@ const Login = ({ displayAsButtons = false }) => {
           type: "error",
           isLoading: false,
           autoClose: 3000,
+          closeButton: true,
         });
         return;
       }
@@ -42,6 +43,7 @@ const Login = ({ displayAsButtons = false }) => {
         type: "error",
         isLoading: false,
         autoClose: 3000,
+        closeButton: true,
       });
       return;
     }
@@ -53,20 +55,20 @@ const Login = ({ displayAsButtons = false }) => {
         type: "success",
         isLoading: false,
         autoClose: 2000,
+        closeButton: true,
       });
     } catch (error) {
       logUserOut();
       if (error === UserLoginError.Unregistered) {
         toast.update(id, {
-          render: "Please register as warden",
+          render: "Please register",
           type: "error",
           isLoading: false,
-          autoClose: 4000,
+          autoClose: 2000,
+          closeButton: true,
         });
         navigate("/register");
-        return;
-      }
-      if (error === UserLoginError.RegistrationPending) {
+      } else if (error === UserLoginError.RegistrationPending) {
         toast.update(id, {
           render: (
             <span>
@@ -82,25 +84,27 @@ const Login = ({ displayAsButtons = false }) => {
           type: "error",
           isLoading: false,
           autoClose: 4000,
+          closeButton: true,
         });
-        return;
-      }
-      if (error === UserLoginError.ConnectionPending) {
+      } else if (error === UserLoginError.ConnectionPending) {
         toast.update(id, {
           render:
             "Your request to connect your wallet is pending review. Check the progress in GitHub",
           type: "error",
           isLoading: false,
           autoClose: 4000,
+          closeButton: true,
         });
-        return;
+      } else {
+        toast.update(id, {
+          render:
+            "Something went wrong. Please refresh the page and try again.",
+          type: "error",
+          isLoading: false,
+          autoClose: 4000,
+          closeButton: true,
+        });
       }
-      toast.update(id, {
-        render: "Something went wrong. Please refresh the page and try again.",
-        type: "error",
-        isLoading: false,
-        autoClose: 4000,
-      });
     }
   };
 

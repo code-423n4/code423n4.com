@@ -46,6 +46,7 @@ async function updateTeamData(team, newPolygonAddress) {
     null,
     2
   );
+  const teamName = team.handle;
   const files = {
     [`_data/handles/${teamName}.json`]: updatedTeamData,
   };

@@ -54,7 +54,7 @@ const DEFAULT_STATE: UserState = {
 const UserContext = createContext<User>({ currentUser: DEFAULT_STATE });
 
 const UserProvider = ({ children }) => {
-  const { isAuthenticated, logout, user } = useMoralis();
+  const { isAuthenticated, logout, user, isInitialized } = useMoralis();
   const { showModal } = useModalContext();
   const [currentUser, setCurrentUser] = useState(DEFAULT_STATE);
   const [
@@ -78,6 +78,9 @@ const UserProvider = ({ children }) => {
 
   useEffect(() => {
     if (accountChangeListenerInitialized) {
+      return;
+    }
+    if (!isInitialized) {
       return;
     }
     const initializeEventListeners = () => {
@@ -137,7 +140,7 @@ const UserProvider = ({ children }) => {
     };
     initializeEventListeners();
     setAccountChangeListenerInitialized(true);
-  }, []);
+  }, [isInitialized]);
 
   const getUserInfo = async (user: Moralis.User): Promise<void> => {
     const {
@@ -195,6 +198,9 @@ const UserProvider = ({ children }) => {
   };
 
   const connectWallet = useCallback(async (): Promise<void> => {
+    if (!isInitialized) {
+      return;
+    }
     const user = await Moralis.User.current();
     if (!user) {
       logUserOut();
@@ -202,13 +208,14 @@ const UserProvider = ({ children }) => {
     }
 
     const username = await user.get("c4Username");
-    const handlesPendingConfirmation = await user.get(
-      "handlesPendingConfirmation"
-    );
-    if (handlesPendingConfirmation) {
-      navigate("/confirm-account");
-    }
     if (!username) {
+      const handlesPendingConfirmation = await user.get(
+        "handlesPendingConfirmation"
+      );
+      if (handlesPendingConfirmation && handlesPendingConfirmation.length > 0) {
+        navigate("/confirm-account");
+        return;
+      }
       // check for existing user who has submitted with that address/register them
       const associatedHandles = await Moralis.Cloud.run("findUser");
       if (!associatedHandles || associatedHandles.length < 1) {
@@ -218,6 +225,7 @@ const UserProvider = ({ children }) => {
       user.set("handlesPendingConfirmation", associatedHandles);
       await user.save();
       navigate("/confirm-account");
+      return;
     } else {
       try {
         await getUserInfo(user);
@@ -225,14 +233,20 @@ const UserProvider = ({ children }) => {
         throw error;
       }
     }
-  }, []);
+  }, [isInitialized]);
 
   const logUserOut = useCallback(() => {
+    if (!isInitialized) {
+      return;
+    }
     logout();
     setCurrentUser(DEFAULT_STATE);
-  }, []);
+  }, [isInitialized]);
 
   useEffect(() => {
+    if (!isInitialized) {
+      return;
+    }
     // check if user is logged in when page is refreshed
     const checkForUser = async () => {
       if (!isAuthenticated) {
@@ -240,7 +254,6 @@ const UserProvider = ({ children }) => {
         return;
       } else {
         try {
-          const user = await Moralis.User.current();
           if (!user) {
             logUserOut();
           } else {
@@ -255,7 +268,7 @@ const UserProvider = ({ children }) => {
       }
     };
     checkForUser();
-  }, [isAuthenticated, user]);
+  }, [isAuthenticated, user, isInitialized]);
 
   const userContext = useMemo(() => {
     return { currentUser, logUserOut, connectWallet };
@@ -266,21 +279,6 @@ const UserProvider = ({ children }) => {
 };
 
 export const wrapRootElement = ({ element }) => {
-  // const environment = process.env.NODE_ENV;
-  // const isStaging = process.env.GATSBY_STAGING;
-  // let appId;
-  // let serverUrl;
-
-  // if (isStaging) {
-  //   serverUrl = process.env.GATSBY_STAGING_MORALIS_SERVER;
-  //   appId = process.env.GATSBY_STAGING_MORALIS_APP_ID;
-  // } else if (environment === "production") {
-  //   serverUrl = process.env.GATSBY_PRODUCTION_MORALIS_SERVER;
-  //   appId = process.env.GATSBY_PRODUCTION_MORALIS_APP_ID;
-  // } else {
-  //   serverUrl = process.env.GATSBY_DEV_MORALIS_SERVER;
-  //   appId = process.env.GATSBY_DEV_MORALIS_APP_ID;
-  // }
   const appId = process.env.GATSBY_MORALIS_APP_ID;
   const serverUrl = process.env.GATSBY_MORALIS_SERVER;
 

@@ -1,5 +1,4 @@
 import clsx from "clsx";
-import Moralis from "moralis";
 import { navigate } from "gatsby";
 import React, { MouseEvent, useEffect, useState, useCallback } from "react";
 import { useMoralis } from "react-moralis";
@@ -93,6 +92,7 @@ export default function ConfirmAccount() {
         gitHubUsername,
         emailAddress,
         isUpdate: true,
+        polygonAddress: user.attributes.ethAddress,
       };
 
       const response = await fetch(url, {
@@ -110,18 +110,13 @@ export default function ConfirmAccount() {
           user.set("gitHubUsername", gitHubUsername);
           user.set("emailAddress", emailAddress);
           user.set("handlesPendingConfirmation", []);
-          // @todo: add role
           await user.save();
-          await Moralis.Cloud.run("markUserConfirmed", {
-            handle: confirmedHandle,
-          });
           logUserOut();
           setStatus(FormStatus.Submitted);
         } catch (error) {
           logUserOut();
           setStatus(FormStatus.Error);
           setErrorMessage(error.message || "");
-          console.error(error);
         }
       } else {
         setStatus(FormStatus.Error);
@@ -141,172 +136,181 @@ export default function ConfirmAccount() {
     setStatus(FormStatus.Unsubmitted);
   };
 
-  return status === FormStatus.Loading || isInitializing ? (
-    // @todo: style a loading state
-    <div>LOADING...</div>
-  ) : (
+  return (
     <DefaultLayout>
-      <div className="wrapper-main">
-        <h1 className="page-header">
-          {handles.length === 1
-            ? `Welcome back, ${handles[0]}!`
-            : "Welcome back!"}
-        </h1>
-        {(status === FormStatus.Unsubmitted ||
-          status === FormStatus.Submitting) && (
-          <form className={clsx(styles.Form)}>
-            <p>
-              Please confirm your identity and fill out the information below
-            </p>
-            {handles.length > 1 && (
-              <>
-                <fieldset
-                  className={clsx(widgetStyles.Fields, widgetStyles.RadioGroup)}
-                >
-                  {handles.map((handle) => (
-                    <label className={widgetStyles.RadioLabel} key={handle}>
-                      <input
-                        className={widgetStyles.Radio}
-                        type="radio"
-                        value={handle}
-                        name="handle"
-                        checked={handle === confirmedHandle}
-                        onChange={(e) => setConfirmedHandle(e.target.value)}
-                      />
-                      {handle}
-                    </label>
-                  ))}
-                </fieldset>
-              </>
-            )}
-            <div className={widgetStyles.Container}>
-              <label htmlFor="discordUsername" className={widgetStyles.Label}>
-                Discord Username *
-              </label>
-              <p className={widgetStyles.Help}>
-                Used in case we need to contact you about your submissions or
-                winnings.
-              </p>
-              <input
-                className={clsx(
-                  widgetStyles.Control,
-                  widgetStyles.Text,
-                  hasValidationErrors &&
-                    (!discordUsername || !isValidDiscord) &&
-                    "input-error"
-                )}
-                type="text"
-                id="discordUsername"
-                name="discordUsername"
-                placeholder="Warden#1234"
-                value={discordUsername}
-                onChange={handleDiscordUsernameChange}
-              />
-              {!discordUsername && hasValidationErrors && (
-                <p className={widgetStyles.ErrorMessage}>
-                  <small>This field is required</small>
-                </p>
-              )}
-              {hasValidationErrors && !isValidDiscord && (
-                <p className={widgetStyles.ErrorMessage}>
-                  <small>
-                    Make sure you enter your discord username, and not your
-                    server nickname. It should end with '#' followed by 4
-                    digits.
-                  </small>
-                </p>
-              )}
-            </div>
-            <div className={widgetStyles.Container}>
-              <label htmlFor="gitHubUsername" className={widgetStyles.Label}>
-                GitHub Username *
-              </label>
-              <p className={widgetStyles.Help}>
-                Used in case we need to give you access to certain repositories.
-              </p>
-              <input
-                className={clsx(
-                  widgetStyles.Control,
-                  widgetStyles.Text,
-                  hasValidationErrors && !gitHubUsername && "input-error"
-                )}
-                type="text"
-                id="gitHubUsername"
-                name="gitHubUsername"
-                placeholder="Username"
-                value={gitHubUsername}
-                onChange={(e) => setGitHubUsername(e.target.value)}
-              />
-              {!gitHubUsername && hasValidationErrors && (
-                <p className={widgetStyles.ErrorMessage}>
-                  <small>This field is required</small>
-                </p>
-              )}
-            </div>
-            <div className={widgetStyles.Container}>
-              <label htmlFor="emailAddress" className={widgetStyles.Label}>
-                Email Address *
-              </label>
-              <p className={widgetStyles.Help}>
-                Used for sending confirmation emails for each of your
-                submissions.
-              </p>
-              <input
-                className={clsx(
-                  widgetStyles.Control,
-                  widgetStyles.Text,
-                  hasValidationErrors && !emailAddress && "input-error"
-                )}
-                type="text"
-                id="emailAddress"
-                name="emailAddress"
-                placeholder="warden@email.com"
-                value={emailAddress}
-                onChange={(e) => setEmailAddress(e.target.value)}
-              />
-              {!emailAddress && hasValidationErrors && (
-                <p className={widgetStyles.ErrorMessage}>
-                  <small>This field is required</small>
-                </p>
-              )}
-            </div>
-            <button
-              className={clsx("button cta-button centered", styles.Button)}
-              type="submit"
-              onClick={handleSubmit}
-            >
-              Submit
-            </button>
-          </form>
-        )}
-        {status === FormStatus.Error && (
-          <div style={{ textAlign: "center" }}>
-            <h1>Whoops!</h1>
-            <p>An error occurred while confirming your account.</p>
-            {errorMessage !== "" && (
+      {status === FormStatus.Loading || isInitializing ? (
+        // @todo: style a loading state
+        <div>LOADING...</div>
+      ) : (
+        <div className="wrapper-main">
+          <h1 className="page-header">
+            {handles.length === 1
+              ? `Welcome back, ${handles[0]}!`
+              : "Welcome back!"}
+          </h1>
+          {(status === FormStatus.Unsubmitted ||
+            status === FormStatus.Submitting) && (
+            <form className={clsx(styles.Form)}>
               <p>
-                <small>{errorMessage}</small>
+                Please confirm your identity and fill out the information below
               </p>
-            )}
-            <button className="button cta-button" onClick={resetForm}>
-              Try again
-            </button>
-            {/* @todo: handle pending */}
-          </div>
-        )}
-        {status === FormStatus.Submitted && (
-          <div className="centered-text">
-            <h1>Thank you!</h1>
-            <p>Your wallet has successfully been connected to your account.</p>
-            <h2>One more thing...</h2>
-            <p>
-              We need to manually approve your account. Please give us a howl{" "}
-              <a href="https://discord.gg/code4rena">Discord</a> in the channel
-              #i-want-to-be-a-warden.
-            </p>
-          </div>
-        )}
-      </div>
+              {handles.length > 1 && (
+                <>
+                  <fieldset
+                    className={clsx(
+                      widgetStyles.Fields,
+                      widgetStyles.RadioGroup
+                    )}
+                  >
+                    {handles.map((handle) => (
+                      <label className={widgetStyles.RadioLabel} key={handle}>
+                        <input
+                          className={widgetStyles.Radio}
+                          type="radio"
+                          value={handle}
+                          name="handle"
+                          checked={handle === confirmedHandle}
+                          onChange={(e) => setConfirmedHandle(e.target.value)}
+                        />
+                        {handle}
+                      </label>
+                    ))}
+                  </fieldset>
+                </>
+              )}
+              <div className={widgetStyles.Container}>
+                <label htmlFor="discordUsername" className={widgetStyles.Label}>
+                  Discord Username *
+                </label>
+                <p className={widgetStyles.Help}>
+                  Used in case we need to contact you about your submissions or
+                  winnings.
+                </p>
+                <input
+                  className={clsx(
+                    widgetStyles.Control,
+                    widgetStyles.Text,
+                    hasValidationErrors &&
+                      (!discordUsername || !isValidDiscord) &&
+                      "input-error"
+                  )}
+                  type="text"
+                  id="discordUsername"
+                  name="discordUsername"
+                  placeholder="Warden#1234"
+                  value={discordUsername}
+                  onChange={handleDiscordUsernameChange}
+                />
+                {!discordUsername && hasValidationErrors && (
+                  <p className={widgetStyles.ErrorMessage}>
+                    <small>This field is required</small>
+                  </p>
+                )}
+                {hasValidationErrors && !isValidDiscord && (
+                  <p className={widgetStyles.ErrorMessage}>
+                    <small>
+                      Make sure you enter your discord username, and not your
+                      server nickname. It should end with '#' followed by 4
+                      digits.
+                    </small>
+                  </p>
+                )}
+              </div>
+              <div className={widgetStyles.Container}>
+                <label htmlFor="gitHubUsername" className={widgetStyles.Label}>
+                  GitHub Username *
+                </label>
+                <p className={widgetStyles.Help}>
+                  Used in case we need to give you access to certain
+                  repositories.
+                </p>
+                <input
+                  className={clsx(
+                    widgetStyles.Control,
+                    widgetStyles.Text,
+                    hasValidationErrors && !gitHubUsername && "input-error"
+                  )}
+                  type="text"
+                  id="gitHubUsername"
+                  name="gitHubUsername"
+                  placeholder="Username"
+                  value={gitHubUsername}
+                  onChange={(e) => setGitHubUsername(e.target.value)}
+                />
+                {!gitHubUsername && hasValidationErrors && (
+                  <p className={widgetStyles.ErrorMessage}>
+                    <small>This field is required</small>
+                  </p>
+                )}
+              </div>
+              <div className={widgetStyles.Container}>
+                <label htmlFor="emailAddress" className={widgetStyles.Label}>
+                  Email Address *
+                </label>
+                <p className={widgetStyles.Help}>
+                  Used for sending confirmation emails for each of your
+                  submissions.
+                </p>
+                <input
+                  className={clsx(
+                    widgetStyles.Control,
+                    widgetStyles.Text,
+                    hasValidationErrors && !emailAddress && "input-error"
+                  )}
+                  type="text"
+                  id="emailAddress"
+                  name="emailAddress"
+                  placeholder="warden@email.com"
+                  value={emailAddress}
+                  onChange={(e) => setEmailAddress(e.target.value)}
+                />
+                {!emailAddress && hasValidationErrors && (
+                  <p className={widgetStyles.ErrorMessage}>
+                    <small>This field is required</small>
+                  </p>
+                )}
+              </div>
+              <button
+                className={clsx("button cta-button centered", styles.Button)}
+                type="submit"
+                onClick={handleSubmit}
+              >
+                {status === FormStatus.Submitting ? "Submitting..." : "Submit"}
+              </button>
+            </form>
+          )}
+          {status === FormStatus.Error && (
+            <div style={{ textAlign: "center" }}>
+              <h1>Whoops!</h1>
+              <p>An error occurred while confirming your account.</p>
+              {errorMessage !== "" && (
+                <p>
+                  <small>{errorMessage}</small>
+                </p>
+              )}
+              <button className="button cta-button" onClick={resetForm}>
+                Try again
+              </button>
+            </div>
+          )}
+          {status === FormStatus.Submitted && (
+            <div className="centered-text">
+              <h1>Thank you!</h1>
+              <p>
+                Your wallet has successfully been connected to your account.
+              </p>
+              <p>
+                You should receive an email confirmation with a link to the pull
+                request to update your warden file. When the pull request has
+                been merged, that means your re-registration has been fully
+                processed and you can login to submit findings again within a
+                few minutes.
+              </p>
+              <p>See you in the arena! 🐺</p>
+            </div>
+          )}
+        </div>
+      )}
     </DefaultLayout>
   );
 }

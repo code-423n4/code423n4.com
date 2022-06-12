@@ -70,7 +70,7 @@ async function fetchReadmeMarkdown(contestNode) {
 async function fetchSocialImage(contestNode) {
   const { repository } = await graphqlWithAuth(
     `query socialImage($repo: String!) {
-    repository(owner: ${process.env.GITHUB_OWNER}, name: $repo) {
+    repository(owner: "${process.env.GITHUB_OWNER}", name: $repo) {
       openGraphImageUrl
       usesCustomOpenGraphImage
     }
@@ -121,7 +121,6 @@ exports.createSchemaCustomization = ({ actions }) => {
 exports.onCreateNode = async ({ node, getNode, actions }) => {
   const { createNodeField } = actions;
   if (node.internal.type === `MarkdownRemark`) {
-    const value = createFilePath({ node, getNode });
     const parent = getNode(node.parent);
     let slug;
     if (node.frontmatter.slug) {
