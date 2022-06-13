@@ -49,6 +49,7 @@
   margin: 0 auto;
   cursor: pointer;
   position: relative;
+  background-size:cover!important; 
 }
 
 .contest-page .contest-artwork:hover {
