@@ -52,7 +52,7 @@ async function updateTeamData(team, newPolygonAddress) {
   const files = {
     [`_data/handles/${teamName}.json`]: updatedTeamData,
   };
-  const owner = process.env.GITHUB_OWNER;
+  const owner = process.env.GITHUB_REPO_OWNER;
   const body = `This auto-generated PR adds polygon address for team ${teamName}`;
   const title = `Add address for team ${teamName}`;
   await octokit.createPullRequest({
@@ -258,7 +258,7 @@ exports.handler = async (event) => {
     };
   }
 
-  const owner = process.env.GITHUB_OWNER;
+  const owner = process.env.CONTEST_GITHUB_REPO_OWNER;
 
   try {
     const issueResult = await octokit.request(

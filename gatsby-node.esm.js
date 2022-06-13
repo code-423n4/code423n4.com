@@ -57,7 +57,7 @@ function getRepoName(contestNode) {
 
 async function fetchReadmeMarkdown(contestNode) {
   const { data } = await octokit.request("GET /repos/{owner}/{repo}/readme", {
-    owner: process.env.GITHUB_OWNER,
+    owner: process.env.GITHUB_REPO_OWNER,
     repo: `${getRepoName(contestNode)}`,
     headers: {
       accept: "application/vnd.github.v3.html+json",
@@ -70,7 +70,7 @@ async function fetchReadmeMarkdown(contestNode) {
 async function fetchSocialImage(contestNode) {
   const { repository } = await graphqlWithAuth(
     `query socialImage($repo: String!) {
-    repository(owner: "${process.env.GITHUB_OWNER}", name: $repo) {
+    repository(owner: "${process.env.GITHUB_REPO_OWNER}", name: $repo) {
       openGraphImageUrl
       usesCustomOpenGraphImage
     }

@@ -46,15 +46,17 @@ Fork [code-423n4/code423n4.com](https://github.com/code-423n4/code423n4.com) and
 
 ### Add environment configuration
 
-## Required
+#### Required
 
 - Generate GitHub [personal access token] with(https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token) with "full control of private repositories" scope and set `GITHUB_TOKEN`
-- Use your GitHub username for `GITHUB_OWNER`
+- Use your GitHub username for `GITHUB_REPO_OWNER`
+- Set `CONTEST_GITHUB_REPO_OWNER` to `code-423n4`
+- Set `NODE_ENV` to `development`
 - Use `BRANCH_NAME` from `.env.sample` OR optionally set it to whichever branch you are developing
 - Use `REPO` from `.env.sample` OR optionally name your repo something else and update it here
 - Use `GATSBY_MORALIS_APP_ID` and `GATSBY_MORALIS_SERVER` from `.env.sample` OR optionally set up your own moralis server and use the server url and app id from your instance. See instructions in documentation/MoralisInstructions.md
 
-## Optional (to enable email confirmation features)
+#### Optional (to enable email confirmation features)
 
 - Use your email address for `EMAIL_SENDER`
 - Use mailgun private api-key for `MAILGUN_KEY`
@@ -67,7 +69,7 @@ In order to test applying for a judge role, create a repo named `judges`
 
 If you submit test findings to the default test contest repo, you can find your submissions [here](https://github.com/code-423n4/2022-01-dev-test-repo-findings). Be aware: this is a public repo.
 
-If you would rather create your own test contest and findings repo(s), make sure to add them to `_test-data/contests/contests.csv`.
+If you would rather create your own test contest and findings repo(s), make sure to add them to `_test-data/contests/contests.csv` and update the `CONTEST_GITHUB_REPO_OWNER` variable.
 
 ## Develop
 

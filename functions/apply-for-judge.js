@@ -68,7 +68,7 @@ exports.handler = async (event) => {
     const createIssue = await octokit.request(
       "POST /repos/{owner}/{repo}/issues",
       {
-        owner: process.env.GITHUB_OWNER,
+        owner: process.env.GITHUB_REPO_OWNER,
         repo: "judges",
         title: `Warden ${handle} has applied to be a judge`,
         body: `${details}`,

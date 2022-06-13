@@ -62,7 +62,7 @@ exports.handler = async (event) => {
       };
     }
 
-    const owner = process.env.GITHUB_OWNER;
+    const owner = process.env.GITHUB_REPO_OWNER;
     const data = JSON.parse(event.body);
     const {
       handle,
