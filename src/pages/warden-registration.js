@@ -23,6 +23,7 @@ const FormStatus = {
   Error: "error",
 };
 
+
 function getFileAsBase64(file) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -42,6 +43,7 @@ const WardenRegistrationForm = ({ handles }) => {
   const [errorMessage, setErrorMessage] = useState("");
   const [captchaToken, setCaptchaToken] = useState("");
   const [hasValidationErrors, setHasValidationErrors] = useState(false);
+  const [validateLinkError, setValidateLinkError] = useState("");
   const avatarInputRef = useRef();
 
   const handleChange = useCallback((e) => {
@@ -51,13 +53,29 @@ const WardenRegistrationForm = ({ handles }) => {
     });
   }, []);
 
+  const validateLink = (link) => {
+    let check = new RegExp('^(?:[a-z]+:)?//', 'i');
+      // 
+    if(!check.test(link) && link !== ''){
+      setValidateLinkError('Please provide a valid url. "https://domain_name" required.')
+      return false;
+    }
+    setValidateLinkError('');
+    return true;
+  };
+
   const submitRegistration = useCallback(() => {
     const url = `/.netlify/functions/register-warden`;
+
+    if(validateLink(state.link)){
+      return;
+    };
+    
     if (
       !state.handle ||
       !state.qualifications ||
       !captchaToken ||
-      handles.has(state.handle)
+      handles.has(state.handle) 
     ) {
       setHasValidationErrors(true);
       return;
@@ -205,10 +223,13 @@ const WardenRegistrationForm = ({ handles }) => {
               type="text"
               id="link"
               name="link"
-              placeholder="Link"
+              placeholder="https://twitter.com/your_handle_here"
               value={state.link}
               onChange={handleChange}
             />
+            {validateLinkError.length > 0 && (
+              <p>{validateLinkError}</p>
+            )}
           </div>
           <div className={widgetStyles.Container}>
             <label htmlFor="avatar" className={widgetStyles.Label}>
