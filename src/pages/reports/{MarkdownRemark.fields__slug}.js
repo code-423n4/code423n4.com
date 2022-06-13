@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, {useState} from "react";
 import { graphql } from "gatsby";
 import DOMPurify from "isomorphic-dompurify";
 
@@ -6,6 +6,15 @@ import ReportLayout from "../../templates/ReportLayout";
 
 function ReportPageTemplate({ data }) {
   const page = data.markdownRemark;
+  
+  const scrollToTop = () =>{
+    if (typeof window !== undefined) {
+      window.scrollTo({
+        top: 0, 
+        behavior: 'smooth'
+      });
+    }
+  };
 
   return (
     <ReportLayout
@@ -39,6 +48,7 @@ function ReportPageTemplate({ data }) {
           </div>
         </article>
       </div>
+      <button className="button floating-button" onClick={scrollToTop}>Top</button>
     </ReportLayout>
   );
 }

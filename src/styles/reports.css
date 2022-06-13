@@ -34,6 +34,12 @@
   text-decoration: none;
 }
 
+.floating-button {
+  position: sticky;
+  bottom: 20px;
+  right: 20px;
+}
+
 @media screen and (min-width: 800px) {
   .wrapper-reports {
     display: grid;
