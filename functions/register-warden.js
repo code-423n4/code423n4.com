@@ -230,7 +230,7 @@ exports.handler = async (event) => {
           "GET /repos/{owner}/{repo}/contents/{path}",
           {
             owner,
-            repo: "code423n4.com",
+            repo: process.env.REPO,
             path: `_data/handles/${handle}.json`,
           }
         );
@@ -262,12 +262,11 @@ exports.handler = async (event) => {
     try {
       const res = await octokit.createPullRequest({
         owner,
-        repo: "code423n4.com",
+        repo: process.env.REPO,
         title,
         body,
         head: branchName,
-        // @todo: remove this before warden auth feature is merged
-        base: "feature/warden-auth",
+        base: process.env.BRANCH_NAME,
         changes: [
           {
             files,
@@ -282,7 +281,7 @@ exports.handler = async (event) => {
         "POST /repos/{owner}/{repo}/issues/{issue_number}/labels",
         {
           owner,
-          repo: "code423n4.com",
+          repo: process.env.REPO,
           issue_number: res.data.number,
           labels,
         }

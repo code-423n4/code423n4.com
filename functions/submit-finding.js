@@ -60,9 +60,10 @@ async function updateTeamData(team, newPolygonAddress) {
   const title = `Add address for team ${teamName}`;
   await octokit.createPullRequest({
     owner,
-    repo: "code423n4.com",
+    repo: process.env.REPO,
     title,
     body,
+    base: process.env.BRANCH_NAME,
     head: `warden/${teamName}`,
     changes: [
       {

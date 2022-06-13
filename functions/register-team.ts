@@ -103,10 +103,11 @@ exports.handler = async (event) => {
     try {
       const res = await octokit.createPullRequest({
         owner: process.env.GITHUB_OWNER,
-        repo: "code423n4.com",
+        repo: process.env.REPO,
         title,
         body,
         head: branchName,
+        base: process.env.BRANCH_NAME,
         changes: [
           {
             files,

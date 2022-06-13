@@ -23,7 +23,7 @@ exports.handler = async (event) => {
         const warden = JSON.parse(wardenFile.toString());
         if (warden.image) {
           const imagePath = warden.image.slice(2);
-          warden.image = `https://raw.githubusercontent.com/${process.env.GITHUB_OWNER}/code423n4.com/main/_data/handles/${imagePath}`;
+          warden.image = `https://raw.githubusercontent.com/${process.env.GITHUB_OWNER}/${process.env.REPO}/${process.env.BRANCH_NAME}/_data/handles/${imagePath}`;
         }
         if (warden && warden.members && warden.members.includes(userHandle)) {
           teams.push({ ...warden, username: warden.handle });
