@@ -46,7 +46,7 @@ Fork [code-423n4/code423n4.com](https://github.com/code-423n4/code423n4.com) and
 
 ### Add environment secrets and variables
 
-- Generate GitHub [personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token) and set `GITHUB_TOKEN`
+- Generate GitHub [personal access token] with(https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token) with "full control of private repositories" scope and set `GITHUB_TOKEN`
 - Use your GitHub username for `GITHUB_OWNER`
 - Use your email address for `EMAIL_SENDER`
 - Use mailgun private api-key for `MAILGUN_KEY`
