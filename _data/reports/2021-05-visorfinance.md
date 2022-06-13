@@ -7,6 +7,15 @@ findings: "https://github.com/code-423n4/2021-05-visorfinance-findings/issues"
 contest: 10
 ---
 
+# Table of Content
+```toc
+exclude: Table of Contents
+tight: true
+ordered: false
+from-heading: 1
+to-heading: 2
+```
+
 # Overview
 
 ## About C4

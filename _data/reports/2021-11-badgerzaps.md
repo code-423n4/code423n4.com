@@ -7,6 +7,15 @@ findings: "https://github.com/code-423n4/2021-11-badgerzaps-findings/issues"
 contest: 57
 ---
 
+# Table of Content
+```toc
+exclude: Table of Contents
+tight: true
+ordered: false
+from-heading: 1
+to-heading: 2
+```
+
 # Overview
 
 ## About C4
