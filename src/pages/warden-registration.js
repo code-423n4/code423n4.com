@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { graphql } from "gatsby";
 import clsx from "clsx";
 import HCaptcha from "@hcaptcha/react-hcaptcha";
@@ -23,6 +23,7 @@ const FormStatus = {
   Error: "error",
 };
 
+
 function getFileAsBase64(file) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -42,6 +43,7 @@ const WardenRegistrationForm = ({ handles }) => {
   const [errorMessage, setErrorMessage] = useState("");
   const [captchaToken, setCaptchaToken] = useState("");
   const [hasValidationErrors, setHasValidationErrors] = useState(false);
+  const [hasValidateLinkError, setHasValidateLinkError] = useState(false);
   const avatarInputRef = useRef();
 
   const handleChange = useCallback((e) => {
@@ -51,13 +53,27 @@ const WardenRegistrationForm = ({ handles }) => {
     });
   }, []);
 
+  useEffect((link) => {
+    let check = new RegExp('^(?:[a-z]+:)?//', 'i');
+      // 
+    if(!check.test(link) && link !== ''){
+      setHasValidateLinkError(true)
+      // setValidateLinkError('Please provide a valid url. "https://domain_name" required.');
+      return;
+    }
+    setHasValidateLinkError(false);
+  },[state.link]);
+ 
+
   const submitRegistration = useCallback(() => {
     const url = `/.netlify/functions/register-warden`;
+
     if (
       !state.handle ||
       !state.qualifications ||
       !captchaToken ||
-      handles.has(state.handle)
+      handles.has(state.handle) ||
+      hasValidateLinkError
     ) {
       setHasValidationErrors(true);
       return;
@@ -205,10 +221,13 @@ const WardenRegistrationForm = ({ handles }) => {
               type="text"
               id="link"
               name="link"
-              placeholder="Link"
+              placeholder="https://twitter.com/your_handle_here"
               value={state.link}
               onChange={handleChange}
             />
+            {hasValidateLinkError && (
+              <p>Please provide a valid url. "https://domain_name" required.</p>
+            )}
           </div>
           <div className={widgetStyles.Container}>
             <label htmlFor="avatar" className={widgetStyles.Label}>
