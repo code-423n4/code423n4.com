@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { graphql } from "gatsby";
 import clsx from "clsx";
 import HCaptcha from "@hcaptcha/react-hcaptcha";
@@ -43,7 +43,7 @@ const WardenRegistrationForm = ({ handles }) => {
   const [errorMessage, setErrorMessage] = useState("");
   const [captchaToken, setCaptchaToken] = useState("");
   const [hasValidationErrors, setHasValidationErrors] = useState(false);
-  const [validateLinkError, setValidateLinkError] = useState("");
+  const [hasValidateLinkError, setHasValidateLinkError] = useState(false);
   const avatarInputRef = useRef();
 
   const handleChange = useCallback((e) => {
@@ -53,29 +53,27 @@ const WardenRegistrationForm = ({ handles }) => {
     });
   }, []);
 
-  const validateLink = (link) => {
+  useEffect((link) => {
     let check = new RegExp('^(?:[a-z]+:)?//', 'i');
       // 
     if(!check.test(link) && link !== ''){
-      setValidateLinkError('Please provide a valid url. "https://domain_name" required.')
-      return false;
+      setHasValidateLinkError(true)
+      // setValidateLinkError('Please provide a valid url. "https://domain_name" required.');
+      return;
     }
-    setValidateLinkError('');
-    return true;
-  };
+    setHasValidateLinkError(false);
+  },[state.link]);
+ 
 
   const submitRegistration = useCallback(() => {
     const url = `/.netlify/functions/register-warden`;
 
-    if(validateLink(state.link)){
-      return;
-    };
-    
     if (
       !state.handle ||
       !state.qualifications ||
       !captchaToken ||
-      handles.has(state.handle) 
+      handles.has(state.handle) ||
+      hasValidateLinkError
     ) {
       setHasValidationErrors(true);
       return;
@@ -227,8 +225,8 @@ const WardenRegistrationForm = ({ handles }) => {
               value={state.link}
               onChange={handleChange}
             />
-            {validateLinkError.length > 0 && (
-              <p>{validateLinkError}</p>
+            {hasValidateLinkError && (
+              <p>Please provide a valid url. "https://domain_name" required.</p>
             )}
           </div>
           <div className={widgetStyles.Container}>
