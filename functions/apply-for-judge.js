@@ -5,8 +5,6 @@ const dedent = require("dedent");
 const octokit = new Octokit({ auth: token });
 
 exports.handler = async (event) => {
-  // console.log("event:", event);
-
   // only allow POST
   try {
     if (event.httpMethod !== "POST") {
@@ -70,15 +68,13 @@ exports.handler = async (event) => {
     const createIssue = await octokit.request(
       "POST /repos/{owner}/{repo}/issues",
       {
-        owner: "code-423n4",
+        owner: process.env.GITHUB_OWNER,
         repo: "judges",
         title: `Warden ${handle} has applied to be a judge`,
         body: `${details}`,
         labels: ["candidate"],
       }
     );
-
-    // const createIssue = await true;
 
     return {
       statusCode: 201,
@@ -87,8 +83,8 @@ exports.handler = async (event) => {
   } catch (err) {
     console.error(err);
     return {
-      statusCode: 500,
-      body: JSON.stringify({ error: "Internal server error." }),
+      statusCode: err.status || 500,
+      body: JSON.stringify({ error: err.message || "Internal server error." }),
     };
   }
 };

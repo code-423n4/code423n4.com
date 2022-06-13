@@ -27,6 +27,7 @@ const ReportForm = (props) => {
           sponsor={props.data.contestsCsv.sponsor.name}
           contest={props.data.contestsCsv.contestid}
           repo={props.data.contestsCsv.findingsRepo}
+          title={props.data.contestsCsv.title}
         />
       )}
     </DefaultLayout>

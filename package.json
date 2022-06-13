@@ -82,6 +82,7 @@
   "devDependencies": {
     "@types/jsonwebtoken": "^8.5.5",
     "@types/react": "^18.0.9",
+    "netlify-cli": "^10.5.0",
     "prettier": "2.2.1",
     "tiny-glob": "^0.2.8"
   },
@@ -90,7 +91,7 @@
     "build": "gatsby build",
     "develop": "gatsby develop",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\"",
-    "start": "yarn develop",
+    "start": "netlify dev",
     "serve": "gatsby serve",
     "clean": "gatsby clean",
     "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\" && exit 1",

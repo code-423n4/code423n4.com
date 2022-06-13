@@ -67,6 +67,7 @@ exports.handler = async (event) => {
       };
     }
 
+    const owner = process.env.GITHUB_OWNER;
     const data = JSON.parse(event.body);
     const {
       handle,
@@ -117,6 +118,15 @@ exports.handler = async (event) => {
         statusCode: 422,
         body: JSON.stringify({
           error: "Moralis id is required",
+        }),
+      };
+    }
+
+    if (!polygonAddress) {
+      return {
+        statusCode: 422,
+        body: JSON.stringify({
+          error: "Address is required",
         }),
       };
     }
@@ -174,20 +184,11 @@ exports.handler = async (event) => {
     });
 
     try {
-      const isValidUser = await Moralis.Cloud.run(
-        "checkHandleAgainstPreviousSubmissions",
-        {
-          username: handle,
-          moralisId,
-          polygonAddress,
-        }
-      );
-      if (!isValidUser) {
-        return {
-          statusCode: 422,
-          body: JSON.stringify({ error: "Unauthorized" }),
-        };
-      }
+      await Moralis.Cloud.run("checkHandleAgainstPreviousSubmissions", {
+        username: handle,
+        moralisId,
+        polygonAddress,
+      });
     } catch (error) {
       return {
         statusCode: 422,
@@ -228,8 +229,8 @@ exports.handler = async (event) => {
         const wardenFile = await octokit.request(
           "GET /repos/{owner}/{repo}/contents/{path}",
           {
-            owner: "code-423n4",
-            repo: "code423n4.com",
+            owner,
+            repo: process.env.REPO,
             path: `_data/handles/${handle}.json`,
           }
         );
@@ -260,11 +261,12 @@ exports.handler = async (event) => {
     );
     try {
       const res = await octokit.createPullRequest({
-        owner: "code-423n4",
-        repo: "code423n4.com",
+        owner,
+        repo: process.env.REPO,
         title,
         body,
         head: branchName,
+        base: process.env.BRANCH_NAME,
         changes: [
           {
             files,
@@ -273,26 +275,28 @@ exports.handler = async (event) => {
         ],
       });
 
+      const labels = isUpdate ? ["re-registration"] : ["app-warden"];
+
       await octokit.request(
         "POST /repos/{owner}/{repo}/issues/{issue_number}/labels",
         {
-          owner: "code-423n4",
-          repo: "code423n4.com",
+          owner,
+          repo: process.env.REPO,
           issue_number: res.data.number,
-          labels: ["app-warden"],
+          labels,
         }
       );
 
       const emailBody = dedent`
         Your registration is being processed.
 
-        You can monitor the pull request here: ${res.url}
+        You can monitor the pull request here: ${res.data.html_url}
 
         Once this pull request is merged, you can log in and compete in contests.
       `;
 
       const emailData = {
-        from: "submissions@code423n4.com",
+        from: process.env.EMAIL_SENDER,
         to: emailAddress,
         subject: `Registration pending for ${handle}`,
         text: emailBody,

@@ -23,7 +23,7 @@ exports.handler = async (event) => {
         const warden = JSON.parse(wardenFile.toString());
         if (warden.image) {
           const imagePath = warden.image.slice(2);
-          warden.image = `https://raw.githubusercontent.com/code-423n4/code423n4.com/main/_data/handles/${imagePath}`;
+          warden.image = `https://raw.githubusercontent.com/${process.env.GITHUB_OWNER}/${process.env.REPO}/${process.env.BRANCH_NAME}/_data/handles/${imagePath}`;
         }
         if (warden && warden.members && warden.members.includes(userHandle)) {
           teams.push({ ...warden, username: warden.handle });
@@ -37,7 +37,7 @@ exports.handler = async (event) => {
       };
     } else {
       return {
-        statusCode: 204
+        statusCode: 204,
       };
     }
   } catch (error) {

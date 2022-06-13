@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useRef } from "react";
+import React, { useCallback, useState, useRef, ReactNode } from "react";
 import clsx from "clsx";
 import { useMoralis } from "react-moralis";
 import Moralis from "moralis/types";
@@ -311,7 +311,7 @@ export default function RegistrationForm({ handles, wardens, className }) {
                 checked={!isNewUser}
                 onChange={handleFormChange}
               />
-              I'm an established warden
+              I'm a registered warden
             </label>
           </fieldset>
           {instructions}
@@ -552,20 +552,28 @@ export default function RegistrationForm({ handles, wardens, className }) {
           )}
           <Agreement />
           <div className={styles.ButtonsWrapper}>
-            <button
-              className={clsx("button cta-button", styles.Button)}
-              type="button"
-              onClick={() => submitRegistration()}
-            >
-              Register with MetaMask
-            </button>
-            <button
-              className={clsx("button cta-button", styles.Button)}
-              type="button"
-              onClick={() => submitRegistration("walletConnect")}
-            >
-              Register with WalletConnect
-            </button>
+            {status === FormStatus.Submitting ? (
+              <span className={clsx("button cta-button", styles.Button)}>
+                Submitting...
+              </span>
+            ) : (
+              <>
+                <button
+                  className={clsx("button cta-button", styles.Button)}
+                  type="button"
+                  onClick={() => submitRegistration()}
+                >
+                  Register with MetaMask
+                </button>
+                <button
+                  className={clsx("button cta-button", styles.Button)}
+                  type="button"
+                  onClick={() => submitRegistration("walletConnect")}
+                >
+                  Register with WalletConnect
+                </button>
+              </>
+            )}
           </div>
         </form>
       ) : status === FormStatus.Error ? (
@@ -581,7 +589,7 @@ export default function RegistrationForm({ handles, wardens, className }) {
             Try again
           </button>
         </div>
-      ) : (
+      ) : isNewUser ? (
         <div className="centered-text">
           <h1>Thank you!</h1>
           <p>Your registration application has been submitted.</p>
@@ -592,6 +600,18 @@ export default function RegistrationForm({ handles, wardens, className }) {
             howl in #i-want-to-be-a-warden! <br />
             We look forward to seeing you in the arena!
           </p>
+        </div>
+      ) : (
+        <div className="centered-text">
+          <h1>Thank you!</h1>
+          <p>Your wallet has successfully been connected to your account.</p>
+          <p>
+            You should receive an email confirmation with a link to the pull
+            request to update your warden file. You will also be tagged in the
+            pull request, so you will know when your request has been fully
+            processed and you can begin to submit findings again.
+          </p>
+          <p>See you in the arena! 🐺</p>
         </div>
       )}
     </>

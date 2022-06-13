@@ -30,7 +30,12 @@ function isDangerousRepo(s) {
 }
 
 async function getContestEnd(contestId) {
-  const contests = await csv().fromFile("_data/contests/contests.csv");
+  let contests;
+  if (process.env.NODE_ENV === "development") {
+    contests = await csv().fromFile("_test-data/contests/contests.csv");
+  } else {
+    contests = await csv().fromFile("_data/contests/contests.csv");
+  }
 
   const contest = contests.find((c) => c.contestid == contestId);
   return new Date(contest.end_time).getTime();
@@ -46,16 +51,19 @@ async function updateTeamData(team, newPolygonAddress) {
     null,
     2
   );
+  const teamName = team.handle;
   const files = {
     [`_data/handles/${teamName}.json`]: updatedTeamData,
   };
+  const owner = process.env.GITHUB_OWNER;
   const body = `This auto-generated PR adds polygon address for team ${teamName}`;
   const title = `Add address for team ${teamName}`;
   await octokit.createPullRequest({
-    owner: "code-423n4",
-    repo: "code423n4.com",
+    owner,
+    repo: process.env.REPO,
     title,
     body,
+    base: process.env.BRANCH_NAME,
     head: `warden/${teamName}`,
     changes: [
       {
@@ -97,8 +105,6 @@ exports.handler = async (event) => {
     serverUrl: moralisServerUrl,
     appId: moralisAppId,
   });
-
-  const owner = "code-423n4";
 
   // ensure we have the data we need
   if (
@@ -255,7 +261,10 @@ exports.handler = async (event) => {
     };
   }
 
-  const recipients = `${emailAddresses.join(", ")}, submissions@code423n4.com`;
+  const owner = process.env.GITHUB_OWNER;
+  const recipients = `${emailAddresses.join(", ")}, ${
+    process.env.EMAIL_SENDER
+  }`;
   const text = dedent`
   C4 finding submitted: (risk = ${labels[1]})
   Wallet address: ${address}
@@ -264,7 +273,7 @@ exports.handler = async (event) => {
   `;
 
   const emailData = {
-    from: "submissions@code423n4.com",
+    from: process.env.EMAIL_SENDER,
     to: recipients,
     subject: `C4 ${sponsor} finding: ${title}`,
     text,
@@ -335,9 +344,11 @@ exports.handler = async (event) => {
       });
   } catch (error) {
     return {
-      statusCode: 500,
+      statusCode: error.status || 500,
       body: JSON.stringify({
-        error: "Something went wrong with your submission. Please try again.",
+        error:
+          error.message ||
+          "Something went wrong with your submission. Please try again.",
       }),
     };
   }
