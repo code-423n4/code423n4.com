@@ -30,7 +30,12 @@ function isDangerousRepo(s) {
 }
 
 async function getContestEnd(contestId) {
-  const contests = await csv().fromFile("_data/contests/contests.csv");
+  let contests;
+  if (process.env.NODE_ENV === "development") {
+    contests = await csv().fromFile("_test-data/contests/contests.csv");
+  } else {
+    contests = await csv().fromFile("_data/contests/contests.csv");
+  }
 
   const contest = contests.find((c) => c.contestid == contestId);
   return new Date(contest.end_time).getTime();

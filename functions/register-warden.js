@@ -266,6 +266,8 @@ exports.handler = async (event) => {
         title,
         body,
         head: branchName,
+        // @todo: remove this before warden auth feature is merged
+        base: "feature/warden-auth",
         changes: [
           {
             files,
