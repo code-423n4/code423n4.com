@@ -18,9 +18,6 @@ const {
 const OctokitClient = Octokit.plugin(createPullRequest);
 const octokit = new OctokitClient({ auth: token });
 
-const mailgun = new Mailgun(formData);
-const mg = mailgun.client({ username: "api", key: apiKey });
-
 function isDangerousHandle(s) {
   return s.match(/^[0-9a-zA-Z_\-]+$/) === null;
 }
@@ -262,22 +259,6 @@ exports.handler = async (event) => {
   }
 
   const owner = process.env.GITHUB_OWNER;
-  const recipients = `${emailAddresses.join(", ")}, ${
-    process.env.EMAIL_SENDER
-  }`;
-  const text = dedent`
-  C4 finding submitted: (risk = ${labels[1]})
-  Wallet address: ${address}
-  
-  ${body}
-  `;
-
-  const emailData = {
-    from: process.env.EMAIL_SENDER,
-    to: recipients,
-    subject: `C4 ${sponsor} finding: ${title}`,
-    text,
-  };
 
   try {
     const issueResult = await octokit.request(
@@ -318,30 +299,51 @@ exports.handler = async (event) => {
       content,
     });
 
-    // Special email used for testing
-    if (emailAddresses[0] === "@@@") {
+    if (apiKey && domain && process.env.EMAIL_SENDER) {
+      const mailgun = new Mailgun(formData);
+      const mg = mailgun.client({ username: "api", key: apiKey });
+
+      const recipients = `${emailAddresses.join(", ")}, ${
+        process.env.EMAIL_SENDER
+      }`;
+
+      const text = dedent`
+      C4 finding submitted: (risk = ${labels[1]})
+      Wallet address: ${address}
+      
+      ${body}
+      `;
+
+      const emailData = {
+        from: process.env.EMAIL_SENDER,
+        to: recipients,
+        subject: `C4 ${sponsor} finding: ${title}`,
+        text,
+      };
+
+      return mg.messages
+        .create(domain, emailData)
+        .then(() => {
+          return {
+            statusCode: 200,
+            body: "Issue posted successfully and confirmation email sent.",
+          };
+        })
+        .catch((err) => {
+          return {
+            statusCode: err.status || 500,
+            body: JSON.stringify({
+              error:
+                "Failed to send confirmation email. " + (err.message || err),
+            }),
+          };
+        });
+    } else {
       return {
         statusCode: 200,
-        body: "Issue posted successfully and confirmation email sent.",
+        body: "Issue posted successfully. Confirmation email skipped",
       };
     }
-
-    return mg.messages
-      .create(domain, emailData)
-      .then(() => {
-        return {
-          statusCode: 200,
-          body: "Issue posted successfully and confirmation email sent.",
-        };
-      })
-      .catch((err) => {
-        return {
-          statusCode: err.status || 500,
-          body: JSON.stringify({
-            error: "Failed to send confirmation email. " + (err.message || err),
-          }),
-        };
-      });
   } catch (error) {
     return {
       statusCode: error.status || 500,

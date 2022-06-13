@@ -17,13 +17,8 @@ const {
 } = require("./_config");
 const { resolve } = require("core-js/fn/promise");
 
-const kickbox = Kickbox.client(kickboxApiKey).kickbox();
-
 const OctokitClient = Octokit.plugin(createPullRequest);
 const octokit = new OctokitClient({ auth: token });
-
-const mailgun = new Mailgun(formData);
-const mg = mailgun.client({ username: "api", key: apiKey });
 
 function isDangerous(s) {
   return s.match(/^[0-9a-zA-Z_\-]+$/) === null;
@@ -141,24 +136,27 @@ exports.handler = async (event) => {
       };
     }
 
-    const kickboxPromise = new Promise((resolve, reject) => {
-      kickbox.verify(emailAddress, async function (err, kickboxResponse) {
-        // @todo: determine which results we should reject
-        if (kickboxResponse.body.result === "undeliverable") {
-          reject(kickboxResponse.body.message || "");
-        }
-        resolve();
+    if (kickboxApiKey) {
+      const kickbox = Kickbox.client(kickboxApiKey).kickbox();
+      const kickboxPromise = new Promise((resolve, reject) => {
+        kickbox.verify(emailAddress, async function (err, kickboxResponse) {
+          // @todo: determine which results we should reject
+          if (kickboxResponse.body.result === "undeliverable") {
+            reject(kickboxResponse.body.message || "");
+          }
+          resolve();
+        });
       });
-    });
-    try {
-      await kickboxPromise;
-    } catch (error) {
-      return {
-        statusCode: 422,
-        body: JSON.stringify({
-          error: "The email address you entered is not valid. " + error,
-        }),
-      };
+      try {
+        await kickboxPromise;
+      } catch (error) {
+        return {
+          statusCode: 422,
+          body: JSON.stringify({
+            error: "The email address you entered is not valid. " + error,
+          }),
+        };
+      }
     }
 
     const url = `${event.headers.origin}/.netlify/functions/get-user?id=${handle}`;
@@ -287,40 +285,52 @@ exports.handler = async (event) => {
         }
       );
 
-      const emailBody = dedent`
-        Your registration is being processed.
+      if (apiKey && domain) {
+        const mailgun = new Mailgun(formData);
+        const mg = mailgun.client({ username: "api", key: apiKey });
 
-        You can monitor the pull request here: ${res.data.html_url}
+        const emailBody = dedent`
+          Your registration is being processed.
 
-        Once this pull request is merged, you can log in and compete in contests.
-      `;
+          You can monitor the pull request here: ${res.data.html_url}
 
-      const emailData = {
-        from: process.env.EMAIL_SENDER,
-        to: emailAddress,
-        subject: `Registration pending for ${handle}`,
-        text: emailBody,
-      };
+          Once this pull request is merged, you can log in and compete in contests.
+        `;
 
-      return mg.messages
-        .create(domain, emailData)
-        .then(() => {
-          return {
-            statusCode: 201,
-            body: JSON.stringify({
-              message: `Created PR ${res.data.number} and sent confirmation email`,
-            }),
-          };
-        })
-        .catch((err) => {
-          return {
-            statusCode: err.status || 500,
-            body: JSON.stringify({
-              error:
-                "Failed to send confirmation email. " + (err.message || err),
-            }),
-          };
-        });
+        const emailData = {
+          from: process.env.EMAIL_SENDER,
+          to: emailAddress,
+          subject: `Registration pending for ${handle}`,
+          text: emailBody,
+        };
+
+        return mg.messages
+          .create(domain, emailData)
+          .then(() => {
+            return {
+              statusCode: 201,
+              body: JSON.stringify({
+                message: `Created PR ${res.data.number} and sent confirmation email`,
+              }),
+            };
+          })
+          .catch((err) => {
+            return {
+              statusCode: err.status || 500,
+              body: JSON.stringify({
+                error:
+                  "Failed to send confirmation email. " + (err.message || err),
+              }),
+            };
+          });
+      } else {
+        return {
+          statusCode: 201,
+          body: JSON.stringify({
+            message: `Created PR ${res.data.number}. Email confirmation skipped`,
+          }),
+        };
+      }
     } catch (error) {
       return {
         statusCode: error.response.status,
