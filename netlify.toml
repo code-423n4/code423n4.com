@@ -17,8 +17,8 @@
   to = "/register"
   status = 200
 
-[context.production.environment]
-  C4_ENV = "production"
+[context.production]
+  command = "source ./env_setup.sh PRODUCTION_ && yarn build"
 
 [context.deploy-preview]
   ignore = "bash ./netlify-ignore-branch.sh"
@@ -31,7 +31,7 @@
   C4_ENV = "staging"
 
 [context.staging.environment]
-  C4_ENV = "staging"
+  command = "source ./env_setup.sh STAGING_ && yarn build"
 
 [functions]
   directory = "functions/"
