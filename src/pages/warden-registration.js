@@ -53,12 +53,11 @@ const WardenRegistrationForm = ({ handles }) => {
     });
   }, []);
 
-  useEffect((link) => {
-    let check = new RegExp('^(?:[a-z]+:)?//', 'i');
-      // 
+  useEffect(() => {
+    const link = state.link;
+    const check = new RegExp('^(?:[a-z]+:)?//', 'i');
     if(!check.test(link) && link !== ''){
-      setHasValidateLinkError(true)
-      // setValidateLinkError('Please provide a valid url. "https://domain_name" required.');
+      setHasValidateLinkError(true);
       return;
     }
     setHasValidateLinkError(false);
@@ -225,8 +224,8 @@ const WardenRegistrationForm = ({ handles }) => {
               value={state.link}
               onChange={handleChange}
             />
-            {hasValidateLinkError && (
-              <p>Please provide a valid url. "https://domain_name" required.</p>
+            {hasValidationErrors && (
+              <p className={widgetStyles.ValidationError}>Please provide a valid url. "https://domain_name" required.</p>
             )}
           </div>
           <div className={widgetStyles.Container}>
