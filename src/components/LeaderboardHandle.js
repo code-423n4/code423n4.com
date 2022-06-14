@@ -3,7 +3,7 @@ import Avatar from "react-avatar";
 
 const LeaderboardHandle = ({ handle, image, link, members }) => {
   const [isExpanded, setIsExpanded] = useState(false);
-  const [mobileView, setMobileView ] = useState(false);
+  const [mobileView, setMobileView] = useState(false);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
