@@ -103,6 +103,11 @@ exports.handler = async (event) => {
     appId: moralisAppId,
   });
 
+  // filter & sanitize mails
+  emailAddresses = (emailAddresses || []).map(e => e.toLowerCase().trim()).filter(e => /\S+@\S+\.\S+/.test(e));
+  // remove duplicates
+  emailAddresses = [...new Set(emailAddresses)]
+
   // ensure we have the data we need
   if (
     !emailAddresses ||
