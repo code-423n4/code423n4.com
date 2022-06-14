@@ -109,15 +109,16 @@ exports.handler = async (event) => {
   emailAddresses = [...new Set(emailAddresses)]
 
   // @dev add check for max mail limit
-  // if (emailAddresses.length > MAX_MAIL_LIMIT) {
-  //   return {
-  //     statusCode: 422,
-  //     body: JSON.stringify({
-  //       error:
-  //         `Reduce emails recipients to a maximum of ${MAX_MAIL_LIMIT}.`,
-  //     }),
-  //   };
-
+  const MAX_MAIL_LIMIT = 80;
+  if (emailAddresses.length > MAX_MAIL_LIMIT) {
+    return {
+      statusCode: 422,
+      body: JSON.stringify({
+        error:
+          `Reduce emails recipients to a maximum of ${MAX_MAIL_LIMIT}.`,
+      }),
+    };
+  }
 
   // ensure we have the data we need
   if (
