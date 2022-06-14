@@ -4,12 +4,10 @@ const sharp = require("sharp");
 const { verify } = require("hcaptcha");
 const { token } = require("./_config");
 
+const { isDangerous } = require("./_utils");
+
 const OctokitClient = Octokit.plugin(createPullRequest);
 const octokit = new OctokitClient({ auth: token });
-
-function isDangerous(s) {
-  return s.match(/^[0-9a-zA-Z_\-]+$/) === null;
-}
 
 exports.handler = async (event) => {
   console.log("event", event);

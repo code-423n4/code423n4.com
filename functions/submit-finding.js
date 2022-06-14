@@ -14,18 +14,12 @@ const {
   moralisMasterKey,
 } = require("./_config");
 
+import { isDangerous } from "./_utils";
+
 const octokit = new Octokit({ auth: token });
 
 const mailgun = new Mailgun(formData);
 const mg = mailgun.client({ username: "api", key: apiKey });
-
-function isDangerousHandle(s) {
-  return s.match(/^[0-9a-zA-Z_\-]+$/) === null;
-}
-
-function isDangerousRepo(s) {
-  return s.match(/^[0-9a-zA-Z\-]+$/) === null;
-}
 
 async function getContestEnd(contestId) {
   const contests = await csv().fromFile("_data/contests/contests.csv");
@@ -115,7 +109,7 @@ exports.handler = async (event) => {
     };
   }
 
-  if (isDangerousRepo(repo)) {
+  if (isDangerous(repo)) {
     return {
       statusCode: 400,
       body:
@@ -123,7 +117,7 @@ exports.handler = async (event) => {
     };
   }
 
-  if (isDangerousHandle(handle)) {
+  if (isDangerous(handle)) {
     return {
       statusCode: 400,
       body:
