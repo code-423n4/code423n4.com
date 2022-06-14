@@ -106,7 +106,6 @@ export default function TeamRegistrationForm({
         !teamMembers.find((member) => member.value === currentUser.username)
       ) {
         setHasValidationErrors(true);
-        updateFormStatus(FormStatus.Error);
         return;
       }
       setHasValidationErrors(false);
@@ -149,7 +148,14 @@ export default function TeamRegistrationForm({
         console.error(error);
       }
     })();
-  }, [avatarInputRef, state, hasValidationErrors, currentUser]);
+  }, [
+    avatarInputRef,
+    state,
+    hasValidationErrors,
+    currentUser,
+    teamMembers,
+    handles,
+  ]);
 
   return (
     <form className={className}>
