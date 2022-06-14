@@ -115,6 +115,7 @@ const WardenRegistrationForm = ({ handles }) => {
     state.link,
     captchaToken,
     handles,
+    hasValidateLinkError
   ]);
 
   const updateErrorMessage = (message) => {
@@ -225,7 +226,7 @@ const WardenRegistrationForm = ({ handles }) => {
               onChange={handleChange}
             />
             {hasValidationErrors && (
-              <p className={widgetStyles.ValidationError}>Please provide a valid url. "https://domain_name" required.</p>
+              <p className={widgetStyles.ErrorMessage}>Please provide a valid url. "https://domain_name" required.</p>
             )}
           </div>
           <div className={widgetStyles.Container}>
