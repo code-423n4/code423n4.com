@@ -7,7 +7,7 @@ const LeaderboardHandle = ({ handle, image, link, members }) => {
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      setMobileView(window.innerWidth <= 740 ? true : false);
+      setMobileView(window.innerWidth <= 740);
     }
   }, []);
 
