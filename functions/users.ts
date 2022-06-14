@@ -1,4 +1,5 @@
 import { readFileSync } from "fs";
+import { isDangerous } from "./_utils";
 
 exports.handler = async (event) => {
   // only allow GET
@@ -11,6 +12,14 @@ exports.handler = async (event) => {
   }
 
   const userHandle = event.queryStringParameters.id;
+
+  if (isDangerous(userHandle)) {
+    return {
+      statusCode: 400,
+      body:
+        "Handle can only contain alphanumeric characters [a-zA-Z0-9], underscores (_), and hyphens (-).",
+    };
+  }
 
   try {
     const userFile = readFileSync(`./_data/handles/${userHandle}.json`);
