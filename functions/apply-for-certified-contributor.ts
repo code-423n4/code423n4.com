@@ -2,8 +2,9 @@ const { Client } = require("@notionhq/client");
 const dedent = require("dedent");
 const formData = require("form-data");
 const Mailgun = require("mailgun.js");
-const { verify } = require("hcaptcha");
-const { apiKey, domain } = require("./_config");
+const { Moralis } = require("moralis/node");
+
+const { apiKey, domain, moralisAppId, moralisServerUrl } = require("./_config");
 
 const notionKey = process.env.NOTION_KEY;
 const notionDbId = process.env.NOTION_WARDEN_CERTIFICATION_DATABASE_ID;
@@ -53,27 +54,65 @@ async function handler(event) {
     };
   }
 
-  const { authorization } = event.headers;
+  const authorization = event.headers["x-authorization"];
   if (!authorization) {
     return {
       statusCode: 401,
-      body: JSON.stringify({ error: "Authorization failed" }),
-    };
-  }
-
-  const { success } = await verify(process.env.HCAPTCHA_SECRET, authorization);
-  if (!success) {
-    return {
-      statusCode: 401,
-      body: JSON.stringify({ error: "Authorization failed" }),
+      body: JSON.stringify({
+        error: "Unauthorized",
+      }),
     };
   }
 
   const ticket = JSON.parse(event.body);
-  if (!ticket.wardenHandle || !ticket.githubUsername || !ticket.emailAddress) {
+  if (!ticket.wardenHandle || !ticket.gitHubUsername || !ticket.emailAddress) {
     return {
       statusCode: 422,
       body: JSON.stringify({ error: "Contact info is required" }),
+    };
+  }
+
+  await Moralis.start({
+    serverUrl: moralisServerUrl,
+    appId: moralisAppId,
+  });
+
+  const userUrl = `${event.headers.origin}/.netlify/functions/get-user?id=${ticket.wardenHandle}`;
+  const userResponse = await fetch(userUrl);
+  if (!userResponse.ok) {
+    return {
+      statusCode: 401,
+      body: JSON.stringify({
+        error:
+          "You must be a registered warden to apply to be a certified contributor",
+      }),
+    };
+  }
+
+  const userData = await userResponse.json();
+  if (!userData || !userData.moralisId) {
+    return {
+      statusCode: 401,
+      body: JSON.stringify({
+        error:
+          "You must be a registered warden to apply to be a certified contributor",
+      }),
+    };
+  }
+
+  const { moralisId } = userData;
+  const sessionToken = authorization.split("Bearer ")[1];
+  const confirmed = await Moralis.Cloud.run("confirmUser", {
+    sessionToken,
+    moralisId,
+    username: ticket.wardenHandle,
+  });
+  if (!confirmed) {
+    return {
+      statusCode: 401,
+      body: JSON.stringify({
+        error: "Authorization failed",
+      }),
     };
   }
 
@@ -102,7 +141,7 @@ async function handler(event) {
             {
               type: "text",
               text: {
-                content: ticket.githubUsername,
+                content: ticket.gitHubUsername,
               },
             },
           ],
