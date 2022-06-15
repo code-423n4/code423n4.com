@@ -1,5 +1,6 @@
 import React, { useCallback, useState, useRef, ReactNode } from "react";
 import clsx from "clsx";
+import { useMoralis } from "react-moralis";
 
 import useUser from "../hooks/UserContext";
 
@@ -45,6 +46,8 @@ function getFileAsBase64(file) {
 
 export default function TeamRegistrationForm({ handles, wardens, className }) {
   const { currentUser } = useUser();
+  const { user, isInitialized } = useMoralis();
+
   const [state, setState] = useState(initialState);
   const [hasValidationErrors, setHasValidationErrors] = useState(false);
   const [status, setStatus] = useState<FormStatus>(FormStatus.Unsubmitted);
@@ -52,6 +55,7 @@ export default function TeamRegistrationForm({ handles, wardens, className }) {
   const [teamMembers, setTeamMembers] = useState<
     { value: string; image: string }[]
   >([wardens.find((warden) => warden.value === currentUser.username)]);
+
   const avatarInputRef = useRef<HTMLInputElement>();
   const [isDangerousTeamName, setisDangerousTeamName] = useState(false);
 
@@ -117,7 +121,7 @@ export default function TeamRegistrationForm({ handles, wardens, className }) {
 
   const submitRegistration = useCallback((): void => {
     const url = `/.netlify/functions/register-team`;
-    if (!currentUser.isLoggedIn) {
+    if (!currentUser.isLoggedIn || !user || !isInitialized) {
       navigate("/");
     }
 
@@ -148,16 +152,20 @@ export default function TeamRegistrationForm({ handles, wardens, className }) {
 
         const requestBody = {
           teamName: state.teamName,
+          username: currentUser.username,
           members,
           link: state.link,
           image,
           address: state.polygonAddress,
         };
 
+        const sessionToken = user.attributes.sessionToken;
+
         const response = await fetch(url, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            "X-Authorization": `Bearer ${sessionToken}`,
           },
           body: JSON.stringify(requestBody),
         });
@@ -182,6 +190,8 @@ export default function TeamRegistrationForm({ handles, wardens, className }) {
     currentUser,
     teamMembers,
     handles,
+    user,
+    isInitialized,
   ]);
 
   return (
@@ -380,13 +390,6 @@ export default function TeamRegistrationForm({ handles, wardens, className }) {
         <div className="centered-text">
           <h1>Thank you!</h1>
           <p>Your registration application has been submitted.</p>
-          <h2>One more thing...</h2>
-          <p>
-            Before we can complete your registration, please join us in{" "}
-            <a href="https://discord.gg/code4rena">Discord</a> and give us a
-            howl in #i-want-to-be-a-warden! <br />
-            We look forward to seeing you in the arena!
-          </p>
         </div>
       ) : (
         ""

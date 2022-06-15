@@ -24,7 +24,7 @@ export default function TeamRegistration({ data }) {
       <div className="wrapper-main">
         <h1 className="page-header">Register a Team</h1>
         <TeamRegistrationForm
-          className={clsx(styles.Form)}
+          className={styles.Form}
           handles={handles}
           wardens={wardens}
         />

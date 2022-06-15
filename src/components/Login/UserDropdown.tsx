@@ -1,6 +1,6 @@
+import Avatar from "react-avatar";
 import clsx from "clsx";
 import React from "react";
-import Avatar from "react-avatar";
 
 import useUser from "../../hooks/UserContext";
 
