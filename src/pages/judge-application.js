@@ -1,28 +1,14 @@
-import React, {
-  useCallback,
-  useState,
-  // useRef
-} from "react";
+import React, { useState } from "react";
 import { StaticQuery, graphql } from "gatsby";
 
 import DefaultLayout from "../templates/DefaultLayout";
 import Widgets from "../components/reporter/widgets/Widgets";
-// import clsx from "clsx";
-// import HCaptcha from "@hcaptcha/react-hcaptcha";
-// import * as styles from "../components/form/Form.module.scss";
-// import * as widgetStyles from "../components/reporter/widgets/Widgets.module.scss";
+import useUser from "../hooks/UserContext";
+import { useMoralis } from "react-moralis";
 
 const config = {
   labelAll: "candidate",
   fields: [
-    {
-      name: "handle",
-      label: "Warden handle",
-      helpText: "Handle you're competing under",
-      widget: "warden",
-      required: true,
-      options: [],
-    },
     {
       name: "bio",
       label: "Tell us about yourself",
@@ -84,7 +70,6 @@ const config = {
 const textareaHint = "## accepts markdown";
 
 const initialState = {
-  handle: "",
   bio: textareaHint,
   link1: "",
   details1: textareaHint,
@@ -124,56 +109,64 @@ const wardenListQuery = graphql`
 const JudgeApplication = () => {
   const [state, setState] = useState(initialState);
   const [status, setStatus] = useState("unsubmitted");
+  const [errorMessage, setErrorMessage] = useState("");
+  const { currentUser } = useUser();
+  const { user, isInitialized } = useMoralis();
 
   const fields = config.fields;
 
-  const handleChange = useCallback((e) => {
+  const handleChange = (e) => {
     const { name, value } = e.target;
     setState((state) => {
       return { ...state, [name]: value };
     });
-  }, []);
-
-  const url = `/.netlify/functions/apply-for-judge`;
-
-  const applyForJudge = useCallback((url, data) => {
-    (async () => {
-      setStatus(FormStatus.Submitting);
-      const response = await fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
-      if (response.ok) {
-        console.log("success");
-        setStatus(FormStatus.Submitted);
-      } else {
-        setStatus(FormStatus.Error);
-        // const message = `Error: ${response.status}`;
-      }
-    })();
-  }, []);
-
-  // const labelSet = [
-  //   config.labelAll ? config.labelAll : "",
-  //   state.label ? state.label : "",
-  // ];
-
-  const formData = {
-    handle: state.handle,
-    bio: state.bio,
-    link1: state.link1,
-    details1: state.details1,
-    link2: state.link2,
-    details2: state.details2,
-    link3: state.link3,
-    details3: state.details3,
   };
+
+  const applyForJudge = async (data) => {
+    const url = `/.netlify/functions/apply-for-judge`;
+    setStatus(FormStatus.Submitting);
+    const sessionToken = user.attributes.sessionToken;
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Authorization": `Bearer ${sessionToken}`,
+      },
+      body: JSON.stringify(data),
+    });
+    if (response.ok) {
+      console.log("success");
+      setStatus(FormStatus.Submitted);
+    } else {
+      const { error } = await response.json();
+      setStatus(FormStatus.Error);
+      setErrorMessage(error);
+    }
+  };
+
   const handleSubmit = () => {
-    applyForJudge(url, formData);
+    if (
+      !isInitialized ||
+      !user ||
+      !currentUser.isLoggedIn ||
+      !Object.values(state).every((val) => !!val)
+    ) {
+      return;
+    }
+    const handle = currentUser.username;
+    const formData = {
+      handle,
+      bio: state.bio,
+      link1: state.link1,
+      details1: state.details1,
+      link2: state.link2,
+      details2: state.details2,
+      link3: state.link3,
+      details3: state.details3,
+    };
+    applyForJudge(formData);
   };
+
   return (
     <StaticQuery
       query={wardenListQuery}
@@ -190,8 +183,7 @@ const JudgeApplication = () => {
           >
             <div className="wrapper-main">
               {(status === FormStatus.Unsubmitted ||
-                status === FormStatus.Submitting ||
-                status === FormStatus.Error) && (
+                status === FormStatus.Submitting) && (
                 <>
                   <h1 className="page-header">Judge Application</h1>
                   <form>
@@ -219,7 +211,9 @@ const JudgeApplication = () => {
                       type="button"
                       onClick={handleSubmit}
                     >
-                      Apply to be a Judge
+                      {status === FormStatus.Submitting
+                        ? "Submitting..."
+                        : "Apply to be a Judge"}
                     </button>
                   </form>
                 </>
@@ -260,6 +254,20 @@ const JudgeApplication = () => {
                     </a>{" "}
                     section in the Code4rena docs.
                   </p>
+                </div>
+              )}
+              {status === FormStatus.Error && (
+                <div className="centered-text">
+                  <h1>Whoops!</h1>
+                  <p>An error occurred while processing your application.</p>
+                  {errorMessage && <p>{errorMessage}</p>}
+                  <button
+                    className="button cta-button"
+                    type="button"
+                    onClick={() => setStatus(FormStatus.Unsubmitted)}
+                  >
+                    Try again
+                  </button>
                 </div>
               )}
             </div>
