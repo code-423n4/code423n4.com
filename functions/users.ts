@@ -1,5 +1,10 @@
 import { readFileSync } from "fs";
-import { isDangerous } from "./_utils";
+
+// Netlify lambda functions don't make it this easy to share code across multiple functions
+// Thats why this function is repeated in each endpoint.
+function isDangerous(s) {
+  return s.match(/^[0-9a-zA-Z_\-]+$/) === null;
+}
 
 exports.handler = async (event) => {
   // only allow GET

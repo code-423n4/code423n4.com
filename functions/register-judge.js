@@ -4,10 +4,14 @@ const sharp = require("sharp");
 const { verify } = require("hcaptcha");
 const { token } = require("./_config");
 
-const { isDangerous } = require("./_utils");
-
 const OctokitClient = Octokit.plugin(createPullRequest);
 const octokit = new OctokitClient({ auth: token });
+
+// Netlify lambda functions don't make it this easy to share code across multiple functions
+// Thats why this function is repeated in each endpoint.
+function isDangerous(s) {
+  return s.match(/^[0-9a-zA-Z_\-]+$/) === null;
+}
 
 exports.handler = async (event) => {
   console.log("event", event);
