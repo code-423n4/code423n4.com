@@ -37,6 +37,7 @@
 
 .Button {
   @include button;
+  color: #fff;
   width: 100%;
   background: var(--dark-purple);
   text-align: left;
