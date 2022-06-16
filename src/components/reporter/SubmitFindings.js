@@ -19,7 +19,7 @@ import {
 import Form from "../form/Form";
 import { initialState } from "./findings/state";
 
-const SubmitFindings = ({ wardensList, endTime, sponsor, contest, repo }) => {
+const SubmitFindings = ({ wardensList, sponsor, contest, repo }) => {
   const wardens = wardensList.edges.map(({ node }) => {
     return { value: node.handle, image: node.image };
   });
