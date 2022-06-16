@@ -2,10 +2,14 @@ import React from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import remarkBreaks from "remark-breaks";
+import remarkMath from "remark-math";
+import rehypeKatex from "rehype-katex";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import clsx from "clsx";
 
 import * as styles from "./Widgets.module.scss";
+
+import 'katex/dist/katex.min.css';
 
 const TextArea = ({
   name,
@@ -19,6 +23,8 @@ const TextArea = ({
   function handleChange(e) {
     onChange(e);
   }
+
+
 
   return (
     <Tabs className="alternate-tab">
@@ -55,7 +61,8 @@ const TextArea = ({
       <TabPanel>
         <ReactMarkdown
           className={clsx(styles.Control, styles.Markdown)}
-          remarkPlugins={[remarkGfm, remarkBreaks]}
+          remarkPlugins={[remarkGfm, remarkBreaks, remarkMath]}
+          rehypePlugins={[rehypeKatex]}
         >
           {fieldState}
         </ReactMarkdown>
