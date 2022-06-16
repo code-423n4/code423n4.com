@@ -97,6 +97,11 @@ module.exports = {
               }
             }
           },
+          {
+            resolve: `gatsby-remark-mathjax-ssr`,
+            options: {
+            }
+          },
         ],
       },
     },
