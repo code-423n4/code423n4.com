@@ -106,9 +106,9 @@ export default function TeamRegistrationForm({ handles, wardens, className }) {
     }
   };
 
-  function isDangerousTeamName(s) {
+  const isDangerousTeamName = (s) => {
     return s.match(/^[0-9a-zA-Z_\-]+$/) === null;
-  }
+  };
 
   const resetForm = (): void => {
     setErrorMessage("");
@@ -132,11 +132,12 @@ export default function TeamRegistrationForm({ handles, wardens, className }) {
         setHasValidationErrors(true);
         return;
       }
+
       if (isDangerousTeamName(state.teamName)) {
         setHasValidationErrors(true);
         setStatus(FormStatus.Error);
         updateErrorMessage(
-          "Username can only contain alphanumeric characters, underscores, and hyphens"
+          "Team name can only contain alphanumeric characters, underscores, and hyphens"
         );
         return;
       }

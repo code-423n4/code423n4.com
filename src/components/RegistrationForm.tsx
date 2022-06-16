@@ -107,6 +107,10 @@ export default function RegistrationForm({ handles, wardens, className }) {
     setStatus(FormStatus.Unsubmitted);
   };
 
+  const isDangerousHandle = (s) => {
+    return s.match(/^[0-9a-zA-Z_\-]+$/) === null;
+  };
+
   const handleChange = useCallback((e) => {
     const { name, value } = e.target;
     setState((prevState) => {
@@ -154,7 +158,16 @@ export default function RegistrationForm({ handles, wardens, className }) {
           setHasValidationErrors(true);
           return;
         }
-        // @todo: validate discord handle
+
+        if (isDangerousHandle(state.username)) {
+          setHasValidationErrors(true);
+          setStatus(FormStatus.Error);
+          updateErrorMessage(
+            "Handle can only contain alphanumeric characters, underscores, and hyphens"
+          );
+          return;
+        }
+
         setHasValidationErrors(false);
         setStatus(FormStatus.Submitting);
 
