@@ -163,7 +163,10 @@ export default function RegistrationForm({ handles, wardens, className }) {
           if (state.avatar) {
             image = await getFileAsBase64(state.avatar);
           }
-          const user = await authenticate({ provider });
+          const user = await authenticate({
+            provider,
+            signingMessage: "Code4rena login",
+          });
 
           if (user === undefined) {
             // user clicked "cancel" when prompted to sign message
