@@ -165,7 +165,7 @@ export default function RegistrationForm({ handles, wardens, className }) {
           }
           const user = await authenticate({
             provider,
-            signingMessage: "Code4rena login",
+            signingMessage: "Code4rena registration",
           });
 
           if (user === undefined) {
