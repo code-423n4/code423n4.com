@@ -106,11 +106,14 @@ export default function TeamRegistrationForm({ handles, wardens, className }) {
     }
   };
 
+  function isDangerousTeamName(s) {
+    return s.match(/^[0-9a-zA-Z_\-]+$/) === null;
+  }
+
   const resetForm = (): void => {
     setErrorMessage("");
     setStatus(FormStatus.Unsubmitted);
   };
-
   const submitRegistration = useCallback((): void => {
     const url = `/.netlify/functions/register-team`;
     if (!currentUser.isLoggedIn) {
@@ -127,6 +130,14 @@ export default function TeamRegistrationForm({ handles, wardens, className }) {
         state.polygonAddress.length !== 42
       ) {
         setHasValidationErrors(true);
+        return;
+      }
+      if (isDangerousTeamName(state.teamName)) {
+        setHasValidationErrors(true);
+        setStatus(FormStatus.Error);
+        updateErrorMessage(
+          "Username can only contain alphanumeric characters, underscores, and hyphens"
+        );
         return;
       }
       setHasValidationErrors(false);
@@ -148,21 +159,21 @@ export default function TeamRegistrationForm({ handles, wardens, className }) {
           address: state.polygonAddress,
         };
 
-        // const response = await fetch(url, {
-        //   method: "POST",
-        //   headers: {
-        //     "Content-Type": "application/json",
-        //   },
-        //   body: JSON.stringify(requestBody),
-        // });
+        const response = await fetch(url, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(requestBody),
+        });
 
-        // if (response.ok) {
-        //   setStatus(FormStatus.Submitted);
-        // } else {
-        //   const res = await response.json();
-        //   updateErrorMessage(res.error || "");
-        //   setStatus(FormStatus.Error);
-        // }
+        if (response.ok) {
+          setStatus(FormStatus.Submitted);
+        } else {
+          const res = await response.json();
+          updateErrorMessage(res.error || "");
+          setStatus(FormStatus.Error);
+        }
       } catch (error) {
         updateErrorMessage(error.message || "");
         setStatus(FormStatus.Error);
