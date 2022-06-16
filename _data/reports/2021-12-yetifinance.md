@@ -978,34 +978,34 @@ Monetary loss for user
 2.  Let us see \_sendJoeReward function
 
 <!---->
+```solidity
+function _sendJoeReward(address _rewardOwner, address _to) internal {
+        // harvests all JOE that the WJLP contract is owed
+        _MasterChefJoe.withdraw(_poolPid, 0);
 
-    function _sendJoeReward(address _rewardOwner, address _to) internal {
-            // harvests all JOE that the WJLP contract is owed
-            _MasterChefJoe.withdraw(_poolPid, 0);
+        // updates user.unclaimedJOEReward with latest data from TJ
+        _userUpdate(_rewardOwner, 0, true);
 
-            // updates user.unclaimedJOEReward with latest data from TJ
-            _userUpdate(_rewardOwner, 0, true);
-
-            uint joeToSend = userInfo[_rewardOwner].unclaimedJOEReward;
-            userInfo[_rewardOwner].unclaimedJOEReward = 0;
-            _safeJoeTransfer(_to, joeToSend);
-        }
-
+        uint joeToSend = userInfo[_rewardOwner].unclaimedJOEReward;
+        userInfo[_rewardOwner].unclaimedJOEReward = 0;
+        _safeJoeTransfer(_to, joeToSend);
+    }
+```
 3.  Lets say user reward are calculated to be 100 so \_safeJoeTransfer is called with joeToSend as 100. Also user remaining reward becomes 0
 
 4.  Let us see \_safeJoeTransfer function
 
 <!---->
-
-    function _safeJoeTransfer(address _to, uint256 _amount) internal {
-            uint256 joeBal = JOE.balanceOf(address(this));
-            if (_amount > joeBal) {
-                JOE.transfer(_to, joeBal);
-            } else {
-                JOE.transfer(_to, _amount);
-            }
+```solidity
+function _safeJoeTransfer(address _to, uint256 _amount) internal {
+        uint256 joeBal = JOE.balanceOf(address(this));
+        if (_amount > joeBal) {
+            JOE.transfer(_to, joeBal);
+        } else {
+            JOE.transfer(_to, _amount);
         }
-
+    }
+```
 5.  If the reward balance left in this contract is 90 then \_safeJoeTransfer will pass if condition and contract will transfer 90 amount. Thus user incur a loss of 100-90=10 amount (his remaining reward are already set to 0)
 
 #### Recommended Mitigation Steps
@@ -1036,9 +1036,10 @@ Would have to incur fees for simple unwrapping.
 
 The unwrap functionality is only available from `unwrapFor` function, and that function is only callable from AP or SP. [(Code ref)](https://github.com/code-423n4/2021-12-yetifinance/blob/main/packages/contracts/contracts/AssetWrappers/WJLP/WJLP.sol#L148:#L149)
 
-    function unwrapFor(address _to, uint _amount) external override {
-            _requireCallerIsAPorSP();
-
+```solidity
+function unwrapFor(address _to, uint _amount) external override {
+        _requireCallerIsAPorSP();
+```
 #### Recommended Mitigation Steps
 
 Allow anybody to call the function.
@@ -1065,28 +1066,28 @@ Lost yield for user.
 
 In ActivePool's `sendCollateralsUnwrap` (which is used throughout the protocol), it firsts unwraps the asset, and only afterwards calls `claimRewardFor` which will update the rewards:
 [(Code ref)](https://github.com/code-423n4/2021-12-yetifinance/blob/main/packages/contracts/contracts/ActivePool.sol#L186:#L188)
-
-    IWAsset(_tokens[i]).unwrapFor(_to, _amounts[i]);
-    if (_collectRewards) {
-            IWAsset(_tokens[i]).claimRewardFor(_to);
-    }
-
+```solidity
+IWAsset(_tokens[i]).unwrapFor(_to, _amounts[i]);
+if (_collectRewards) {
+        IWAsset(_tokens[i]).claimRewardFor(_to);
+}
+```
 `claimRewardFor` will end up calling `_userUpdate`: [(Code ref)](https://github.com/code-423n4/2021-12-yetifinance/blob/main/packages/contracts/contracts/AssetWrappers/WJLP/WJLP.sol#L246:#L263)
-
-        function _userUpdate(address _user, uint256 _amount, bool _isDeposit) private returns (uint pendingJoeSent) {
-            uint256 accJoePerShare = _MasterChefJoe.poolInfo(_poolPid).accJoePerShare;
-            UserInfo storage user = userInfo[_user];
-            if (user.amount > 0) {
-                user.unclaimedJOEReward = user.amount.mul(accJoePerShare).div(1e12).sub(user.rewardDebt);
-            }
-            if (_isDeposit) {
-                user.amount = user.amount.add(_amount);
-            } else {
-                user.amount = user.amount.sub(_amount);
-            }
-            user.rewardDebt = user.amount.mul(accJoePerShare).div(1e12);
-        }
-
+```solidity
+function _userUpdate(address _user, uint256 _amount, bool _isDeposit) private returns (uint pendingJoeSent) {
+    uint256 accJoePerShare = _MasterChefJoe.poolInfo(_poolPid).accJoePerShare;
+    UserInfo storage user = userInfo[_user];
+    if (user.amount > 0) {
+        user.unclaimedJOEReward = user.amount.mul(accJoePerShare).div(1e12).sub(user.rewardDebt);
+    }
+    if (_isDeposit) {
+        user.amount = user.amount.add(_amount);
+    } else {
+        user.amount = user.amount.sub(_amount);
+    }
+    user.rewardDebt = user.amount.mul(accJoePerShare).div(1e12);
+}
+```
 Now, as ActivePool has already called `unwrapFor` and has burnt the user's tokens, and let's assume they all were used as collateral, it means user.amount=0\*, and the user's unclaimedJOEReward won't get updated to reflect the rewards from the last user update.
 This is why, indeed as the comment in `unwrapFor` says, user's reward should be updated prior to that.
 
