@@ -8,13 +8,6 @@ import useUser from "../hooks/UserContext";
 import Login from "../components/Login/Login";
 import * as styles from "../components/form/Form.module.scss";
 
-enum FormStatus {
-  Unsubmitted = "unsubmitted",
-  Submitting = "submitting",
-  Submitted = "submitted",
-  Error = "error",
-}
-
 export default function TeamRegistration({ data }) {
   const handles = new Set(data.handles.edges.map((h) => h.node.handle));
   const { currentUser } = useUser();
@@ -26,18 +19,17 @@ export default function TeamRegistration({ data }) {
     }
   });
 
-
   return (
     <DefaultLayout pageTitle="Team Registration | Code 423n4">
       {currentUser.isLoggedIn ? (
         <div className="wrapper-main">
           <h1 className="page-header">Register a Team</h1>
           <div>
-              <TeamRegistrationForm
-                className={clsx(styles.Form)}
-                handles={handles}
-                wardens={wardens}
-              />
+            <TeamRegistrationForm
+              className={clsx(styles.Form)}
+              handles={handles}
+              wardens={wardens}
+            />
           </div>
         </div>
       ) : (
