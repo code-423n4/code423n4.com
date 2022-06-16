@@ -41,7 +41,7 @@ function ReportPageTemplate({ data }) {
             <h4>{page.frontmatter.date}</h4>
           </div>
           <div className="report-container">
-            <h2>Table of content</h2>
+            <h2>Table of contents</h2>
             <div className="report-toc" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(page.tableOfContents) }}/>
             <div
               className="report-contents"
