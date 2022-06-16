@@ -1,13 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Avatar from "react-avatar";
 
 const LeaderboardHandle = ({ handle, image, link, members }) => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [mobileView, setMobileView] = useState(false);
 
-  let mobileView = false;
-  if (typeof window !== "undefined") {
-    mobileView = window.innerWidth <= 740 ? true : false;
-  }
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setMobileView(window.innerWidth <= 740);
+    }
+  }, []);
 
   const trimHandle = (handle) => {
     if (handle.split("").length > 15) {
