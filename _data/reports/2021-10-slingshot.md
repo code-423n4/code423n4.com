@@ -7,7 +7,6 @@ findings: "https://github.com/code-423n4/2021-10-slingshot-findings/issues"
 contest: 48
 ---
 
-
 # Overview
 
 ## About C4

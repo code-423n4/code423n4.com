@@ -7,7 +7,6 @@ findings: "https://github.com/code-423n4/2022-01-openleverage-findings/issues"
 contest: 72
 ---
 
-
 # Overview
 
 ## About C4

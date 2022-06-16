@@ -7,7 +7,6 @@ findings: "https://github.com/code-423n4/2022-01-elasticswap-findings/issues"
 contest: 77
 ---
 
-
 # Overview
 
 ## About C4

@@ -7,7 +7,6 @@ findings: "https://github.com/code-423n4/2021-11-bootfinance-findings/issues"
 contest: 51
 ---
 
-
 # Overview
 
 ## About C4

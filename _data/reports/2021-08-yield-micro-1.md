@@ -7,7 +7,6 @@ findings: "https://github.com/code-423n4/2021-08-yield-findings/issues"
 contest: 25
 ---
 
-
 # Overview
 
 ## About C4

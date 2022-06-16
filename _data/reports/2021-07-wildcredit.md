@@ -7,7 +7,6 @@ findings: "https://github.com/code-423n4/https://github.com/code-423n4/2021-07-w
 contest: 18
 ---
 
-
 # Overview
 
 ## About C4

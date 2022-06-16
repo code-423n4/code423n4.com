@@ -7,7 +7,6 @@ findings: "https://github.com/code-423n4/2021-11-badgerzaps-findings/issues"
 contest: 57
 ---
 
-
 # Overview
 
 ## About C4

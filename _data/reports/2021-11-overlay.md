@@ -7,7 +7,6 @@ findings: "https://github.com/code-423n4/2021-11-overlay-findings/issues"
 contest: 49
 ---
 
-
 # Overview
 
 ## About C4

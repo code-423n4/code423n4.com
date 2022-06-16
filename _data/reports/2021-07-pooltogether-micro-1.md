@@ -7,7 +7,6 @@ findings: "https://github.com/code-423n4/2021-07-pooltogether-findings/issues"
 contest: 24
 ---
 
-
 # Overview
 
 ## About C4

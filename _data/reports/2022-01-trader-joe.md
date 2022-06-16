@@ -7,7 +7,6 @@ findings: "https://github.com/code-423n4/2022-01-trader-joe-findings/issues"
 contest: 79
 ---
 
-
 # Overview
 
 ## About C4

@@ -7,7 +7,6 @@ findings: "https://github.com/code-423n4/2021-10-covalent-findings/issues"
 contest: 43
 ---
 
-
 # Overview
 
 ## About C4

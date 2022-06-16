@@ -7,7 +7,6 @@ findings: "https://github.com/code-423n4/2021-07-sherlock-findings/issues"
 contest: 21
 ---
 
-
 # Overview
 
 ## About C4

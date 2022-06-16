@@ -7,7 +7,6 @@ findings: "https://github.com/code-423n4/2022-02-tribe-turbo-findings/issues"
 contest: 92
 ---
 
-
 # Overview
 
 ## About C4

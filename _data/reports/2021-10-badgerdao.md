@@ -7,7 +7,6 @@ findings: "https://github.com/code-423n4/2021-10-badgerdao-findings/issues"
 contest: 47
 ---
 
-
 # Overview
 
 ## About C4

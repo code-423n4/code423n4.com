@@ -7,7 +7,6 @@ findings: "https://github.com/code-423n4/2022-01-timeswap-findings/issues"
 contest: 74
 ---
 
-
 # Overview
 
 ## About C4

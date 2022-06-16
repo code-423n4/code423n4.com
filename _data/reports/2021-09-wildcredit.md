@@ -7,7 +7,6 @@ findings: "https://github.com/code-423n4/2021-09-wildcredit-findings"
 contest: 32 
 ---
 
-
 # Overview
 
 ## About C4

@@ -7,7 +7,6 @@ findings: "https://github.com/code-423n4/2021-12-defiprotocol-findings/issues"
 contest: 65
 ---
 
-
 # Overview
 
 ## About C4

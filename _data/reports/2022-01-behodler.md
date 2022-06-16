@@ -7,7 +7,6 @@ findings: "https://github.com/code-423n4/2022-01-behodler-findings/issues"
 contest: 78
 ---
 
-
 # Overview
 
 ## About C4

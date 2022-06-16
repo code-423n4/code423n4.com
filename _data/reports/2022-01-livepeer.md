@@ -7,7 +7,6 @@ findings: "https://github.com/code-423n4/2022-01-livepeer-findings/issues"
 contest: 73
 ---
 
-
 # Overview
 
 ## About C4

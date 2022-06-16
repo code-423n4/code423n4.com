@@ -7,7 +7,6 @@ findings: "https://github.com/code-423n4/2021-12-perennial-findings/issues"
 contest: 60
 ---
 
-
 # Overview
 
 ## About C4

@@ -7,7 +7,6 @@ findings: "https://github.com/code-423n4/2022-02-redacted-cartel-findings/issues
 contest: 87
 ---
 
-
 # Overview
 
 ## About C4

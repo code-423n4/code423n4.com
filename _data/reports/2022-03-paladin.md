@@ -7,7 +7,6 @@ findings: "https://github.com/code-423n4/2022-03-paladin-findings/issues"
 contest: 105
 ---
 
-
 # Overview
 
 ## About C4

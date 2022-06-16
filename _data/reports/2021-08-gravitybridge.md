@@ -7,7 +7,6 @@ findings: "https://github.com/code-423n4/2021-08-gravitybridge-findings/issues"
 contest: 27
 ---
 
-
 # Overview
 
 ## About C4

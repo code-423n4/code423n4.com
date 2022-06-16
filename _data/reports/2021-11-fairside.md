@@ -7,7 +7,6 @@ findings: "https://github.com/code-423n4/2021-11-fairside-findings/issues"
 contest: 50
 ---
 
-
 # Overview
 
 ## About C4

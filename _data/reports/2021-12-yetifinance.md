@@ -7,7 +7,6 @@ findings: "https://github.com/code-423n4/2021-12-yetifinance-findings/issues"
 contest: 66
 ---
 
-
 # Overview
 
 ## About C4

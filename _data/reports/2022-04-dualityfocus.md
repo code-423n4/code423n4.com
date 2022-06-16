@@ -7,7 +7,6 @@ findings: "https://github.com/code-423n4/2022-04-dualityfocus-findings/issues"
 contest: 108
 ---
 
-
 # Overview
 
 ## About C4

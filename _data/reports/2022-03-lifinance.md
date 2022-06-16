@@ -7,7 +7,6 @@ findings: "https://github.com/code-423n4/2022-03-lifinance-findings/issues"
 contest: 103
 ---
 
-
 # Overview
 
 ## About C4

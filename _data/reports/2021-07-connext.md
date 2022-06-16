@@ -7,7 +7,6 @@ findings: "https://github.com/code-423n4/2021-07-connext-findings/issues"
 contest: 19
 ---
 
-
 # Overview
 
 ## About C4

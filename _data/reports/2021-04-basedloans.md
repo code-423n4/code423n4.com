@@ -7,7 +7,6 @@ findings: "https://github.com/code-423n4/2021-04-basedloans-findings/issues"
 contest: 7
 ---
 
-
 # Overview
 
 ## About C4

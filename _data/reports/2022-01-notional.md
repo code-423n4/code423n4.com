@@ -7,7 +7,6 @@ findings: "https://github.com/code-423n4/2022-01-notional-findings/issues"
 contest: 81
 ---
 
-
 # Overview
 
 ## About C4

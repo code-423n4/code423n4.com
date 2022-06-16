@@ -7,7 +7,6 @@ findings: "https://github.com/code-423n4/2021-04-meebits-findings/issues"
 contest: 6
 ---
 
-
 # Overview
 
 ## About C4

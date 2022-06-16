@@ -7,7 +7,6 @@ findings: "https://github.com/code-423n4/2021-09-sushimiso-findings"
 contest: 28 
 ---
 
-
 # Overview
 
 ## About C4

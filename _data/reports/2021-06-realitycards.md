@@ -7,7 +7,6 @@ findings: "https://github.com/code-423n4/2021-06-realitycards-findings/issues"
 contest: 13
 ---
 
-
 # Overview
 
 ## About C4

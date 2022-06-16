@@ -7,7 +7,6 @@ findings: "https://github.com/code-423n4/2021-12-sublime-findings/issues"
 contest: 61
 ---
 
-
 # Overview
 
 ## About C4

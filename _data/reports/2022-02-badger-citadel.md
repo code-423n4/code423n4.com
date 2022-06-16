@@ -7,7 +7,6 @@ findings: "https://github.com/code-423n4/2022-02-badger-citadel-findings/issues"
 contest: 84
 ---
 
-
 # Overview
 
 ## About C4

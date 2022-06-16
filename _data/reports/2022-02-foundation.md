@@ -7,7 +7,6 @@ findings: "https://github.com/code-423n4/2022-02-foundation-findings/issues"
 contest: 94
 ---
 
-
 # Overview
 
 ## About C4
