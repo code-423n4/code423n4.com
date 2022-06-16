@@ -7,14 +7,6 @@ findings: "https://github.com/code-423n4/2022-04-dualityfocus-findings/issues"
 contest: 108
 ---
 
-# Table of Content
-```toc
-exclude: Table of Contents
-tight: true
-ordered: false
-from-heading: 1
-to-heading: 2
-```
 
 # Overview
 

@@ -40,7 +40,6 @@
     "gatsby-remark-copy-linked-files": "^3.0.0",
     "gatsby-remark-emojis": "^0.4.3",
     "gatsby-remark-smartypants": "^3.0.0",
-    "gatsby-remark-table-of-contents": "^2.0.0",
     "gatsby-remark-vscode": "^3.3.1",
     "gatsby-source-filesystem": "^3.0.0",
     "gatsby-transformer-csv": "^3.5.0",

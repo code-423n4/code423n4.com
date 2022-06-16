@@ -7,14 +7,6 @@ findings: "https://github.com/code-423n4/2022-02-badger-citadel-findings/issues"
 contest: 84
 ---
 
-# Table of Content
-```toc
-exclude: Table of Contents
-tight: true
-ordered: false
-from-heading: 1
-to-heading: 2
-```
 
 # Overview
 

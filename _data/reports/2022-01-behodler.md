@@ -7,14 +7,6 @@ findings: "https://github.com/code-423n4/2022-01-behodler-findings/issues"
 contest: 78
 ---
 
-# Table of Content
-```toc
-exclude: Table of Contents
-tight: true
-ordered: false
-from-heading: 1
-to-heading: 2
-```
 
 # Overview
 

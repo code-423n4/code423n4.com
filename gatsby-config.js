@@ -62,13 +62,13 @@ module.exports = {
       options: {
         plugins: [
           `gatsby-remark-autolink-headers`,
-          {
-            resolve: `gatsby-remark-table-of-contents`,
-            options: {
-              fromHeading: 1,
-              toHeading: 2,
-            },
-          },
+          // {
+          //   resolve: `gatsby-remark-table-of-contents`,
+          //   options: {
+          //     fromHeading: 1,
+          //     toHeading: 2,
+          //   },
+          // },
           `gatsby-remark-copy-linked-files`,
           `gatsby-remark-smartypants`,
           {
