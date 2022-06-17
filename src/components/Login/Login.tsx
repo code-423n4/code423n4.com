@@ -23,7 +23,10 @@ const Login = ({ displayAsButtons = false }) => {
     const id = toast.loading("Logging in...", { autoClose: 4000 });
 
     try {
-      const user = await authenticate({ provider });
+      const user = await authenticate({
+        provider,
+        signingMessage: "Code4rena login",
+      });
       if (user === undefined) {
         // user clicked "cancel" when prompted to sign message
         // @todo: update messaging
