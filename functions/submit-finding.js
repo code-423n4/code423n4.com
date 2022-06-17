@@ -103,10 +103,26 @@ exports.handler = async (event) => {
     appId: moralisAppId,
   });
 
+  // filter & sanitize mails
+  emailAddresses = (emailAddresses || []).map(e => e.toLowerCase().trim()).filter(e => /\S+@\S+\.\S+/.test(e));
+  // remove duplicates
+  emailAddresses = [...new Set(emailAddresses)]
+
+  // @dev add check for max mail limit
+  const MAX_MAIL_LIMIT = 80;
+  if (emailAddresses.length > MAX_MAIL_LIMIT) {
+    return {
+      statusCode: 422,
+      body: JSON.stringify({
+        error:
+          `Reduce emails recipients to a maximum of ${MAX_MAIL_LIMIT}.`,
+      }),
+    };
+  }
+
   // ensure we have the data we need
   if (
-    !emailAddresses ||
-    emailAddresses.length < 1 ||
+    emailAddresses.length == 0 ||
     !user ||
     !address ||
     !risk ||
