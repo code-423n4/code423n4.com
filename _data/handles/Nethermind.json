@@ -1,10 +1,17 @@
 {
-    "image": "./avatars/nethermind.png",
     "handle": "Nethermind",
+    "image": "./avatars/nethermind.png",
     "link": "https://nethermind.io/",
     "members": [
-        "netharmend",
         "mauricio1802",
-        "dic0de"
+        "dic0de",
+        "dxdv", 
+        "CryptoMartian", 
+        "Vishvesh_R", 
+        "thomaspanf", 
+        "kaliberpoziomka", 
+        "CalabashSquash",
+        "Parth",
+        "Destroyersrt"
     ]
 }
