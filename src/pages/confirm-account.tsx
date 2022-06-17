@@ -40,12 +40,21 @@ export default function ConfirmAccount() {
   const discordUsernameRegex = new RegExp(/.*#[0-9]{4}/, "g");
 
   useEffect(() => {
+    // when page first loads, redirect to home page if user is not logged in.
+    if (!isInitialized) {
+      return;
+    }
+    if (!isAuthenticated || !user) {
+      navigate("/");
+    }
+  }, [isInitialized]);
+
+  useEffect(() => {
     if (!isInitialized) {
       return;
     }
     const getUser = async (): Promise<void> => {
       if (!isAuthenticated || !user) {
-        navigate("/");
         return;
       }
 

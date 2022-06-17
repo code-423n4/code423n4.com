@@ -13,6 +13,7 @@ Moralis allows you to create one free server. You can access the server URL and 
 - Add class `AddressesFromPreviousSubmissions` with the fields:
   - `handle: String`
   - `addresses: Array`
+  - `confirmed: Boolean`
 - Optionally add your own data to `AddressesFromPreviousSubmissions`
 
 # Update security settings
