@@ -127,20 +127,13 @@ export default function TeamRegistrationForm({ handles, wardens, className }) {
         handles.has(state.teamName) ||
         !teamMembers.find((member) => member.value === currentUser.username) ||
         // @todo: better validation for polygon address
-        state.polygonAddress.length !== 42
+        state.polygonAddress.length !== 42 ||
+        isDangerousTeamName(state.teamName)
       ) {
         setHasValidationErrors(true);
         return;
       }
 
-      if (isDangerousTeamName(state.teamName)) {
-        setHasValidationErrors(true);
-        setStatus(FormStatus.Error);
-        updateErrorMessage(
-          "Team name can only contain alphanumeric characters, underscores, and hyphens"
-        );
-        return;
-      }
       setHasValidationErrors(false);
       setStatus(FormStatus.Submitting);
 
@@ -213,7 +206,9 @@ export default function TeamRegistrationForm({ handles, wardens, className }) {
                   widgetStyles.Control,
                   widgetStyles.Text,
                   hasValidationErrors &&
-                    (!state.teamName || handles.has(state.teamName)) &&
+                    (!state.teamName ||
+                      isDangerousTeamName(state.teamName) ||
+                      handles.has(state.teamName)) &&
                     "input-error"
                 )}
                 style={{ marginBottom: 0 }}
@@ -235,6 +230,15 @@ export default function TeamRegistrationForm({ handles, wardens, className }) {
                   <small>This field is required</small>
                 </p>
               )}
+              {hasValidationErrors &&
+                state.teamName &&
+                isDangerousTeamName(state.teamName) && (
+                  <p className={widgetStyles.ErrorMessage}>
+                    <small>
+                      Supports alphanumeric characters, underscores, and hyphens
+                    </small>
+                  </p>
+                )}
             </div>
             <div className={widgetStyles.Container}>
               <label className={widgetStyles.Label}>Members *</label>

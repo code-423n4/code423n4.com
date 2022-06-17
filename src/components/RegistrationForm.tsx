@@ -152,19 +152,11 @@ export default function RegistrationForm({ handles, wardens, className }) {
           !state.username ||
           !state.discordUsername ||
           !isValidDiscord ||
+          isDangerousHandle(state.username) ||
           (isNewUser && !state.qualifications) ||
           (isNewUser && handles.has(state.username))
         ) {
           setHasValidationErrors(true);
-          return;
-        }
-
-        if (isDangerousHandle(state.username)) {
-          setHasValidationErrors(true);
-          setStatus(FormStatus.Error);
-          updateErrorMessage(
-            "Handle can only contain alphanumeric characters, underscores, and hyphens"
-          );
           return;
         }
 
@@ -349,6 +341,7 @@ export default function RegistrationForm({ handles, wardens, className }) {
                   widgetStyles.Text,
                   hasValidationErrors &&
                     (!state.username ||
+                      isDangerousHandle(state.username) ||
                       (isNewUser && handles.has(state.username))) &&
                     "input-error"
                 )}
@@ -370,6 +363,15 @@ export default function RegistrationForm({ handles, wardens, className }) {
                   <small>This field is required</small>
                 </p>
               )}
+              {hasValidationErrors &&
+                state.username &&
+                isDangerousHandle(state.username) && (
+                  <p className={widgetStyles.ErrorMessage}>
+                    <small>
+                      Supports alphanumeric characters, underscores, and hyphens
+                    </small>
+                  </p>
+                )}
             </div>
           ) : (
             <div className={widgetStyles.Container}>
