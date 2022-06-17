@@ -137,7 +137,7 @@ export default function ConfirmAccount() {
   };
 
   return (
-    <DefaultLayout>
+    <DefaultLayout hideConnectWalletDropdown={true}>
       {status === FormStatus.Loading || isInitializing ? (
         // @todo: style a loading state
         <div>LOADING...</div>
@@ -178,6 +178,7 @@ export default function ConfirmAccount() {
                   </fieldset>
                 </>
               )}
+              <p>Polygon Address: {user.attributes.ethAddress}</p>
               <div className={widgetStyles.Container}>
                 <label htmlFor="discordUsername" className={widgetStyles.Label}>
                   Discord Username *

@@ -33,7 +33,7 @@ const Hamburger = ({ mobileNavOpen, setMobileNavOpen }) => {
   );
 };
 
-const Header = () => {
+const Header = ({ hideConnectWalletDropdown = false }) => {
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const { currentUser } = useUser();
 
@@ -57,7 +57,8 @@ const Header = () => {
           <Link to="/cosmos">Cosmos</Link>
           <a href="https://docs.code4rena.com">Docs</a>
           <Link to="/help">Help</Link>
-          {currentUser.isLoggedIn ? <UserDropdown /> : <Login />}
+          {!hideConnectWalletDropdown &&
+            (currentUser.isLoggedIn ? <UserDropdown /> : <Login />)}
         </div>
       </nav>
       <span id="skip-link"></span>

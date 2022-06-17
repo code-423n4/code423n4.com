@@ -14,6 +14,7 @@ const DefaultLayout = (props) => {
     children,
     url,
     preview,
+    hideConnectWalletDropdown = false,
   } = props;
   return (
     <>
@@ -80,7 +81,7 @@ const DefaultLayout = (props) => {
         </title>
         <body className={bodyClass} />
       </Helmet>
-      <Header />
+      <Header hideConnectWalletDropdown={hideConnectWalletDropdown} />
       <ToastContainer />
       <Modal />
       <main>

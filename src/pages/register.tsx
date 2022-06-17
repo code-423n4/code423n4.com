@@ -40,7 +40,10 @@ export default function UserRegistration({ data }) {
   }, [data, isInitialized]);
 
   return (
-    <DefaultLayout pageTitle="Registration | Code 423n4">
+    <DefaultLayout
+      pageTitle="Registration | Code 423n4"
+      hideConnectWalletDropdown={true}
+    >
       <div className="wrapper-main">
         <h1 className="page-header">Warden Application</h1>
         <div>
