@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import { graphql } from "gatsby";
-import React, { useState, ReactNode } from "react";
+import React from "react";
 
 import DefaultLayout from "../templates/DefaultLayout";
 import TeamRegistrationForm from "../components/TeamRegistrationForm";

@@ -114,6 +114,7 @@ export default function TeamRegistrationForm({ handles, wardens, className }) {
     setErrorMessage("");
     setStatus(FormStatus.Unsubmitted);
   };
+
   const submitRegistration = useCallback((): void => {
     const url = `/.netlify/functions/register-team`;
     if (!currentUser.isLoggedIn) {
