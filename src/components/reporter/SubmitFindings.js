@@ -279,7 +279,8 @@ const SubmitFindings = ({ wardensList, sponsor, contest, repo, title }) => {
       return field === "" || field === undefined;
     });
 
-    if (!polygonAddress) {
+    // @todo: better validation for polygon address
+    if (!polygonAddress || polygonAddress.length !== 42) {
       hasErrors = true;
     }
 
@@ -395,20 +396,35 @@ const SubmitFindings = ({ wardensList, sponsor, contest, repo, title }) => {
                     {!team.address && attributedTo === team.username && (
                       <div>
                         <label htmlFor={"newTeamAddress"}>
-                          Team Polygon Address
+                          Team Polygon Address *
                         </label>
                         <input
                           className={clsx(
                             widgetStyles.Control,
-                            widgetStyles.Text
+                            widgetStyles.Text,
+                            (!newTeamAddress || newTeamAddress.length !== 42) &&
+                              hasValidationErrors &&
+                              "input-error"
                           )}
                           type="text"
                           id={"newTeamAddress"}
                           placeholder="0x00000..."
                           value={newTeamAddress}
                           onChange={handleNewAddressChange}
-                          maxLength={64}
+                          maxLength={42}
                         />
+                        {!newTeamAddress && hasValidationErrors && (
+                          <p className={widgetStyles.ErrorMessage}>
+                            <small>This field is required</small>
+                          </p>
+                        )}
+                        {newTeamAddress.length !== 42 && hasValidationErrors && (
+                          <p className={widgetStyles.ErrorMessage}>
+                            <small>
+                              Polygon address must be 42 characters long
+                            </small>
+                          </p>
+                        )}
                       </div>
                     )}
                   </label>

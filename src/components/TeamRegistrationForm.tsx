@@ -103,7 +103,9 @@ export default function TeamRegistrationForm({
         !state.teamName ||
         teamMembers.length < 2 ||
         handles.has(state.teamName) ||
-        !teamMembers.find((member) => member.value === currentUser.username)
+        !teamMembers.find((member) => member.value === currentUser.username) ||
+        // @todo: better validation for polygon address
+        state.polygonAddress.length !== 42
       ) {
         setHasValidationErrors(true);
         return;
@@ -237,7 +239,9 @@ export default function TeamRegistrationForm({
           className={clsx(
             widgetStyles.Control,
             widgetStyles.Text,
-            hasValidationErrors && !state.polygonAddress && "input-error"
+            hasValidationErrors &&
+              (!state.polygonAddress || state.polygonAddress.length !== 42) &&
+              "input-error"
           )}
           type="text"
           id="polygonAddress"
@@ -249,6 +253,11 @@ export default function TeamRegistrationForm({
         {hasValidationErrors && !state.polygonAddress && (
           <p className={widgetStyles.ErrorMessage}>
             <small>This field is required</small>
+          </p>
+        )}
+        {hasValidationErrors && state.polygonAddress.length !== 42 && (
+          <p className={widgetStyles.ErrorMessage}>
+            <small>Polygon address must be 42 characters long</small>
           </p>
         )}
       </div>
