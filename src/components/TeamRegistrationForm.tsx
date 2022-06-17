@@ -199,7 +199,7 @@ export default function TeamRegistrationForm({ handles, wardens, className }) {
               <p className={widgetStyles.Help}>
                 Used to report findings, as well as display your total award
                 amount on the leaderboard. Supports alphanumeric characters,
-                underscores, and hyphens.
+                underscores, and hyphens. Maximum 25 characters.
               </p>
               <input
                 className={clsx(
