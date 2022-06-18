@@ -53,6 +53,7 @@ export default function TeamRegistrationForm({ handles, wardens, className }) {
     { value: string; image: string }[]
   >([wardens.find((warden) => warden.value === currentUser.username)]);
   const avatarInputRef = useRef<HTMLInputElement>();
+  const [isDangerousTeamName, setisDangerousTeamName] = useState(false);
 
   const handleChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -60,8 +61,11 @@ export default function TeamRegistrationForm({ handles, wardens, className }) {
       setState((prevState) => {
         return { ...prevState, [name]: value };
       });
+      if (name === "teamName") {
+        setisDangerousTeamName(value.match(/^[0-9a-zA-Z_\-]+$/) === null);
+      }
     },
-    []
+    [state]
   );
 
   const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -106,10 +110,6 @@ export default function TeamRegistrationForm({ handles, wardens, className }) {
     }
   };
 
-  const isDangerousTeamName = (s) => {
-    return s.match(/^[0-9a-zA-Z_\-]+$/) === null;
-  };
-
   const resetForm = (): void => {
     setErrorMessage("");
     setStatus(FormStatus.Unsubmitted);
@@ -129,7 +129,7 @@ export default function TeamRegistrationForm({ handles, wardens, className }) {
         !teamMembers.find((member) => member.value === currentUser.username) ||
         // @todo: better validation for polygon address
         state.polygonAddress.length !== 42 ||
-        isDangerousTeamName(state.teamName)
+        isDangerousTeamName
       ) {
         setHasValidationErrors(true);
         return;
@@ -208,7 +208,7 @@ export default function TeamRegistrationForm({ handles, wardens, className }) {
                   widgetStyles.Text,
                   hasValidationErrors &&
                     (!state.teamName ||
-                      isDangerousTeamName(state.teamName) ||
+                      isDangerousTeamName ||
                       handles.has(state.teamName)) &&
                     "input-error"
                 )}
@@ -231,15 +231,13 @@ export default function TeamRegistrationForm({ handles, wardens, className }) {
                   <small>This field is required</small>
                 </p>
               )}
-              {hasValidationErrors &&
-                state.teamName &&
-                isDangerousTeamName(state.teamName) && (
-                  <p className={widgetStyles.ErrorMessage}>
-                    <small>
-                      Supports alphanumeric characters, underscores, and hyphens
-                    </small>
-                  </p>
-                )}
+              {hasValidationErrors && state.teamName && isDangerousTeamName && (
+                <p className={widgetStyles.ErrorMessage}>
+                  <small>
+                    Supports alphanumeric characters, underscores, and hyphens
+                  </small>
+                </p>
+              )}
             </div>
             <div className={widgetStyles.Container}>
               <label className={widgetStyles.Label}>Members *</label>

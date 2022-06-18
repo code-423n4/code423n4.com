@@ -65,6 +65,7 @@ export default function RegistrationForm({ handles, wardens, className }) {
   const [isValidDiscord, setIsValidDiscord] = useState(true);
   const [status, setStatus] = useState<FormStatus>(FormStatus.Unsubmitted);
   const [errorMessage, setErrorMessage] = useState<string | ReactNode>("");
+  const [isDangerousUsername, setisDangerousUsername] = useState(false);
 
   // global variables
   const avatarInputRef = useRef<HTMLInputElement>();
@@ -107,10 +108,6 @@ export default function RegistrationForm({ handles, wardens, className }) {
     setStatus(FormStatus.Unsubmitted);
   };
 
-  const isDangerousHandle = (s) => {
-    return s.match(/^[0-9a-zA-Z_\-]+$/) === null;
-  };
-
   const handleChange = useCallback((e) => {
     const { name, value } = e.target;
     setState((prevState) => {
@@ -118,6 +115,9 @@ export default function RegistrationForm({ handles, wardens, className }) {
     });
     if (name === "discordUsername") {
       setIsValidDiscord(discordUsernameRegex.test(value));
+    }
+    if (name === "username" ) {
+      setisDangerousUsername(value.match(/^[0-9a-zA-Z_\-]+$/) === null);
     }
   }, []);
 
@@ -152,7 +152,7 @@ export default function RegistrationForm({ handles, wardens, className }) {
           !state.username ||
           !state.discordUsername ||
           !isValidDiscord ||
-          isDangerousHandle(state.username) ||
+          isDangerousUsername ||
           (isNewUser && !state.qualifications) ||
           (isNewUser && handles.has(state.username))
         ) {
@@ -341,7 +341,7 @@ export default function RegistrationForm({ handles, wardens, className }) {
                   widgetStyles.Text,
                   hasValidationErrors &&
                     (!state.username ||
-                      isDangerousHandle(state.username) ||
+                      isDangerousUsername ||
                       (isNewUser && handles.has(state.username))) &&
                     "input-error"
                 )}
@@ -363,9 +363,8 @@ export default function RegistrationForm({ handles, wardens, className }) {
                   <small>This field is required</small>
                 </p>
               )}
-              {hasValidationErrors &&
-                state.username &&
-                isDangerousHandle(state.username) && (
+              {hasValidationErrors ||
+                isDangerousUsername && (
                   <p className={widgetStyles.ErrorMessage}>
                     <small>
                       Supports alphanumeric characters, underscores, and hyphens
@@ -426,7 +425,7 @@ export default function RegistrationForm({ handles, wardens, className }) {
                 <small>This field is required</small>
               </p>
             )}
-            {hasValidationErrors && !isValidDiscord && (
+            {hasValidationErrors || !isValidDiscord && (
               <p className={widgetStyles.ErrorMessage}>
                 <small>
                   Make sure you enter your discord username, and not your server
