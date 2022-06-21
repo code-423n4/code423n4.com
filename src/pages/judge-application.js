@@ -135,7 +135,6 @@ const JudgeApplication = () => {
       body: JSON.stringify(data),
     });
     if (response.ok) {
-      console.log("success");
       setStatus(FormStatus.Submitted);
     } else {
       const { error } = await response.json();
