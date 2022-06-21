@@ -89,19 +89,6 @@ label {
   border-bottom: 2px solid var(--border-lightest-background);
 }
 
-.primary-input-group {
-  background: var(--header-background-purple);
-  margin: 20px -40px;
-  padding: 30px 45px;
-  border: none;
-  border-top: 2px solid var(--border-lightest-background);
-  border-bottom: 2px solid var(--border-lightest-background);
-}
-
-.primary-input-group p {
-  font-size: 13px;
-}
-
 .input-and-close-button {
   display: flex;
   padding: 0;

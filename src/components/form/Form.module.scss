@@ -97,3 +97,16 @@
   margin-right: 10px;
   height: 20px;
 }
+
+.PrimaryInputGroup {
+  background: var(--header-background-purple);
+  margin: 20px -40px;
+  padding: 30px 45px;
+  border: none;
+  border-top: 2px solid var(--border-lightest-background);
+  border-bottom: 2px solid var(--border-lightest-background);
+}
+
+.PrimaryInputGroup p {
+  font-size: 13px;
+}
