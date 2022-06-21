@@ -38,6 +38,15 @@
   border-bottom: 1px solid var(--main-purple);
 }
 
+.RegisterTeamAction {
+  text-transform:capitalize;
+  margin: 10px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid var(--main-purple);
+  text-align: left;
+  font-weight: 300;
+}
+
 .Avatar {
   display: flex;
   flex-direction: row;
