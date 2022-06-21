@@ -7,17 +7,17 @@ assignees: ''
 
 ---
 
-### Problem / opportunity:
+## Problem / opportunity:
 A clear and concise description of what the problem or opportunity is.
 
-### Desired outcome
+## Desired outcome
 A clear and concise description of what this feature would bring to C4.
 
-### Solution
+## Solution
 A clear and concise description of what you want to happen.
 
-### Alternative
+## Alternative
 If applicable
 
-**Additional context**
+## Additional context
 Add any other context or screenshots about the feature request here.
