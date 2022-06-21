@@ -36,6 +36,16 @@ exports.handler = async (event) => {
       };
     }
 
+    if (teamName.length > 25) {
+      return {
+        statusCode: 400,
+        body: JSON.stringify({
+          error:
+            "Team name's length is limited to 25 characters.",
+        }),
+      };
+    }
+
     if (!address) {
       return {
         statusCode: 422,
