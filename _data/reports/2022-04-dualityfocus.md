@@ -83,23 +83,24 @@ The implementation of `CToken` in Duality introduced an `_acceptAdmin` function,
 ### Proof of Concept
 
 `_acceptAdmin` requires `msg.sender` to equal `pendingAdmin`, however, since `pendingAdmin` can never be set, it will always be `address(0)`, making this function unusable.
-
-        function _acceptAdmin() external returns (uint256) {
-            // Check caller is pendingAdmin and pendingAdmin ≠ address(0)
-            if (msg.sender != pendingAdmin || msg.sender == address(0)) {
-                return fail(Error.UNAUTHORIZED, FailureInfo.ACCEPT_ADMIN_PENDING_ADMIN_CHECK);
-            }
-            // Save current values for inclusion in log
-            address oldAdmin = admin;
-            address oldPendingAdmin = pendingAdmin;
-            // Store admin with value pendingAdmin
-            admin = pendingAdmin;
-            // Clear the pending value
-            pendingAdmin = address(0);
-            emit NewAdmin(oldAdmin, admin);
-            emit NewPendingAdmin(oldPendingAdmin, pendingAdmin);
-            return uint256(Error.NO_ERROR);
-        }
+```solidity
+function _acceptAdmin() external returns (uint256) {
+    // Check caller is pendingAdmin and pendingAdmin ≠ address(0)
+    if (msg.sender != pendingAdmin || msg.sender == address(0)) {
+        return fail(Error.UNAUTHORIZED, FailureInfo.ACCEPT_ADMIN_PENDING_ADMIN_CHECK);
+    }
+    // Save current values for inclusion in log
+    address oldAdmin = admin;
+    address oldPendingAdmin = pendingAdmin;
+    // Store admin with value pendingAdmin
+    admin = pendingAdmin;
+    // Clear the pending value
+    pendingAdmin = address(0);
+    emit NewAdmin(oldAdmin, admin);
+    emit NewPendingAdmin(oldPendingAdmin, pendingAdmin);
+    return uint256(Error.NO_ERROR);
+}
+```
 
 ### Tools Used
 
@@ -108,16 +109,17 @@ vim, ganache-cli
 ### Recommended Mitigation Steps
 
 Add a `proposePendingAdmin` function where the current admin can propose successors.
-
-        function _proposePendingAdmin(address newPendingAdmin) external {
-            if (msg.sender != admin) {
-                return fail(Error.UNAUTHORIZED, FailureInfo.PROPOSE_PENDING_ADMIN_CHECK);
-            }
-            address oldPendingAdmin = pendingAdmin;
-            pendingAdmin = newPendingAdmin;
-            emit NewPendingAdmin(oldPendingAdmin, newPendingAdmin);
-            return uint256(Error.NO_ERROR)
-        }
+```solidity
+function _proposePendingAdmin(address newPendingAdmin) external {
+    if (msg.sender != admin) {
+        return fail(Error.UNAUTHORIZED, FailureInfo.PROPOSE_PENDING_ADMIN_CHECK);
+    }
+    address oldPendingAdmin = pendingAdmin;
+    pendingAdmin = newPendingAdmin;
+    emit NewPendingAdmin(oldPendingAdmin, newPendingAdmin);
+    return uint256(Error.NO_ERROR)
+}
+```
 
 **[0xdramaone (Duality Focus) confirmed and commented](https://github.com/code-423n4/2022-04-dualityfocus-findings/issues/29#issuecomment-1094739902):**
  > Acknowledged, we were aware this matches the behavior of actual compound when deployed with CErc20Immutable. We originally thought we would stick with this functionality, but have now opted for enabling admin transitions. 
@@ -137,56 +139,59 @@ _Submitted by rayn_
 ### Proof of Concept
 
 `_setUniV3LpVault` allows changing of `uniV3LpVault`.
-
-        function _setUniV3LpVault(IUniV3LpVault newVault) public returns (uint256) {
-            ...
-            uniV3LpVault = newVault;
-            ...
-        }
+```solidity
+function _setUniV3LpVault(IUniV3LpVault newVault) public returns (uint256) {
+    ...
+    uniV3LpVault = newVault;
+    ...
+}
+```
 
 However, functions such as `UniV3LpVault.withdrawToken` require `Comptroller` to estimate NFT collateral value. This estimation can only be done when the address of `UniV3LpVault` matches `Comptroller.uniV3LpVault` as shown in `addNFTCollateral` below.
 
-    contract UniV3LpVault is IUniV3LpVault {
-        ...
-        function withdrawToken(...) external override nonReentrant(false) avoidsShortfall {
-            ...
-        }
-
-        modifier avoidsShortfall() {
-            _;
-            (, , uint256 shortfall) = comptroller.getAccountLiquidity(msg.sender);
-            require(shortfall == 0, "insufficient liquidity");
-        }
+```solidity
+contract UniV3LpVault is IUniV3LpVault {
+    ...
+    function withdrawToken(...) external override nonReentrant(false) avoidsShortfall {
         ...
     }
 
-    contract Comptroller is ComptrollerV3Storage, ComptrollerInterface, ComptrollerErrorReporter, Exponential {
+    modifier avoidsShortfall() {
+        _;
+        (, , uint256 shortfall) = comptroller.getAccountLiquidity(msg.sender);
+        require(shortfall == 0, "insufficient liquidity");
+    }
+    ...
+}
+
+contract Comptroller is ComptrollerV3Storage, ComptrollerInterface, ComptrollerErrorReporter, Exponential {
+    ...
+    function getAccountLiquidity(address account) public view returns (...) {
+        (Error err, uint256 liquidity, uint256 shortfall) = getHypotheticalAccountLiquidityInternal(...);
         ...
-        function getAccountLiquidity(address account) public view returns (...) {
-            (Error err, uint256 liquidity, uint256 shortfall) = getHypotheticalAccountLiquidityInternal(...);
-            ...
-        }
+    }
 
-        function getHypotheticalAccountLiquidityInternal(...) internal view returns (...) {
-            ...
-            addNFTCollateral(account, vars);
-            ...
-        }
+    function getHypotheticalAccountLiquidityInternal(...) internal view returns (...) {
+        ...
+        addNFTCollateral(account, vars);
+        ...
+    }
 
-        function addNFTCollateral(address account, AccountLiquidityLocalVars memory vars) internal view {
-            uint256 userTokensLength = uniV3LpVault.getUserTokensLength(account);
-            for (uint256 i = 0; i < userTokensLength; i++) {
+    function addNFTCollateral(address account, AccountLiquidityLocalVars memory vars) internal view {
+        uint256 userTokensLength = uniV3LpVault.getUserTokensLength(account);
+        for (uint256 i = 0; i < userTokensLength; i++) {
+            ...
+            {
                 ...
-                {
-                    ...
-                    address poolAddress = uniV3LpVault.getPoolAddress(tokenId);
-                    ...
-                }
+                address poolAddress = uniV3LpVault.getPoolAddress(tokenId);
                 ...
             }
             ...
         }
+        ...
     }
+}
+```
 
 The mutual reliance causes NFT tokens to become stuck. In some cases users can solve this issue by depositing more collateral to cover the shortcoming caused by "disappearing NFTs". In other cases such as liquidation, the functionality becomes downright broken and unuseable..
 
@@ -225,19 +230,19 @@ The code as currently implemented does not handle these sorts of tokens properly
 1.  File: contracts/vault_and_oracles/FlashLoan.sol (line [48](https://github.com/code-423n4/2022-04-dualityfocus/blob/f21ef7708c9335ee1996142e2581cb8714a525c9/contracts/vault_and_oracles/FlashLoan.sol#L48))
 
 ```solidity
-        IERC20(assets[0]).approve(address(LP_VAULT), amounts[0]);
+IERC20(assets[0]).approve(address(LP_VAULT), amounts[0]);
 ```
 
 2.  File: contracts/vault_and_oracles/FlashLoan.sol (line [58](https://github.com/code-423n4/2022-04-dualityfocus/blob/f21ef7708c9335ee1996142e2581cb8714a525c9/contracts/vault_and_oracles/FlashLoan.sol#L58))
 
 ```solidity
-        IERC20(assets[0]).approve(address(LENDING_POOL), amountOwing);
+IERC20(assets[0]).approve(address(LENDING_POOL), amountOwing);
 ```
 
 3.  File: contracts/vault_and_oracles/UniV3LpVault.sol (line [418](https://github.com/code-423n4/2022-04-dualityfocus/blob/f21ef7708c9335ee1996142e2581cb8714a525c9/contracts/vault_and_oracles/UniV3LpVault.sol#L418))
 
 ```solidity
-            IERC20Detailed(params.asset).approve(msg.sender, owedBack);
+IERC20Detailed(params.asset).approve(msg.sender, owedBack);
 ```
 
 There are other calls to `approve()`, but they correctly set the approval to zero after the transfer is done, so that the next approval can go through.
@@ -322,52 +327,54 @@ Noticeably, while gaining arbitrary contract calls sounds dangerous, it does not
 
 In the case of duality, the two locations where arbitrary `swapPath` can be provided is in `flashFocusCall` and `repayDebt`, both in which holds a local lock over `UniV3LpVault`. No global are applied to `Comptroller` or `Ctokens` while performing swaps.
 
-        function flashFocusCall(FlashFocusParams calldata params) external override {
-            ...
-            {
-                ...
-                if (!tokenOfPool && params.swapPath.length > 0) amountIn0 = _swap(params.swapPath, params.amount);
-                ...
-            }
-            ...
-        }
+```solidity
+function flashFocusCall(FlashFocusParams calldata params) external override {
+    ...
+    {
+        ...
+        if (!tokenOfPool && params.swapPath.length > 0) amountIn0 = _swap(params.swapPath, params.amount);
+        ...
+    }
+    ...
+}
 
-        function flashFocus(FlashFocusParams calldata params)
-            external
-            override
-            nonReentrant(true)
-            isAuthorizedForToken(params.tokenId)
-            avoidsShortfall
-        {
-            ...
-            flashLoan.LENDING_POOL().flashLoan(
-                receiverAddress,
-                assets,
-                amounts,
-                modes,
-                onBehalfOf,
-                newParams,
-                referralCode
-            );
-        }
+function flashFocus(FlashFocusParams calldata params)
+    external
+    override
+    nonReentrant(true)
+    isAuthorizedForToken(params.tokenId)
+    avoidsShortfall
+{
+    ...
+    flashLoan.LENDING_POOL().flashLoan(
+        receiverAddress,
+        assets,
+        amounts,
+        modes,
+        onBehalfOf,
+        newParams,
+        referralCode
+    );
+}
 
-        function repayDebt(RepayDebtParams calldata params)
-            external
-            override
-            nonReentrant(true)
-            isAuthorizedForToken(params.tokenId)
-            avoidsShortfall
-            returns (uint256 amountReturned)
-        {
-            ...
-            {
-                ...
-                if (amountOutFrom0 == 0 && params.swapPath0.length > 0) amountOutFrom0 = _swap(params.swapPath0, amount0);
-                if (amountOutFrom1 == 0 && params.swapPath1.length > 0) amountOutFrom1 = _swap(params.swapPath1, amount1);
-                ...
-            }
-            ...
-        }
+function repayDebt(RepayDebtParams calldata params)
+    external
+    override
+    nonReentrant(true)
+    isAuthorizedForToken(params.tokenId)
+    avoidsShortfall
+    returns (uint256 amountReturned)
+{
+    ...
+    {
+        ...
+        if (amountOutFrom0 == 0 && params.swapPath0.length > 0) amountOutFrom0 = _swap(params.swapPath0, amount0);
+        if (amountOutFrom1 == 0 && params.swapPath1.length > 0) amountOutFrom1 = _swap(params.swapPath1, amount1);
+        ...
+    }
+    ...
+}
+```
 
 The lack of global locks here had us doubting whether an attack is possible. While we spent a considerable amount of time and failed to come up with any possible attack vectors, the complexity of the system held us back from concluding that an attack is impossible.
 

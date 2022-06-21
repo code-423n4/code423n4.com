@@ -28,6 +28,7 @@ Moralis.Cloud.define("findUser", async (req) => {
   const address = req.user.attributes.ethAddress;
   const query = new Moralis.Query("AddressesFromPreviousSubmissions");
   query.equalTo("addresses", address);
+  query.notEqualTo("confirmed", true);
   query.select("handle");
 
   const matchedUsers = await query.find({ useMasterKey: true });
@@ -89,4 +90,20 @@ Moralis.Cloud.define("confirmUser", async (req) => {
   sessionQuery.matchesQuery("user", userQuery);
   const result = await sessionQuery.find({ useMasterKey: true });
   return result.length > 0;
+});
+
+Moralis.Cloud.define("markUserConfirmed", async (req) => {
+  const address = req.user.attributes.ethAddress;
+  const handle = req.params.handle;
+  const query = new Moralis.Query("AddressesFromPreviousSubmissions");
+  query.equalTo("address", address);
+  query.equalTo("handle", handle);
+
+  const user = await query.find({ useMasterKey: true });
+  if (!user) {
+    throw "Handle and address do not match";
+  }
+
+  user.set("confirmed", true);
+  user.save(null, { useMasterKey: true });
 });

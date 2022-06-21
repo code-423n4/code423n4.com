@@ -65,6 +65,7 @@ export default function RegistrationForm({ handles, wardens, className }) {
   const [isValidDiscord, setIsValidDiscord] = useState(true);
   const [status, setStatus] = useState<FormStatus>(FormStatus.Unsubmitted);
   const [errorMessage, setErrorMessage] = useState<string | ReactNode>("");
+  const [isDangerousUsername, setisDangerousUsername] = useState(false);
 
   // global variables
   const avatarInputRef = useRef<HTMLInputElement>();
@@ -115,6 +116,9 @@ export default function RegistrationForm({ handles, wardens, className }) {
     if (name === "discordUsername") {
       setIsValidDiscord(discordUsernameRegex.test(value));
     }
+    if (name === "username" ) {
+      setisDangerousUsername(value.match(/^[0-9a-zA-Z_\-]+$/) === null);
+    }
   }, []);
 
   const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -148,13 +152,14 @@ export default function RegistrationForm({ handles, wardens, className }) {
           !state.username ||
           !state.discordUsername ||
           !isValidDiscord ||
+          isDangerousUsername ||
           (isNewUser && !state.qualifications) ||
           (isNewUser && handles.has(state.username))
         ) {
           setHasValidationErrors(true);
           return;
         }
-        // @todo: validate discord handle
+
         setHasValidationErrors(false);
         setStatus(FormStatus.Submitting);
 
@@ -163,7 +168,10 @@ export default function RegistrationForm({ handles, wardens, className }) {
           if (state.avatar) {
             image = await getFileAsBase64(state.avatar);
           }
-          const user = await authenticate({ provider });
+          const user = await authenticate({
+            provider,
+            signingMessage: "Code4rena registration",
+          });
 
           if (user === undefined) {
             // user clicked "cancel" when prompted to sign message
@@ -333,6 +341,7 @@ export default function RegistrationForm({ handles, wardens, className }) {
                   widgetStyles.Text,
                   hasValidationErrors &&
                     (!state.username ||
+                      isDangerousUsername ||
                       (isNewUser && handles.has(state.username))) &&
                     "input-error"
                 )}
@@ -354,6 +363,14 @@ export default function RegistrationForm({ handles, wardens, className }) {
                   <small>This field is required</small>
                 </p>
               )}
+              {hasValidationErrors ||
+                isDangerousUsername && (
+                  <p className={widgetStyles.ErrorMessage}>
+                    <small>
+                      Supports alphanumeric characters, underscores, and hyphens
+                    </small>
+                  </p>
+                )}
             </div>
           ) : (
             <div className={widgetStyles.Container}>
@@ -408,7 +425,7 @@ export default function RegistrationForm({ handles, wardens, className }) {
                 <small>This field is required</small>
               </p>
             )}
-            {hasValidationErrors && !isValidDiscord && (
+            {hasValidationErrors || !isValidDiscord && (
               <p className={widgetStyles.ErrorMessage}>
                 <small>
                   Make sure you enter your discord username, and not your server

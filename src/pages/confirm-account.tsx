@@ -40,12 +40,21 @@ export default function ConfirmAccount() {
   const discordUsernameRegex = new RegExp(/.*#[0-9]{4}/, "g");
 
   useEffect(() => {
+    // when page first loads, redirect to home page if user is not logged in.
+    if (!isInitialized) {
+      return;
+    }
+    if (!isAuthenticated || !user) {
+      navigate("/");
+    }
+  }, [isInitialized]);
+
+  useEffect(() => {
     if (!isInitialized) {
       return;
     }
     const getUser = async (): Promise<void> => {
       if (!isAuthenticated || !user) {
-        navigate("/");
         return;
       }
 
@@ -137,7 +146,7 @@ export default function ConfirmAccount() {
   };
 
   return (
-    <DefaultLayout>
+    <DefaultLayout hideConnectWalletDropdown={true}>
       {status === FormStatus.Loading || isInitializing ? (
         // @todo: style a loading state
         <div>LOADING...</div>
@@ -178,6 +187,7 @@ export default function ConfirmAccount() {
                   </fieldset>
                 </>
               )}
+              <p>Polygon Address: {user.attributes.ethAddress}</p>
               <div className={widgetStyles.Container}>
                 <label htmlFor="discordUsername" className={widgetStyles.Label}>
                   Discord Username *

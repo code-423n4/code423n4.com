@@ -90,6 +90,7 @@ const plugins = [
             theme: "Dark+ (default dark)",
             languageAliases: {
               solidity: "js",
+              sol: "js",
             },
           },
         },

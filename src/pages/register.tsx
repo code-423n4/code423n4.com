@@ -1,8 +1,10 @@
 import clsx from "clsx";
-import { graphql } from "gatsby";
+import { graphql, navigate } from "gatsby";
 import Moralis from "moralis";
-import { useMoralis } from "react-moralis";
 import React, { useEffect, useState } from "react";
+import { useMoralis } from "react-moralis";
+
+import useUser from "../hooks/UserContext";
 
 import DefaultLayout from "../templates/DefaultLayout";
 import RegistrationForm from "../components/RegistrationForm";
@@ -13,6 +15,13 @@ export default function UserRegistration({ data }) {
   const handles = new Set(data.handles.edges.map((h) => h.node.handle));
   const [wardens, setWardens] = useState([]);
   const { isInitialized } = useMoralis();
+  const { currentUser } = useUser();
+
+  useEffect((): void => {
+    if (currentUser.isLoggedIn) {
+      navigate("/");
+    }
+  }, [currentUser.isLoggedIn]);
 
   useEffect((): void => {
     async function filterWardens(): Promise<void> {
@@ -40,7 +49,10 @@ export default function UserRegistration({ data }) {
   }, [data, isInitialized]);
 
   return (
-    <DefaultLayout pageTitle="Registration | Code 423n4">
+    <DefaultLayout
+      pageTitle="Registration | Code 423n4"
+      hideConnectWalletDropdown={true}
+    >
       <div className="wrapper-main">
         <h1 className="page-header">Warden Application</h1>
         <div>
