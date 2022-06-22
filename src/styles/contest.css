@@ -39,7 +39,6 @@
 
   background-color: var(--secondary-background-purple);
   background-repeat: no-repeat;
-  background-size: cover;
   background-position: 0, -50%;
   border-radius: var(--art-border-radius);
   height: var(--art-height);
@@ -49,6 +48,7 @@
   margin: 0 auto;
   cursor: pointer;
   position: relative;
+  background-size:cover!important; 
 }
 
 .contest-page .contest-artwork:hover {
