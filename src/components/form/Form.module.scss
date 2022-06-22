@@ -98,8 +98,7 @@
   height: 20px;
 }
 
-.PrimaryInputGroup {
-  background: var(--header-background-purple);
+.InputGroup {
   margin: 20px -40px;
   padding: 30px 45px;
   border: none;
@@ -107,6 +106,10 @@
   border-bottom: 2px solid var(--border-lightest-background);
 }
 
-.PrimaryInputGroup p {
+.EmphasizedInputGroup {
+  background: var(--header-background-purple);
+}
+
+.EmphasizedInputGroup p {
   font-size: 13px;
 }

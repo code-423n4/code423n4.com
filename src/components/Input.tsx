@@ -11,12 +11,15 @@ interface InputProps {
   label?: string | ReactNode;
   helpText?: string | ReactNode;
   required?: boolean;
-  value: string | number;
+  value: string;
   canRemove?: boolean;
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleRemoveInputField?: (name: string) => void;
+  // optional button to show on the right of the input
+  button?: string;
+  handleButtonClick?: (value: string) => void;
   // returns an array of error messages
-  validator?: (value: string | number) => (string | ReactNode)[];
+  validator?: (value: string) => (string | ReactNode)[];
 }
 
 export function Input({
@@ -29,6 +32,8 @@ export function Input({
   handleChange,
   handleRemoveInputField = undefined,
   validator,
+  button,
+  handleButtonClick,
 }: InputProps) {
   const [isInvalid, setIsInvalid] = useState(false);
   const [validationErrors, setValidationErrors] = useState([]);
@@ -83,6 +88,16 @@ export function Input({
             aria-label="Remove this field"
           >
             &#x2715;
+          </button>
+        )}
+        {button && handleButtonClick && (
+          <button
+            //className="button button-tiny secondary"
+            className={styles.DeleteButton}
+            type="button"
+            onClick={() => handleButtonClick(value)}
+          >
+            {button}
           </button>
         )}
       </div>

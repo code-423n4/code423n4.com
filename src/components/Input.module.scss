@@ -4,8 +4,8 @@
 }
 
 .DeleteButton {
-  font-family: "Roboto Mono", monospace;
   height: 36px;
+  white-space: nowrap;
   align-self: center;
   background: none;
   border: 2px solid transparent;
@@ -40,6 +40,7 @@
   font-weight: bold;
   font-size: 20px;
   color: white;
+  display: block;
 }
 
 .Help {

@@ -7,6 +7,7 @@ import { useMoralis } from "react-moralis";
 import useUser from "../hooks/UserContext";
 
 import DefaultLayout from "../templates/DefaultLayout";
+import { DynamicInputGroup } from "../components/DynamicInputGroup";
 import { Input } from "../components/Input";
 
 import * as styles from "../components/form/Form.module.scss";
@@ -28,39 +29,63 @@ enum FormStatus {
 
 export default function ConfirmAccount() {
   // hooks
-  const { isInitialized, isInitializing, user } = useMoralis();
+  const { isInitialized, isInitializing, user, Moralis } = useMoralis();
   const { currentUser, reFetchUser } = useUser();
 
   // state
-  const [state, setState] = useState(initialState);
-  const [contactInfoFormStatus, setContactInfoFormStatus] = useState(
+  const [state, setState] = useState<Record<string, string>>(initialState);
+  const [defaultAddress, setDefaultAddress] = useState<string>("");
+  const [addresses, setAddresses] = useState<string[]>([]);
+  const [wardenInfoStatus, setWardenInfoFormStatus] = useState<FormStatus>(
     FormStatus.Unsubmitted
   );
-  const [usernameFormStatus, setUsernameFormStatus] = useState(
+  const [usernameFormStatus, setUsernameFormStatus] = useState<FormStatus>(
     FormStatus.Unsubmitted
   );
 
+  const getUser = async (): Promise<void> => {
+    const {
+      username,
+      discordUsername,
+      gitHubUsername,
+      emailAddress,
+      address,
+    } = currentUser;
+    setState({ username, discordUsername, gitHubUsername, emailAddress });
+    setDefaultAddress(address);
+    let addresses = await user.get("accounts");
+    addresses = addresses.filter(
+      (currentAddress) => currentAddress !== address
+    );
+    setAddresses(addresses);
+  };
+
   useEffect(() => {
-    if (!isInitialized) {
+    if (!isInitialized || !user) {
       return;
     }
-    const getUser = async (): Promise<void> => {
-      const {
-        username,
-        discordUsername,
-        gitHubUsername,
-        emailAddress,
-      } = currentUser;
-      setState({ username, discordUsername, gitHubUsername, emailAddress });
-    };
     getUser();
   }, [currentUser, isInitialized]);
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     setState((prevState) => ({
       ...prevState,
       [e.target.name]: e.target.value,
     }));
+  };
+
+  const handleAddressListChange = (updatedAddressList: string[]): void => {
+    setAddresses(updatedAddressList);
+  };
+
+  const handleDefaultAddressChange = async (
+    newDefaultAddress: string
+  ): Promise<void> => {
+    setDefaultAddress(newDefaultAddress);
+    const additionalAddresses = [...addresses, defaultAddress].filter(
+      (address) => address !== newDefaultAddress
+    );
+    setAddresses(additionalAddresses);
   };
 
   const validateDiscordUsername = (value) => {
@@ -76,6 +101,14 @@ export default function ConfirmAccount() {
     return [];
   };
 
+  const validatePolygonAddress = (value) => {
+    const errors = [];
+    if (value.length !== 42) {
+      errors.push("Polygon address must be 42 characters long");
+    }
+    return errors;
+  };
+
   const validateUsername = (value) => {
     const errors = [];
     if (value.length > 25) {
@@ -89,7 +122,7 @@ export default function ConfirmAccount() {
     return errors;
   };
 
-  const handleSaveContactInfo = async () => {
+  const handleSaveWardenInfo = async () => {
     if (!user) {
       return;
     }
@@ -97,7 +130,8 @@ export default function ConfirmAccount() {
     if (
       !state.discordUsername ||
       !state.gitHubUsername ||
-      !state.emailAddress
+      !state.emailAddress ||
+      !defaultAddress
     ) {
       return;
     }
@@ -109,15 +143,43 @@ export default function ConfirmAccount() {
       return;
     }
 
-    setContactInfoFormStatus(FormStatus.Submitting);
+    const defaultAddressErrors = validatePolygonAddress(defaultAddress);
+    if (defaultAddressErrors.length > 0) {
+      return;
+    }
+
+    setWardenInfoFormStatus(FormStatus.Submitting);
 
     user.set("discordUsername", state.discordUsername);
     user.set("gitHubUsername", state.gitHubUsername);
     user.set("emailAddress", state.emailAddress);
+    // user.set("accounts", [...addresses, defaultAddress]);
+    // user.set("ethAddress", defaultAddress);
+
+    const savedAddresses = await user.get("accounts");
+    const updatedAddresses = [...addresses, defaultAddress].map((address) =>
+      address.toLowerCase()
+    );
+    const deletedAddresses = savedAddresses.filter(
+      (address) => !updatedAddresses.includes(address)
+    );
+    const newAddresses = updatedAddresses.filter(
+      (address) => !savedAddresses.includes(address)
+    );
+    console.log("deleted", deletedAddresses);
+    console.log("new", newAddresses);
+    // newAddresses.forEach(async (address) => {
+    //   await Moralis.link(address);
+    //   console.log("saved");
+    // });
+    await Moralis.link(newAddresses[0]);
+    console.log("saved");
+
     await user.save();
+    console.log("user info saved");
     await reFetchUser();
-    toast.success("Contact information has been updated");
-    setContactInfoFormStatus(FormStatus.Submitted);
+    toast.success("Your information has been updated");
+    setWardenInfoFormStatus(FormStatus.Submitted);
   };
 
   const handleSaveUsername = async () => {
@@ -138,6 +200,10 @@ export default function ConfirmAccount() {
     setUsernameFormStatus(FormStatus.Submitted);
   };
 
+  const resetWardenInfo = (): void => {
+    getUser();
+  };
+
   return (
     <DefaultLayout>
       {isInitializing ? (
@@ -147,7 +213,7 @@ export default function ConfirmAccount() {
         <div className="wrapper-main">
           <h1 className="page-header">Manage Account</h1>
           <form className={clsx(styles.Form)}>
-            <h2 className={styles.Heading2}>Contact Information</h2>
+            <h2 className={styles.Heading2}>Warden Information</h2>
             <Input
               label="Discord Username:"
               handleChange={handleChange}
@@ -170,16 +236,43 @@ export default function ConfirmAccount() {
               name="emailAddress"
               required={true}
             />
-            <button
-              type="button"
-              className="button cta-button centered"
-              onClick={handleSaveContactInfo}
+            <DynamicInputGroup
+              validator={validatePolygonAddress}
+              onChange={handleAddressListChange}
+              fieldName="polygon address"
+              fields={addresses}
+              button="Make default"
+              handleButtonClick={handleDefaultAddressChange}
             >
-              {contactInfoFormStatus === FormStatus.Submitting
-                ? "Saving..."
-                : "Save contact information"}
-            </button>
-            <fieldset className={styles.PrimaryInputGroup}>
+              <span className={inputStyles.Label}>
+                Default Polygon Address:
+              </span>
+              <p>{defaultAddress}</p>
+              <span className={inputStyles.Label}>Additional Addresses:</span>
+            </DynamicInputGroup>
+            <div className={styles.ButtonsWrapper}>
+              <button
+                type="button"
+                className="button cta-button secondary"
+                onClick={resetWardenInfo}
+                disabled={wardenInfoStatus === FormStatus.Submitting}
+              >
+                Clear Changes
+              </button>
+              <button
+                type="button"
+                className="button cta-button"
+                onClick={handleSaveWardenInfo}
+                disabled={wardenInfoStatus === FormStatus.Submitting}
+              >
+                {wardenInfoStatus === FormStatus.Submitting
+                  ? "Saving..."
+                  : "Save Changes"}
+              </button>
+            </div>
+            <fieldset
+              className={clsx(styles.EmphasizedInputGroup, styles.InputGroup)}
+            >
               <h2 className={styles.Heading2}>Danger Zone</h2>
               <Input
                 label="Code4rena Username:"
