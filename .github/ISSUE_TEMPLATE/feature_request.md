@@ -17,7 +17,7 @@ A clear and concise description of what this feature would bring to C4.
 A clear and concise description of what you want to happen.
 
 ## Alternative
-If applicable
+If applicable.
 
 ## Additional context
 Add any other context or screenshots about the feature request here.
