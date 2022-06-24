@@ -6,6 +6,7 @@ const Mailgun = require("mailgun.js");
 const { Moralis } = require("moralis/node");
 const { Octokit } = require("@octokit/core");
 const sharp = require("sharp");
+const { verify } = require("hcaptcha");
 
 const {
   token,
@@ -62,7 +63,6 @@ exports.handler = async (event) => {
       };
     }
 
-    const owner = process.env.GITHUB_REPO_OWNER;
     const data = JSON.parse(event.body);
     const {
       handle,
@@ -133,6 +133,25 @@ exports.handler = async (event) => {
           error:
             "Handle can only use alphanumeric characters [a-zA-Z0-9], underscores (_), and hyphens (-).",
         }),
+      };
+    }
+
+    const { authorization } = event.headers;
+    if (!authorization) {
+      return {
+        statusCode: 401,
+        body: JSON.stringify({ error: "Authorization failed" }),
+      };
+    }
+
+    const { success } = await verify(
+      process.env.HCAPTCHA_SECRET,
+      authorization
+    );
+    if (!success) {
+      return {
+        statusCode: 401,
+        body: JSON.stringify({ error: "Authorization failed" }),
       };
     }
 
@@ -221,6 +240,7 @@ exports.handler = async (event) => {
       };
     }
 
+    const owner = process.env.GITHUB_REPO_OWNER;
     // @todo: delete this once all existing users have completed registration
     if (isUpdate) {
       try {

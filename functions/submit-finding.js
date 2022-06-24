@@ -1,11 +1,11 @@
 const { createPullRequest } = require("octokit-plugin-create-pull-request");
 const csv = require("csvtojson");
 const dedent = require("dedent");
+const fetch = require("node-fetch");
 const formData = require("form-data");
 const Mailgun = require("mailgun.js");
 const { Moralis } = require("moralis/node");
 const { Octokit } = require("@octokit/core");
-const fetch = require("node-fetch");
 
 const {
   token,

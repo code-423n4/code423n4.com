@@ -1,5 +1,6 @@
-import React, { useCallback } from "react";
+import Avatar from "react-avatar";
 import clsx from "clsx";
+import React, { useCallback } from "react";
 
 import Select from "react-select";
 
@@ -8,13 +9,12 @@ import * as styles from "./WardenField.module.scss";
 const WardenOptionLabel = ({ value, image }) => {
   return (
     <div className={styles.OptionContainer}>
-      <img
-        src={
-          image
-            ? image.childImageSharp.resize.src
-            : "https://placekitten.com/g/64/64"
-        }
-        alt={"avatar for " + value}
+      <Avatar
+        src={image ? image.childImageSharp.resize.src : ""}
+        name={value}
+        size="27px"
+        round="27px"
+        className={styles.Avatar}
       />
       <span>{value}</span>
     </div>

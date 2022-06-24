@@ -1,8 +1,9 @@
 import React, { useCallback, useState, useRef, ReactNode } from "react";
 import clsx from "clsx";
-import { useMoralis } from "react-moralis";
+import HCaptcha from "@hcaptcha/react-hcaptcha";
 import Moralis from "moralis/types";
 import { toast } from "react-toastify";
+import { useMoralis } from "react-moralis";
 
 import useUser from "../hooks/UserContext";
 
@@ -66,6 +67,7 @@ export default function RegistrationForm({ handles, wardens, className }) {
   const [status, setStatus] = useState<FormStatus>(FormStatus.Unsubmitted);
   const [errorMessage, setErrorMessage] = useState<string | ReactNode>("");
   const [isDangerousUsername, setisDangerousUsername] = useState(false);
+  const [captchaToken, setCaptchaToken] = useState("");
 
   // global variables
   const avatarInputRef = useRef<HTMLInputElement>();
@@ -116,7 +118,7 @@ export default function RegistrationForm({ handles, wardens, className }) {
     if (name === "discordUsername") {
       setIsValidDiscord(discordUsernameRegex.test(value));
     }
-    if (name === "username" ) {
+    if (name === "username") {
       setisDangerousUsername(value.match(/^[0-9a-zA-Z_\-]+$/) === null);
     }
   }, []);
@@ -134,6 +136,10 @@ export default function RegistrationForm({ handles, wardens, className }) {
     });
   };
 
+  const handleCaptchaVerification = (token) => {
+    setCaptchaToken(token);
+  };
+
   const removeAvatar = (): void => {
     if (!avatarInputRef || !avatarInputRef.current) {
       return;
@@ -149,6 +155,7 @@ export default function RegistrationForm({ handles, wardens, className }) {
       const url = `/.netlify/functions/register-warden`;
       (async () => {
         if (
+          !captchaToken ||
           !state.username ||
           !state.discordUsername ||
           !isValidDiscord ||
@@ -228,6 +235,7 @@ export default function RegistrationForm({ handles, wardens, className }) {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
+              Authorization: captchaToken,
             },
             body: JSON.stringify(requestBody),
           });
@@ -363,14 +371,13 @@ export default function RegistrationForm({ handles, wardens, className }) {
                   <small>This field is required</small>
                 </p>
               )}
-              {hasValidationErrors ||
-                isDangerousUsername && (
-                  <p className={widgetStyles.ErrorMessage}>
-                    <small>
-                      Supports alphanumeric characters, underscores, and hyphens
-                    </small>
-                  </p>
-                )}
+              {(hasValidationErrors || isDangerousUsername) && (
+                <p className={widgetStyles.ErrorMessage}>
+                  <small>
+                    Supports alphanumeric characters, underscores, and hyphens
+                  </small>
+                </p>
+              )}
             </div>
           ) : (
             <div className={widgetStyles.Container}>
@@ -425,7 +432,7 @@ export default function RegistrationForm({ handles, wardens, className }) {
                 <small>This field is required</small>
               </p>
             )}
-            {hasValidationErrors || !isValidDiscord && (
+            {(hasValidationErrors || !isValidDiscord) && (
               <p className={widgetStyles.ErrorMessage}>
                 <small>
                   Make sure you enter your discord username, and not your server
@@ -567,6 +574,13 @@ export default function RegistrationForm({ handles, wardens, className }) {
               </div>
             </>
           )}
+          <div className="captcha-container">
+            <HCaptcha
+              sitekey="4963abcb-188b-4972-8e44-2887e315af52"
+              theme="dark"
+              onVerify={handleCaptchaVerification}
+            />
+          </div>
           <Agreement />
           <div className={styles.ButtonsWrapper}>
             {status === FormStatus.Submitting ? (
