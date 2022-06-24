@@ -22,7 +22,7 @@ exports.handler = async (event) => {
     return {
       statusCode: 400,
       body: JSON.stringify({
-        error: "Handle can only contain alphanumeric characters [a-zA-Z0-9], underscores (_), and hyphens (-).",
+        error: "Team name can only contain alphanumeric characters [a-zA-Z0-9], underscores (_), and hyphens (-).",
       }),
     };
   }
