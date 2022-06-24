@@ -594,7 +594,7 @@ export default function RegistrationForm({ handles, wardens, className }) {
           </div>
         </form>
       ) : status === FormStatus.Error ? (
-        <div style={{ textAlign: "center" }}>
+        <div className="centered-text">
           <h1>Whoops!</h1>
           <p>An error occurred while processing your registration.</p>
           {errorMessage !== "" && (

@@ -27,7 +27,6 @@ import { useModalContext } from "../../hooks/ModalContext";
 import Agreement from "../content/Agreement";
 import { DynamicInputGroup } from "../DynamicInputGroup";
 import FormField from "./widgets/FormField";
-import Login from "../Login/Login";
 import WardenDetails from "../WardenDetails";
 import Widget from "./widgets/Widget";
 
@@ -329,7 +328,7 @@ const SubmitFindings = ({ wardensList, sponsor, contest, repo, title }) => {
     }
   };
 
-  return currentUser.isLoggedIn ? (
+  return (
     <div
       className={
         !isExpanded ? clsx(styles.Form) : clsx(styles.Form, styles.FormMax)
@@ -511,20 +510,6 @@ const SubmitFindings = ({ wardensList, sponsor, contest, repo, title }) => {
           </button>
         </div>
       )}
-    </div>
-  ) : (
-    <div className="centered-text">
-      <div className={clsx(styles.Form)}>
-        <h1>Please login</h1>
-        {/* TODO: add date and link */}
-        <p>
-          You need to be a registered warden currently connected via wallet to
-          see this page. Note to existing wardens: As of [date] wardens are
-          required to authenticate with a wallet to submit findings. You can
-          read more about this change <a href="/"> here</a>.
-        </p>
-        <Login displayAsButtons={true} />
-      </div>
     </div>
   );
 };

@@ -1,16 +1,13 @@
-import clsx from "clsx";
 import { graphql } from "gatsby";
 import React from "react";
 
-import DefaultLayout from "../templates/DefaultLayout";
+import ProtectedPage from "../components/ProtectedPage";
 import TeamRegistrationForm from "../components/TeamRegistrationForm";
-import useUser from "../hooks/UserContext";
-import Login from "../components/Login/Login";
+
 import * as styles from "../components/form/Form.module.scss";
 
 export default function TeamRegistration({ data }) {
   const handles = new Set(data.handles.edges.map((h) => h.node.handle));
-  const { currentUser } = useUser();
 
   let wardens: { value: string; image: string }[] = [];
   data.handles.edges.forEach(({ node }) => {
@@ -20,31 +17,19 @@ export default function TeamRegistration({ data }) {
   });
 
   return (
-    <DefaultLayout pageTitle="Team Registration | Code 423n4">
-      {currentUser.isLoggedIn ? (
-        <div className="wrapper-main">
-          <h1 className="page-header">Register a Team</h1>
-          <div>
-            <TeamRegistrationForm
-              className={clsx(styles.Form)}
-              handles={handles}
-              wardens={wardens}
-            />
-          </div>
-        </div>
-      ) : (
-        <div className="centered-text">
-          <div className={clsx(styles.Form)}>
-            <h1>Please login</h1>
-            <p>
-              You need to be a registered warden, currently connected via wallet
-              to register a team.
-            </p>
-            <Login displayAsButtons={true} />
-          </div>
-        </div>
-      )}
-    </DefaultLayout>
+    <ProtectedPage
+      pageTitle="Team Registration | Code 423n4"
+      message="You need to be a registered warden, currently connected via wallet to register a team."
+    >
+      <div className="wrapper-main">
+        <h1 className="page-header">Register a Team</h1>
+        <TeamRegistrationForm
+          className={clsx(styles.Form)}
+          handles={handles}
+          wardens={wardens}
+        />
+      </div>
+    </ProtectedPage>
   );
 }
 
