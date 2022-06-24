@@ -41,6 +41,11 @@
   margin-bottom: 40px;
   max-width: 100%;
   text-align: center;
+  font-family: "Roboto", sans-serif;
+}
+
+ul {
+  text-align: left;
 }
 
 .modal-main-buttons {

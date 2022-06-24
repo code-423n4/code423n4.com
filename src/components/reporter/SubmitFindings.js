@@ -445,9 +445,7 @@ const SubmitFindings = ({ wardensList, sponsor, contest, repo, title }) => {
               <p>{currentUser.emailAddress}</p>
             </DynamicInputGroup>
           </fieldset>
-          <fieldset
-            className={clsx(styles.EmphasizedInputGroup, styles.InputGroup)}
-          >
+          <fieldset className={styles.EmphasizedInputGroup}>
             <h2>Finding</h2>
             {fieldList.map((field, index) => {
               let isInvalid = false;
