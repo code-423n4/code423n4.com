@@ -163,7 +163,7 @@ exports.handler = async (event) => {
           if (kickboxResponse.body.result === "undeliverable") {
             reject(kickboxResponse.body.message || "");
           }
-          resolve();
+          resolve(kickboxResponse.body.result);
         });
       });
       try {

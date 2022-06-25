@@ -7,8 +7,8 @@ import { toast } from "react-toastify";
 import { useModalContext } from "../hooks/ModalContext";
 import useUser from "../hooks/UserContext";
 
-import DefaultLayout from "../templates/DefaultLayout";
 import { Input } from "../components/Input";
+import ProtectedPage from "../components/ProtectedPage";
 
 import * as styles from "../components/form/Form.module.scss";
 import * as inputStyles from "../components/Input.module.scss";
@@ -29,7 +29,7 @@ enum FormStatus {
 export default function ConfirmAccount() {
   // hooks
   const { isInitialized, isInitializing, user } = useMoralis();
-  const { currentUser, reFetchUser } = useUser();
+  const { currentUser, reFetchUser, logUserOut } = useUser();
   const { showModal } = useModalContext();
 
   // state
@@ -46,7 +46,7 @@ export default function ConfirmAccount() {
   const getUser = async (): Promise<void> => {
     const { discordUsername, gitHubUsername, emailAddress } = currentUser;
     const accounts = await user.get("accounts");
-    setAddresses(accounts);
+    setAddresses(accounts || []);
     setState({ discordUsername, gitHubUsername, emailAddress });
   };
 
@@ -138,10 +138,6 @@ export default function ConfirmAccount() {
     }
 
     setUsernameFormStatus(FormStatus.Submitting);
-
-    const url = `/.netlify/functions/update-user`;
-    // @todo: write endpoint for updating user info
-
     showModal({
       title: `Are you sure you want to change your username to "${username}"?`,
       body: (
@@ -172,10 +168,38 @@ export default function ConfirmAccount() {
 
   const saveUsername = async () => {
     try {
+      const url = `/.netlify/functions/update-user`;
+      const requestBody = {
+        newUsername: username,
+        username: currentUser.username,
+        polygonAddress: currentUser.address,
+        gitHubUsername: currentUser.gitHubUsername,
+      };
+
+      const sessionToken = user.attributes.sessionToken;
+
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Authorization": `Bearer ${sessionToken}`,
+        },
+        body: JSON.stringify(requestBody),
+      });
+
+      if (!response.ok) {
+        const { error } = await response.json();
+        console.error(error);
+        throw "Saving username failed";
+      }
+
       user.set("c4Username", username);
       await user.save();
-      await reFetchUser();
-      toast.success("Your request to change your username has been submitted");
+
+      toast.success(
+        "Your request to change your username has been submitted. You have been logged out."
+      );
+      await logUserOut();
       setUsernameFormStatus(FormStatus.Submitted);
     } catch (error) {
       setUsernameFormStatus(FormStatus.Error);
@@ -192,7 +216,7 @@ export default function ConfirmAccount() {
   };
 
   return (
-    <DefaultLayout>
+    <ProtectedPage pageTitle="My Account | Code 423n4">
       {isInitializing ? (
         // @todo: style a loading state
         <div>LOADING...</div>
@@ -318,6 +342,6 @@ export default function ConfirmAccount() {
           </form>
         </div>
       )}
-    </DefaultLayout>
+    </ProtectedPage>
   );
 }
