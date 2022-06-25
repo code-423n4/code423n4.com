@@ -71,7 +71,7 @@ export const riskField = {
 export const vulnerabilityDetailsField = {
   name: "details",
   label: "Vulnerability details",
-  helpText: "Link to all referenced sections of code in GitHub",
+  helpText: "Link to all referenced sections of code in GitHub \n You can use [markdown](https://www.markdownguide.org/basic-syntax/) including [markdown math notation](https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/writing-mathematical-expressions) in this field",
   widget: "textarea",
   required: true,
 };
@@ -79,7 +79,7 @@ export const vulnerabilityDetailsField = {
 export const qaGasDetailsField = {
   name: "qaGasDetails",
   label: "Vulnerability details",
-  helpText: "Link to all referenced sections of code in GitHub",
+  helpText: "Link to all referenced sections of code in GitHub \n You can use [markdown](https://www.markdownguide.org/basic-syntax/) including [markdown math notation](https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/writing-mathematical-expressions) in this field",
   widget: "textarea",
   required: true,
 };
