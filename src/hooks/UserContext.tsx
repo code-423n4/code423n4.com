@@ -36,6 +36,7 @@ interface User {
   currentUser: UserState;
   logUserOut?: () => void;
   connectWallet?: () => Promise<void>;
+  reFetchUser?: () => Promise<void>;
 }
 
 const DEFAULT_STATE: UserState = {
@@ -270,9 +271,19 @@ const UserProvider = ({ children }) => {
     checkForUser();
   }, [isAuthenticated, user, isInitialized]);
 
+  const reFetchUser = useCallback(async (): Promise<void> => {
+    if (!isInitialized || !isAuthenticated || !user) {
+      return;
+    }
+    const username = await user.get("c4Username");
+    if (username) {
+      await getUserInfo(user);
+    }
+  }, [isInitialized, isAuthenticated, user]);
+
   const userContext = useMemo(() => {
-    return { currentUser, logUserOut, connectWallet };
-  }, [currentUser, logUserOut, connectWallet]);
+    return { currentUser, logUserOut, connectWallet, reFetchUser };
+  }, [currentUser, logUserOut, connectWallet, reFetchUser]);
   return (
     <UserContext.Provider value={userContext}>{children}</UserContext.Provider>
   );

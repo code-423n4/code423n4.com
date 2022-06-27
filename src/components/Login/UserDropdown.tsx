@@ -1,6 +1,7 @@
-import Avatar from "react-avatar";
 import clsx from "clsx";
+import { Link } from "gatsby";
 import React from "react";
+import Avatar from "react-avatar";
 
 import useUser from "../../hooks/UserContext";
 
@@ -42,6 +43,9 @@ export default function UserDropdown() {
               "..." +
               currentUser.address.slice(-4)}
           </span>
+          <Link to="/account" className={dropdownStyles.Button}>
+            Manage Account
+          </Link>
           <button onClick={logUserOut} className={dropdownStyles.Button}>
             <img
               src="/images/sign-out.svg"

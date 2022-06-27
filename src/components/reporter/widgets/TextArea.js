@@ -13,8 +13,8 @@ const TextArea = ({
   fieldState,
   isInvalid,
   onChange,
-  maxSize,
-  helpText,
+  maxSize = 65536,
+  helpText = null,
 }) => {
   function handleChange(e) {
     onChange(e);

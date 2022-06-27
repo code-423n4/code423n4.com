@@ -45,6 +45,8 @@
   padding: 10px;
   display: flex;
   align-items: center;
+  font-weight: normal;
+  text-transform: none;
 
   &:hover {
     background: var(--main-purple);

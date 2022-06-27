@@ -5,13 +5,16 @@ import * as styles from "./DynamicInputGroup.module.scss";
 import { Input } from "./Input";
 
 interface DynamicInputGroupProps {
-  onChange: (payload: (string | number)[]) => void;
-  fields: (string | number)[];
+  onChange: (payload: string[]) => void;
+  fields: string[];
   children: ReactNode;
-  validator?: (value: string | number) => (string | ReactNode)[];
+  validator?: (value: string) => (string | ReactNode)[];
   fieldName: string;
   className?: string | undefined;
   required?: boolean | undefined;
+  // optional button to show on the right of the inputs
+  button?: string;
+  handleButtonClick?: (value: string) => void;
 }
 
 export const DynamicInputGroup = ({
@@ -22,6 +25,8 @@ export const DynamicInputGroup = ({
   fieldName,
   className,
   required,
+  button,
+  handleButtonClick,
 }: DynamicInputGroupProps) => {
   const handleChange = (e) => {
     const { value } = e.target;
@@ -66,6 +71,8 @@ export const DynamicInputGroup = ({
           handleChange={handleChange}
           handleRemoveInputField={handleRemoveInputField}
           validator={validator}
+          button={button}
+          handleButtonClick={handleButtonClick}
         />
       ))}
       <button
