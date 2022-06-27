@@ -9,6 +9,7 @@ import DefaultLayout from "../templates/DefaultLayout";
 
 import * as styles from "../components/form/Form.module.scss";
 import * as widgetStyles from "../components/reporter/widgets/Widgets.module.scss";
+import HCaptcha from "@hcaptcha/react-hcaptcha";
 
 enum FormStatus {
   Unsubmitted = "unsubmitted",
@@ -35,6 +36,7 @@ export default function ConfirmAccount() {
   const [isValidDiscord, setIsValidDiscord] = useState(true);
   const [status, setStatus] = useState<FormStatus>(FormStatus.Loading);
   const [errorMessage, setErrorMessage] = useState<string>("");
+  const [captchaToken, setCaptchaToken] = useState("");
 
   // global variables
   const discordUsernameRegex = new RegExp(/.*#[0-9]{4}/, "g");
@@ -81,11 +83,16 @@ export default function ConfirmAccount() {
     setIsValidDiscord(discordUsernameRegex.test(e.target.value));
   };
 
+  const handleCaptchaVerification = (token) => {
+    setCaptchaToken(token);
+  };
+
   const handleSubmit = useCallback(
     async (e: MouseEvent<HTMLButtonElement>): Promise<void> => {
       e.preventDefault();
       const url = `/.netlify/functions/register-warden`;
       if (
+        !captchaToken ||
         !discordUsername ||
         !isValidDiscord ||
         !gitHubUsername ||
@@ -108,6 +115,7 @@ export default function ConfirmAccount() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: captchaToken,
         },
         body: JSON.stringify(requestBody),
       });
@@ -279,6 +287,13 @@ export default function ConfirmAccount() {
                     <small>This field is required</small>
                   </p>
                 )}
+              </div>
+              <div className="captcha-container">
+                <HCaptcha
+                  sitekey="4963abcb-188b-4972-8e44-2887e315af52"
+                  theme="dark"
+                  onVerify={handleCaptchaVerification}
+                />
               </div>
               <button
                 className={clsx("button cta-button centered", styles.Button)}
