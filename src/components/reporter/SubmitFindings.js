@@ -69,7 +69,6 @@ const SubmitFindings = ({ wardensList, sponsor, contest, repo, title }) => {
   const [errorMessage, setErrorMessage] = useState("An error occurred");
   const [isExpanded, setIsExpanded] = useState(false);
   const [state, setState] = useState(initialState);
-  // @todo: filter empty email addresses
   const [additionalEmailAddresses, setAdditionalEmailAddresses] = useState([]);
   const [polygonAddress, setPolygonAddress] = useState("");
   const [newTeamAddress, setNewTeamAddress] = useState("");

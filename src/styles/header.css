@@ -80,9 +80,7 @@ header nav {
     justify-self: flex-end;
   }
 
-
   .nav-links {
-    /* @todo: style login and register links/buttons for mobile */
     width: 100%;
     top: 50px;
     opacity: 0;
