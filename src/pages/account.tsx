@@ -124,6 +124,7 @@ export default function ConfirmAccount() {
       setWardenInfoFormStatus(FormStatus.Submitted);
     } catch (error) {
       setWardenInfoFormStatus(FormStatus.Error);
+      toast.error("An error occurred. Your changes have not been saved");
     }
   };
 
@@ -203,6 +204,7 @@ export default function ConfirmAccount() {
       setUsernameFormStatus(FormStatus.Submitted);
     } catch (error) {
       setUsernameFormStatus(FormStatus.Error);
+      toast.error("An error occurred. Your changes have not been saved");
     }
   };
 
