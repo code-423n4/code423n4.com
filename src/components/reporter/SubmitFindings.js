@@ -110,7 +110,7 @@ const SubmitFindings = ({ wardensList, sponsor, contest, repo }) => {
       hasErrors = true;
     }
 
-    const regex = new RegExp("#L", "g");
+    const regex = new RegExp("#L[0-9]+(-L[0-9]+)?$");
     const hasInvalidLinks = state.linesOfCode.some((line) => {
       return !regex.test(line.value);
     });
