@@ -371,7 +371,7 @@ export default function RegistrationForm({ handles, wardens, className }) {
                   <small>This field is required</small>
                 </p>
               )}
-              {(hasValidationErrors || isDangerousUsername) && (
+              {(hasValidationErrors && isDangerousUsername) && (
                 <p className={widgetStyles.ErrorMessage}>
                   <small>
                     Supports alphanumeric characters, underscores, and hyphens
@@ -432,7 +432,7 @@ export default function RegistrationForm({ handles, wardens, className }) {
                 <small>This field is required</small>
               </p>
             )}
-            {(hasValidationErrors || !isValidDiscord) && (
+            {(hasValidationErrors && !isValidDiscord) && (
               <p className={widgetStyles.ErrorMessage}>
                 <small>
                   Make sure you enter your discord username, and not your server
