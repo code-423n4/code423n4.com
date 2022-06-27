@@ -25,7 +25,7 @@ function isDangerous(s) {
   return s.match(/^[0-9a-zA-Z_\-]+$/) === null;
 }
 
-function getPrData(isUpdate, handle, gitHubUsername, qualifications) {
+function getPrData(isUpdate, handle, gitHubUsername) {
   let sentenceVerb = "Register";
 
   if (isUpdate) {
@@ -44,8 +44,6 @@ function getPrData(isUpdate, handle, gitHubUsername, qualifications) {
         Auto-generated PR to register the new warden ${handle}
 
         @${gitHubUsername}
-        
-        ${qualifications}
         `;
   return { title, body, branchName };
 }
@@ -66,7 +64,6 @@ exports.handler = async (event) => {
     const data = JSON.parse(event.body);
     const {
       handle,
-      qualifications,
       image,
       link,
       moralisId,
@@ -95,16 +92,6 @@ exports.handler = async (event) => {
       return {
         statusCode: 422,
         body: JSON.stringify({ error: "Email address is required" }),
-      };
-    }
-
-    if (!qualifications && !isUpdate) {
-      return {
-        statusCode: 422,
-        body: JSON.stringify({
-          error:
-            "Please provide evidence of your ability to compete in an EVM-base audit contest",
-        }),
       };
     }
 
@@ -274,8 +261,7 @@ exports.handler = async (event) => {
     const { title, body, branchName } = getPrData(
       isUpdate,
       handle,
-      gitHubUsername,
-      qualifications
+      gitHubUsername
     );
     try {
       const res = await octokit.createPullRequest({

@@ -9,7 +9,6 @@ import useUser from "../hooks/UserContext";
 
 import Agreement from "./content/Agreement";
 import WardenField from "../components/reporter/widgets/WardenField";
-import TextArea from "../components/reporter/widgets/TextArea.js";
 
 import * as styles from "../components/form/Form.module.scss";
 import * as widgetStyles from "../components/reporter/widgets/Widgets.module.scss";
@@ -17,7 +16,6 @@ import * as widgetStyles from "../components/reporter/widgets/Widgets.module.scs
 interface userState {
   username: string;
   discordUsername: string;
-  qualifications: string;
   gitHubUsername: string;
   emailAddress: string;
   link?: string;
@@ -34,7 +32,6 @@ enum FormStatus {
 const initialState: userState = {
   username: "",
   discordUsername: "",
-  qualifications: "",
   gitHubUsername: "",
   emailAddress: "",
   link: "",
@@ -160,7 +157,6 @@ export default function RegistrationForm({ handles, wardens, className }) {
           !state.discordUsername ||
           !isValidDiscord ||
           isDangerousUsername ||
-          (isNewUser && !state.qualifications) ||
           (isNewUser && handles.has(state.username))
         ) {
           setHasValidationErrors(true);
@@ -208,14 +204,12 @@ export default function RegistrationForm({ handles, wardens, className }) {
 
           const requestBody = {
             handle: state.username,
-            qualifications: state.qualifications,
             gitHubUsername: state.gitHubUsername,
             emailAddress: state.emailAddress,
             polygonAddress,
             moralisId,
           } as {
             handle: string;
-            qualifications: string;
             gitHubUsername: string;
             emailAddress: string;
             moralisId: string;
@@ -371,7 +365,7 @@ export default function RegistrationForm({ handles, wardens, className }) {
                   <small>This field is required</small>
                 </p>
               )}
-              {(hasValidationErrors && isDangerousUsername) && (
+              {hasValidationErrors && isDangerousUsername && (
                 <p className={widgetStyles.ErrorMessage}>
                   <small>
                     Supports alphanumeric characters, underscores, and hyphens
@@ -432,7 +426,7 @@ export default function RegistrationForm({ handles, wardens, className }) {
                 <small>This field is required</small>
               </p>
             )}
-            {(hasValidationErrors && !isValidDiscord) && (
+            {hasValidationErrors && !isValidDiscord && (
               <p className={widgetStyles.ErrorMessage}>
                 <small>
                   Make sure you enter your discord username, and not your server
@@ -495,38 +489,6 @@ export default function RegistrationForm({ handles, wardens, className }) {
           </div>
           {isNewUser && (
             <>
-              <div className={widgetStyles.Container}>
-                <label htmlFor="link" className={widgetStyles.Label}>
-                  Qualifications *
-                </label>
-                <p className={widgetStyles.Help}>
-                  Please provide evidence of your ability to be competitive in
-                  an EVM-based audit contest, preferably with links. For
-                  specifically the OpenSea contest, evidence of experience with
-                  assembly is a bonus.
-                </p>
-                <p className={widgetStyles.Help}>
-                  <strong>
-                    Please note, the qualifications you list here will be public
-                    as part of a PR in the{" "}
-                    <a href="https://github.com/code-423n4/code423n4.com">
-                      code423n4.com repo.
-                    </a>
-                  </strong>
-                </p>
-                <TextArea
-                  name="qualifications"
-                  required={true}
-                  onChange={handleChange}
-                  fieldState={state.qualifications}
-                  isInvalid={!state.qualifications && hasValidationErrors}
-                />
-                {!state.qualifications && hasValidationErrors && (
-                  <p className={widgetStyles.ErrorMessage}>
-                    <small>This field is required</small>
-                  </p>
-                )}
-              </div>
               <div className={widgetStyles.Container}>
                 <label htmlFor="link" className={widgetStyles.Label}>
                   Link (Optional)
@@ -623,7 +585,7 @@ export default function RegistrationForm({ handles, wardens, className }) {
       ) : isNewUser ? (
         <div className="centered-text">
           <h1>Thank you!</h1>
-          <p>Your registration application has been submitted.</p>
+          <p>Your registration has been submitted.</p>
           <h2>One more thing...</h2>
           <p>
             Before we can complete your registration, please join us in{" "}

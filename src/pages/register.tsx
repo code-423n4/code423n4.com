@@ -54,7 +54,7 @@ export default function UserRegistration({ data }) {
       hideConnectWalletDropdown={true}
     >
       <div className="wrapper-main">
-        <h1 className="page-header">Warden Application</h1>
+        <h1 className="page-header">Warden Registration</h1>
         <div>
           <RegistrationForm
             className={clsx(styles.Form)}
