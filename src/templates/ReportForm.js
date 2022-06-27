@@ -12,12 +12,10 @@ const ReportForm = (props) => {
     <ProtectedPage
       pageTitle="Submit finding | Code 423n4"
       message={
-        /* @todo: add date and link */
         <>
           You need to be a registered warden currently connected via wallet to
-          see this page. Note to existing wardens: As of [date] wardens are
-          required to authenticate with a wallet to submit findings. You can
-          read more about this change <a href="/"> here</a>.
+          see this page. Note to existing wardens: As of June 27, wardens are
+          required to authenticate with a wallet to submit findings.
         </>
       }
     >
