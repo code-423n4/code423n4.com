@@ -74,7 +74,7 @@
 }
 
 .Text {
-  height: 40px;
+  height: 50px;
   width: 100%;
   box-sizing: border-box;
 
@@ -84,7 +84,7 @@
 }
 
 .Select {
-  height: 40px;
+  height: 50px;
   width: 100%;
   cursor: pointer;
 }
@@ -128,7 +128,7 @@ input[type="file"].Avatar::file-selector-button {
   background-color: rgba(204, 204, 204, 1);
   padding: 1px;
   border-radius: 2px;
-  color:black;
+  color: black;
 }
 
 .Markdown {
