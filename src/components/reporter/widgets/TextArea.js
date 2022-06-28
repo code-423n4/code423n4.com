@@ -19,6 +19,7 @@ const TextArea = ({
   onChange,
   maxSize,
   helpText,
+  type
 }) => {
   function handleChange(e) {
     onChange(e);
@@ -57,7 +58,11 @@ const TextArea = ({
           )}
         </div>
       </TabPanel>
-      {helpText ?? <p>{helpText}</p>}
+      {type !== 'markdown' && helpText ? (
+            <p >{helpText}</p>
+          ) : (
+            <ReactMarkdown>{helpText}</ReactMarkdown>
+          )}
       <TabPanel>
         <ReactMarkdown
           className={clsx(styles.Control, styles.Markdown)}
