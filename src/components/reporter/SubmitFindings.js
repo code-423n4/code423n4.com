@@ -286,7 +286,6 @@ const SubmitFindings = ({ wardensList, sponsor, contest, repo, title }) => {
       hasErrors = true;
     }
 
-    const locRegex = new RegExp("#L", "g");
     const locRegex = new RegExp("#L[0-9]+(-L[0-9]+)?$");
     const hasInvalidLinks = state.linesOfCode.some((line) => {
       return !locRegex.test(line.value);
