@@ -51,7 +51,14 @@ header nav {
   transition: all 0.3s ease-out;
 }
 
-@media (max-width: 830px) {
+.nav-links {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+@media (max-width: 970px) {
   header {
     margin: 0;
     padding: 0;
@@ -73,7 +80,6 @@ header nav {
     justify-self: flex-end;
   }
 
-
   .nav-links {
     width: 100%;
     top: 50px;
@@ -81,6 +87,8 @@ header nav {
     overflow: hidden;
     max-height: 0;
     transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
+    flex-direction: column;
+    align-items: flex-start;
   }
   header nav {
     display: flex;
@@ -102,9 +110,10 @@ header nav {
   header nav .nav-links a {
     display: block;
     text-align: left;
-    padding: 10px 0;
-    margin: 15px 0;
+    padding: 20px 0;
+    margin: 0;
     border-bottom: 1px solid #efefef1a;
+    width: 100%;
   }
   header nav.open .hamburger {
     order: 0;
