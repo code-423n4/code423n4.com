@@ -14,8 +14,7 @@ const ReportForm = (props) => {
       message={
         <>
           You need to be a registered warden currently connected via wallet to
-          see this page. Note to existing wardens: As of June 27, wardens are
-          required to authenticate with a wallet to submit findings.
+          see this page.
         </>
       }
     >

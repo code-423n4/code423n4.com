@@ -7,9 +7,9 @@ export default function Banner() {
 
   return !currentUser.isLoggedIn ? (
     <div className={styles.MessageBar}>
-      <p>
-        📣 <strong>Attention Wardens:</strong> Effective June 27, you must
-        connect your wallet in order to compete in audit contests. 📣
+      <p className={styles.Message}>
+        🐺 <strong>Hey, wardens!</strong> Wallet auth is here! 🎉{" "}
+        <strong>Connect now »</strong>
       </p>
     </div>
   ) : null;
