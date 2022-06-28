@@ -110,23 +110,9 @@ exports.handler = async (event) => {
     }
 
     const owner = process.env.GITHUB_REPO_OWNER;
-    const wardenFile = await octokit.request(
-      "GET /repos/{owner}/{repo}/contents/{path}",
-      {
-        owner,
-        repo: process.env.REPO,
-        path: `_data/handles/${username}.json`,
-      }
-    );
 
-    const oldWardenFile = JSON.parse(
-      // @ts-ignore
-      Buffer.from(wardenFile.data.content, "base64")
-    );
+    const { moralisId, link, image } = userData;
 
-    // const { moralisId } = oldWardenFile;
-    const moralisId = "PEmzPnEAbDOEvUifCPYW5fJ8";
-    console.log(moralisId);
     const sessionToken = authorization.split("Bearer ")[1];
     const confirmed = await Moralis.Cloud.run("confirmUser", {
       sessionToken,
@@ -142,7 +128,7 @@ exports.handler = async (event) => {
       };
     }
 
-    const newWardenFile = { ...oldWardenFile, handle: newUsername };
+    const newWardenFile = { link, moralisId, image, handle: newUsername };
     const files: Record<string, unknown> = {
       [`_data/handles/${newUsername}.json`]: JSON.stringify(
         newWardenFile,
