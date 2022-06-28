@@ -145,7 +145,14 @@ export default function ConfirmAccount() {
         }
       }
     },
-    [user, discordUsername, gitHubUsername, emailAddress, confirmedHandle]
+    [
+      captchaToken,
+      user,
+      discordUsername,
+      gitHubUsername,
+      emailAddress,
+      confirmedHandle,
+    ]
   );
 
   const resetForm = () => {
