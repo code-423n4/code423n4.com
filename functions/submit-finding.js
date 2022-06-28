@@ -40,9 +40,17 @@ async function getContestEnd(contestId) {
 
 async function updateTeamData(team, newPolygonAddress) {
   // @todo: delete this once all existing teams have added addresses
+  const teamData = {
+    handle: team.handle,
+    members: team.members,
+    link: team.link,
+  };
+  if (team.image) {
+    teamData.image = team.image;
+  }
   const updatedTeamData = JSON.stringify(
     {
-      ...team,
+      ...teamData,
       address: newPolygonAddress,
     },
     null,
@@ -86,7 +94,6 @@ exports.handler = async (event) => {
   const data = JSON.parse(event.body);
   const {
     user,
-    emailAddresses,
     address,
     attributedTo,
     risk,
@@ -97,6 +104,7 @@ exports.handler = async (event) => {
     sponsor,
     repo,
   } = data;
+  let { emailAddresses } = data;
 
   await Moralis.start({
     serverUrl: moralisServerUrl,
@@ -104,9 +112,11 @@ exports.handler = async (event) => {
   });
 
   // filter & sanitize mails
-  emailAddresses = (emailAddresses || []).map(e => e.toLowerCase().trim()).filter(e => /\S+@\S+\.\S+/.test(e));
+  emailAddresses = (emailAddresses || [])
+    .map((e) => e.toLowerCase().trim())
+    .filter((e) => /\S+@\S+\.\S+/.test(e));
   // remove duplicates
-  emailAddresses = [...new Set(emailAddresses)]
+  emailAddresses = [...new Set(emailAddresses)];
 
   // @dev add check for max mail limit
   const MAX_MAIL_LIMIT = 80;
@@ -114,8 +124,7 @@ exports.handler = async (event) => {
     return {
       statusCode: 422,
       body: JSON.stringify({
-        error:
-          `Reduce emails recipients to a maximum of ${MAX_MAIL_LIMIT}.`,
+        error: `Reduce emails recipients to a maximum of ${MAX_MAIL_LIMIT}.`,
       }),
     };
   }

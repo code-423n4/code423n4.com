@@ -173,7 +173,7 @@ const UserProvider = ({ children }) => {
 
     const moralisId = registeredUser.moralisId;
     const link = registeredUser.link || null;
-    const image = registeredUser.image || null;
+    const image = registeredUser.imageUrl || null;
 
     // fetching teams
     const teamsResponse = await fetch(
@@ -181,7 +181,12 @@ const UserProvider = ({ children }) => {
     );
     let teams = [];
     if (teamsResponse.status === 200) {
-      teams = await teamsResponse.json();
+      const teamsData = await teamsResponse.json();
+      teams = teamsData.map((team) => ({
+        username: team.handle,
+        address: team.address,
+        image: team.imageUrl,
+      }));
     }
 
     setCurrentUser({

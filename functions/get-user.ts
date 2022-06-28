@@ -20,7 +20,8 @@ exports.handler = async (event) => {
     return {
       statusCode: 400,
       body: JSON.stringify({
-        error: "Handle can only contain alphanumeric characters [a-zA-Z0-9], underscores (_), and hyphens (-).",
+        error:
+          "Handle can only contain alphanumeric characters [a-zA-Z0-9], underscores (_), and hyphens (-).",
       }),
     };
   }
@@ -30,7 +31,7 @@ exports.handler = async (event) => {
     const user = JSON.parse(userFile.toString());
     if (user.image) {
       const imagePath = user.image.slice(2);
-      user.image = `https://raw.githubusercontent.com/${process.env.GITHUB_REPO_OWNER}/${process.env.REPO}/${process.env.BRANCH_NAME}/_data/handles/${imagePath}`;
+      user.imageUrl = `https://raw.githubusercontent.com/${process.env.GITHUB_REPO_OWNER}/${process.env.REPO}/${process.env.BRANCH_NAME}/_data/handles/${imagePath}`;
     }
 
     return {
