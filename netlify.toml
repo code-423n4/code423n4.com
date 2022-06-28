@@ -9,6 +9,11 @@
   to = "/images/code4rena_is.pdf"
   status = 200
 
+[[redirects]]
+  from = "/warden-registration"
+  to = "/register"
+  status = 200
+
 [context.deploy-preview]
   ignore = "bash ./netlify-ignore-branch.sh"
   environment = { GATSBY_STAGING = "true" }
