@@ -270,7 +270,7 @@ exports.handler = async (event) => {
         title,
         body,
         head: branchName,
-        base: process.env.BRANCH_NAME,
+        base: "warden/registrations",
         changes: [
           {
             files,
