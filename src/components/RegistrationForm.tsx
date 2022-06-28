@@ -133,9 +133,9 @@ export default function RegistrationForm({ handles, wardens, className }) {
     });
   };
 
-  const handleCaptchaVerification = (token) => {
+  const handleCaptchaVerification = useCallback((token) => {
     setCaptchaToken(token);
-  };
+  }, []);
 
   const removeAvatar = (): void => {
     if (!avatarInputRef || !avatarInputRef.current) {
