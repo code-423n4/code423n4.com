@@ -83,9 +83,9 @@ export default function ConfirmAccount() {
     setIsValidDiscord(discordUsernameRegex.test(e.target.value));
   };
 
-  const handleCaptchaVerification = (token) => {
+  const handleCaptchaVerification = useCallback((token) => {
     setCaptchaToken(token);
-  };
+  }, []);
 
   const handleSubmit = useCallback(
     async (e: MouseEvent<HTMLButtonElement>): Promise<void> => {
