@@ -156,6 +156,8 @@ export default function RegistrationForm({ handles, wardens, className }) {
           !state.username ||
           !state.discordUsername ||
           !isValidDiscord ||
+          !state.gitHubUsername ||
+          !state.emailAddress ||
           isDangerousUsername ||
           (isNewUser && handles.has(state.username))
         ) {
@@ -282,6 +284,7 @@ export default function RegistrationForm({ handles, wardens, className }) {
       handles,
       hasValidationErrors,
       isValidDiscord,
+      captchaToken,
     ]
   );
 
