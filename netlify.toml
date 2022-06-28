@@ -11,7 +11,11 @@
 
 [context.deploy-preview]
   ignore = "bash ./netlify-ignore-branch.sh"
+  environment = { GATSBY_STAGING = "true" }
+
+[context.staging]
+  environment = { GATSBY_STAGING = "true" }
 
 [functions]
   directory = "functions/"
-  included_files = ["_data/contests/*"]
+  included_files = ["_data/contests/*", "_data/handles/*.json"]

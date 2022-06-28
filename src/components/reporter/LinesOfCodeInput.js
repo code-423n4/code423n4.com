@@ -12,7 +12,7 @@ const InputField = ({
   isInvalid,
 }) => {
   return (
-    <div>
+    <>
       {/* TODO: use an input component once widgets are refactored */}
       <div className="input-and-close-button">
         <input
@@ -57,10 +57,11 @@ const InputField = ({
           )}
         </label>
       )}
-    </div>
+    </>
   );
 };
 
+// @todo: replace with DynamicInputGroup component
 const LinesOfCode = ({ onChange, linesOfCode, isInvalid }) => {
   const handleChange = (e, index) => {
     const { value } = e.target;
@@ -85,8 +86,10 @@ const LinesOfCode = ({ onChange, linesOfCode, isInvalid }) => {
   };
 
   return (
-    <div className="lines-of-code-input">
-      <h2>Links to affected code</h2>
+    <div className="lines-of-code">
+      <label htmlFor="lines-of-code" className={styles.Label}>
+        Links to affected code
+      </label>
       <p>
         Provide GitHub links, including line numbers, to all instances of this
         bug throughout the repo. (
