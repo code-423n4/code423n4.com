@@ -6,6 +6,15 @@ import ReportLayout from "../../templates/ReportLayout";
 
 function ReportPageTemplate({ data }) {
   const page = data.markdownRemark;
+  
+  const scrollToTop = () =>{
+    if (typeof window !== undefined) {
+      window.scrollTo({
+        top: 0, 
+        behavior: 'smooth'
+      });
+    }
+  };
 
   return (
     <ReportLayout
@@ -31,12 +40,17 @@ function ReportPageTemplate({ data }) {
             </h1>
             <h4>{page.frontmatter.date}</h4>
           </div>
-          <div
-            className="report-contents"
-            dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(page.html) }}
-          />
+          <div className="report-container">
+            <h2>Table of contents</h2>
+            <div className="report-toc" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(page.tableOfContents) }}/>
+            <div
+              className="report-contents"
+              dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(page.html) }}
+            />
+          </div>
         </article>
       </div>
+      <button className="button floating-button" onClick={scrollToTop}>Top</button>
     </ReportLayout>
   );
 }
@@ -59,6 +73,7 @@ export const query = graphql`
         }
       }
       html
+      tableOfContents(maxDepth: 2)
     }
   }
 `;

@@ -1,0 +1,20 @@
+:root {
+  --toastify-color-info: var(--main-purple);
+  --toastify-color-success: var(--hot-blue);
+  --toastify-color-warning: var(--orange);
+  --toastify-color-error: var(--hot-pink);
+
+  --toastify-toast-width: 400px;
+  --toastify-font-family: var(--font-family);
+
+  /* Used when no type is provided */
+  --toastify-color-progress-light: var(--main-purple);
+}
+
+.Toastify__toast-body a {
+  color: #757575;
+}
+
+.Toastify__toast-body a:hover {
+  color: var(--main-purple);
+}
