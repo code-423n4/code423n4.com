@@ -77,11 +77,7 @@ export default function ConfirmAccount() {
       return;
     }
 
-    if (
-      !state.discordUsername ||
-      !state.gitHubUsername ||
-      !state.emailAddress
-    ) {
+    if (!state.discordUsername || !state.emailAddress) {
       return;
     }
 
@@ -94,8 +90,10 @@ export default function ConfirmAccount() {
 
     setStatus(FormStatus.Submitting);
     user.set("discordUsername", state.discordUsername);
-    user.set("gitHubUsername", state.gitHubUsername);
     user.set("emailAddress", state.emailAddress);
+    if (state.gitHubUsername) {
+      user.set("gitHubUsername", state.gitHubUsername);
+    }
 
     try {
       await user.save();
@@ -129,7 +127,7 @@ export default function ConfirmAccount() {
               ))}
             </ul>
             <Input
-              label="Discord Username:"
+              label="Discord Username *"
               handleChange={handleChange}
               value={state.discordUsername}
               name="discordUsername"
@@ -137,18 +135,17 @@ export default function ConfirmAccount() {
               validator={validateDiscordUsername}
             />
             <Input
-              label="Github Username:"
-              handleChange={handleChange}
-              value={state.gitHubUsername}
-              name="gitHubUsername"
-              required={true}
-            />
-            <Input
-              label="Email Address:"
+              label="Email Address *"
               handleChange={handleChange}
               value={state.emailAddress}
               name="emailAddress"
               required={true}
+            />
+            <Input
+              label="Github Username (Optional)"
+              handleChange={handleChange}
+              value={state.gitHubUsername}
+              name="gitHubUsername"
             />
             <div className={styles.ButtonsWrapper}>
               <button

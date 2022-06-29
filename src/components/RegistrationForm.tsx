@@ -156,7 +156,6 @@ export default function RegistrationForm({ handles, wardens, className }) {
           !state.username ||
           !state.discordUsername ||
           !isValidDiscord ||
-          !state.gitHubUsername ||
           !state.emailAddress ||
           isDangerousUsername ||
           (isNewUser && handles.has(state.username))
@@ -240,7 +239,9 @@ export default function RegistrationForm({ handles, wardens, className }) {
             try {
               user.set("c4Username", state.username);
               user.set("discordUsername", state.discordUsername);
-              user.set("gitHubUsername", state.gitHubUsername);
+              if (state.gitHubUsername) {
+                user.set("gitHubUsername", state.gitHubUsername);
+              }
               user.set("emailAddress", state.emailAddress);
               // @todo: add role
               await user.save();
@@ -257,7 +258,9 @@ export default function RegistrationForm({ handles, wardens, className }) {
               // allow confirmation email to fail; don't save a bad email address
               user.set("c4Username", state.username);
               user.set("discordUsername", state.discordUsername);
-              user.set("gitHubUsername", state.gitHubUsername);
+              if (state.gitHubUsername) {
+                user.set("gitHubUsername", state.gitHubUsername);
+              }
               // @todo: add role
               await user.save();
               setStatus(FormStatus.Submitted);
@@ -439,32 +442,6 @@ export default function RegistrationForm({ handles, wardens, className }) {
             )}
           </div>
           <div className={widgetStyles.Container}>
-            <label htmlFor="gitHubUsername" className={widgetStyles.Label}>
-              GitHub Username *
-            </label>
-            <p className={widgetStyles.Help}>
-              Used in case we need to give you access to certain repositories.
-            </p>
-            <input
-              className={clsx(
-                widgetStyles.Control,
-                widgetStyles.Text,
-                hasValidationErrors && !state.gitHubUsername && "input-error"
-              )}
-              type="text"
-              id="gitHubUsername"
-              name="gitHubUsername"
-              placeholder="Username"
-              value={state.gitHubUsername}
-              onChange={handleChange}
-            />
-            {hasValidationErrors && !state.gitHubUsername && (
-              <p className={widgetStyles.ErrorMessage}>
-                <small>This field is required</small>
-              </p>
-            )}
-          </div>
-          <div className={widgetStyles.Container}>
             <label htmlFor="emailAddress" className={widgetStyles.Label}>
               Email Address *
             </label>
@@ -489,6 +466,23 @@ export default function RegistrationForm({ handles, wardens, className }) {
                 <small>This field is required</small>
               </p>
             )}
+          </div>
+          <div className={widgetStyles.Container}>
+            <label htmlFor="gitHubUsername" className={widgetStyles.Label}>
+              GitHub Username (Optional)
+            </label>
+            <p className={widgetStyles.Help}>
+              Used in case we need to give you access to certain repositories.
+            </p>
+            <input
+              className={clsx(widgetStyles.Control, widgetStyles.Text)}
+              type="text"
+              id="gitHubUsername"
+              name="gitHubUsername"
+              placeholder="Username"
+              value={state.gitHubUsername}
+              onChange={handleChange}
+            />
           </div>
           {isNewUser && (
             <>
