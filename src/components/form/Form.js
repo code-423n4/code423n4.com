@@ -49,7 +49,7 @@ const Form = ({
         url,
         headers || {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: headers || { "Content-Type": "application/json" },
           body: JSON.stringify(data),
         }
       );
@@ -72,7 +72,7 @@ const Form = ({
       }
     >
       <div className={clsx(styles.FormHeader)}>
-        <h1>{displayedInfo.title}</h1>
+        <h1 className={styles.Heading1}>{displayedInfo.title}</h1>
         <button
           onClick={() => setIsExpanded(!isExpanded)}
           className={clsx(styles.FormIconButton)}
@@ -136,7 +136,7 @@ const Form = ({
       )}
       {status === FormStatus.Submitted && (
         <div className="centered-text">
-          <h1>Thank you!</h1>
+          <h2 className={styles.Heading2}>Thank you!</h2>
           <p>{displayedInfo.afterSubmit}</p>
           <button
             className="button cta-button"

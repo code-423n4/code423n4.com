@@ -1,4 +1,3 @@
-
 .agreement {
   font-size: 0.8em;
   padding: 10px;
@@ -83,16 +82,11 @@ label {
   padding: 10px;
 }
 
-.lines-of-code-input {
-  background: var(--background-purple);
-  margin-left: -41px;
-  margin-right: -41px;
-  margin: 0 -41px 20px;
-  padding: 20px 45px;
-}
-
-.lines-of-code-input p {
-  font-size: 13px;
+.lines-of-code {
+  margin: 0 -45px;
+  padding: 30px 45px;
+  border-top: 2px solid var(--border-lightest-background);
+  border-bottom: 2px solid var(--border-lightest-background);
 }
 
 .input-and-close-button {

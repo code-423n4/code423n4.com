@@ -1,25 +1,15 @@
 import React, { useCallback, useState } from "react";
 import { StaticQuery, graphql } from "gatsby";
-import HCaptcha from "@hcaptcha/react-hcaptcha";
 import clsx from "clsx";
 import DOMPurify from "isomorphic-dompurify";
 
-import DefaultLayout from "../templates/DefaultLayout";
-import Widgets from "../components/reporter/widgets/Widgets";
-import Widget from "../components/reporter/widgets/Widget";
-
 import * as styles from "../components/form/Form.module.scss";
 import * as widgetStyles from "../components/reporter/widgets/Widgets.module.scss";
+import ProtectedPage from "../components/ProtectedPage";
+import useUser from "../hooks/UserContext";
+import { useMoralis } from "react-moralis";
 
 function ApplyForCertifiedContributor() {
-  const fields = [];
-
-  const initialState = {
-    wardenHandle: "",
-    githubUsername: "",
-    emailAddress: "",
-  };
-
   const FormStatus = {
     Unsubmitted: "unsubmitted",
     Submitting: "submitting",
@@ -27,20 +17,20 @@ function ApplyForCertifiedContributor() {
     Error: "error",
   };
 
-  const [hasValidationErrors, setValidationErrors] = useState(false);
-  const [fieldState, setFieldState] = useState(initialState);
   const [status, setStatus] = useState(FormStatus.Unsubmitted);
   const [errorMessage, setErrorMessage] = useState("An error occurred");
-  const [captchaToken, setCaptchaToken] = useState("");
   const [acceptedAgreement, setAcceptedAgreement] = useState(false);
+  const { currentUser } = useUser();
+  const { user, isInitialized } = useMoralis();
 
   const submit = async (url, data) => {
+    const sessionToken = user.attributes.sessionToken;
     setStatus(FormStatus.Submitting);
     const response = await fetch(url, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: captchaToken,
+        "X-Authorization": `Bearer ${sessionToken}`,
       },
       body: JSON.stringify(data),
     });
@@ -55,71 +45,29 @@ function ApplyForCertifiedContributor() {
     }
   };
 
-  const handleChange = useCallback((e) => {
-    const { name, value } = e.target;
-    setFieldState((state) => {
-      return { ...state, [name]: value };
-    });
-  }, []);
-
   const handleAgreement = useCallback(() => {
     setAcceptedAgreement(!acceptedAgreement);
   }, [acceptedAgreement]);
 
   const handleSubmit = () => {
-    if (
-      !fieldState.wardenHandle ||
-      !fieldState.githubUsername ||
-      !fieldState.emailAddress ||
-      !acceptedAgreement ||
-      fields.some((field) => {
-        return field.required && !fieldState[field.name];
-      })
-    ) {
-      setValidationErrors(true);
+    if (!acceptedAgreement || !currentUser.isLoggedIn || !isInitialized) {
       return;
     }
-    setValidationErrors(false);
-    submit("/.netlify/functions/apply-for-certified-contributor", fieldState);
-  };
 
-  const handleCaptchaVerification = useCallback((token) => {
-    setCaptchaToken(token);
-  }, []);
+    const payload = {
+      wardenHandle: currentUser.username,
+      gitHubUsername: currentUser.gitHubUsername,
+      emailAddress: currentUser.emailAddress,
+    };
+    submit("/.netlify/functions/apply-for-certified-contributor", payload);
+  };
 
   return (
     <StaticQuery
       query={pageQuery}
       render={(data) => {
-        const wardens = data.allHandlesJson.edges.map(({ node }) => {
-          return { value: node.handle, image: node.image };
-        });
-
-        const contactFields = [
-          {
-            name: "wardenHandle",
-            label: "Warden Handle",
-            helpText: "Handle to certify",
-            widget: "warden",
-            required: true,
-            options: wardens,
-          },
-          {
-            name: "githubUsername",
-            label: "GitHub Username",
-            widget: "text",
-            required: true,
-          },
-          {
-            name: "emailAddress",
-            label: "E-mail Address",
-            widget: "text",
-            required: true,
-          },
-        ];
-
         return (
-          <DefaultLayout
+          <ProtectedPage
             pageDescription="Apply to become a Certified Warden."
             pageTitle="Certified Warden Application | Code 423n4"
           >
@@ -136,64 +84,38 @@ function ApplyForCertifiedContributor() {
               )}
               {(status === FormStatus.Unsubmitted ||
                 status === FormStatus.Submitting) && (
-                <form className={styles.Form}>
+                <form className={clsx(styles.Form, styles.FormSmall)}>
                   <h1>Certification Application</h1>
-                  <fieldset className={widgetStyles.Fields}>
-                    {contactFields.map((field, index) => {
-                      return (
-                        <div key={field.name + index}>
-                          <label>{field.label}</label>
-                          <Widget
-                            name={field.name}
-                            field={field}
-                            onChange={handleChange}
-                            fieldState={fieldState}
-                            isInvalid={
-                              hasValidationErrors && !fieldState[field.name]
-                            }
-                            required={field.required}
-                          />
-                        </div>
-                      );
-                    })}
-                    <Widgets
-                      fields={fields}
-                      onChange={handleChange}
-                      fieldState={fieldState}
-                      showValidationErrors={hasValidationErrors}
-                    />
-                    <label
-                      className={clsx(
-                        hasValidationErrors &&
-                          !acceptedAgreement &&
-                          "input-error"
-                      )}
-                    >
-                      <input
-                        type="checkbox"
-                        checked={acceptedAgreement}
-                        onChange={handleAgreement}
-                      />
-                      I have read and agree to the terms and conditions (see
-                      below)
-                    </label>
-                  </fieldset>
-                  <div
-                    className="captcha-container"
-                    style={{ "justify-content": "left", "margin-top": "20px" }}
+                  <label
+                    htmlFor="acceptAgreeement"
+                    className={widgetStyles.Control}
                   >
-                    <HCaptcha
-                      sitekey="4963abcb-188b-4972-8e44-2887e315af52"
-                      theme="dark"
-                      onVerify={handleCaptchaVerification}
+                    <input
+                      type="checkbox"
+                      id="acceptAgreeement"
+                      checked={acceptedAgreement}
+                      onChange={handleAgreement}
+                      className={widgetStyles.Checkbox}
                     />
-                  </div>
+                    I have read and agree to the terms and conditions (see
+                    below)
+                    {!acceptedAgreement && (
+                      <label
+                        htmlFor="acceptAgreeement"
+                        className={widgetStyles.ErrorMessage}
+                      >
+                        <small>
+                          You must accept the terms and conditions to apply.
+                        </small>
+                      </label>
+                    )}
+                  </label>
                   <button
-                    className="button cta-button"
+                    className="button cta-button primary centered"
                     type="button"
                     onClick={handleSubmit}
                     disabled={
-                      status !== FormStatus.Unsubmitted || !captchaToken
+                      status !== FormStatus.Unsubmitted || !acceptedAgreement
                     }
                   >
                     {status === FormStatus.Unsubmitted
@@ -247,7 +169,7 @@ function ApplyForCertifiedContributor() {
                 />
               )}
             </div>
-          </DefaultLayout>
+          </ProtectedPage>
         );
       }}
     />
@@ -258,21 +180,6 @@ export default ApplyForCertifiedContributor;
 
 const pageQuery = graphql`
   query {
-    allHandlesJson(sort: { fields: handle, order: ASC }) {
-      edges {
-        node {
-          id
-          handle
-          image {
-            childImageSharp {
-              resize(width: 64, quality: 90) {
-                src
-              }
-            }
-          }
-        }
-      }
-    }
     contributorTerms: markdownRemark(
       frontmatter: {
         title: { eq: "Certified Contributor Terms and Conditions" }

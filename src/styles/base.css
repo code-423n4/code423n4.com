@@ -1,13 +1,14 @@
 :root {
-  --main-purple: #8424e2;
-  --light-purple: #a29ab6;
+  --main-purple: #792cda;
+  --light-purple: #cdbef4;
   --light-blue: #5cb8ff;
   --hot-blue: #1a4bff;
   --blue: #361ee0;
+  --dark-purple: #4a00b1;
   --hot-pink: #ff108b;
   --orange: #ff4000;
 
-  --header-background-purple: #190b3e;
+  --header-background-purple: #1a0c3e;
   --background-purple: #160f29;
   --secondary-background-purple: #291d4d;
   --tertiary-background-purple: #433d55;
@@ -21,7 +22,7 @@
 
   /* these rgb color values should be identical to their pairs above */
   /* use these to change opacity like this: `rgba(var(--main-purple-rgb), 0.8)` */
-  --main-purple-rgb: 132, 36, 226;
+  --main-purple-rgb: 121, 44, 218;
 
   --page-margin: 40px;
   --page-margin-mobile: 8px;
@@ -69,6 +70,7 @@ h1 {
 
 h2 {
   color: var(--text-headers);
+  font-family: "Roboto", sans-serif;
 }
 
 h2 code {
@@ -220,7 +222,7 @@ a {
 }
 
 a:hover {
-  color: var(--orange);
+  color: var(--light-purple);
 }
 
 p a:hover,
@@ -232,7 +234,7 @@ h4 a:hover,
 h5 a:hover,
 h6 a:hover,
 blockquote a:hover {
-  color: var(--orange);
+  color: var(--light-purple);
 }
 
 h1.page-header {
@@ -255,7 +257,7 @@ iframe {
 
 .button-div {
   background-color: transparent;
-  border:none;
+  border: none;
 }
 
 @media (max-width: 600px) {
@@ -281,13 +283,12 @@ iframe {
   }
 }
 
-
 @media only screen and (max-width: 740px),
   (min-device-width: 768px) and (max-device-width: 1024px) {
-    h1.page-header {
-      margin: 0;
-      padding: 0;
-      text-align: center;
-      font-size: 22px;
-    }
+  h1.page-header {
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    font-size: 22px;
+  }
 }

@@ -2,21 +2,29 @@ import React from "react";
 import { graphql, Link } from "gatsby";
 
 import SubmitFindings from "../components/reporter/SubmitFindings";
-
+import ProtectedPage from "../components/ProtectedPage";
 
 const ReportForm = (props) => {
   const endTime = props.data.contestsCsv.end_time;
   const hasContestEnded = Date.now() > new Date(endTime).getTime();
 
   return (
-    <main>
+    <ProtectedPage
+      pageTitle="Submit finding | Code 423n4"
+      message={
+        <>
+          You need to be a registered warden currently connected via wallet to
+          see this page.
+        </>
+      }
+    >
       {hasContestEnded ? (
         <div className="center">
           <h1>This contest has ended.</h1>
           <p>You can no longer submit findings for this contest.</p>
           <Link
             to="/contests"
-            className="contest-repo button button-small cta-button primary"
+            className="contest-repo button cta-button primary"
           >
             View active contests
           </Link>
@@ -27,9 +35,10 @@ const ReportForm = (props) => {
           sponsor={props.data.contestsCsv.sponsor.name}
           contest={props.data.contestsCsv.contestid}
           repo={props.data.contestsCsv.findingsRepo}
+          title={props.data.contestsCsv.title}
         />
       )}
-    </main>
+    </ProtectedPage>
   );
 };
 
