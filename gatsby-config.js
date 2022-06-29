@@ -12,7 +12,6 @@ function csvBooleanParser(item) {
 
 const plugins = [
   `gatsby-plugin-react-helmet`,
-  `gatsby-remark-autolink-headers`,
   {
     resolve: `gatsby-source-filesystem`,
     options: {
@@ -59,6 +58,7 @@ const plugins = [
     resolve: `gatsby-transformer-remark`,
     options: {
       plugins: [
+        `gatsby-remark-autolink-headers`,
         `gatsby-remark-copy-linked-files`,
         `gatsby-remark-smartypants`,
         {
