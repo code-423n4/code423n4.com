@@ -17,9 +17,7 @@ const TextArea = ({
   fieldState,
   isInvalid,
   onChange,
-  maxSize,
-  helpText,
-  type
+  maxSize = 65536,
 }) => {
   function handleChange(e) {
     onChange(e);
@@ -58,11 +56,6 @@ const TextArea = ({
           )}
         </div>
       </TabPanel>
-      {type !== 'markdown' && helpText ? (
-            <p >{helpText}</p>
-          ) : (
-            <ReactMarkdown>{helpText}</ReactMarkdown>
-          )}
       <TabPanel>
         <ReactMarkdown
           className={clsx(styles.Control, styles.Markdown)}

@@ -3,3 +3,5 @@
 
 import "./src/styles/global.css";
 import "gatsby-remark-mathjax-ssr/mathjax.css";
+
+export { wrapRootElement } from "./src/hooks/UserContext";
