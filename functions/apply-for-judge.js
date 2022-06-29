@@ -1,18 +1,18 @@
-const { Octokit } = require("@octokit/core");
-const { token } = require("./_config");
 const dedent = require("dedent");
+const { Moralis } = require("moralis/node");
+const { Octokit } = require("@octokit/core");
+
+const { token, moralisAppId, moralisServerUrl } = require("./_config");
 
 const octokit = new Octokit({ auth: token });
 
 exports.handler = async (event) => {
-  // console.log("event:", event);
-
   // only allow POST
   try {
     if (event.httpMethod !== "POST") {
       return {
         statusCode: 405,
-        body: "Method not allowed",
+        body: JSON.stringify({ error: "Method not allowed" }),
         headers: { Allow: "POST" },
       };
     }
@@ -42,7 +42,61 @@ exports.handler = async (event) => {
     ) {
       return {
         statusCode: 422,
-        body: "All form fields are required",
+        body: JSON.stringify({ error: "All form fields are required" }),
+      };
+    }
+
+    const authorization = event.headers["x-authorization"];
+    if (!authorization) {
+      return {
+        statusCode: 401,
+        body: JSON.stringify({
+          error: "Unauthorized",
+        }),
+      };
+    }
+
+    await Moralis.start({
+      serverUrl: moralisServerUrl,
+      appId: moralisAppId,
+    });
+
+    const userUrl = `${event.headers.origin}/.netlify/functions/get-user?id=${handle}`;
+    const userResponse = await fetch(userUrl);
+    if (!userResponse.ok) {
+      return {
+        statusCode: 401,
+        body: JSON.stringify({
+          error:
+            "You must be a registered warden to apply to be a C4 contest judge",
+        }),
+      };
+    }
+
+    const userData = await userResponse.json();
+    if (!userData || !userData.moralisId) {
+      return {
+        statusCode: 401,
+        body: JSON.stringify({
+          error:
+            "You must be a registered warden to apply to be a C4 contest judge",
+        }),
+      };
+    }
+
+    const { moralisId } = userData;
+    const sessionToken = authorization.split("Bearer ")[1];
+    const confirmed = await Moralis.Cloud.run("confirmUser", {
+      sessionToken,
+      moralisId,
+      username: handle,
+    });
+    if (!confirmed) {
+      return {
+        statusCode: 401,
+        body: JSON.stringify({
+          error: "Authorization failed",
+        }),
       };
     }
 
@@ -70,15 +124,13 @@ exports.handler = async (event) => {
     const createIssue = await octokit.request(
       "POST /repos/{owner}/{repo}/issues",
       {
-        owner: "code-423n4",
+        owner: process.env.GITHUB_REPO_OWNER,
         repo: "judges",
         title: `Warden ${handle} has applied to be a judge`,
         body: `${details}`,
         labels: ["candidate"],
       }
     );
-
-    // const createIssue = await true;
 
     return {
       statusCode: 201,
@@ -87,8 +139,8 @@ exports.handler = async (event) => {
   } catch (err) {
     console.error(err);
     return {
-      statusCode: 500,
-      body: JSON.stringify({ error: "Internal server error." }),
+      statusCode: err.status || 500,
+      body: JSON.stringify({ error: err.message || "Internal server error." }),
     };
   }
 };

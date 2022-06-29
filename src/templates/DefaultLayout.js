@@ -1,8 +1,11 @@
 import React from "react";
 import Helmet from "react-helmet";
+import { ToastContainer } from "react-toastify";
+import Banner from "../components/Banner";
 
 import Footer from "../components/content/Footer";
 import Header from "../components/content/Header";
+import Modal from "../components/Modal";
 
 const DefaultLayout = (props) => {
   const {
@@ -12,6 +15,7 @@ const DefaultLayout = (props) => {
     children,
     url,
     preview,
+    hideConnectWalletDropdown = false,
   } = props;
   return (
     <>
@@ -78,7 +82,10 @@ const DefaultLayout = (props) => {
         </title>
         <body className={bodyClass} />
       </Helmet>
-      <Header />
+      <Banner />
+      <Header hideConnectWalletDropdown={hideConnectWalletDropdown} />
+      <ToastContainer />
+      <Modal />
       <main>
         {children}
         <Footer />
