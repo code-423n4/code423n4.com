@@ -34,16 +34,17 @@ function getPrData(isUpdate, handle, gitHubUsername) {
 
   const title = `${sentenceVerb} warden ${handle}`;
   const branchName = `warden/${handle}`;
+  const tag = gitHubUsername ? `@${gitHubUsername}` : "";
   const body = isUpdate
     ? dedent`
       This auto-generated PR updates info for warden ${handle}
 
-      @${gitHubUsername}
+      ${tag}
     `
     : dedent`
         Auto-generated PR to register the new warden ${handle}
 
-        @${gitHubUsername}
+        ${tag}
         `;
   return { title, body, branchName };
 }
@@ -78,13 +79,6 @@ exports.handler = async (event) => {
       return {
         statusCode: 422,
         body: JSON.stringify({ error: "Handle is required" }),
-      };
-    }
-
-    if (!gitHubUsername) {
-      return {
-        statusCode: 422,
-        body: JSON.stringify({ error: "GitHub username is required" }),
       };
     }
 

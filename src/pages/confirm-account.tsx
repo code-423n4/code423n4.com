@@ -95,7 +95,6 @@ export default function ConfirmAccount() {
         !captchaToken ||
         !discordUsername ||
         !isValidDiscord ||
-        !gitHubUsername ||
         !emailAddress
       ) {
         setHasValidationErrors(true);
@@ -124,9 +123,12 @@ export default function ConfirmAccount() {
         try {
           user.set("c4Username", confirmedHandle);
           user.set("discordUsername", discordUsername);
-          user.set("gitHubUsername", gitHubUsername);
           user.set("emailAddress", emailAddress);
           user.set("handlesPendingConfirmation", []);
+          if (gitHubUsername) {
+            user.set("gitHubUsername", gitHubUsername);
+          }
+
           await user.save();
           logUserOut();
           setStatus(FormStatus.Submitted);
@@ -242,33 +244,6 @@ export default function ConfirmAccount() {
                 )}
               </div>
               <div className={widgetStyles.Container}>
-                <label htmlFor="gitHubUsername" className={widgetStyles.Label}>
-                  GitHub Username *
-                </label>
-                <p className={widgetStyles.Help}>
-                  Used in case we need to give you access to certain
-                  repositories.
-                </p>
-                <input
-                  className={clsx(
-                    widgetStyles.Control,
-                    widgetStyles.Text,
-                    hasValidationErrors && !gitHubUsername && "input-error"
-                  )}
-                  type="text"
-                  id="gitHubUsername"
-                  name="gitHubUsername"
-                  placeholder="Username"
-                  value={gitHubUsername}
-                  onChange={(e) => setGitHubUsername(e.target.value)}
-                />
-                {!gitHubUsername && hasValidationErrors && (
-                  <p className={widgetStyles.ErrorMessage}>
-                    <small>This field is required</small>
-                  </p>
-                )}
-              </div>
-              <div className={widgetStyles.Container}>
                 <label htmlFor="emailAddress" className={widgetStyles.Label}>
                   Email Address *
                 </label>
@@ -294,6 +269,24 @@ export default function ConfirmAccount() {
                     <small>This field is required</small>
                   </p>
                 )}
+              </div>
+              <div className={widgetStyles.Container}>
+                <label htmlFor="gitHubUsername" className={widgetStyles.Label}>
+                  GitHub Username (Optional)
+                </label>
+                <p className={widgetStyles.Help}>
+                  Used in case we need to give you access to certain
+                  repositories.
+                </p>
+                <input
+                  className={clsx(widgetStyles.Control, widgetStyles.Text)}
+                  type="text"
+                  id="gitHubUsername"
+                  name="gitHubUsername"
+                  placeholder="Username"
+                  value={gitHubUsername}
+                  onChange={(e) => setGitHubUsername(e.target.value)}
+                />
               </div>
               <div className="captcha-container">
                 <HCaptcha
