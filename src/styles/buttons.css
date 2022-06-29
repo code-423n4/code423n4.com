@@ -49,3 +49,13 @@
 .cta-button.secondary:hover {
   background-color: var(--main-purple);
 }
+
+.cta-button.danger {
+  background-color: transparent;
+  color: #fff;
+  box-shadow: inset 0px 0px 0px 2px var(--hot-pink);
+}
+
+.cta-button.danger:hover {
+  background-color: var(--hot-pink);
+}
