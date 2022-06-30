@@ -371,7 +371,7 @@ Given:
 *   Alice is the first liquidity provider.
 
 1.  Alice transfers 1e18 WBTC and 1e18 USDT to mint 100e18 of liquidity;
-2.  Bob can use 100e18 USDT (\~$100) to swap out most of the balance of WBTC.
+2.  Bob can use 100e18 USDT (\~\$100) to swap out most of the balance of WBTC.
 
 ##### Impact
 A significant portion (>90% in the case above) of the user's funds can be lost due to arbitrage.
@@ -449,8 +449,8 @@ This implies that all tokens must be provided in equal "raw amounts", regardless
 ###### Issue 1
 
 Imagine I want to create a DAI/WBTC pool.
-If I want to initialize the pool with 100$ of DAI, `amountIn = ratio` needs to be `100*1e18=1e20` as DAI has 18 decimals.
-However, I now also need to supply `1e20` of WBTC (which has 8 decimals) and I'd need to pay `1e20/1e8 * priceOfBTC`, over a quadrillion dollars to match it with the 100$ of DAI.
+If I want to initialize the pool with 100\$ of DAI, `amountIn = ratio` needs to be `100*1e18=1e20` as DAI has 18 decimals.
+However, I now also need to supply `1e20` of WBTC (which has 8 decimals) and I'd need to pay `1e20/1e8 * priceOfBTC`, over a quadrillion dollars to match it with the 100\$ of DAI.
 
 ###### Issue 2
 
