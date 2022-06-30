@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useRef, ReactNode } from "react";
+import React, { useCallback, useState, useRef, ReactNode, useEffect } from "react";
 import clsx from "clsx";
 import HCaptcha from "@hcaptcha/react-hcaptcha";
 import Moralis from "moralis/types";
@@ -64,6 +64,7 @@ export default function RegistrationForm({ handles, wardens, className }) {
   const [status, setStatus] = useState<FormStatus>(FormStatus.Unsubmitted);
   const [errorMessage, setErrorMessage] = useState<string | ReactNode>("");
   const [isDangerousUsername, setisDangerousUsername] = useState(false);
+  const [hasValidateLinkError, setHasValidateLinkError] = useState(false);
   const [captchaToken, setCaptchaToken] = useState("");
 
   // global variables
@@ -101,6 +102,18 @@ export default function RegistrationForm({ handles, wardens, className }) {
       setErrorMessage(message);
     }
   };
+
+  useEffect(() => {
+    const link = state.link;
+    const check = new RegExp('^(?:[a-z]+:)?//', 'i');
+    if(link !== undefined){
+      if(!check.test(link) && link !== ''){
+        setHasValidateLinkError(true);
+        return;
+      }
+    }
+    setHasValidateLinkError(false);
+  },[state.link]);
 
   const resetForm = () => {
     setErrorMessage("");
@@ -158,7 +171,8 @@ export default function RegistrationForm({ handles, wardens, className }) {
           !isValidDiscord ||
           !state.emailAddress ||
           isDangerousUsername ||
-          (isNewUser && handles.has(state.username))
+          (isNewUser && handles.has(state.username)) ||
+          hasValidateLinkError
         ) {
           setHasValidationErrors(true);
           return;
@@ -288,6 +302,7 @@ export default function RegistrationForm({ handles, wardens, className }) {
       hasValidationErrors,
       isValidDiscord,
       captchaToken,
+      hasValidateLinkError
     ]
   );
 
@@ -503,6 +518,9 @@ export default function RegistrationForm({ handles, wardens, className }) {
                   value={state.link}
                   onChange={handleChange}
                 />
+                 {hasValidationErrors && hasValidateLinkError && (
+                    <p className={widgetStyles.ErrorMessage}>Please provide a valid url. "https://domain_name" required.</p>
+                  )}
               </div>
               <div className={widgetStyles.Container}>
                 <label htmlFor="avatar" className={widgetStyles.Label}>
