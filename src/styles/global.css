@@ -1,9 +1,11 @@
+@import "react-toastify/dist/ReactToastify.css";
+@import "./helpers.css";
 @import "./base.css";
 @import "./buttons.css";
 @import "./contest.css";
 @import "./contest-list.css";
 @import "./cosmos.css";
-@import "./error-page.css"; 
+@import "./error-page.css";
 @import "./footer.css";
 @import "./forms.css";
 @import "./header.css";
@@ -14,3 +16,6 @@
 @import "./reports.css";
 @import "./tabs.css";
 @import "./testimonials.css";
+@import "./error-page.css";
+@import "./toast.css";
+@import "./modal.css";
