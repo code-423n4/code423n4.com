@@ -86,6 +86,11 @@ const UserProvider = ({ children }) => {
     }
     const initializeEventListeners = () => {
       Moralis.onAccountChanged(async (account) => {
+        if (!account) {
+          // wallet locked
+          return;
+        }
+
         const user = await Moralis.User.current();
         if (!user) {
           toast.error(
@@ -128,10 +133,9 @@ const UserProvider = ({ children }) => {
               </>
             ),
             primaryButtonText: "Link address",
-            secondaryButtonText: "Logout",
+            secondaryButtonText: "Cancel",
             primaryButtonAction: async () =>
               await linkAccount(account, username),
-            secondaryButtonAction: logout,
           });
         } catch (error) {
           toast.error(error.message);
