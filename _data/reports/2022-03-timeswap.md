@@ -229,7 +229,7 @@ From the prior contest:
 > and since your solidity version is above 0.8.0 the line:<br>
 > due.debt -= assetsIn\[i]; will revert due to underflow
 >
-> The attacker can keep doing it everytime the user is going to pay and since 1 token is baisicly 0$ (18 decimals) the attacker doesn't lose real money
+> The attacker can keep doing it everytime the user is going to pay and since 1 token is baisicly 0\$ (18 decimals) the attacker doesn't lose real money
 
 [code-423n4/2022-01-timeswap-findings#86 (comment)](https://github.com/code-423n4/2022-01-timeswap-findings/issues/86#issue-1095233776)
 
