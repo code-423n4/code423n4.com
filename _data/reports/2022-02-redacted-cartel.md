@@ -1044,7 +1044,7 @@ _Submitted by hickuphh3_
 
 The `ThecosomataETH` contract adds ETH and BTRFLY tokens as liquidity into the [ETH-BTRFLY curve crypto pool](https://etherscan.io/address/0xf43b15ab692fde1f9c24a9fce700adcc809d5391). The `calculateAmountRequiredForLP()` function relies on the `price_oracle` value returned by the pool to calculate the ETH and BTRFLY amounts to be added as liquidity. It is therefore important to ensure that `price_oracle` is accurate.
 
-At the time of writing, the pool has about $5M in liquidity, which is comparable to that of the [liquidity provided on UniswapV3](https://info.uniswap.org/#/pools/0xdf9ab3c649005ebfdf682d2302ca1f673e0d37a2). Flash loan attacks are therefore possible, but ineffective (explained further later).
+At the time of writing, the pool has about \$5M in liquidity, which is comparable to that of the [liquidity provided on UniswapV3](https://info.uniswap.org/#/pools/0xdf9ab3c649005ebfdf682d2302ca1f673e0d37a2). Flash loan attacks are therefore possible, but ineffective (explained further later).
 
 In the [curve v2 whitepaper](https://curve.fi/files/crypto-pools-paper.pdf), the price oracle mechanism is explained briefly in the “Algorithm for repegging” section. It is reproduced below for convenience.
 
