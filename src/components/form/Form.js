@@ -102,6 +102,7 @@ const Form = ({
                   name={field.name}
                   label={field.label}
                   helpText={field.helpText}
+                  type={field.type}
                   isInvalid={isInvalid}
                 >
                   <Widget

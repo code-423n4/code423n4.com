@@ -95,6 +95,11 @@ const plugins = [
             },
           },
         },
+        {
+          resolve: `gatsby-remark-mathjax-ssr`,
+          options: {
+          }
+        },
       ],
     },
   },
