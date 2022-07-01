@@ -36,7 +36,6 @@
   --art-height: 100px;
   --art-border-radius: 10px;
   --art-transition: all 0.2s ease-out;
-  
   object-fit:cover;
   background-color: var(--secondary-background-purple);
   background-repeat: no-repeat;
