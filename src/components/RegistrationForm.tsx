@@ -70,6 +70,7 @@ export default function RegistrationForm({ handles, wardens, className }) {
   // global variables
   const avatarInputRef = useRef<HTMLInputElement>();
   const discordUsernameRegex = new RegExp(/.*#[0-9]{4}/, "g");
+  const checkAbsoluteURL = new RegExp('^(?:[a-z]+:)?//', 'i');
   const instructions = isNewUser ? (
     <p>
       To register as a warden, please fill out this form and join us in{" "}
@@ -103,18 +104,6 @@ export default function RegistrationForm({ handles, wardens, className }) {
     }
   };
 
-  useEffect(() => {
-    const link = state.link;
-    const check = new RegExp('^(?:[a-z]+:)?//', 'i');
-    if(link !== undefined){
-      if(!check.test(link) && link !== ''){
-        setHasValidateLinkError(true);
-        return;
-      }
-    }
-    setHasValidateLinkError(false);
-  },[state.link]);
-
   const resetForm = () => {
     setErrorMessage("");
     setStatus(FormStatus.Unsubmitted);
@@ -130,6 +119,11 @@ export default function RegistrationForm({ handles, wardens, className }) {
     }
     if (name === "username") {
       setisDangerousUsername(value.match(/^[0-9a-zA-Z_\-]+$/) === null);
+    }
+    if(name === "link"){
+      if(value !== undefined && value !== ''){
+          setHasValidateLinkError(!checkAbsoluteURL.test(value));
+      }
     }
   }, []);
 
