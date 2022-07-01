@@ -36,7 +36,8 @@
   --art-height: 100px;
   --art-border-radius: 10px;
   --art-transition: all 0.2s ease-out;
-
+  
+  object-fit:cover;
   background-color: var(--secondary-background-purple);
   background-repeat: no-repeat;
   background-position: 0, -50%;
@@ -49,6 +50,10 @@
   cursor: pointer;
   position: relative;
   background-size:cover!important; 
+}
+
+.contest-artwork-default{
+  object-fit:none;
 }
 
 .contest-page .contest-artwork:hover {
@@ -77,6 +82,10 @@
 .contest-page .contest-artwork.open {
   height: auto;
   background-position: 0, 0;
+}
+
+.contest-page .contest-artwork-default.open {
+  padding-bottom: 56.25%;
 }
 
 .contest-page .header-live {
