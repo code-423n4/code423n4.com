@@ -11,7 +11,6 @@ const Widget = ({ field, fieldState, isInvalid, onChange }) => {
     required,
     options,
     maxSize = 65536,
-    helpText = null,
   } = field;
 
   function handleChange(e) {
@@ -36,7 +35,6 @@ const Widget = ({ field, fieldState, isInvalid, onChange }) => {
       fieldState={fieldState[name]}
       isInvalid={isInvalid}
       maxSize={maxSize}
-      helpText={helpText}
     />
   );
 
