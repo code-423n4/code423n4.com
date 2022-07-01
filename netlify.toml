@@ -3,15 +3,24 @@
   publish = "public/"
   command = "yarn build"
   environment = { YARN_VERSION = "1.22.10" }
-  
+
 [[redirects]]
   from = "/is"
   to = "/images/code4rena_is.pdf"
-  status = 200  
+  status = 200
+
+[[redirects]]
+  from = "/warden-registration"
+  to = "/register"
+  status = 200
 
 [context.deploy-preview]
   ignore = "bash ./netlify-ignore-branch.sh"
+  environment = { GATSBY_STAGING = "true" }
+
+[context.staging]
+  environment = { GATSBY_STAGING = "true" }
 
 [functions]
   directory = "functions/"
-  included_files = ["_data/contests/*"]
+  included_files = ["_data/contests/*", "_data/handles/*.json"]

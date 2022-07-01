@@ -2,7 +2,7 @@
   color-scheme: dark;
   background-color: var(--secondary-background-purple);
   color: #ccc;
-  max-width: 700px;
+  max-width: 930px;
   margin: 40px auto;
   padding: 40px;
   border: 1px solid var(--border-lightest-background);
@@ -10,10 +10,29 @@
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue",
     Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji",
     "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
 
-  & h1 {
-    text-align: center;
-  }
+.FormSmall {
+  max-width: 700px;
+}
+
+.Heading1 {
+  font-size: 36px;
+  text-align: center;
+}
+
+.Heading2 {
+  font-size: 24px;
+  text-align: center;
+}
+
+.Heading3 {
+  font-size: 20px;
+}
+
+.Heading4 {
+  font-size: 16px;
+  text-transform: uppercase;
 }
 
 .FormMax {
@@ -55,15 +74,9 @@
 
 .Button {
   font-family: inherit;
-  display: block;
-  padding: 10px;
-  width: 200px;
-  margin: 10px auto;
-  font-weight: bold;
-
-  &:hover {
-    cursor: pointer;
-  }
+  margin: 10px;
+  display: flex;
+  align-items: center;
 
   &:disabled {
     opacity: 0.3;
@@ -72,14 +85,34 @@
   &:disabled:hover {
     cursor: not-allowed;
   }
+}
 
-  @media (prefers-color-scheme: dark) {
-    background-color: black;
-    color: #fff;
-    border: 1px solid #fff;
+.ButtonsWrapper {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
 
-    &:hover {
-      background-color: rgba(255, 255, 255, 0.2);
-    }
-  }
+.Icon {
+  margin-right: 10px;
+  height: 20px;
+}
+
+.DividingLine {
+  margin: 20px -40px;
+  height: 0;
+  border-top: 2px solid var(--border-lightest-background);
+}
+
+.EmphasizedInputGroup {
+  margin: 20px -40px;
+  padding: 30px 45px;
+  border: none;
+  border-top: 2px solid var(--border-lightest-background);
+  border-bottom: 2px solid var(--border-lightest-background);
+  background: var(--header-background-purple);
+}
+
+.EmphasizedInputGroup p {
+  font-size: 13px;
 }

@@ -1,9 +1,22 @@
-const { Octokit } = require("@octokit/core");
 const { createPullRequest } = require("octokit-plugin-create-pull-request");
+const dedent = require("dedent");
+const formData = require("form-data");
+const Kickbox = require("kickbox");
+const Mailgun = require("mailgun.js");
+const { Moralis } = require("moralis/node");
+const { Octokit } = require("@octokit/core");
 const sharp = require("sharp");
 const { verify } = require("hcaptcha");
-const { token } = require("./_config");
-const dedent = require("dedent");
+
+const {
+  token,
+  apiKey,
+  domain,
+  moralisAppId,
+  moralisServerUrl,
+  kickboxApiKey,
+} = require("./_config");
+const { resolve } = require("core-js/fn/promise");
 
 const OctokitClient = Octokit.plugin(createPullRequest);
 const octokit = new OctokitClient({ auth: token });
@@ -12,37 +25,54 @@ function isDangerous(s) {
   return s.match(/^[0-9a-zA-Z_\-]+$/) === null;
 }
 
+function getPrData(isUpdate, handle, gitHubUsername) {
+  let sentenceVerb = "Register";
+
+  if (isUpdate) {
+    sentenceVerb = "Update";
+  }
+
+  const title = `${sentenceVerb} warden ${handle}`;
+  const branchName = `warden/${handle}`;
+  const tag = gitHubUsername ? `@${gitHubUsername}` : "";
+  const body = isUpdate
+    ? dedent`
+      This auto-generated PR updates info for warden ${handle}
+
+      ${tag}
+    `
+    : dedent`
+        Auto-generated PR to register the new warden ${handle}
+
+        ${tag}
+        `;
+  return { title, body, branchName };
+}
+
 exports.handler = async (event) => {
   // only allow POST
   try {
     if (event.httpMethod !== "POST") {
       return {
         statusCode: 405,
-        body: JSON.stringify({ error: "Method not allowed" }),
+        body: JSON.stringify({
+          error: "Method not allowed",
+        }),
         headers: { Allow: "POST" },
       };
     }
 
-    const { authorization } = event.headers;
-    if (!authorization) {
-      return {
-        statusCode: 401,
-        body: JSON.stringify({ error: "Authorization failed" }),
-      };
-    }
-    const { success } = await verify(
-      process.env.HCAPTCHA_SECRET,
-      authorization
-    );
-    if (!success) {
-      return {
-        statusCode: 401,
-        body: JSON.stringify({ error: "Authorization failed" }),
-      };
-    }
-
     const data = JSON.parse(event.body);
-    let { handle, qualifications, image, link } = data;
+    const {
+      handle,
+      image,
+      link,
+      moralisId,
+      gitHubUsername,
+      emailAddress,
+      polygonAddress,
+      isUpdate,
+    } = data;
 
     // ensure we have the data we need
     if (!handle) {
@@ -52,12 +82,27 @@ exports.handler = async (event) => {
       };
     }
 
-    if (!qualifications) {
+    if (!emailAddress) {
+      return {
+        statusCode: 422,
+        body: JSON.stringify({ error: "Email address is required" }),
+      };
+    }
+
+    if (!moralisId) {
       return {
         statusCode: 422,
         body: JSON.stringify({
-          error:
-            "Please provide evidence of your ability to compete in an EVM-base audit contest",
+          error: "Moralis id is required",
+        }),
+      };
+    }
+
+    if (!polygonAddress) {
+      return {
+        statusCode: 422,
+        body: JSON.stringify({
+          error: "Address is required",
         }),
       };
     }
@@ -72,7 +117,84 @@ exports.handler = async (event) => {
       };
     }
 
-    let formattedHandleData = { handle, link };
+    const { authorization } = event.headers;
+    if (!authorization) {
+      return {
+        statusCode: 401,
+        body: JSON.stringify({ error: "Authorization failed" }),
+      };
+    }
+
+    const { success } = await verify(
+      process.env.HCAPTCHA_SECRET,
+      authorization
+    );
+    if (!success) {
+      return {
+        statusCode: 401,
+        body: JSON.stringify({ error: "Authorization failed" }),
+      };
+    }
+
+    if (kickboxApiKey) {
+      const kickbox = Kickbox.client(kickboxApiKey).kickbox();
+      const kickboxPromise = new Promise((resolve, reject) => {
+        kickbox.verify(emailAddress, async function (err, kickboxResponse) {
+          // @todo: determine which results we should reject
+          if (kickboxResponse.body.result === "undeliverable") {
+            reject(kickboxResponse.body.message || "");
+          }
+          resolve(kickboxResponse.body.result);
+        });
+      });
+      try {
+        await kickboxPromise;
+      } catch (error) {
+        return {
+          statusCode: 422,
+          body: JSON.stringify({
+            error: "The email address you entered is not valid. " + error,
+          }),
+        };
+      }
+    }
+
+    const url = `${event.headers.origin}/.netlify/functions/get-user?id=${handle}`;
+    // make sure that an update has a valid warden file, and a new registration does not
+    const response = await fetch(url);
+    if (isUpdate && !response.ok) {
+      return {
+        statusCode: 422,
+        body: JSON.stringify({ error: "Account does not exist" }),
+      };
+    }
+    const userData = await response.json();
+    if ((!isUpdate && response.ok) || userData.moralisId) {
+      return {
+        statusCode: 422,
+        body: JSON.stringify({ error: "This user is already registered" }),
+      };
+    }
+
+    await Moralis.start({
+      serverUrl: moralisServerUrl,
+      appId: moralisAppId,
+    });
+
+    try {
+      await Moralis.Cloud.run("checkHandleAgainstPreviousSubmissions", {
+        username: handle,
+        moralisId,
+        polygonAddress,
+      });
+    } catch (error) {
+      return {
+        statusCode: 422,
+        body: JSON.stringify({ error: "Unauthorized" }),
+      };
+    }
+
+    const formattedHandleData = { handle, link, moralisId };
     let avatarFilename = "";
     let base64Avatar = "";
     if (image) {
@@ -99,50 +221,130 @@ exports.handler = async (event) => {
       };
     }
 
-    const body = dedent`
-      Auto-generated PR to register the new warden ${handle}
-      
-      ${qualifications}
-      `;
+    const owner = process.env.GITHUB_REPO_OWNER;
+    // @todo: delete this once all existing users have completed registration
+    if (isUpdate) {
+      try {
+        const wardenFile = await octokit.request(
+          "GET /repos/{owner}/{repo}/contents/{path}",
+          {
+            owner,
+            repo: process.env.REPO,
+            path: `_data/handles/${handle}.json`,
+          }
+        );
 
+        const content = JSON.stringify(
+          {
+            ...JSON.parse(Buffer.from(wardenFile.data.content, "base64")),
+            moralisId,
+          },
+          null,
+          2
+        );
+        files[`_data/handles/${handle}.json`] = content;
+      } catch (error) {
+        console.error(error);
+        return {
+          statusCode: 500,
+          body: JSON.stringify({ error: "Internal server error." }),
+        };
+      }
+    }
+
+    const { title, body, branchName } = getPrData(
+      isUpdate,
+      handle,
+      gitHubUsername
+    );
     try {
       const res = await octokit.createPullRequest({
-        owner: "code-423n4",
-        repo: "code423n4.com",
-        title: `Add warden ${handle}`,
+        owner,
+        repo: process.env.REPO,
+        title,
         body,
-        head: `warden-${handle}`,
+        head: branchName,
+        base: "warden/registrations",
         changes: [
           {
             files,
-            commit: `Add warden ${handle}`,
+            commit: title,
           },
         ],
       });
 
-      await octokit.request("POST /repos/{owner}/{repo}/issues/{issue_number}/labels", {
-        owner: "code-423n4",
-        repo: "code423n4.com",
-        issue_number: res.data.number,
-        labels: [
-          "app-warden",
-        ]
-      });
+      const labels = isUpdate ? ["re-registration"] : ["app-warden"];
 
+      await octokit.request(
+        "POST /repos/{owner}/{repo}/issues/{issue_number}/labels",
+        {
+          owner,
+          repo: process.env.REPO,
+          issue_number: res.data.number,
+          labels,
+        }
+      );
+
+      if (apiKey && domain) {
+        const mailgun = new Mailgun(formData);
+        const mg = mailgun.client({ username: "api", key: apiKey });
+
+        const emailBody = dedent`
+          Your registration is being processed.
+
+          You can monitor the pull request here: ${res.data.html_url}
+
+          Once this pull request is merged, you can log in and compete in contests.
+        `;
+
+        const emailData = {
+          from: process.env.EMAIL_SENDER,
+          to: emailAddress,
+          subject: `Registration pending for ${handle}`,
+          text: emailBody,
+        };
+
+        return mg.messages
+          .create(domain, emailData)
+          .then(() => {
+            return {
+              statusCode: 201,
+              body: JSON.stringify({
+                message: `Created PR ${res.data.number} and sent confirmation email`,
+              }),
+            };
+          })
+          .catch((err) => {
+            return {
+              statusCode: err.status || 500,
+              body: JSON.stringify({
+                error:
+                  "Failed to send confirmation email. " + (err.message || err),
+              }),
+            };
+          });
+      } else {
+        return {
+          statusCode: 201,
+          body: JSON.stringify({
+            message: `Created PR ${res.data.number}. Email confirmation skipped`,
+          }),
+        };
+      }
+    } catch (error) {
       return {
-        statusCode: 201,
-        body: JSON.stringify({ message: `Created PR ${res.data.number}` }),
-      };
-    } catch (err) {
-      return {
-        statusCode: err.response.status,
-        body: JSON.stringify({ error: err.response.data.message.toString() }),
+        statusCode: error.response.status,
+        body: JSON.stringify({
+          error: error.response.data.message.toString(),
+        }),
       };
     }
-  } catch (err) {
+  } catch (error) {
     return {
-      statusCode: 500,
-      body: JSON.stringify({ error: "Internal server error." }),
+      statusCode: error.status || 500,
+      body: JSON.stringify({
+        error: error.message || "Internal server error.",
+      }),
     };
   }
 };

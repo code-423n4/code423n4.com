@@ -5,7 +5,13 @@ import LinesOfCode from "../LinesOfCodeInput";
 import WardenField from "./WardenField";
 
 const Widget = ({ field, fieldState, isInvalid, onChange }) => {
-  const { widget, name, required, options, maxSize = 65536, helpText = null } = field;
+  const {
+    widget,
+    name,
+    required,
+    options,
+    maxSize = 65536,
+  } = field;
 
   function handleChange(e) {
     onChange(e);
@@ -29,7 +35,6 @@ const Widget = ({ field, fieldState, isInvalid, onChange }) => {
       fieldState={fieldState[name]}
       isInvalid={isInvalid}
       maxSize={maxSize}
-      helpText={helpText}
     />
   );
 
