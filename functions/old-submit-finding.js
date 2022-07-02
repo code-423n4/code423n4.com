@@ -128,7 +128,7 @@ exports.handler = async (event) => {
         repo,
         title,
         body,
-        labels,
+        labels: [...labels, "old-submission-method"],
       }
     );
 
