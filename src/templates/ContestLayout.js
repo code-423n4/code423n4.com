@@ -65,20 +65,29 @@ const ContestLayout = (props) => {
             )}
             <p className="days-duration">{t.daysDuration} day contest</p>
           </div>
-          <button
-            style={
-              fields.artPath !== null
-                ? { backgroundImage: `url(${fields.artPath})` }
-                : null
-            }
-            onClick={() => setArtOpen((isOpen) => !isOpen)}
-            className={clsx(
-              { open: artOpen },
-              "contest-artwork background-pattern",
-              "button-div"
-            )}
-            aria-label={`${title} artwork. Expands on click.`}
-          />
+          {fields.artPath !== null ? (
+            <img
+              src={fields.artPath}
+              onClick={() => setArtOpen((isOpen) => !isOpen)}
+              className={clsx(
+                { open: artOpen },
+                "contest-artwork background-pattern",
+                "button-div"
+              )}
+              aria-label={`${title} artwork. Expands on click.`}
+            />
+          ) : (
+            <button
+              onClick={() => setArtOpen((isOpen) => !isOpen)}
+              className={clsx(
+                { open: artOpen },
+                "contest-artwork background-pattern ",
+                "button-div",
+                "contest-artwork-default"
+              )}
+              aria-label={`${title} artwork. Expands on click.`}
+            />
+          )}
         </div>
         <section className="top-section contest-wrapper">
           <div className="sponsor-image">
