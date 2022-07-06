@@ -262,7 +262,7 @@ const SubmitFindings = ({
             window.localStorage.removeItem(findingId);
           }
           toast.error(error);
-        } else if (error.includes("sha")) {
+        } else if (error.includes(`"sha" wasn't supplied`)) {
           setStatus(FormStatus.Error);
           setErrorMessage(
             `It looks like you've already submitted a ${state.risk} report for this contest.`
