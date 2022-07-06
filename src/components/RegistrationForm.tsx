@@ -1,4 +1,10 @@
-import React, { useCallback, useState, useRef, ReactNode, useEffect } from "react";
+import React, {
+  useCallback,
+  useState,
+  useRef,
+  ReactNode,
+  useEffect,
+} from "react";
 import clsx from "clsx";
 import HCaptcha from "@hcaptcha/react-hcaptcha";
 import Moralis from "moralis/types";
@@ -70,7 +76,7 @@ export default function RegistrationForm({ handles, wardens, className }) {
   // global variables
   const avatarInputRef = useRef<HTMLInputElement>();
   const discordUsernameRegex = new RegExp(/.*#[0-9]{4}/, "g");
-  const checkAbsoluteURL = new RegExp('^(?:[a-z]+:)?//', 'i');
+  const checkAbsoluteURL = new RegExp("^(?:[a-z]+:)?//", "i");
   const instructions = isNewUser ? (
     <p>
       To register as a warden, please fill out this form and join us in{" "}
@@ -120,9 +126,9 @@ export default function RegistrationForm({ handles, wardens, className }) {
     if (name === "username") {
       setisDangerousUsername(value.match(/^[0-9a-zA-Z_\-]+$/) === null);
     }
-    if(name === "link"){
-      if(value !== undefined && value !== ''){
-          setHasValidateLinkError(!checkAbsoluteURL.test(value));
+    if (name === "link") {
+      if (value !== undefined && value !== "") {
+        setHasValidateLinkError(!checkAbsoluteURL.test(value));
       }
     }
   }, []);
@@ -296,7 +302,7 @@ export default function RegistrationForm({ handles, wardens, className }) {
       hasValidationErrors,
       isValidDiscord,
       captchaToken,
-      hasValidateLinkError
+      hasValidateLinkError,
     ]
   );
 
@@ -512,9 +518,11 @@ export default function RegistrationForm({ handles, wardens, className }) {
                   value={state.link}
                   onChange={handleChange}
                 />
-                 {hasValidationErrors && hasValidateLinkError && (
-                    <p className={widgetStyles.ErrorMessage}>Please provide a valid url. "https://domain_name" required.</p>
-                  )}
+                {hasValidationErrors && hasValidateLinkError && (
+                  <p className={widgetStyles.ErrorMessage}>
+                    Please provide a valid url. "https://domain_name" required.
+                  </p>
+                )}
               </div>
               <div className={widgetStyles.Container}>
                 <label htmlFor="avatar" className={widgetStyles.Label}>
