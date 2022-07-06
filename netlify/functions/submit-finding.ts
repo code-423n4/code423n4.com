@@ -214,7 +214,7 @@ exports.handler = async (event) => {
   try {
     const markdownPath = `data/${attributedTo}-${risk}-report.md`;
     const qaOrGasSubmissionBody = `See the markdown file with the details of this report [here](https://github.com/${owner}/${repo}/blob/main/${markdownPath}).`;
-    const isQaOrGasSubmission = Boolean(risk === "G" || risk === "1");
+    const isQaOrGasSubmission = Boolean(risk === "G" || risk === "Q");
 
     const issueResult = await octokit.request(
       "POST /repos/{owner}/{repo}/issues",
