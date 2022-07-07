@@ -15,6 +15,10 @@ const ReportForm = (props) => {
         <>
           You need to be a registered warden currently connected via wallet to
           see this page.
+
+          <p>
+            If authentication isn't working, you may <Link to={props.data.contestsCsv.fields.submissionPath + "-old"}>try the unauthenticated submission form</Link>.
+          </p>
         </>
       }
     >
@@ -54,6 +58,9 @@ export const pageQuery = graphql`
       findingsRepo
       sponsor {
         name
+      }
+      fields {
+        submissionPath
       }
     }
     allHandlesJson(sort: { fields: handle, order: ASC }) {
