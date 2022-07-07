@@ -1,6 +1,7 @@
 const dedent = require("dedent");
 const { Moralis } = require("moralis/node");
 const { Octokit } = require("@octokit/core");
+const fetch = require("node-fetch");
 
 const { token, moralisAppId, moralisServerUrl } = require("./_config");
 
