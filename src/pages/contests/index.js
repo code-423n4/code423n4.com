@@ -7,6 +7,7 @@ import DefaultLayout from "../../templates/DefaultLayout";
 export default function Contests({ data }) {
   const [filteredContests, setFilteredContest] = useState(null);
   const [contestStatusChanges, updateContestStatusChanges] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
   const contests = data.contests.edges;
   const updateContestStatus = () => {
     updateContestStatusChanges(contestStatusChanges + 1);
@@ -84,6 +85,7 @@ export default function Contests({ data }) {
   };
 
   useEffect(() => {
+    setIsLoading(true);
     fetch("/.netlify/functions/getNotionData")
       .then((res) => {
         if (res.ok) {
@@ -94,7 +96,11 @@ export default function Contests({ data }) {
       .then((data) => {
         setFilteredContest(sortContests(contests, data));
       })
+      .then((res) => {
+        setIsLoading(false);
+      })
       .catch((err) => {
+        setIsLoading(false);
         console.log(err);
       });
   }, [contests]);
@@ -106,76 +112,86 @@ export default function Contests({ data }) {
       bodyClass="contests-page"
       pageDescription="Current, upcoming, and past audit contests"
     >
-      <div className="wrapper-main">
-        {filteredContests && filteredContests.upcomingContests.length > 0 ? (
-          <section>
-            <h1>
-              Upcoming contests ({filteredContests.upcomingContests.length})
-            </h1>
-            <ContestList
-              updateContestStatus={updateContestStatus}
-              contests={filteredContests.upcomingContests}
-            />
-          </section>
-        ) : null}
-        {filteredContests && filteredContests.activeContests.length > 0 ? (
-          <section>
-            <h1>Active contests ({filteredContests.activeContests.length})</h1>
-            <ContestList
-              updateContestStatus={updateContestStatus}
-              contests={filteredContests.activeContests}
-            />
-          </section>
-        ) : null}
-        {filteredContests && filteredContests.sponsorReview.length > 0 ? (
-          <section>
-            <h1>
-              Sponsor review in progress (
-              {filteredContests.sponsorReview.length})
-            </h1>
-            <ContestList
-              updateContestStatus={updateContestStatus}
-              contests={filteredContests.sponsorReview}
-            />
-          </section>
-        ) : null}
-        {filteredContests && filteredContests.judging.length > 0 ? (
-          <section>
-            <h1>Judging in progress ({filteredContests.judging.length})</h1>
-            <ContestList
-              updateContestStatus={updateContestStatus}
-              contests={filteredContests.judging}
-            />
-          </section>
-        ) : null}
-        {filteredContests && filteredContests.awarding.length > 0 ? (
-          <section>
-            <h1>Awarding in progress ({filteredContests.awarding.length})</h1>
-            <ContestList
-              updateContestStatus={updateContestStatus}
-              contests={filteredContests.awarding}
-            />
-          </section>
-        ) : null}
-        {filteredContests && filteredContests.reporting.length > 0 ? (
-          <section>
-            <h1>Reporting in progress ({filteredContests.reporting.length})</h1>
-            <ContestList
-              updateContestStatus={updateContestStatus}
-              contests={filteredContests.reporting}
-            />
-          </section>
-        ) : null}
-        {filteredContests && filteredContests.completed.length > 0 ? (
-          <section>
-            <h1>Completed contests ({filteredContests.completed.length})</h1>
-            <ContestList
-              updateContestStatus={updateContestStatus}
-              contests={filteredContests.completed.reverse()}
-            />
-          </section>
-        ) : null}
-      </div>
+      {isLoading ? (
+        <div className="wrapper-main" style={{ height: "65vh" }}>
+          <h2 className="center">Loading contests...</h2>
+        </div>
+      ) : (
+        <div className="wrapper-main">
+          {filteredContests && filteredContests.upcomingContests.length > 0 ? (
+            <section>
+              <h1>
+                Upcoming contests ({filteredContests.upcomingContests.length})
+              </h1>
+              <ContestList
+                updateContestStatus={updateContestStatus}
+                contests={filteredContests.upcomingContests}
+              />
+            </section>
+          ) : null}
+          {filteredContests && filteredContests.activeContests.length > 0 ? (
+            <section>
+              <h1>
+                Active contests ({filteredContests.activeContests.length})
+              </h1>
+              <ContestList
+                updateContestStatus={updateContestStatus}
+                contests={filteredContests.activeContests}
+              />
+            </section>
+          ) : null}
+          {filteredContests && filteredContests.sponsorReview.length > 0 ? (
+            <section>
+              <h1>
+                Sponsor review in progress (
+                {filteredContests.sponsorReview.length})
+              </h1>
+              <ContestList
+                updateContestStatus={updateContestStatus}
+                contests={filteredContests.sponsorReview}
+              />
+            </section>
+          ) : null}
+          {filteredContests && filteredContests.judging.length > 0 ? (
+            <section>
+              <h1>Judging in progress ({filteredContests.judging.length})</h1>
+              <ContestList
+                updateContestStatus={updateContestStatus}
+                contests={filteredContests.judging}
+              />
+            </section>
+          ) : null}
+          {filteredContests && filteredContests.awarding.length > 0 ? (
+            <section>
+              <h1>Awarding in progress ({filteredContests.awarding.length})</h1>
+              <ContestList
+                updateContestStatus={updateContestStatus}
+                contests={filteredContests.awarding}
+              />
+            </section>
+          ) : null}
+          {filteredContests && filteredContests.reporting.length > 0 ? (
+            <section>
+              <h1>
+                Reporting in progress ({filteredContests.reporting.length})
+              </h1>
+              <ContestList
+                updateContestStatus={updateContestStatus}
+                contests={filteredContests.reporting}
+              />
+            </section>
+          ) : null}
+          {filteredContests && filteredContests.completed.length > 0 ? (
+            <section>
+              <h1>Completed contests ({filteredContests.completed.length})</h1>
+              <ContestList
+                updateContestStatus={updateContestStatus}
+                contests={filteredContests.completed.reverse()}
+              />
+            </section>
+          ) : null}
+        </div>
+      )}
     </DefaultLayout>
   );
 }
