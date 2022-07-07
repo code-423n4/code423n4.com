@@ -71,7 +71,7 @@ const ContestTile = ({ contest, updateContestStatus }) => {
               className="button button-small cta-button secondary"
             >
               View Repo
-            </a>
+            </Link>
           )}
           {(t.contestStatus === "active" || status === "Active Contest") &&
           findingsRepo &&
