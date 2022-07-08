@@ -35,7 +35,14 @@ const ReportForm = (props) => {
         </div>
       ) : (
         <>
-          Need to make a change to a submission? <a href={`/my/findings?contest=${props.data.contestsCsv.contestid}`}>View submissions.</a>
+          Need to make a change to a submission?
+          {" "}
+          <Link 
+            to="/my/findings"
+            state={{ contestId: props.data.contestsCsv.contestid }}
+          >
+            View submissions.
+          </Link>
           <SubmitFindings
             wardensList={props.data.allHandlesJson}
             sponsor={props.data.contestsCsv.sponsor.name}
