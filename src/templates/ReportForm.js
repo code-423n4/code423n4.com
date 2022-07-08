@@ -34,13 +34,16 @@ const ReportForm = (props) => {
           </Link>
         </div>
       ) : (
-        <SubmitFindings
-          wardensList={props.data.allHandlesJson}
-          sponsor={props.data.contestsCsv.sponsor.name}
-          contest={props.data.contestsCsv.contestid}
-          repo={props.data.contestsCsv.findingsRepo}
-          title={props.data.contestsCsv.title}
-        />
+        <>
+          Need to make a change to a submission? <a href={`/my/findings?contest=${props.data.contestsCsv.contestid}`}>View submissions.</a>
+          <SubmitFindings
+            wardensList={props.data.allHandlesJson}
+            sponsor={props.data.contestsCsv.sponsor.name}
+            contest={props.data.contestsCsv.contestid}
+            repo={props.data.contestsCsv.findingsRepo}
+            title={props.data.contestsCsv.title}
+          />
+        </>
       )}
     </ProtectedPage>
   );
