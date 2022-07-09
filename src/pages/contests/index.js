@@ -34,19 +34,15 @@ export default function Contests({ data }) {
       }
       const data = {
         ...element.node,
-        status: statusObject[0]?.status,
+        status: statusAndIdObj[0]?.status,
       };
       switch (statusAndIdObj[0]?.status) {
         case "Pre-Contest":
-          statusObject.upcomingContests.push(data);
-          break;
         case "Preview week":
           statusObject.upcomingContests.push(data);
           break;
-        case "Active Contest":
-          statusObject.activeContests.push(data);
-          break;
         case "Active":
+        case "Active Contest":
           statusObject.activeContests.push(data);
           break;
         case "Sponsor Review":
@@ -86,7 +82,7 @@ export default function Contests({ data }) {
 
   useEffect(() => {
     setIsLoading(true);
-    fetch("/.netlify/functions/getNotionData")
+    fetch("/.netlify/functions/get-contests")
       .then((res) => {
         if (res.ok) {
           return res.json();

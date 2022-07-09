@@ -54,17 +54,16 @@ const ContestTile = ({ contest, updateContestStatus }) => {
           />
         ) : (
           <p>
-            Contest ran {t.startDay === "" ? "" : t.startDay}-
-            {t.endDay === "" ? "" : t.endDay}
+            Contest ran {t.startDay}-{t.endDay}
           </p>
         )}
         <ClientOnly>
-          <Link
-            to={fields?.contestPath || "/"}
+          <a
+            to={fields.contestPath}
             className="contest-repo button button-small cta-button primary"
           >
             {`${findingsRepo === "" ? "Preview" : "View"} Contest`}
-          </Link>
+          </a>
           {t.contestStatus === "active" && contestRepo && (
             <Link
               to={contestRepo}
@@ -77,7 +76,7 @@ const ContestTile = ({ contest, updateContestStatus }) => {
           findingsRepo &&
           fields.submissionPath ? (
             <Link
-              to={fields?.submissionPath || "/"}
+              to={fields.submissionPath}
               className="button button-small cta-button secondary"
             >
               Submit Finding
