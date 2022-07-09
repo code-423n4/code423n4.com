@@ -2,7 +2,11 @@ import React from "react";
 
 import ProtectedPage from "../../components/ProtectedPage";
 
-export default function FindingsPage({ data }) {
+export default function FindingsPage({ data, location }) {
+  const params = new URLSearchParams(location.search);
+  console.log(`Query param contest: ${params.get("contest")}`);
+  console.log(`Link state contest: ${location.state?.contestId}`);
+
   return (
     <ProtectedPage
       pageTitle="View Findings"
