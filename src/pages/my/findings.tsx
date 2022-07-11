@@ -18,7 +18,7 @@ export default function FindingsPage({ data, location }) {
   }
 
   useEffect(() => {
-    fetch(`/.netlify/functions/edit-finding?` + q, {
+    fetch(`/.netlify/functions/manage-findings?` + q, {
       // method: "POST",
       // headers: {
       //   "Content-Type": "application/json",
