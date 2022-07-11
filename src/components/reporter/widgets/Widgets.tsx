@@ -5,8 +5,24 @@ import Widget from "./Widget";
 
 import * as styles from "./Widgets.module.scss";
 
+export interface Field {
+  name: string;
+  label: string;
+  widget: string;
+  type?: string;
+  helpText?: string;
+  required?: boolean;
+  options?: Record<string, unknown>[];
+}
+
+interface WidgetsProps {
+  fields: Field[];
+  fieldState: Record<string, unknown>;
+  showValidationErrors: boolean;
+}
+
 const Widgets = (props) => {
-  const { fields, fieldState, showValidationErrors } = props;
+  const { fields, fieldState, showValidationErrors }: WidgetsProps = props;
 
   function handleChange(e) {
     props.onChange(e);

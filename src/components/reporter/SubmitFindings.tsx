@@ -23,6 +23,9 @@ import {
 import useUser from "../../hooks/UserContext";
 import { useModalContext } from "../../hooks/ModalContext";
 
+// types
+import { Field } from "./widgets/Widgets";
+
 // components
 import Agreement from "../content/Agreement";
 import { DynamicInputGroup } from "../DynamicInputGroup";
@@ -48,6 +51,7 @@ const SubmitFindings = ({
   repo,
   title,
   initialState,
+  endpoint,
 }) => {
   const wardens = wardensList.edges.map(({ node }) => {
     return { value: node.handle, image: node.image };
@@ -64,7 +68,7 @@ const SubmitFindings = ({
   const [polygonAddress, setPolygonAddress] = useState("");
   const [newTeamAddress, setNewTeamAddress] = useState("");
   const [attributedTo, setAttributedTo] = useState("");
-  const [fieldList, setFieldList] = useState([
+  const [fieldList, setFieldList] = useState<Field[]>([
     wardenField(wardens),
     emailField,
     addressField,
@@ -99,7 +103,7 @@ const SubmitFindings = ({
 
   useEffect(() => {
     // set which fields are shown based on risk
-    let fieldList = [riskField];
+    let fieldList: Field[] = [riskField];
     if (!state.risk) {
       setFieldList(fieldList);
       return;
@@ -174,8 +178,8 @@ const SubmitFindings = ({
     setStatus(FormStatus.Unsubmitted);
   };
 
-  const submitFinding = useCallback(() => {
-    const url = `/.netlify/functions/submit-finding`;
+  const submitFinding = useCallback(async () => {
+    const url = `/.netlify/functions/${endpoint}`;
     const isQaOrGasFinding = checkQaOrGasFinding(state.risk);
 
     const locString = state.linesOfCode.map((loc) => loc.value).join("\n");
