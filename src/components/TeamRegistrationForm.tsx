@@ -103,7 +103,11 @@ export default function TeamRegistrationForm({ handles, wardens, className }) {
         <span>
           It looks like a team with this name has already been registered. Don't
           forget to join us in{" "}
-          <a href="https://discord.gg/code4rena" target="_blank">
+          <a
+            href="https://discord.gg/code4rena"
+            target="_blank"
+            rel="noreferrer"
+          >
             Discord
           </a>{" "}
           and give us a howl in #i-want-to-be-a-warden"
