@@ -15,8 +15,6 @@ export default function FindingsPage({ data, location }) {
         setFindingsList(resultData);
       });
   }, []);
-  
-  console.log(findingsList);
 
   return (
     <ProtectedPage
