@@ -1,11 +1,16 @@
-import React from "react";
+import React, { ReactNode } from "react";
 
 import { DynamicInputGroup } from "../DynamicInputGroup";
 import * as styles from "./widgets/Widgets.module.scss";
 
-const LinesOfCode = ({ onChange, linesOfCode }) => {
-  const validator = (line) => {
-    const errors = [];
+interface LinesOfCodeProps {
+  onChange: (payload: string[]) => void;
+  linesOfCode: string[];
+}
+
+const LinesOfCode = ({ onChange, linesOfCode }: LinesOfCodeProps) => {
+  const validator = (line: string): (string | ReactNode)[] => {
+    const errors: (string | ReactNode)[] = [];
     const locRegex = new RegExp("#L[0-9]+(-L[0-9]+)?$");
     if (!locRegex.test(line)) {
       errors.push(
