@@ -12,8 +12,21 @@ export default function FindingsPage({ data, location }) {
   // with a state variable, get specific contest
   console.log(`Link state contest: ${location.state?.contestId}`);
 
+  const q = new URLSearchParams({})
+  if ( location.state?.contestId !== undefined ) {
+    q.append("contest", location.state?.contestId);
+  }
+
   useEffect(() => {
-    fetch(`/.netlify/functions/edit-finding`)
+    fetch(`/.netlify/functions/edit-finding?` + q, {
+      // method: "POST",
+      // headers: {
+      //   "Content-Type": "application/json",
+      // },
+      // body: JSON.stringify({
+      //   contestId,
+      // })
+    })
       .then((response) => response.json())
       .then((resultData) => {
         setFindingsList(resultData);
