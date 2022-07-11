@@ -5,6 +5,10 @@ function getFindings(req) {
   // they can see their findings for active contests
   // they can see their teams' findings for active contests
   // there are some parameters?
+  console.log(req);
+  const contestId = parseInt(req.queryStringParameters?.contest);
+  console.log(contestId);
+
   return {
     statusCode: 200,
     body: JSON.stringify({}),
