@@ -65,6 +65,7 @@ const ReportForm = (props) => {
             repo={props.data.contestsCsv.findingsRepo}
             title={props.data.contestsCsv.title}
             initialState={initialState}
+            endpoint="submit-finding"
           />
         </>
       )}

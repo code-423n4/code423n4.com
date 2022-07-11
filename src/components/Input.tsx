@@ -6,7 +6,6 @@ import * as styles from "./Input.module.scss";
 // @todo: replace TextField widgets with this component
 
 interface InputProps {
-  key?: string;
   name: string;
   label?: string | ReactNode;
   helpText?: string | ReactNode;
