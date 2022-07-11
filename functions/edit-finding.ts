@@ -7,7 +7,7 @@ function getFindings(req) {
   // there are some parameters?
   return {
     statusCode: 200,
-    body: "Get OK",
+    body: JSON.stringify({}),
   };
 }
 
@@ -17,7 +17,7 @@ function editFinding(req) {
   //     their own (their teams')
   return {
     statusCode: 200,
-    body: "Edit OK",
+    body: JSON.stringify({}),
   };
 }
 
