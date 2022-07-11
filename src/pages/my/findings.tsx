@@ -3,8 +3,12 @@ import React, { useEffect, useState } from "react";
 import ProtectedPage from "../../components/ProtectedPage";
 
 export default function FindingsPage({ data, location }) {
+
+  // optionally? support url params for contest
   const params = new URLSearchParams(location.search);
   console.log(`Query param contest: ${params.get("contest")}`);
+
+  // with a state variable, get specific contest
   console.log(`Link state contest: ${location.state?.contestId}`);
 
   const [findingsList, setFindingsList] = useState([]);
