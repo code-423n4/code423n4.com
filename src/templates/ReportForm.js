@@ -8,6 +8,19 @@ const ReportForm = (props) => {
   const endTime = props.data.contestsCsv.end_time;
   const hasContestEnded = Date.now() > new Date(endTime).getTime();
 
+  const mdTemplate =
+    "## Impact\nDetailed description of the impact of this finding.\n\n## " +
+    "Proof of Concept\nProvide direct links to all referenced code in GitHub. " +
+    "Add screenshots, logs, or any other relevant proof that illustrates the concept." +
+    "\n\n## Tools Used\n\n## Recommended Mitigation Steps";
+  const initialState = {
+    title: "",
+    risk: "",
+    details: mdTemplate,
+    qaGasDetails: "",
+    linesOfCode: [""],
+  };
+
   return (
     <ProtectedPage
       pageTitle="Submit finding | Code 423n4"
@@ -15,9 +28,12 @@ const ReportForm = (props) => {
         <>
           You need to be a registered warden currently connected via wallet to
           see this page.
-
           <p>
-            If authentication isn't working, you may <Link to={props.data.contestsCsv.fields.submissionPath + "-old"}>try the unauthenticated submission form</Link>.
+            If authentication isn't working, you may{" "}
+            <Link to={props.data.contestsCsv.fields.submissionPath + "-old"}>
+              try the unauthenticated submission form
+            </Link>
+            .
           </p>
         </>
       }
@@ -35,9 +51,8 @@ const ReportForm = (props) => {
         </div>
       ) : (
         <>
-          Need to make a change to a submission?
-          {" "}
-          <Link 
+          Need to make a change to a submission?{" "}
+          <Link
             to="/my/findings"
             state={{ contestId: props.data.contestsCsv.contestid }}
           >
@@ -49,6 +64,7 @@ const ReportForm = (props) => {
             contest={props.data.contestsCsv.contestid}
             repo={props.data.contestsCsv.findingsRepo}
             title={props.data.contestsCsv.title}
+            initialState={initialState}
           />
         </>
       )}

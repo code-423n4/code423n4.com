@@ -34,22 +34,6 @@ import Widget from "./widgets/Widget";
 import * as styles from "../form/Form.module.scss";
 import * as widgetStyles from "../reporter/widgets/Widgets.module.scss";
 
-const mdTemplate =
-  "## Impact\nDetailed description of the impact of this finding.\n\n## Proof of Concept\nProvide direct links to all referenced code in GitHub. Add screenshots, logs, or any other relevant proof that illustrates the concept.\n\n## Tools Used\n\n## Recommended Mitigation Steps";
-
-const initialState = {
-  title: "",
-  risk: "",
-  details: mdTemplate,
-  qaGasDetails: "",
-  linesOfCode: [
-    {
-      id: Date.now(),
-      value: "",
-    },
-  ],
-};
-
 const FormStatus = {
   Unsubmitted: "unsubmitted",
   Submitting: "submitting",
@@ -57,7 +41,14 @@ const FormStatus = {
   Error: "error",
 };
 
-const SubmitFindings = ({ wardensList, sponsor, contest, repo, title }) => {
+const SubmitFindings = ({
+  wardensList,
+  sponsor,
+  contest,
+  repo,
+  title,
+  initialState,
+}) => {
   const wardens = wardensList.edges.map(({ node }) => {
     return { value: node.handle, image: node.image };
   });
@@ -282,16 +273,12 @@ const SubmitFindings = ({ wardensList, sponsor, contest, repo, title }) => {
       hasErrors = true;
     }
 
-    if (!isQaOrGasFinding && !state.linesOfCode[0].value) {
-      hasErrors = true;
-    }
-
     const locRegex = new RegExp("#L[0-9]+(-L[0-9]+)?$");
     const hasInvalidLinks = state.linesOfCode.some((line) => {
-      return !locRegex.test(line.value);
+      return !locRegex.test(line);
     });
 
-    if (!isQaOrGasFinding && (!state.linesOfCode[0].value || hasInvalidLinks)) {
+    if (!isQaOrGasFinding && (!state.linesOfCode[0] || hasInvalidLinks)) {
       hasErrors = true;
     }
 
