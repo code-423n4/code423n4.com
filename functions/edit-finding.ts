@@ -27,5 +27,12 @@ export async function handler(event) {
       return getFindings(event);
     case "POST":
       return editFinding(event);
+    default:
+      return {
+        statusCode: 418,
+        body: JSON.stringify({
+          error: "nuh-uh",
+        })
+      }
   }
 };
