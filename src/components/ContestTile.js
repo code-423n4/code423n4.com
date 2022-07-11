@@ -59,7 +59,7 @@ const ContestTile = ({ contest, updateContestStatus }) => {
         )}
         <ClientOnly>
           <a
-            to={fields.contestPath}
+            to={fields?.contestPath || "/"}
             className="contest-repo button button-small cta-button primary"
           >
             {`${findingsRepo === "" ? "Preview" : "View"} Contest`}
