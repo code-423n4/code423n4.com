@@ -7,7 +7,7 @@ import * as styles from "./DynamicInputGroup.module.scss";
 interface DynamicInputGroupProps {
   onChange: (payload: string[]) => void;
   fields: string[];
-  children: ReactNode;
+  children?: ReactNode;
   validator?: (value: string) => (string | ReactNode)[];
   fieldName: string;
   className?: string | undefined;
