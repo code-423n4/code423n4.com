@@ -1,14 +1,17 @@
-import React, { useCallback, useState, useRef, ReactNode } from "react";
-import clsx from "clsx";
+import { navigate } from "gatsby";
+import React, { useCallback, useState, useRef } from "react";
 import { useMoralis } from "react-moralis";
 
+// hooks
 import useUser from "../hooks/UserContext";
 
+// components
+import Form from "./form/Form";
+import { Input } from "./Input";
 import WardenField from "../components/reporter/widgets/WardenField";
 
-import * as styles from "../components/form/Form.module.scss";
+// styles
 import * as widgetStyles from "../components/reporter/widgets/Widgets.module.scss";
-import { navigate } from "gatsby";
 
 interface teamState {
   teamName: string;
@@ -17,19 +20,17 @@ interface teamState {
   avatar?: File | null;
 }
 
+interface TeamRegistrationFormProps {
+  handles: Set<string>;
+  wardens: { value: string; image: unknown }[];
+}
+
 const initialState: teamState = {
   teamName: "",
   link: "",
   avatar: null,
   polygonAddress: "",
 };
-
-enum FormStatus {
-  Unsubmitted = "unsubmitted",
-  Submitting = "submitting",
-  Submitted = "submitted",
-  Error = "error",
-}
 
 function getFileAsBase64(file) {
   return new Promise((resolve, reject) => {
@@ -44,20 +45,18 @@ function getFileAsBase64(file) {
   });
 }
 
-export default function TeamRegistrationForm({ handles, wardens, className }) {
+export default function TeamRegistrationForm({
+  handles,
+  wardens,
+}: TeamRegistrationFormProps) {
   const { currentUser } = useUser();
   const { user, isInitialized } = useMoralis();
 
   const [state, setState] = useState(initialState);
-  const [hasValidationErrors, setHasValidationErrors] = useState(false);
-  const [status, setStatus] = useState<FormStatus>(FormStatus.Unsubmitted);
-  const [errorMessage, setErrorMessage] = useState<string | ReactNode>("");
   const [teamMembers, setTeamMembers] = useState<
-    { value: string; image: string }[]
+    { value: string; image: unknown }[]
   >([wardens.find((warden) => warden.value === currentUser.username)]);
-
   const avatarInputRef = useRef<HTMLInputElement>();
-  const [isDangerousTeamName, setisDangerousTeamName] = useState(false);
 
   const handleChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -65,9 +64,6 @@ export default function TeamRegistrationForm({ handles, wardens, className }) {
       setState((prevState) => {
         return { ...prevState, [name]: value };
       });
-      if (name === "teamName") {
-        setisDangerousTeamName(value.match(/^[0-9a-zA-Z_\-]+$/) === null);
-      }
     },
     [state]
   );
@@ -95,102 +91,76 @@ export default function TeamRegistrationForm({ handles, wardens, className }) {
     });
   };
 
-  const updateErrorMessage = (message: string | undefined): void => {
+  const throwErrorMessage = (message: string | undefined): void => {
     if (!message) {
-      setErrorMessage("");
+      throw "";
     } else if (message === "Reference already exists") {
-      setErrorMessage(
-        <span>
-          It looks like a team with this name has already been registered. Don't
-          forget to join us in{" "}
-          <a
-            href="https://discord.gg/code4rena"
-            target="_blank"
-            rel="noreferrer"
-          >
-            Discord
-          </a>{" "}
-          and give us a howl in #i-want-to-be-a-warden"
-        </span>
+      throw (
+        "It looks like a team or warden with this name has a " +
+        "pending registration. If you already submitted a registration " +
+        "for this team, please wait for our team to review and approve " +
+        "your request. Otherwise, try choosing a different name."
       );
     } else {
-      setErrorMessage(message);
+      throw message;
     }
   };
 
-  const resetForm = (): void => {
-    setErrorMessage("");
-    setStatus(FormStatus.Unsubmitted);
-  };
+  const validator = useCallback(() => {
+    if (
+      !state.teamName ||
+      teamMembers.length < 2 ||
+      handles.has(state.teamName) ||
+      !teamMembers.find((member) => member.value === currentUser.username) ||
+      // @todo: better validation for polygon address
+      state.polygonAddress.length !== 42 ||
+      state.teamName.match(/^[0-9a-zA-Z_\-]+$/) === null
+    ) {
+      return true;
+    }
+    return false;
+  }, [state, teamMembers, handles, currentUser]);
 
-  const submitRegistration = useCallback((): void => {
+  const submitRegistration = useCallback(async (): Promise<void> => {
     const url = `/.netlify/functions/register-team`;
     if (!currentUser.isLoggedIn || !user || !isInitialized) {
       navigate("/");
     }
 
-    (async () => {
-      if (
-        !state.teamName ||
-        teamMembers.length < 2 ||
-        handles.has(state.teamName) ||
-        !teamMembers.find((member) => member.value === currentUser.username) ||
-        // @todo: better validation for polygon address
-        state.polygonAddress.length !== 42 ||
-        isDangerousTeamName
-      ) {
-        setHasValidationErrors(true);
-        return;
-      }
+    let image = undefined;
+    const members = teamMembers.map((member) => member.value);
 
-      setHasValidationErrors(false);
-      setStatus(FormStatus.Submitting);
+    if (state.avatar) {
+      image = await getFileAsBase64(state.avatar);
+    }
 
-      let image = undefined;
-      try {
-        const members = teamMembers.map((member) => member.value);
+    const requestBody = {
+      teamName: state.teamName,
+      username: currentUser.username,
+      members,
+      link: state.link,
+      image,
+      address: state.polygonAddress,
+    };
 
-        if (state.avatar) {
-          image = await getFileAsBase64(state.avatar);
-        }
+    const sessionToken = user.attributes.sessionToken;
 
-        const requestBody = {
-          teamName: state.teamName,
-          username: currentUser.username,
-          members,
-          link: state.link,
-          image,
-          address: state.polygonAddress,
-        };
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Authorization": `Bearer ${sessionToken}`,
+      },
+      body: JSON.stringify(requestBody),
+    });
 
-        const sessionToken = user.attributes.sessionToken;
-
-        const response = await fetch(url, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "X-Authorization": `Bearer ${sessionToken}`,
-          },
-          body: JSON.stringify(requestBody),
-        });
-
-        if (response.ok) {
-          setStatus(FormStatus.Submitted);
-        } else {
-          const res = await response.json();
-          updateErrorMessage(res.error || "");
-          setStatus(FormStatus.Error);
-        }
-      } catch (error) {
-        updateErrorMessage(error.message || "");
-        setStatus(FormStatus.Error);
-        console.error(error);
-      }
-    })();
+    if (!response.ok) {
+      const res = await response.json();
+      throw throwErrorMessage(res.error || "");
+    }
   }, [
     avatarInputRef,
     state,
-    hasValidationErrors,
     currentUser,
     teamMembers,
     handles,
@@ -198,206 +168,122 @@ export default function TeamRegistrationForm({ handles, wardens, className }) {
     isInitialized,
   ]);
 
+  const validateTeamName = useCallback(
+    (teamName: string): string[] => {
+      const errors = [];
+      if (teamName.match(/^[0-9a-zA-Z_\-]+$/) === null) {
+        errors.push(
+          "Supports alphanumeric characters, underscores, and hyphens"
+        );
+      }
+      if (handles.has(teamName)) {
+        errors.push(`${teamName} is already registered as a team or warden.`);
+      }
+      return errors;
+    },
+    [handles]
+  );
+
+  const validateTeamMembers = useCallback(
+    (members: { value: string; image: string }[]): string[] => {
+      const errors = [];
+      if (members.length < 2) {
+        errors.push("You must have at least 2 members on a team.");
+      }
+      if (!members.find((member) => member.value === currentUser.username)) {
+        errors.push("You must add yourself to the team you are creating.");
+      }
+      return errors;
+    },
+    [currentUser]
+  );
+
+  const validatePolygonAddress = (address: string): string[] => {
+    const errors = [];
+    if (address.length !== 42) {
+      errors.push("Polygon address must be 42 characters long.");
+    }
+    return errors;
+  };
+
   return (
-    <>
-      {status === FormStatus.Unsubmitted || status === FormStatus.Submitting ? (
-        <>
-          <p className="center">
-            Before you register your team, please ensure each member has
-            connected their wallet to their C4 account.
+    <Form
+      successMessage="Your registration application has been submitted."
+      onSubmit={submitRegistration}
+      submitButtonText="Register Team"
+      validator={validator}
+    >
+      <>
+        <Input
+          name="teamName"
+          placeholder="TeamName"
+          value={state.teamName}
+          required={true}
+          label="Team Name *"
+          helpText="Used to report findings, as well as display your total award amount on the leaderboard. Supports alphanumeric characters, underscores, and hyphens. Maximum 25 characters."
+          handleChange={handleChange}
+          validator={validateTeamName}
+        />
+        {/* @todo: make current user a fixed option */}
+        <WardenField
+          name="teamMembers"
+          required={true}
+          options={wardens}
+          onChange={(e) => {
+            setTeamMembers(e.target.value || []);
+          }}
+          fieldState={teamMembers}
+          isMulti={true}
+          validator={validateTeamMembers}
+          label="Members *"
+        />
+        <Input
+          name="polygonAddress"
+          placeholder="0x00000..."
+          value={state.polygonAddress}
+          required={true}
+          label="Polygon Address *"
+          helpText="Address where your team's prize should go. If you use a smart contract wallet, please contact one of our organizers in Discord in addition to adding the address here."
+          handleChange={handleChange}
+          validator={validatePolygonAddress}
+        />
+        <Input
+          name="link"
+          placeholder="https://twitter.com/code4rena"
+          value={state.link}
+          label="Link (Optional)"
+          helpText="Link your leaderboard entry to a personal website or social media account."
+          handleChange={handleChange}
+        />
+
+        <div className={widgetStyles.Container}>
+          <label htmlFor="avatar" className={widgetStyles.Label}>
+            Avatar (Optional)
+          </label>
+          <p className={widgetStyles.Help}>
+            An avatar displayed next to your name on the leaderboard.
           </p>
-          <form className={className}>
-            <div className={widgetStyles.Container}>
-              <label htmlFor="teamName" className={widgetStyles.Label}>
-                Team Name *
-              </label>
-              <p className={widgetStyles.Help}>
-                Used to report findings, as well as display your total award
-                amount on the leaderboard. Supports alphanumeric characters,
-                underscores, and hyphens. Maximum 25 characters.
-              </p>
-              <input
-                className={clsx(
-                  widgetStyles.Control,
-                  widgetStyles.Text,
-                  hasValidationErrors &&
-                    (!state.teamName ||
-                      isDangerousTeamName ||
-                      handles.has(state.teamName)) &&
-                    "input-error"
-                )}
-                style={{ marginBottom: 0 }}
-                type="text"
-                id="teamName"
-                name="teamName"
-                placeholder="TeamName"
-                value={state.teamName}
-                onChange={handleChange}
-                maxLength={25}
-              />
-              {handles.has(state.teamName) && (
-                <p className={widgetStyles.ErrorMessage}>
-                  <small>{`${state.teamName} is already registered as a team or warden.`}</small>
-                </p>
-              )}
-              {hasValidationErrors && !state.teamName && (
-                <p className={widgetStyles.ErrorMessage}>
-                  <small>This field is required</small>
-                </p>
-              )}
-              {hasValidationErrors && state.teamName && isDangerousTeamName && (
-                <p className={widgetStyles.ErrorMessage}>
-                  <small>
-                    Supports alphanumeric characters, underscores, and hyphens
-                  </small>
-                </p>
-              )}
-            </div>
-            <div className={widgetStyles.Container}>
-              <label className={widgetStyles.Label}>Members *</label>
-              {/* @todo: make current user a fixed option */}
-              <WardenField
-                name="teamMembers"
-                required={true}
-                options={wardens}
-                onChange={(e) => {
-                  setTeamMembers(e.target.value || []);
-                }}
-                fieldState={teamMembers}
-                isInvalid={hasValidationErrors && teamMembers.length < 2}
-                isMulti={true}
-              />
-              {hasValidationErrors && teamMembers.length < 2 && (
-                <p className={widgetStyles.ErrorMessage}>
-                  <small>You must have at least 2 members on a team</small>
-                </p>
-              )}
-              {hasValidationErrors &&
-                !teamMembers.find(
-                  (member) => member.value === currentUser.username
-                ) && (
-                  <p className={widgetStyles.ErrorMessage}>
-                    <small>
-                      You must add yourself to the team you are creating
-                    </small>
-                  </p>
-                )}
-            </div>
-            <div className={widgetStyles.Container}>
-              <label htmlFor="polygonAddress" className={widgetStyles.Label}>
-                Polygon Address *
-              </label>
-              <p className={widgetStyles.Help}>
-                Address where your team's prize should go. If you use a smart
-                contract wallet, please contact one of our organizers in Discord
-                in addition to adding the address here.
-              </p>
-              <input
-                className={clsx(
-                  widgetStyles.Control,
-                  widgetStyles.Text,
-                  hasValidationErrors &&
-                    (!state.polygonAddress ||
-                      state.polygonAddress.length !== 42) &&
-                    "input-error"
-                )}
-                type="text"
-                id="polygonAddress"
-                name="polygonAddress"
-                placeholder="0x00000..."
-                value={state.polygonAddress}
-                onChange={handleChange}
-              />
-              {hasValidationErrors && !state.polygonAddress && (
-                <p className={widgetStyles.ErrorMessage}>
-                  <small>This field is required</small>
-                </p>
-              )}
-              {hasValidationErrors && state.polygonAddress.length !== 42 && (
-                <p className={widgetStyles.ErrorMessage}>
-                  <small>Polygon address must be 42 characters long</small>
-                </p>
-              )}
-            </div>
-            <div className={widgetStyles.Container}>
-              <label htmlFor="link" className={widgetStyles.Label}>
-                Link (Optional)
-              </label>
-              <p className={widgetStyles.Help}>
-                Link your leaderboard entry to a personal website or social
-                media account.
-              </p>
-              <input
-                className={clsx(widgetStyles.Control, widgetStyles.Text)}
-                type="text"
-                id="link"
-                name="link"
-                placeholder="https://twitter.com/code4rena"
-                value={state.link}
-                onChange={handleChange}
-              />
-            </div>
-            <div className={widgetStyles.Container}>
-              <label htmlFor="avatar" className={widgetStyles.Label}>
-                Avatar (Optional)
-              </label>
-              <p className={widgetStyles.Help}>
-                An avatar displayed next to your name on the leaderboard.
-              </p>
-              <input
-                className={widgetStyles.Avatar}
-                type="file"
-                id="avatar"
-                name="avatar"
-                accept=".png,.jpg,.jpeg,.webp"
-                ref={avatarInputRef}
-                onChange={handleAvatarChange}
-              />
-              {state.avatar && (
-                <button
-                  className="remove-line-button"
-                  type="button"
-                  onClick={removeAvatar}
-                  aria-label="Remove avatar"
-                >
-                  &#x2715;
-                </button>
-              )}
-            </div>
-            <div className={styles.ButtonsWrapper}>
-              <button
-                className={clsx("button cta-button", styles.Button)}
-                type="button"
-                onClick={submitRegistration}
-              >
-                {status === FormStatus.Submitting
-                  ? "Submitting..."
-                  : "Register Team"}
-              </button>
-            </div>
-          </form>
-        </>
-      ) : status === FormStatus.Error ? (
-        <div style={{ textAlign: "center" }}>
-          <h1>Whoops!</h1>
-          <p>An error occurred while processing your registration.</p>
-          {errorMessage !== "" && (
-            <p>
-              <small>{errorMessage || ""}</small>
-            </p>
+          <input
+            className={widgetStyles.Avatar}
+            type="file"
+            id="avatar"
+            name="avatar"
+            accept=".png,.jpg,.jpeg,.webp"
+            ref={avatarInputRef}
+            onChange={handleAvatarChange}
+          />
+          {state.avatar && (
+            <button
+              className="remove-line-button"
+              type="button"
+              onClick={removeAvatar}
+              aria-label="Remove avatar"
+            >
+              &#x2715;
+            </button>
           )}
-          <button className="button cta-button" onClick={resetForm}>
-            Try again
-          </button>
         </div>
-      ) : status === FormStatus.Submitted ? (
-        <div className="centered-text">
-          <h1>Thank you!</h1>
-          <p>Your registration application has been submitted.</p>
-        </div>
-      ) : (
-        ""
-      )}
-    </>
+      </>
+    </Form>
   );
 }

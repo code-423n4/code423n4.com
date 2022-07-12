@@ -1,10 +1,11 @@
 import Avatar from "react-avatar";
 import clsx from "clsx";
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 
 import Select from "react-select";
 
 import * as styles from "./WardenField.module.scss";
+import * as inputStyles from "../../Input.module.scss";
 
 const WardenOptionLabel = ({ value, image }) => {
   return (
@@ -27,9 +28,14 @@ const WardenField = ({
   options,
   onChange,
   fieldState,
-  isInvalid,
+  validator,
+  label = undefined,
+  helpText = undefined,
   isMulti = false,
 }) => {
+  const [isInvalid, setIsInvalid] = useState(false);
+  const [validationErrors, setValidationErrors] = useState([]);
+
   const handleChange = useCallback(
     (option) => {
       // @todo: pass the option object itself to the onChange handler
@@ -44,8 +50,34 @@ const WardenField = ({
     [onChange, name, isMulti]
   );
 
+  const validate = () => {
+    let errorMessages = [];
+    if (validator) {
+      const validationErrors = validator(fieldState);
+      if (validationErrors.length > 0) {
+        errorMessages = errorMessages.concat(validationErrors);
+      }
+    }
+    if (required && (fieldState === "" || fieldState === undefined)) {
+      errorMessages.push("This field is required");
+    }
+    if (errorMessages.length > 0) {
+      setIsInvalid(true);
+      setValidationErrors(errorMessages);
+    } else {
+      setIsInvalid(false);
+      setValidationErrors([]);
+    }
+  };
+
   return (
-    <>
+    <div>
+      {label && (
+        <label className={inputStyles.Label} htmlFor={name}>
+          {label}
+        </label>
+      )}
+      {helpText && <p className={inputStyles.Help}>{helpText}</p>}
       <Select
         name={name}
         required={required}
@@ -61,8 +93,15 @@ const WardenField = ({
         classNamePrefix="react-select"
         isClearable={true}
         isMulti={isMulti}
+        onBlur={validate}
       />
-    </>
+      {isInvalid &&
+        validationErrors.map((validationError) => (
+          <label htmlFor={name} className={inputStyles.ErrorMessage}>
+            {validationError}
+          </label>
+        ))}
+    </div>
   );
 };
 
