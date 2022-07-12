@@ -51,7 +51,7 @@ const LinesOfCode = ({ onChange, linesOfCode }: LinesOfCodeProps) => {
       <DynamicInputGroup
         fields={linesOfCode}
         onChange={onChange}
-        fieldName="links to affected code"
+        fieldName="code block"
         required={true}
         validator={validator}
       ></DynamicInputGroup>
