@@ -1,3 +1,5 @@
+import { Handler } from "@netlify/functions";
+
 const { Moralis } = require("moralis/node");
 
 const {
@@ -37,7 +39,7 @@ function editFinding(req) {
   };
 }
 
-export async function handler(event) {
+const handler: Handler = async (event, context) => {
   const authorization = event.headers["x-authorization"];
 
   if (!authorization) {
@@ -107,3 +109,5 @@ export async function handler(event) {
       }
   }
 };
+
+export { handler };
