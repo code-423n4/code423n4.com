@@ -15,7 +15,7 @@ const {
   moralisAppId,
   moralisServerUrl,
   kickboxApiKey,
-} = require("./_config");
+} = require("../_config");
 const { resolve } = require("core-js/fn/promise");
 
 const OctokitClient = Octokit.plugin(createPullRequest);
