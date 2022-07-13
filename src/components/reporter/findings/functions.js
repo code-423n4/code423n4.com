@@ -34,10 +34,10 @@ export const initStateFromStorage = (contest, initialState, setState) => {
       risk: riskIndex >= 0 ? riskField.options[riskIndex].value : "",
       details: dataObject.details || initialState.details,
       qaGasDetails: dataObject.qaGasDetails || "",
-      linesOfCode:
-        dataObject.linesOfCode && dataObject.linesOfCode.length > 0
-          ? dataObject.linesOfCode
-          : initialState.linesOfCode,
+      linksToCode:
+        dataObject.linksToCode && dataObject.linksToCode.length > 0
+          ? dataObject.linksToCode
+          : initialState.linksToCode,
     };
   });
 };

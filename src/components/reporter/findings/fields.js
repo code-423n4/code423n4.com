@@ -1,14 +1,14 @@
 export const emailField = {
   name: "email",
-  label: "Email address",
+  label: "Email address *",
   helpText: "Used to send a copy of this form for your records",
   widget: "text",
   required: true,
 };
 
 export const addressField = {
-  name: "address",
-  label: "Polygon address",
+  name: "polygonAddress",
+  label: "Polygon address *",
   helpText:
     "Address where your prize should go. If you use a smart contract wallet, please contact one of our organizers in Discord in addition to adding the address here.",
   widget: "text",
@@ -17,7 +17,7 @@ export const addressField = {
 
 export const titleField = {
   name: "title",
-  label: "Title",
+  label: "Title *",
   helpText:
     "Summarize your findings for the bug or vulnerability. (This will be the issue title.)",
   widget: "text",
@@ -27,7 +27,7 @@ export const titleField = {
 export const wardenField = (wardens) => {
   return {
     name: "handle",
-    label: "Handle",
+    label: "Handle *",
     helpText: "Handle you're competing under (individual or team name)",
     widget: "warden",
     required: true,
@@ -35,17 +35,17 @@ export const wardenField = (wardens) => {
   };
 };
 
-export const linesOfCodeField = {
-  name: "linesOfCode",
+export const linksToCodeField = {
+  name: "linksToCode",
   label: "",
-  helpText:"",
-  widget: "linesOfCode",
+  helpText: "",
+  widget: "linksToCode",
   required: true,
 };
 
 export const riskField = {
   name: "risk",
-  label: "Risk rating",
+  label: "Risk rating *",
   widget: "select",
   required: true,
   options: [
@@ -70,18 +70,20 @@ export const riskField = {
 
 export const vulnerabilityDetailsField = {
   name: "details",
-  label: "Vulnerability details",
-  helpText: "Link to all referenced sections of code in GitHub. \n You can use [markdown](https://www.markdownguide.org/basic-syntax/) including [markdown math notation](https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/writing-mathematical-expressions) in this field",
-  type: 'markdown',
+  label: "Vulnerability details *",
+  helpText:
+    "Link to all referenced sections of code in GitHub. \n You can use [markdown](https://www.markdownguide.org/basic-syntax/) including [markdown math notation](https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/writing-mathematical-expressions) in this field",
+  type: "markdown",
   widget: "textarea",
   required: true,
 };
 
 export const qaGasDetailsField = {
   name: "qaGasDetails",
-  label: "Vulnerability details",
-  helpText: "Link to all referenced sections of code in GitHub. \n You can use [markdown](https://www.markdownguide.org/basic-syntax/) including [markdown math notation](https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/writing-mathematical-expressions) in this field",
-  type: 'markdown',
+  label: "Report contents *",
+  helpText:
+    "Link to all referenced sections of code in GitHub. \n You can use [markdown](https://www.markdownguide.org/basic-syntax/) including [markdown math notation](https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/writing-mathematical-expressions) in this field",
+  type: "markdown",
   widget: "textarea",
   required: true,
 };
