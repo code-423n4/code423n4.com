@@ -1,25 +1,48 @@
 import { graphql, Link } from "gatsby";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import ProtectedPage from "../components/ProtectedPage";
 import SubmitFindings from "../components/reporter/SubmitFindings";
 
+const mdTemplate =
+  "## Impact\nDetailed description of the impact of this finding.\n\n## " +
+  "Proof of Concept\nProvide direct links to all referenced code in GitHub. " +
+  "Add screenshots, logs, or any other relevant proof that illustrates the concept." +
+  "\n\n## Tools Used\n\n## Recommended Mitigation Steps";
+const initialState = {
+  title: "",
+  risk: "",
+  details: mdTemplate,
+  qaGasDetails: "",
+  linksToCode: [""],
+};
+
 const ReportForm = (props) => {
+  const [state, setState] = useState(initialState);
+  const [isLoading, setIsLoading] = useState(true);
+  const [endpoint, setEndpoint] = useState("submit-finding");
+
   const endTime = props.data.contestsCsv.end_time;
   const hasContestEnded = Date.now() > new Date(endTime).getTime();
 
-  const mdTemplate =
-    "## Impact\nDetailed description of the impact of this finding.\n\n## " +
-    "Proof of Concept\nProvide direct links to all referenced code in GitHub. " +
-    "Add screenshots, logs, or any other relevant proof that illustrates the concept." +
-    "\n\n## Tools Used\n\n## Recommended Mitigation Steps";
-  const initialState = {
-    title: "",
-    risk: "",
-    details: mdTemplate,
-    qaGasDetails: "",
-    linksToCode: [""],
-  };
+  useEffect(() => {
+    (async () => {
+      if (props.location.search) {
+        try {
+          // const issue = await getSubmission(props.location.search)
+          // setState(issue)
+          setEndpoint("update-finding");
+          setIsLoading(false);
+        } catch (error) {
+          setIsLoading(false);
+          setEndpoint("submit-finding");
+        }
+      } else {
+        setIsLoading(false);
+        setEndpoint("submit-finding");
+      }
+    })();
+  }, [props.location.search]);
 
   return (
     <ProtectedPage
@@ -38,7 +61,10 @@ const ReportForm = (props) => {
         </>
       }
     >
-      {hasContestEnded ? (
+      {isLoading ? (
+        // @todo: style a loading state
+        <span>Loading...</span>
+      ) : hasContestEnded ? (
         <div className="center">
           <h1>This contest has ended.</h1>
           <p>You can no longer submit findings for this contest.</p>
@@ -65,7 +91,7 @@ const ReportForm = (props) => {
             repo={props.data.contestsCsv.findingsRepo}
             title={props.data.contestsCsv.title}
             initialState={initialState}
-            endpoint="submit-finding"
+            endpoint={endpoint}
           />
         </>
       )}
