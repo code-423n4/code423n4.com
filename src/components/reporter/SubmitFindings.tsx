@@ -10,7 +10,7 @@ import {
   titleField,
   riskField,
   wardenField,
-  linesOfCodeField,
+  linksToCodeField,
   vulnerabilityDetailsField,
   qaGasDetailsField,
 } from "./findings/fields";
@@ -94,10 +94,10 @@ const SubmitFindings = ({
     if (typeof window === "undefined") {
       return;
     }
-    const { risk, details, qaGasDetails, linesOfCode, title } = state;
+    const { risk, details, qaGasDetails, linksToCode, title } = state;
     window.localStorage.setItem(
       contest,
-      JSON.stringify({ risk, details, qaGasDetails, linesOfCode, title })
+      JSON.stringify({ risk, details, qaGasDetails, linksToCode, title })
     );
   }, [state, contest]);
 
@@ -116,7 +116,7 @@ const SubmitFindings = ({
     setFieldList(
       fieldList.concat([
         titleField,
-        linesOfCodeField,
+        linksToCodeField,
         vulnerabilityDetailsField,
       ])
     );
@@ -126,7 +126,7 @@ const SubmitFindings = ({
   const handleChange = (e) => {
     if (Array.isArray(e)) {
       setState((state) => {
-        return { ...state, linesOfCode: e };
+        return { ...state, linksToCode: e };
       });
     } else {
       const { name, value } = e.target;
@@ -172,7 +172,7 @@ const SubmitFindings = ({
         risk: "",
         details: initialState.details,
         qaGasDetails: "",
-        linesOfCode: initialState.linesOfCode,
+        linksToCode: initialState.linksToCode,
       };
     });
     setStatus(FormStatus.Unsubmitted);
@@ -182,9 +182,9 @@ const SubmitFindings = ({
     const url = `/.netlify/functions/${endpoint}`;
     const isQaOrGasFinding = checkQaOrGasFinding(state.risk);
 
-    const locString = state.linesOfCode.map((loc) => loc.value).join("\n");
+    const linksToCodeString = state.linksToCode.join("\n");
     const details = isQaOrGasFinding ? state.qaGasDetails : state.details;
-    const markdownBody = `# Lines of code\n\n${locString}\n\n\n# Vulnerability details\n\n${details}\n\n`;
+    const markdownBody = `# Lines of code\n\n${linksToCodeString}\n\n\n# Vulnerability details\n\n${details}\n\n`;
     const formattedRisk = state.risk ? state.risk.slice(0, 1) : "";
     const formattedBody = isQaOrGasFinding ? details : markdownBody;
     const emailAddressList = additionalEmailAddresses.filter(
@@ -257,37 +257,49 @@ const SubmitFindings = ({
     attributedTo,
   ]);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const validator = useCallback(() => {
     if (!currentUser.isLoggedIn) {
-      return;
+      return true;
     }
-
     const isQaOrGasFinding = checkQaOrGasFinding(state.risk);
     // extract required fields from field data for validation check
     const requiredFields = isQaOrGasFinding
       ? [state.risk, state.qaGasDetails]
       : [state.risk, state.title, state.details];
-    let hasErrors = requiredFields.some((field) => {
+    const hasErrors = requiredFields.some((field) => {
       return field === "" || field === undefined;
     });
 
+    if (hasErrors) {
+      setHasValidationErrors(true);
+      return true;
+    }
+
     // @todo: better validation for polygon address
     if (!polygonAddress || polygonAddress.length !== 42) {
-      hasErrors = true;
+      setHasValidationErrors(true);
+      return true;
     }
 
-    const locRegex = new RegExp("#L[0-9]+(-L[0-9]+)?$");
-    const hasInvalidLinks = state.linesOfCode.some((line) => {
-      return !locRegex.test(line);
+    const linksToCodeRegex = new RegExp("#L[0-9]+(-L[0-9]+)?$");
+    const hasInvalidLinks = state.linksToCode.some((link) => {
+      return !linksToCodeRegex.test(link);
     });
 
-    if (!isQaOrGasFinding && (!state.linesOfCode[0] || hasInvalidLinks)) {
-      hasErrors = true;
+    if (!isQaOrGasFinding && (!state.linksToCode[0] || hasInvalidLinks)) {
+      setHasValidationErrors(true);
+      return true;
     }
 
-    if (hasErrors) {
-      setHasValidationErrors(hasErrors);
+    setHasValidationErrors(false);
+    return false;
+  }, [state, polygonAddress, currentUser]);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const isInvalid = validator();
+    if (isInvalid) {
       return;
     }
 
@@ -343,82 +355,87 @@ const SubmitFindings = ({
           <fieldset className={widgetStyles.Fields}>
             <h2 className={styles.Heading2}>User Info</h2>
             {currentUser.teams.length > 0 ? (
-              <fieldset
-                className={clsx(widgetStyles.Fields, widgetStyles.RadioGroup)}
-              >
-                <h3 className={styles.Heading3}>Submitting as</h3>
-                <h4 className={styles.Heading4}>WARDEN</h4>
-                <label className={widgetStyles.RadioLabel}>
-                  <input
-                    className={widgetStyles.Radio}
-                    type="radio"
-                    value={currentUser.username}
-                    name="currentUser"
-                    checked={attributedTo === currentUser.username}
-                    onChange={handleAttributionChange}
-                  />
-                  <WardenDetails
-                    username={currentUser.username}
-                    address={currentUser.address}
-                    image={currentUser.image}
-                  />
-                </label>
-                <h4 className={styles.Heading4}>TEAM MEMBER</h4>
-                {currentUser.teams.map((team, i) => (
-                  <label
-                    className={widgetStyles.RadioLabel}
-                    key={team.username}
-                  >
+              <>
+                <h3 className={widgetStyles.Label}>Submitting as</h3>
+                <fieldset
+                  className={clsx(widgetStyles.Fields, widgetStyles.RadioGroup)}
+                >
+                  <h4 className={styles.Heading4}>WARDEN</h4>
+                  <label className={widgetStyles.RadioLabel}>
                     <input
                       className={widgetStyles.Radio}
                       type="radio"
-                      value={i}
-                      name="team"
-                      checked={attributedTo === team.username}
+                      value={currentUser.username}
+                      name="currentUser"
+                      checked={attributedTo === currentUser.username}
                       onChange={handleAttributionChange}
                     />
                     <WardenDetails
-                      username={team.username}
-                      address={team.address}
-                      image={team.image}
+                      username={currentUser.username}
+                      address={currentUser.address}
+                      image={currentUser.image}
                     />
-                    {!team.address && attributedTo === team.username && (
-                      <div>
-                        <label htmlFor={"newTeamAddress"}>
-                          Team Polygon Address *
-                        </label>
-                        <input
-                          className={clsx(
-                            widgetStyles.Control,
-                            widgetStyles.Text,
-                            (!newTeamAddress || newTeamAddress.length !== 42) &&
-                              hasValidationErrors &&
-                              "input-error"
-                          )}
-                          type="text"
-                          id={"newTeamAddress"}
-                          placeholder="0x00000..."
-                          value={newTeamAddress}
-                          onChange={handleNewAddressChange}
-                          maxLength={42}
-                        />
-                        {!newTeamAddress && hasValidationErrors && (
-                          <p className={widgetStyles.ErrorMessage}>
-                            <small>This field is required</small>
-                          </p>
-                        )}
-                        {newTeamAddress.length !== 42 && hasValidationErrors && (
-                          <p className={widgetStyles.ErrorMessage}>
-                            <small>
-                              Polygon address must be 42 characters long
-                            </small>
-                          </p>
-                        )}
-                      </div>
-                    )}
                   </label>
-                ))}
-              </fieldset>
+                  <h4 className={styles.Heading4}>TEAM MEMBER</h4>
+                  {currentUser.teams.map((team, i) => (
+                    <>
+                      <label
+                        className={widgetStyles.RadioLabel}
+                        key={team.username}
+                      >
+                        <input
+                          className={widgetStyles.Radio}
+                          type="radio"
+                          value={i}
+                          name="team"
+                          checked={attributedTo === team.username}
+                          onChange={handleAttributionChange}
+                        />
+                        <WardenDetails
+                          username={team.username}
+                          address={team.address}
+                          image={team.image}
+                        />
+                      </label>
+                      {!team.address && attributedTo === team.username && (
+                        <div style={{ margin: "10px 0 0 40px" }}>
+                          <label htmlFor={"newTeamAddress"}>
+                            Team Polygon Address *
+                          </label>
+                          <input
+                            className={clsx(
+                              widgetStyles.Control,
+                              widgetStyles.Text,
+                              (!newTeamAddress ||
+                                newTeamAddress.length !== 42) &&
+                                hasValidationErrors &&
+                                "input-error"
+                            )}
+                            type="text"
+                            id={"newTeamAddress"}
+                            placeholder="0x00000..."
+                            value={newTeamAddress}
+                            onChange={handleNewAddressChange}
+                            maxLength={42}
+                          />
+                          {!newTeamAddress && hasValidationErrors && (
+                            <p className={widgetStyles.ErrorMessage}>
+                              <small>This field is required</small>
+                            </p>
+                          )}
+                          {newTeamAddress.length !== 42 && hasValidationErrors && (
+                            <p className={widgetStyles.ErrorMessage}>
+                              <small>
+                                Polygon address must be 42 characters long
+                              </small>
+                            </p>
+                          )}
+                        </div>
+                      )}
+                    </>
+                  ))}
+                </fieldset>
+              </>
             ) : (
               <WardenDetails
                 username={currentUser.username}
@@ -431,15 +448,17 @@ const SubmitFindings = ({
               onChange={(emails) => setAdditionalEmailAddresses(emails)}
               fieldName="email address"
             >
-              <label htmlFor="email">Email</label>
+              <label htmlFor="email" className={widgetStyles.Label}>
+                Email
+              </label>
               <p>{currentUser.emailAddress}</p>
             </DynamicInputGroup>
           </fieldset>
           <fieldset className={styles.EmphasizedInputGroup}>
-            <h2>Finding</h2>
+            <h2 className={styles.Heading2}>Finding</h2>
             {fieldList.map((field, index) => {
               let isInvalid = false;
-              if (field.name === "linesOfCode") {
+              if (field.name === "linksToCode") {
                 isInvalid = hasValidationErrors;
               } else {
                 isInvalid = hasValidationErrors && !state[field.name];

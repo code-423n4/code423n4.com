@@ -1,8 +1,8 @@
-import React from "react";
 import { graphql, Link } from "gatsby";
+import React from "react";
 
-import SubmitFindings from "../components/reporter/SubmitFindings";
 import ProtectedPage from "../components/ProtectedPage";
+import SubmitFindings from "../components/reporter/SubmitFindings";
 
 const ReportForm = (props) => {
   const endTime = props.data.contestsCsv.end_time;
@@ -18,7 +18,7 @@ const ReportForm = (props) => {
     risk: "",
     details: mdTemplate,
     qaGasDetails: "",
-    linesOfCode: [""],
+    linksToCode: [""],
   };
 
   return (

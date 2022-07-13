@@ -3,16 +3,16 @@ import React, { ReactNode } from "react";
 import { DynamicInputGroup } from "../DynamicInputGroup";
 import * as styles from "./widgets/Widgets.module.scss";
 
-interface LinesOfCodeProps {
+interface LinksToCodeProps {
   onChange: (payload: string[]) => void;
-  linesOfCode: string[];
+  linksToCode: string[];
 }
 
-const LinesOfCode = ({ onChange, linesOfCode }: LinesOfCodeProps) => {
+const LinksToCode = ({ onChange, linksToCode }: LinksToCodeProps) => {
   const validator = (line: string): (string | ReactNode)[] => {
     const errors: (string | ReactNode)[] = [];
-    const locRegex = new RegExp("#L[0-9]+(-L[0-9]+)?$");
-    if (!locRegex.test(line)) {
+    const linksToCodeRegex = new RegExp("#L[0-9]+(-L[0-9]+)?$");
+    if (!linksToCodeRegex.test(line)) {
       errors.push(
         <span>
           Please include at least one line number at the end of your URL.{" "}
@@ -31,9 +31,9 @@ const LinesOfCode = ({ onChange, linesOfCode }: LinesOfCodeProps) => {
   };
 
   return (
-    <div className="lines-of-code">
-      <label htmlFor="lines-of-code" className={styles.Label}>
-        Links to affected code
+    <div className="links-to-code">
+      <label htmlFor="links-to-code" className={styles.Label}>
+        Links to affected code *
       </label>
       <p className={styles.Help}>
         Provide GitHub links, including line numbers, to all instances of this
@@ -49,7 +49,7 @@ const LinesOfCode = ({ onChange, linesOfCode }: LinesOfCodeProps) => {
         )
       </p>
       <DynamicInputGroup
-        fields={linesOfCode}
+        fields={linksToCode}
         onChange={onChange}
         fieldName="code block"
         required={true}
@@ -59,4 +59,4 @@ const LinesOfCode = ({ onChange, linesOfCode }: LinesOfCodeProps) => {
   );
 };
 
-export default LinesOfCode;
+export default LinksToCode;
