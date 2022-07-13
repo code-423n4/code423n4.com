@@ -7,7 +7,7 @@ import webpack from "webpack";
 
 import SchemaCustomization from "./schema";
 
-const { token } = require("./netlify/functions/_config");
+const { token } = require("./netlify/_config");
 
 const octokit = new Octokit({
   auth: token,

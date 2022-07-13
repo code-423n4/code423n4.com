@@ -4,7 +4,7 @@ const { Moralis } = require("moralis/node");
 const {
   moralisAppId,
   moralisServerUrl,
-} = require("./_config");
+} = require("../_config");
 
 // wip: endpoint for self-serve submission editing
 

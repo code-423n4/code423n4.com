@@ -4,7 +4,7 @@ const formData = require("form-data");
 const Mailgun = require("mailgun.js");
 const { Octokit } = require("@octokit/core");
 
-const { token, apiKey, domain } = require("./_config");
+const { token, apiKey, domain } = require("../_config");
 
 const octokit = new Octokit({ auth: token });
 
