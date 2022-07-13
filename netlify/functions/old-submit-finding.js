@@ -20,7 +20,12 @@ function isDangerousRepo(s) {
 }
 
 async function getContestEnd(contestId) {
-  const contests = await csv().fromFile("_data/contests/contests.csv");
+  let contests;
+  if (process.env.NODE_ENV === "development") {
+    contests = await csv().fromFile("_test-data/contests/contests.csv");
+  } else {
+    contests = await csv().fromFile("_data/contests/contests.csv");
+  }
 
   const contest = contests.find((c) => c.contestid == contestId);
   return new Date(contest.end_time).getTime();
@@ -67,24 +72,30 @@ exports.handler = async (event) => {
   ) {
     return {
       statusCode: 422,
-      body:
-        "Email, handle, address, risk, title, body, and labels are required.",
+      body: JSON.stringify({
+        error:
+          "Email, handle, address, risk, title, body, and labels are required.",
+      }),
     };
   }
 
   if (isDangerousRepo(repo)) {
     return {
       statusCode: 400,
-      body:
-        "Repository can only contain alphanumeric characters [a-zA-Z0-9] and hyphens (-).",
+      body: JSON.stringify({
+        error:
+          "Repository can only contain alphanumeric characters [a-zA-Z0-9] and hyphens (-).",
+      }),
     };
   }
 
   if (isDangerousHandle(handle)) {
     return {
       statusCode: 400,
-      body:
-        "Handle can only contain alphanumeric characters [a-zA-Z0-9], underscores (_), and hyphens (-).",
+      body: JSON.stringify({
+        error:
+          "Handle can only contain alphanumeric characters [a-zA-Z0-9], underscores (_), and hyphens (-).",
+      }),
     };
   }
 
@@ -94,14 +105,18 @@ exports.handler = async (event) => {
     if (Date.now() - 5000 > contestEnd) {
       return {
         statusCode: 400,
-        body: "This contest has ended.",
+        body: JSON.stringify({
+          error: "This contest has ended.",
+        }),
       };
     }
   } catch (error) {
     console.error(error);
     return {
       statusCode: 422,
-      body: "Error fetching contest data",
+      body: JSON.stringify({
+        error: "Error fetching contest data",
+      }),
     };
   }
 
@@ -184,7 +199,9 @@ exports.handler = async (event) => {
   } catch (error) {
     return {
       statusCode: 500,
-      body: "Something went wrong with your submission. Please try again.",
+      body: JSON.stringify({
+        error: "Something went wrong with your submission. Please try again.",
+      }),
     };
   }
 };
