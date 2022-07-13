@@ -1,3 +1,4 @@
+const csv = require("csvtojson");
 const { Moralis } = require("moralis/node");
 
 const {
@@ -7,6 +8,18 @@ const {
 
 // wip: endpoint for self-serve submission editing
 
+function getContestEnd(contestId) {
+  let contests;
+  if (process.env.NODE_ENV === "development") {
+    contests = csv().fromFile("_test-data/contests/contests.csv");
+  } else {
+    contests = csv().fromFile("_data/contests/contests.csv");
+  }
+
+  const contest = contests.find((c) => c.contestid == contestId);
+  return new Date(contest.end_time).getTime();
+}
+
 function getFindings(req) {
   // the request needs to come from an authenticated warden
   // they can see their findings for active contests
@@ -15,6 +28,9 @@ function getFindings(req) {
   console.log(req);
   const contestId = parseInt(req.queryStringParameters?.contest);
   console.log(contestId);
+
+  // 1. all or one contest
+  // 2. all active contests (or specific)
 
   return {
     statusCode: 200,
