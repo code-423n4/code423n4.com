@@ -1,8 +1,13 @@
+import Moralis from "moralis";
 import React, { useEffect, useState } from "react";
+
+import useUser from "../../hooks/UserContext";
 
 import ProtectedPage from "../../components/ProtectedPage";
 
 export default function FindingsPage({ data, location }) {
+  const { currentUser } = useUser();
+
   const [findingsList, setFindingsList] = useState([]);
 
   // optionally? support url params for contest
@@ -18,20 +23,22 @@ export default function FindingsPage({ data, location }) {
   }
 
   useEffect(() => {
-    fetch(`/.netlify/functions/manage-findings?` + q, {
-      // method: "POST",
-      // headers: {
-      //   "Content-Type": "application/json",
-      // },
-      // body: JSON.stringify({
-      //   contestId,
-      // })
-    })
-      .then((response) => response.json())
-      .then((resultData) => {
-        setFindingsList(resultData);
-      });
-  }, []);
+    if (currentUser.isLoggedIn) {
+      const user = Moralis.User.current();
+      const sessionToken = user?.attributes.sessionToken;
+
+      fetch(`/.netlify/functions/manage-findings?` + q, {
+        headers: {
+          "Content-Type": "application/json",
+          "X-Authorization": `Bearer ${sessionToken}`,
+        },
+      })
+        .then((response) => response.json())
+        .then((resultData) => {
+          setFindingsList(resultData);
+        });
+    }
+  }, [currentUser]);
 
   return (
     <ProtectedPage
