@@ -1,4 +1,3 @@
-const csv = require("csvtojson");
 const { Moralis } = require("moralis/node");
 
 const {
@@ -6,19 +5,9 @@ const {
   moralisServerUrl,
 } = require("../_config");
 
+const { getContestEnd } = require("../util/contest-utils");
+
 // wip: endpoint for self-serve submission editing
-
-function getContestEnd(contestId) {
-  let contests;
-  if (process.env.NODE_ENV === "development") {
-    contests = csv().fromFile("_test-data/contests/contests.csv");
-  } else {
-    contests = csv().fromFile("_data/contests/contests.csv");
-  }
-
-  const contest = contests.find((c) => c.contestid == contestId);
-  return new Date(contest.end_time).getTime();
-}
 
 function getFindings(req) {
   // the request needs to come from an authenticated warden
