@@ -4,7 +4,7 @@ const { Moralis } = require("moralis/node");
 const { Octokit } = require("@octokit/core");
 const sharp = require("sharp");
 
-const { token, moralisAppId, moralisServerUrl } = require("./_config");
+const { token, moralisAppId, moralisServerUrl } = require("../_config");
 
 const OctokitClient = Octokit.plugin(createPullRequest);
 const octokit = new OctokitClient({ auth: token });
