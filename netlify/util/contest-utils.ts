@@ -8,17 +8,12 @@ async function getContest(contestId) {
   return contest;
 }
 
-function isContestActive(contestId) {
-  return getContest(contestId).then((c) => {
-    if (c) {
-      const now = Date.now();
-      const start = new Date(c.start_time).getTime();
-      const end = new Date(c.end_time).getTime();
-  
-      return (now >= start) && (now <= end);
-    }
-    return false;
-  });
+function isContestActive(contest) {
+  const now = Date.now();
+  const start = new Date(contest.start_time).getTime();
+  const end = new Date(contest.end_time).getTime();
+
+  return (now >= start) && (now <= end);
 }
 
 export {
