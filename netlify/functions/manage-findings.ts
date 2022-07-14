@@ -2,6 +2,7 @@ import { Handler } from "@netlify/functions";
 
 import { checkAuth } from "../util/auth-utils";
 import { getContest, isContestActive } from "../util/contest-utils";
+import { wardenFindingsForContest } from "../util/github-utils";
 
 
 async function getFindings(req) {
@@ -16,7 +17,11 @@ async function getFindings(req) {
   }
 
   // warden can see own findings
+  const wardenHandle = "";
+  await wardenFindingsForContest(wardenHandle, contest);
+
   // warden can see team findings
+  // await wardenFindingsForContest(teamHandle, contest.repo);
 
   return {
     statusCode: 200,
