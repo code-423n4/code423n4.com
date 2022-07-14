@@ -9,6 +9,10 @@ async function getContest(contestId) {
 }
 
 function isContestActive(contest) {
+  if (!contest) {
+    return false;
+  }
+
   const now = Date.now();
   const start = new Date(contest.start_time).getTime();
   const end = new Date(contest.end_time).getTime();
