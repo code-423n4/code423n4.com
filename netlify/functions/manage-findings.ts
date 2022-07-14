@@ -1,7 +1,7 @@
 import { Handler } from "@netlify/functions";
 
 import { checkAuth } from "../util/auth-utils";
-import { getContestEnd } from "../util/contest-utils";
+import { isContestActive } from "../util/contest-utils";
 
 
 async function getFindings(req) {
@@ -9,6 +9,10 @@ async function getFindings(req) {
 
   // first phase:
   // given active! contest id
+  if (!(await isContestActive(contestId))) {
+    // throw?
+  }
+
   // warden can see own findings
   // warden can see team findings
 
