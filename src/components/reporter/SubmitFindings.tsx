@@ -1,6 +1,5 @@
 import clsx from "clsx";
 import React, { useEffect, useState, useCallback } from "react";
-import Moralis from "moralis";
 import { toast } from "react-toastify";
 
 // helpers
@@ -15,16 +14,18 @@ import {
   qaGasDetailsField,
 } from "./findings/fields";
 import {
-  initStateFromStorage,
   config,
-  checkTitle,
+  getTitle,
   checkQaOrGasFinding,
+  getCurrentStateFromStorage,
+  setStateInLocalStorage,
 } from "./findings/functions";
 import useUser from "../../hooks/UserContext";
 import { useModalContext } from "../../hooks/ModalContext";
 
 // types
 import { Field } from "./widgets/Widgets";
+import { FindingRequestData, ReportState } from "../../templates/ReportForm";
 
 // components
 import Agreement from "../content/Agreement";
@@ -44,6 +45,17 @@ const FormStatus = {
   Error: "error",
 };
 
+interface SubmitFindingsProps {
+  wardensList: { edges: { node: { handle: string; image: unknown } }[] };
+  sponsor: string;
+  contest: string;
+  repo: string;
+  title: string;
+  initialState: ReportState;
+  onSubmit: (data: FindingRequestData) => Promise<Response>;
+  findingId: string;
+}
+
 const SubmitFindings = ({
   wardensList,
   sponsor,
@@ -51,8 +63,9 @@ const SubmitFindings = ({
   repo,
   title,
   initialState,
-  endpoint,
-}) => {
+  onSubmit,
+  findingId,
+}: SubmitFindingsProps) => {
   const wardens = wardensList.edges.map(({ node }) => {
     return { value: node.handle, image: node.image };
   });
@@ -87,19 +100,13 @@ const SubmitFindings = ({
   }, [currentUser]);
 
   useEffect(() => {
-    initStateFromStorage(contest, initialState, setState);
-  }, [contest]);
+    const currentState = getCurrentStateFromStorage(findingId, initialState);
+    setState(currentState);
+  }, [findingId, initialState]);
 
   useEffect(() => {
-    if (typeof window === "undefined") {
-      return;
-    }
-    const { risk, details, qaGasDetails, linksToCode, title } = state;
-    window.localStorage.setItem(
-      contest,
-      JSON.stringify({ risk, details, qaGasDetails, linksToCode, title })
-    );
-  }, [state, contest]);
+    setStateInLocalStorage(findingId, state);
+  }, [state, findingId]);
 
   useEffect(() => {
     // set which fields are shown based on risk
@@ -125,15 +132,15 @@ const SubmitFindings = ({
   // change handlers
   const handleChange = (e) => {
     if (Array.isArray(e)) {
-      setState((state) => {
-        return { ...state, linksToCode: e };
+      setState((prevState) => {
+        return { ...prevState, linksToCode: e };
       });
     } else {
       const { name, value } = e.target;
       switch (name) {
         case "title":
           setState((prevState) => {
-            return { ...prevState, [name]: checkTitle(value, prevState.risk) };
+            return { ...prevState, [name]: getTitle(value, prevState.risk) };
           });
           break;
         default:
@@ -179,7 +186,6 @@ const SubmitFindings = ({
   };
 
   const submitFinding = useCallback(async () => {
-    const url = `/.netlify/functions/${endpoint}`;
     const isQaOrGasFinding = checkQaOrGasFinding(state.risk);
 
     const linksToCodeString = state.linksToCode.join("\n");
@@ -192,7 +198,7 @@ const SubmitFindings = ({
     );
     emailAddressList.push(currentUser.emailAddress);
 
-    const data = {
+    const data: FindingRequestData = {
       user: currentUser.username,
       contest,
       sponsor,
@@ -201,51 +207,39 @@ const SubmitFindings = ({
       attributedTo,
       address: polygonAddress,
       risk: formattedRisk,
-      title: checkTitle(state.title, state.risk),
+      title: getTitle(state.title, state.risk),
       body: formattedBody,
       labels: [config.labelAll, state.risk],
     };
-    (async () => {
-      setStatus(FormStatus.Submitting);
-      const user = await Moralis.User.current();
-      if (!user) {
-        setStatus(FormStatus.Error);
-        return;
-      }
-      const sessionToken = user.attributes.sessionToken;
-      try {
-        const response = await fetch(url, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "X-Authorization": `Bearer ${sessionToken}`,
-          },
-          body: JSON.stringify(data),
-        });
-        if (response.ok) {
+    setStatus(FormStatus.Submitting);
+    try {
+      const response = await onSubmit(data);
+      if (response.ok) {
+        setStatus(FormStatus.Submitted);
+        if (typeof window !== `undefined`) {
+          window.localStorage.removeItem(findingId);
+        }
+      } else {
+        const { error } = await response.json();
+        if (error.startsWith("Failed to send confirmation email")) {
           setStatus(FormStatus.Submitted);
           if (typeof window !== `undefined`) {
-            window.localStorage.removeItem(contest);
+            window.localStorage.removeItem(findingId);
           }
+          toast.error(error);
         } else {
-          const { error } = await response.json();
-          if (error.startsWith("Failed to send confirmation email")) {
-            setStatus(FormStatus.Submitted);
-            if (typeof window !== `undefined`) {
-              window.localStorage.removeItem(contest);
-            }
-            toast.error(error);
-          } else {
-            setStatus(FormStatus.Error);
-            if (error) {
-              setErrorMessage(error);
-            }
+          setStatus(FormStatus.Error);
+          if (error) {
+            setErrorMessage(error);
           }
         }
-      } catch (error) {
-        setStatus(FormStatus.Error);
       }
-    })();
+    } catch (error) {
+      setStatus(FormStatus.Error);
+      if (typeof error === "string") {
+        setErrorMessage(error);
+      }
+    }
   }, [
     contest,
     currentUser,

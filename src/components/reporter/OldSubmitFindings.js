@@ -13,7 +13,7 @@ import {
 import {
   initStateFromStorage,
   config,
-  checkTitle,
+  getTitle,
   checkQaOrGasFinding,
 } from "./findings/functions";
 
@@ -72,7 +72,7 @@ const OldSubmitFindings = ({ wardensList, sponsor, contest, repo }) => {
       switch (name) {
         case "title":
           setState((state) => {
-            return { ...state, [name]: checkTitle(value, state.risk) };
+            return { ...state, [name]: getTitle(value, state.risk) };
           });
           break;
         default:
@@ -138,7 +138,7 @@ const OldSubmitFindings = ({ wardensList, sponsor, contest, repo }) => {
       handle,
       address: polygonAddress,
       risk: formattedRisk,
-      title: checkTitle(state.title, state.risk),
+      title: getTitle(state.title, state.risk),
       body: formattedBody,
       labels: [config.labelAll, state.risk],
     };
