@@ -74,7 +74,7 @@ const WardenField = ({
     <div>
       {label && (
         <label className={inputStyles.Label} htmlFor={name}>
-          {label}
+          {required ? label + " *" : label}
         </label>
       )}
       {helpText && <p className={inputStyles.Help}>{helpText}</p>}
