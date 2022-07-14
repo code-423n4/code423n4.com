@@ -5,11 +5,12 @@ import { getContestEnd } from "../util/contest-utils";
 
 
 async function getFindings(req) {
-  // the request needs to come from an authenticated warden
-  // they can see their findings for active contests
-  // they can see their teams' findings for active contests
-  // there are some parameters?
   const contestId = parseInt(req.queryStringParameters?.contest);
+
+  // first phase:
+  // given active! contest id
+  // warden can see own findings
+  // warden can see team findings
 
   return {
     statusCode: 200,
