@@ -32,6 +32,15 @@ async function editFinding(req) {
 }
 
 const handler: Handler = async (event, context) => {
+  if (!checkAuth(event)) {
+    return {
+      statusCode: 401,
+      body: JSON.stringify({
+        error: "Unauthorized",
+      }),
+    };
+  }
+
   switch (event.httpMethod) {
     case "GET":
       return await getFindings(event);

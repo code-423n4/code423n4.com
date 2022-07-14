@@ -10,12 +10,7 @@ async function checkAuth(event) {
   const authorization = event.headers["x-authorization"];
 
   if (!authorization) {
-    return {
-      statusCode: 401,
-      body: JSON.stringify({
-        error: "Unauthorized",
-      }),
-    };
+    return false;
   }
 
   await Moralis.start({
@@ -61,6 +56,8 @@ async function checkAuth(event) {
   //     }),
   //   };
   // }
+
+  return true;
 }
 
 export {
