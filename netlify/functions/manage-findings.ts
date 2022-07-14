@@ -2,7 +2,6 @@ import { Handler } from "@netlify/functions";
 
 import { checkAuth } from "../util/auth-utils";
 import { getContestEnd } from "../util/contest-utils";
-import { checkAuth } from "../util/auth-utils";
 
 // wip: endpoint for self-serve submission editing
 
