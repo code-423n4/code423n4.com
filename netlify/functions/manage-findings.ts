@@ -1,13 +1,13 @@
 import { Handler } from "@netlify/functions";
 
-const { Moralis } = require("moralis/node");
+import Moralis from "moralis/node";
 
 const {
   moralisAppId,
   moralisServerUrl,
 } = require("../_config");
 
-const { getContestEnd } = require("../util/contest-utils");
+import { getContestEnd } from "../util/contest-utils";
 
 // wip: endpoint for self-serve submission editing
 

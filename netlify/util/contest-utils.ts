@@ -1,7 +1,7 @@
 import csv from "csvtojson";
 
 
-async function getContestEnd(contestId) {
+export async function getContestEnd(contestId) {
   // if (process.env.NODE_ENV === "development") {
   //   contests = csv().fromFile("_test-data/contests/contests.csv");
   // } else {
@@ -16,8 +16,3 @@ async function getContestEnd(contestId) {
   }
   // else throw?
 }
-
-
-module.exports = {
-  getContestEnd,
-};
