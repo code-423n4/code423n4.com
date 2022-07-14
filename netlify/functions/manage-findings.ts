@@ -3,7 +3,6 @@ import { Handler } from "@netlify/functions";
 import { checkAuth } from "../util/auth-utils";
 import { getContestEnd } from "../util/contest-utils";
 
-// wip: endpoint for self-serve submission editing
 
 async function getFindings(req) {
   // the request needs to come from an authenticated warden
@@ -11,9 +10,6 @@ async function getFindings(req) {
   // they can see their teams' findings for active contests
   // there are some parameters?
   const contestId = parseInt(req.queryStringParameters?.contest);
-
-  // 1. all or one contest
-  // 2. all active contests (or specific)
 
   return {
     statusCode: 200,
