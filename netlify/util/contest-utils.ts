@@ -1,17 +1,20 @@
-const csv = require("csvtojson");
+import csv from "csvtojson";
 
 
-function getContestEnd(contestId) {
-  let contests;
+async function getContestEnd(contestId) {
+  // if (process.env.NODE_ENV === "development") {
+  //   contests = csv().fromFile("_test-data/contests/contests.csv");
+  // } else {
+  //   contests = csv().fromFile("_data/contests/contests.csv");
+  // }
 
-  if (process.env.NODE_ENV === "development") {
-    contests = csv().fromFile("_test-data/contests/contests.csv");
-  } else {
-    contests = csv().fromFile("_data/contests/contests.csv");
-  }
-
+  const contests = await csv().fromFile("_data/contests/contests.csv");
   const contest = contests.find((c) => c.contestid == contestId);
-  return new Date(contest.end_time).getTime();
+
+  if (contest) {
+    return new Date(contest.end_time).getTime();
+  }
+  // else throw?
 }
 
 
