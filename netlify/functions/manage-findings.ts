@@ -1,15 +1,17 @@
 import { Handler } from "@netlify/functions";
 
 import { checkAuth } from "../util/auth-utils";
-import { isContestActive } from "../util/contest-utils";
+import { getContest, isContestActive } from "../util/contest-utils";
 
 
 async function getFindings(req) {
   const contestId = parseInt(req.queryStringParameters?.contest);
 
+  const contest = await getContest(contestId);
+
   // first phase:
   // given active! contest id
-  if (!(await isContestActive(contestId))) {
+  if (!isContestActive(contest)) {
     // throw?
   }
 
