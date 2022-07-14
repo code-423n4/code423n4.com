@@ -16,9 +16,7 @@ async function getFindings(req) {
   // they can see their findings for active contests
   // they can see their teams' findings for active contests
   // there are some parameters?
-  console.log(req);
   const contestId = parseInt(req.queryStringParameters?.contest);
-  console.log(contestId);
 
   // 1. all or one contest
   // 2. all active contests (or specific)
