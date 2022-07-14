@@ -219,7 +219,7 @@ export default function TeamRegistrationForm({
           placeholder="TeamName"
           value={state.teamName}
           required={true}
-          label="Team Name *"
+          label="Team Name"
           helpText="Used to report findings, as well as display your total award amount on the leaderboard. Supports alphanumeric characters, underscores, and hyphens. Maximum 25 characters."
           handleChange={handleChange}
           validator={validateTeamName}
@@ -235,14 +235,14 @@ export default function TeamRegistrationForm({
           fieldState={teamMembers}
           isMulti={true}
           validator={validateTeamMembers}
-          label="Members *"
+          label="Members"
         />
         <Input
           name="polygonAddress"
           placeholder="0x00000..."
           value={state.polygonAddress}
           required={true}
-          label="Polygon Address *"
+          label="Polygon Address"
           helpText="Address where your team's prize should go. If you use a smart contract wallet, please contact one of our organizers in Discord in addition to adding the address here."
           handleChange={handleChange}
           validator={validatePolygonAddress}

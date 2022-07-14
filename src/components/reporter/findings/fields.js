@@ -1,3 +1,5 @@
+// @todo: remove * from required field labels after replacing widgets with Input compoenent
+
 export const emailField = {
   name: "email",
   label: "Email address *",

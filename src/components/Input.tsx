@@ -63,7 +63,7 @@ export function Input({
     <div>
       {label && (
         <label className={styles.Label} htmlFor={name}>
-          {label}
+          {required ? label + " *" : label}
         </label>
       )}
       {helpText && <p className={styles.Help}>{helpText}</p>}
