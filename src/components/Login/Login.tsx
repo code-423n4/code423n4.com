@@ -84,7 +84,11 @@ const Login = ({ displayAsButtons = false }) => {
             <span>
               It looks like your account registration is pending. Don't forget
               to join us in{" "}
-              <a href="https://discord.gg/code4rena" target="_blank">
+              <a
+                href="https://discord.gg/code4rena"
+                target="_blank"
+                rel="noreferrer"
+              >
                 Discord
               </a>{" "}
               and give us a howl in #i-want-to-be-a-warden so we can complete
@@ -139,6 +143,7 @@ const Login = ({ displayAsButtons = false }) => {
             <a
               href="https://metamask.io/"
               target="_blank"
+              rel="noreferrer"
               className={clsx("button", styles.SmallerButton)}
             >
               <img
@@ -188,6 +193,7 @@ const Login = ({ displayAsButtons = false }) => {
               <a
                 href="https://metamask.io/"
                 target="_blank"
+                rel="noreferrer"
                 className={clsx(dropdownStyles.Button, styles.Desktop)}
               >
                 <img
@@ -215,6 +221,7 @@ const Login = ({ displayAsButtons = false }) => {
             <a
               href={isMetaMaskEnabled ? "" : "https://metamask.io/"}
               target="_blank"
+              rel="noreferrer"
               onClick={isMetaMaskEnabled ? (e) => handleLogin(e) : null}
               className={styles.Link}
             >

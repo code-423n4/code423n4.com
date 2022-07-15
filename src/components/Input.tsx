@@ -6,11 +6,11 @@ import * as styles from "./Input.module.scss";
 // @todo: replace TextField widgets with this component
 
 interface InputProps {
-  key?: string;
   name: string;
   label?: string | ReactNode;
   helpText?: string | ReactNode;
   required?: boolean;
+  placeholder?: string;
   value: string;
   canRemove?: boolean;
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -27,6 +27,7 @@ export function Input({
   label,
   helpText,
   required,
+  placeholder,
   value,
   canRemove = false,
   handleChange,
@@ -62,7 +63,7 @@ export function Input({
     <div>
       {label && (
         <label className={styles.Label} htmlFor={name}>
-          {label}
+          {required ? label + " *" : label}
         </label>
       )}
       {helpText && <p className={styles.Help}>{helpText}</p>}
@@ -74,6 +75,7 @@ export function Input({
             isInvalid && styles.InputError
           )}
           name={name}
+          placeholder={placeholder || ""}
           type="text"
           value={value}
           autoComplete="off"
