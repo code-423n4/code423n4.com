@@ -1,4 +1,5 @@
 import Moralis from "moralis/node";
+import fetch from "node-fetch";
 
 const {
   moralisAppId,
@@ -8,6 +9,8 @@ const {
 
 async function checkAuth(event) {
   const authorization = event.headers["x-authorization"];
+  const sessionToken = authorization.split("Bearer ")[1];
+  const user = event.headers["c4-user"];
 
   if (!authorization) {
     return false;
@@ -18,44 +21,26 @@ async function checkAuth(event) {
     appId: moralisAppId,
   });
 
-  // wip: from submit-finding auth
-  //   do we need username? can we check session token?
-  // const userUrl = `${event.headers.origin}/.netlify/functions/get-user?id=${user}`;
-  // const userResponse = await fetch(userUrl);
-  // if (!userResponse.ok) {
-  //   return {
-  //     statusCode: 401,
-  //     body: JSON.stringify({
-  //       error: "You must be registered to submit findings",
-  //     }),
-  //   };
-  // }
+  const userUrl = `${process.env.URL}/.netlify/functions/get-user?id=${user}`;
+  const userResponse = await fetch(userUrl);
+  if (!userResponse.ok) {
+    return false;
+  }
 
-  // const userData = await userResponse.json();
-  // if (!userData || !userData.moralisId) {
-  //   return {
-  //     statusCode: 401,
-  //     body: JSON.stringify({
-  //       error: "You must be registered to submit findings",
-  //     }),
-  //   };
-  // }
+  const userData = await userResponse.json();
+  if (!userData || !userData.moralisId) {
+    return false;
+  }
 
-  // const { moralisId } = userData;
-  // const sessionToken = authorization.split("Bearer ")[1];
-  // const confirmed = await Moralis.Cloud.run("confirmUser", {
-  //   sessionToken,
-  //   moralisId,
-  //   username: user,
-  // });
-  // if (!confirmed) {
-  //   return {
-  //     statusCode: 401,
-  //     body: JSON.stringify({
-  //       error: "Authorization failed",
-  //     }),
-  //   };
-  // }
+  const { moralisId } = userData;
+  const confirmed = await Moralis.Cloud.run("confirmUser", {
+    sessionToken,
+    moralisId,
+    username: user,
+  });
+  if (!confirmed) {
+    return false;
+  }
 
   return true;
 }

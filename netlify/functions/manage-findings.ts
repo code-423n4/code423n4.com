@@ -40,7 +40,7 @@ async function editFinding(req) {
 }
 
 const handler: Handler = async (event, context) => {
-  if (!checkAuth(event)) {
+  if (!(await checkAuth(event))) {
     return {
       statusCode: 401,
       body: JSON.stringify({
