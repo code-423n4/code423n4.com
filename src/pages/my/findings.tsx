@@ -17,20 +17,22 @@ export default function FindingsPage({ data, location }) {
   // with a state variable, get specific contest
   console.log(`Link state contest: ${location.state?.contestId}`);
 
-  const q = new URLSearchParams({})
-  if ( location.state?.contestId !== undefined ) {
-    q.append("contest", location.state?.contestId);
-  }
-
   useEffect(() => {
     if (currentUser.isLoggedIn) {
       const user = Moralis.User.current();
       const sessionToken = user?.attributes.sessionToken;
 
+      const q = new URLSearchParams({});
+
+      if ( location.state?.contestId !== undefined ) {
+        q.append("contest", location.state?.contestId);
+      }
+    
       fetch(`/.netlify/functions/manage-findings?` + q, {
         headers: {
           "Content-Type": "application/json",
           "X-Authorization": `Bearer ${sessionToken}`,
+          "C4-User": currentUser.username,
         },
       })
         .then((response) => response.json())
