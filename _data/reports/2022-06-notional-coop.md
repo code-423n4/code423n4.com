@@ -101,7 +101,7 @@ During the audit contest outlined in this document, C4 conducted an analysis of 
 
 This contest was judged by [gzeon](https://twitter.com/gzeon).
 
-Final report assembled by [itsmetechjay](https://twitter.com/itsmetechyjay).
+Final report assembled by [itsmetechjay](https://twitter.com/itsmetechjay).
 
 # Summary
 
