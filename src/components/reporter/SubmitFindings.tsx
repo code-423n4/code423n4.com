@@ -172,6 +172,8 @@ const SubmitFindings = ({
   };
 
   const handleReset = () => {
+    // @todo: clear query string and location state
+
     setState((prevState) => {
       return {
         ...prevState,
@@ -477,12 +479,14 @@ const SubmitFindings = ({
             })}
           </fieldset>
           <Agreement />
+          {/* @todo: add optional cancel button */}
           <button
             className="button cta-button centered"
             type="button"
             onClick={handleSubmit}
             disabled={status !== FormStatus.Unsubmitted}
           >
+            {/* @todo: make button text dynamic */}
             {status === FormStatus.Unsubmitted
               ? "Create issue"
               : "Submitting..."}
@@ -501,6 +505,7 @@ const SubmitFindings = ({
           </button>
         </div>
       )}
+      {/* @todo: consider making this section dynamic */}
       {status === FormStatus.Submitted && (
         <div className="centered-text">
           <h2 className={styles.Heading2}>Thank you!</h2>

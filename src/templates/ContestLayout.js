@@ -1,19 +1,24 @@
-import React, { useState } from "react";
-import { graphql, Link } from "gatsby";
 import clsx from "clsx";
-import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
+import { graphql, Link } from "gatsby";
 import DOMPurify from "isomorphic-dompurify";
+import Moralis from "moralis";
+import React, { useEffect, useState } from "react";
+import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 
 import { getDates } from "../utils/time";
 
-import ContestFAQ from "../pages/contests/faq";
+import useUser from "../hooks/UserContext";
+
+import ClientOnly from "../components/ClientOnly";
 import ContestResults from "../components/ContestResults";
 import Countdown from "../components/Countdown";
 import DefaultLayout from "./DefaultLayout";
-import ClientOnly from "../components/ClientOnly";
+import FindingsList from "../components/FindingsList";
 
 const ContestLayout = (props) => {
   const [artOpen, setArtOpen] = useState(false);
+  const [findingsList, setFindingsList] = useState([]);
+  const { currentUser } = useUser();
 
   const {
     title,
@@ -25,6 +30,7 @@ const ContestLayout = (props) => {
     fields,
     start_time,
     end_time,
+    contestid,
   } = props.data.contestsCsv;
 
   const { markdownRemark } = props.data;
@@ -40,6 +46,27 @@ const ContestLayout = (props) => {
       ? markdownRemark.frontmatter.altUrl
       : `/reports/${props.data.markdownRemark.frontmatter.slug}`;
   }
+
+  useEffect(() => {
+    if (currentUser.isLoggedIn) {
+      const user = Moralis.User.current();
+      const sessionToken = user?.attributes.sessionToken;
+
+      fetch(`/.netlify/functions/manage-findings?contest=${contestid}`, {
+        headers: {
+          "Content-Type": "application/json",
+          "X-Authorization": `Bearer ${sessionToken}`,
+          "C4-User": currentUser.username,
+        },
+      })
+        .then((response) => response.json())
+        .then((resultData) => {
+          setFindingsList(resultData.issues.reverse());
+        });
+    } else {
+      setFindingsList([]);
+    }
+  }, [currentUser, contestid]);
 
   return (
     <DefaultLayout
@@ -145,7 +172,7 @@ const ContestLayout = (props) => {
                 <Tab>Results</Tab>
               )}
               <Tab>Details</Tab>
-              <Tab>FAQ</Tab>
+              {t.contestStatus === "active" && <Tab>Findings</Tab>}
             </TabList>
 
             {props.data.leaderboardFindings.findings.length > 0 && (
@@ -182,11 +209,16 @@ const ContestLayout = (props) => {
                 )}
               </div>
             </TabPanel>
-            <TabPanel>
-              <div className="contest-wrapper">
-                <ContestFAQ />
-              </div>
-            </TabPanel>
+            {t.contestStatus === "active" && (
+              <TabPanel>
+                <div className="contest-wrapper">
+                  <FindingsList
+                    findings={findingsList}
+                    submissionPath={fields.submissionPath}
+                  />
+                </div>
+              </TabPanel>
+            )}
           </Tabs>
         </section>
       </ClientOnly>

@@ -96,7 +96,20 @@ const ReportForm = ({ data, location }) => {
 
   useEffect(() => {
     (async () => {
-      if (location.search) {
+      if (location.state && location.state.finding) {
+        const finding = location.state.finding;
+        setFindingId(finding.number);
+        setState({
+          title: finding.title,
+          risk: finding.labels[1],
+          details: finding.body,
+          qaGasDetails: finding.body,
+          linksToCode: [""],
+        });
+        setIsLoading(false);
+        setEndpoint("update-finding");
+        setFindingId(`${contestid}-${finding.number}`);
+      } else if (location.search) {
         try {
           // @todo: improve this
           const id = location.search.split("=")[1];
@@ -157,22 +170,17 @@ const ReportForm = ({ data, location }) => {
           </Link>
         </div>
       ) : (
-        <>
-          Need to make a change to a submission?{" "}
-          <Link to="/my/findings" state={{ contestId: contestid }}>
-            View submissions.
-          </Link>
-          <SubmitFindings
-            wardensList={data.allHandlesJson}
-            sponsor={sponsor.name}
-            contest={contestid}
-            repo={findingsRepo}
-            title={title}
-            initialState={state}
-            onSubmit={onSubmit}
-            findingId={findingId}
-          />
-        </>
+        // @todo: pass in dynamic submit button and cancel button
+        <SubmitFindings
+          wardensList={data.allHandlesJson}
+          sponsor={sponsor.name}
+          contest={contestid}
+          repo={findingsRepo}
+          title={title}
+          initialState={state}
+          onSubmit={onSubmit}
+          findingId={findingId}
+        />
       )}
     </ProtectedPage>
   );
