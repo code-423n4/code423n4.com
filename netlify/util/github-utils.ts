@@ -130,6 +130,35 @@ async function getAllIssues(
   return issues;
 }
 
+async function getSubmittedFindingsFromFolder(repo) {
+  // returns handle/issueNumber from ./data/{handle}-{issue}.json files
+
+  const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
+
+  const submitted_findings = await octokit.request("GET /repos/{owner}/{repo}/contents/{path}", {
+    owner: process.env.GITHUB_CONTEST_REPO_OWNER,
+    repo: repo,
+    path: "data",
+  }).then(res => {
+    return res.data.map(f => {
+      const [key, ext] = f.name.split(".");
+      const [handle, issueNumber] = key.split("-");
+
+      // xxx: md submissions?
+      // if (ext !== "json") {
+      //   console.log("non-json file");
+      // }
+
+      return {
+        'handle': handle,
+        'issueNumber': issueNumber,
+      }
+    });
+  });
+
+  return submitted_findings;
+}
+
 async function wardenFindingsForContest(handle, contest) {
   const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
 
