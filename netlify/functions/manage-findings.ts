@@ -21,7 +21,9 @@ async function getFindings(req) {
   await wardenFindingsForContest(wardenHandle, contest);
 
   // warden can see team findings
-  // await wardenFindingsForContest(teamHandle, contest.repo);
+  // if (req.queryStringParameters?.teamFindings) {
+  //   await wardenFindingsForContest(teamHandle, contest.repo);
+  // }
 
   return {
     statusCode: 200,
