@@ -7,7 +7,8 @@ import { wardenFindingsForContest } from "../util/github-utils";
 
 async function getFindings(req) {
   const contestId = parseInt(req.queryStringParameters?.contest);
-  const wardenHandle = req.queryStringParameters?.handle;
+  // const wardenHandle = req.queryStringParameters?.handle;
+  const wardenHandle = req.headers["c4-user"];
 
   const contest = await getContest(contestId);
 
