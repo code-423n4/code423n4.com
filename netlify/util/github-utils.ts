@@ -160,17 +160,17 @@ async function getSubmittedFindingsFromFolder(repo) {
 }
 
 async function wardenFindingsForContest(handle, contest) {
-  const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
+  const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN }); // TODO: move out?
 
   const repoName = contest.findingsRepo.split("/").slice(-1)[0];
 
   // get the handle-id mapping from './data'
-  const all_findings = (await getSubmittedFindingsFromFolder(repoName)).filter(item => {
-    return item.handle === handle
-  });
+  const handle_findings = (await getSubmittedFindingsFromFolder(repoName))
+    .filter(item => {
+      return item.handle === handle
+    });
 
-  return all_findings;
-  // return await getAllIssues(octokit, repoName, process.env.GITHUB_CONTEST_REPO_OWNER);
+  return handle_findings;
 }
 
 export {
