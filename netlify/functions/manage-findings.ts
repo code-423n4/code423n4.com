@@ -7,6 +7,7 @@ import { wardenFindingsForContest } from "../util/github-utils";
 
 async function getFindings(req) {
   const contestId = parseInt(req.queryStringParameters?.contest);
+  const wardenHandle = req.queryStringParameters?.handle;
 
   const contest = await getContest(contestId);
 
@@ -17,7 +18,6 @@ async function getFindings(req) {
   }
 
   // warden can see own findings
-  const wardenHandle = "";
   await wardenFindingsForContest(wardenHandle, contest);
 
   // warden can see team findings
