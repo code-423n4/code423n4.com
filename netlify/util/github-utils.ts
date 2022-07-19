@@ -131,7 +131,14 @@ async function getAllIssues(
 }
 
 async function wardenFindingsForContest(handle, contest) {
+  const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
 
+  const repoName = contest.findingsRepo.split("/").slice(-1)[0];
+
+  // get the handle-id mapping from './data'
+
+  return [];
+  // return await getAllIssues(octokit, repoName, process.env.GITHUB_CONTEST_REPO_OWNER);
 }
 
 export {
