@@ -165,9 +165,11 @@ async function wardenFindingsForContest(handle, contest) {
   const repoName = contest.findingsRepo.split("/").slice(-1)[0];
 
   // get the handle-id mapping from './data'
-  const all_findings = await getSubmittedFindingsFromFolder(repoName);
+  const all_findings = (await getSubmittedFindingsFromFolder(repoName)).filter(item => {
+    return item.handle === handle
+  });
 
-  return [];
+  return all_findings;
   // return await getAllIssues(octokit, repoName, process.env.GITHUB_CONTEST_REPO_OWNER);
 }
 
