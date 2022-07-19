@@ -18,16 +18,20 @@ async function getFindings(req) {
   }
 
   // warden can see own findings
-  await wardenFindingsForContest(wardenHandle, contest);
+  const wardenFindings = await wardenFindingsForContest(wardenHandle, contest);
 
   // warden can see team findings
   // if (req.queryStringParameters?.teamFindings) {
   //   await wardenFindingsForContest(teamHandle, contest.repo);
   // }
 
+  const res = {
+    [wardenHandle]: wardenFindings,
+  }
+
   return {
     statusCode: 200,
-    body: JSON.stringify({}),
+    body: JSON.stringify(res),
   };
 }
 
