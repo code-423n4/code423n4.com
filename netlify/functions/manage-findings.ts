@@ -7,26 +7,25 @@ import { wardenFindingsForContest } from "../util/github-utils";
 
 
 async function getFindings(req) {
-  // todo: ensure contestId / wardenHandle exist?
+  // first phase:
+  // given active! contest id
+  // [ ] warden can see own findings
+  // [ ] warden can see team findings
 
+  // todo: ensure contestId / wardenHandle exist?
   const contestId = parseInt(req.queryStringParameters?.contest);
-  // const wardenHandle = req.queryStringParameters?.handle;
   const wardenHandle = req.headers["c4-user"];
 
   const contest = await getContest(contestId);
 
-  const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
-
-  // first phase:
-  // given active! contest id
   if (!isContestActive(contest)) {
     // throw?
   }
 
-  // warden can see own findings
+  const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
+
   const wardenFindings = await wardenFindingsForContest(octokit, wardenHandle, contest);
 
-  // warden can see team findings
   // if (req.queryStringParameters?.teamFindings) {
   //   await wardenFindingsForContest(teamHandle, contest.repo);
   // }
