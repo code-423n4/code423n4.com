@@ -61,7 +61,8 @@ const ContestLayout = (props) => {
       })
         .then((response) => response.json())
         .then((resultData) => {
-          setFindingsList(resultData.issues.reverse());
+          // todo: what comes back is an object with lists of findings
+          setFindingsList(resultData[currentUser.username]);
         });
     } else {
       setFindingsList([]);

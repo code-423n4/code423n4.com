@@ -14,7 +14,7 @@ interface Finding {
   id: string;
   title: string;
   body: string;
-  labels: { nodes: { name: string; color: string }[] };
+  labels: { name: string; color: string }[];
   number: number;
   state: string;
   createdAt: string;
@@ -62,7 +62,7 @@ const FindingsList = ({ submissionPath, findings }: FindingsListProps) => {
                     >
                       {finding.title}
                     </Link>
-                    {finding.labels.nodes.map((label) => (
+                    {finding.labels.map((label) => (
                       <span
                         key={label.name}
                         className={styles.Risk}
