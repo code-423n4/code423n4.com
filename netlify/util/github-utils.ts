@@ -12,6 +12,7 @@ query ($name: String!, $owner: String!) {
           labels(first: 10) {
             nodes {
               name
+              color
             }
           }
           number
@@ -39,6 +40,7 @@ query ($name: String!, $owner: String!, $after: String!) {
           labels(first: 10) {
             nodes {
               name
+              color
             }
           }
           number
@@ -65,6 +67,7 @@ interface QueryResponse {
         labels: {
           nodes: {
             name: string;
+            color: string;
           }[];
         };
         number: number;
