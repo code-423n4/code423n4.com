@@ -1,4 +1,5 @@
 import { Handler } from "@netlify/functions";
+import { Octokit } from "@octokit/core";
 
 import { checkAuth } from "../util/auth-utils";
 import { getContest, isContestActive } from "../util/contest-utils";
@@ -14,6 +15,8 @@ async function getFindings(req) {
 
   const contest = await getContest(contestId);
 
+  const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
+
   // first phase:
   // given active! contest id
   if (!isContestActive(contest)) {
@@ -21,7 +24,7 @@ async function getFindings(req) {
   }
 
   // warden can see own findings
-  const wardenFindings = await wardenFindingsForContest(wardenHandle, contest);
+  const wardenFindings = await wardenFindingsForContest(octokit, wardenHandle, contest);
 
   // warden can see team findings
   // if (req.queryStringParameters?.teamFindings) {

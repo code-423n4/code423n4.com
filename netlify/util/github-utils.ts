@@ -130,12 +130,10 @@ async function getAllIssues(
   return issues;
 }
 
-async function getSubmittedFindingsFromFolder(repo) {
+async function getSubmittedFindingsFromFolder(client : Octokit, repo) {
   // returns handle/issueNumber from ./data/{handle}-{issue}.json files
 
-  const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
-
-  const submitted_findings = await octokit.request("GET /repos/{owner}/{repo}/contents/{path}", {
+  const submitted_findings = await client.request("GET /repos/{owner}/{repo}/contents/{path}", {
     owner: process.env.GITHUB_CONTEST_REPO_OWNER,
     repo: repo,
     path: "data",
@@ -159,13 +157,11 @@ async function getSubmittedFindingsFromFolder(repo) {
   return submitted_findings;
 }
 
-async function wardenFindingsForContest(handle, contest) {
-  const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN }); // TODO: move out?
-
+async function wardenFindingsForContest(client : Octokit, handle, contest) {
   const repoName = contest.findingsRepo.split("/").slice(-1)[0];
 
   // get the handle-id mapping from './data'
-  const submission_files = (await getSubmittedFindingsFromFolder(repoName))
+  const submission_files = (await getSubmittedFindingsFromFolder(client, repoName))
     .filter(item => {
       return item.handle === handle
     });
