@@ -165,12 +165,15 @@ async function wardenFindingsForContest(handle, contest) {
   const repoName = contest.findingsRepo.split("/").slice(-1)[0];
 
   // get the handle-id mapping from './data'
-  const handle_findings = (await getSubmittedFindingsFromFolder(repoName))
+  const submission_files = (await getSubmittedFindingsFromFolder(repoName))
     .filter(item => {
       return item.handle === handle
     });
 
-  return handle_findings
+  // todo: stitch submissions and issues
+  // const github_issues = getAllIssues();
+
+  return submission_files
     .map(item => {
       // todo: fill in necessary values
       return {
