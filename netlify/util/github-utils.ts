@@ -167,7 +167,11 @@ async function wardenFindingsForContest(client : Octokit, handle, contest) {
     });
 
   // todo: stitch submissions and issues
-  // const github_issues = getAllIssues();
+  const github_issues = (await getAllIssues(client, repoName, process.env.GITHUB_CONTEST_REPO_OWNER))
+    .filter(issue => {
+      // return issue.number in submission_files
+      return true;
+    });
 
   return submission_files
     .map(item => {
