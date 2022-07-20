@@ -24,7 +24,7 @@ interface NotionCertifiedContributorApplication {
       }[];
     };
     Status: {
-      select: {
+      multi_select: {
         name: string;
       };
     };
@@ -132,7 +132,7 @@ async function handler(event) {
           ],
         },
         Status: {
-          select: {
+          multi_select: {
             name: "Applied",
           },
         },
