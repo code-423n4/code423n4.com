@@ -149,20 +149,9 @@ async function getSubmittedFindingsFromFolder(repo) {
       //   console.log("non-json file");
       // }
 
-      // todo: fill in necessary values
       return {
         'handle': handle,
         'issueNumber': issueNumber,
-        'id': "The ID???",
-        'title': `Placehodler title ${f.name}`,
-        'body': "The Body (can this be avoided until edit?)",
-        'labels': [
-          // {"name": "Some Label", "color": "aabb00"}
-        ],
-        'number': issueNumber,
-        'state': "some state",
-        'createdAt': null,
-        'updatedAt': null,
       }
     });
   });
@@ -181,7 +170,23 @@ async function wardenFindingsForContest(handle, contest) {
       return item.handle === handle
     });
 
-  return handle_findings;
+  return handle_findings
+    .map(item => {
+      // todo: fill in necessary values
+      return {
+        ...item,
+        'id': "The ID???",
+        'title': "Placehodler title",
+        'body': "The Body (can this be avoided until edit?)",
+        'labels': [
+          // {"name": "Some Label", "color": "aabb00"}
+        ],
+        'number': item.issueNumber,
+        'state': "some state",
+        'createdAt': null,
+        'updatedAt': null,
+      };
+    });
 }
 
 export {
