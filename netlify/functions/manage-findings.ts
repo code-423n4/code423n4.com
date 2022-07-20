@@ -9,7 +9,8 @@ import { wardenFindingsForContest } from "../util/github-utils";
 async function getFindings(req) {
   // first phase:
   // given active! contest id
-  // [ ] warden can see own findings
+  // [x] warden can see own findings
+  //   * [ ] completely.. ?
   // [ ] warden can see team findings
 
   // todo: ensure contestId / wardenHandle exist?
@@ -51,6 +52,8 @@ async function editFinding(req) {
 }
 
 const handler: Handler = async (event, context) => {
+  // todo: error handling..
+
   if (!(await checkAuth(event))) {
     return {
       statusCode: 401,
