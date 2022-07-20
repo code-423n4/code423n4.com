@@ -43,9 +43,6 @@ export default function UserDropdown() {
               "..." +
               currentUser.address.slice(-4)}
           </span>
-          <Link to="/my/findings" className={dropdownStyles.Button}>
-            Manage Findings
-          </Link>
           <Link to="/account" className={dropdownStyles.Button}>
             Manage Account
           </Link>
