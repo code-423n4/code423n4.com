@@ -175,13 +175,10 @@ async function wardenFindingsForContest(handle, contest) {
       // todo: fill in necessary values
       return {
         ...item,
-        'id': "The ID???",
-        'title': "Placehodler title",
-        'body': "The Body (can this be avoided until edit?)",
+        'title': "Placehodler title1",
         'labels': [
           // {"name": "Some Label", "color": "aabb00"}
         ],
-        'number': item.issueNumber,
         'state': "some state",
         'createdAt': null,
         'updatedAt': null,

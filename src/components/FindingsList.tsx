@@ -11,11 +11,9 @@ import * as styles from "./FindingsList.module.scss";
 import * as formStyles from "./form/Form.module.scss";
 
 interface Finding {
-  id: string;
   title: string;
-  body: string;
   labels: { name: string; color: string }[];
-  number: number;
+  issueNumber: number;
   state: string;
   createdAt: string;
   updatedAt: string;
@@ -38,7 +36,7 @@ const FindingsList = ({ submissionPath, findings }: FindingsListProps) => {
             const created = new Date(finding.createdAt);
             const now = new Date();
             return (
-              <li key={finding.id} className={styles.ListItem}>
+              <li key={finding.issueNumber} className={styles.ListItem}>
                 <svg
                   className={clsx(styles[finding.state], styles.Status)}
                   viewBox="0 0 16 16"
@@ -56,7 +54,7 @@ const FindingsList = ({ submissionPath, findings }: FindingsListProps) => {
                 <div>
                   <div className={styles.Details}>
                     <Link
-                      to={`${submissionPath}?issue=${finding.number}`}
+                      to={`${submissionPath}?issue=${finding.issueNumber}`}
                       state={{ finding: finding }}
                       className={clsx(styles[finding.state], styles.Title)}
                     >
