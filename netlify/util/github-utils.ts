@@ -187,9 +187,21 @@ async function wardenFindingsForContest(client : Octokit, handle, contest) {
       return {
         ...item,
         'title': github_issues[item.issueNumber].title,
-        'labels': [
-          // {"name": "Some Label", "color": "aabb00"}
-        ],
+        'labels': github_issues[item.issueNumber].labels.nodes
+          .filter(label => {
+            return [
+              "3 (High Risk)",
+              "2 (Med Risk)",
+              "QA (Quality Assurance)",
+              "G (Gas Optimization)",
+            ].indexOf(label.name) >= 0;
+          })
+          .map(label => {
+            return {
+              name: label.name,
+              color: label.color,
+            }
+          }),
         'state': github_issues[item.issueNumber].state, // OPEN | CLOSED
         'createdAt': null,
         'updatedAt': null,
