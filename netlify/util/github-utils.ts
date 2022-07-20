@@ -149,7 +149,7 @@ async function getSubmittedFindingsFromFolder(client : Octokit, repo) {
 
       return {
         'handle': handle,
-        'issueNumber': issueNumber,
+        'issueNumber': parseInt(issueNumber),
       }
     });
   });
@@ -169,16 +169,21 @@ async function wardenFindingsForContest(client : Octokit, handle, contest) {
   // todo: stitch submissions and issues
   const github_issues = (await getAllIssues(client, repoName, process.env.GITHUB_CONTEST_REPO_OWNER))
     .filter(issue => {
-      // return issue.number in submission_files
-      return true;
-    });
+      return submission_files.find(submission_file => {
+        return submission_file.issueNumber === issue.number;
+      }) !== undefined;
+    })
+    .reduce((issues, issue) => {
+      issues[issue.number] = issue;
+      return issues;
+    }, {});
 
   const submissions = submission_files
     .map(item => {
       // todo: fill in necessary values
       return {
         ...item,
-        'title': "Placehodler title1",
+        'title': github_issues[item.issueNumber].title,
         'labels': [
           // {"name": "Some Label", "color": "aabb00"}
         ],
