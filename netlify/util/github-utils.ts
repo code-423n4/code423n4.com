@@ -149,9 +149,20 @@ async function getSubmittedFindingsFromFolder(repo) {
       //   console.log("non-json file");
       // }
 
+      // todo: fill in necessary values
       return {
         'handle': handle,
         'issueNumber': issueNumber,
+        'id': "The ID???",
+        'title': `Placehodler title ${f.name}`,
+        'body': "The Body (can this be avoided until edit?)",
+        'labels': [
+          // {"name": "Some Label", "color": "aabb00"}
+        ],
+        'number': issueNumber,
+        'state': "some state",
+        'createdAt': null,
+        'updatedAt': null,
       }
     });
   });
