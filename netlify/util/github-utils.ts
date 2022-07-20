@@ -194,5 +194,6 @@ async function wardenFindingsForContest(client : Octokit, handle, contest) {
 export {
   QueryResponse,
   getAllIssues,
+  getSubmittedFindingsFromFolder,
   wardenFindingsForContest,
 };
