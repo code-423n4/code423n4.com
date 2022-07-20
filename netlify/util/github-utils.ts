@@ -187,7 +187,7 @@ async function wardenFindingsForContest(client : Octokit, handle, contest) {
         'labels': [
           // {"name": "Some Label", "color": "aabb00"}
         ],
-        'state': github_issues[item.issueNumber].title, // OPEN | CLOSED
+        'state': github_issues[item.issueNumber].state, // OPEN | CLOSED
         'createdAt': null,
         'updatedAt': null,
       };
