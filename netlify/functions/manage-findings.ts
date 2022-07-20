@@ -10,7 +10,6 @@ async function getFindings(req) {
   // first phase:
   // given active! contest id
   // [x] warden can see own findings
-  //   * [ ] completely.. ?
   // [ ] warden can see team findings
 
   // todo: ensure contestId / wardenHandle exist?
