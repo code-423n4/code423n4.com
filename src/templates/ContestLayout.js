@@ -19,6 +19,7 @@ const ContestLayout = (props) => {
   const [artOpen, setArtOpen] = useState(false);
   const [findingsList, setFindingsList] = useState([]);
   const { currentUser } = useUser();
+  const [isLoadingFindings, setIsLoadingFindings] = useState(true);
 
   const {
     title,
@@ -62,7 +63,21 @@ const ContestLayout = (props) => {
         .then((response) => response.json())
         .then((resultData) => {
           // todo: what comes back is an object with lists of findings
-          setFindingsList(resultData[currentUser.username]);
+          // const findingsByUser = Object.keys(resultData).map((handle) => {
+          //   return {
+          //     user:
+          //       handle === currentUser.username
+          //         ? currentUser
+          //         : currentUser.teams.find((team) => team.username === handle),
+          //     findings: resultData[handle],
+          //   };
+          // });
+          console.log(resultData);
+          setFindingsList(resultData);
+          setIsLoadingFindings(false);
+        })
+        .catch((error) => {
+          setIsLoadingFindings(false);
         });
     } else {
       setFindingsList([]);
@@ -213,10 +228,27 @@ const ContestLayout = (props) => {
             {t.contestStatus === "active" && (
               <TabPanel>
                 <div className="contest-wrapper">
+                  <h1>{currentUser.username}</h1>
                   <FindingsList
-                    findings={findingsList}
+                    findings={findingsList.user}
                     submissionPath={fields.submissionPath}
+                    isLoading={isLoadingFindings}
                   />
+                  {currentUser.teams.map((team) => (
+                    <>
+                      <h1>{team.username}</h1>
+                      {findingsList.teams &&
+                      findingsList.teams[team.username] ? (
+                        <FindingsList
+                          findings={findingsList.teams[team.username]}
+                          submissionPath={fields.submissionPath}
+                          isLoading={isLoadingFindings}
+                        />
+                      ) : (
+                        <span>No findings</span>
+                      )}
+                    </>
+                  ))}
                 </div>
               </TabPanel>
             )}

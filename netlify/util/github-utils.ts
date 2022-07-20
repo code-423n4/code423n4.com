@@ -1,6 +1,5 @@
 import { Octokit } from "@octokit/core";
 
-
 const firstPageQuery = `
 query ($name: String!, $owner: String!) {
     repository(name: $name, owner: $owner) {
@@ -16,6 +15,9 @@ query ($name: String!, $owner: String!) {
             }
           }
           number
+          body
+          createdAt
+          updatedAt
         }
         pageInfo {
           endCursor
@@ -25,6 +27,8 @@ query ($name: String!, $owner: String!) {
     }
     rateLimit {
       cost
+      limit
+      remaining
     }
   }  
 `;
@@ -44,6 +48,9 @@ query ($name: String!, $owner: String!, $after: String!) {
             }
           }
           number
+          body
+          createdAt
+          updatedAt
         }
         pageInfo {
           endCursor
@@ -53,6 +60,8 @@ query ($name: String!, $owner: String!, $after: String!) {
     }
     rateLimit {
       cost
+      limit
+      remaining
     }
   }  
 `;
@@ -85,12 +94,10 @@ async function getFirstPage(
   name: string,
   owner: string
 ): Promise<QueryResponse> {
-  console.log("getting first page");
   const response = await client.graphql<QueryResponse>(firstPageQuery, {
     name,
     owner,
   });
-  console.log(response);
   return response;
 }
 
@@ -100,7 +107,6 @@ async function getNthPage(
   owner: string,
   after: string
 ): Promise<QueryResponse> {
-  console.log(`getting nth page after ${after}`);
   const response = await client.graphql<QueryResponse>(nthPageQuery, {
     name,
     owner,
@@ -133,80 +139,91 @@ async function getAllIssues(
   return issues;
 }
 
-async function getSubmittedFindingsFromFolder(client : Octokit, repo) {
+async function getSubmittedFindingsFromFolder(client: Octokit, repo) {
   // returns handle/issueNumber from ./data/{handle}-{issue}.json files
 
-  const submitted_findings = await client.request("GET /repos/{owner}/{repo}/contents/{path}", {
-    owner: process.env.GITHUB_CONTEST_REPO_OWNER,
-    repo: repo,
-    path: "data",
-  }).then(res => {
-    return res.data.map(f => {
-      const [key, ext] = f.name.split(".");
-      const [handle, issueNumber] = key.split("-");
+  const submitted_findings = await client
+    .request("GET /repos/{owner}/{repo}/contents/{path}", {
+      owner: process.env.GITHUB_CONTEST_REPO_OWNER,
+      repo: repo,
+      path: "data",
+    })
+    .then((res) => {
+      return (
+        Object.values(res.data)
+          // filter out .md files
+          .filter((f) => {
+            const [key, ext] = f.name.split(".");
+            return ext === "json";
+          })
+          .map((f) => {
+            const [key, ext] = f.name.split(".");
+            const [handle, issueNumber] = key.split("-");
 
-      // xxx: md submissions?
-      // if (ext !== "json") {
-      //   console.log("non-json file");
-      // }
-
-      return {
-        'handle': handle,
-        'issueNumber': parseInt(issueNumber),
-      }
+            return {
+              handle: handle,
+              issueNumber: parseInt(issueNumber),
+            };
+          })
+      );
     });
-  });
 
   return submitted_findings;
 }
 
-async function wardenFindingsForContest(client : Octokit, handle, contest) {
+async function wardenFindingsForContest(client: Octokit, handle, contest) {
   const repoName = contest.findingsRepo.split("/").slice(-1)[0];
 
   // get the handle-id mapping from './data'
-  const submission_files = (await getSubmittedFindingsFromFolder(client, repoName))
-    .filter(item => {
-      return item.handle === handle
-    });
+  const submission_files = (
+    await getSubmittedFindingsFromFolder(client, repoName)
+  ).filter((item) => {
+    return item.handle === handle;
+  });
 
   // todo: stitch submissions and issues
-  const github_issues = (await getAllIssues(client, repoName, process.env.GITHUB_CONTEST_REPO_OWNER))
-    .filter(issue => {
-      return submission_files.find(submission_file => {
-        return submission_file.issueNumber === issue.number;
-      }) !== undefined;
+  const github_issues = (
+    await getAllIssues(client, repoName, process.env.GITHUB_CONTEST_REPO_OWNER)
+  )
+    .filter((issue) => {
+      return (
+        submission_files.find((submission_file) => {
+          return submission_file.issueNumber === issue.number;
+        }) !== undefined
+      );
     })
     .reduce((issues, issue) => {
       issues[issue.number] = issue;
       return issues;
     }, {});
 
-  const submissions = submission_files
-    .map(item => {
-      // todo: fill in necessary values
-      return {
-        ...item,
-        'title': github_issues[item.issueNumber].title,
-        'labels': github_issues[item.issueNumber].labels.nodes
-          .filter(label => {
-            return [
+  const submissions = submission_files.map((item) => {
+    // todo: fill in necessary values
+    return {
+      ...item,
+      title: github_issues[item.issueNumber].title,
+      labels: github_issues[item.issueNumber].labels.nodes
+        .filter((label) => {
+          return (
+            [
               "3 (High Risk)",
               "2 (Med Risk)",
               "QA (Quality Assurance)",
               "G (Gas Optimization)",
-            ].indexOf(label.name) >= 0;
-          })
-          .map(label => {
-            return {
-              name: label.name,
-              color: label.color,
-            }
-          }),
-        'state': github_issues[item.issueNumber].state, // OPEN | CLOSED
-        'createdAt': null,
-        'updatedAt': null,
-      };
-    });
+            ].indexOf(label.name) >= 0
+          );
+        })
+        .map((label) => {
+          return {
+            name: label.name,
+            color: label.color,
+          };
+        }),
+      state: github_issues[item.issueNumber].state, // OPEN | CLOSED
+      createdAt: github_issues[item.issueNumber].createdAt,
+      updatedAt: github_issues[item.issueNumber].updatedAt,
+    };
+  });
 
   return submissions;
 }

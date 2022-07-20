@@ -1,5 +1,4 @@
 import { readFileSync } from "fs";
-import path from "path";
 import fs from "fs";
 
 exports.handler = async (event) => {
@@ -29,18 +28,17 @@ exports.handler = async (event) => {
   }
 
   try {
-    const handleDir = path.join(__dirname + "/../_data/handles");
-    let file = fs.readdirSync(handleDir);
-    let teams = [];
-    file.forEach((handle) => {
-      if (handle.includes(".json")) {
-        const wardenFile = readFileSync(`./_data/handles/${handle}`);
+    const usersFiles = fs.readdirSync("./_data/handles");
+    const teams = [];
+    usersFiles.forEach((file) => {
+      if (file.includes(".json")) {
+        const wardenFile = readFileSync(`./_data/handles/${file}`);
         const warden = JSON.parse(wardenFile.toString());
-        if (warden.image) {
-          const imagePath = warden.image.slice(2);
-          warden.imageUrl = `https://raw.githubusercontent.com/${process.env.GITHUB_REPO_OWNER}/${process.env.REPO}/${process.env.BRANCH_NAME}/_data/handles/${imagePath}`;
-        }
         if (warden && warden.members && warden.members.includes(userHandle)) {
+          if (warden.image) {
+            const imagePath = warden.image.slice(2);
+            warden.imageUrl = `https://raw.githubusercontent.com/${process.env.GITHUB_REPO_OWNER}/${process.env.REPO}/${process.env.BRANCH_NAME}/_data/handles/${imagePath}`;
+          }
           teams.push({ ...warden });
         }
       }
@@ -56,6 +54,7 @@ exports.handler = async (event) => {
       };
     }
   } catch (error) {
+    console.error(error);
     return {
       statusCode: 401,
       body: JSON.stringify({ error: "Team not found" }),
