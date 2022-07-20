@@ -173,7 +173,7 @@ async function wardenFindingsForContest(client : Octokit, handle, contest) {
       return true;
     });
 
-  return submission_files
+  const submissions = submission_files
     .map(item => {
       // todo: fill in necessary values
       return {
@@ -187,6 +187,8 @@ async function wardenFindingsForContest(client : Octokit, handle, contest) {
         'updatedAt': null,
       };
     });
+
+  return submissions;
 }
 
 export {
