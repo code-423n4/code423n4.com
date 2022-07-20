@@ -31,7 +31,7 @@ const FindingsList = ({ submissionPath, findings }: FindingsListProps) => {
 
   return currentUser.isLoggedIn ? (
     <>
-      {findings.length > 0 ? (
+      {findings.length > 0 ? ( // todo: a length-0 response is possible
         <ul className={styles.List}>
           {findings.map((finding) => {
             const updated = new Date(finding.updatedAt);
