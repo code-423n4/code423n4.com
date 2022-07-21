@@ -198,7 +198,6 @@ async function wardenFindingsForContest(client: Octokit, handle, contest) {
     }, {});
 
   const submissions = submission_files.map((item) => {
-    // todo: fill in necessary values
     return {
       ...item,
       title: github_issues[item.issueNumber].title,
