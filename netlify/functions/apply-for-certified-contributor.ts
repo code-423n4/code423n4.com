@@ -4,7 +4,12 @@ const formData = require("form-data");
 const Mailgun = require("mailgun.js");
 const { Moralis } = require("moralis/node");
 
-const { apiKey, domain, moralisAppId, moralisServerUrl } = require("../_config");
+const {
+  apiKey,
+  domain,
+  moralisAppId,
+  moralisServerUrl,
+} = require("../_config");
 
 const notionKey = process.env.NOTION_KEY;
 const notionDbId = process.env.NOTION_WARDEN_CERTIFICATION_DATABASE_ID;
@@ -77,7 +82,7 @@ async function handler(event) {
     appId: moralisAppId,
   });
 
-  const userUrl = `${event.headers.origin}/.netlify/functions/get-user?id=${ticket.wardenHandle}`;
+  const userUrl = `${process.env.URL}/.netlify/functions/get-user?id=${ticket.wardenHandle}`;
   const userResponse = await fetch(userUrl);
   if (!userResponse.ok) {
     return {

@@ -163,7 +163,7 @@ exports.handler = async (event) => {
   }
 
   try {
-    const userUrl = `${event.headers.origin}/.netlify/functions/get-user?id=${user}`;
+    const userUrl = `${process.env.URL}/.netlify/functions/get-user?id=${user}`;
     const userResponse = await fetch(userUrl);
     if (!userResponse.ok) {
       return {
@@ -202,7 +202,7 @@ exports.handler = async (event) => {
 
     const isTeamSubmission = attributedTo !== user;
     if (isTeamSubmission) {
-      const teamUrl = `${event.headers.origin}/.netlify/functions/get-user?id=${attributedTo}`;
+      const teamUrl = `${process.env.URL}/.netlify/functions/get-user?id=${attributedTo}`;
       const teamResponse = await fetch(teamUrl);
       if (!teamResponse.ok) {
         return {
@@ -233,11 +233,11 @@ exports.handler = async (event) => {
         }
       }
     }
-  } catch (err) {
+  } catch (error) {
     return {
-      statusCode: err.status || 500,
+      statusCode: error.status || 500,
       body: JSON.stringify({
-        error: err.message || "Internal server error",
+        error: error.message || "Internal server error",
       }),
     };
   }
@@ -283,7 +283,7 @@ exports.handler = async (event) => {
     };
   }
 
-  const owner = process.env.CONTEST_GITHUB_REPO_OWNER;
+  const owner = process.env.GITHUB_CONTEST_REPO_OWNER;
 
   try {
     const issueResult = await octokit.request(
