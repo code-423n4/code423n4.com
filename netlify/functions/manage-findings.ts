@@ -71,6 +71,9 @@ async function getFindings(req: Event): Promise<Response> {
 
   return {
     statusCode: 200,
+    headers: {
+      'Content-Type': 'application/json',
+    },
     body: JSON.stringify(res),
   };
 }
