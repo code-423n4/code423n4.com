@@ -58,15 +58,12 @@ async function getFindings(req: Event): Promise<Response> {
 
   // }
 
-  if (teamHandles && teamHandles.length > 0) {
-    teamHandles.forEach(async (teamHandle) => {
-      const teamFindings = await wardenFindingsForContest(
-        octokit,
-        teamHandle,
-        contest
-      );
-      res["teams"][teamHandle] = teamFindings;
-    });
+  for (const teamHandle of teamHandles) {
+    res["teams"][teamHandle] = await wardenFindingsForContest(
+      octokit,
+      teamHandle,
+      contest
+    );
   }
 
   return {
