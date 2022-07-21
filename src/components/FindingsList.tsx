@@ -3,21 +3,18 @@ import { formatDistance, differenceInSeconds } from "date-fns";
 import { Link } from "gatsby";
 import React from "react";
 
+// types
+import { Finding } from "../../types/findings";
+
+// hooks
 import useUser from "../hooks/UserContext";
 
+// components
 import Login from "./Login/Login";
 
+// styles
 import * as styles from "./FindingsList.module.scss";
 import * as formStyles from "./form/Form.module.scss";
-
-interface Finding {
-  title: string;
-  labels: { name: string; color: string }[];
-  issueNumber: number;
-  state: string;
-  createdAt: string;
-  updatedAt: string;
-}
 
 interface FindingsListProps {
   submissionPath: string;

@@ -1,4 +1,5 @@
 import { Octokit } from "@octokit/core";
+import { Finding } from "../../types/findings";
 
 const firstPageQuery = `
 query ($name: String!, $owner: String!) {
@@ -144,7 +145,7 @@ async function getSubmittedFindingsFromFolder(client: Octokit, repo) {
 
   const submitted_findings = await client
     .request("GET /repos/{owner}/{repo}/contents/{path}", {
-      owner: process.env.GITHUB_CONTEST_REPO_OWNER,
+      owner: process.env.GITHUB_CONTEST_REPO_OWNER!,
       repo: repo,
       path: "data",
     })
@@ -171,7 +172,11 @@ async function getSubmittedFindingsFromFolder(client: Octokit, repo) {
   return submitted_findings;
 }
 
-async function wardenFindingsForContest(client: Octokit, handle, contest) {
+async function wardenFindingsForContest(
+  client: Octokit,
+  handle,
+  contest
+): Promise<Finding[]> {
   const repoName = contest.findingsRepo.split("/").slice(-1)[0];
 
   // get the handle-id mapping from './data'
@@ -183,7 +188,7 @@ async function wardenFindingsForContest(client: Octokit, handle, contest) {
 
   // todo: stitch submissions and issues
   const github_issues = (
-    await getAllIssues(client, repoName, process.env.GITHUB_CONTEST_REPO_OWNER)
+    await getAllIssues(client, repoName, process.env.GITHUB_CONTEST_REPO_OWNER!)
   )
     .filter((issue) => {
       return (
@@ -198,30 +203,49 @@ async function wardenFindingsForContest(client: Octokit, handle, contest) {
     }, {});
 
   const submissions = submission_files.map((item) => {
+    const labels = github_issues[item.issueNumber].labels.nodes
+      .filter((label) => {
+        return (
+          [
+            "3 (High Risk)",
+            "2 (Med Risk)",
+            "QA (Quality Assurance)",
+            "G (Gas Optimization)",
+          ].indexOf(label.name) >= 0
+        );
+      })
+      .map((label) => {
+        return {
+          name: label.name,
+          color: label.color,
+        };
+      });
+
+    const riskLabel = github_issues[item.issueNumber].labels.nodes.find(
+      (label) => {
+        return [
+          "3 (High Risk)",
+          "2 (Med Risk)",
+          "QA (Quality Assurance)",
+          "G (Gas Optimization)",
+        ].includes(label.name);
+      }
+    );
+
+    const risk = riskLabel.name;
+    // @todo: extract lines of code from issue body for medium and high issues
+    const linksToCode = [];
+
     return {
       ...item,
       title: github_issues[item.issueNumber].title,
       body: github_issues[item.issueNumber].body,
-      labels: github_issues[item.issueNumber].labels.nodes
-        .filter((label) => {
-          return (
-            [
-              "3 (High Risk)",
-              "2 (Med Risk)",
-              "QA (Quality Assurance)",
-              "G (Gas Optimization)",
-            ].indexOf(label.name) >= 0
-          );
-        })
-        .map((label) => {
-          return {
-            name: label.name,
-            color: label.color,
-          };
-        }),
+      labels,
+      risk,
       state: github_issues[item.issueNumber].state, // OPEN | CLOSED
       createdAt: github_issues[item.issueNumber].createdAt,
       updatedAt: github_issues[item.issueNumber].updatedAt,
+      linksToCode,
     };
   });
 
