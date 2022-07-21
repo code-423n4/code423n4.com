@@ -202,6 +202,7 @@ async function wardenFindingsForContest(client: Octokit, handle, contest) {
     return {
       ...item,
       title: github_issues[item.issueNumber].title,
+      body: github_issues[item.issueNumber].body,
       labels: github_issues[item.issueNumber].labels.nodes
         .filter((label) => {
           return (
