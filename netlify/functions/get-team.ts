@@ -54,7 +54,6 @@ exports.handler = async (event) => {
       };
     }
   } catch (error) {
-    console.error(error);
     return {
       statusCode: 401,
       body: JSON.stringify({ error: "Team not found" }),

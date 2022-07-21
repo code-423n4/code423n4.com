@@ -63,7 +63,6 @@ async function getFindings(req: Event): Promise<Response> {
         teamHandle,
         contest
       );
-      console.log(teamFindings);
       res["teams"][teamHandle] = teamFindings;
     });
   }
