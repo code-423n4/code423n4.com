@@ -13,7 +13,7 @@ async function getFindings(req: Event): Promise<Response> {
   // first phase:
   // given active! contest id
   // [x] warden can see own findings
-  // [ ] warden can see team findings
+  // [x] warden can see team findings
 
   // todo: ensure contestId / wardenHandle exist?
   const contestId = parseInt(req.queryStringParameters?.contest);
