@@ -31,7 +31,7 @@ exports.handler = async (event) => {
     const usersFiles = fs.readdirSync("./_data/handles");
     const teams = [];
     usersFiles.forEach((file) => {
-      if (file.includes(".json")) {
+      if (file.endsWith(".json")) {
         const wardenFile = readFileSync(`./_data/handles/${file}`);
         const warden = JSON.parse(wardenFile.toString());
         if (warden && warden.members && warden.members.includes(userHandle)) {
