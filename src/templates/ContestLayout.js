@@ -62,17 +62,6 @@ const ContestLayout = (props) => {
       })
         .then((response) => response.json())
         .then((resultData) => {
-          // todo: what comes back is an object with lists of findings
-          // const findingsByUser = Object.keys(resultData).map((handle) => {
-          //   return {
-          //     user:
-          //       handle === currentUser.username
-          //         ? currentUser
-          //         : currentUser.teams.find((team) => team.username === handle),
-          //     findings: resultData[handle],
-          //   };
-          // });
-          console.log(resultData);
           setFindingsList(resultData);
           setIsLoadingFindings(false);
         })
