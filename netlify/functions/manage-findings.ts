@@ -18,6 +18,8 @@ async function getFindings(req: Event): Promise<Response> {
   // todo: ensure contestId / wardenHandle exist?
   const contestId = parseInt(req.queryStringParameters?.contest);
   const wardenHandle = req.headers["c4-user"];
+
+  // todo: move to util?
   let teamHandles = [];
   try {
     const teamUrl = `${process.env.URL}/.netlify/functions/get-team?id=${wardenHandle}`;
