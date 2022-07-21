@@ -1,20 +1,39 @@
 import { Handler } from "@netlify/functions";
+import { Response } from "@netlify/functions/src/function/response";
+import { Event } from "@netlify/functions/src/function/event";
+import { Context } from "@netlify/functions/src/function/context";
 import { Octokit } from "@octokit/core";
+import fetch from "node-fetch";
 
 import { checkAuth } from "../util/auth-utils";
 import { getContest, isContestActive } from "../util/contest-utils";
 import { wardenFindingsForContest } from "../util/github-utils";
 
-
-async function getFindings(req) {
+async function getFindings(req: Event): Promise<Response> {
   // first phase:
   // given active! contest id
   // [x] warden can see own findings
-  // [ ] warden can see team findings
+  // [x] warden can see team findings
 
   // todo: ensure contestId / wardenHandle exist?
   const contestId = parseInt(req.queryStringParameters?.contest);
   const wardenHandle = req.headers["c4-user"];
+
+  // todo: move to util?
+  let teamHandles = [];
+  try {
+    const teamUrl = `${process.env.URL}/.netlify/functions/get-team?id=${wardenHandle}`;
+    const teams = await fetch(teamUrl);
+    if (teams.status === 200) {
+      const teamsData = await teams.json();
+      teamHandles = teamsData.map((team) => team.handle);
+    }
+  } catch (error) {
+    return {
+      statusCode: error.status || 500,
+      body: JSON.stringify({ error: error.message || error }),
+    };
+  }
 
   const contest = await getContest(contestId);
 
@@ -24,18 +43,34 @@ async function getFindings(req) {
 
   const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
 
-  const wardenFindings = await wardenFindingsForContest(octokit, wardenHandle, contest);
-
-  // if (req.queryStringParameters?.teamFindings) {
-  //   await wardenFindingsForContest(teamHandle, contest.repo);
-  // }
+  const wardenFindings = await wardenFindingsForContest(
+    octokit,
+    wardenHandle,
+    contest
+  );
 
   const res = {
-    [wardenHandle]: wardenFindings,
+    user: wardenFindings,
+    teams: {},
+  };
+
+  // if (req.queryStringParameters?.teamFindings) {
+
+  // }
+
+  for (const teamHandle of teamHandles) {
+    res["teams"][teamHandle] = await wardenFindingsForContest(
+      octokit,
+      teamHandle,
+      contest
+    );
   }
 
   return {
     statusCode: 200,
+    headers: {
+      'Content-Type': 'application/json',
+    },
     body: JSON.stringify(res),
   };
 }
@@ -50,7 +85,10 @@ async function editFinding(req) {
   };
 }
 
-const handler: Handler = async (event, context) => {
+const handler: Handler = async (
+  event: Event,
+  context: Context
+): Promise<Response> => {
   // todo: error handling..
 
   if (!(await checkAuth(event))) {
@@ -72,8 +110,8 @@ const handler: Handler = async (event, context) => {
         statusCode: 418,
         body: JSON.stringify({
           error: "nuh-uh",
-        })
-      }
+        }),
+      };
   }
 };
 
