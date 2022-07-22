@@ -1,17 +1,20 @@
 .List {
   list-style: none;
   border: 1px solid var(--border-lightest-background);
-  border-bottom: none;
   padding: 0;
+  overflow: hidden;
+  border-radius: 4px;
 }
 
 .ListItem {
   display: flex;
-  border-bottom: 1px solid var(--border-lightest-background);
   padding: 10px;
   align-items: flex-start;
   justify-content: flex-start;
 
+  &:not(:last-of-type) {
+    border-bottom: 1px solid var(--border-lightest-background);
+  }
   // overriding base style for span inside li
   span::before {
     content: "";
@@ -62,10 +65,15 @@
   line-height: 12px;
   display: inline-block;
   white-space: nowrap;
+  background-color: var(--background-purple);
 }
 
 .Time {
   font-size: 12px;
   color: var(--light-purple);
   margin-top: 5px;
+}
+
+.Heading {
+  background-color: var(--header-background-purple);
 }
