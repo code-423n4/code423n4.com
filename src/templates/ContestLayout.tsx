@@ -253,6 +253,7 @@ const ContestLayout = (props) => {
                   ) : (
                     <>
                       <FindingsList
+                        key={currentUser.username}
                         findings={findingsList.user}
                         submissionPath={fields.submissionPath}
                         isLoading={findingsStatus === FindingsStatus.Fetching}
@@ -264,6 +265,7 @@ const ContestLayout = (props) => {
                       </FindingsList>
                       {currentUser.teams.map((team) => (
                         <FindingsList
+                          key={team.username}
                           findings={findingsList.teams[team.username] || []}
                           submissionPath={fields.submissionPath}
                           isLoading={findingsStatus === FindingsStatus.Fetching}
