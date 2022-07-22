@@ -221,7 +221,7 @@ async function wardenFindingsForContest(
         };
       });
 
-    const riskLabel = github_issues[item.issueNumber].labels.nodes.find(
+    const riskLabel = labels.find(
       (label) => {
         return [
           "3 (High Risk)",
