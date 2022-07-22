@@ -147,13 +147,13 @@ const ReportForm = ({ data, location }) => {
         <>
           You need to be a registered warden currently connected via wallet to
           see this page.
-          <p>
+          {/* <p> */}
             If authentication isn't working, you may{" "}
             <Link to={fields.submissionPath + "-old"}>
               try the unauthenticated submission form
             </Link>
             .
-          </p>
+          {/* </p> */}
         </>
       }
     >
