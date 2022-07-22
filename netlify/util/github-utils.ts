@@ -238,6 +238,7 @@ async function wardenFindingsForContest(
     }[riskLabel.name];
 
     // @todo: extract lines of code from issue body for medium and high issues
+    // body is generated with: # Lines of code\n\n${linksToCodeString}\n\n\n# Vulnerability details\n\n${details}\n\n
     const linksToCode = [];
 
     return {
