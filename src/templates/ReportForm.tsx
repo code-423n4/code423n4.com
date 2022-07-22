@@ -104,7 +104,7 @@ const ReportForm = ({ data, location }) => {
           risk: finding.risk,
           details: finding.body,
           qaGasDetails: finding.body,
-          linksToCode: [""],
+          linksToCode: finding.linksToCode,
         });
         setIsLoading(false);
         setEndpoint("manage-findings");
