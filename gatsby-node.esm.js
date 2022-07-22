@@ -177,7 +177,7 @@ exports.createPages = async ({ graphql, actions }) => {
 
   const contests = await graphql(queries.contests);
   const formTemplate = path.resolve("./src/templates/ReportForm.tsx");
-  const contestTemplate = path.resolve("./src/templates/ContestLayout.js");
+  const contestTemplate = path.resolve("./src/templates/ContestLayout.tsx");
   contests.data.contests.edges.forEach((contest) => {
     if (contest.node.findingsRepo) {
       createPage({

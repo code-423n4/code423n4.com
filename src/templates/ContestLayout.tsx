@@ -5,21 +5,40 @@ import Moralis from "moralis";
 import React, { useEffect, useState } from "react";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 
+// types
+import { FindingsResponse } from "../../types/findings";
+// helpers
 import { getDates } from "../utils/time";
-
+// hooks
 import useUser from "../hooks/UserContext";
-
+// components
 import ClientOnly from "../components/ClientOnly";
 import ContestResults from "../components/ContestResults";
 import Countdown from "../components/Countdown";
 import DefaultLayout from "./DefaultLayout";
 import FindingsList from "../components/FindingsList";
+import WardenDetails from "../components/WardenDetails";
+
+enum FindingsStatus {
+  Fetching = "fetching",
+  Error = "error",
+  Success = "success",
+}
 
 const ContestLayout = (props) => {
+  // state
   const [artOpen, setArtOpen] = useState(false);
-  const [findingsList, setFindingsList] = useState([]);
+  const [findingsList, setFindingsList] = useState<FindingsResponse>({
+    user: [],
+    teams: {},
+  });
+  const [findingsStatus, setFindingsStatus] = useState<FindingsStatus>(
+    FindingsStatus.Fetching
+  );
+  const [errorMessage, setErrorMessage] = useState<string>("");
+
+  // hooks
   const { currentUser } = useUser();
-  const [isLoadingFindings, setIsLoadingFindings] = useState(true);
 
   const {
     title,
@@ -49,28 +68,40 @@ const ContestLayout = (props) => {
   }
 
   useEffect(() => {
-    if (currentUser.isLoggedIn) {
-      const user = Moralis.User.current();
-      const sessionToken = user?.attributes.sessionToken;
+    (async () => {
+      if (currentUser.isLoggedIn) {
+        const user = Moralis.User.current();
+        const sessionToken = user?.attributes.sessionToken;
 
-      fetch(`/.netlify/functions/manage-findings?contest=${contestid}`, {
-        headers: {
-          "Content-Type": "application/json",
-          "X-Authorization": `Bearer ${sessionToken}`,
-          "C4-User": currentUser.username,
-        },
-      })
-        .then((response) => response.json())
-        .then((resultData) => {
+        try {
+          const response = await fetch(
+            `/.netlify/functions/manage-findings?contest=${contestid}`,
+            {
+              headers: {
+                "Content-Type": "application/json",
+                "X-Authorization": `Bearer ${sessionToken}`,
+                "C4-User": currentUser.username,
+              },
+            }
+          );
+
+          if (!response.ok) {
+            const { error } = await response.json();
+            setFindingsStatus(FindingsStatus.Error);
+            setErrorMessage(error);
+            return;
+          }
+          const resultData: FindingsResponse = await response.json();
+
           setFindingsList(resultData);
-          setIsLoadingFindings(false);
-        })
-        .catch((error) => {
-          setIsLoadingFindings(false);
-        });
-    } else {
-      setFindingsList([]);
-    }
+          setFindingsStatus(FindingsStatus.Success);
+        } catch (error) {
+          setFindingsStatus(FindingsStatus.Error);
+        }
+      } else {
+        setFindingsList({ user: [], teams: {} });
+      }
+    })();
   }, [currentUser, contestid]);
 
   return (
@@ -85,7 +116,6 @@ const ContestLayout = (props) => {
           <div className="contest-tippy-top">
             {t.contestStatus === "soon" || t.contestStatus === "active" ? (
               <Countdown
-                state={t.contestStatus}
                 start={start_time}
                 end={end_time}
                 isPreview={findingsRepo === ""}
@@ -194,11 +224,9 @@ const ContestLayout = (props) => {
                     <h1>Contest details coming soon</h1>
                     <p>Check back when this contest launches in:</p>
                     <Countdown
-                      state={t.contestStatus}
                       start={start_time}
                       end={end_time}
                       isPreview={findingsRepo === ""}
-                      text={false}
                     />
                     <img
                       src="/images/icon-details.svg"
@@ -217,27 +245,37 @@ const ContestLayout = (props) => {
             {t.contestStatus === "active" && (
               <TabPanel>
                 <div className="contest-wrapper">
-                  <h1>{currentUser.username}</h1>
-                  <FindingsList
-                    findings={findingsList.user}
-                    submissionPath={fields.submissionPath}
-                    isLoading={isLoadingFindings}
-                  />
-                  {currentUser.teams.map((team) => (
+                  {findingsStatus === FindingsStatus.Error ? (
+                    <div className="centered-text">
+                      <h3>Oops! Something went wrong.</h3>
+                      <p>{errorMessage}</p>
+                    </div>
+                  ) : (
                     <>
-                      <h1>{team.username}</h1>
-                      {findingsList.teams &&
-                      findingsList.teams[team.username] ? (
-                        <FindingsList
-                          findings={findingsList.teams[team.username]}
-                          submissionPath={fields.submissionPath}
-                          isLoading={isLoadingFindings}
+                      <FindingsList
+                        findings={findingsList.user}
+                        submissionPath={fields.submissionPath}
+                        isLoading={findingsStatus === FindingsStatus.Fetching}
+                      >
+                        <WardenDetails
+                          image={currentUser.image}
+                          username={currentUser.username}
                         />
-                      ) : (
-                        <span>No findings</span>
-                      )}
+                      </FindingsList>
+                      {currentUser.teams.map((team) => (
+                        <FindingsList
+                          findings={findingsList.teams[team.username] || []}
+                          submissionPath={fields.submissionPath}
+                          isLoading={findingsStatus === FindingsStatus.Fetching}
+                        >
+                          <WardenDetails
+                            image={team.image}
+                            username={team.username}
+                          />
+                        </FindingsList>
+                      ))}
                     </>
-                  ))}
+                  )}
                 </div>
               </TabPanel>
             )}

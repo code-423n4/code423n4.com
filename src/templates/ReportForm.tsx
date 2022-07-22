@@ -98,17 +98,17 @@ const ReportForm = ({ data, location }) => {
     (async () => {
       if (location.state && location.state.finding) {
         const finding = location.state.finding;
-        setFindingId(finding.number);
+        setFindingId(finding.issueNumber);
         setState({
           title: finding.title,
-          risk: finding.labels[1],
+          risk: finding.risk,
           details: finding.body,
           qaGasDetails: finding.body,
           linksToCode: [""],
         });
         setIsLoading(false);
         setEndpoint("update-finding");
-        setFindingId(`${contestid}-${finding.number}`);
+        setFindingId(`${contestid}-${finding.issueNumber}`);
       } else if (location.search) {
         try {
           // @todo: improve this

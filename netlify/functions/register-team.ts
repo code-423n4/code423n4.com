@@ -43,8 +43,7 @@ exports.handler = async (event) => {
       return {
         statusCode: 400,
         body: JSON.stringify({
-          error:
-            "Team name's length is limited to 25 characters.",
+          error: "Team name's length is limited to 25 characters.",
         }),
       };
     }
@@ -101,7 +100,7 @@ exports.handler = async (event) => {
       appId: moralisAppId,
     });
 
-    const userUrl = `${event.headers.origin}/.netlify/functions/get-user?id=${username}`;
+    const userUrl = `${process.env.URL}/.netlify/functions/get-user?id=${username}`;
     const userResponse = await fetch(userUrl);
     if (!userResponse.ok) {
       return {

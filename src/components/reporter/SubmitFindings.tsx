@@ -2,6 +2,10 @@ import clsx from "clsx";
 import React, { useEffect, useState, useCallback } from "react";
 import { toast } from "react-toastify";
 
+// types
+import { Field } from "./widgets/Widgets";
+import { FindingRequestData, ReportState } from "../../templates/ReportForm";
+
 // helpers
 import {
   emailField,
@@ -20,12 +24,10 @@ import {
   getCurrentStateFromStorage,
   setStateInLocalStorage,
 } from "./findings/functions";
+
+// hooks
 import useUser from "../../hooks/UserContext";
 import { useModalContext } from "../../hooks/ModalContext";
-
-// types
-import { Field } from "./widgets/Widgets";
-import { FindingRequestData, ReportState } from "../../templates/ReportForm";
 
 // components
 import Agreement from "../content/Agreement";
@@ -38,12 +40,12 @@ import Widget from "./widgets/Widget";
 import * as styles from "../form/Form.module.scss";
 import * as widgetStyles from "../reporter/widgets/Widgets.module.scss";
 
-const FormStatus = {
-  Unsubmitted: "unsubmitted",
-  Submitting: "submitting",
-  Submitted: "submitted",
-  Error: "error",
-};
+enum FormStatus {
+  Unsubmitted = "unsubmitted",
+  Submitting = "submitting",
+  Submitted = "submitted",
+  Error = "error",
+}
 
 interface SubmitFindingsProps {
   wardensList: { edges: { node: { handle: string; image: unknown } }[] };
@@ -69,25 +71,31 @@ const SubmitFindings = ({
   const wardens = wardensList.edges.map(({ node }) => {
     return { value: node.handle, image: node.image };
   });
-  const { currentUser } = useUser();
 
-  // Component State
-  const [status, setStatus] = useState(FormStatus.Unsubmitted);
-  const [hasValidationErrors, setHasValidationErrors] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("An error occurred");
-  const [isExpanded, setIsExpanded] = useState(false);
-  const [state, setState] = useState(initialState);
-  const [additionalEmailAddresses, setAdditionalEmailAddresses] = useState([]);
-  const [polygonAddress, setPolygonAddress] = useState("");
-  const [newTeamAddress, setNewTeamAddress] = useState("");
-  const [attributedTo, setAttributedTo] = useState("");
+  // hooks
+  const { currentUser } = useUser();
+  const { showModal } = useModalContext();
+
+  // state
+  const [status, setStatus] = useState<FormStatus>(FormStatus.Unsubmitted);
+  const [hasValidationErrors, setHasValidationErrors] = useState<boolean>(
+    false
+  );
+  const [errorMessage, setErrorMessage] = useState<string>("An error occurred");
+  const [isExpanded, setIsExpanded] = useState<boolean>(false);
+  const [state, setState] = useState<ReportState>(initialState);
+  const [additionalEmailAddresses, setAdditionalEmailAddresses] = useState<
+    string[]
+  >([]);
+  const [polygonAddress, setPolygonAddress] = useState<string>("");
+  const [newTeamAddress, setNewTeamAddress] = useState<string>("");
+  const [attributedTo, setAttributedTo] = useState<string>("");
   const [fieldList, setFieldList] = useState<Field[]>([
     wardenField(wardens),
     emailField,
     addressField,
     riskField,
   ]);
-  const { showModal } = useModalContext();
 
   // effects
   useEffect(() => {
@@ -195,7 +203,7 @@ const SubmitFindings = ({
     const markdownBody = `# Lines of code\n\n${linksToCodeString}\n\n\n# Vulnerability details\n\n${details}\n\n`;
     const formattedRisk = state.risk ? state.risk.slice(0, 1) : "";
     const formattedBody = isQaOrGasFinding ? details : markdownBody;
-    const emailAddressList = additionalEmailAddresses.filter(
+    const emailAddressList: string[] = additionalEmailAddresses.filter(
       (email) => !!email
     );
     emailAddressList.push(currentUser.emailAddress);
@@ -204,7 +212,7 @@ const SubmitFindings = ({
       user: currentUser.username,
       contest,
       sponsor,
-      repo: repo.split("/").pop(),
+      repo: repo.split("/").pop() || "",
       emailAddresses: emailAddressList,
       attributedTo,
       address: polygonAddress,
@@ -437,6 +445,7 @@ const SubmitFindings = ({
                 username={currentUser.username}
                 address={currentUser.address}
                 image={currentUser.image}
+                className={widgetStyles.Container}
               />
             )}
             <DynamicInputGroup

@@ -1,9 +1,10 @@
 import { Handler } from "@netlify/functions";
 import { Response } from "@netlify/functions/src/function/response";
 import { Event } from "@netlify/functions/src/function/event";
-import { Context } from "@netlify/functions/src/function/context";
 import { Octokit } from "@octokit/core";
 import fetch from "node-fetch";
+
+import { Finding, FindingsResponse } from "../../types/findings";
 
 import { checkAuth } from "../util/auth-utils";
 import { getContest, isContestActive } from "../util/contest-utils";
@@ -16,7 +17,7 @@ async function getFindings(req: Event): Promise<Response> {
   // [x] warden can see team findings
 
   // todo: ensure contestId / wardenHandle exist?
-  const contestId = parseInt(req.queryStringParameters?.contest);
+  const contestId = parseInt(req.queryStringParameters?.contest!);
   const wardenHandle = req.headers["c4-user"];
 
   // todo: move to util?
@@ -43,13 +44,13 @@ async function getFindings(req: Event): Promise<Response> {
 
   const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
 
-  const wardenFindings = await wardenFindingsForContest(
+  const wardenFindings: Finding[] = await wardenFindingsForContest(
     octokit,
     wardenHandle,
     contest
   );
 
-  const res = {
+  const res: FindingsResponse = {
     user: wardenFindings,
     teams: {},
   };
@@ -59,17 +60,18 @@ async function getFindings(req: Event): Promise<Response> {
   // }
 
   for (const teamHandle of teamHandles) {
-    res["teams"][teamHandle] = await wardenFindingsForContest(
+    const teamFindings: Finding[] = await wardenFindingsForContest(
       octokit,
       teamHandle,
       contest
     );
+    res.teams[teamHandle] = teamFindings;
   }
 
   return {
     statusCode: 200,
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
     body: JSON.stringify(res),
   };
@@ -85,10 +87,7 @@ async function editFinding(req) {
   };
 }
 
-const handler: Handler = async (
-  event: Event,
-  context: Context
-): Promise<Response> => {
+const handler: Handler = async (event: Event): Promise<Response> => {
   // todo: error handling..
 
   if (!(await checkAuth(event))) {

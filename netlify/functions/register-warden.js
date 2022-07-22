@@ -159,7 +159,7 @@ exports.handler = async (event) => {
       }
     }
 
-    const url = `${event.headers.origin}/.netlify/functions/get-user?id=${handle}`;
+    const url = `${process.env.URL}/.netlify/functions/get-user?id=${handle}`;
     // make sure that an update has a valid warden file, and a new registration does not
     const response = await fetch(url);
     if (isUpdate && !response.ok) {

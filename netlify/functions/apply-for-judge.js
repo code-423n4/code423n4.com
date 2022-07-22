@@ -62,7 +62,7 @@ exports.handler = async (event) => {
       appId: moralisAppId,
     });
 
-    const userUrl = `${event.headers.origin}/.netlify/functions/get-user?id=${handle}`;
+    const userUrl = `${process.env.URL}/.netlify/functions/get-user?id=${handle}`;
     const userResponse = await fetch(userUrl);
     if (!userResponse.ok) {
       return {
