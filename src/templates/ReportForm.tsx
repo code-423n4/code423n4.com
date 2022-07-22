@@ -107,7 +107,7 @@ const ReportForm = ({ data, location }) => {
           linksToCode: [""],
         });
         setIsLoading(false);
-        setEndpoint("update-finding");
+        setEndpoint("manage-findings");
         setFindingId(`${contestid}-${finding.issueNumber}`);
       } else if (location.search) {
         try {
@@ -120,7 +120,7 @@ const ReportForm = ({ data, location }) => {
           // setState(issue);
           setIssueId(id);
           setFindingId(`${contestid}-${id}`);
-          setEndpoint("update-finding");
+          setEndpoint("manage-findings");
           setIsLoading(false);
         } catch (error) {
           // @todo: decide what should happen in this case? navigate back or load new finding
