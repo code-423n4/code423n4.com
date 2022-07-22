@@ -173,6 +173,7 @@ const ReportForm = ({ data, location }) => {
         </div>
       ) : (
         // @todo: pass in dynamic submit button and cancel button
+        // @todo: remove allHandlesJson dependency (and page query)
         <SubmitFindings
           wardensList={data.allHandlesJson}
           sponsor={sponsor.name}
