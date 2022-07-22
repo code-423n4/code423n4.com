@@ -112,13 +112,15 @@ const ReportForm = ({ data, location }) => {
       } else if (location.search) {
         try {
           // @todo: improve this
-          const id = location.search.split("=")[1];
+          const params = new URLSearchParams(location.search);
+          const id = params.get("issue");
+          // if id?
           // // placeholder function for getting issue by id;
           // // will need to reshape the response to be ReportState
           // // before passing into setting initial state
           // const issue = await getSubmission(issueId)
           // setState(issue);
-          setIssueId(id);
+          setIssueId(id as string);
           setFindingId(`${contestid}-${id}`);
           setEndpoint("manage-findings");
           setIsLoading(false);
