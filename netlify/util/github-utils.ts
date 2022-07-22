@@ -231,10 +231,10 @@ async function wardenFindingsForContest(
 
     // @todo: figure out correct/expected mapping?
     const risk = {
-      "3 (High Risk)": "H",
-      "2 (Med Risk)": "M",
-      "QA (Quality Assurance)": "Q",
-      "G (Gas Optimization)": "G",
+      "3 (High Risk)": "H", // "High Risk",
+      "2 (Med Risk)": "M", // "Medium Risk",
+      "QA (Quality Assurance)": "Q", // "QA Report (low / non-critical)",
+      "G (Gas Optimization)": "G", // "Gas Optimizations",
     }[riskLabel.name];
 
     // @todo: extract lines of code from issue body for medium and high issues
