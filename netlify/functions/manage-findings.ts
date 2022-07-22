@@ -15,6 +15,7 @@ async function getFindings(req: Event): Promise<Response> {
   // given active! contest id
   // [x] warden can see own findings
   // [x] warden can see team findings
+  // [ ] can see specific finding
 
   // todo: ensure contestId / wardenHandle exist?
   const contestId = parseInt(req.queryStringParameters?.contest!);
@@ -101,6 +102,7 @@ const handler: Handler = async (event: Event): Promise<Response> => {
 
   switch (event.httpMethod) {
     case "GET":
+      // @todo: determine if single-issue or all-issue (or cheat?)
       return await getFindings(event);
     case "POST":
       return await editFinding(event);
