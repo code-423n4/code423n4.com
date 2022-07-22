@@ -3,6 +3,9 @@ import Moralis from "moralis";
 import React, { useCallback, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
+// hooks
+import useUser from "../hooks/UserContext";
+
 import ProtectedPage from "../components/ProtectedPage";
 import SubmitFindings from "../components/reporter/SubmitFindings";
 
@@ -43,6 +46,8 @@ const initialState: ReportState = {
 };
 
 const ReportForm = ({ data, location }) => {
+  const { currentUser } = useUser();
+
   const {
     sponsor,
     contestid,
@@ -87,11 +92,12 @@ const ReportForm = ({ data, location }) => {
         headers: {
           "Content-Type": "application/json",
           "X-Authorization": `Bearer ${sessionToken}`,
+          "C4-User": currentUser.username,
         },
         body: JSON.stringify(data),
       });
     },
-    [issueId, location.search, state]
+    [currentUser, issueId, location.search, state]
   );
 
   useEffect(() => {
