@@ -202,16 +202,18 @@ async function wardenFindingsForContest(
       return issues;
     }, {});
 
+  const riskLabels = [
+    "3 (High Risk)",
+    "2 (Med Risk)",
+    "QA (Quality Assurance)",
+    "G (Gas Optimization)",
+  ];
+
   const submissions = submission_files.map((item) => {
     const labels = github_issues[item.issueNumber].labels.nodes
       .filter((label) => {
         return (
-          [
-            "3 (High Risk)",
-            "2 (Med Risk)",
-            "QA (Quality Assurance)",
-            "G (Gas Optimization)",
-          ].indexOf(label.name) >= 0
+          riskLabels.indexOf(label.name) >= 0
         );
       })
       .map((label) => {
@@ -223,16 +225,18 @@ async function wardenFindingsForContest(
 
     const riskLabel = labels.find(
       (label) => {
-        return [
-          "3 (High Risk)",
-          "2 (Med Risk)",
-          "QA (Quality Assurance)",
-          "G (Gas Optimization)",
-        ].includes(label.name);
+        return riskLabels.includes(label.name);
       }
     );
 
-    const risk = riskLabel.name;
+    // @todo: figure out correct/expected mapping?
+    const risk = {
+      "3 (High Risk)": "H",
+      "2 (Med Risk)": "M",
+      "QA (Quality Assurance)": "Q",
+      "G (Gas Optimization)": "G",
+    }[riskLabel.name];
+
     // @todo: extract lines of code from issue body for medium and high issues
     const linksToCode = [];
 
