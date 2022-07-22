@@ -7,7 +7,7 @@ function FormField({
   name,
   label,
   helpText,
-  type = null,
+  type = "",
   isInvalid,
   children,
   errorMessage = "This field is required",

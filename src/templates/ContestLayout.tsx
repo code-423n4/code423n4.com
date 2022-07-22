@@ -5,16 +5,19 @@ import Moralis from "moralis";
 import React, { useEffect, useState } from "react";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 
+// types
+import { FindingsResponse } from "../../types/findings";
+// helpers
 import { getDates } from "../utils/time";
-
+// hooks
 import useUser from "../hooks/UserContext";
-
+// components
 import ClientOnly from "../components/ClientOnly";
 import ContestResults from "../components/ContestResults";
 import Countdown from "../components/Countdown";
 import DefaultLayout from "./DefaultLayout";
 import FindingsList from "../components/FindingsList";
-import { FindingsResponse } from "../../types/findings";
+import WardenDetails from "../components/WardenDetails";
 
 enum FindingsStatus {
   Fetching = "fetching",
@@ -249,23 +252,27 @@ const ContestLayout = (props) => {
                     </div>
                   ) : (
                     <>
-                      <h1>{currentUser.username}</h1>
                       <FindingsList
                         findings={findingsList.user}
                         submissionPath={fields.submissionPath}
                         isLoading={findingsStatus === FindingsStatus.Fetching}
-                      />
+                      >
+                        <WardenDetails
+                          image={currentUser.image}
+                          username={currentUser.username}
+                        />
+                      </FindingsList>
                       {currentUser.teams.map((team) => (
-                        <>
-                          <h1>{team.username}</h1>
-                          <FindingsList
-                            findings={findingsList.teams[team.username] || []}
-                            submissionPath={fields.submissionPath}
-                            isLoading={
-                              findingsStatus === FindingsStatus.Fetching
-                            }
+                        <FindingsList
+                          findings={findingsList.teams[team.username] || []}
+                          submissionPath={fields.submissionPath}
+                          isLoading={findingsStatus === FindingsStatus.Fetching}
+                        >
+                          <WardenDetails
+                            image={team.image}
+                            username={team.username}
                           />
-                        </>
+                        </FindingsList>
                       ))}
                     </>
                   )}
