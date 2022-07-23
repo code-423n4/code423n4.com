@@ -99,6 +99,27 @@ async function editFinding(req) {
   }
   */
 
+  // get contest to find repo
+  // modifications to issueid
+
+  // did attribution change?
+  // rename json file (and alter "address" key with wallet address)
+
+  // did risk change?
+  // remove old risk label / apply new risk label
+
+  // did title change?
+  // simple field update
+
+  // did body change?
+  // simple field update
+
+  // apply edited-by-warden label
+
+  // create GH comment indicating C4-User
+
+  // send e-mails
+
   return {
     statusCode: 200,
     body: JSON.stringify({}),
