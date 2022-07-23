@@ -82,6 +82,22 @@ async function editFinding(req) {
   // an authenticated warden can edit a finding
   //   for active contests
   //     their own (their teams')
+  // [ ] should add "edited-by-warden"
+  // [ ] add GH comment for "edited by" ${C4-User}
+  /*
+  {
+    "issue": 70,
+    "contest": 999999,
+    "emailAddresses": ["dzhawsh@code4rena.com"],
+    
+    "attributedTo"?: {oldValue, newValue},
+    "address"?: newValue, // only if attributedTo changes
+    "risk"?: {oldValue, newValue},
+    "title"?: "QA Report",
+    "body"?: (combined with links to code on client-side),
+  }
+  */
+
   return {
     statusCode: 200,
     body: JSON.stringify({}),
