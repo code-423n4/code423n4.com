@@ -19,12 +19,21 @@ async function getFindings(req: Event): Promise<Response> {
   // [ ] team findings optional? (query param)
 
   // todo: ensure contestId / wardenHandle exist?
-  const contestId = parseInt(req.queryStringParameters?.contest!);
   const wardenHandle = req.headers["c4-user"];
 
-  // let issueNumber;
-  // if (req.queryStringParameters?.issue) {
-  //   issueNumber = parseInt(req.queryStringParameters?.issue);
+  let contestId;
+  if (req.queryStringParameters?.contest) {
+    contestId = parseInt(req.queryStringParameters?.contest);
+  }
+
+  let issueNumber;
+  if (req.queryStringParameters?.issue) {
+    issueNumber = parseInt(req.queryStringParameters?.issue);
+  }
+
+  let includeTeams = true;
+  // if (req.queryStringParameters?.includeTeams) {
+    // includeTeams = req.queryStringParameters?.includeTeams)
   // }
 
   const contest = await getContest(contestId);
@@ -46,10 +55,7 @@ async function getFindings(req: Event): Promise<Response> {
     teams: {},
   };
 
-  // (req.queryStringParameters?.teamFindings)
-  let includeTeam = true;
-
-  if (includeTeam) {
+  if (includeTeams) {
     // todo: move to util?
     let teamHandles = [];
     try {
