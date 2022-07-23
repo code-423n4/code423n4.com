@@ -90,8 +90,9 @@ async function editFinding(req) {
     "contest": 999999,
     "emailAddresses": ["dzhawsh@code4rena.com"],
     
-    "attributedTo"?: {oldValue, newValue},
-    "address"?: newValue, // only if attributedTo changes
+    "attributedTo"?: {oldValue, newValue, wallet},
+    // or maybe just include with attributedTo?
+       "address"?: newValue, // only if attributedTo changes
     "risk"?: {oldValue, newValue},
     "title"?: "QA Report",
     "body"?: (combined with links to code on client-side),
