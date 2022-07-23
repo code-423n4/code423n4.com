@@ -133,14 +133,14 @@ const ReportForm = ({ data, location }) => {
         try {
           // @todo: improve this
           const params = new URLSearchParams(location.search);
-          const id = params.get("issue");
+          const id = params.get("issue")!;
           // if id?
           // // placeholder function for getting issue by id;
           // // will need to reshape the response to be ReportState
           // // before passing into setting initial state
           // const issue = await getSubmission(issueId)
           // setState(issue);
-          setIssueId(id as string);
+          setIssueId(id);
           setFindingId(`${contestid}-${id}`);
           setEndpoint("manage-findings");
           setIsLoading(false);
