@@ -74,6 +74,7 @@ const ContestLayout = (props) => {
         const sessionToken = user?.attributes.sessionToken;
 
         try {
+          // @todo: maybe store the response (or avoid re-fetching during navigation?)?
           const response = await fetch(
             `/.netlify/functions/manage-findings?contest=${contestid}`,
             {
