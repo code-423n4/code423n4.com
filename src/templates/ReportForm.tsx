@@ -126,6 +126,7 @@ const ReportForm = ({ data, location }) => {
           linksToCode: finding.linksToCode,
         });
         setIsLoading(false);
+        // ? will this swap the endpoint on normal submit?
         setEndpoint("manage-findings");
         setFindingId(`${contestid}-${finding.issueNumber}`);
       } else if (location.search) {
