@@ -18,6 +18,9 @@ async function getFindings(req: Event): Promise<Response> {
   // [ ] can see specific finding
   // [ ] team findings optional? (query param)
 
+  // todo: less hacky
+  let finding: Finding;
+
   // todo: ensure contestId / wardenHandle exist?
   const wardenHandle = req.headers["c4-user"];
 
