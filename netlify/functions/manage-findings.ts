@@ -16,6 +16,7 @@ async function getFindings(req: Event): Promise<Response> {
   // [x] warden can see own findings
   // [x] warden can see team findings
   // [ ] can see specific finding
+  // [ ] team findings optional? (query param)
 
   // todo: ensure contestId / wardenHandle exist?
   const contestId = parseInt(req.queryStringParameters?.contest!);
@@ -25,22 +26,6 @@ async function getFindings(req: Event): Promise<Response> {
   // if (req.queryStringParameters?.issue) {
   //   issueNumber = parseInt(req.queryStringParameters?.issue);
   // }
-
-  // todo: move to util?
-  let teamHandles = [];
-  try {
-    const teamUrl = `${process.env.URL}/.netlify/functions/get-team?id=${wardenHandle}`;
-    const teams = await fetch(teamUrl);
-    if (teams.status === 200) {
-      const teamsData = await teams.json();
-      teamHandles = teamsData.map((team) => team.handle);
-    }
-  } catch (error) {
-    return {
-      statusCode: error.status || 500,
-      body: JSON.stringify({ error: error.message || error }),
-    };
-  }
 
   const contest = await getContest(contestId);
 
@@ -61,17 +46,34 @@ async function getFindings(req: Event): Promise<Response> {
     teams: {},
   };
 
-  // if (req.queryStringParameters?.teamFindings) {
+  // (req.queryStringParameters?.teamFindings)
+  let includeTeam = true;
 
-  // }
+  if (includeTeam) {
+    // todo: move to util?
+    let teamHandles = [];
+    try {
+      const teamUrl = `${process.env.URL}/.netlify/functions/get-team?id=${wardenHandle}`;
+      const teams = await fetch(teamUrl);
+      if (teams.status === 200) {
+        const teamsData = await teams.json();
+        teamHandles = teamsData.map((team) => team.handle);
+      }
+    } catch (error) {
+      return {
+        statusCode: error.status || 500,
+        body: JSON.stringify({ error: error.message || error }),
+      };
+    }
 
-  for (const teamHandle of teamHandles) {
-    const teamFindings: Finding[] = await wardenFindingsForContest(
-      octokit,
-      teamHandle,
-      contest
-    );
-    res.teams[teamHandle] = teamFindings;
+    for (const teamHandle of teamHandles) {
+      const teamFindings: Finding[] = await wardenFindingsForContest(
+        octokit,
+        teamHandle,
+        contest
+      );
+      res.teams[teamHandle] = teamFindings;
+    }
   }
 
   return {
