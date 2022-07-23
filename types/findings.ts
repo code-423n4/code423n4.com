@@ -10,7 +10,6 @@ export interface Finding {
   createdAt: string;
   updatedAt: string;
   issueNumber: number;
-  linksToCode: string[];
 }
 
 export interface FindingsResponse {

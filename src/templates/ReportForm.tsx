@@ -9,6 +9,18 @@ import useUser from "../hooks/UserContext";
 import ProtectedPage from "../components/ProtectedPage";
 import SubmitFindings from "../components/reporter/SubmitFindings";
 
+// @todo: extract lines of code from issue body for medium and high issues
+// body is generated with: # Lines of code\n\n${linksToCodeString}\n\n\n# Vulnerability details\n\n${details}\n\n
+
+// let body = github_issues[item.issueNumber].body;
+// const ltcEnd = body.indexOf("\n\n\n# Vulnerability details\n\n");
+// let linksToCode = [];
+
+// if (ltcEnd >= 0) {
+  // linksToCode = linksToCode.concat(body.slice("# Lines of code\n\n".length, ltcEnd).split("\n"));
+  // body = body.slice(ltcEnd)
+// }
+
 export interface ReportState {
   title: string;
   risk: string;

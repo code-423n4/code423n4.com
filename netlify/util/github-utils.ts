@@ -231,10 +231,6 @@ async function wardenFindingsForContest(
 
     const risk = riskLabel.name;
 
-    // @todo: extract lines of code from issue body for medium and high issues
-    // body is generated with: # Lines of code\n\n${linksToCodeString}\n\n\n# Vulnerability details\n\n${details}\n\n
-    const linksToCode = [];
-
     return {
       ...item,
       title: github_issues[item.issueNumber].title,
@@ -244,7 +240,6 @@ async function wardenFindingsForContest(
       state: github_issues[item.issueNumber].state, // OPEN | CLOSED
       createdAt: github_issues[item.issueNumber].createdAt,
       updatedAt: github_issues[item.issueNumber].updatedAt,
-      linksToCode,
     };
   });
 
