@@ -140,6 +140,7 @@ const ReportForm = ({ data, location }) => {
           // // before passing into setting initial state
           // const issue = await getSubmission(issueId)
           // setState(issue);
+          // await fetch ?contest=&issue=
           setIssueId(id);
           setFindingId(`${contestid}-${id}`);
           setEndpoint("manage-findings");
