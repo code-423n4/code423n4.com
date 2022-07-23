@@ -87,6 +87,7 @@ const ReportForm = ({ data, location }) => {
         throw "You must be logged in to submit findings";
       }
       const sessionToken = user.attributes.sessionToken;
+      // special edit handling if manage-findings/edit
       return fetch(url, {
         method: "POST",
         headers: {
