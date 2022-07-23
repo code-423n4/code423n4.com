@@ -115,51 +115,76 @@ const ReportForm = ({ data, location }) => {
 
   useEffect(() => {
     (async () => {
-      if (location.state && location.state.finding) {
-        const finding = location.state.finding;
-        setFindingId(finding.issueNumber);
-        setState({
-          title: finding.title,
-          risk: finding.risk,
-          details: finding.body,
-          qaGasDetails: finding.body,
-          linksToCode: finding.linksToCode,
-        });
-        setIsLoading(false);
-        // ? will this swap the endpoint on normal submit?
-        setEndpoint("manage-findings");
-        setFindingId(`${contestid}-${finding.issueNumber}`);
-      } else if (location.search) {
-        try {
-          // @todo: improve this
-          const params = new URLSearchParams(location.search);
-          const id = params.get("issue")!;
-          // if id?
-          // // placeholder function for getting issue by id;
-          // // will need to reshape the response to be ReportState
-          // // before passing into setting initial state
-          // const issue = await getSubmission(issueId)
-          // setState(issue);
-          // await fetch ?contest=&issue=
-          setIssueId(id);
-          setFindingId(`${contestid}-${id}`);
-          setEndpoint("manage-findings");
+      if (currentUser.isLoggedIn) {
+        const user = await Moralis.User.current();
+
+        if (location.state && location.state.finding) {
+          const finding = location.state.finding;
+          setFindingId(finding.issueNumber);
+          setState({
+            title: finding.title,
+            risk: finding.risk,
+            details: finding.body,
+            qaGasDetails: finding.body,
+            linksToCode: finding.linksToCode,
+          });
           setIsLoading(false);
-        } catch (error) {
-          // @todo: decide what should happen in this case? navigate back or load new finding
-          toast.error(
-            "An error occurred while fetching the details of your finding. Please refresh and try again"
-          );
+          // ? will this swap the endpoint on normal submit?
+          setEndpoint("manage-findings");
+          setFindingId(`${contestid}-${finding.issueNumber}`);
+        } else if (location.search) {
+          try {
+            // @todo: improve this
+            const params = new URLSearchParams(location.search);
+            const id = params.get("issue") as string;
+            // if id?
+            // // placeholder function for getting issue by id;
+            // // will need to reshape the response to be ReportState
+            // // before passing into setting initial state
+            setEndpoint("manage-findings");
+            setIssueId(id);
+            setFindingId(`${contestid}-${id}`);
+
+            const q = new URLSearchParams({
+              "contest": contestid,
+              "issue": id,
+            });
+
+            fetch(`/.netlify/functions/manage-findings?` + q, {
+              headers: {
+                "Content-Type": "application/json",
+                "X-Authorization": `Bearer ${user?.attributes.sessionToken}`,
+                "C4-User": currentUser.username,
+              },
+            })
+              .then((response) => (response.json()))
+              .then((resultData) => {
+                console.log(resultData);
+                // setState(resultData);
+                // setIsLoading(false);
+              })
+              .catch(() => {
+                //
+              })
+              .finally(() => {
+                setIsLoading(false);
+              });
+          } catch (error) {
+            // @todo: decide what should happen in this case? navigate back or load new finding
+            toast.error(
+              "An error occurred while fetching the details of your finding. Please refresh and try again"
+            );
+          }
+        } else {
+          setIssueId("");
+          setFindingId(contestid);
+          setState(initialState);
+          setIsLoading(false);
+          setEndpoint("submit-finding");
         }
-      } else {
-        setIssueId("");
-        setFindingId(contestid);
-        setState(initialState);
-        setIsLoading(false);
-        setEndpoint("submit-finding");
       }
     })();
-  }, [location.search, contestid]);
+  }, [currentUser, location.search, contestid]);
 
   return (
     <ProtectedPage
