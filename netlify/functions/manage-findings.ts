@@ -21,6 +21,11 @@ async function getFindings(req: Event): Promise<Response> {
   const contestId = parseInt(req.queryStringParameters?.contest!);
   const wardenHandle = req.headers["c4-user"];
 
+  // let issueNumber;
+  // if (req.queryStringParameters?.issue) {
+  //   issueNumber = parseInt(req.queryStringParameters?.issue);
+  // }
+
   // todo: move to util?
   let teamHandles = [];
   try {
