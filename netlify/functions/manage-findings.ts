@@ -18,6 +18,7 @@ async function getFinding(
   let finding;
 
   const res: FindingResponse = {
+    name: username,
     finding: finding,
   };
 
