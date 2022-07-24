@@ -16,3 +16,8 @@ export interface FindingsResponse {
   user: Finding[];
   teams: Record<string, Finding[]>;
 }
+
+export interface FindingResponse {
+  name: string;
+  finding: Finding;
+}

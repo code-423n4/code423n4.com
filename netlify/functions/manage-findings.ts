@@ -4,40 +4,43 @@ import { Event } from "@netlify/functions/src/function/event";
 import { Octokit } from "@octokit/core";
 import fetch from "node-fetch";
 
-import { Finding, FindingsResponse } from "../../types/findings";
+import { Finding, FindingResponse, FindingsResponse } from "../../types/findings";
 
 import { checkAuth } from "../util/auth-utils";
 import { getContest, isContestActive } from "../util/contest-utils";
 import { wardenFindingsForContest } from "../util/github-utils";
 
-async function getFindings(req: Event): Promise<Response> {
+async function getFinding(
+  username: string,
+  contestId: number,
+  issueId: number,
+): Promise<Response> {
+  let finding;
+
+  const res: FindingResponse = {
+    finding: finding,
+  };
+
+  return {
+    statusCode: 200,
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(res),
+  };
+}
+
+async function getFindings(
+  username: string,
+  contestId: number,
+  includeTeams: boolean = true
+): Promise<Response> {
   // first phase:
   // given active! contest id
   // [x] warden can see own findings
   // [x] warden can see team findings
   // [ ] can see specific finding
   // [ ] team findings optional? (query param)
-
-  // todo: less hacky
-  let finding: Finding;
-
-  // todo: ensure contestId / wardenHandle exist?
-  const wardenHandle = req.headers["c4-user"];
-
-  let contestId;
-  if (req.queryStringParameters?.contest) {
-    contestId = parseInt(req.queryStringParameters?.contest);
-  }
-
-  let issueNumber;
-  if (req.queryStringParameters?.issue) {
-    issueNumber = parseInt(req.queryStringParameters?.issue);
-  }
-
-  let includeTeams = true;
-  // if (req.queryStringParameters?.includeTeams) {
-    // includeTeams = req.queryStringParameters?.includeTeams)
-  // }
 
   const contest = await getContest(contestId);
 
@@ -49,7 +52,7 @@ async function getFindings(req: Event): Promise<Response> {
 
   const wardenFindings: Finding[] = await wardenFindingsForContest(
     octokit,
-    wardenHandle,
+    username,
     contest
   );
 
@@ -62,7 +65,7 @@ async function getFindings(req: Event): Promise<Response> {
     // todo: move to util?
     let teamHandles = [];
     try {
-      const teamUrl = `${process.env.URL}/.netlify/functions/get-team?id=${wardenHandle}`;
+      const teamUrl = `${process.env.URL}/.netlify/functions/get-team?id=${username}`;
       const teams = await fetch(teamUrl);
       if (teams.status === 200) {
         const teamsData = await teams.json();
@@ -157,7 +160,33 @@ const handler: Handler = async (event: Event): Promise<Response> => {
   switch (event.httpMethod) {
     case "GET":
       // @todo: determine if single-issue or all-issue (or cheat?)
-      return await getFindings(event);
+      // todo: ensure contestId / wardenHandle exist?
+      let username;
+      if (event.headers["c4-user"]) {
+        username = event.headers["c4-user"];
+      }
+
+      let contestId;
+      if (event.queryStringParameters?.contest) {
+        contestId = parseInt(event.queryStringParameters?.contest);
+      }
+
+      let issueNumber;
+      if (event.queryStringParameters?.issue) {
+        issueNumber = parseInt(event.queryStringParameters?.issue);
+      }
+
+      let includeTeams = true;
+      // if (req.queryStringParameters?.includeTeams) {
+        // includeTeams = req.queryStringParameters?.includeTeams)
+      // }
+
+      if (issueNumber !== undefined && contestId !== undefined) {
+        return await getFinding(username, contestId, issueNumber);
+      }
+      else {
+        return await getFindings(username, contestId, includeTeams);
+      }
     case "POST":
       return await editFinding(event);
     default:
