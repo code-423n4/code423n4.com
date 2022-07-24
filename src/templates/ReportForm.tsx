@@ -9,18 +9,6 @@ import useUser from "../hooks/UserContext";
 import ProtectedPage from "../components/ProtectedPage";
 import SubmitFindings from "../components/reporter/SubmitFindings";
 
-// @todo: extract lines of code from issue body for medium and high issues
-// body is generated with: # Lines of code\n\n${linksToCodeString}\n\n\n# Vulnerability details\n\n${details}\n\n
-
-// let body = github_issues[item.issueNumber].body;
-// const ltcEnd = body.indexOf("\n\n\n# Vulnerability details\n\n");
-// let linksToCode = [];
-
-// if (ltcEnd >= 0) {
-  // linksToCode = linksToCode.concat(body.slice("# Lines of code\n\n".length, ltcEnd).split("\n"));
-  // body = body.slice(ltcEnd)
-// }
-
 export interface ReportState {
   title: string;
   risk: string;
@@ -159,14 +147,27 @@ const ReportForm = ({ data, location }) => {
             })
               .then((response) => (response.json()))
               .then((resultData) => {
-                // todo: links to code
-                // console.log(resultData);
+                let linksToCode = [];
+                let body = resultData.finding.body;
+
+                // @todo: extract lines of code from issue body for medium and high issues
+                // body is generated with: # Lines of code\n\n${linksToCodeString}\n\n\n# Vulnerability details\n\n${details}\n\n
+                console.log(resultData.finding.risk);
+                if (["3 (High Risk)", "2 (Med Risk)"].includes(resultData.finding.risk)) {
+                  const ltcEnd = body.indexOf("\n\n\n# Vulnerability details\n\n");
+
+                  if (ltcEnd >= 0) {
+                    linksToCode = linksToCode.concat(body.slice("# Lines of code\n\n".length, ltcEnd).split("\n"));
+                    body = body.slice(ltcEnd + "\n\n\n".length);
+                  }
+                }
+
                 setState({
                   title: resultData.finding.title,
                   risk: resultData.finding.risk,
-                  details: resultData.finding.body,
-                  qaGasDetails: resultData.finding.body,
-                  linksToCode: [], //resultData.finding.linksToCode,
+                  details: body,
+                  qaGasDetails: body,
+                  linksToCode: linksToCode,
                 });
                 // setState(resultData);
                 // setIsLoading(false);
