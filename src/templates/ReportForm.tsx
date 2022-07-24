@@ -159,7 +159,15 @@ const ReportForm = ({ data, location }) => {
             })
               .then((response) => (response.json()))
               .then((resultData) => {
-                console.log(resultData);
+                // todo: links to code
+                // console.log(resultData);
+                setState({
+                  title: resultData.finding.title,
+                  risk: resultData.finding.risk,
+                  details: resultData.finding.body,
+                  qaGasDetails: resultData.finding.body,
+                  linksToCode: [], //resultData.finding.linksToCode,
+                });
                 // setState(resultData);
                 // setIsLoading(false);
               })

@@ -8,26 +8,73 @@ import { Finding, FindingResponse, FindingsResponse } from "../../types/findings
 
 import { checkAuth } from "../util/auth-utils";
 import { getContest, isContestActive } from "../util/contest-utils";
-import { wardenFindingsForContest } from "../util/github-utils";
+import { getSubmittedFindingsFromFolder, wardenFindingsForContest } from "../util/github-utils";
 
 async function getFinding(
   username: string,
   contestId: number,
   issueId: number,
 ): Promise<Response> {
-  let finding;
+  const client = new Octokit({ auth: process.env.GITHUB_TOKEN });
 
-  const res: FindingResponse = {
-    name: username,
-    finding: finding,
-  };
+  const contest = await getContest(contestId);
+  const repoName = contest.findingsRepo.split("/").slice(-1)[0];
+
+  let teamHandles = [];
+  const teamUrl = `${process.env.URL}/.netlify/functions/get-team?id=${username}`;
+  const teams = await fetch(teamUrl);
+  if (teams.status === 200) {
+    const teamsData = await teams.json();
+    teamHandles = teamsData.map((team) => team.handle);
+  }
+
+  // get list of submissions, filtering for access / match
+  const submission_files = (
+    await getSubmittedFindingsFromFolder(client, repoName)
+  ).filter((item) => {
+    if (item.handle === username || teamHandles.includes(item.handle)) {
+      if (item.issueNumber === issueId) {
+        return item;
+      }
+    }
+  });
+
+  // todo: don't rely on full listing
+  let finding;
+  if (submission_files.length === 1) {
+    const findings = (await wardenFindingsForContest(client, submission_files[0].handle, contest))
+      .filter((item) => {
+        if (item.issueNumber === issueId) {
+          return item;
+        }
+      });
+
+    if (findings.length === 1) {
+      finding = findings[0];
+    }
+  }
+
+  if (finding) {
+    const res: FindingResponse = {
+      name: submission_files[0].handle,
+      finding: finding,
+    };
+
+    return {
+      statusCode: 200,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(res),
+    };
+  }
 
   return {
-    statusCode: 200,
+    statusCode: 500,
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(res),
+    body: JSON.stringify({error: "problem fetching finding"}),
   };
 }
 
