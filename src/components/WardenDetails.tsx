@@ -19,12 +19,12 @@ export default function WardenDetails({
 }: WardenDetailsProps) {
   return (
     <div className={clsx(styles.Wrapper, className)}>
-      <span>
+      <div className={styles.Username}>
         <span className={styles.Icon}>
           <Avatar src={image} name={username} size="32px" round="32px" />
         </span>
-        {username}
-      </span>
+        <span>{username}</span>
+      </div>
       {address && (
         <span className={styles.Address}>
           {address.slice(0, 5) + "..." + address.slice(-4)}

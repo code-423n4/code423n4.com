@@ -63,7 +63,8 @@
   padding: 3px 7px;
   margin-right: 5px;
   line-height: 12px;
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
   white-space: nowrap;
   background-color: var(--background-purple);
 }
@@ -76,4 +77,9 @@
 
 .Heading {
   background-color: var(--header-background-purple);
+}
+
+.Details {
+  display: flex;
+  align-items: center;
 }
