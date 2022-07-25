@@ -74,6 +74,7 @@ const ContestLayout = (props) => {
         const sessionToken = user?.attributes.sessionToken;
 
         try {
+          // @todo: maybe store the response (or avoid re-fetching during navigation?)?
           const response = await fetch(
             `/.netlify/functions/manage-findings?contest=${contestid}`,
             {
@@ -253,6 +254,7 @@ const ContestLayout = (props) => {
                   ) : (
                     <>
                       <FindingsList
+                        key={currentUser.username}
                         findings={findingsList.user}
                         submissionPath={fields.submissionPath}
                         isLoading={findingsStatus === FindingsStatus.Fetching}
@@ -264,6 +266,7 @@ const ContestLayout = (props) => {
                       </FindingsList>
                       {currentUser.teams.map((team) => (
                         <FindingsList
+                          key={team.username}
                           findings={findingsList.teams[team.username] || []}
                           submissionPath={fields.submissionPath}
                           isLoading={findingsStatus === FindingsStatus.Fetching}

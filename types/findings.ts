@@ -10,10 +10,14 @@ export interface Finding {
   createdAt: string;
   updatedAt: string;
   issueNumber: number;
-  linksToCode: string[];
 }
 
 export interface FindingsResponse {
   user: Finding[];
   teams: Record<string, Finding[]>;
+}
+
+export interface FindingResponse {
+  name: string;
+  finding: Finding;
 }

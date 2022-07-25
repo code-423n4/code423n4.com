@@ -3,6 +3,9 @@ import Moralis from "moralis";
 import React, { useCallback, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
+// hooks
+import useUser from "../hooks/UserContext";
+
 import ProtectedPage from "../components/ProtectedPage";
 import SubmitFindings from "../components/reporter/SubmitFindings";
 
@@ -43,6 +46,8 @@ const initialState: ReportState = {
 };
 
 const ReportForm = ({ data, location }) => {
+  const { currentUser } = useUser();
+
   const {
     sponsor,
     contestid,
@@ -82,61 +87,113 @@ const ReportForm = ({ data, location }) => {
         throw "You must be logged in to submit findings";
       }
       const sessionToken = user.attributes.sessionToken;
+      // special edit handling if manage-findings/edit
       return fetch(url, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           "X-Authorization": `Bearer ${sessionToken}`,
+          "C4-User": currentUser.username,
         },
         body: JSON.stringify(data),
       });
     },
-    [issueId, location.search, state]
+    [currentUser, issueId, location.search, state]
   );
 
   useEffect(() => {
     (async () => {
-      if (location.state && location.state.finding) {
-        const finding = location.state.finding;
-        setFindingId(finding.issueNumber);
-        setState({
-          title: finding.title,
-          risk: finding.risk,
-          details: finding.body,
-          qaGasDetails: finding.body,
-          linksToCode: [""],
-        });
-        setIsLoading(false);
-        setEndpoint("update-finding");
-        setFindingId(`${contestid}-${finding.issueNumber}`);
-      } else if (location.search) {
-        try {
-          // @todo: improve this
-          const id = location.search.split("=")[1];
-          // // placeholder function for getting issue by id;
-          // // will need to reshape the response to be ReportState
-          // // before passing into setting initial state
-          // const issue = await getSubmission(issueId)
-          // setState(issue);
-          setIssueId(id);
-          setFindingId(`${contestid}-${id}`);
-          setEndpoint("update-finding");
+      if (currentUser.isLoggedIn) {
+        const user = await Moralis.User.current();
+
+        if (location.state && location.state.finding) {
+          const finding = location.state.finding;
+          setFindingId(finding.issueNumber);
+          setState({
+            title: finding.title,
+            risk: finding.risk,
+            details: finding.body,
+            qaGasDetails: finding.body,
+            linksToCode: finding.linksToCode,
+          });
           setIsLoading(false);
-        } catch (error) {
-          // @todo: decide what should happen in this case? navigate back or load new finding
-          toast.error(
-            "An error occurred while fetching the details of your finding. Please refresh and try again"
-          );
+          // ? will this swap the endpoint on normal submit?
+          setEndpoint("manage-findings");
+          setFindingId(`${contestid}-${finding.issueNumber}`);
+        } else if (location.search) {
+          try {
+            // @todo: improve this
+            const params = new URLSearchParams(location.search);
+            const id = params.get("issue") as string;
+            // if id?
+            // // placeholder function for getting issue by id;
+            // // will need to reshape the response to be ReportState
+            // // before passing into setting initial state
+            setEndpoint("manage-findings");
+            setIssueId(id);
+            setFindingId(`${contestid}-${id}`);
+
+            const q = new URLSearchParams({
+              "contest": contestid,
+              "issue": id,
+            });
+
+            fetch(`/.netlify/functions/manage-findings?` + q, {
+              headers: {
+                "Content-Type": "application/json",
+                "X-Authorization": `Bearer ${user?.attributes.sessionToken}`,
+                "C4-User": currentUser.username,
+              },
+            })
+              .then((response) => (response.json()))
+              .then((resultData) => {
+                let linksToCode = [];
+                let body = resultData.finding.body;
+
+                // @todo: extract lines of code from issue body for medium and high issues
+                // body is generated with: # Lines of code\n\n${linksToCodeString}\n\n\n# Vulnerability details\n\n${details}\n\n
+                console.log(resultData.finding.risk);
+                if (["3 (High Risk)", "2 (Med Risk)"].includes(resultData.finding.risk)) {
+                  const ltcEnd = body.indexOf("\n\n\n# Vulnerability details\n\n");
+
+                  if (ltcEnd >= 0) {
+                    linksToCode = linksToCode.concat(body.slice("# Lines of code\n\n".length, ltcEnd).split("\n"));
+                    body = body.slice(ltcEnd + "\n\n\n".length);
+                  }
+                }
+
+                setState({
+                  title: resultData.finding.title,
+                  risk: resultData.finding.risk,
+                  details: body,
+                  qaGasDetails: body,
+                  linksToCode: linksToCode,
+                });
+                // setState(resultData);
+                // setIsLoading(false);
+              })
+              .catch(() => {
+                //
+              })
+              .finally(() => {
+                setIsLoading(false);
+              });
+          } catch (error) {
+            // @todo: decide what should happen in this case? navigate back or load new finding
+            toast.error(
+              "An error occurred while fetching the details of your finding. Please refresh and try again"
+            );
+          }
+        } else {
+          setIssueId("");
+          setFindingId(contestid);
+          setState(initialState);
+          setIsLoading(false);
+          setEndpoint("submit-finding");
         }
-      } else {
-        setIssueId("");
-        setFindingId(contestid);
-        setState(initialState);
-        setIsLoading(false);
-        setEndpoint("submit-finding");
       }
     })();
-  }, [location.search, contestid]);
+  }, [currentUser, location.search, contestid]);
 
   return (
     <ProtectedPage
@@ -145,13 +202,13 @@ const ReportForm = ({ data, location }) => {
         <>
           You need to be a registered warden currently connected via wallet to
           see this page.
-          <p>
+          {/* <p> */}
             If authentication isn't working, you may{" "}
             <Link to={fields.submissionPath + "-old"}>
               try the unauthenticated submission form
             </Link>
             .
-          </p>
+          {/* </p> */}
         </>
       }
     >
@@ -171,6 +228,7 @@ const ReportForm = ({ data, location }) => {
         </div>
       ) : (
         // @todo: pass in dynamic submit button and cancel button
+        // @todo: remove allHandlesJson dependency (and page query)
         <SubmitFindings
           wardensList={data.allHandlesJson}
           sponsor={sponsor.name}
