@@ -161,7 +161,7 @@ function removeLiquidity(uint256 _nftId, uint256 _amount)
 
 [LiquidityProviders.sol#L192-L194](https://github.com/code-423n4/2022-03-biconomy/blob/db8a1fdddd02e8cc209a4c73ffbb3de210e4a81a/contracts/hyphen/LiquidityProviders.sol#L192-L194)<br>
 
-```solidity=192
+```solidity
 function sharesToTokenAmount(uint256 _shares, address _tokenAddress) public view returns (uint256) {
     return (_shares * totalReserve[_tokenAddress]) / totalSharesMinted[_tokenAddress];
 }
