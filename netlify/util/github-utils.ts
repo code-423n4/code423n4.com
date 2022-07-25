@@ -143,7 +143,10 @@ async function getAllIssues(
   return issues;
 }
 
-async function getSubmittedFindingsFromFolder(client: Octokit, repo) {
+async function getSubmittedFindingsFromFolder(
+  client: Octokit,
+  repo: string
+): Promise<{ handle: string; issueNumber: number }[]> {
   // returns handle/issueNumber from ./data/{handle}-{issue}.json files
 
   const submitted_findings = await client
@@ -165,7 +168,7 @@ async function getSubmittedFindingsFromFolder(client: Octokit, repo) {
             const [handle, issueNumber] = key.split("-");
 
             return {
-              handle: handle,
+              handle: handle as string,
               issueNumber: parseInt(issueNumber),
             };
           })
@@ -236,9 +239,7 @@ async function wardenFindingsForContest(
   const submissions = submission_files.map((item) => {
     const labels = github_issues[item.issueNumber].labels.nodes
       .filter((label) => {
-        return (
-          riskLabels.indexOf(label.name) >= 0
-        );
+        return riskLabels.indexOf(label.name) >= 0;
       })
       .map((label) => {
         return {
@@ -247,11 +248,9 @@ async function wardenFindingsForContest(
         };
       });
 
-    const riskLabel = labels.find(
-      (label) => {
-        return riskLabels.includes(label.name);
-      }
-    );
+    const riskLabel = labels.find((label) => {
+      return riskLabels.includes(label.name);
+    });
 
     const risk = riskLabel.name;
 
