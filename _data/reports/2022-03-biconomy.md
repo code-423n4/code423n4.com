@@ -186,7 +186,7 @@ Actual Results: The tx reverted due to overflow at `sharesToTokenAmount()`.
 
 [LiquidityProviders.sol#L280-L292](https://github.com/code-423n4/2022-03-biconomy/blob/04751283f85c9fc94fb644ff2b489ec339cd9ffc/contracts/hyphen/LiquidityProviders.sol#L280-L292)<br>
 
-```solidity=280
+```solidity
 function _increaseLiquidity(uint256 _nftId, uint256 _amount) internal onlyValidLpToken(_nftId, _msgSender()) {
     (address token, uint256 totalSuppliedLiquidity, uint256 totalShares) = lpToken.tokenMetadata(_nftId);
 
