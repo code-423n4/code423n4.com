@@ -1,4 +1,6 @@
 import { readFileSync } from "fs";
+import fetch from "node-fetch";
+
 import { isDangerousHandle } from "../util/validation-utils";
 
 export async function findUser(userHandle) {
@@ -18,4 +20,18 @@ export async function findUser(userHandle) {
   } catch (error) {
     throw "User not found";
   }
+}
+
+export async function getUserTeams(username) {
+  let teamHandles = [];
+
+  const teamUrl = `${process.env.URL}/.netlify/functions/get-team?id=${username}`;
+  const teams = await fetch(teamUrl);
+
+  if (teams.status === 200) {
+    const teamsData = await teams.json();
+    teamHandles = teamsData.map((team) => team.handle);
+  }
+
+  return teamHandles;
 }

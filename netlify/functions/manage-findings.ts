@@ -2,13 +2,13 @@ import { Handler } from "@netlify/functions";
 import { Response } from "@netlify/functions/src/function/response";
 import { Event } from "@netlify/functions/src/function/event";
 import { Octokit } from "@octokit/core";
-import fetch from "node-fetch";
 
 import { Finding, FindingResponse, FindingsResponse } from "../../types/findings";
 
 import { checkAuth } from "../util/auth-utils";
 import { getContest, isContestActive } from "../util/contest-utils";
 import { getAvailableFindings, wardenFindingsForContest } from "../util/github-utils";
+import { getUserTeams } from "../util/user-utils";
 
 async function getFinding(
   username: string,
@@ -98,20 +98,7 @@ async function getFindings(
 
   if (includeTeams) {
     // todo: move to util?
-    let teamHandles = [];
-    try {
-      const teamUrl = `${process.env.URL}/.netlify/functions/get-team?id=${username}`;
-      const teams = await fetch(teamUrl);
-      if (teams.status === 200) {
-        const teamsData = await teams.json();
-        teamHandles = teamsData.map((team) => team.handle);
-      }
-    } catch (error) {
-      return {
-        statusCode: error.status || 500,
-        body: JSON.stringify({ error: error.message || error }),
-      };
-    }
+    const teamHandles = await getUserTeams(username);
 
     for (const teamHandle of teamHandles) {
       const teamFindings: Finding[] = await wardenFindingsForContest(
