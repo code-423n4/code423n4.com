@@ -275,8 +275,7 @@ async function editFinding(
       ],
     });
 
-    // add GH comment for "edited by" ${C4-User}
-    // send e-mails
+    // todo: send e-mails
   }
 
   return {
