@@ -279,14 +279,14 @@ const handler: Handler = async (event: Event): Promise<Response> => {
       }
     case "POST":
       return await editFinding(username, contestId, issueNumber, JSON.parse(event.body!));
-    default:
-      return {
-        statusCode: 418,
-        body: JSON.stringify({
-          error: "nuh-uh",
-        }),
-      };
   }
+
+  return {
+    statusCode: 418,
+    body: JSON.stringify({
+      error: "nuh-uh",
+    }),
+  };
 };
 
 export { handler };
