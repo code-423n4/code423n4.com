@@ -2,6 +2,8 @@ import { Handler } from "@netlify/functions";
 import { Response } from "@netlify/functions/src/function/response";
 import { Event } from "@netlify/functions/src/function/event";
 import { Octokit } from "@octokit/core";
+import { createOrUpdateTextFile } from "@octokit/plugin-create-or-update-text-file";
+
 
 import { Finding, FindingEditRequest, FindingResponse, FindingsResponse } from "../../types/findings";
 
@@ -128,7 +130,8 @@ async function editFinding(
   // an authenticated warden can edit a finding
   //   for active contests
   //     their own (their teams')
-  const client = new Octokit({ auth: process.env.GITHUB_TOKEN });
+  const CustOcto = Octokit.plugin(createOrUpdateTextFile);
+  const client = new CustOcto({ auth: process.env.GITHUB_TOKEN });
 
   let edited = false;
 
@@ -149,6 +152,7 @@ async function editFinding(
 
   // get contest to find repo
   const contest = await getContest(contestId);
+  const repoName = contest.findingsRepo.split("/").slice(-1)[0]
 
   // modifications to issueid
 
@@ -172,9 +176,47 @@ async function editFinding(
 
   // did attribution change?
   if (data.attributedTo) {
+    const oldPath = `data/${data.attributedTo.oldValue}-${issueNumber}.json`;
+    const newPath = `data/${data.attributedTo.newValue}-${issueNumber}.json`;
+
     // read issue-json
+    const old_contents = await client.request("GET /repos/{owner}/{repo}/contents/{path}", {
+      owner: process.env.GITHUB_REPO_OWNER!,
+      repo: repoName,
+      path: oldPath,
+    });
+
     // change "address" value to data.wallet
+    const new_data = JSON.parse(Buffer.from(old_contents.data.content, "base64").toString());
+    new_data.address = data.attributedTo.wallet;
+
     // write/rename issue-json
+    // save the re-attributed
+    const newRes = await client.createOrUpdateTextFile({
+      owner: process.env.GITHUB_REPO_OWNER!,
+      repo: repoName,
+      path: newPath,
+      content: JSON.stringify(new_data),
+      message: "changing attribution",
+    });
+
+    if (!newRes.updated) {
+      throw "Problem writing new file";
+    }
+
+    // delete the original
+    const oldRes = await client.createOrUpdateTextFile({
+      owner: process.env.GITHUB_REPO_OWNER!,
+      repo: repoName,
+      path: oldPath,
+      content: null,
+      message: "removing old file",
+    });
+
+    if (!oldRes.deleted) {
+      throw "Problem removing old file";
+    }
+
     edited = true;
   }
 
