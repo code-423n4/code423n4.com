@@ -1,5 +1,6 @@
 import { Octokit } from "@octokit/core";
-import fetch from "node-fetch";
+
+import { getUserTeams } from "./user-utils";
 
 import { Finding } from "../../types/findings";
 
@@ -181,13 +182,7 @@ async function getAvailableFindings(
 ) {
   const repoName = contest.findingsRepo.split("/").slice(-1)[0];
 
-  let teamHandles = [];
-  const teamUrl = `${process.env.URL}/.netlify/functions/get-team?id=${username}`;
-  const teams = await fetch(teamUrl);
-  if (teams.status === 200) {
-    const teamsData = await teams.json();
-    teamHandles = teamsData.map((team) => team.handle);
-  }
+  const teamHandles = await getUserTeams(username);
 
   // get list of submissions, filtering for access / match
   const submission_files = (
