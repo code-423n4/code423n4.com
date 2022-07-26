@@ -3,7 +3,7 @@ import { Response } from "@netlify/functions/src/function/response";
 import { Event } from "@netlify/functions/src/function/event";
 import { Octokit } from "@octokit/core";
 
-import { Finding, FindingResponse, FindingsResponse } from "../../types/findings";
+import { Finding, FindingEditRequest, FindingResponse, FindingsResponse } from "../../types/findings";
 
 import { checkAuth } from "../util/auth-utils";
 import { getContest, isContestActive } from "../util/contest-utils";
@@ -117,23 +117,6 @@ async function getFindings(
     },
     body: JSON.stringify(res),
   };
-}
-
-interface FindingEditRequest {
-  issue: number;
-  contest: number;
-  emailAddresses?: string[];
-  attributedTo?: {
-    newValue: string;
-    oldValue: string;
-    wallet: string;
-  };
-  risk?: {
-    newValue: string;
-    oldValue: string;
-  };
-  title?: string;
-  body?: string;
 }
 
 async function editFinding(
