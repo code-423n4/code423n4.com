@@ -150,6 +150,14 @@ async function editFinding(
   }
   */
 
+  // todo: move to more general place
+  const RiskCodeToGithubLabel = {
+    "3": "3 (High Risk)",
+    "2": "2 (Med Risk)",
+    "Q": "QA (Quality Assurance)",
+    "G": "G (Gas Optimizations)",
+  };
+
   // get contest to find repo
   const contest = await getContest(contestId);
   const repoName = contest.findingsRepo.split("/").slice(-1)[0]
@@ -224,22 +232,23 @@ async function editFinding(
   if (data.risk) {
     // these are GitHub-named already?
     // remove label corresponding to data.risk.oldValue
-    // await octokit.request('DELETE /repos/{owner}/{repo}/issues/{issue_number}/labels/{name}', {
-      // owner: process.env.GITHUB_REPO_OWNER!,
-      // repo: repoName,
-      // issue_number: issueNumber,
-      // name: 'NAME'
-    // });
+    await client.request('DELETE /repos/{owner}/{repo}/issues/{issue_number}/labels/{name}', {
+      owner: process.env.GITHUB_REPO_OWNER!,
+      repo: repoName,
+      issue_number: issueNumber,
+      name: RiskCodeToGithubLabel[data.risk.oldValue],
+    });
 
     // add label corresponding to data.risk.newValue
-    // await octokit.request('POST /repos/{owner}/{repo}/issues/{issue_number}/labels', {
-    //   owner: process.env.GITHUB_REPO_OWNER!,
-    //   repo: repoName,
-    //   issue_number: issueNumber,
-    //   labels: [
-    //     "NEW LABEL"
-    //   ]
-    // });
+    await client.request('POST /repos/{owner}/{repo}/issues/{issue_number}/labels', {
+      owner: process.env.GITHUB_REPO_OWNER!,
+      repo: repoName,
+      issue_number: issueNumber,
+      labels: [
+        RiskCodeToGithubLabel[data.risk.newValue],
+      ],
+    });
+
     edited = true;
   }
 
