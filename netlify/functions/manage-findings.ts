@@ -188,8 +188,8 @@ async function editFinding(req) {
   // send e-mails
 
   return {
-    statusCode: 200,
-    body: JSON.stringify({}),
+    statusCode: 500,
+    body: JSON.stringify({error: "something went wrong editing submision"}),
   };
 }
 
