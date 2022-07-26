@@ -158,6 +158,8 @@ async function editFinding(
   // an authenticated warden can edit a finding
   //   for active contests
   //     their own (their teams')
+  const client = new Octokit({ auth: process.env.GITHUB_TOKEN });
+
   let edited = false;
 
   /*
@@ -182,6 +184,21 @@ async function editFinding(
 
   // check for authorization to edit --
   // the issue is warden or team
+  const available_findings = await getAvailableFindings(client, username, contest);
+
+  const canAccess = available_findings
+    .find((f) => {
+      if (f.issueNumber === issueNumber) {
+        return true;
+      }
+    }) !== undefined;
+
+  if (!canAccess) {
+    return {
+      statusCode: 500,
+      body: JSON.stringify({error: "no submission found to edit"}),
+    };
+  }
 
   // did attribution change?
   if (data.attributedTo) {
@@ -265,7 +282,11 @@ const handler: Handler = async (event: Event): Promise<Response> => {
         return await getFindings(username, contestId, includeTeams);
       }
     case "POST":
-      return await editFinding(username, contestId, issueNumber, JSON.parse(event.body!));
+      // const data: FindingEditRequest = JSON.parse(event.body!);
+      // return await editFinding(username, data.contest, data.issue, data);
+
+      const data = JSON.parse(event.body!);
+      return await editFinding(username, data.contest, parseInt(data.issueId), data);
   }
 
   return {
