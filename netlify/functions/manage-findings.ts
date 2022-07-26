@@ -166,7 +166,7 @@ async function editFinding(
   username: string,
   contestId: number,
   issueNumber: number,
-  body: FindingEditRequest,
+  data: FindingEditRequest,
 ): Promise<Response> {
   // an authenticated warden can edit a finding
   //   for active contests
