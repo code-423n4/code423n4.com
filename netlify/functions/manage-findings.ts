@@ -171,6 +171,7 @@ async function editFinding(
   // an authenticated warden can edit a finding
   //   for active contests
   //     their own (their teams')
+  let edited = false;
 
   /*
   {
@@ -192,23 +193,42 @@ async function editFinding(
 
   // modifications to issueid
 
+  // check for authorization to edit --
+  // the issue is warden or team
+
   // did attribution change?
-  // rename json file (and alter "address" key with wallet address)
+  if (data.attributedTo) {
+    // read issue-json
+    // change "address" value to data.wallet
+    // write/rename issue-json
+    edited = true;
+  }
 
   // did risk change?
-  // remove old risk label / apply new risk label
+  if (data.risk) {
+    // these are GitHub-named already?
+    // remove label corresponding to data.risk.oldValue
+    // add label corresponding to data.risk.newValue
+    edited = true;
+  }
+
+  // simple field updates
 
   // did title change?
-  // simple field update
+  if (data.title) {
+    edited = true;
+  }
 
   // did body change?
-  // simple field update
+  if (data.body) {
+    edited = true;
+  }
 
-  // apply edited-by-warden label
-
-  // add GH comment for "edited by" ${C4-User}
-
-  // send e-mails
+  if (edited) {
+    // apply edited-by-warden label
+    // add GH comment for "edited by" ${C4-User}
+    // send e-mails
+  }
 
   return {
     statusCode: 500,
