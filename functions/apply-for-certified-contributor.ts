@@ -7,7 +7,7 @@ const { Moralis } = require("moralis/node");
 const { apiKey, domain, moralisAppId, moralisServerUrl } = require("./_config");
 
 const notionKey = process.env.NOTION_KEY;
-const notionDbId = process.env.NOTION_WARDEN_CERTIFICATION_DATABASE_ID;
+const notionDbId = process.env.NOTION_WARDEN_CERTIFICATION_DATABASE_ID!;
 
 const notion = new Client({ auth: notionKey });
 
@@ -18,6 +18,7 @@ interface NotionCertifiedContributorApplication {
   properties: {
     "Warden Handle": {
       title: {
+        type: "text";
         text: {
           content: string;
         };
@@ -26,7 +27,7 @@ interface NotionCertifiedContributorApplication {
     Status: {
       multi_select: {
         name: string;
-      };
+      }[];
     };
     "GitHub Username": {
       rich_text: [
@@ -125,6 +126,7 @@ async function handler(event) {
         "Warden Handle": {
           title: [
             {
+              type: "text",
               text: {
                 content: ticket.wardenHandle,
               },
@@ -132,9 +134,7 @@ async function handler(event) {
           ],
         },
         Status: {
-          multi_select: {
-            name: "Applied",
-          },
+          multi_select: [{ name: "Applied" }],
         },
         "GitHub Username": {
           rich_text: [
