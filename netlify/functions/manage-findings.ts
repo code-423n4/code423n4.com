@@ -224,7 +224,22 @@ async function editFinding(
   if (data.risk) {
     // these are GitHub-named already?
     // remove label corresponding to data.risk.oldValue
+    // await octokit.request('DELETE /repos/{owner}/{repo}/issues/{issue_number}/labels/{name}', {
+      // owner: process.env.GITHUB_REPO_OWNER!,
+      // repo: repoName,
+      // issue_number: issueNumber,
+      // name: 'NAME'
+    // });
+
     // add label corresponding to data.risk.newValue
+    // await octokit.request('POST /repos/{owner}/{repo}/issues/{issue_number}/labels', {
+    //   owner: process.env.GITHUB_REPO_OWNER!,
+    //   repo: repoName,
+    //   issue_number: issueNumber,
+    //   labels: [
+    //     "NEW LABEL"
+    //   ]
+    // });
     edited = true;
   }
 
@@ -242,6 +257,15 @@ async function editFinding(
 
   if (edited) {
     // apply edited-by-warden label
+    await client.request('POST /repos/{owner}/{repo}/issues/{issue_number}/labels', {
+      owner: process.env.GITHUB_REPO_OWNER!,
+      repo: repoName,
+      issue_number: issueNumber,
+      labels: [
+        "edited-by-warden",
+      ],
+    });
+
     // add GH comment for "edited by" ${C4-User}
     // send e-mails
   }
