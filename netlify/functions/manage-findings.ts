@@ -241,18 +241,18 @@ const handler: Handler = async (event: Event): Promise<Response> => {
     username = event.headers["c4-user"];
   }
 
-  let contestId;
-  if (event.queryStringParameters?.contest) {
-    contestId = parseInt(event.queryStringParameters?.contest);
-  }
-
-  let issueNumber;
-  if (event.queryStringParameters?.issue) {
-    issueNumber = parseInt(event.queryStringParameters?.issue);
-  }
-
   switch (event.httpMethod) {
     case "GET":
+      let contestId;
+      if (event.queryStringParameters?.contest) {
+        contestId = parseInt(event.queryStringParameters?.contest);
+      }
+    
+      let issueNumber;
+      if (event.queryStringParameters?.issue) {
+        issueNumber = parseInt(event.queryStringParameters?.issue);
+      }
+    
       let includeTeams = true;
       // if (req.queryStringParameters?.includeTeams) {
         // includeTeams = req.queryStringParameters?.includeTeams)
