@@ -145,7 +145,29 @@ async function getFindings(
   };
 }
 
-async function editFinding(req) {
+interface FindingEditRequest {
+  issue: number;
+  contest: number;
+  emailAddresses?: string[];
+  attributedTo?: {
+    newValue: string;
+    oldValue: string;
+    wallet: string;
+  };
+  risk?: {
+    newValue: string;
+    oldValue: string;
+  };
+  title?: string;
+  body?: string;
+}
+
+async function editFinding(
+  username: string,
+  contestId: number,
+  issueNumber: number,
+  body: FindingEditRequest,
+): Promise<Response> {
   // an authenticated warden can edit a finding
   //   for active contests
   //     their own (their teams')
@@ -166,6 +188,8 @@ async function editFinding(req) {
   */
 
   // get contest to find repo
+  const contest = await getContest(contestId);
+
   // modifications to issueid
 
   // did attribution change?
@@ -204,38 +228,37 @@ const handler: Handler = async (event: Event): Promise<Response> => {
     };
   }
 
+  // simple param filling
+  let username;
+  if (event.headers["c4-user"]) {
+    username = event.headers["c4-user"];
+  }
+
+  let contestId;
+  if (event.queryStringParameters?.contest) {
+    contestId = parseInt(event.queryStringParameters?.contest);
+  }
+
+  let issueNumber;
+  if (event.queryStringParameters?.issue) {
+    issueNumber = parseInt(event.queryStringParameters?.issue);
+  }
+
   switch (event.httpMethod) {
     case "GET":
-      // @todo: determine if single-issue or all-issue (or cheat?)
-      // todo: ensure contestId / wardenHandle exist?
-      let username;
-      if (event.headers["c4-user"]) {
-        username = event.headers["c4-user"];
-      }
-
-      let contestId;
-      if (event.queryStringParameters?.contest) {
-        contestId = parseInt(event.queryStringParameters?.contest);
-      }
-
-      let issueNumber;
-      if (event.queryStringParameters?.issue) {
-        issueNumber = parseInt(event.queryStringParameters?.issue);
-      }
-
       let includeTeams = true;
       // if (req.queryStringParameters?.includeTeams) {
         // includeTeams = req.queryStringParameters?.includeTeams)
       // }
 
-      if (issueNumber !== undefined && contestId !== undefined) {
+      if (issueNumber !== undefined) {
         return await getFinding(username, contestId, issueNumber);
       }
       else {
         return await getFindings(username, contestId, includeTeams);
       }
     case "POST":
-      return await editFinding(event);
+      return await editFinding(username, contestId, issueNumber, JSON.parse(event.body!));
     default:
       return {
         statusCode: 418,
