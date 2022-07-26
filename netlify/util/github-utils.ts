@@ -1,4 +1,6 @@
 import { Octokit } from "@octokit/core";
+import fetch from "node-fetch";
+
 import { Finding } from "../../types/findings";
 
 const firstPageQuery = `
@@ -172,6 +174,33 @@ async function getSubmittedFindingsFromFolder(client: Octokit, repo) {
   return submitted_findings;
 }
 
+async function getAvailableFindings(
+  client: Octokit,
+  username: string,
+  contest,
+) {
+  const repoName = contest.findingsRepo.split("/").slice(-1)[0];
+
+  let teamHandles = [];
+  const teamUrl = `${process.env.URL}/.netlify/functions/get-team?id=${username}`;
+  const teams = await fetch(teamUrl);
+  if (teams.status === 200) {
+    const teamsData = await teams.json();
+    teamHandles = teamsData.map((team) => team.handle);
+  }
+
+  // get list of submissions, filtering for access / match
+  const submission_files = (
+    await getSubmittedFindingsFromFolder(client, repoName)
+  ).filter((item) => {
+    if (item.handle === username || teamHandles.includes(item.handle)) {
+      return item;
+    }
+  });
+
+  return submission_files;
+}
+
 async function wardenFindingsForContest(
   client: Octokit,
   handle,
@@ -249,6 +278,7 @@ async function wardenFindingsForContest(
 export {
   QueryResponse,
   getAllIssues,
+  getAvailableFindings,
   getSubmittedFindingsFromFolder,
   wardenFindingsForContest,
 };
