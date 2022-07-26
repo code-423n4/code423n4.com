@@ -149,8 +149,7 @@ async function editFinding(req) {
   // an authenticated warden can edit a finding
   //   for active contests
   //     their own (their teams')
-  // [ ] should add "edited-by-warden"
-  // [ ] add GH comment for "edited by" ${C4-User}
+
   /*
   {
     "issue": 70,
@@ -183,7 +182,7 @@ async function editFinding(req) {
 
   // apply edited-by-warden label
 
-  // create GH comment indicating C4-User
+  // add GH comment for "edited by" ${C4-User}
 
   // send e-mails
 
