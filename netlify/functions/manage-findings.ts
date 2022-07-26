@@ -8,7 +8,7 @@ import { Finding, FindingResponse, FindingsResponse } from "../../types/findings
 
 import { checkAuth } from "../util/auth-utils";
 import { getContest, isContestActive } from "../util/contest-utils";
-import { getSubmittedFindingsFromFolder, wardenFindingsForContest } from "../util/github-utils";
+import { getAvailableFindings, wardenFindingsForContest } from "../util/github-utils";
 
 async function getFinding(
   username: string,
@@ -18,26 +18,13 @@ async function getFinding(
   const client = new Octokit({ auth: process.env.GITHUB_TOKEN });
 
   const contest = await getContest(contestId);
-  const repoName = contest.findingsRepo.split("/").slice(-1)[0];
 
-  let teamHandles = [];
-  const teamUrl = `${process.env.URL}/.netlify/functions/get-team?id=${username}`;
-  const teams = await fetch(teamUrl);
-  if (teams.status === 200) {
-    const teamsData = await teams.json();
-    teamHandles = teamsData.map((team) => team.handle);
-  }
-
-  // get list of submissions, filtering for access / match
-  const submission_files = (
-    await getSubmittedFindingsFromFolder(client, repoName)
-  ).filter((item) => {
-    if (item.handle === username || teamHandles.includes(item.handle)) {
+  const submission_files = (await getAvailableFindings(client, username, contest))
+    .filter((item) => {
       if (item.issueNumber === issueId) {
         return item;
       }
-    }
-  });
+    });
 
   // todo: don't rely on full listing
   let finding;
