@@ -222,6 +222,8 @@ const handler: Handler = async (event: Event): Promise<Response> => {
     };
   }
 
+  // todo: active contest only?
+
   // simple param filling
   let username;
   if (event.headers["c4-user"]) {
