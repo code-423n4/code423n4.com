@@ -19,7 +19,7 @@ export interface FindingEditRequest {
   attributedTo?: {
     newValue: string;
     oldValue: string;
-    wallet: string;
+    address: string;
   };
   risk?: {
     newValue: string;
@@ -37,4 +37,18 @@ export interface FindingsResponse {
 export interface FindingResponse {
   name: string;
   finding: Finding;
+}
+
+export interface FindingCreateRequest {
+  user: string;
+  contest: string;
+  sponsor: string;
+  repo: string;
+  emailAddresses: string[];
+  attributedTo: string;
+  address: string;
+  risk: string;
+  title: string;
+  body: string;
+  labels: string[];
 }

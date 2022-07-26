@@ -4,7 +4,8 @@ import { toast } from "react-toastify";
 
 // types
 import { Field } from "./widgets/Widgets";
-import { FindingRequestData, ReportState } from "../../templates/ReportForm";
+import { ReportState } from "../../templates/ReportForm";
+import { FindingCreateRequest } from "../../../types/findings";
 
 // helpers
 import {
@@ -12,7 +13,6 @@ import {
   addressField,
   titleField,
   riskField,
-  wardenField,
   linksToCodeField,
   vulnerabilityDetailsField,
   qaGasDetailsField,
@@ -48,18 +48,21 @@ enum FormStatus {
 }
 
 interface SubmitFindingsProps {
-  wardensList: { edges: { node: { handle: string; image: unknown } }[] };
   sponsor: string;
   contest: string;
   repo: string;
   title: string;
   initialState: ReportState;
-  onSubmit: (data: FindingRequestData) => Promise<Response>;
+  onSubmit: (data: FindingCreateRequest) => Promise<Response>;
   findingId: string;
+  initialAttributedTo: string;
+  submitButtonText: string;
+  successMessage: string;
+  successButtonText?: string;
+  cancelButtonText?: string;
 }
 
 const SubmitFindings = ({
-  wardensList,
   sponsor,
   contest,
   repo,
@@ -67,11 +70,12 @@ const SubmitFindings = ({
   initialState,
   onSubmit,
   findingId,
+  initialAttributedTo,
+  submitButtonText,
+  successMessage,
+  successButtonText,
+  cancelButtonText,
 }: SubmitFindingsProps) => {
-  const wardens = wardensList.edges.map(({ node }) => {
-    return { value: node.handle, image: node.image };
-  });
-
   // hooks
   const { currentUser } = useUser();
   const { showModal } = useModalContext();
@@ -89,9 +93,8 @@ const SubmitFindings = ({
   >([]);
   const [polygonAddress, setPolygonAddress] = useState<string>("");
   const [newTeamAddress, setNewTeamAddress] = useState<string>("");
-  const [attributedTo, setAttributedTo] = useState<string>("");
+  const [attributedTo, setAttributedTo] = useState<string>(initialAttributedTo);
   const [fieldList, setFieldList] = useState<Field[]>([
-    wardenField(wardens),
     emailField,
     addressField,
     riskField,
@@ -99,13 +102,23 @@ const SubmitFindings = ({
 
   // effects
   useEffect(() => {
-    (() => {
-      if (currentUser.isLoggedIn) {
+    if (currentUser.isLoggedIn) {
+      if (attributedTo === currentUser.username) {
         setPolygonAddress(currentUser.address);
-        setAttributedTo(currentUser.username);
+      } else {
+        const team = currentUser.teams.find(
+          (team) => team.username === attributedTo
+        );
+        setPolygonAddress(team?.address || "");
       }
-    })();
+    }
   }, [currentUser]);
+
+  useEffect(() => {
+    if (!attributedTo) {
+      setAttributedTo(initialAttributedTo);
+    }
+  }, [initialAttributedTo]);
 
   useEffect(() => {
     const currentState = getCurrentStateFromStorage(findingId, initialState);
@@ -115,6 +128,17 @@ const SubmitFindings = ({
   useEffect(() => {
     setStateInLocalStorage(findingId, state);
   }, [state, findingId]);
+
+  useEffect(() => {
+    if (attributedTo !== currentUser.username) {
+      const team = currentUser.teams.find((t) => t.username === attributedTo);
+      if (team) {
+        setPolygonAddress(team.address || newTeamAddress);
+      }
+    } else {
+      setPolygonAddress(currentUser.address);
+    }
+  }, [attributedTo, currentUser]);
 
   useEffect(() => {
     // set which fields are shown based on risk
@@ -167,10 +191,8 @@ const SubmitFindings = ({
         return;
       }
       setAttributedTo(team.username || "");
-      setPolygonAddress(team.address || newTeamAddress);
     } else {
       setAttributedTo(currentUser.username);
-      setPolygonAddress(currentUser.address);
     }
   };
 
@@ -180,19 +202,15 @@ const SubmitFindings = ({
   };
 
   const handleReset = () => {
-    // @todo: clear query string and location state
-
-    setState((prevState) => {
-      return {
-        ...prevState,
-        title: "",
-        risk: "",
-        details: initialState.details,
-        qaGasDetails: "",
-        linksToCode: initialState.linksToCode,
-      };
-    });
+    setState(initialState);
     setStatus(FormStatus.Unsubmitted);
+  };
+
+  const handleCancel = (): void => {
+    if (typeof window !== `undefined`) {
+      window.localStorage.removeItem(findingId);
+    }
+    setState(initialState);
   };
 
   const submitFinding = useCallback(async () => {
@@ -201,14 +219,13 @@ const SubmitFindings = ({
     const linksToCodeString = state.linksToCode.join("\n");
     const details = isQaOrGasFinding ? state.qaGasDetails : state.details;
     const markdownBody = `# Lines of code\n\n${linksToCodeString}\n\n\n# Vulnerability details\n\n${details}\n\n`;
-    const formattedRisk = state.risk ? state.risk.slice(0, 1) : "";
     const formattedBody = isQaOrGasFinding ? details : markdownBody;
     const emailAddressList: string[] = additionalEmailAddresses.filter(
       (email) => !!email
     );
     emailAddressList.push(currentUser.emailAddress);
 
-    const data: FindingRequestData = {
+    const data: FindingCreateRequest = {
       user: currentUser.username,
       contest,
       sponsor,
@@ -216,7 +233,7 @@ const SubmitFindings = ({
       emailAddresses: emailAddressList,
       attributedTo,
       address: polygonAddress,
-      risk: formattedRisk,
+      risk: state.risk,
       title: getTitle(state.title, state.risk),
       body: formattedBody,
       labels: [config.labelAll, state.risk],
@@ -489,17 +506,27 @@ const SubmitFindings = ({
           </fieldset>
           <Agreement />
           {/* @todo: add optional cancel button */}
-          <button
-            className="button cta-button centered"
-            type="button"
-            onClick={handleSubmit}
-            disabled={status !== FormStatus.Unsubmitted}
-          >
-            {/* @todo: make button text dynamic */}
-            {status === FormStatus.Unsubmitted
-              ? "Create issue"
-              : "Submitting..."}
-          </button>
+          <div className={styles.ButtonsWrapper}>
+            {cancelButtonText && (
+              <button
+                className="button cta-button secondary"
+                type="button"
+                onClick={handleCancel}
+              >
+                {cancelButtonText}
+              </button>
+            )}
+            <button
+              className="button cta-button"
+              type="button"
+              onClick={handleSubmit}
+              disabled={status !== FormStatus.Unsubmitted}
+            >
+              {status === FormStatus.Unsubmitted
+                ? submitButtonText
+                : "Submitting..."}
+            </button>
+          </div>
         </form>
       )}
       {status === FormStatus.Error && (
@@ -514,18 +541,19 @@ const SubmitFindings = ({
           </button>
         </div>
       )}
-      {/* @todo: consider making this section dynamic */}
       {status === FormStatus.Submitted && (
         <div className="centered-text">
           <h2 className={styles.Heading2}>Thank you!</h2>
-          <p>Your report has been submitted.</p>
-          <button
-            className="button cta-button"
-            type="button"
-            onClick={handleReset}
-          >
-            Submit another
-          </button>
+          <p>{successMessage}</p>
+          {successButtonText && (
+            <button
+              className="button cta-button"
+              type="button"
+              onClick={handleReset}
+            >
+              Submit another
+            </button>
+          )}
         </div>
       )}
     </div>

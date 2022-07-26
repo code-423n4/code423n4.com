@@ -306,7 +306,7 @@ exports.handler = async (event) => {
       contest,
       handle: attributedTo,
       address,
-      risk,
+      risk: risk.slice(0, 1),
       title,
       issueId,
       issueUrl,
@@ -333,7 +333,7 @@ exports.handler = async (event) => {
       }`;
 
       const text = dedent`
-      C4 finding submitted: (risk = ${labels[1]})
+      C4 finding submitted: (risk = ${risk})
       Wallet address: ${address}
       
       ${body}

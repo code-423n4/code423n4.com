@@ -107,7 +107,10 @@ async function getFindings(
   );
 
   const res: FindingsResponse = {
-    user: wardenFindings,
+    user: wardenFindings.map((finding) => ({
+      ...finding,
+      attributedTo: username,
+    })),
     teams: {},
   };
 
@@ -121,7 +124,10 @@ async function getFindings(
         teamHandle,
         contest
       );
-      res.teams[teamHandle] = teamFindings;
+      res.teams[teamHandle] = teamFindings.map((finding) => ({
+        ...finding,
+        attributedTo: teamHandle,
+      }));
     }
   }
 
@@ -218,7 +224,7 @@ async function editFinding(
     const new_data = JSON.parse(
       Buffer.from(old_contents.data.content, "base64").toString()
     );
-    new_data.address = data.attributedTo.wallet;
+    new_data.address = data.attributedTo.address;
 
     // write/rename issue-json
     // save the re-attributed

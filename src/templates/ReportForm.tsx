@@ -3,9 +3,13 @@ import Moralis from "moralis";
 import React, { useCallback, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
+// types
+import { FindingCreateRequest, FindingEditRequest } from "../../types/findings";
+
 // hooks
 import useUser from "../hooks/UserContext";
 
+// components
 import ProtectedPage from "../components/ProtectedPage";
 import SubmitFindings from "../components/reporter/SubmitFindings";
 
@@ -17,19 +21,9 @@ export interface ReportState {
   linksToCode: string[];
 }
 
-export interface FindingRequestData {
-  user: string;
-  contest: string;
-  sponsor: string;
-  repo: string;
-  emailAddresses: string[];
-  attributedTo: string;
-  address: string;
-  risk: string;
-  title: string;
-  body: string;
-  labels: string[];
-  issueId?: string;
+enum FormMode {
+  Edit = "edit",
+  Create = "create",
 }
 
 const mdTemplate =
@@ -56,12 +50,13 @@ const ReportForm = ({ data, location }) => {
     end_time,
     fields,
   } = data.contestsCsv;
-  const [state, setState] = useState(initialState);
-  const [isLoading, setIsLoading] = useState(true);
-  const [endpoint, setEndpoint] = useState("submit-finding");
-  const [issueId, setIssueId] = useState("");
-  const [findingId, setFindingId] = useState(contestid);
-  const [hasContestEnded, setHasContestEnded] = useState(
+  const [state, setState] = useState<ReportState>(initialState);
+  const [attributedTo, setAttributedTo] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [mode, setMode] = useState<FormMode>(FormMode.Create);
+  const [issueId, setIssueId] = useState<number | null>(null);
+  const [findingId, setFindingId] = useState<string>(contestid);
+  const [hasContestEnded, setHasContestEnded] = useState<boolean>(
     Date.now() > new Date(end_time).getTime()
   );
 
@@ -77,29 +72,78 @@ const ReportForm = ({ data, location }) => {
   });
 
   const onSubmit = useCallback(
-    async (data: FindingRequestData): Promise<Response> => {
-      if (issueId) {
-        data.issueId = issueId;
+    async (data: FindingCreateRequest): Promise<Response> => {
+      const endpoint =
+        mode === FormMode.Create ? "submit-finding" : "manage-findings";
+      let requestData: FindingCreateRequest | FindingEditRequest = data;
+      if (mode === FormMode.Edit) {
+        requestData = getUpdatedFindingRequestData(data);
       }
-      const url = `/.netlify/functions/${endpoint}`;
       const user = await Moralis.User.current();
       if (!user) {
         throw "You must be logged in to submit findings";
       }
       const sessionToken = user.attributes.sessionToken;
-      // special edit handling if manage-findings/edit
-      return fetch(url, {
+      return fetch(`/.netlify/functions/${endpoint}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           "X-Authorization": `Bearer ${sessionToken}`,
           "C4-User": currentUser.username,
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify(requestData),
       });
     },
-    [currentUser, issueId, location.search, state]
+    [currentUser, mode]
   );
+
+  const getUpdatedFindingRequestData = (
+    data: FindingCreateRequest
+  ): FindingEditRequest => {
+    const requestData: FindingEditRequest = {
+      issue: issueId!,
+      contest: parseInt(data.contest),
+      emailAddresses: data.emailAddresses,
+    };
+    if (state.title !== data.title) {
+      console.log("title changed:", state.title, "=>", data.title);
+      requestData.title = data.title;
+    }
+    if (state.risk !== data.risk) {
+      console.log("risk changed:", state.risk, "=>", data.risk);
+      requestData.risk = { oldValue: state.risk, newValue: data.risk };
+    }
+    if (attributedTo !== data.attributedTo) {
+      console.log(
+        "attributedTo changed:",
+        attributedTo,
+        "=>",
+        data.attributedTo
+      );
+      requestData.attributedTo = {
+        oldValue: attributedTo,
+        newValue: data.attributedTo,
+        address: data.address,
+      };
+    }
+
+    if (data.body !== state.qaGasDetails) {
+      console.log("body changed:", state.qaGasDetails, "=>", data.body);
+      requestData.body = data.body;
+    }
+
+    // check if anything changed
+    if (
+      !requestData.attributedTo &&
+      !requestData.title &&
+      !requestData.body &&
+      !requestData.risk
+    ) {
+      console.log("error - no changes to save");
+      throw "There were no changes to save.";
+    }
+    return requestData;
+  };
 
   useEffect(() => {
     (async () => {
@@ -108,34 +152,39 @@ const ReportForm = ({ data, location }) => {
 
         if (location.state && location.state.finding) {
           const finding = location.state.finding;
-          setFindingId(finding.issueNumber);
+          const { links, body } = separateLinksFromBody(
+            finding.body,
+            finding.risk
+          );
+          setMode(FormMode.Edit);
+          setIssueId(finding.issueNumber);
+          setFindingId(`${contestid}-${finding.issueNumber}`);
           setState({
             title: finding.title,
             risk: finding.risk,
-            details: finding.body,
+            details: body,
             qaGasDetails: finding.body,
-            linksToCode: finding.linksToCode,
+            linksToCode: links,
           });
+          setAttributedTo(finding.attributedTo);
           setIsLoading(false);
           // ? will this swap the endpoint on normal submit?
-          setEndpoint("manage-findings");
           setFindingId(`${contestid}-${finding.issueNumber}`);
         } else if (location.search) {
           try {
-            // @todo: improve this
             const params = new URLSearchParams(location.search);
-            const id = params.get("issue") as string;
+            const id = parseInt(params.get("issue") as string);
             // if id?
             // // placeholder function for getting issue by id;
             // // will need to reshape the response to be ReportState
             // // before passing into setting initial state
-            setEndpoint("manage-findings");
+            setMode(FormMode.Edit);
             setIssueId(id);
             setFindingId(`${contestid}-${id}`);
 
             const q = new URLSearchParams({
-              "contest": contestid,
-              "issue": id,
+              contest: contestid as string,
+              issue: id.toString(),
             });
 
             fetch(`/.netlify/functions/manage-findings?` + q, {
@@ -145,19 +194,25 @@ const ReportForm = ({ data, location }) => {
                 "C4-User": currentUser.username,
               },
             })
-              .then((response) => (response.json()))
+              .then((response) => response.json())
               .then((resultData) => {
                 let linksToCode = [];
                 let body = resultData.finding.body;
-
-                // @todo: extract lines of code from issue body for medium and high issues
-                // body is generated with: # Lines of code\n\n${linksToCodeString}\n\n\n# Vulnerability details\n\n${details}\n\n
-                console.log(resultData.finding.risk);
-                if (["3 (High Risk)", "2 (Med Risk)"].includes(resultData.finding.risk)) {
-                  const ltcEnd = body.indexOf("\n\n\n# Vulnerability details\n\n");
+                if (
+                  ["3 (High Risk)", "2 (Med Risk)"].includes(
+                    resultData.finding.risk
+                  )
+                ) {
+                  const ltcEnd = body.indexOf(
+                    "\n\n\n# Vulnerability details\n\n"
+                  );
 
                   if (ltcEnd >= 0) {
-                    linksToCode = linksToCode.concat(body.slice("# Lines of code\n\n".length, ltcEnd).split("\n"));
+                    linksToCode = linksToCode.concat(
+                      body
+                        .slice("# Lines of code\n\n".length, ltcEnd)
+                        .split("\n")
+                    );
                     body = body.slice(ltcEnd + "\n\n\n".length);
                   }
                 }
@@ -169,6 +224,7 @@ const ReportForm = ({ data, location }) => {
                   qaGasDetails: body,
                   linksToCode: linksToCode,
                 });
+                setAttributedTo(resultData.finding.attributedTo);
                 // setState(resultData);
                 // setIsLoading(false);
               })
@@ -185,15 +241,38 @@ const ReportForm = ({ data, location }) => {
             );
           }
         } else {
-          setIssueId("");
+          setIssueId(0);
           setFindingId(contestid);
           setState(initialState);
           setIsLoading(false);
-          setEndpoint("submit-finding");
+          setMode(FormMode.Create);
+          setAttributedTo(currentUser.username);
         }
       }
     })();
-  }, [currentUser, location.search, contestid]);
+  }, [currentUser, location, contestid]);
+
+  const separateLinksFromBody = (
+    issueBody: string,
+    risk: string
+  ): { links: string[]; body: string } => {
+    let body = issueBody;
+    let linksToCode: string[] = [];
+
+    // @todo: extract lines of code from issue body for medium and high issues
+    // body is generated with: # Lines of code\n\n${linksToCodeString}\n\n\n# Vulnerability details\n\n${details}\n\n
+    if (["3 (High Risk)", "2 (Med Risk)"].includes(risk)) {
+      const ltcEnd = body.indexOf("\n\n\n# Vulnerability details\n\n");
+
+      if (ltcEnd >= 0) {
+        linksToCode = linksToCode
+          .concat(body.slice("# Lines of code\n\n".length, ltcEnd).split("\n"))
+          .map((ltc) => ltc);
+        body = body.slice(ltcEnd + "\n\n\n# Vulnerability details\n\n".length);
+      }
+    }
+    return { links: linksToCode, body };
+  };
 
   return (
     <ProtectedPage
@@ -203,12 +282,11 @@ const ReportForm = ({ data, location }) => {
           You need to be a registered warden currently connected via wallet to
           see this page.
           {/* <p> */}
-            If authentication isn't working, you may{" "}
-            <Link to={fields.submissionPath + "-old"}>
-              try the unauthenticated submission form
-            </Link>
-            .
-          {/* </p> */}
+          If authentication isn't working, you may{" "}
+          <Link to={fields.submissionPath + "-old"}>
+            try the unauthenticated submission form
+          </Link>
+          .{/* </p> */}
         </>
       }
     >
@@ -230,7 +308,6 @@ const ReportForm = ({ data, location }) => {
         // @todo: pass in dynamic submit button and cancel button
         // @todo: remove allHandlesJson dependency (and page query)
         <SubmitFindings
-          wardensList={data.allHandlesJson}
           sponsor={sponsor.name}
           contest={contestid}
           repo={findingsRepo}
@@ -238,6 +315,19 @@ const ReportForm = ({ data, location }) => {
           initialState={state}
           onSubmit={onSubmit}
           findingId={findingId}
+          initialAttributedTo={attributedTo}
+          submitButtonText={
+            mode === FormMode.Create ? "Create Issue" : "Update Issue"
+          }
+          successMessage={
+            mode === FormMode.Create
+              ? "Your report has been submitted."
+              : "Your report has been updated."
+          }
+          successButtonText={
+            mode === FormMode.Create ? "Submit Another" : undefined
+          }
+          cancelButtonText={mode === FormMode.Edit ? "Undo Changes" : undefined}
         />
       )}
     </ProtectedPage>
@@ -259,21 +349,6 @@ export const pageQuery = graphql`
       }
       fields {
         submissionPath
-      }
-    }
-    allHandlesJson(sort: { fields: handle, order: ASC }) {
-      edges {
-        node {
-          id
-          handle
-          image {
-            childImageSharp {
-              resize(width: 64, quality: 90) {
-                src
-              }
-            }
-          }
-        }
       }
     }
   }
