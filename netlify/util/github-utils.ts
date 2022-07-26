@@ -1,4 +1,7 @@
 import { Octokit } from "@octokit/core";
+
+import { getUserTeams } from "./user-utils";
+
 import { Finding } from "../../types/findings";
 
 const firstPageQuery = `
@@ -172,6 +175,27 @@ async function getSubmittedFindingsFromFolder(client: Octokit, repo) {
   return submitted_findings;
 }
 
+async function getAvailableFindings(
+  client: Octokit,
+  username: string,
+  contest,
+) {
+  const repoName = contest.findingsRepo.split("/").slice(-1)[0];
+
+  const teamHandles = await getUserTeams(username);
+
+  // get list of submissions, filtering for access / match
+  const submission_files = (
+    await getSubmittedFindingsFromFolder(client, repoName)
+  ).filter((item) => {
+    if (item.handle === username || teamHandles.includes(item.handle)) {
+      return item;
+    }
+  });
+
+  return submission_files;
+}
+
 async function wardenFindingsForContest(
   client: Octokit,
   handle,
@@ -249,6 +273,7 @@ async function wardenFindingsForContest(
 export {
   QueryResponse,
   getAllIssues,
+  getAvailableFindings,
   getSubmittedFindingsFromFolder,
   wardenFindingsForContest,
 };

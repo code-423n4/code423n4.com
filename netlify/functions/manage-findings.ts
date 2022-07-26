@@ -2,13 +2,13 @@ import { Handler } from "@netlify/functions";
 import { Response } from "@netlify/functions/src/function/response";
 import { Event } from "@netlify/functions/src/function/event";
 import { Octokit } from "@octokit/core";
-import fetch from "node-fetch";
 
 import { Finding, FindingResponse, FindingsResponse } from "../../types/findings";
 
 import { checkAuth } from "../util/auth-utils";
 import { getContest, isContestActive } from "../util/contest-utils";
-import { getSubmittedFindingsFromFolder, wardenFindingsForContest } from "../util/github-utils";
+import { getAvailableFindings, wardenFindingsForContest } from "../util/github-utils";
+import { getUserTeams } from "../util/user-utils";
 
 async function getFinding(
   username: string,
@@ -18,26 +18,13 @@ async function getFinding(
   const client = new Octokit({ auth: process.env.GITHUB_TOKEN });
 
   const contest = await getContest(contestId);
-  const repoName = contest.findingsRepo.split("/").slice(-1)[0];
 
-  let teamHandles = [];
-  const teamUrl = `${process.env.URL}/.netlify/functions/get-team?id=${username}`;
-  const teams = await fetch(teamUrl);
-  if (teams.status === 200) {
-    const teamsData = await teams.json();
-    teamHandles = teamsData.map((team) => team.handle);
-  }
-
-  // get list of submissions, filtering for access / match
-  const submission_files = (
-    await getSubmittedFindingsFromFolder(client, repoName)
-  ).filter((item) => {
-    if (item.handle === username || teamHandles.includes(item.handle)) {
+  const submission_files = (await getAvailableFindings(client, username, contest))
+    .filter((item) => {
       if (item.issueNumber === issueId) {
         return item;
       }
-    }
-  });
+    });
 
   // todo: don't rely on full listing
   let finding;
@@ -111,20 +98,7 @@ async function getFindings(
 
   if (includeTeams) {
     // todo: move to util?
-    let teamHandles = [];
-    try {
-      const teamUrl = `${process.env.URL}/.netlify/functions/get-team?id=${username}`;
-      const teams = await fetch(teamUrl);
-      if (teams.status === 200) {
-        const teamsData = await teams.json();
-        teamHandles = teamsData.map((team) => team.handle);
-      }
-    } catch (error) {
-      return {
-        statusCode: error.status || 500,
-        body: JSON.stringify({ error: error.message || error }),
-      };
-    }
+    const teamHandles = await getUserTeams(username);
 
     for (const teamHandle of teamHandles) {
       const teamFindings: Finding[] = await wardenFindingsForContest(
@@ -145,12 +119,36 @@ async function getFindings(
   };
 }
 
-async function editFinding(req) {
+interface FindingEditRequest {
+  issue: number;
+  contest: number;
+  emailAddresses?: string[];
+  attributedTo?: {
+    newValue: string;
+    oldValue: string;
+    wallet: string;
+  };
+  risk?: {
+    newValue: string;
+    oldValue: string;
+  };
+  title?: string;
+  body?: string;
+}
+
+async function editFinding(
+  username: string,
+  contestId: number,
+  issueNumber: number,
+  data: FindingEditRequest,
+): Promise<Response> {
   // an authenticated warden can edit a finding
   //   for active contests
   //     their own (their teams')
-  // [ ] should add "edited-by-warden"
-  // [ ] add GH comment for "edited by" ${C4-User}
+  const client = new Octokit({ auth: process.env.GITHUB_TOKEN });
+
+  let edited = false;
+
   /*
   {
     "issue": 70,
@@ -167,29 +165,65 @@ async function editFinding(req) {
   */
 
   // get contest to find repo
+  const contest = await getContest(contestId);
+
   // modifications to issueid
 
+  // check for authorization to edit --
+  // the issue is warden or team
+  const available_findings = await getAvailableFindings(client, username, contest);
+
+  const canAccess = available_findings
+    .find((f) => {
+      if (f.issueNumber === issueNumber) {
+        return true;
+      }
+    }) !== undefined;
+
+  if (!canAccess) {
+    return {
+      statusCode: 500,
+      body: JSON.stringify({error: "no submission found to edit"}),
+    };
+  }
+
   // did attribution change?
-  // rename json file (and alter "address" key with wallet address)
+  if (data.attributedTo) {
+    // read issue-json
+    // change "address" value to data.wallet
+    // write/rename issue-json
+    edited = true;
+  }
 
   // did risk change?
-  // remove old risk label / apply new risk label
+  if (data.risk) {
+    // these are GitHub-named already?
+    // remove label corresponding to data.risk.oldValue
+    // add label corresponding to data.risk.newValue
+    edited = true;
+  }
+
+  // simple field updates
 
   // did title change?
-  // simple field update
+  if (data.title) {
+    edited = true;
+  }
 
   // did body change?
-  // simple field update
+  if (data.body) {
+    edited = true;
+  }
 
-  // apply edited-by-warden label
-
-  // create GH comment indicating C4-User
-
-  // send e-mails
+  if (edited) {
+    // apply edited-by-warden label
+    // add GH comment for "edited by" ${C4-User}
+    // send e-mails
+  }
 
   return {
-    statusCode: 200,
-    body: JSON.stringify({}),
+    statusCode: 500,
+    body: JSON.stringify({error: "something went wrong editing submision"}),
   };
 }
 
@@ -205,46 +239,49 @@ const handler: Handler = async (event: Event): Promise<Response> => {
     };
   }
 
+  // simple param filling
+  let username;
+  if (event.headers["c4-user"]) {
+    username = event.headers["c4-user"];
+  }
+
   switch (event.httpMethod) {
     case "GET":
-      // @todo: determine if single-issue or all-issue (or cheat?)
-      // todo: ensure contestId / wardenHandle exist?
-      let username;
-      if (event.headers["c4-user"]) {
-        username = event.headers["c4-user"];
-      }
-
       let contestId;
       if (event.queryStringParameters?.contest) {
         contestId = parseInt(event.queryStringParameters?.contest);
       }
-
+    
       let issueNumber;
       if (event.queryStringParameters?.issue) {
         issueNumber = parseInt(event.queryStringParameters?.issue);
       }
-
+    
       let includeTeams = true;
       // if (req.queryStringParameters?.includeTeams) {
         // includeTeams = req.queryStringParameters?.includeTeams)
       // }
 
-      if (issueNumber !== undefined && contestId !== undefined) {
+      if (issueNumber !== undefined) {
         return await getFinding(username, contestId, issueNumber);
       }
       else {
         return await getFindings(username, contestId, includeTeams);
       }
     case "POST":
-      return await editFinding(event);
-    default:
-      return {
-        statusCode: 418,
-        body: JSON.stringify({
-          error: "nuh-uh",
-        }),
-      };
+      // const data: FindingEditRequest = JSON.parse(event.body!);
+      // return await editFinding(username, data.contest, data.issue, data);
+
+      const data = JSON.parse(event.body!);
+      return await editFinding(username, data.contest, parseInt(data.issueId), data);
   }
+
+  return {
+    statusCode: 418,
+    body: JSON.stringify({
+      error: "nuh-uh",
+    }),
+  };
 };
 
 export { handler };
