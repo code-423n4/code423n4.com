@@ -205,7 +205,7 @@ async function editFinding(
       repo: repoName,
       path: newPath,
       content: JSON.stringify(new_data),
-      message: "changing attribution",
+      message: `Issue #${issueNumber} attribution changed from ${data.attributedTo.oldValue} to ${data.attributedTo.newValue} by ${username}`,
     });
 
     if (!newRes.updated) {
