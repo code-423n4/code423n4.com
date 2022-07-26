@@ -264,7 +264,6 @@ exports.handler = async (event) => {
         title,
         body,
         head: branchName,
-        base: "warden/registrations",
         changes: [
           {
             files,
