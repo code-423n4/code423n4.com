@@ -287,17 +287,42 @@ async function editFinding(
     edited = true;
   }
 
-  // simple field updates
+  if (data.title && data.body) {
+    // did both title and body change?
+    await client.request("PATCH /repos/{owner}/{repo}/issues/{issue_number}", {
+      owner: process.env.GITHUB_REPO_OWNER!,
+      repo: repoName,
+      issue_number: issueNumber,
+      title: data.title,
+      body: data.body,
+    });
 
-  // did title change?
-  if (data.title) {
+    emailBody =
+      `Title changed: ${data.title}\n\n` +
+      `Report contents changed: ${data.body}\n\n` +
+      emailBody;
+    edited = true;
+  } else if (data.title) {
+    // did title change?
+    await client.request("PATCH /repos/{owner}/{repo}/issues/{issue_number}", {
+      owner: process.env.GITHUB_REPO_OWNER!,
+      repo: repoName,
+      issue_number: issueNumber,
+      title: data.title,
+    });
+
     emailBody = `Title changed: ${data.title}\n\n` + emailBody;
     edited = true;
-  }
+  } else if (data.body) {
+    // did body change?
+    await client.request("PATCH /repos/{owner}/{repo}/issues/{issue_number}", {
+      owner: process.env.GITHUB_REPO_OWNER!,
+      repo: repoName,
+      issue_number: issueNumber,
+      body: data.body,
+    });
 
-  // did body change?
-  if (data.body) {
-    emailBody = `Details changed: ${data.body}\n\n` + emailBody;
+    emailBody = `Report contents changed: ${data.body}\n\n` + emailBody;
     edited = true;
   }
 
