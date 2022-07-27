@@ -154,28 +154,13 @@ async function editFinding(
 
   let edited = false;
 
-  /*
-  {
-    "issue": 70,
-    "contest": 999999,
-    "emailAddresses": ["dzhawsh@code4rena.com"],
-    
-    "attributedTo"?: {oldValue, newValue, wallet},
-    // or maybe just include with attributedTo?
-       "address"?: newValue, // only if attributedTo changes
-    "risk"?: {oldValue, newValue},
-    "title"?: "QA Report",
-    "body"?: (combined with links to code on client-side),
-  }
-  */
-
   // todo: move to more general place
-  const RiskCodeToGithubLabel = {
-    "3": "3 (High Risk)",
-    "2": "2 (Med Risk)",
-    Q: "QA (Quality Assurance)",
-    G: "G (Gas Optimizations)",
-  };
+  // const RiskCodeToGithubLabel = {
+  //   "3": "3 (High Risk)",
+  //   "2": "2 (Med Risk)",
+  //   Q: "QA (Quality Assurance)",
+  //   G: "G (Gas Optimizations)",
+  // };
 
   // get contest to find repo
   const contest = await getContest(contestId);
@@ -193,6 +178,7 @@ async function editFinding(
 
   const canAccess =
     available_findings.find((f) => {
+      console.log(f.issueNumber, issueNumber);
       if (f.issueNumber === issueNumber) {
         return true;
       }
@@ -207,6 +193,8 @@ async function editFinding(
 
   // did attribution change?
   if (data.attributedTo) {
+    // if team (attributedTo is not c4User) and team address is not already saved, save team address
+
     const oldPath = `data/${data.attributedTo.oldValue}-${issueNumber}.json`;
     const newPath = `data/${data.attributedTo.newValue}-${issueNumber}.json`;
 
@@ -266,7 +254,8 @@ async function editFinding(
         owner: process.env.GITHUB_REPO_OWNER!,
         repo: repoName,
         issue_number: issueNumber,
-        name: RiskCodeToGithubLabel[data.risk.oldValue],
+        // name: RiskCodeToGithubLabel[data.risk.oldValue],
+        name: data.risk.oldValue,
       }
     );
 
@@ -277,7 +266,8 @@ async function editFinding(
         owner: process.env.GITHUB_REPO_OWNER!,
         repo: repoName,
         issue_number: issueNumber,
-        labels: [RiskCodeToGithubLabel[data.risk.newValue]],
+        // labels: [RiskCodeToGithubLabel[data.risk.newValue]],
+        labels: [data.risk.newValue],
       }
     );
 
@@ -313,7 +303,7 @@ async function editFinding(
 
   return {
     statusCode: 500,
-    body: JSON.stringify({ error: "something went wrong editing submision" }),
+    body: JSON.stringify({ error: "something went wrong editing submission" }),
   };
 }
 
