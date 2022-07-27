@@ -1,6 +1,10 @@
 {
   "handle": "MangoBurger",
-  "members": ["BurgerTime", "CaptainMango"],
+  "members": [
+    "BurgerTime",
+    "CaptainMango"
+  ],
   "link": "",
-  "image": "./avatars/CaptainMango.jpeg"
+  "image": "./avatars/CaptainMango.jpeg",
+  "address": "0x0000000000000000000000000000000000000000"
 }
