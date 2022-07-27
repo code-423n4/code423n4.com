@@ -16,7 +16,13 @@ import {
   getAvailableFindings,
   wardenFindingsForContest,
 } from "../util/github-utils";
-import { getUserTeams, checkAndUpdateTeamAddress } from "../util/user-utils";
+import {
+  getUserTeams,
+  checkAndUpdateTeamAddress,
+  sendConfirmationEmail,
+} from "../util/user-utils";
+
+import { apiKey, domain } from "../_config";
 
 async function getFinding(
   username: string,
@@ -151,6 +157,9 @@ async function editFinding(
 
   // get contest to find repo
   const contest = await getContest(contestId);
+  if (!contest) {
+    throw { message: "Not a valid contest" };
+  }
   const repoName = contest.findingsRepo.split("/").slice(-1)[0];
 
   // modifications to issueid
@@ -171,13 +180,13 @@ async function editFinding(
     }) !== undefined;
 
   if (!canAccess) {
-    return {
-      statusCode: 500,
-      body: JSON.stringify({ error: "no submission found to edit" }),
+    throw {
+      message: "no submission found to edit",
     };
   }
 
-  // did attribution change?
+  let emailBody = `Updated by: ${username}`;
+
   if (data.attributedTo) {
     await checkAndUpdateTeamAddress(
       data.attributedTo.newValue,
@@ -187,7 +196,6 @@ async function editFinding(
     const oldPath = `data/${data.attributedTo.oldValue}-${issueNumber}.json`;
     const newPath = `data/${data.attributedTo.newValue}-${issueNumber}.json`;
 
-    // read issue-json
     const oldContents = await client.request(
       "GET /repos/{owner}/{repo}/contents/{path}",
       {
@@ -197,15 +205,13 @@ async function editFinding(
       }
     );
 
-    // change "address" value to data.wallet
     const newContents = JSON.parse(
+      // @ts-ignore // @todo: fix this typescript error
       Buffer.from(oldContents.data.content, "base64").toString()
     );
     newContents.handle = data.attributedTo.newValue;
     newContents.address = data.attributedTo.address;
 
-    // write/rename issue-json
-    // save the re-attributed
     const newRes = await client.createOrUpdateTextFile({
       owner: process.env.GITHUB_REPO_OWNER!,
       repo: repoName,
@@ -218,26 +224,25 @@ async function editFinding(
       throw { message: "Problem writing new file" };
     }
 
-    // delete the original
     const oldRes = await client.createOrUpdateTextFile({
       owner: process.env.GITHUB_REPO_OWNER!,
       repo: repoName,
       path: oldPath,
       content: null,
-      message: "removing old file",
+      message: `File replaced by ${newPath} by ${username}`,
     });
 
     if (!oldRes.deleted) {
       throw { message: "Problem removing old file" };
     }
 
+    emailBody =
+      `Attribution changed from ${data.attributedTo.oldValue} to ${data.attributedTo.newValue}\n\n` +
+      emailBody;
     edited = true;
   }
 
-  // did risk change?
   if (data.risk) {
-    // these are GitHub-named already?
-    // remove label corresponding to data.risk.oldValue
     try {
       await client.request(
         "DELETE /repos/{owner}/{repo}/issues/{issue_number}/labels/{name}",
@@ -245,7 +250,6 @@ async function editFinding(
           owner: process.env.GITHUB_REPO_OWNER!,
           repo: repoName,
           issue_number: issueNumber,
-          // name: RiskCodeToGithubLabel[data.risk.oldValue],
           name: data.risk.oldValue,
         }
       );
@@ -258,7 +262,6 @@ async function editFinding(
       };
     }
 
-    // add label corresponding to data.risk.newValue
     try {
       await client.request(
         "POST /repos/{owner}/{repo}/issues/{issue_number}/labels",
@@ -266,7 +269,6 @@ async function editFinding(
           owner: process.env.GITHUB_REPO_OWNER!,
           repo: repoName,
           issue_number: issueNumber,
-          // labels: [RiskCodeToGithubLabel[data.risk.newValue]],
           labels: [data.risk.newValue],
         }
       );
@@ -279,6 +281,9 @@ async function editFinding(
       };
     }
 
+    emailBody =
+      `Risk changed from ${data.risk.oldValue} to ${data.risk.newValue}\n\n` +
+      emailBody;
     edited = true;
   }
 
@@ -286,11 +291,13 @@ async function editFinding(
 
   // did title change?
   if (data.title) {
+    emailBody = `Title changed: ${data.title}\n\n` + emailBody;
     edited = true;
   }
 
   // did body change?
   if (data.body) {
+    emailBody = `Details changed: ${data.body}\n\n` + emailBody;
     edited = true;
   }
 
@@ -303,7 +310,6 @@ async function editFinding(
     return;
   }
 
-  // apply edited-by-warden label
   await client.request(
     "POST /repos/{owner}/{repo}/issues/{issue_number}/labels",
     {
@@ -313,7 +319,12 @@ async function editFinding(
       labels: ["edited-by-warden"],
     }
   );
-  // todo: send e-mails
+
+  if (apiKey && domain && process.env.EMAIL_SENDER) {
+    const subject = `C4 ${contest.sponsor} finding updated`;
+
+    await sendConfirmationEmail(data.emailAddresses, subject, emailBody);
+  }
 }
 
 const handler: Handler = async (event: Event): Promise<Response> => {

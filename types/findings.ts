@@ -16,7 +16,7 @@ export interface Finding {
 export interface FindingEditRequest {
   issue: number;
   contest: number;
-  emailAddresses?: string[];
+  emailAddresses: string[];
   attributedTo?: {
     newValue: string;
     oldValue: string;
