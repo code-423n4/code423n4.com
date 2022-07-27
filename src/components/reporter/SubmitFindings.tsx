@@ -1,4 +1,5 @@
 import clsx from "clsx";
+import { navigate } from "@reach/router";
 import React, { useEffect, useState, useCallback } from "react";
 import { toast } from "react-toastify";
 
@@ -126,10 +127,6 @@ const SubmitFindings = ({
   }, [findingId, initialState]);
 
   useEffect(() => {
-    setStateInLocalStorage(findingId, state);
-  }, [state, findingId]);
-
-  useEffect(() => {
     if (attributedTo !== currentUser.username) {
       const team = currentUser.teams.find((t) => t.username === attributedTo);
       if (team) {
@@ -165,19 +162,28 @@ const SubmitFindings = ({
   const handleChange = (e) => {
     if (Array.isArray(e)) {
       setState((prevState) => {
-        return { ...prevState, linksToCode: e };
+        const newState = { ...prevState, linksToCode: e };
+        setStateInLocalStorage(findingId, newState);
+        return newState;
       });
     } else {
       const { name, value } = e.target;
       switch (name) {
         case "title":
           setState((prevState) => {
-            return { ...prevState, [name]: getTitle(value, prevState.risk) };
+            const newState = {
+              ...prevState,
+              [name]: getTitle(value, prevState.risk),
+            };
+            setStateInLocalStorage(findingId, newState);
+            return newState;
           });
           break;
         default:
           setState((prevState) => {
-            return { ...prevState, [name]: value };
+            const newState = { ...prevState, [name]: value };
+            setStateInLocalStorage(findingId, newState);
+            return newState;
           });
           break;
       }
@@ -218,7 +224,7 @@ const SubmitFindings = ({
 
     const linksToCodeString = state.linksToCode.join("\n");
     const details = isQaOrGasFinding ? state.qaGasDetails : state.details;
-    const markdownBody = `# Lines of code\n\n${linksToCodeString}\n\n\n# Vulnerability details\n\n${details}\n\n`;
+    const markdownBody = `# Lines of code\n\n${linksToCodeString}\n\n\n# Vulnerability details\n\n${details}`;
     const formattedBody = isQaOrGasFinding ? details : markdownBody;
     const emailAddressList: string[] = additionalEmailAddresses.filter(
       (email) => !!email
@@ -246,6 +252,8 @@ const SubmitFindings = ({
         if (typeof window !== `undefined`) {
           window.localStorage.removeItem(findingId);
         }
+        // clear location state
+        navigate("", { state: {} });
       } else {
         const { error } = await response.json();
         if (error.startsWith("Failed to send confirmation email")) {

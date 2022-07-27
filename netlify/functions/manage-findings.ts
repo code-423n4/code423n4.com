@@ -7,7 +7,6 @@ import { createOrUpdateTextFile } from "@octokit/plugin-create-or-update-text-fi
 import {
   Finding,
   FindingEditRequest,
-  FindingResponse,
   FindingsResponse,
 } from "../../types/findings";
 
@@ -17,7 +16,7 @@ import {
   getAvailableFindings,
   wardenFindingsForContest,
 } from "../util/github-utils";
-import { getUserTeams } from "../util/user-utils";
+import { getUserTeams, checkAndUpdateTeamAddress } from "../util/user-utils";
 
 async function getFinding(
   username: string,
@@ -57,17 +56,12 @@ async function getFinding(
   }
 
   if (finding) {
-    const res: FindingResponse = {
-      name: submission_files[0].handle,
-      finding: finding,
-    };
-
     return {
       statusCode: 200,
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(res),
+      body: JSON.stringify(finding),
     };
   }
 
@@ -89,8 +83,8 @@ async function getFindings(
   // given active! contest id
   // [x] warden can see own findings
   // [x] warden can see team findings
-  // [ ] can see specific finding
-  // [ ] team findings optional? (query param)
+  // [x] can see specific finding
+  // [x] team findings optional? (query param)
 
   const contest = await getContest(contestId);
 
@@ -107,15 +101,11 @@ async function getFindings(
   );
 
   const res: FindingsResponse = {
-    user: wardenFindings.map((finding) => ({
-      ...finding,
-      attributedTo: username,
-    })),
+    user: wardenFindings,
     teams: {},
   };
 
   if (includeTeams) {
-    // todo: move to util?
     const teamHandles = await getUserTeams(username);
 
     for (const teamHandle of teamHandles) {
@@ -124,10 +114,7 @@ async function getFindings(
         teamHandle,
         contest
       );
-      res.teams[teamHandle] = teamFindings.map((finding) => ({
-        ...finding,
-        attributedTo: teamHandle,
-      }));
+      res.teams[teamHandle] = teamFindings;
     }
   }
 
@@ -145,7 +132,7 @@ async function editFinding(
   contestId: number,
   issueNumber: number,
   data: FindingEditRequest
-): Promise<Response> {
+): Promise<void> {
   // an authenticated warden can edit a finding
   //   for active contests
   //     their own (their teams')
@@ -178,7 +165,6 @@ async function editFinding(
 
   const canAccess =
     available_findings.find((f) => {
-      console.log(f.issueNumber, issueNumber);
       if (f.issueNumber === issueNumber) {
         return true;
       }
@@ -193,13 +179,16 @@ async function editFinding(
 
   // did attribution change?
   if (data.attributedTo) {
-    // if team (attributedTo is not c4User) and team address is not already saved, save team address
-
+    await checkAndUpdateTeamAddress(
+      data.attributedTo.newValue,
+      username,
+      data.attributedTo.address
+    );
     const oldPath = `data/${data.attributedTo.oldValue}-${issueNumber}.json`;
     const newPath = `data/${data.attributedTo.newValue}-${issueNumber}.json`;
 
     // read issue-json
-    const old_contents = await client.request(
+    const oldContents = await client.request(
       "GET /repos/{owner}/{repo}/contents/{path}",
       {
         owner: process.env.GITHUB_REPO_OWNER!,
@@ -209,10 +198,11 @@ async function editFinding(
     );
 
     // change "address" value to data.wallet
-    const new_data = JSON.parse(
-      Buffer.from(old_contents.data.content, "base64").toString()
+    const newContents = JSON.parse(
+      Buffer.from(oldContents.data.content, "base64").toString()
     );
-    new_data.address = data.attributedTo.address;
+    newContents.handle = data.attributedTo.newValue;
+    newContents.address = data.attributedTo.address;
 
     // write/rename issue-json
     // save the re-attributed
@@ -220,12 +210,12 @@ async function editFinding(
       owner: process.env.GITHUB_REPO_OWNER!,
       repo: repoName,
       path: newPath,
-      content: JSON.stringify(new_data),
+      content: JSON.stringify(newContents),
       message: `Issue #${issueNumber} attribution changed from ${data.attributedTo.oldValue} to ${data.attributedTo.newValue} by ${username}`,
     });
 
     if (!newRes.updated) {
-      throw "Problem writing new file";
+      throw { message: "Problem writing new file" };
     }
 
     // delete the original
@@ -238,7 +228,7 @@ async function editFinding(
     });
 
     if (!oldRes.deleted) {
-      throw "Problem removing old file";
+      throw { message: "Problem removing old file" };
     }
 
     edited = true;
@@ -248,28 +238,46 @@ async function editFinding(
   if (data.risk) {
     // these are GitHub-named already?
     // remove label corresponding to data.risk.oldValue
-    await client.request(
-      "DELETE /repos/{owner}/{repo}/issues/{issue_number}/labels/{name}",
-      {
-        owner: process.env.GITHUB_REPO_OWNER!,
-        repo: repoName,
-        issue_number: issueNumber,
-        // name: RiskCodeToGithubLabel[data.risk.oldValue],
-        name: data.risk.oldValue,
-      }
-    );
+    try {
+      await client.request(
+        "DELETE /repos/{owner}/{repo}/issues/{issue_number}/labels/{name}",
+        {
+          owner: process.env.GITHUB_REPO_OWNER!,
+          repo: repoName,
+          issue_number: issueNumber,
+          // name: RiskCodeToGithubLabel[data.risk.oldValue],
+          name: data.risk.oldValue,
+        }
+      );
+    } catch (error) {
+      throw {
+        status: error.status || 500,
+        message: `Error removing old label: [${data.risk.oldValue}] - ${
+          error.message || "unknown"
+        }`,
+      };
+    }
 
     // add label corresponding to data.risk.newValue
-    await client.request(
-      "POST /repos/{owner}/{repo}/issues/{issue_number}/labels",
-      {
-        owner: process.env.GITHUB_REPO_OWNER!,
-        repo: repoName,
-        issue_number: issueNumber,
-        // labels: [RiskCodeToGithubLabel[data.risk.newValue]],
-        labels: [data.risk.newValue],
-      }
-    );
+    try {
+      await client.request(
+        "POST /repos/{owner}/{repo}/issues/{issue_number}/labels",
+        {
+          owner: process.env.GITHUB_REPO_OWNER!,
+          repo: repoName,
+          issue_number: issueNumber,
+          // labels: [RiskCodeToGithubLabel[data.risk.newValue]],
+          labels: [data.risk.newValue],
+        }
+      );
+    } catch (error) {
+      throw {
+        status: error.status || 500,
+        message: `Error adding new label: [${data.risk.newValue}] - ${
+          error.message || "unknown"
+        }`,
+      };
+    }
 
     edited = true;
   }
@@ -286,25 +294,26 @@ async function editFinding(
     edited = true;
   }
 
-  if (edited) {
-    // apply edited-by-warden label
-    await client.request(
-      "POST /repos/{owner}/{repo}/issues/{issue_number}/labels",
-      {
-        owner: process.env.GITHUB_REPO_OWNER!,
-        repo: repoName,
-        issue_number: issueNumber,
-        labels: ["edited-by-warden"],
-      }
-    );
-
-    // todo: send e-mails
+  if (!edited) {
+    // throw?
+    // {
+    //   status: 204,
+    //   body: "Nothing changed",
+    // };
+    return;
   }
 
-  return {
-    statusCode: 500,
-    body: JSON.stringify({ error: "something went wrong editing submission" }),
-  };
+  // apply edited-by-warden label
+  await client.request(
+    "POST /repos/{owner}/{repo}/issues/{issue_number}/labels",
+    {
+      owner: process.env.GITHUB_REPO_OWNER!,
+      repo: repoName,
+      issue_number: issueNumber,
+      labels: ["edited-by-warden"],
+    }
+  );
+  // todo: send e-mails
 }
 
 const handler: Handler = async (event: Event): Promise<Response> => {
@@ -354,12 +363,20 @@ const handler: Handler = async (event: Event): Promise<Response> => {
       // return await editFinding(username, data.contest, data.issue, data);
 
       const data = JSON.parse(event.body!);
-      return await editFinding(
-        username,
-        data.contest,
-        parseInt(data.issueId),
-        data
-      );
+      try {
+        await editFinding(username, data.contest, data.issue, data);
+        return {
+          statusCode: 200,
+          body: "SUCCESS!",
+        };
+      } catch (error) {
+        return {
+          statusCode: error.status || 500,
+          body: JSON.stringify({
+            error: error.message || "something went wrong editing submission",
+          }),
+        };
+      }
   }
 
   return {
