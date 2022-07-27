@@ -10,6 +10,7 @@ export interface Finding {
   createdAt: string;
   updatedAt: string;
   issueNumber: number;
+  handle: string;
 }
 
 export interface FindingEditRequest {
@@ -32,11 +33,6 @@ export interface FindingEditRequest {
 export interface FindingsResponse {
   user: Finding[];
   teams: Record<string, Finding[]>;
-}
-
-export interface FindingResponse {
-  name: string;
-  finding: Finding;
 }
 
 export interface FindingCreateRequest {

@@ -4,7 +4,11 @@ import React, { useCallback, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
 // types
-import { FindingCreateRequest, FindingEditRequest } from "../../types/findings";
+import {
+  Finding,
+  FindingCreateRequest,
+  FindingEditRequest,
+} from "../../types/findings";
 
 // hooks
 import useUser from "../hooks/UserContext";
@@ -54,7 +58,7 @@ const ReportForm = ({ data, location }) => {
   const [attributedTo, setAttributedTo] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [mode, setMode] = useState<FormMode>(FormMode.Create);
-  const [issueId, setIssueId] = useState<number | null>(null);
+  const [issueId, setIssueId] = useState<number>(0);
   const [findingId, setFindingId] = useState<string>(contestid);
   const [hasContestEnded, setHasContestEnded] = useState<boolean>(
     Date.now() > new Date(end_time).getTime()
@@ -94,7 +98,8 @@ const ReportForm = ({ data, location }) => {
         body: JSON.stringify(requestData),
       });
     },
-    [currentUser, mode]
+    // must include dependencies for functions executed by this function too
+    [currentUser, mode, issueId, attributedTo, state]
   );
 
   const getUpdatedFindingRequestData = (
@@ -106,44 +111,67 @@ const ReportForm = ({ data, location }) => {
       emailAddresses: data.emailAddresses,
     };
     if (state.title !== data.title) {
-      console.log("title changed:", state.title, "=>", data.title);
       requestData.title = data.title;
     }
     if (state.risk !== data.risk) {
-      console.log("risk changed:", state.risk, "=>", data.risk);
       requestData.risk = { oldValue: state.risk, newValue: data.risk };
     }
     if (attributedTo !== data.attributedTo) {
-      console.log(
-        "attributedTo changed:",
-        attributedTo,
-        "=>",
-        data.attributedTo
-      );
       requestData.attributedTo = {
         oldValue: attributedTo,
         newValue: data.attributedTo,
         address: data.address,
       };
     }
-
     if (data.body !== state.qaGasDetails) {
-      console.log("body changed:", state.qaGasDetails, "=>", data.body);
       requestData.body = data.body;
     }
 
-    // check if anything changed
+    // If nothing changed, do not submit
     if (
       !requestData.attributedTo &&
       !requestData.title &&
       !requestData.body &&
       !requestData.risk
     ) {
-      console.log("error - no changes to save");
       throw "There were no changes to save.";
     }
     return requestData;
   };
+
+  const initializeEditState = (finding) => {
+    // normalize whitespace
+    const normalizedBody = finding.body.replaceAll("\r\n", "\n");
+    const { links, body } = separateLinksFromBody(normalizedBody, finding.risk);
+    setMode(FormMode.Edit);
+    setIssueId(parseInt(finding.issueNumber));
+    setFindingId(`${contestid}-${finding.issueNumber}`);
+    setState({
+      title: finding.title,
+      risk: finding.risk,
+      details: body,
+      qaGasDetails: normalizedBody,
+      linksToCode: links,
+    });
+    setAttributedTo(finding.handle);
+    setFindingId(`${contestid}-${finding.issueNumber}`);
+  };
+
+  const initializeCreateState = () => {
+    setIssueId(0);
+    setFindingId(contestid);
+    setState(initialState);
+    setMode(FormMode.Create);
+    setAttributedTo(currentUser.username);
+  };
+
+  function findDiff(str1, str2) {
+    let diff = "";
+    str2.split("").forEach(function (val, i) {
+      if (val != str1.charAt(i)) diff += val;
+    });
+    return diff;
+  }
 
   useEffect(() => {
     (async () => {
@@ -152,88 +180,31 @@ const ReportForm = ({ data, location }) => {
 
         if (location.state && location.state.finding) {
           const finding = location.state.finding;
-          const { links, body } = separateLinksFromBody(
-            finding.body,
-            finding.risk
-          );
-          setMode(FormMode.Edit);
-          setIssueId(finding.issueNumber);
-          setFindingId(`${contestid}-${finding.issueNumber}`);
-          setState({
-            title: finding.title,
-            risk: finding.risk,
-            details: body,
-            qaGasDetails: finding.body,
-            linksToCode: links,
-          });
-          setAttributedTo(finding.attributedTo);
-          setIsLoading(false);
-          // ? will this swap the endpoint on normal submit?
-          setFindingId(`${contestid}-${finding.issueNumber}`);
+          initializeEditState(finding);
         } else if (location.search) {
+          const params = new URLSearchParams(location.search);
+          const id = parseInt(params.get("issue") as string);
+          if (!id) {
+            initializeCreateState();
+            return;
+          }
           try {
-            const params = new URLSearchParams(location.search);
-            const id = parseInt(params.get("issue") as string);
-            // if id?
-            // // placeholder function for getting issue by id;
-            // // will need to reshape the response to be ReportState
-            // // before passing into setting initial state
-            setMode(FormMode.Edit);
-            setIssueId(id);
-            setFindingId(`${contestid}-${id}`);
-
             const q = new URLSearchParams({
               contest: contestid as string,
               issue: id.toString(),
             });
-
-            fetch(`/.netlify/functions/manage-findings?` + q, {
-              headers: {
-                "Content-Type": "application/json",
-                "X-Authorization": `Bearer ${user?.attributes.sessionToken}`,
-                "C4-User": currentUser.username,
-              },
-            })
-              .then((response) => response.json())
-              .then((resultData) => {
-                let linksToCode = [];
-                let body = resultData.finding.body;
-                if (
-                  ["3 (High Risk)", "2 (Med Risk)"].includes(
-                    resultData.finding.risk
-                  )
-                ) {
-                  const ltcEnd = body.indexOf(
-                    "\n\n\n# Vulnerability details\n\n"
-                  );
-
-                  if (ltcEnd >= 0) {
-                    linksToCode = linksToCode.concat(
-                      body
-                        .slice("# Lines of code\n\n".length, ltcEnd)
-                        .split("\n")
-                    );
-                    body = body.slice(ltcEnd + "\n\n\n".length);
-                  }
-                }
-
-                setState({
-                  title: resultData.finding.title,
-                  risk: resultData.finding.risk,
-                  details: body,
-                  qaGasDetails: body,
-                  linksToCode: linksToCode,
-                });
-                setAttributedTo(resultData.finding.attributedTo);
-                // setState(resultData);
-                // setIsLoading(false);
-              })
-              .catch(() => {
-                //
-              })
-              .finally(() => {
-                setIsLoading(false);
-              });
+            const response = await fetch(
+              `/.netlify/functions/manage-findings?` + q,
+              {
+                headers: {
+                  "Content-Type": "application/json",
+                  "X-Authorization": `Bearer ${user?.attributes.sessionToken}`,
+                  "C4-User": currentUser.username,
+                },
+              }
+            );
+            const finding: Finding = await response.json();
+            initializeEditState(finding);
           } catch (error) {
             // @todo: decide what should happen in this case? navigate back or load new finding
             toast.error(
@@ -241,13 +212,9 @@ const ReportForm = ({ data, location }) => {
             );
           }
         } else {
-          setIssueId(0);
-          setFindingId(contestid);
-          setState(initialState);
-          setIsLoading(false);
-          setMode(FormMode.Create);
-          setAttributedTo(currentUser.username);
+          initializeCreateState();
         }
+        setIsLoading(false);
       }
     })();
   }, [currentUser, location, contestid]);

@@ -14,6 +14,7 @@ const {
   moralisAppId,
   moralisServerUrl,
 } = require("../_config");
+import { checkAndUpdateTeamAddress } from "../util/user-utils";
 
 const OctokitClient = Octokit.plugin(createPullRequest);
 const octokit = new OctokitClient({ auth: token });
@@ -36,47 +37,6 @@ async function getContestEnd(contestId) {
 
   const contest = contests.find((c) => c.contestid == contestId);
   return new Date(contest.end_time).getTime();
-}
-
-async function updateTeamData(team, newPolygonAddress) {
-  // @todo: delete this once all existing teams have added addresses
-  const teamData = {
-    handle: team.handle,
-    members: team.members,
-    link: team.link,
-  };
-  if (team.image) {
-    teamData.image = team.image;
-  }
-  const updatedTeamData = JSON.stringify(
-    {
-      ...teamData,
-      address: newPolygonAddress,
-    },
-    null,
-    2
-  );
-  const teamName = team.handle;
-  const files = {
-    [`_data/handles/${teamName}.json`]: updatedTeamData,
-  };
-  const owner = process.env.GITHUB_REPO_OWNER;
-  const body = `This auto-generated PR adds polygon address for team ${teamName}`;
-  const title = `Add address for team ${teamName}`;
-  await octokit.createPullRequest({
-    owner,
-    repo: process.env.REPO,
-    title,
-    body,
-    base: process.env.BRANCH_NAME,
-    head: `warden/${teamName}`,
-    changes: [
-      {
-        files,
-        commit: title,
-      },
-    ],
-  });
 }
 
 exports.handler = async (event) => {
@@ -200,39 +160,7 @@ exports.handler = async (event) => {
       };
     }
 
-    const isTeamSubmission = attributedTo !== user;
-    if (isTeamSubmission) {
-      const teamUrl = `${process.env.URL}/.netlify/functions/get-user?id=${attributedTo}`;
-      const teamResponse = await fetch(teamUrl);
-      if (!teamResponse.ok) {
-        return {
-          statusCode: 401,
-          body: JSON.stringify({
-            error: "You must be registered to submit findings",
-          }),
-        };
-      }
-      const teamData = await teamResponse.json();
-      if (!teamData.members || !teamData.members.includes(user)) {
-        return {
-          statusCode: 401,
-          body: JSON.stringify({
-            error: "You cannot submit findings for a team you are not on",
-          }),
-        };
-      }
-      if (!teamData.address) {
-        // create a PR to update team JSON file with team address
-        try {
-          await updateTeamData(teamData, address);
-        } catch (error) {
-          // don't throw error if this PR fails - there will likely be duplicates
-          // due to the fact that PRs take some time to review and merge and we
-          // don't want to block teams from submitting findings in the meantime
-          console.error(error);
-        }
-      }
-    }
+    await checkAndUpdateTeamAddress(attributedTo, user, address);
   } catch (error) {
     return {
       statusCode: error.status || 500,
