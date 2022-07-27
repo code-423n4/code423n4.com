@@ -2,8 +2,6 @@ const { createPullRequest } = require("octokit-plugin-create-pull-request");
 const csv = require("csvtojson");
 const dedent = require("dedent");
 const fetch = require("node-fetch");
-const formData = require("form-data");
-const Mailgun = require("mailgun.js");
 const { Moralis } = require("moralis/node");
 const { Octokit } = require("@octokit/core");
 
@@ -14,7 +12,10 @@ const {
   moralisAppId,
   moralisServerUrl,
 } = require("../_config");
-import { checkAndUpdateTeamAddress } from "../util/user-utils";
+import {
+  checkAndUpdateTeamAddress,
+  sendConfirmationEmail,
+} from "../util/user-utils";
 
 const OctokitClient = Octokit.plugin(createPullRequest);
 const octokit = new OctokitClient({ auth: token });
@@ -253,44 +254,19 @@ exports.handler = async (event) => {
     });
 
     if (apiKey && domain && process.env.EMAIL_SENDER) {
-      const mailgun = new Mailgun(formData);
-      const mg = mailgun.client({ username: "api", key: apiKey });
-
-      const recipients = `${emailAddresses.join(", ")}, ${
-        process.env.EMAIL_SENDER
-      }`;
-
       const text = dedent`
       C4 finding submitted: (risk = ${risk})
       Wallet address: ${address}
       
       ${body}
       `;
+      const subject = `C4 ${sponsor} finding: ${title}`;
 
-      const emailData = {
-        from: process.env.EMAIL_SENDER,
-        to: recipients,
-        subject: `C4 ${sponsor} finding: ${title}`,
-        text,
+      await sendConfirmationEmail(emailAddresses, subject, text);
+      return {
+        statusCode: 200,
+        body: "Issue posted successfully and confirmation email sent.",
       };
-
-      return mg.messages
-        .create(domain, emailData)
-        .then(() => {
-          return {
-            statusCode: 200,
-            body: "Issue posted successfully and confirmation email sent.",
-          };
-        })
-        .catch((err) => {
-          return {
-            statusCode: err.status || 500,
-            body: JSON.stringify({
-              error:
-                "Failed to send confirmation email. " + (err.message || err),
-            }),
-          };
-        });
     } else {
       return {
         statusCode: 200,

@@ -1,16 +1,29 @@
 import csv from "csvtojson";
 
-async function getContest(contestId) {
+export interface Contest {
+  contestid: string;
+  title: string;
+  sponsor: string;
+  details: string;
+  start_time: string;
+  end_time: string;
+  amount: string;
+  repo: string;
+  findingsRepo: string;
+  hide: "True" | "False";
+  league: string;
+}
+
+async function getContest(contestId: number): Promise<Contest | undefined> {
   const allContests = await csv().fromFile("_data/contests/contests.csv");
-  let contests = allContests;
+  let contests: Contest[] = allContests;
   if (process.env.NODE_ENV === "development") {
     const testContests = await csv().fromFile(
       "_test-data/contests/contests.csv"
     );
     contests = contests.concat(testContests);
   }
-  //const contests = await csv().fromFile("_data/contests/contests.csv");
-  const contest = contests.find((c) => c.contestid == contestId);
+  const contest = contests.find((c) => parseInt(c.contestid) == contestId);
   return contest;
 }
 

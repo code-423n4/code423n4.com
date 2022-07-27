@@ -2,8 +2,10 @@ import { readFileSync } from "fs";
 import fetch from "node-fetch";
 const { Octokit } = require("@octokit/core");
 const { createPullRequest } = require("octokit-plugin-create-pull-request");
+const formData = require("form-data");
+const Mailgun = require("mailgun.js");
 
-const { token } = require("../_config");
+const { token, apiKey, domain } = require("../_config");
 
 import { isDangerousHandle } from "../util/validation-utils";
 
@@ -120,4 +122,26 @@ export async function checkAndUpdateTeamAddress(
       console.error(error);
     }
   }
+}
+
+export async function sendConfirmationEmail(
+  emailAddresses: string[],
+  subject: string,
+  body: string
+) {
+  const mailgun = new Mailgun(formData);
+  const mg = mailgun.client({ username: "api", key: apiKey });
+
+  const recipients = `${emailAddresses.join(", ")}, ${
+    process.env.EMAIL_SENDER
+  }`;
+
+  const emailData = {
+    from: process.env.EMAIL_SENDER,
+    to: recipients,
+    subject,
+    text: body,
+  };
+
+  return mg.messages.create(domain, emailData);
 }
