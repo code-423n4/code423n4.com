@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { formatDistance, differenceInSeconds } from "date-fns";
+import { formatDistance } from "date-fns";
 import { Link } from "gatsby";
 import React, { PropsWithChildren } from "react";
 
@@ -13,7 +13,6 @@ import useUser from "../hooks/UserContext";
 import Login from "./Login/Login";
 // styles
 import * as styles from "./FindingsList.module.scss";
-import * as formStyles from "./form/Form.module.scss";
 
 interface FindingsListProps extends PropsWithChildren {
   submissionPath: string;
@@ -98,11 +97,9 @@ const FindingsList = ({
     </ul>
   ) : (
     <div className="centered-text">
-      <div className={formStyles.Form}>
-        <h1>Please login</h1>
-        <p>You must be logged in to view your findings.</p>
-        <Login displayAsButtons={true} />
-      </div>
+      <h1>Please log in</h1>
+      <p>You must be logged in to view your findings.</p>
+      <Login displayAsButtons={true} />
     </div>
   );
 };
