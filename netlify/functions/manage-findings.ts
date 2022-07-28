@@ -8,7 +8,8 @@ import {
   Finding,
   FindingEditRequest,
   FindingsResponse,
-} from "../../types/findings";
+} from "../../types/finding";
+import { Contest } from "../../types/contest";
 
 import { checkAuth } from "../util/auth-utils";
 import { getContest, isContestActive } from "../util/contest-utils";
@@ -26,12 +27,10 @@ import { apiKey, domain } from "../_config";
 
 async function getFinding(
   username: string,
-  contestId: number,
-  issueId: number
+  issueId: number,
+  contest: Contest
 ): Promise<Response> {
   const client = new Octokit({ auth: process.env.GITHUB_TOKEN });
-
-  const contest = await getContest(contestId);
 
   const submission_files = (
     await getAvailableFindings(client, username, contest)
@@ -82,21 +81,16 @@ async function getFinding(
 
 async function getFindings(
   username: string,
-  contestId: number,
-  includeTeams: boolean = true
+  includeTeams: boolean = true,
+  contest: Contest
 ): Promise<Response> {
   // first phase:
   // given active! contest id
   // [x] warden can see own findings
   // [x] warden can see team findings
   // [x] can see specific finding
-  // [x] team findings optional? (query param)
-
-  const contest = await getContest(contestId);
-
-  if (!isContestActive(contest)) {
-    // throw?
-  }
+  // [x] team findings
+  // [ ] make team findings optional? (query param)
 
   const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
 
@@ -135,13 +129,10 @@ async function getFindings(
 
 async function editFinding(
   username: string,
-  contestId: number,
   issueNumber: number,
-  data: FindingEditRequest
+  data: FindingEditRequest,
+  contest: Contest
 ): Promise<void> {
-  // an authenticated warden can edit a finding
-  //   for active contests
-  //     their own (their teams')
   const CustOcto = Octokit.plugin(createOrUpdateTextFile);
   const client = new CustOcto({ auth: process.env.GITHUB_TOKEN });
 
@@ -155,17 +146,8 @@ async function editFinding(
   //   G: "G (Gas Optimizations)",
   // };
 
-  // get contest to find repo
-  const contest = await getContest(contestId);
-  if (!contest) {
-    throw { message: "Not a valid contest" };
-  }
   const repoName = contest.findingsRepo.split("/").slice(-1)[0];
 
-  // modifications to issueid
-
-  // check for authorization to edit --
-  // the issue is warden or team
   const available_findings = await getAvailableFindings(
     client,
     username,
@@ -181,7 +163,7 @@ async function editFinding(
 
   if (!canAccess) {
     throw {
-      message: "no submission found to edit",
+      message: "No submission found to edit",
     };
   }
 
@@ -364,7 +346,33 @@ const handler: Handler = async (event: Event): Promise<Response> => {
     };
   }
 
-  // todo: active contest only?
+  // should contestId always be included in query params for consistency?
+  let contestId;
+  if (event.queryStringParameters?.contest) {
+    contestId = parseInt(event.queryStringParameters?.contest);
+  } else if (event.body) {
+    const data = JSON.parse(event.body);
+    contestId = data.contest;
+  }
+
+  // make sure the given contest is still active
+  const contest = await getContest(contestId);
+  if (!contest) {
+    return {
+      statusCode: 422,
+      body: JSON.stringify({
+        error: "Contest not found",
+      }),
+    };
+  }
+  if (!isContestActive(contest)) {
+    return {
+      statusCode: 400,
+      body: JSON.stringify({
+        error: "This contest has ended.",
+      }),
+    };
+  }
 
   // simple param filling
   let username;
@@ -374,11 +382,6 @@ const handler: Handler = async (event: Event): Promise<Response> => {
 
   switch (event.httpMethod) {
     case "GET":
-      let contestId;
-      if (event.queryStringParameters?.contest) {
-        contestId = parseInt(event.queryStringParameters?.contest);
-      }
-
       let issueNumber;
       if (event.queryStringParameters?.issue) {
         issueNumber = parseInt(event.queryStringParameters?.issue);
@@ -390,17 +393,14 @@ const handler: Handler = async (event: Event): Promise<Response> => {
       // }
 
       if (issueNumber !== undefined) {
-        return await getFinding(username, contestId, issueNumber);
+        return await getFinding(username, issueNumber, contest);
       } else {
-        return await getFindings(username, contestId, includeTeams);
+        return await getFindings(username, includeTeams, contest);
       }
     case "POST":
-      // const data: FindingEditRequest = JSON.parse(event.body!);
-      // return await editFinding(username, data.contest, data.issue, data);
-
-      const data = JSON.parse(event.body!);
+      const data: FindingEditRequest = JSON.parse(event.body!);
       try {
-        await editFinding(username, data.contest, data.issue, data);
+        await editFinding(username, data.issue, data, contest);
         return {
           statusCode: 200,
           body: "SUCCESS!",

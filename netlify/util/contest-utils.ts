@@ -1,18 +1,5 @@
 import csv from "csvtojson";
-
-export interface Contest {
-  contestid: string;
-  title: string;
-  sponsor: string;
-  details: string;
-  start_time: string;
-  end_time: string;
-  amount: string;
-  repo: string;
-  findingsRepo: string;
-  hide: "True" | "False";
-  league: string;
-}
+import { Contest } from "../../types/contest";
 
 async function getContest(contestId: number): Promise<Contest | undefined> {
   const allContests = await csv().fromFile("_data/contests/contests.csv");
@@ -27,7 +14,7 @@ async function getContest(contestId: number): Promise<Contest | undefined> {
   return contest;
 }
 
-function isContestActive(contest) {
+function isContestActive(contest: Contest): boolean {
   if (!contest) {
     return false;
   }

@@ -5,6 +5,8 @@ const { createPullRequest } = require("octokit-plugin-create-pull-request");
 const formData = require("form-data");
 const Mailgun = require("mailgun.js");
 
+import { TeamData } from "../../types/user";
+
 const { token, apiKey, domain } = require("../_config");
 
 import { isDangerousHandle } from "../util/validation-utils";
@@ -31,28 +33,20 @@ export async function findUser(userHandle) {
   }
 }
 
-export async function getUserTeams(username) {
-  let teamHandles = [];
+export async function getUserTeams(username: string): Promise<string[]> {
+  let teamHandles: string[] = [];
 
   const teamUrl = `${process.env.URL}/.netlify/functions/get-team?id=${username}`;
   const teams = await fetch(teamUrl);
 
   if (teams.status === 200) {
-    const teamsData = await teams.json();
+    const teamsData: TeamData[] = await teams.json();
     teamHandles = teamsData.map((team) => team.handle);
   }
 
   return teamHandles;
 }
 
-interface TeamData {
-  handle: string;
-  members: string[];
-  link?: string;
-  image?: string;
-}
-
-// @todo: delete this once all existing teams have added addresses
 export async function checkAndUpdateTeamAddress(
   attributedTo,
   user,
@@ -66,15 +60,16 @@ export async function checkAndUpdateTeamAddress(
   const teamUrl = `${process.env.URL}/.netlify/functions/get-user?id=${attributedTo}`;
   const teamResponse = await fetch(teamUrl);
   if (!teamResponse.ok) {
-    throw { status: 401, message: "You must be registered to submit findings" };
+    throw { status: 401, message: "Unauthorized" };
   }
   const team = await teamResponse.json();
   if (!team.members || !team.members.includes(user)) {
     throw {
       status: 401,
-      message: "You cannot submit findings for a team you are not on",
+      message: "Unauthorized",
     };
   }
+  // @todo: delete this once all existing teams have added addresses
   if (!team.address) {
     // create a PR to update team JSON file with team address
     try {
