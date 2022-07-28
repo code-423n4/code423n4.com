@@ -42,7 +42,6 @@ const FindingsList = ({
         </li>
       ) : (
         findings.map((finding) => {
-          const updated = new Date(finding.updatedAt);
           const created = new Date(finding.createdAt);
           const now = new Date();
           return (
