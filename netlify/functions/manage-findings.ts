@@ -85,7 +85,7 @@ async function getFindings(
   contest: Contest
 ): Promise<Response> {
   // first phase:
-  // given active! contest id
+  // given active contest id
   // [x] warden can see own findings
   // [x] warden can see team findings
   // [x] can see specific finding
@@ -220,6 +220,7 @@ async function editFinding(
 
     emailBody =
       `Attribution changed from ${data.attributedTo.oldValue} to ${data.attributedTo.newValue}\n\n` +
+      `Wallet address: ${data.attributedTo.address}` +
       emailBody;
     edited = true;
   }
