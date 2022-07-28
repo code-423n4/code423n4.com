@@ -513,7 +513,6 @@ const SubmitFindings = ({
             })}
           </fieldset>
           <Agreement />
-          {/* @todo: add optional cancel button */}
           <div className={styles.ButtonsWrapper}>
             {cancelButtonText && (
               <button

@@ -226,8 +226,8 @@ const ReportForm = ({ data, location }) => {
     let body = issueBody;
     let linksToCode: string[] = [];
 
-    // @todo: extract lines of code from issue body for medium and high issues
-    // body is generated with: # Lines of code\n\n${linksToCodeString}\n\n\n# Vulnerability details\n\n${details}\n\n
+    // extract lines of code from issue body for medium and high issues
+    // body is generated with: # Lines of code\n\n${linksToCodeString}\n\n\n# Vulnerability details\n\n${details}
     if (["3 (High Risk)", "2 (Med Risk)"].includes(risk)) {
       const ltcEnd = body.indexOf("\n\n\n# Vulnerability details\n\n");
 
@@ -272,8 +272,6 @@ const ReportForm = ({ data, location }) => {
           </Link>
         </div>
       ) : (
-        // @todo: pass in dynamic submit button and cancel button
-        // @todo: remove allHandlesJson dependency (and page query)
         <SubmitFindings
           sponsor={sponsor.name}
           contest={contestid}

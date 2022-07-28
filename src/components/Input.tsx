@@ -31,16 +31,18 @@ export function Input({
   value,
   canRemove = false,
   handleChange,
-  handleRemoveInputField = undefined,
+  handleRemoveInputField,
   validator,
   button,
   handleButtonClick,
 }: InputProps) {
-  const [isInvalid, setIsInvalid] = useState(false);
-  const [validationErrors, setValidationErrors] = useState([]);
+  const [isInvalid, setIsInvalid] = useState<boolean>(false);
+  const [validationErrors, setValidationErrors] = useState<
+    (string | ReactNode)[]
+  >([]);
 
   const validate = (): void => {
-    let errorMessages = [];
+    let errorMessages: (string | ReactNode)[] = [];
     if (validator) {
       const validationErrors = validator(value);
       if (validationErrors.length > 0) {
@@ -82,7 +84,7 @@ export function Input({
           onBlur={validate}
           onChange={handleChange}
         />
-        {canRemove && (
+        {canRemove && handleRemoveInputField && (
           <button
             className={styles.DeleteButton}
             type="button"

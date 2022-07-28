@@ -62,6 +62,7 @@ async function fetchReadmeMarkdown(contestNode) {
 }
 
 async function fetchSocialImage(contestNode) {
+  // @todo: fetch without auth
   const { repository } = await graphqlWithAuth(
     `query socialImage($repo: String!) {
     repository(owner: "${process.env.GITHUB_CONTEST_REPO_OWNER}", name: $repo) {

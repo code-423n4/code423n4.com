@@ -1,5 +1,5 @@
 import { navigate } from "gatsby";
-import React, { useCallback, useState, useRef } from "react";
+import React, { useCallback, useState, useRef, ReactNode } from "react";
 import { useMoralis } from "react-moralis";
 
 // hooks
@@ -8,7 +8,9 @@ import useUser from "../hooks/UserContext";
 // components
 import Form from "./form/Form";
 import { Input } from "./Input";
-import WardenField from "../components/reporter/widgets/WardenField";
+import WardenField, {
+  WardenFieldOption,
+} from "../components/reporter/widgets/WardenField";
 
 // styles
 import * as widgetStyles from "../components/reporter/widgets/Widgets.module.scss";
@@ -22,7 +24,7 @@ interface teamState {
 
 interface TeamRegistrationFormProps {
   handles: Set<string>;
-  wardens: { value: string; image: unknown }[];
+  wardens: WardenFieldOption[];
 }
 
 const initialState: teamState = {
@@ -53,9 +55,9 @@ export default function TeamRegistrationForm({
   const { user, isInitialized } = useMoralis();
 
   const [state, setState] = useState(initialState);
-  const [teamMembers, setTeamMembers] = useState<
-    { value: string; image: unknown }[]
-  >([wardens.find((warden) => warden.value === currentUser.username)]);
+  const [teamMembers, setTeamMembers] = useState<WardenFieldOption[]>([
+    wardens.find((warden) => warden.value === currentUser.username)!,
+  ]);
   const avatarInputRef = useRef<HTMLInputElement>();
 
   const handleChange = useCallback(
@@ -125,9 +127,10 @@ export default function TeamRegistrationForm({
     const url = `/.netlify/functions/register-team`;
     if (!currentUser.isLoggedIn || !user || !isInitialized) {
       navigate("/");
+      return;
     }
 
-    let image = undefined;
+    let image: unknown = undefined;
     const members = teamMembers.map((member) => member.value);
 
     if (state.avatar) {
@@ -169,8 +172,8 @@ export default function TeamRegistrationForm({
   ]);
 
   const validateTeamName = useCallback(
-    (teamName: string): string[] => {
-      const errors = [];
+    (teamName: string): (string | ReactNode)[] => {
+      const errors: (string | ReactNode)[] = [];
       if (teamName.match(/^[0-9a-zA-Z_\-]+$/) === null) {
         errors.push(
           "Supports alphanumeric characters, underscores, and hyphens"
@@ -185,8 +188,8 @@ export default function TeamRegistrationForm({
   );
 
   const validateTeamMembers = useCallback(
-    (members: { value: string; image: string }[]): string[] => {
-      const errors = [];
+    (members): (string | ReactNode)[] => {
+      const errors: (string | ReactNode)[] = [];
       if (members.length < 2) {
         errors.push("You must have at least 2 members on a team.");
       }
@@ -198,8 +201,8 @@ export default function TeamRegistrationForm({
     [currentUser]
   );
 
-  const validatePolygonAddress = (address: string): string[] => {
-    const errors = [];
+  const validatePolygonAddress = (address: string): (string | ReactNode)[] => {
+    const errors: (string | ReactNode)[] = [];
     if (address.length !== 42) {
       errors.push("Polygon address must be 42 characters long.");
     }
@@ -230,7 +233,7 @@ export default function TeamRegistrationForm({
           required={true}
           options={wardens}
           onChange={(e) => {
-            setTeamMembers(e.target.value || []);
+            setTeamMembers((e.target.value as WardenFieldOption[]) || []);
           }}
           fieldState={teamMembers}
           isMulti={true}
@@ -250,7 +253,7 @@ export default function TeamRegistrationForm({
         <Input
           name="link"
           placeholder="https://twitter.com/code4rena"
-          value={state.link}
+          value={state.link || ""}
           label="Link (Optional)"
           helpText="Link your leaderboard entry to a personal website or social media account."
           handleChange={handleChange}
@@ -269,6 +272,7 @@ export default function TeamRegistrationForm({
             id="avatar"
             name="avatar"
             accept=".png,.jpg,.jpeg,.webp"
+            // @ts-ignore // @todo: solve this typescript error
             ref={avatarInputRef}
             onChange={handleAvatarChange}
           />

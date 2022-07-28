@@ -34,9 +34,9 @@ interface UserState {
 
 interface User {
   currentUser: UserState;
-  logUserOut?: () => void;
-  connectWallet?: () => Promise<void>;
-  reFetchUser?: () => Promise<void>;
+  logUserOut: () => void;
+  connectWallet: () => Promise<void>;
+  reFetchUser: () => Promise<void>;
 }
 
 const DEFAULT_STATE: UserState = {
@@ -52,7 +52,12 @@ const DEFAULT_STATE: UserState = {
   link: undefined,
 };
 
-const UserContext = createContext<User>({ currentUser: DEFAULT_STATE });
+const UserContext = createContext<User>({
+  currentUser: DEFAULT_STATE,
+  logUserOut: () => {},
+  connectWallet: async () => {},
+  reFetchUser: async () => {},
+});
 
 const UserProvider = ({ children }) => {
   const { isAuthenticated, logout, user, isInitialized } = useMoralis();

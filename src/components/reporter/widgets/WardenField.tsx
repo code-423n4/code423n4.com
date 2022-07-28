@@ -1,6 +1,6 @@
 import Avatar from "react-avatar";
 import clsx from "clsx";
-import React, { useCallback, useState } from "react";
+import React, { ReactNode, useCallback, useState } from "react";
 
 import Select from "react-select";
 
@@ -22,26 +22,49 @@ const WardenOptionLabel = ({ value, image }) => {
   );
 };
 
+export interface WardenFieldOption {
+  value: string;
+  image: unknown;
+}
+
+interface WardenFieldProps<T> {
+  name: string;
+  required?: boolean;
+  options: WardenFieldOption[];
+  onChange: (e: { target: { value: T; name: string } }) => void;
+  fieldState: T;
+  validator?: (value: T) => (string | ReactNode)[];
+  label?: string;
+  helpText?: string;
+  isMulti?: boolean;
+}
+
 const WardenField = ({
   name,
-  required,
+  required = false,
   options,
   onChange,
   fieldState,
   validator,
-  label = undefined,
-  helpText = undefined,
+  label,
+  helpText,
   isMulti = false,
-}) => {
-  const [isInvalid, setIsInvalid] = useState(false);
-  const [validationErrors, setValidationErrors] = useState([]);
+}: WardenFieldProps<WardenFieldOption[] | string>) => {
+  const [isInvalid, setIsInvalid] = useState<boolean>(false);
+  const [validationErrors, setValidationErrors] = useState<
+    (string | ReactNode)[]
+  >([]);
 
   const handleChange = useCallback(
     (option) => {
       // @todo: pass the option object itself to the onChange handler
-      // and process the data in the consumer
+      // and process the data in the consumer instead of trying to
+      // reshape into a change event type
       const value = option && option.value ? option.value : "";
-      const target = {
+      const target: {
+        value: WardenFieldOption[] | string;
+        name: string;
+      } = {
         name,
         value: isMulti ? option : value,
       };
@@ -51,14 +74,14 @@ const WardenField = ({
   );
 
   const validate = () => {
-    let errorMessages = [];
+    let errorMessages: (string | ReactNode)[] = [];
     if (validator) {
       const validationErrors = validator(fieldState);
       if (validationErrors.length > 0) {
         errorMessages = errorMessages.concat(validationErrors);
       }
     }
-    if (required && (fieldState === "" || fieldState === undefined)) {
+    if (required && !fieldState) {
       errorMessages.push("This field is required");
     }
     if (errorMessages.length > 0) {

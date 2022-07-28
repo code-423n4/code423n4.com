@@ -17,6 +17,7 @@ const Login = ({ displayAsButtons = false }) => {
   const [isMetaMaskEnabled, setIsMetaMaskEnabled] = useState(false);
 
   useEffect(() => {
+    // @ts-ignore // @todo: fix typescript error
     if (typeof window !== "undefined" && window.ethereum) {
       setIsMetaMaskEnabled(true);
     }
@@ -222,7 +223,7 @@ const Login = ({ displayAsButtons = false }) => {
               href={isMetaMaskEnabled ? "" : "https://metamask.io/"}
               target="_blank"
               rel="noreferrer"
-              onClick={isMetaMaskEnabled ? (e) => handleLogin(e) : null}
+              onClick={isMetaMaskEnabled ? (e) => handleLogin(e) : undefined}
               className={styles.Link}
             >
               <img
