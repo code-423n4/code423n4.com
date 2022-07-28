@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 // types
 import { Field } from "./widgets/Widgets";
 import { ReportState } from "../../templates/ReportForm";
-import { FindingCreateRequest } from "../../../types/findings";
+import { FindingCreateRequest } from "../../../types/finding";
 
 // helpers
 import {

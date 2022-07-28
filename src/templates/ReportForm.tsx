@@ -8,7 +8,7 @@ import {
   Finding,
   FindingCreateRequest,
   FindingEditRequest,
-} from "../../types/findings";
+} from "../../types/finding";
 
 // hooks
 import useUser from "../hooks/UserContext";

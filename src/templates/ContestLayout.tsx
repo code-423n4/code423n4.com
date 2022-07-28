@@ -6,7 +6,7 @@ import React, { useEffect, useState } from "react";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 
 // types
-import { FindingsResponse } from "../../types/findings";
+import { FindingsResponse } from "../../types/finding";
 // helpers
 import { getDates } from "../utils/time";
 // hooks

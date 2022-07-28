@@ -12,6 +12,8 @@ const {
   moralisAppId,
   moralisServerUrl,
 } = require("../_config");
+
+import { getContest, isContestActive } from "../util/contest-utils";
 import {
   checkAndUpdateTeamAddress,
   sendConfirmationEmail,
@@ -26,18 +28,6 @@ function isDangerousHandle(s) {
 
 function isDangerousRepo(s) {
   return s.match(/^[0-9a-zA-Z\-]+$/) === null;
-}
-
-async function getContestEnd(contestId) {
-  let contests;
-  if (process.env.NODE_ENV === "development") {
-    contests = await csv().fromFile("_test-data/contests/contests.csv");
-  } else {
-    contests = await csv().fromFile("_data/contests/contests.csv");
-  }
-
-  const contest = contests.find((c) => c.contestid == contestId);
-  return new Date(contest.end_time).getTime();
 }
 
 exports.handler = async (event) => {
@@ -191,10 +181,18 @@ exports.handler = async (event) => {
     };
   }
 
-  // make sure finding was submitted within the contest window, allowing 5 sec padding
   try {
-    const contestEnd = await getContestEnd(contest);
-    if (Date.now() - 5000 > contestEnd) {
+    const currentContest = await getContest(contest);
+    if (!currentContest) {
+      return {
+        statusCode: 422,
+        body: JSON.stringify({
+          error: "Contest not found",
+        }),
+      };
+    }
+    // make sure finding was submitted within the contest window
+    if (!isContestActive(currentContest)) {
       return {
         statusCode: 400,
         body: JSON.stringify({
@@ -203,7 +201,6 @@ exports.handler = async (event) => {
       };
     }
   } catch (error) {
-    console.error(error);
     return {
       statusCode: 422,
       body: JSON.stringify({

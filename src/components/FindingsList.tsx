@@ -4,7 +4,7 @@ import { Link } from "gatsby";
 import React, { PropsWithChildren } from "react";
 
 // types
-import { Finding } from "../../types/findings";
+import { Finding } from "../../types/finding";
 // helpers
 import { transformColor } from "../utils/color";
 // hooks

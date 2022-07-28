@@ -2,7 +2,7 @@ import { Octokit } from "@octokit/core";
 
 import { getUserTeams } from "./user-utils";
 
-import { Finding } from "../../types/findings";
+import { Finding } from "../../types/finding";
 
 const firstPageQuery = `
 query ($name: String!, $owner: String!) {
@@ -181,7 +181,7 @@ async function getSubmittedFindingsFromFolder(
 async function getAvailableFindings(
   client: Octokit,
   username: string,
-  contest,
+  contest
 ) {
   const repoName = contest.findingsRepo.split("/").slice(-1)[0];
 
