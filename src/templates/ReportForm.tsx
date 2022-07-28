@@ -183,15 +183,15 @@ const ReportForm = ({ data, location }) => {
           initializeEditState(finding);
         } else if (location.search) {
           const params = new URLSearchParams(location.search);
-          const id = parseInt(params.get("issue") as string);
+          const id = params.get("issue");
           if (!id) {
             initializeCreateState();
             return;
           }
           try {
             const q = new URLSearchParams({
-              contest: contestid as string,
-              issue: id.toString(),
+              contest: contestid,
+              issue: id,
             });
             const response = await fetch(
               `/.netlify/functions/manage-findings?` + q,

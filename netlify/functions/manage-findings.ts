@@ -27,8 +27,8 @@ import { apiKey, domain } from "../_config";
 
 async function getFinding(
   username: string,
-  issueId: number,
-  contest: Contest
+  contest: Contest,
+  issueId: number
 ): Promise<Response> {
   const client = new Octokit({ auth: process.env.GITHUB_TOKEN });
 
@@ -81,8 +81,8 @@ async function getFinding(
 
 async function getFindings(
   username: string,
-  includeTeams: boolean = true,
-  contest: Contest
+  contest: Contest,
+  includeTeams: boolean = true
 ): Promise<Response> {
   // first phase:
   // given active contest id
@@ -90,7 +90,7 @@ async function getFindings(
   // [x] warden can see team findings
   // [x] can see specific finding
   // [x] team findings
-  // [ ] make team findings optional? (query param)
+  // [x] make team findings optional
 
   const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
 
@@ -129,9 +129,9 @@ async function getFindings(
 
 async function editFinding(
   username: string,
+  contest: Contest,
   issueNumber: number,
-  data: FindingEditRequest,
-  contest: Contest
+  data: FindingEditRequest
 ): Promise<void> {
   const CustOcto = Octokit.plugin(createOrUpdateTextFile);
   const client = new CustOcto({ auth: process.env.GITHUB_TOKEN });
@@ -389,19 +389,20 @@ const handler: Handler = async (event: Event): Promise<Response> => {
       }
 
       let includeTeams = true;
+      // @todo: use flag to include teams in query params
       // if (req.queryStringParameters?.includeTeams) {
       // includeTeams = req.queryStringParameters?.includeTeams)
       // }
 
       if (issueNumber !== undefined) {
-        return await getFinding(username, issueNumber, contest);
+        return await getFinding(username, contest, issueNumber);
       } else {
-        return await getFindings(username, includeTeams, contest);
+        return await getFindings(username, contest, includeTeams);
       }
     case "POST":
       const data: FindingEditRequest = JSON.parse(event.body!);
       try {
-        await editFinding(username, data.issue, data, contest);
+        await editFinding(username, contest, data.issue, data);
         return {
           statusCode: 200,
           body: "SUCCESS!",

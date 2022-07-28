@@ -232,7 +232,7 @@ exports.handler = async (event) => {
       contest,
       handle: attributedTo,
       address,
-      risk: risk.slice(0, 1),
+      risk: risk.slice(0, 1), // @todo: explicit mapping
       title,
       issueId,
       issueUrl,
