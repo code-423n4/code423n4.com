@@ -1,11 +1,11 @@
-import path from "path";
-import { createFilePath } from "gatsby-source-filesystem";
-import { graphql } from "@octokit/graphql";
 import format from "date-fns/format";
+import { createFilePath } from "gatsby-source-filesystem";
+import fetch from "node-fetch";
+import { graphql } from "@octokit/graphql";
+import path from "path";
 import webpack from "webpack";
 
 import SchemaCustomization from "./schema";
-import fetch from "node-fetch";
 
 const { token } = require("./netlify/_config");
 
