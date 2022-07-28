@@ -418,7 +418,7 @@ const handler: Handler = async (event: Event): Promise<Response> => {
   }
 
   return {
-    statusCode: 418,
+    statusCode: 405,
     body: JSON.stringify({
       error: "nuh-uh",
     }),
