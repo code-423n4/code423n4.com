@@ -5,6 +5,7 @@ const Mailgun = require("mailgun.js");
 const { Octokit } = require("@octokit/core");
 
 const { token, apiKey, domain } = require("../_config");
+const { isContestActive, getContest } = require("../util/contest-utils");
 
 const octokit = new Octokit({ auth: token });
 
@@ -17,13 +18,6 @@ function isDangerousHandle(s) {
 
 function isDangerousRepo(s) {
   return s.match(/^[0-9a-zA-Z\-]+$/) === null;
-}
-
-async function getContestEnd(contestId) {
-  contests = await csv().fromFile("_data/contests/contests.csv");
-
-  const contest = contests.find((c) => c.contestid == contestId);
-  return new Date(contest.end_time).getTime();
 }
 
 exports.handler = async (event) => {
@@ -96,8 +90,17 @@ exports.handler = async (event) => {
 
   // make sure finding was submitted within the contest window, allowing 5 sec padding
   try {
-    const contestEnd = await getContestEnd(contest);
-    if (Date.now() - 5000 > contestEnd) {
+    const currentContest = await getContest(contest);
+    if (!currentContest) {
+      return {
+        statusCode: 422,
+        body: JSON.stringify({
+          error: "Contest not found",
+        }),
+      };
+    }
+    // make sure finding was submitted within the contest window
+    if (!isContestActive(currentContest)) {
       return {
         statusCode: 400,
         body: JSON.stringify({
