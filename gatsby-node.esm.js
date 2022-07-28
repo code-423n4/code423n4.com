@@ -1,17 +1,13 @@
 import path from "path";
 import { createFilePath } from "gatsby-source-filesystem";
-import { Octokit } from "@octokit/core";
 import { graphql } from "@octokit/graphql";
 import format from "date-fns/format";
 import webpack from "webpack";
 
 import SchemaCustomization from "./schema";
+import fetch from "node-fetch";
 
 const { token } = require("./netlify/_config");
-
-const octokit = new Octokit({
-  auth: token,
-});
 
 const graphqlWithAuth = graphql.defaults({
   headers: {
@@ -56,14 +52,12 @@ function getRepoName(contestNode) {
 }
 
 async function fetchReadmeMarkdown(contestNode) {
-  const { data } = await octokit.request("GET /repos/{owner}/{repo}/readme", {
-    owner: process.env.GITHUB_CONTEST_REPO_OWNER,
-    repo: `${getRepoName(contestNode)}`,
-    headers: {
-      accept: "application/vnd.github.v3.html+json",
-    },
-  });
-
+  const response = await fetch(
+    `https://raw.githubusercontent.com/${
+      process.env.GITHUB_CONTEST_REPO_OWNER
+    }/${getRepoName(contestNode)}/main/README.md`
+  );
+  const data = await response.text();
   return data;
 }
 

@@ -1,9 +1,12 @@
 import clsx from "clsx";
 import { graphql, Link } from "gatsby";
-import DOMPurify from "isomorphic-dompurify";
 import Moralis from "moralis";
 import React, { useEffect, useState } from "react";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
+import rehypeKatex from "rehype-katex";
+import remarkBreaks from "remark-breaks";
+import remarkGfm from "remark-gfm";
+import remarkMath from "remark-math";
 
 // types
 import { FindingsResponse } from "../../types/finding";
@@ -18,6 +21,9 @@ import Countdown from "../components/Countdown";
 import DefaultLayout from "./DefaultLayout";
 import FindingsList from "../components/FindingsList";
 import WardenDetails from "../components/WardenDetails";
+import ReactMarkdown from "react-markdown";
+// styles
+import * as styles from "../components/reporter/widgets/Widgets.module.scss";
 
 enum FindingsStatus {
   Fetching = "fetching",
@@ -235,11 +241,15 @@ const ContestLayout = (props) => {
                     />
                   </div>
                 ) : (
-                  <div
-                    dangerouslySetInnerHTML={{
-                      __html: DOMPurify.sanitize(fields.readmeContent),
-                    }}
-                  />
+                  <article>
+                    <ReactMarkdown
+                      className={clsx(styles.Control, styles.Markdown)}
+                      remarkPlugins={[remarkGfm, remarkBreaks, remarkMath]}
+                      rehypePlugins={[rehypeKatex]}
+                    >
+                      {`${fields.readmeContent}`}
+                    </ReactMarkdown>
+                  </article>
                 )}
               </div>
             </TabPanel>
