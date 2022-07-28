@@ -189,4 +189,21 @@ input[type="file"].Avatar::file-selector-button {
     line-height: inherit;
     word-wrap: normal;
   }
+
+  table {
+    border-collapse: collapse;
+    margin-bottom: 16px;
+  }
+
+  tbody {
+    tr:nth-child(2n) {
+      background-color: var(--lightest-background-purple);
+    }
+  }
+
+  td,
+  th {
+    border: 1px solid var(--border-lightest-background);
+    padding: 6px 13px;
+  }
 }
