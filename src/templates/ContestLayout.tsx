@@ -1,19 +1,50 @@
-import React, { useState } from "react";
-import { graphql, Link } from "gatsby";
 import clsx from "clsx";
+import { graphql, Link } from "gatsby";
+import Moralis from "moralis";
+import React, { useEffect, useState } from "react";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
-import DOMPurify from "isomorphic-dompurify";
+import rehypeKatex from "rehype-katex";
+import remarkBreaks from "remark-breaks";
+import remarkGfm from "remark-gfm";
+import remarkMath from "remark-math";
 
+// types
+import { FindingsResponse } from "../../types/finding";
+// helpers
 import { getDates } from "../utils/time";
-
-import ContestFAQ from "../pages/contests/faq";
+// hooks
+import useUser from "../hooks/UserContext";
+// components
+import ClientOnly from "../components/ClientOnly";
 import ContestResults from "../components/ContestResults";
 import Countdown from "../components/Countdown";
 import DefaultLayout from "./DefaultLayout";
-import ClientOnly from "../components/ClientOnly";
+import FindingsList from "../components/FindingsList";
+import WardenDetails from "../components/WardenDetails";
+import ReactMarkdown from "react-markdown";
+// styles
+import * as styles from "../components/reporter/widgets/Widgets.module.scss";
+
+enum FindingsStatus {
+  Fetching = "fetching",
+  Error = "error",
+  Success = "success",
+}
 
 const ContestLayout = (props) => {
+  // state
   const [artOpen, setArtOpen] = useState(false);
+  const [findingsList, setFindingsList] = useState<FindingsResponse>({
+    user: [],
+    teams: {},
+  });
+  const [findingsStatus, setFindingsStatus] = useState<FindingsStatus>(
+    FindingsStatus.Fetching
+  );
+  const [errorMessage, setErrorMessage] = useState<string>("");
+
+  // hooks
+  const { currentUser } = useUser();
 
   const {
     title,
@@ -25,6 +56,7 @@ const ContestLayout = (props) => {
     fields,
     start_time,
     end_time,
+    contestid,
   } = props.data.contestsCsv;
 
   const { markdownRemark } = props.data;
@@ -41,6 +73,43 @@ const ContestLayout = (props) => {
       : `/reports/${props.data.markdownRemark.frontmatter.slug}`;
   }
 
+  useEffect(() => {
+    (async () => {
+      if (currentUser.isLoggedIn) {
+        const user = Moralis.User.current();
+        const sessionToken = user?.attributes.sessionToken;
+
+        try {
+          const response = await fetch(
+            `/.netlify/functions/manage-findings?contest=${contestid}`,
+            {
+              headers: {
+                "Content-Type": "application/json",
+                "X-Authorization": `Bearer ${sessionToken}`,
+                "C4-User": currentUser.username,
+              },
+            }
+          );
+
+          if (!response.ok) {
+            const { error } = await response.json();
+            setFindingsStatus(FindingsStatus.Error);
+            setErrorMessage(error);
+            return;
+          }
+          const resultData: FindingsResponse = await response.json();
+
+          setFindingsList(resultData);
+          setFindingsStatus(FindingsStatus.Success);
+        } catch (error) {
+          setFindingsStatus(FindingsStatus.Error);
+        }
+      } else {
+        setFindingsList({ user: [], teams: {} });
+      }
+    })();
+  }, [currentUser, contestid]);
+
   return (
     <DefaultLayout
       pageTitle={pageTitle}
@@ -53,7 +122,6 @@ const ContestLayout = (props) => {
           <div className="contest-tippy-top">
             {t.contestStatus === "soon" || t.contestStatus === "active" ? (
               <Countdown
-                state={t.contestStatus}
                 start={start_time}
                 end={end_time}
                 isPreview={findingsRepo === ""}
@@ -145,7 +213,7 @@ const ContestLayout = (props) => {
                 <Tab>Results</Tab>
               )}
               <Tab>Details</Tab>
-              <Tab>FAQ</Tab>
+              {t.contestStatus === "active" && <Tab>Findings</Tab>}
             </TabList>
 
             {props.data.leaderboardFindings.findings.length > 0 && (
@@ -162,11 +230,9 @@ const ContestLayout = (props) => {
                     <h1>Contest details coming soon</h1>
                     <p>Check back when this contest launches in:</p>
                     <Countdown
-                      state={t.contestStatus}
                       start={start_time}
                       end={end_time}
                       isPreview={findingsRepo === ""}
-                      text={false}
                     />
                     <img
                       src="/images/icon-details.svg"
@@ -174,19 +240,57 @@ const ContestLayout = (props) => {
                     />
                   </div>
                 ) : (
-                  <div
-                    dangerouslySetInnerHTML={{
-                      __html: DOMPurify.sanitize(fields.readmeContent),
-                    }}
-                  />
+                  <article>
+                    <ReactMarkdown
+                      className={clsx(styles.Control, styles.Markdown)}
+                      remarkPlugins={[remarkGfm, remarkBreaks, remarkMath]}
+                      rehypePlugins={[rehypeKatex]}
+                    >
+                      {`${fields.readmeContent}`}
+                    </ReactMarkdown>
+                  </article>
                 )}
               </div>
             </TabPanel>
-            <TabPanel>
-              <div className="contest-wrapper">
-                <ContestFAQ />
-              </div>
-            </TabPanel>
+            {t.contestStatus === "active" && (
+              <TabPanel>
+                <div className="contest-wrapper">
+                  {findingsStatus === FindingsStatus.Error ? (
+                    <div className="centered-text">
+                      <h3>Oops! Something went wrong.</h3>
+                      <p>{errorMessage}</p>
+                    </div>
+                  ) : (
+                    <>
+                      <FindingsList
+                        key={currentUser.username}
+                        findings={findingsList.user}
+                        submissionPath={fields.submissionPath}
+                        isLoading={findingsStatus === FindingsStatus.Fetching}
+                      >
+                        <WardenDetails
+                          image={currentUser.image}
+                          username={currentUser.username}
+                        />
+                      </FindingsList>
+                      {currentUser.teams.map((team) => (
+                        <FindingsList
+                          key={team.username}
+                          findings={findingsList.teams[team.username] || []}
+                          submissionPath={fields.submissionPath}
+                          isLoading={findingsStatus === FindingsStatus.Fetching}
+                        >
+                          <WardenDetails
+                            image={team.image}
+                            username={team.username}
+                          />
+                        </FindingsList>
+                      ))}
+                    </>
+                  )}
+                </div>
+              </TabPanel>
+            )}
           </Tabs>
         </section>
       </ClientOnly>
