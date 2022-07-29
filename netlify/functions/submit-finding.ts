@@ -2,8 +2,6 @@ const { createPullRequest } = require("octokit-plugin-create-pull-request");
 const csv = require("csvtojson");
 const dedent = require("dedent");
 const fetch = require("node-fetch");
-const formData = require("form-data");
-const Mailgun = require("mailgun.js");
 const { Moralis } = require("moralis/node");
 const { Octokit } = require("@octokit/core");
 
@@ -13,7 +11,13 @@ const {
   domain,
   moralisAppId,
   moralisServerUrl,
-} = require("./_config");
+} = require("../_config");
+
+import { getContest, isContestActive } from "../util/contest-utils";
+import {
+  checkAndUpdateTeamAddress,
+  sendConfirmationEmail,
+} from "../util/user-utils";
 
 const OctokitClient = Octokit.plugin(createPullRequest);
 const octokit = new OctokitClient({ auth: token });
@@ -24,59 +28,6 @@ function isDangerousHandle(s) {
 
 function isDangerousRepo(s) {
   return s.match(/^[0-9a-zA-Z\-]+$/) === null;
-}
-
-async function getContestEnd(contestId) {
-  let contests;
-  if (process.env.NODE_ENV === "development") {
-    contests = await csv().fromFile("_test-data/contests/contests.csv");
-  } else {
-    contests = await csv().fromFile("_data/contests/contests.csv");
-  }
-
-  const contest = contests.find((c) => c.contestid == contestId);
-  return new Date(contest.end_time).getTime();
-}
-
-async function updateTeamData(team, newPolygonAddress) {
-  // @todo: delete this once all existing teams have added addresses
-  const teamData = {
-    handle: team.handle,
-    members: team.members,
-    link: team.link,
-  };
-  if (team.image) {
-    teamData.image = team.image;
-  }
-  const updatedTeamData = JSON.stringify(
-    {
-      ...teamData,
-      address: newPolygonAddress,
-    },
-    null,
-    2
-  );
-  const teamName = team.handle;
-  const files = {
-    [`_data/handles/${teamName}.json`]: updatedTeamData,
-  };
-  const owner = process.env.GITHUB_REPO_OWNER;
-  const body = `This auto-generated PR adds polygon address for team ${teamName}`;
-  const title = `Add address for team ${teamName}`;
-  await octokit.createPullRequest({
-    owner,
-    repo: process.env.REPO,
-    title,
-    body,
-    base: process.env.BRANCH_NAME,
-    head: `warden/${teamName}`,
-    changes: [
-      {
-        files,
-        commit: title,
-      },
-    ],
-  });
 }
 
 exports.handler = async (event) => {
@@ -163,7 +114,7 @@ exports.handler = async (event) => {
   }
 
   try {
-    const userUrl = `${event.headers.origin}/.netlify/functions/get-user?id=${user}`;
+    const userUrl = `${process.env.URL}/.netlify/functions/get-user?id=${user}`;
     const userResponse = await fetch(userUrl);
     if (!userResponse.ok) {
       return {
@@ -200,44 +151,12 @@ exports.handler = async (event) => {
       };
     }
 
-    const isTeamSubmission = attributedTo !== user;
-    if (isTeamSubmission) {
-      const teamUrl = `${event.headers.origin}/.netlify/functions/get-user?id=${attributedTo}`;
-      const teamResponse = await fetch(teamUrl);
-      if (!teamResponse.ok) {
-        return {
-          statusCode: 401,
-          body: JSON.stringify({
-            error: "You must be registered to submit findings",
-          }),
-        };
-      }
-      const teamData = await teamResponse.json();
-      if (!teamData.members || !teamData.members.includes(user)) {
-        return {
-          statusCode: 401,
-          body: JSON.stringify({
-            error: "You cannot submit findings for a team you are not on",
-          }),
-        };
-      }
-      if (!teamData.address) {
-        // create a PR to update team JSON file with team address
-        try {
-          await updateTeamData(teamData, address);
-        } catch (error) {
-          // don't throw error if this PR fails - there will likely be duplicates
-          // due to the fact that PRs take some time to review and merge and we
-          // don't want to block teams from submitting findings in the meantime
-          console.error(error);
-        }
-      }
-    }
-  } catch (err) {
+    await checkAndUpdateTeamAddress(attributedTo, user, address);
+  } catch (error) {
     return {
-      statusCode: err.status || 500,
+      statusCode: error.status || 500,
       body: JSON.stringify({
-        error: err.message || "Internal server error",
+        error: error.message || "Internal server error",
       }),
     };
   }
@@ -262,10 +181,18 @@ exports.handler = async (event) => {
     };
   }
 
-  // make sure finding was submitted within the contest window, allowing 5 sec padding
   try {
-    const contestEnd = await getContestEnd(contest);
-    if (Date.now() - 5000 > contestEnd) {
+    const currentContest = await getContest(contest);
+    if (!currentContest) {
+      return {
+        statusCode: 422,
+        body: JSON.stringify({
+          error: "Contest not found",
+        }),
+      };
+    }
+    // make sure finding was submitted within the contest window
+    if (!isContestActive(currentContest)) {
       return {
         statusCode: 400,
         body: JSON.stringify({
@@ -274,7 +201,6 @@ exports.handler = async (event) => {
       };
     }
   } catch (error) {
-    console.error(error);
     return {
       statusCode: 422,
       body: JSON.stringify({
@@ -283,7 +209,7 @@ exports.handler = async (event) => {
     };
   }
 
-  const owner = process.env.CONTEST_GITHUB_REPO_OWNER;
+  const owner = process.env.GITHUB_CONTEST_REPO_OWNER;
 
   try {
     const issueResult = await octokit.request(
@@ -306,7 +232,7 @@ exports.handler = async (event) => {
       contest,
       handle: attributedTo,
       address,
-      risk,
+      risk: risk.slice(0, 1), // @todo: explicit mapping
       title,
       issueId,
       issueUrl,
@@ -325,44 +251,19 @@ exports.handler = async (event) => {
     });
 
     if (apiKey && domain && process.env.EMAIL_SENDER) {
-      const mailgun = new Mailgun(formData);
-      const mg = mailgun.client({ username: "api", key: apiKey });
-
-      const recipients = `${emailAddresses.join(", ")}, ${
-        process.env.EMAIL_SENDER
-      }`;
-
       const text = dedent`
-      C4 finding submitted: (risk = ${labels[1]})
+      C4 finding submitted: (risk = ${risk})
       Wallet address: ${address}
       
       ${body}
       `;
+      const subject = `C4 ${sponsor} finding: ${title}`;
 
-      const emailData = {
-        from: process.env.EMAIL_SENDER,
-        to: recipients,
-        subject: `C4 ${sponsor} finding: ${title}`,
-        text,
+      await sendConfirmationEmail(emailAddresses, subject, text);
+      return {
+        statusCode: 200,
+        body: "Issue posted successfully and confirmation email sent.",
       };
-
-      return mg.messages
-        .create(domain, emailData)
-        .then(() => {
-          return {
-            statusCode: 200,
-            body: "Issue posted successfully and confirmation email sent.",
-          };
-        })
-        .catch((err) => {
-          return {
-            statusCode: err.status || 500,
-            body: JSON.stringify({
-              error:
-                "Failed to send confirmation email. " + (err.message || err),
-            }),
-          };
-        });
     } else {
       return {
         statusCode: 200,

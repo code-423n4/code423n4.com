@@ -3,7 +3,7 @@ const { Moralis } = require("moralis/node");
 const { Octokit } = require("@octokit/core");
 const fetch = require("node-fetch");
 
-const { token, moralisAppId, moralisServerUrl } = require("./_config");
+const { token, moralisAppId, moralisServerUrl } = require("../_config");
 
 const octokit = new Octokit({ auth: token });
 
@@ -62,7 +62,7 @@ exports.handler = async (event) => {
       appId: moralisAppId,
     });
 
-    const userUrl = `${event.headers.origin}/.netlify/functions/get-user?id=${handle}`;
+    const userUrl = `${process.env.URL}/.netlify/functions/get-user?id=${handle}`;
     const userResponse = await fetch(userUrl);
     if (!userResponse.ok) {
       return {
