@@ -4,7 +4,7 @@ const { Moralis } = require("moralis/node");
 const { Octokit } = require("@octokit/core");
 const sharp = require("sharp");
 
-const { token, moralisAppId, moralisServerUrl } = require("./_config");
+const { token, moralisAppId, moralisServerUrl } = require("../_config");
 
 const OctokitClient = Octokit.plugin(createPullRequest);
 const octokit = new OctokitClient({ auth: token });
@@ -43,8 +43,7 @@ exports.handler = async (event) => {
       return {
         statusCode: 400,
         body: JSON.stringify({
-          error:
-            "Team name's length is limited to 25 characters.",
+          error: "Team name's length is limited to 25 characters.",
         }),
       };
     }
@@ -101,7 +100,7 @@ exports.handler = async (event) => {
       appId: moralisAppId,
     });
 
-    const userUrl = `${event.headers.origin}/.netlify/functions/get-user?id=${username}`;
+    const userUrl = `${process.env.URL}/.netlify/functions/get-user?id=${username}`;
     const userResponse = await fetch(userUrl);
     if (!userResponse.ok) {
       return {

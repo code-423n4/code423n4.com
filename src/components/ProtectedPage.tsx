@@ -28,7 +28,7 @@ export default function ProtectedPage({
       ) : (
         <div className="centered-text">
           <div className={styles.Form}>
-            <h1>Please login</h1>
+            <h1>Please log in</h1>
             <p>{message || "You must be logged in to view this page."}</p>
             <Login displayAsButtons={true} />
           </div>
