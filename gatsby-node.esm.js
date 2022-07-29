@@ -1,7 +1,7 @@
+import { graphql } from "@octokit/graphql";
 import format from "date-fns/format";
 import { createFilePath } from "gatsby-source-filesystem";
 import fetch from "node-fetch";
-import { graphql } from "@octokit/graphql";
 import path from "path";
 import webpack from "webpack";
 

@@ -271,20 +271,21 @@ async function editFinding(
   }
 
   // Simple field handling {title, body}
-  const simpleFields = {};
+  const simpleFields: { title?: string; body?: string } = {};
 
   if (data.title) {
-    simpleFields["title"] = data.title;
+    simpleFields.title = data.title;
     emailBody = `Title changed: ${data.title}\n\n` + emailBody;
     edited = true;
   }
-  
+
   if (data.body) {
-    simpleFields["body"] = data.body;
+    simpleFields.body = data.body;
     emailBody = `Report contents changed: ${data.body}\n\n` + emailBody;
     edited = true;
+  }
 
-  if (simpleFields !== {}) {
+  if (simpleFields.title !== undefined || simpleFields.body !== undefined) {
     await client.request("PATCH /repos/{owner}/{repo}/issues/{issue_number}", {
       owner: process.env.GITHUB_REPO_OWNER!,
       repo: repoName,
