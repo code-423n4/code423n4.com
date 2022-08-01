@@ -1,17 +1,11 @@
 import React from "react";
 
 import { SelectField, TextArea, TextField } from "./";
-import LinesOfCode from "../LinesOfCodeInput";
+import LinksToCode from "../LinksToCodeInput";
 import WardenField from "./WardenField";
 
 const Widget = ({ field, fieldState, isInvalid, onChange }) => {
-  const {
-    widget,
-    name,
-    required,
-    options,
-    maxSize = 65536,
-  } = field;
+  const { widget, name, required, options, maxSize = 65536 } = field;
 
   function handleChange(e) {
     onChange(e);
@@ -60,13 +54,8 @@ const Widget = ({ field, fieldState, isInvalid, onChange }) => {
     />
   );
 
-  const linesOfCodeWidget = (
-    <LinesOfCode
-      name={name}
-      onChange={handleChange}
-      linesOfCode={fieldState[name]}
-      isInvalid={isInvalid}
-    />
+  const linksToCodeInputGroup = (
+    <LinksToCode onChange={handleChange} linksToCode={fieldState[name]} />
   );
 
   const widgets = {
@@ -74,7 +63,7 @@ const Widget = ({ field, fieldState, isInvalid, onChange }) => {
     textarea: textAreaWidget,
     select: selectFieldWidget,
     warden: wardenFieldWidget,
-    linesOfCode: linesOfCodeWidget,
+    linksToCode: linksToCodeInputGroup,
   };
 
   return widgets[widget];

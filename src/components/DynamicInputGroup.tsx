@@ -1,13 +1,13 @@
 import clsx from "clsx";
-import React, { ComponentType, ReactNode, useCallback } from "react";
+import React, { ReactNode, useCallback } from "react";
 
-import * as styles from "./DynamicInputGroup.module.scss";
 import { Input } from "./Input";
+import * as styles from "./DynamicInputGroup.module.scss";
 
 interface DynamicInputGroupProps {
   onChange: (payload: string[]) => void;
   fields: string[];
-  children: ReactNode;
+  children?: ReactNode;
   validator?: (value: string) => (string | ReactNode)[];
   fieldName: string;
   className?: string | undefined;
