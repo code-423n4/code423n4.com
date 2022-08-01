@@ -6,11 +6,11 @@ import * as styles from "./Input.module.scss";
 // @todo: replace TextField widgets with this component
 
 interface InputProps {
-  key?: string;
   name: string;
   label?: string | ReactNode;
   helpText?: string | ReactNode;
   required?: boolean;
+  placeholder?: string;
   value: string;
   canRemove?: boolean;
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -27,19 +27,22 @@ export function Input({
   label,
   helpText,
   required,
+  placeholder,
   value,
   canRemove = false,
   handleChange,
-  handleRemoveInputField = undefined,
+  handleRemoveInputField,
   validator,
   button,
   handleButtonClick,
 }: InputProps) {
-  const [isInvalid, setIsInvalid] = useState(false);
-  const [validationErrors, setValidationErrors] = useState([]);
+  const [isInvalid, setIsInvalid] = useState<boolean>(false);
+  const [validationErrors, setValidationErrors] = useState<
+    (string | ReactNode)[]
+  >([]);
 
   const validate = (): void => {
-    let errorMessages = [];
+    let errorMessages: (string | ReactNode)[] = [];
     if (validator) {
       const validationErrors = validator(value);
       if (validationErrors.length > 0) {
@@ -62,7 +65,7 @@ export function Input({
     <div>
       {label && (
         <label className={styles.Label} htmlFor={name}>
-          {label}
+          {required ? label + " *" : label}
         </label>
       )}
       {helpText && <p className={styles.Help}>{helpText}</p>}
@@ -74,13 +77,14 @@ export function Input({
             isInvalid && styles.InputError
           )}
           name={name}
+          placeholder={placeholder || ""}
           type="text"
           value={value}
           autoComplete="off"
           onBlur={validate}
           onChange={handleChange}
         />
-        {canRemove && (
+        {canRemove && handleRemoveInputField && (
           <button
             className={styles.DeleteButton}
             type="button"

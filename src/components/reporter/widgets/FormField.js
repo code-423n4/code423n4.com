@@ -7,12 +7,11 @@ function FormField({
   name,
   label,
   helpText,
-  type = null,
+  type = "",
   isInvalid,
   children,
   errorMessage = "This field is required",
 }) {
-
   return (
     <div className={styles.Container}>
       {label && (
@@ -20,13 +19,13 @@ function FormField({
           {label}
         </label>
       )}
-      {type !== 'markdown' && helpText ? (
-            <p className={styles.Help}>{helpText}</p>
-          ) : (
-            <ReactMarkdown className={styles.Help}>{helpText}</ReactMarkdown>
-          )}
+      {type !== "markdown" && helpText ? (
+        <p className={styles.Help}>{helpText}</p>
+      ) : (
+        <ReactMarkdown className={styles.Help}>{helpText}</ReactMarkdown>
+      )}
       {children}
-      {(isInvalid && name !== 'linesOfCode') && (
+      {isInvalid && name !== "linksToCode" && (
         <label htmlFor={name} className={styles.ErrorMessage}>
           {errorMessage}
         </label>

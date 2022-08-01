@@ -15,8 +15,8 @@ export default function Dropdown({
 
   return (
     <div
-      onMouseEnter={openOnHover ? () => setIsOpen(true) : null}
-      onMouseLeave={openOnHover ? () => setIsOpen(false) : null}
+      onMouseEnter={openOnHover ? () => setIsOpen(true) : undefined}
+      onMouseLeave={openOnHover ? () => setIsOpen(false) : undefined}
       className={clsx(className, styles.Wrapper, wrapperClass && wrapperClass)}
     >
       <button
