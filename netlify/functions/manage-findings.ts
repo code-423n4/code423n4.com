@@ -332,6 +332,18 @@ async function editFinding(
   }
 }
 
+async function deleteFinding(
+  username: string,
+  contest: Contest,
+  issueNumber: number
+) {
+  // @todo:
+  // [ ] delete json file?
+  // [ ] delete markdown file for QA and Gas reports
+  // [ ] close issue with comment "withdrawn by x"
+  // [ ] add "withdrawn by warden" label
+}
+
 const handler: Handler = async (event: Event): Promise<Response> => {
   // @todo: better error handling
   try {
@@ -377,10 +389,10 @@ const handler: Handler = async (event: Event): Promise<Response> => {
     if (event.headers["c4-user"]) {
       username = event.headers["c4-user"];
     }
+    let issueNumber;
 
     switch (event.httpMethod) {
       case "GET":
-        let issueNumber;
         if (event.queryStringParameters?.issue) {
           issueNumber = parseInt(event.queryStringParameters?.issue);
         }
@@ -409,6 +421,25 @@ const handler: Handler = async (event: Event): Promise<Response> => {
             statusCode: error.status || 500,
             body: JSON.stringify({
               error: error.message || "something went wrong editing submission",
+            }),
+          };
+        }
+      case "DELETE":
+        if (event.queryStringParameters?.issue) {
+          issueNumber = parseInt(event.queryStringParameters?.issue);
+        }
+        try {
+          await deleteFinding(username, contest, issueNumber);
+          return {
+            statusCode: 200,
+            body: "SUCCESS!",
+          };
+        } catch (error) {
+          return {
+            statusCode: error.status || 500,
+            body: JSON.stringify({
+              error:
+                error.message || "something went wrong deleting submission",
             }),
           };
         }
