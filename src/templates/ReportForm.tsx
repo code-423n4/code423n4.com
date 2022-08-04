@@ -11,6 +11,7 @@ import {
 } from "../../types/finding";
 
 // hooks
+import { useModalContext } from "../hooks/ModalContext";
 import useUser from "../hooks/UserContext";
 
 // components
@@ -44,8 +45,7 @@ const initialState: ReportState = {
 };
 
 const ReportForm = ({ data, location }) => {
-  const { currentUser } = useUser();
-
+  // data
   const {
     sponsor,
     contestid,
@@ -54,6 +54,12 @@ const ReportForm = ({ data, location }) => {
     end_time,
     fields,
   } = data.contestsCsv;
+
+  // hooks
+  const { showModal } = useModalContext();
+  const { currentUser } = useUser();
+
+  // state
   const [state, setState] = useState<ReportState>(initialState);
   const [attributedTo, setAttributedTo] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -85,7 +91,7 @@ const ReportForm = ({ data, location }) => {
       }
       const user = await Moralis.User.current();
       if (!user) {
-        throw "You must be logged in to submit findings";
+        throw "You must be logged in to submit or edit findings";
       }
       const sessionToken = user.attributes.sessionToken;
       return fetch(`/.netlify/functions/${endpoint}`, {
@@ -138,6 +144,42 @@ const ReportForm = ({ data, location }) => {
     }
     return requestData;
   };
+
+  const deleteFinding = useCallback(
+    async (user: Moralis.User): Promise<void> => {
+      const sessionToken = user.attributes.sessionToken;
+      const q = new URLSearchParams({
+        contest: contestid.toString(),
+        issue: issueId.toString(),
+      });
+      const response = await fetch(`/.netlify/functions/manage-findings?` + q, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Authorization": `Bearer ${sessionToken}`,
+          "C4-User": currentUser.username,
+        },
+      });
+      if (!response.ok) {
+        const { error } = await response.json();
+        throw error;
+      }
+    },
+    [issueId, currentUser]
+  );
+
+  const onDelete = useCallback(async (): Promise<void> => {
+    const user = await Moralis.User.current();
+    if (!user) {
+      throw "You must be logged in to withdraw findings";
+    }
+    showModal({
+      title: "Withdraw Finding",
+      body: "Are you sure you want to withdraw this finding?",
+      primaryButtonAction: () => deleteFinding(user),
+      primaryButtonText: "Withdraw",
+    });
+  }, [issueId, currentUser, deleteFinding]);
 
   const initializeEditState = (finding) => {
     // normalize whitespace
@@ -286,6 +328,7 @@ const ReportForm = ({ data, location }) => {
             mode === FormMode.Create ? "Submit Another" : undefined
           }
           cancelButtonText={mode === FormMode.Edit ? "Undo Changes" : undefined}
+          onDelete={mode === FormMode.Edit ? onDelete : undefined}
         />
       )}
     </ProtectedPage>

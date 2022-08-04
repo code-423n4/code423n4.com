@@ -63,6 +63,7 @@ interface SubmitFindingsProps {
   successMessage: string;
   successButtonText?: string;
   cancelButtonText?: string;
+  onDelete?: () => void;
 }
 
 const SubmitFindings = ({
@@ -79,6 +80,7 @@ const SubmitFindings = ({
   successMessage,
   successButtonText,
   cancelButtonText,
+  onDelete,
 }: SubmitFindingsProps) => {
   // hooks
   const { currentUser } = useUser();
@@ -527,6 +529,15 @@ const SubmitFindings = ({
                 onClick={handleCancel}
               >
                 {cancelButtonText}
+              </button>
+            )}
+            {onDelete && (
+              <button
+                className="button cta-button danger"
+                type="button"
+                onClick={onDelete}
+              >
+                Withdraw Finding
               </button>
             )}
             <button
