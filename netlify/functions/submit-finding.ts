@@ -1,5 +1,4 @@
 const { createPullRequest } = require("octokit-plugin-create-pull-request");
-const csv = require("csvtojson");
 const dedent = require("dedent");
 const fetch = require("node-fetch");
 const { Moralis } = require("moralis/node");
@@ -13,7 +12,11 @@ const {
   moralisServerUrl,
 } = require("../_config");
 
-import { getContest, isContestActive } from "../util/contest-utils";
+import {
+  getContest,
+  getRiskCodeFromGithubLabel,
+  isContestActive,
+} from "../util/contest-utils";
 import {
   checkAndUpdateTeamAddress,
   sendConfirmationEmail,
@@ -210,11 +213,12 @@ exports.handler = async (event) => {
   }
 
   const owner = process.env.GITHUB_CONTEST_REPO_OWNER;
+  const riskCode = getRiskCodeFromGithubLabel(risk);
 
   try {
-    const markdownPath = `data/${attributedTo}-${risk}-report.md`;
+    const markdownPath = `data/${attributedTo}-${riskCode}.md`;
     const qaOrGasSubmissionBody = `See the markdown file with the details of this report [here](https://github.com/${owner}/${repo}/blob/main/${markdownPath}).`;
-    const isQaOrGasSubmission = Boolean(risk === "G" || risk === "Q");
+    const isQaOrGasSubmission = Boolean(riskCode === "G" || riskCode === "Q");
 
     const issueResult = await octokit.request(
       "POST /repos/{owner}/{repo}/issues",
@@ -236,7 +240,7 @@ exports.handler = async (event) => {
       contest,
       handle: attributedTo,
       address,
-      risk: risk.slice(0, 1), // @todo: explicit mapping
+      risk: riskCode,
       title,
       issueId,
       issueUrl,

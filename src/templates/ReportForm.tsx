@@ -165,14 +165,6 @@ const ReportForm = ({ data, location }) => {
     setAttributedTo(currentUser.username);
   };
 
-  function findDiff(str1, str2) {
-    let diff = "";
-    str2.split("").forEach(function (val, i) {
-      if (val != str1.charAt(i)) diff += val;
-    });
-    return diff;
-  }
-
   useEffect(() => {
     (async () => {
       if (currentUser.isLoggedIn) {
@@ -275,6 +267,7 @@ const ReportForm = ({ data, location }) => {
         <SubmitFindings
           sponsor={sponsor.name}
           contest={contestid}
+          contestPath={fields.contestPath}
           repo={findingsRepo}
           title={title}
           initialState={state}
@@ -314,6 +307,7 @@ export const pageQuery = graphql`
       }
       fields {
         submissionPath
+        contestPath
       }
     }
   }

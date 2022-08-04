@@ -6,7 +6,7 @@ export interface Finding {
     color: string;
   }[];
   risk: string;
-  state: string;
+  state: "OPEN" | "CLOSED";
   createdAt: string;
   updatedAt: string;
   issueNumber: number;

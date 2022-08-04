@@ -40,6 +40,7 @@ import Widget from "./widgets/Widget";
 // styles
 import * as styles from "../form/Form.module.scss";
 import * as widgetStyles from "../reporter/widgets/Widgets.module.scss";
+import { Link } from "gatsby";
 
 enum FormStatus {
   Unsubmitted = "unsubmitted",
@@ -51,6 +52,7 @@ enum FormStatus {
 interface SubmitFindingsProps {
   sponsor: string;
   contest: string;
+  contestPath: string;
   repo: string;
   title: string;
   initialState: ReportState;
@@ -66,6 +68,7 @@ interface SubmitFindingsProps {
 const SubmitFindings = ({
   sponsor,
   contest,
+  contestPath,
   repo,
   title,
   initialState,
@@ -555,15 +558,20 @@ const SubmitFindings = ({
         <div className="centered-text">
           <h2 className={styles.Heading2}>Thank you!</h2>
           <p>{successMessage}</p>
-          {successButtonText && (
-            <button
-              className="button cta-button"
-              type="button"
-              onClick={handleReset}
-            >
-              Submit another
-            </button>
-          )}
+          <div className={styles.ButtonsWrapper}>
+            <Link to={contestPath} className="button cta-button secondary">
+              Back to contest
+            </Link>
+            {successButtonText && (
+              <button
+                className="button cta-button"
+                type="button"
+                onClick={handleReset}
+              >
+                Submit another
+              </button>
+            )}
+          </div>
         </div>
       )}
     </div>

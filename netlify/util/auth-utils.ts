@@ -1,11 +1,7 @@
 import Moralis from "moralis/node";
 import fetch from "node-fetch";
 
-const {
-  moralisAppId,
-  moralisServerUrl,
-} = require("../_config");
-
+const { moralisAppId, moralisServerUrl } = require("../_config");
 
 async function checkAuth(event) {
   const authorization = event.headers["x-authorization"];
@@ -33,18 +29,22 @@ async function checkAuth(event) {
   }
 
   const { moralisId } = userData;
-  const confirmed = await Moralis.Cloud.run("confirmUser", {
-    sessionToken,
-    moralisId,
-    username: user,
-  });
-  if (!confirmed) {
+  try {
+    const confirmed = await Moralis.Cloud.run("confirmUser", {
+      sessionToken,
+      moralisId,
+      username: user,
+    });
+    if (!confirmed) {
+      return false;
+    }
+  } catch (error) {
+    // @todo: better error handling
+    console.log(error);
     return false;
   }
 
   return true;
 }
 
-export {
-  checkAuth,
-};
+export { checkAuth };

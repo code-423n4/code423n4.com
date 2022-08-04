@@ -12,7 +12,11 @@ import {
 import { Contest } from "../../types/contest";
 
 import { checkAuth } from "../util/auth-utils";
-import { getContest, isContestActive } from "../util/contest-utils";
+import {
+  getContest,
+  getRiskCodeFromGithubLabel,
+  isContestActive,
+} from "../util/contest-utils";
 import {
   getAvailableFindings,
   wardenFindingsForContest,
@@ -136,15 +140,23 @@ async function editFinding(
   const CustOcto = Octokit.plugin(createOrUpdateTextFile);
   const client = new CustOcto({ auth: process.env.GITHUB_TOKEN });
 
-  let edited = false;
+  // don't allow users to change risk to or from QA or gas
+  if (data.risk && data.risk.oldValue) {
+    const oldRiskCode = getRiskCodeFromGithubLabel(data.risk.oldValue);
+    const newRiskCode = getRiskCodeFromGithubLabel(data.risk.newValue);
+    if (oldRiskCode === "Q" || oldRiskCode === "G") {
+      throw {
+        message: `You cannot change the risk level for ${data.risk.oldValue} reports.`,
+      };
+    }
+    if (newRiskCode === "Q" || newRiskCode === "G") {
+      throw {
+        message: `You cannot convert risk from ${data.risk.oldValue} to ${data.risk.newValue}. Try withdrawing the old finding and then adding it to your ${data.risk.newValue} report.`,
+      };
+    }
+  }
 
-  // todo: move to more general place
-  // const RiskCodeToGithubLabel = {
-  //   "3": "3 (High Risk)",
-  //   "2": "2 (Med Risk)",
-  //   Q: "QA (Quality Assurance)",
-  //   G: "G (Gas Optimizations)",
-  // };
+  let edited = false;
 
   const repoName = contest.findingsRepo.split("/").slice(-1)[0];
 
@@ -321,93 +333,99 @@ async function editFinding(
 }
 
 const handler: Handler = async (event: Event): Promise<Response> => {
-  // todo: error handling..
+  // @todo: better error handling
+  try {
+    if (!(await checkAuth(event))) {
+      return {
+        statusCode: 401,
+        body: JSON.stringify({
+          error: "Unauthorized",
+        }),
+      };
+    }
 
-  if (!(await checkAuth(event))) {
+    // should contestId always be included in query params for consistency?
+    let contestId;
+    if (event.queryStringParameters?.contest) {
+      contestId = parseInt(event.queryStringParameters?.contest);
+    } else if (event.body) {
+      const data = JSON.parse(event.body);
+      contestId = data.contest;
+    }
+
+    // make sure the given contest is still active
+    const contest = await getContest(contestId);
+    if (!contest) {
+      return {
+        statusCode: 422,
+        body: JSON.stringify({
+          error: "Contest not found",
+        }),
+      };
+    }
+    if (!isContestActive(contest)) {
+      return {
+        statusCode: 400,
+        body: JSON.stringify({
+          error: "This contest has ended.",
+        }),
+      };
+    }
+
+    // simple param filling
+    let username;
+    if (event.headers["c4-user"]) {
+      username = event.headers["c4-user"];
+    }
+
+    switch (event.httpMethod) {
+      case "GET":
+        let issueNumber;
+        if (event.queryStringParameters?.issue) {
+          issueNumber = parseInt(event.queryStringParameters?.issue);
+        }
+
+        let includeTeams = true;
+        // @todo: use flag to include teams in query params
+        // if (req.queryStringParameters?.includeTeams) {
+        // includeTeams = req.queryStringParameters?.includeTeams)
+        // }
+
+        if (issueNumber !== undefined) {
+          return await getFinding(username, contest, issueNumber);
+        } else {
+          return await getFindings(username, contest, includeTeams);
+        }
+      case "POST":
+        const data: FindingEditRequest = JSON.parse(event.body!);
+        try {
+          await editFinding(username, contest, data.issue, data);
+          return {
+            statusCode: 200,
+            body: "SUCCESS!",
+          };
+        } catch (error) {
+          return {
+            statusCode: error.status || 500,
+            body: JSON.stringify({
+              error: error.message || "something went wrong editing submission",
+            }),
+          };
+        }
+    }
+
     return {
-      statusCode: 401,
+      statusCode: 405,
       body: JSON.stringify({
-        error: "Unauthorized",
+        error: "nuh-uh",
       }),
     };
-  }
-
-  // should contestId always be included in query params for consistency?
-  let contestId;
-  if (event.queryStringParameters?.contest) {
-    contestId = parseInt(event.queryStringParameters?.contest);
-  } else if (event.body) {
-    const data = JSON.parse(event.body);
-    contestId = data.contest;
-  }
-
-  // make sure the given contest is still active
-  const contest = await getContest(contestId);
-  if (!contest) {
+  } catch (error) {
     return {
-      statusCode: 422,
-      body: JSON.stringify({
-        error: "Contest not found",
-      }),
+      statusCode: error.status || 500,
+      body: JSON.stringify({ error: error.message || "Something went wrong" }),
     };
   }
-  if (!isContestActive(contest)) {
-    return {
-      statusCode: 400,
-      body: JSON.stringify({
-        error: "This contest has ended.",
-      }),
-    };
-  }
-
-  // simple param filling
-  let username;
-  if (event.headers["c4-user"]) {
-    username = event.headers["c4-user"];
-  }
-
-  switch (event.httpMethod) {
-    case "GET":
-      let issueNumber;
-      if (event.queryStringParameters?.issue) {
-        issueNumber = parseInt(event.queryStringParameters?.issue);
-      }
-
-      let includeTeams = true;
-      // @todo: use flag to include teams in query params
-      // if (req.queryStringParameters?.includeTeams) {
-      // includeTeams = req.queryStringParameters?.includeTeams)
-      // }
-
-      if (issueNumber !== undefined) {
-        return await getFinding(username, contest, issueNumber);
-      } else {
-        return await getFindings(username, contest, includeTeams);
-      }
-    case "POST":
-      const data: FindingEditRequest = JSON.parse(event.body!);
-      try {
-        await editFinding(username, contest, data.issue, data);
-        return {
-          statusCode: 200,
-          body: "SUCCESS!",
-        };
-      } catch (error) {
-        return {
-          statusCode: error.status || 500,
-          body: JSON.stringify({
-            error: error.message || "something went wrong editing submission",
-          }),
-        };
-      }
-  }
-
-  return {
-    statusCode: 405,
-    body: JSON.stringify({
-      error: "nuh-uh",
-    }),
-  };
 };
 
 export { handler };
