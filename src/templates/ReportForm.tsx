@@ -146,45 +146,36 @@ const ReportForm = ({ data, location }) => {
     return requestData;
   };
 
-  const deleteFinding = useCallback(
-    async (user: Moralis.User): Promise<void> => {
-      const sessionToken = user.attributes.sessionToken;
-      const q = new URLSearchParams({
-        contest: contestid.toString(),
-        issue: issueId.toString(),
-      });
-      const response = await fetch(`/.netlify/functions/manage-findings?` + q, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          "X-Authorization": `Bearer ${sessionToken}`,
-          "C4-User": currentUser.username,
-        },
-        body: JSON.stringify({
-          attributedTo,
-          risk: state.risk,
-        } as FindingDeleteRequest),
-      });
-      if (!response.ok) {
-        const { error } = await response.json();
-        throw error;
-      }
-    },
-    [issueId, currentUser, state.risk, attributedTo]
-  );
-
   const onDelete = useCallback(async (): Promise<void> => {
     const user = await Moralis.User.current();
     if (!user) {
       throw "You must be logged in to withdraw findings";
     }
-    return showModal({
-      title: "Withdraw Finding",
-      body: "Are you sure you want to withdraw this finding?",
-      primaryButtonAction: () => deleteFinding(user),
-      primaryButtonText: "Withdraw",
+    const sessionToken = user.attributes.sessionToken;
+    const q = new URLSearchParams({
+      contest: contestid.toString(),
+      issue: issueId.toString(),
     });
-  }, [issueId, currentUser, deleteFinding, state.risk, attributedTo]);
+    const body: FindingDeleteRequest = {
+      attributedTo,
+      risk: state.risk,
+      // @todo: enable adding multiple email addresses
+      emailAddresses: [currentUser.emailAddress],
+    };
+    const response = await fetch(`/.netlify/functions/manage-findings?` + q, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Authorization": `Bearer ${sessionToken}`,
+        "C4-User": currentUser.username,
+      },
+      body: JSON.stringify(body),
+    });
+    if (!response.ok) {
+      const { error } = await response.json();
+      throw error;
+    }
+  }, [issueId, currentUser, state.risk, attributedTo]);
 
   const initializeEditState = (finding: Finding) => {
     if (finding.state === "CLOSED") {

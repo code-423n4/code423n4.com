@@ -260,7 +260,7 @@ async function editFinding(
 
   let emailBody = `Updated by: ${username}`;
 
-  if (data.attributedTo.newValue !== data.attributedTo.newValue) {
+  if (data.attributedTo.oldValue !== data.attributedTo.newValue) {
     handleAttributionChange(
       client,
       repoName,
@@ -279,8 +279,8 @@ async function editFinding(
   if (isQaOrGasSubmission) {
     let reportContent;
     let message = "";
-    const editMessage = `Report updated by ${username}. `;
-    const attributionMessage = `Report attribution changed to ${data.attributedTo.newValue} by ${username}. `;
+    const editMessage = `Report for issue #${issueNumber} updated by ${username}. `;
+    const attributionMessage = `Report attribution changed for issue #${issueNumber} from ${data.attributedTo.oldValue} to ${data.attributedTo.newValue} by ${username}. `;
 
     if (data.body) {
       reportContent = data.body;
@@ -293,6 +293,7 @@ async function editFinding(
         username,
         oldRiskCode as "Q" | "G"
       );
+      reportContent = reportMarkdown;
       // @todo: remove this once we can be sure all reports are saved as md files
       // if there is not a report saved, use issue body
       if (!reportMarkdown) {
@@ -313,14 +314,14 @@ async function editFinding(
       owner,
       repo: repoName,
       path: `data/${data.attributedTo.newValue}-${newRiskCode}.md`,
-      content: Buffer.from(reportContent).toString("base64"),
+      content: reportContent,
       message:
-        data.attributedTo.newValue !== data.attributedTo.newValue
+        data.attributedTo.oldValue !== data.attributedTo.newValue
           ? message + attributionMessage
           : message,
     });
 
-    if (data.attributedTo.newValue !== data.attributedTo.newValue) {
+    if (data.attributedTo.oldValue !== data.attributedTo.newValue) {
       // delete old report
       await client.createOrUpdateTextFile({
         owner,
@@ -438,13 +439,15 @@ async function deleteFinding(
   contest: Contest,
   issueNumber: number,
   risk: string,
-  attributedTo: string
+  attributedTo: string,
+  emailAddresses: string[]
 ) {
   // @todo:
   // [x] delete markdown file for QA and Gas reports
   // [x] close issue
   // [x] add comment "withdrawn by x"
   // [x] add "withdrawn by warden" and "Invalid" labels
+  // [x] send confirmation email
 
   const CustOcto = Octokit.plugin(createOrUpdateTextFile);
   const client = new CustOcto({ auth: process.env.GITHUB_TOKEN });
@@ -482,6 +485,11 @@ async function deleteFinding(
       body: `Withdrawn by ${username}`,
     }
   );
+  const subject = `C4 ${contest.sponsor} finding withdrawn by ${username}`;
+  // @todo: Maybe include more information about the deleted finding
+  const emailBody = `Issue #${issueNumber} with risk ${risk} withdrawn by ${username}`;
+
+  await sendConfirmationEmail(emailAddresses, subject, emailBody);
 }
 
 const handler: Handler = async (event: Event): Promise<Response> => {
@@ -565,9 +573,11 @@ const handler: Handler = async (event: Event): Promise<Response> => {
           };
         }
       case "DELETE":
-        const { attributedTo, risk }: FindingDeleteRequest = JSON.parse(
-          event.body!
-        );
+        const {
+          attributedTo,
+          risk,
+          emailAddresses,
+        }: FindingDeleteRequest = JSON.parse(event.body!);
         issueNumber = parseInt(event.queryStringParameters?.issue!);
         if (!issueNumber || !attributedTo || !risk) {
           return {
@@ -581,7 +591,14 @@ const handler: Handler = async (event: Event): Promise<Response> => {
         if (attributedTo !== username) {
           await checkTeamAuth(attributedTo, username);
         }
-        await deleteFinding(username, contest, issueNumber, risk, attributedTo);
+        await deleteFinding(
+          username,
+          contest,
+          issueNumber,
+          risk,
+          attributedTo,
+          emailAddresses
+        );
         return {
           statusCode: 200,
           body: "SUCCESS!",

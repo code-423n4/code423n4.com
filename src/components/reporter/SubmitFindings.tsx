@@ -64,7 +64,7 @@ interface SubmitFindingsProps {
   successMessage: string;
   successButtonText?: string;
   cancelButtonText?: string;
-  onDelete?: () => void;
+  onDelete?: () => Promise<void>;
 }
 
 const SubmitFindings = ({
@@ -224,6 +224,18 @@ const SubmitFindings = ({
     setState(initialState);
   };
 
+  const handleDeleteClick = async () => {
+    if (!onDelete) {
+      return;
+    }
+    showModal({
+      title: "Withdraw Finding",
+      body: "Are you sure you want to withdraw this finding?",
+      primaryButtonAction: handleDelete,
+      primaryButtonText: "Withdraw",
+    });
+  };
+
   const handleDelete = useCallback(async (): Promise<void> => {
     if (!onDelete) {
       return;
@@ -286,11 +298,6 @@ const SubmitFindings = ({
             window.localStorage.removeItem(findingId);
           }
           toast.error(error);
-        } else if (error.includes(`"sha" wasn't supplied`)) {
-          setStatus(FormStatus.Error);
-          setErrorMessage(
-            `It looks like you've already submitted a ${state.risk} report for this contest.`
-          );
         } else {
           setStatus(FormStatus.Error);
           setErrorMessage(error);
@@ -389,6 +396,7 @@ const SubmitFindings = ({
     <div className={styles.Form}>
       <h1 className={styles.Heading1}>{`${title} finding`}</h1>
       {(status === FormStatus.Unsubmitted ||
+        status === FormStatus.Deleting ||
         status === FormStatus.Submitting) && (
         <form>
           <fieldset className={widgetStyles.Fields}>
@@ -537,9 +545,11 @@ const SubmitFindings = ({
               <button
                 className="button cta-button danger"
                 type="button"
-                onClick={handleDelete}
+                onClick={handleDeleteClick}
               >
-                Withdraw Finding
+                {status === FormStatus.Deleting
+                  ? "Withdrawing..."
+                  : "Withdraw finding"}
               </button>
             )}
             <button
@@ -548,9 +558,9 @@ const SubmitFindings = ({
               onClick={handleSubmit}
               disabled={status !== FormStatus.Unsubmitted}
             >
-              {status === FormStatus.Unsubmitted
-                ? submitButtonText
-                : "Submitting..."}
+              {status === FormStatus.Submitting
+                ? "Submitting..."
+                : submitButtonText}
             </button>
           </div>
         </form>

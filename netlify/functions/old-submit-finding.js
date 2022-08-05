@@ -5,6 +5,7 @@ const Mailgun = require("mailgun.js");
 const { Octokit } = require("@octokit/core");
 
 const { token, apiKey, domain } = require("../_config");
+const { getMarkdownReportForUser } = require("../util/github-utils");
 
 const octokit = new Octokit({ auth: token });
 
@@ -142,6 +143,20 @@ exports.handler = async (event) => {
     const markdownPath = `data/${handle}-${risk}.md`;
     const qaOrGasSubmissionBody = `See the markdown file with the details of this report [here](https://github.com/${owner}/${repo}/blob/main/${markdownPath}).`;
     const isQaOrGasSubmission = Boolean(risk === "G" || risk === "Q");
+    if (isQaOrGasSubmission) {
+      const existingReport = await getMarkdownReportForUser(
+        octokit,
+        repo,
+        attributedTo,
+        riskCode
+      );
+      if (existingReport) {
+        throw {
+          status: 400,
+          message: `It looks like you've already submitted a ${risk} report for this contest.`,
+        };
+      }
+    }
 
     const issueResult = await octokit.request(
       "POST /repos/{owner}/{repo}/issues",

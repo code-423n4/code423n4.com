@@ -52,4 +52,5 @@ export interface FindingCreateRequest {
 export interface FindingDeleteRequest {
   attributedTo: string;
   risk: string;
+  emailAddresses: string[];
 }
