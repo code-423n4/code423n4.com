@@ -17,12 +17,12 @@ export interface FindingEditRequest {
   issue: number;
   contest: number;
   emailAddresses: string[];
-  attributedTo?: {
+  attributedTo: {
     newValue: string;
     oldValue: string;
     address: string;
   };
-  risk?: {
+  risk: {
     newValue: string;
     oldValue: string;
   };
@@ -47,4 +47,9 @@ export interface FindingCreateRequest {
   title: string;
   body: string;
   labels: string[];
+}
+
+export interface FindingDeleteRequest {
+  attributedTo: string;
+  risk: string;
 }

@@ -4,14 +4,18 @@ import { Event } from "@netlify/functions/src/function/event";
 import { Octokit } from "@octokit/core";
 import { createOrUpdateTextFile } from "@octokit/plugin-create-or-update-text-file";
 
+// types
+import { Contest } from "../../types/contest";
 import {
   Finding,
+  FindingDeleteRequest,
   FindingEditRequest,
   FindingsResponse,
 } from "../../types/finding";
-import { Contest } from "../../types/contest";
+import { TeamData } from "../../types/user";
 
-import { checkAuth } from "../util/auth-utils";
+// utils
+import { checkAuth, checkTeamAuth } from "../util/auth-utils";
 import {
   getContest,
   getRiskCodeFromGithubLabel,
@@ -19,14 +23,17 @@ import {
 } from "../util/contest-utils";
 import {
   getAvailableFindings,
+  getMarkdownReportForUser,
+  getRepoName,
   wardenFindingsForContest,
 } from "../util/github-utils";
 import {
   getUserTeams,
-  checkAndUpdateTeamAddress,
+  updateTeamAddress,
   sendConfirmationEmail,
 } from "../util/user-utils";
 
+// config
 import { apiKey, domain } from "../_config";
 
 async function getFinding(
@@ -131,6 +138,71 @@ async function getFindings(
   };
 }
 
+async function handleAttributionChange(
+  client,
+  repoName,
+  issueNumber,
+  username,
+  attributedTo: { newValue: string; oldValue: string; address: string }
+) {
+  if (attributedTo.newValue !== username) {
+    const team: TeamData = await checkTeamAuth(attributedTo.newValue, username);
+    // @todo: remove this once all teams have saved addresses
+    if (!team.address) {
+      try {
+        await updateTeamAddress(team, attributedTo.address);
+      } catch (error) {
+        // don't throw error if this PR fails - there will likely be duplicates
+        // due to the fact that PRs take some time to review and merge and we
+        // don't want to block teams from submitting findings in the meantime
+        console.warn(error);
+      }
+    }
+  }
+  const oldPath = `data/${attributedTo.oldValue}-${issueNumber}.json`;
+  const newPath = `data/${attributedTo.newValue}-${issueNumber}.json`;
+
+  const oldContents = await client.request(
+    "GET /repos/{owner}/{repo}/contents/{path}",
+    {
+      owner: process.env.GITHUB_REPO_OWNER!,
+      repo: repoName,
+      path: oldPath,
+    }
+  );
+
+  const newContents = JSON.parse(
+    // @ts-ignore // @todo: fix this typescript error
+    Buffer.from(oldContents.data.content, "base64").toString()
+  );
+  newContents.handle = attributedTo.newValue;
+  newContents.address = attributedTo.address;
+
+  const newFileResponse = await client.createOrUpdateTextFile({
+    owner: process.env.GITHUB_REPO_OWNER!,
+    repo: repoName,
+    path: newPath,
+    content: JSON.stringify(newContents),
+    message: `Issue #${issueNumber} attribution changed from ${attributedTo.oldValue} to ${attributedTo.newValue} by ${username}`,
+  });
+
+  if (!newFileResponse.updated) {
+    throw { message: "Problem writing new file" };
+  }
+
+  const oldFileResponse = await client.createOrUpdateTextFile({
+    owner: process.env.GITHUB_REPO_OWNER!,
+    repo: repoName,
+    path: oldPath,
+    content: null,
+    message: `File replaced by ${newPath} by ${username}`,
+  });
+
+  if (!oldFileResponse.deleted) {
+    throw { message: "Problem removing old file" };
+  }
+}
+
 async function editFinding(
   username: string,
   contest: Contest,
@@ -141,9 +213,15 @@ async function editFinding(
   const client = new CustOcto({ auth: process.env.GITHUB_TOKEN });
 
   // don't allow users to change risk to or from QA or gas
-  if (data.risk && data.risk.oldValue) {
-    const oldRiskCode = getRiskCodeFromGithubLabel(data.risk.oldValue);
-    const newRiskCode = getRiskCodeFromGithubLabel(data.risk.newValue);
+  const oldRiskCode = getRiskCodeFromGithubLabel(data.risk.oldValue);
+  const newRiskCode = getRiskCodeFromGithubLabel(data.risk.newValue);
+  const isQaOrGasSubmission = Boolean(
+    newRiskCode === "Q" ||
+      newRiskCode === "G" ||
+      oldRiskCode === "Q" ||
+      oldRiskCode === "G"
+  );
+  if (oldRiskCode !== newRiskCode) {
     if (oldRiskCode === "Q" || oldRiskCode === "G") {
       throw {
         message: `You cannot change the risk level for ${data.risk.oldValue} reports.`,
@@ -151,14 +229,15 @@ async function editFinding(
     }
     if (newRiskCode === "Q" || newRiskCode === "G") {
       throw {
-        message: `You cannot convert risk from ${data.risk.oldValue} to ${data.risk.newValue}. Try withdrawing the old finding and then adding it to your ${data.risk.newValue} report.`,
+        message: `You cannot convert risk from ${data.risk.oldValue} to ${data.risk.newValue}. Try withdrawing your finding and then adding it to your ${data.risk.newValue} report.`,
       };
     }
   }
 
   let edited = false;
 
-  const repoName = contest.findingsRepo.split("/").slice(-1)[0];
+  const owner = process.env.GITHUB_REPO_OWNER!;
+  const repoName = getRepoName(contest);
 
   const available_findings = await getAvailableFindings(
     client,
@@ -181,55 +260,14 @@ async function editFinding(
 
   let emailBody = `Updated by: ${username}`;
 
-  if (data.attributedTo) {
-    await checkAndUpdateTeamAddress(
-      data.attributedTo.newValue,
+  if (data.attributedTo.newValue !== data.attributedTo.newValue) {
+    handleAttributionChange(
+      client,
+      repoName,
+      issueNumber,
       username,
-      data.attributedTo.address
+      data.attributedTo
     );
-    const oldPath = `data/${data.attributedTo.oldValue}-${issueNumber}.json`;
-    const newPath = `data/${data.attributedTo.newValue}-${issueNumber}.json`;
-
-    const oldContents = await client.request(
-      "GET /repos/{owner}/{repo}/contents/{path}",
-      {
-        owner: process.env.GITHUB_REPO_OWNER!,
-        repo: repoName,
-        path: oldPath,
-      }
-    );
-
-    const newContents = JSON.parse(
-      // @ts-ignore // @todo: fix this typescript error
-      Buffer.from(oldContents.data.content, "base64").toString()
-    );
-    newContents.handle = data.attributedTo.newValue;
-    newContents.address = data.attributedTo.address;
-
-    const newRes = await client.createOrUpdateTextFile({
-      owner: process.env.GITHUB_REPO_OWNER!,
-      repo: repoName,
-      path: newPath,
-      content: JSON.stringify(newContents),
-      message: `Issue #${issueNumber} attribution changed from ${data.attributedTo.oldValue} to ${data.attributedTo.newValue} by ${username}`,
-    });
-
-    if (!newRes.updated) {
-      throw { message: "Problem writing new file" };
-    }
-
-    const oldRes = await client.createOrUpdateTextFile({
-      owner: process.env.GITHUB_REPO_OWNER!,
-      repo: repoName,
-      path: oldPath,
-      content: null,
-      message: `File replaced by ${newPath} by ${username}`,
-    });
-
-    if (!oldRes.deleted) {
-      throw { message: "Problem removing old file" };
-    }
-
     emailBody =
       `Attribution changed from ${data.attributedTo.oldValue} to ${data.attributedTo.newValue}\n\n` +
       `Wallet address: ${data.attributedTo.address}` +
@@ -237,7 +275,65 @@ async function editFinding(
     edited = true;
   }
 
-  if (data.risk) {
+  // Additional steps for attribution or body changes for QA and Gas reports
+  if (isQaOrGasSubmission) {
+    let reportContent;
+    let message = "";
+    const editMessage = `Report updated by ${username}. `;
+    const attributionMessage = `Report attribution changed to ${data.attributedTo.newValue} by ${username}. `;
+
+    if (data.body) {
+      reportContent = data.body;
+      message += editMessage;
+    } else {
+      // if report did not change, use saved report
+      const reportMarkdown = await getMarkdownReportForUser(
+        client,
+        repoName,
+        username,
+        oldRiskCode as "Q" | "G"
+      );
+      // @todo: remove this once we can be sure all reports are saved as md files
+      // if there is not a report saved, use issue body
+      if (!reportMarkdown) {
+        const issue = await client.request(
+          "GET /repos/{owner}/{repo}/issues/{issue_number}",
+          {
+            owner,
+            repo: repoName,
+            issue_number: issueNumber,
+          }
+        );
+        reportContent = issue.data.body;
+      }
+    }
+
+    // create/update report
+    await client.createOrUpdateTextFile({
+      owner,
+      repo: repoName,
+      path: `data/${data.attributedTo.newValue}-${newRiskCode}.md`,
+      content: Buffer.from(reportContent).toString("base64"),
+      message:
+        data.attributedTo.newValue !== data.attributedTo.newValue
+          ? message + attributionMessage
+          : message,
+    });
+
+    if (data.attributedTo.newValue !== data.attributedTo.newValue) {
+      // delete old report
+      await client.createOrUpdateTextFile({
+        owner,
+        repo: repoName,
+        path: `data/${data.attributedTo.oldValue}-${oldRiskCode}.md`,
+        content: null,
+        message: attributionMessage,
+      });
+    }
+  }
+
+  // Only handle risk changes between Med and High
+  if (!isQaOrGasSubmission && data.risk.oldValue !== data.risk.newValue) {
     try {
       await client.request(
         "DELETE /repos/{owner}/{repo}/issues/{issue_number}/labels/{name}",
@@ -292,7 +388,12 @@ async function editFinding(
   }
 
   if (data.body) {
-    simpleFields.body = data.body;
+    // @todo: remove this once we can be sure all reports are saved as md files
+    if (isQaOrGasSubmission) {
+      simpleFields.body = `See the markdown file with the details of this report [here](https://github.com/${owner}/${repoName}/blob/main/data/${data.attributedTo.newValue}-${newRiskCode}.md).`;
+    } else {
+      simpleFields.body = data.body;
+    }
     emailBody = `Report contents changed: ${data.body}\n\n` + emailBody;
     edited = true;
   }
@@ -335,13 +436,52 @@ async function editFinding(
 async function deleteFinding(
   username: string,
   contest: Contest,
-  issueNumber: number
+  issueNumber: number,
+  risk: string,
+  attributedTo: string
 ) {
   // @todo:
-  // [ ] delete json file?
-  // [ ] delete markdown file for QA and Gas reports
-  // [ ] close issue with comment "withdrawn by x"
-  // [ ] add "withdrawn by warden" label
+  // [x] delete markdown file for QA and Gas reports
+  // [x] close issue
+  // [x] add comment "withdrawn by x"
+  // [x] add "withdrawn by warden" and "Invalid" labels
+
+  const CustOcto = Octokit.plugin(createOrUpdateTextFile);
+  const client = new CustOcto({ auth: process.env.GITHUB_TOKEN });
+
+  const repoName = getRepoName(contest);
+  const owner = process.env.GITHUB_REPO_OWNER!;
+
+  const riskCode = getRiskCodeFromGithubLabel(risk);
+  if (riskCode === "Q" || riskCode === "G") {
+    // setting content to null deletes the file
+    await client.createOrUpdateTextFile({
+      owner,
+      repo: repoName,
+      path: `data/${attributedTo}-${riskCode}.md`,
+      content: null,
+      message: `report for issue #${issueNumber} withdrawn by ${username}`,
+    });
+  }
+
+  // close issue and update labels at the same time
+  await client.request("PATCH /repos/{owner}/{repo}/issues/{issue_number}", {
+    owner,
+    repo: repoName,
+    issue_number: issueNumber,
+    state: "closed",
+    labels: ["withdrawn by warden", "Invalid", risk],
+  });
+
+  await client.request(
+    "POST /repos/{owner}/{repo}/issues/{issue_number}/comments",
+    {
+      owner,
+      repo: repoName,
+      issue_number: issueNumber,
+      body: `Withdrawn by ${username}`,
+    }
+  );
 }
 
 const handler: Handler = async (event: Event): Promise<Response> => {
@@ -425,24 +565,27 @@ const handler: Handler = async (event: Event): Promise<Response> => {
           };
         }
       case "DELETE":
-        if (event.queryStringParameters?.issue) {
-          issueNumber = parseInt(event.queryStringParameters?.issue);
-        }
-        try {
-          await deleteFinding(username, contest, issueNumber);
+        const { attributedTo, risk }: FindingDeleteRequest = JSON.parse(
+          event.body!
+        );
+        issueNumber = parseInt(event.queryStringParameters?.issue!);
+        if (!issueNumber || !attributedTo || !risk) {
           return {
-            statusCode: 200,
-            body: "SUCCESS!",
-          };
-        } catch (error) {
-          return {
-            statusCode: error.status || 500,
+            statusCode: 422,
             body: JSON.stringify({
-              error:
-                error.message || "something went wrong deleting submission",
+              error: "Issue number, attribution, and risk are required",
             }),
           };
         }
+
+        if (attributedTo !== username) {
+          await checkTeamAuth(attributedTo, username);
+        }
+        await deleteFinding(username, contest, issueNumber, risk, attributedTo);
+        return {
+          statusCode: 200,
+          body: "SUCCESS!",
+        };
     }
 
     return {

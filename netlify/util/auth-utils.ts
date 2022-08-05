@@ -1,16 +1,16 @@
 import Moralis from "moralis/node";
 import fetch from "node-fetch";
+import { Event } from "@netlify/functions/src/function/event";
 
 const { moralisAppId, moralisServerUrl } = require("../_config");
 
-async function checkAuth(event) {
+async function checkAuth(event: Event) {
   const authorization = event.headers["x-authorization"];
-  const sessionToken = authorization.split("Bearer ")[1];
   const user = event.headers["c4-user"];
-
-  if (!authorization) {
+  if (!authorization || !user) {
     return false;
   }
+  const sessionToken = authorization.split("Bearer ")[1];
 
   await Moralis.start({
     serverUrl: moralisServerUrl,
@@ -47,4 +47,21 @@ async function checkAuth(event) {
   return true;
 }
 
-export { checkAuth };
+async function checkTeamAuth(teamName, username) {
+  const teamResponse = await fetch(
+    `${process.env.URL}/.netlify/functions/get-user?id=${teamName}`
+  );
+  if (!teamResponse.ok) {
+    throw { status: 401, message: "Unauthorized" };
+  }
+  const team = await teamResponse.json();
+  if (!team.members || !team.members.includes(username)) {
+    throw {
+      status: 401,
+      message: "Unauthorized",
+    };
+  }
+  return team;
+}
+
+export { checkAuth, checkTeamAuth };

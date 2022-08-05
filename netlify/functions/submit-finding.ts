@@ -12,15 +12,15 @@ const {
   moralisServerUrl,
 } = require("../_config");
 
+import { TeamData } from "../../types/user";
+
+import { checkTeamAuth } from "../util/auth-utils";
 import {
   getContest,
   getRiskCodeFromGithubLabel,
   isContestActive,
 } from "../util/contest-utils";
-import {
-  checkAndUpdateTeamAddress,
-  sendConfirmationEmail,
-} from "../util/user-utils";
+import { updateTeamAddress, sendConfirmationEmail } from "../util/user-utils";
 
 const OctokitClient = Octokit.plugin(createPullRequest);
 const octokit = new OctokitClient({ auth: token });
@@ -154,7 +154,19 @@ exports.handler = async (event) => {
       };
     }
 
-    await checkAndUpdateTeamAddress(attributedTo, user, address);
+    if (attributedTo !== user) {
+      const team: TeamData = await checkTeamAuth(attributedTo, user);
+      if (!team.address) {
+        try {
+          await updateTeamAddress(team, address);
+        } catch (error) {
+          // don't throw error if this PR fails - there will likely be duplicates
+          // due to the fact that PRs take some time to review and merge and we
+          // don't want to block teams from submitting findings in the meantime
+          console.warn(error);
+        }
+      }
+    }
   } catch (error) {
     return {
       statusCode: error.status || 500,

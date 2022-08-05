@@ -1,9 +1,10 @@
 import { Octokit } from "@octokit/core";
 
-import { getUserTeams } from "./user-utils";
-
+import { Contest } from "../../types/contest";
 import { Finding } from "../../types/finding";
+
 import { getRiskCodeFromGithubLabel } from "./contest-utils";
+import { getUserTeams } from "./user-utils";
 
 const firstPageQuery = `
 query ($name: String!, $owner: String!) {
@@ -268,7 +269,7 @@ async function wardenFindingsForContest(
   const labelsToDisplay = [
     ...riskLabels,
     "edited-by-warden",
-    // @todo: maybe add "withdrawn by warden"
+    "withdrawn by warden",
   ];
 
   const submissions = submission_files.map(
@@ -319,10 +320,17 @@ async function wardenFindingsForContest(
   return Promise.all(submissions);
 }
 
+// @todo: should this be in contest utils?
+function getRepoName(contest: Contest) {
+  return contest.findingsRepo.split("/").slice(-1)[0];
+}
+
 export {
   QueryResponse,
   getAllIssues,
   getAvailableFindings,
   getSubmittedFindingsFromFolder,
   wardenFindingsForContest,
+  getRepoName,
+  getMarkdownReportForUser,
 };
