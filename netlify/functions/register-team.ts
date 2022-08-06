@@ -1,10 +1,11 @@
-const { createPullRequest } = require("octokit-plugin-create-pull-request");
-const fetch = require("node-fetch");
-const { Moralis } = require("moralis/node");
-const { Octokit } = require("@octokit/core");
+import fetch from "node-fetch";
+import Moralis from "moralis/node";
+import { createPullRequest } from "octokit-plugin-create-pull-request";
+import { File } from "octokit-plugin-create-pull-request/dist-types/types";
 const sharp = require("sharp");
+import { Octokit } from "@octokit/core";
 
-const { token, moralisAppId, moralisServerUrl } = require("../_config");
+import { token, moralisAppId, moralisServerUrl } from "../_config";
 
 const OctokitClient = Octokit.plugin(createPullRequest);
 const octokit = new OctokitClient({ auth: token });
@@ -156,7 +157,7 @@ exports.handler = async (event) => {
       formattedTeamData.image = `./avatars/${teamName}.${info.format}`;
     }
 
-    const files: Record<string, unknown> = {
+    const files: { [path: string]: string | File } = {
       [`_data/handles/${teamName}.json`]: JSON.stringify(
         formattedTeamData,
         null,
@@ -175,8 +176,8 @@ exports.handler = async (event) => {
     const branchName = `team/${teamName}`;
     try {
       const res = await octokit.createPullRequest({
-        owner: process.env.GITHUB_REPO_OWNER,
-        repo: process.env.REPO,
+        owner: process.env.GITHUB_REPO_OWNER!,
+        repo: process.env.REPO!,
         title,
         body,
         head: branchName,
@@ -188,6 +189,13 @@ exports.handler = async (event) => {
           },
         ],
       });
+
+      if (!res) {
+        return {
+          statusCode: 400,
+          body: JSON.stringify({ error: "Failed to create pull request." }),
+        };
+      }
 
       return {
         statusCode: 201,

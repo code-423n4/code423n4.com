@@ -5,7 +5,7 @@ const Mailgun = require("mailgun.js");
 const { Octokit } = require("@octokit/core");
 
 const { token, apiKey, domain } = require("../_config");
-const { getMarkdownReportForUser } = require("../util/github-utils");
+import { getMarkdownReportForUser } from "../util/github-utils";
 
 const octokit = new Octokit({ auth: token });
 
@@ -147,8 +147,8 @@ exports.handler = async (event) => {
       const existingReport = await getMarkdownReportForUser(
         octokit,
         repo,
-        attributedTo,
-        riskCode
+        handle,
+        risk
       );
       if (existingReport) {
         throw {
