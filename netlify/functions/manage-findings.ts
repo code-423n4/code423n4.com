@@ -290,7 +290,7 @@ async function editFinding(
     );
     emailBody =
       `Attribution changed from ${data.attributedTo.oldValue} to ${data.attributedTo.newValue}\n\n` +
-      `Wallet address: ${data.attributedTo.address}` +
+      `Wallet address: ${data.attributedTo.address}\n\n` +
       emailBody;
     edited = true;
   }
