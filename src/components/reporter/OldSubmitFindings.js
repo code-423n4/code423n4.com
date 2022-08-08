@@ -1,43 +1,41 @@
-import React, { useEffect, useState } from "react";
-import Agreement from "../content/Agreement";
+import React, { useEffect, useState, useCallback } from "react";
+
 import {
   emailField,
   addressField,
   titleField,
   riskField,
   wardenField,
-  linesOfCodeField,
+  linksToCodeField,
   vulnerabilityDetailsField,
   qaGasDetailsField,
 } from "./findings/fields";
 import {
   initStateFromStorage,
   config,
-  checkTitle,
+  getTitle,
   checkQaOrGasFinding,
 } from "./findings/functions";
+
+import Agreement from "../content/Agreement";
 import Form from "../form/Form";
+import FormField from "./widgets/FormField";
+import { Widget } from "./widgets";
+
+import * as widgetStyles from "./widgets/Widgets.module.scss";
 
 const mdTemplate =
-"## Impact\nDetailed description of the impact of this finding.\n\n## Proof of Concept\nProvide direct links to all referenced code in GitHub. Add screenshots, logs, or any other relevant proof that illustrates the concept.\n\n## Tools Used\n\n## Recommended Mitigation Steps";
+  "## Impact\nDetailed description of the impact of this finding.\n\n## Proof of Concept\nProvide direct links to all referenced code in GitHub. Add screenshots, logs, or any other relevant proof that illustrates the concept.\n\n## Tools Used\n\n## Recommended Mitigation Steps";
 
 const initialState = {
-  contest: "",
-  sponsor: "",
-  repo: "",
-  title: "",
   email: "",
   handle: "",
   polygonAddress: "",
+  title: "",
   risk: "",
   details: mdTemplate,
   qaGasDetails: "",
-  linesOfCode: [
-    {
-      id: Date.now(),
-      value: "",
-    },
-  ],
+  linksToCode: [""],
 };
 
 const OldSubmitFindings = ({ wardensList, sponsor, contest, repo }) => {
@@ -46,20 +44,13 @@ const OldSubmitFindings = ({ wardensList, sponsor, contest, repo }) => {
   });
 
   const [state, setState] = useState(initialState);
+  const [hasValidationErrors, setHasValidationErrors] = useState(false);
   const [fieldList, setFieldList] = useState([
     wardenField(wardens),
     emailField,
     addressField,
     riskField,
   ]);
-  const submissionUrl = `/.netlify/functions/old-submit-finding`;
-
-  const displayedInfo = {
-    title: `${sponsor} contest finding`,
-    buttonText: "Create issue",
-    successButton: "Submit another",
-    afterSubmit: "Your report has been submitted.",
-  };
 
   useEffect(() => {
     initStateFromStorage(contest, initialState, setState);
@@ -74,23 +65,14 @@ const OldSubmitFindings = ({ wardensList, sponsor, contest, repo }) => {
   const changeHandler = (e) => {
     if (Array.isArray(e)) {
       setState((state) => {
-        return { ...state, linesOfCode: e };
+        return { ...state, linksToCode: e };
       });
     } else {
       const { name, value } = e?.target;
       switch (name) {
-        case "risk":
-          setState((state) => {
-            return {
-              ...state,
-              [name]: value,
-              labels: [config.labelAll, value ? value : ""],
-            };
-          });
-          break;
         case "title":
           setState((state) => {
-            return { ...state, [name]: checkTitle(value, state.risk) };
+            return { ...state, [name]: getTitle(value, state.risk) };
           });
           break;
         default:
@@ -102,40 +84,51 @@ const OldSubmitFindings = ({ wardensList, sponsor, contest, repo }) => {
     }
   };
 
-  const handleSubmit = (
-    setHasValidationErrors,
-    submitFinding,
-    setIsExpanded
-  ) => {
-    const locString = state.linesOfCode.map((loc) => loc.value).join("\n");
+  const validator = useCallback(() => {
     const details = checkQaOrGasFinding(state.risk)
       ? state.qaGasDetails
       : state.details;
-    const markdownBody = `# Lines of code\n\n${locString}\n\n\n# Vulnerability details\n\n${details}\n\n`;
-
+    const { email, handle, polygonAddress, title, risk } = state;
+    const isQaOrGasFinding = checkQaOrGasFinding(state.risk);
     // extract required fields from field data for validation check
-    const formatedRisk = state.risk ? state.risk.slice(0, 1) : "";
-    const formatedBody = checkQaOrGasFinding(state.risk)
-      ? details
-      : markdownBody;
-
-    const { email, handle, address, title } = state;
     const requiredFields = checkQaOrGasFinding(state.risk)
-      ? [email, handle, address, formatedRisk, formatedBody]
-      : [email, handle, address, formatedRisk, title, formatedBody];
-    let hasErrors = requiredFields.some((field) => {
+      ? [email, handle, polygonAddress, risk, details]
+      : [email, handle, polygonAddress, risk, title, details];
+    const hasErrors = requiredFields.some((field) => {
       return field === "" || field === undefined;
     });
 
-    // TODO: verify that loc include code lines and are valid URLs
-    if (!checkQaOrGasFinding(state.risk) && !state.linesOfCode[0].value) {
-      hasErrors = true;
+    if (hasErrors) {
+      setHasValidationErrors(true);
+      return true;
     }
 
-    const regex = new RegExp("#L[0-9]+(-L[0-9]+)?$");
-    const hasInvalidLinks = state.linesOfCode.some((line) => {
-      return !regex.test(line.value);
+    const linksToCodeRegex = new RegExp("#L[0-9]+(-L[0-9]+)?$");
+    const hasInvalidLinks = state.linksToCode.some((link) => {
+      return !linksToCodeRegex.test(link);
     });
+
+    if (!isQaOrGasFinding && (!state.linksToCode[0] || hasInvalidLinks)) {
+      setHasValidationErrors(true);
+      return true;
+    }
+
+    setHasValidationErrors(false);
+    return false;
+  }, [state]);
+
+  const handleSubmit = useCallback(async () => {
+    const { email, handle, polygonAddress, linksToCode } = state;
+    const linksToCodeString = linksToCode.join("\n");
+    const details = checkQaOrGasFinding(state.risk)
+      ? state.qaGasDetails
+      : state.details;
+    const markdownBody = `# Lines of code\n\n${linksToCodeString}\n\n\n# Vulnerability details\n\n${details}\n\n`;
+
+    const formattedRisk = state.risk ? state.risk.slice(0, 1) : "";
+    const formattedBody = checkQaOrGasFinding(state.risk)
+      ? details
+      : markdownBody;
 
     const submitData = {
       contest,
@@ -143,22 +136,26 @@ const OldSubmitFindings = ({ wardensList, sponsor, contest, repo }) => {
       repo: repo.split("/").pop(),
       email,
       handle,
-      address,
-      risk: formatedRisk,
-      title: checkTitle(state.title, state.risk),
-      body: formatedBody,
-      labels: state.labels,
+      address: polygonAddress,
+      risk: formattedRisk,
+      title: getTitle(state.title, state.risk),
+      body: formattedBody,
+      labels: [config.labelAll, state.risk],
     };
-    setHasValidationErrors(hasErrors || hasInvalidLinks);
-    if (!hasErrors) {
-      submitFinding(submissionUrl, submitData);
-      if (typeof window !== `undefined`) {
-        window.localStorage.removeItem(contest);
-      }
-
-      setIsExpanded(false);
+    const submissionUrl = `/.netlify/functions/old-submit-finding`;
+    const response = await fetch(submissionUrl, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(submitData),
+    });
+    if (!response.ok) {
+      const { error } = await response.json();
+      throw error || "Something went wrong.";
     }
-  };
+    if (typeof window !== `undefined`) {
+      window.localStorage.removeItem(contest);
+    }
+  }, [state, contest, repo, sponsor]);
 
   useEffect(() => {
     if (checkQaOrGasFinding(state.risk)) {
@@ -176,10 +173,11 @@ const OldSubmitFindings = ({ wardensList, sponsor, contest, repo }) => {
         addressField,
         riskField,
         titleField,
-        linesOfCodeField,
+        linksToCodeField,
         vulnerabilityDetailsField,
       ]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.risk]); // don't add wardens from here
 
   const resetForm = () => {
@@ -190,27 +188,44 @@ const OldSubmitFindings = ({ wardensList, sponsor, contest, repo }) => {
         risk: "",
         details: initialState.details,
         qaGasDetails: "",
-        linesOfCode: [
-          {
-            id: Date.now(),
-            value: "",
-          },
-        ],
+        linksToCode: [""],
       };
     });
   };
 
   return (
     <Form
-      state={state}
-      setState={setState}
-      initialState={initialState}
-      fieldsList={fieldList}
-      handleSubmit={handleSubmit}
-      changeHandler={changeHandler}
-      displayedInfo={displayedInfo}
+      onSubmit={handleSubmit}
+      title={`${sponsor} contest finding`}
+      submitButtonText="Create issue"
+      successButtonText="Submit another"
+      successMessage="Your report has been submitted."
       resetForm={resetForm}
+      validator={validator}
     >
+      <fieldset className={widgetStyles.Fields}>
+        {fieldList.map((field, index) => {
+          const isInvalid =
+            hasValidationErrors && field.required && !state[field.name];
+          return (
+            <FormField
+              key={`${field.name} ${index}`}
+              name={field.name}
+              label={field.label}
+              helpText={field.helpText}
+              type={field.type}
+              isInvalid={isInvalid}
+            >
+              <Widget
+                field={field}
+                onChange={changeHandler}
+                fieldState={state}
+                isInvalid={isInvalid}
+              />
+            </FormField>
+          );
+        })}
+      </fieldset>
       <Agreement />
     </Form>
   );

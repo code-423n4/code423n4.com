@@ -127,7 +127,7 @@ export default function ConfirmAccount() {
               ))}
             </ul>
             <Input
-              label="Discord Username *"
+              label="Discord Username"
               handleChange={handleChange}
               value={state.discordUsername}
               name="discordUsername"
@@ -135,7 +135,7 @@ export default function ConfirmAccount() {
               validator={validateDiscordUsername}
             />
             <Input
-              label="Email Address *"
+              label="Email Address"
               handleChange={handleChange}
               value={state.emailAddress}
               name="emailAddress"
