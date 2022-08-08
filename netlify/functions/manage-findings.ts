@@ -234,6 +234,22 @@ async function editFinding(
     }
   }
 
+  // don't allow users to change attribution of QA or gas reports
+  if (
+    isQaOrGasSubmission &&
+    data.attributedTo.oldValue !== data.attributedTo.newValue
+  ) {
+    throw {
+      message:
+        "You cannot change the author of a QA or Gas report. If you meant to submit your report as " +
+        data.attributedTo.newValue +
+        " instead of " +
+        data.attributedTo.oldValue +
+        ", you can withdraw this report and submit a new one as " +
+        data.attributedTo.newValue,
+    };
+  }
+
   let edited = false;
 
   const owner = process.env.GITHUB_REPO_OWNER!;
@@ -260,7 +276,11 @@ async function editFinding(
 
   let emailBody = `Updated by: ${username}`;
 
-  if (data.attributedTo.oldValue !== data.attributedTo.newValue) {
+  // Only handle attribution changes between Med and High
+  if (
+    !isQaOrGasSubmission &&
+    data.attributedTo.oldValue !== data.attributedTo.newValue
+  ) {
     handleAttributionChange(
       client,
       repoName,
@@ -273,64 +293,6 @@ async function editFinding(
       `Wallet address: ${data.attributedTo.address}` +
       emailBody;
     edited = true;
-  }
-
-  // Additional steps for attribution or body changes for QA and Gas reports
-  if (isQaOrGasSubmission) {
-    let reportContent;
-    let message = "";
-    const editMessage = `Report for issue #${issueNumber} updated by ${username}. `;
-    const attributionMessage = `Report attribution changed for issue #${issueNumber} from ${data.attributedTo.oldValue} to ${data.attributedTo.newValue} by ${username}. `;
-
-    if (data.body) {
-      reportContent = data.body;
-      message += editMessage;
-    } else {
-      // if report did not change, use saved report
-      const reportMarkdown = await getMarkdownReportForUser(
-        client,
-        repoName,
-        username,
-        oldRiskCode as "Q" | "G"
-      );
-      reportContent = reportMarkdown;
-      // @todo: remove this once we can be sure all reports are saved as md files
-      // if there is not a report saved, use issue body
-      if (!reportMarkdown) {
-        const issue = await client.request(
-          "GET /repos/{owner}/{repo}/issues/{issue_number}",
-          {
-            owner,
-            repo: repoName,
-            issue_number: issueNumber,
-          }
-        );
-        reportContent = issue.data.body;
-      }
-    }
-
-    // create/update report
-    await client.createOrUpdateTextFile({
-      owner,
-      repo: repoName,
-      path: `data/${data.attributedTo.newValue}-${newRiskCode}.md`,
-      content: reportContent,
-      message:
-        data.attributedTo.oldValue !== data.attributedTo.newValue
-          ? message + attributionMessage
-          : message,
-    });
-
-    if (data.attributedTo.oldValue !== data.attributedTo.newValue) {
-      // delete old report
-      await client.createOrUpdateTextFile({
-        owner,
-        repo: repoName,
-        path: `data/${data.attributedTo.oldValue}-${oldRiskCode}.md`,
-        content: null,
-        message: attributionMessage,
-      });
-    }
   }
 
   // Only handle risk changes between Med and High
@@ -389,9 +351,17 @@ async function editFinding(
   }
 
   if (data.body) {
-    // @todo: remove this once we can be sure all reports are saved as md files
     if (isQaOrGasSubmission) {
-      simpleFields.body = `See the markdown file with the details of this report [here](https://github.com/${owner}/${repoName}/blob/main/data/${data.attributedTo.newValue}-${newRiskCode}.md).`;
+      await client.createOrUpdateTextFile({
+        owner,
+        repo: repoName,
+        path: `data/${data.attributedTo.newValue}-${newRiskCode}.md`,
+        content: data.body,
+        message: `Report for issue #${issueNumber} updated by ${username}`,
+      });
+      // @todo: remove this once we can be sure all reports are saved as md files
+      const markdownPath = `https://github.com/${owner}/${repoName}/blob/main/data/${data.attributedTo.newValue}-${newRiskCode}.md`;
+      simpleFields.body = `See the markdown file with the details of this report [here](${markdownPath}).`;
     } else {
       simpleFields.body = data.body;
     }
