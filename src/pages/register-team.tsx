@@ -4,12 +4,12 @@ import React from "react";
 import ProtectedPage from "../components/ProtectedPage";
 import TeamRegistrationForm from "../components/TeamRegistrationForm";
 
-import * as styles from "../components/form/Form.module.scss";
-
 export default function TeamRegistration({ data }) {
-  const handles = new Set(data.handles.edges.map((h) => h.node.handle));
+  const handles: Set<string> = new Set(
+    data.handles.edges.map((h) => h.node.handle)
+  );
 
-  let wardens: { value: string; image: string }[] = [];
+  let wardens: { value: string; image: unknown }[] = [];
   data.handles.edges.forEach(({ node }) => {
     if (!node.members) {
       wardens.push({ value: node.handle, image: node.image });
@@ -23,11 +23,11 @@ export default function TeamRegistration({ data }) {
     >
       <div className="wrapper-main">
         <h1 className="page-header">Register a Team</h1>
-        <TeamRegistrationForm
-          className={styles.Form}
-          handles={handles}
-          wardens={wardens}
-        />
+        <p className="center">
+          Before you register your team, please ensure each member has connected
+          their wallet to their C4 account.
+        </p>
+        <TeamRegistrationForm handles={handles} wardens={wardens} />
       </div>
     </ProtectedPage>
   );

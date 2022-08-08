@@ -101,7 +101,7 @@ function ApplyForCertifiedContributor() {
                 <form className={clsx(styles.Form, styles.FormSmall)}>
                   <h1>Certification Application</h1>
                   <Input
-                    label="Github Username *"
+                    label="Github Username"
                     handleChange={(e) => setGitHubUsername(e.target.value)}
                     value={gitHubUsername}
                     name="gitHubUsername"

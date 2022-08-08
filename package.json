@@ -17,6 +17,7 @@
     "@notionhq/client": "^0.4.13",
     "@octokit/core": "^3.5.1",
     "@octokit/graphql": "^4.8.0",
+    "@octokit/plugin-create-or-update-text-file": "^2.0.1",
     "@walletconnect/web3-provider": "^1.7.8",
     "assert": "^2.0.0",
     "babel-eslint": "^10.0.0",

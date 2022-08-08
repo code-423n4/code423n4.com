@@ -1114,7 +1114,7 @@ For this contest, 46 reports were submitted by wardens detailing low risk and no
 ### Low Risk Issues
 
 |    | Issue                                                                                                                       | Instances |
-| -- | :-------------------------------------------------------------------------------------------------------------------------- | :-------: |
+| -- | :-------------------------------------------------------------------------------------------------------------------------- | ------- |
 | 1  | Latent funds can be stolen                                                                                                  |     1     |
 | 2  | Low level calls don't check for contract existence                                                                          |     1     |
 | 3  | Set sane maximums for input parameters                                                                                      |     2     |
@@ -1132,7 +1132,7 @@ Total: 73 instances over 11 issues
 ### Non-critical Issues
 
 |    | Issue                                                                                                                           | Instances |
-| -- | :------------------------------------------------------------------------------------------------------------------------------ | :-------: |
+| -- | :------------------------------------------------------------------------------------------------------------------------------ | ------- |
 | 1  | Adding a `return` statement when the function defines a named return variable, is redundant                                     |     4     |
 | 2  | `override` function arguments that are unused should have the variable name removed or commented out to avoid compiler warnings |     1     |
 | 3  | `public` functions not called by the contract should be declared `external` instead                                             |     12    |
