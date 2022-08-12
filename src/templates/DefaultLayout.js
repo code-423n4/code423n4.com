@@ -1,7 +1,6 @@
 import React from "react";
 import Helmet from "react-helmet";
 import { ToastContainer } from "react-toastify";
-import Banner from "../components/Banner";
 
 import Footer from "../components/content/Footer";
 import Header from "../components/content/Header";
@@ -82,7 +81,6 @@ const DefaultLayout = (props) => {
         </title>
         <body className={bodyClass} />
       </Helmet>
-      <Banner />
       <Header hideConnectWalletDropdown={hideConnectWalletDropdown} />
       <ToastContainer />
       <Modal />
