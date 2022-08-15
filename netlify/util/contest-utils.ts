@@ -26,4 +26,34 @@ function isContestActive(contest: Contest): boolean {
   return now >= start && now <= end;
 }
 
-export { getContest, isContestActive };
+// @todo: determine if this is the right place for these functions
+const riskCodeToLabelMap = {
+  "3": "3 (High Risk)",
+  "2": "2 (Med Risk)",
+  Q: "QA (Quality Assurance)",
+  G: "G (Gas Optimization)",
+};
+
+function getRiskCodeFromGithubLabel(label: string): string {
+  for (const code in riskCodeToLabelMap) {
+    if (riskCodeToLabelMap[code] === label) {
+      return code;
+    }
+  }
+  throw { message: "risk not found" };
+}
+
+function getGithubLabelFromRiskCode(code: string): string {
+  const label = riskCodeToLabelMap[code];
+  if (label) {
+    return label;
+  }
+  throw "risk label not found";
+}
+
+export {
+  getContest,
+  isContestActive,
+  getRiskCodeFromGithubLabel,
+  getGithubLabelFromRiskCode,
+};
