@@ -7,15 +7,20 @@ import { toast } from "react-toastify";
 import {
   Finding,
   FindingCreateRequest,
+  FindingDeleteRequest,
   FindingEditRequest,
 } from "../../types/finding";
 
 // hooks
+import { useModalContext } from "../hooks/ModalContext";
 import useUser from "../hooks/UserContext";
 
 // components
 import ProtectedPage from "../components/ProtectedPage";
 import SubmitFindings from "../components/reporter/SubmitFindings";
+
+// styles
+import * as styles from "../components/form/Form.module.scss";
 
 export interface ReportState {
   title: string;
@@ -44,8 +49,7 @@ const initialState: ReportState = {
 };
 
 const ReportForm = ({ data, location }) => {
-  const { currentUser } = useUser();
-
+  // data
   const {
     sponsor,
     contestid,
@@ -54,12 +58,19 @@ const ReportForm = ({ data, location }) => {
     end_time,
     fields,
   } = data.contestsCsv;
+
+  // hooks
+  const { showModal } = useModalContext();
+  const { currentUser } = useUser();
+
+  // state
   const [state, setState] = useState<ReportState>(initialState);
   const [attributedTo, setAttributedTo] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [mode, setMode] = useState<FormMode>(FormMode.Create);
   const [issueId, setIssueId] = useState<number>(0);
   const [findingId, setFindingId] = useState<string>(contestid);
+  const [isClosed, setIsClosed] = useState<boolean>(false);
   const [hasContestEnded, setHasContestEnded] = useState<boolean>(
     Date.now() > new Date(end_time).getTime()
   );
@@ -85,7 +96,7 @@ const ReportForm = ({ data, location }) => {
       }
       const user = await Moralis.User.current();
       if (!user) {
-        throw "You must be logged in to submit findings";
+        throw "You must be logged in to submit or edit findings";
       }
       const sessionToken = user.attributes.sessionToken;
       return fetch(`/.netlify/functions/${endpoint}`, {
@@ -109,19 +120,15 @@ const ReportForm = ({ data, location }) => {
       issue: issueId!,
       contest: parseInt(data.contest),
       emailAddresses: data.emailAddresses,
-    };
-    if (state.title !== data.title) {
-      requestData.title = data.title;
-    }
-    if (state.risk !== data.risk) {
-      requestData.risk = { oldValue: state.risk, newValue: data.risk };
-    }
-    if (attributedTo !== data.attributedTo) {
-      requestData.attributedTo = {
+      risk: { oldValue: state.risk, newValue: data.risk },
+      attributedTo: {
         oldValue: attributedTo,
         newValue: data.attributedTo,
         address: data.address,
-      };
+      },
+    };
+    if (state.title !== data.title) {
+      requestData.title = data.title;
     }
     if (data.body !== state.qaGasDetails) {
       requestData.body = data.body;
@@ -129,22 +136,56 @@ const ReportForm = ({ data, location }) => {
 
     // If nothing changed, do not submit
     if (
-      !requestData.attributedTo &&
+      requestData.attributedTo.newValue === requestData.attributedTo.oldValue &&
+      requestData.risk.newValue === requestData.risk.oldValue &&
       !requestData.title &&
-      !requestData.body &&
-      !requestData.risk
+      !requestData.body
     ) {
       throw "There were no changes to save.";
     }
     return requestData;
   };
 
-  const initializeEditState = (finding) => {
+  const onDelete = useCallback(async (): Promise<void> => {
+    const user = await Moralis.User.current();
+    if (!user) {
+      throw "You must be logged in to withdraw findings";
+    }
+    const sessionToken = user.attributes.sessionToken;
+    const q = new URLSearchParams({
+      contest: contestid.toString(),
+      issue: issueId.toString(),
+    });
+    const body: FindingDeleteRequest = {
+      attributedTo,
+      risk: state.risk,
+      // @todo: enable adding multiple email addresses
+      emailAddresses: [currentUser.emailAddress],
+    };
+    const response = await fetch(`/.netlify/functions/manage-findings?` + q, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Authorization": `Bearer ${sessionToken}`,
+        "C4-User": currentUser.username,
+      },
+      body: JSON.stringify(body),
+    });
+    if (!response.ok) {
+      const { error } = await response.json();
+      throw error;
+    }
+  }, [issueId, currentUser, state.risk, attributedTo]);
+
+  const initializeEditState = (finding: Finding) => {
+    if (finding.state === "CLOSED") {
+      setIsClosed(true);
+    }
     // normalize whitespace
-    const normalizedBody = finding.body.replaceAll("\r\n", "\n");
+    const normalizedBody = finding.body.replace(/\r\n/g, "\n");
     const { links, body } = separateLinksFromBody(normalizedBody, finding.risk);
     setMode(FormMode.Edit);
-    setIssueId(parseInt(finding.issueNumber));
+    setIssueId(finding.issueNumber);
     setFindingId(`${contestid}-${finding.issueNumber}`);
     setState({
       title: finding.title,
@@ -164,14 +205,6 @@ const ReportForm = ({ data, location }) => {
     setMode(FormMode.Create);
     setAttributedTo(currentUser.username);
   };
-
-  function findDiff(str1, str2) {
-    let diff = "";
-    str2.split("").forEach(function (val, i) {
-      if (val != str1.charAt(i)) diff += val;
-    });
-    return diff;
-  }
 
   useEffect(() => {
     (async () => {
@@ -271,10 +304,25 @@ const ReportForm = ({ data, location }) => {
             View active contests
           </Link>
         </div>
+      ) : isClosed ? (
+        <div className={styles.Form}>
+          <h1 className={styles.Heading1}>This finding has been withdrawn</h1>
+          <h3 className={styles.Heading3}>Submitted by:</h3>
+          <ul>
+            <li>{attributedTo}</li>
+          </ul>
+          <h3 className={styles.Heading3}>Finding:</h3>
+          <ul>
+            <li>Risk: {state.risk}</li>
+            <li>Title: {state.title}</li>
+            <li>Details: {state.qaGasDetails}</li>
+          </ul>
+        </div>
       ) : (
         <SubmitFindings
           sponsor={sponsor.name}
           contest={contestid}
+          contestPath={fields.contestPath}
           repo={findingsRepo}
           title={title}
           initialState={state}
@@ -293,6 +341,7 @@ const ReportForm = ({ data, location }) => {
             mode === FormMode.Create ? "Submit Another" : undefined
           }
           cancelButtonText={mode === FormMode.Edit ? "Undo Changes" : undefined}
+          onDelete={mode === FormMode.Edit ? onDelete : undefined}
         />
       )}
     </ProtectedPage>
@@ -314,6 +363,7 @@ export const pageQuery = graphql`
       }
       fields {
         submissionPath
+        contestPath
       }
     }
   }

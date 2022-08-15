@@ -1,4 +1,3 @@
-import { readFileSync } from "fs";
 import { findUser } from "../util/user-utils";
 
 exports.handler = async (event) => {
