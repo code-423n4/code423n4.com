@@ -538,7 +538,7 @@ export default function RegistrationForm({ handles, wardens, className }) {
           )}
           <div className="captcha-container">
             <HCaptcha
-              sitekey="4963abcb-188b-4972-8e44-2887e315af52"
+              sitekey={process.env.GATSBY_HCAPTCHA_SITE_KEY!}
               theme="dark"
               onVerify={handleCaptchaVerification}
             />
