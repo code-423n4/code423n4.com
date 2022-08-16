@@ -935,7 +935,7 @@ For example, the asset token of [The Sandbox Game](https://www.sandbox.game/en/)
 
 Assuming there is a user tries to buy two tokens of Sandbox's ASSETs with the same token id, the actual transferring is carried by `InfinityExchange::_transferNFTs` which first checks ERC721 interface supports and then ERC1155.
 
-```solidity=
+```solidity
   function _transferNFTs(
     address from,
     address to,
@@ -951,7 +951,7 @@ Assuming there is a user tries to buy two tokens of Sandbox's ASSETs with the sa
 
 The code will go into `_transferERC721s` instead of `_transferERC1155s`, since the Sandbox's ASSETs also support ERC721 interface. Then,
 
-```solidity=
+```solidity
   function _transferERC721s(
     address from,
     address to,
@@ -981,7 +981,7 @@ Check the return values of [Sandbox's ASSETs](https://etherscan.io/token/0xa342f
 
 Reorder the checks,e.g.,
 
-```solidity=
+```solidity
   function _transferNFTs(
     address from,
     address to,
