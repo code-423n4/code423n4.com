@@ -1,8 +1,10 @@
 import { Octokit } from "@octokit/core";
 
-import { getUserTeams } from "./user-utils";
-
+import { Contest } from "../../types/contest";
 import { Finding } from "../../types/finding";
+
+import { getRiskCodeFromGithubLabel } from "./contest-utils";
+import { getUserTeams } from "./user-utils";
 
 const firstPageQuery = `
 query ($name: String!, $owner: String!) {
@@ -91,6 +93,11 @@ interface QueryResponse {
       };
     };
   };
+  rateLimit: {
+    cost: number;
+    limit: number;
+    remaining: number;
+  };
 }
 
 async function getFirstPage(
@@ -141,6 +148,29 @@ async function getAllIssues(
   }
 
   return issues;
+}
+
+async function getMarkdownReportForUser(
+  client: Octokit,
+  repo: string,
+  username: string,
+  reportType: "G" | "Q"
+): Promise<string> {
+  const reportPath = `data/${username}-${reportType}.md`;
+  try {
+    const report = await client.request(
+      "GET /repos/{owner}/{repo}/contents/{path}",
+      {
+        owner: process.env.GITHUB_CONTEST_REPO_OWNER!,
+        repo: repo,
+        path: reportPath,
+      }
+    );
+    // @ts-ignore // @todo: fix this typescript error
+    return Buffer.from(report.data.content, "base64").toString();
+  } catch (error) {
+    return "";
+  }
 }
 
 async function getSubmittedFindingsFromFolder(
@@ -236,37 +266,63 @@ async function wardenFindingsForContest(
     "G (Gas Optimization)",
   ];
 
-  const submissions = submission_files.map((item) => {
-    const labels = github_issues[item.issueNumber].labels.nodes
-      .filter((label) => {
-        return riskLabels.indexOf(label.name) >= 0;
-      })
-      .map((label) => {
-        return {
-          name: label.name,
-          color: label.color,
-        };
+  const labelsToDisplay = [
+    ...riskLabels,
+    "edited-by-warden",
+    "withdrawn by warden",
+  ];
+
+  const submissions = submission_files.map(
+    async (item): Promise<Finding> => {
+      const labels: { name: string; color: string }[] = github_issues[
+        item.issueNumber
+      ].labels.nodes.filter((label) => {
+        return labelsToDisplay.indexOf(label.name) >= 0;
       });
 
-    const riskLabel = labels.find((label) => {
-      return riskLabels.includes(label.name);
-    });
+      let body = github_issues[item.issueNumber].body;
 
-    const risk = riskLabel.name;
+      const riskLabel = labels.find((label) => {
+        return riskLabels.includes(label.name);
+      });
 
-    return {
-      ...item,
-      title: github_issues[item.issueNumber].title,
-      body: github_issues[item.issueNumber].body,
-      labels,
-      risk,
-      state: github_issues[item.issueNumber].state, // OPEN | CLOSED
-      createdAt: github_issues[item.issueNumber].createdAt,
-      updatedAt: github_issues[item.issueNumber].updatedAt,
-    };
-  });
+      const risk = riskLabel!.name;
+      const riskCode = getRiskCodeFromGithubLabel(risk);
+      if (
+        (riskCode === "Q" || riskCode === "G") &&
+        // @todo: remove this condition once we can be sure all reports are saved as md files
+        body.startsWith("See the markdown file with the details of this report")
+      ) {
+        const reportBody = await getMarkdownReportForUser(
+          client,
+          repoName,
+          handle,
+          riskCode
+        );
+        if (reportBody) {
+          body = reportBody;
+        }
+      }
 
-  return submissions;
+      return {
+        ...item,
+        title: github_issues[item.issueNumber].title,
+        body,
+        labels,
+        risk,
+        state: github_issues[item.issueNumber].state,
+        createdAt: github_issues[item.issueNumber].createdAt,
+        updatedAt: github_issues[item.issueNumber].updatedAt,
+      };
+    }
+  );
+
+  return Promise.all(submissions);
+}
+
+// @todo: should this be in contest utils?
+function getRepoName(contest: Contest) {
+  return contest.findingsRepo.split("/").slice(-1)[0];
 }
 
 export {
@@ -275,4 +331,6 @@ export {
   getAvailableFindings,
   getSubmittedFindingsFromFolder,
   wardenFindingsForContest,
+  getRepoName,
+  getMarkdownReportForUser,
 };

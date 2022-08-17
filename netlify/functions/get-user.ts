@@ -1,4 +1,3 @@
-import { readFileSync } from "fs";
 import { findUser } from "../util/user-utils";
 
 exports.handler = async (event) => {
@@ -11,22 +10,7 @@ exports.handler = async (event) => {
     };
   }
 
-  function isDangerousHandle(s) {
-    return s.match(/^[0-9a-zA-Z_\-]+$/) === null;
-  }
-
   const userHandle = event.queryStringParameters.id;
-
-  if (isDangerousHandle(userHandle)) {
-    return {
-      statusCode: 400,
-      body: JSON.stringify({
-        error:
-          "Handle can only contain alphanumeric characters [a-zA-Z0-9], underscores (_), and hyphens (-).",
-      }),
-    };
-  }
-
   try {
     const user = await findUser(userHandle);
 
