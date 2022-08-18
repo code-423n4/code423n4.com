@@ -1,3 +1,5 @@
+@import "../styles/mixins.scss";
+
 .Input {
   text-align: left;
   width: 100%;
@@ -7,10 +9,11 @@
   display: flex;
   padding: 0;
   font-family: var(--font-family);
+  align-items: center;
 }
 
 .DeleteButton {
-  height: 36px;
+  height: 40px;
   white-space: nowrap;
   align-self: center;
   background: none;
@@ -23,6 +26,36 @@
   &:hover {
     background: var(--lightest-background-purple);
     border: 2px solid white;
+  }
+}
+
+.SmallButton {
+  @include button;
+  height: 40px;
+  width: 50px;
+  padding: 0;
+  font-size: 0.9em;
+  white-space: nowrap;
+  align-self: center;
+  margin-left: 3px;
+  color: #fff;
+}
+
+.SaveButton {
+  background-color: var(--main-purple);
+
+  &:hover {
+    background-color: rgba(var(--main-purple-rgb), 0.8);
+    box-shadow: inset 0px 0px 0px 2px #fff;
+  }
+}
+
+.EditButton {
+  background-color: transparent;
+  box-shadow: inset 0px 0px 0px 2px #fff;
+
+  &:hover {
+    background-color: var(--main-purple);
   }
 }
 
@@ -40,9 +73,15 @@
   color: white;
   border-radius: 4px;
   border: none;
+  cursor: text;
 
   &::placeholder {
     color: rgba(255, 255, 255, 0.5);
+  }
+
+  &:disabled {
+    color: rgba(255, 255, 255, 0.5);
+    cursor: default;
   }
 }
 

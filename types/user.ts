@@ -14,3 +14,9 @@ export interface TeamData extends UserFileData {
   imageUrl?: string;
   address?: string;
 }
+
+export interface PaymentAddress {
+  address: string;
+  chain: string;
+  id: string;
+}

@@ -106,26 +106,40 @@ Moralis.Cloud.define("confirmUser", async (req) => {
   return result.length > 0;
 });
 
-Moralis.Cloud.define("markUserConfirmed", async (req) => {
-  const address = req.user.attributes.ethAddress;
-  const handle = req.params.handle;
-  const query = new Moralis.Query("AddressesFromPreviousSubmissions");
-  query.equalTo("address", address);
-  query.equalTo("handle", handle);
-
-  const user = await query.find({ useMasterKey: true });
-  if (!user) {
-    throw "Handle and address do not match";
-  }
-
-  user.set("confirmed", true);
-  user.save(null, { useMasterKey: true });
-});
-
 Moralis.Cloud.define("resetPassword", async (req) => {
   const { email } = req.user.attributes;
   if (!email) {
     throw "You must have an email address saved to reset your password";
   }
   Moralis.User.requestPasswordReset(email);
+});
+
+Moralis.Cloud.define("addPaymentAddress", async (req) => {
+  const chain = req.params.chain;
+  const address = req.params.address;
+  const PaymentAddress = Moralis.Object.extend("PaymentAddress");
+  const newAddress = new PaymentAddress();
+  newAddress.setACL(new Moralis.ACL(req.user));
+  await newAddress.save(
+    { chain, address, user: req.user },
+    { useMasterKey: true }
+  );
+  return newAddress;
+});
+
+// Ensure each user only has one payment address for each chain
+Moralis.Cloud.beforeSave("PaymentAddress", async (req) => {
+  if (!req.original) {
+    const user = req.object.get("user");
+    const chain = await req.object.get("chain");
+
+    const query = new Moralis.Query("PaymentAddress");
+    query.equalTo("chain", chain);
+    query.equalTo("user", user);
+    const results = await query.find({ useMasterKey: true });
+
+    if (results.length > 0) {
+      throw `User already has a ${chain} payment address saved`;
+    }
+  }
 });
