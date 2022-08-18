@@ -5,7 +5,7 @@ import LinksToCode from "../LinksToCodeInput";
 import WardenField from "./WardenField";
 
 const Widget = ({ field, fieldState, isInvalid, onChange }) => {
-  const { widget, name, required, options, maxSize = 65536 } = field;
+  const { widget, name, required, options, maxSize } = field;
 
   function handleChange(e) {
     onChange(e);
