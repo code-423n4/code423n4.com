@@ -245,17 +245,8 @@ export default function ConfirmAccount() {
             />
             <div className={styles.DividingLine}></div>
             <h2 className={styles.Heading2}>User Information</h2>
-            <div className={styles.ButtonsWrapper}>
-              <button
-                type="button"
-                className="button cta-button"
-                onClick={resetPassword}
-              >
-                Reset Password
-              </button>
-            </div>
-            <span className={inputStyles.Label}>Login Addresses:</span>
-            <ul>
+            <span className={inputStyles.Label}>Login Addresses</span>
+            <ul className={styles.List}>
               {authAddresses.map((address) => (
                 <li>{address}</li>
               ))}
@@ -287,6 +278,15 @@ export default function ConfirmAccount() {
               toggleEdit={true}
               handleSaveInputValue={handleSaveUserInfo}
             />
+            <div className={styles.ButtonsWrapper}>
+              <button
+                type="button"
+                className="button cta-button"
+                onClick={resetPassword}
+              >
+                Reset Password
+              </button>
+            </div>
             <div className={styles.DividingLine}></div>
             <h2 className={styles.Heading2}>Teams</h2>
             <p>Team Management coming soon!</p>

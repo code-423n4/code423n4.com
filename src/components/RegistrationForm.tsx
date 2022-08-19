@@ -1,9 +1,10 @@
-import React, { useCallback, useState, useRef, ReactNode } from "react";
 import clsx from "clsx";
-import HCaptcha from "@hcaptcha/react-hcaptcha";
-import Moralis from "moralis-v1/types";
-import { toast } from "react-toastify";
+import Moralis from "moralis-v1";
+import { Moralis as MoralisTypes } from "moralis-v1/types";
+import React, { useCallback, useState, useRef, ReactNode } from "react";
 import { useMoralis } from "react-moralis";
+import { toast } from "react-toastify";
+import HCaptcha from "@hcaptcha/react-hcaptcha";
 
 // hooks
 import useUser from "../hooks/UserContext";
@@ -159,7 +160,7 @@ export default function RegistrationForm({ handles, wardens, className }) {
   };
 
   const submitRegistration = useCallback(
-    (provider: Moralis.Web3ProviderType = "metamask") => {
+    (provider: MoralisTypes.Web3ProviderType = "metamask") => {
       const url = `/.netlify/functions/register-warden`;
       (async () => {
         if (
@@ -261,6 +262,10 @@ export default function RegistrationForm({ handles, wardens, className }) {
               user.set("email", state.emailAddress);
               user.set("registrationComplete", true);
               await user.save();
+              await Moralis.Cloud.run("addPaymentAddress", {
+                address: polygonAddress,
+                chain: "polygon",
+              });
               setStatus(FormStatus.Submitted);
             } catch (error) {
               setStatus(FormStatus.Error);
