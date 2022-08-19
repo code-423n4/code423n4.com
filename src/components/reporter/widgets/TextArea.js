@@ -9,7 +9,7 @@ import clsx from "clsx";
 
 import * as styles from "./Widgets.module.scss";
 
-import 'katex/dist/katex.min.css';
+import "katex/dist/katex.min.css";
 
 const TextArea = ({
   name,
@@ -17,13 +17,11 @@ const TextArea = ({
   fieldState,
   isInvalid,
   onChange,
-  maxSize = 65536,
+  maxSize,
 }) => {
   function handleChange(e) {
     onChange(e);
   }
-
-
 
   return (
     <Tabs className="alternate-tab">
@@ -47,7 +45,7 @@ const TextArea = ({
             maxLength={maxSize}
           />
 
-          {fieldState.length > maxSize - 100 ? (
+          {maxSize && fieldState.length > maxSize - 100 ? (
             <span className={clsx(styles.TextAreaCounter)}>
               {maxSize - fieldState.length} char. remaining
             </span>

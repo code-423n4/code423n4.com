@@ -5,6 +5,7 @@ const Mailgun = require("mailgun.js");
 const { Octokit } = require("@octokit/core");
 
 const { token, apiKey, domain } = require("../_config");
+import { getMarkdownReportForUser } from "../util/github-utils";
 
 const octokit = new Octokit({ auth: token });
 
@@ -37,7 +38,9 @@ exports.handler = async (event) => {
   if (event.httpMethod !== "POST") {
     return {
       statusCode: 405,
-      body: "Method not allowed",
+      body: JSON.stringify({
+        error: "Method not allowed",
+      }),
       headers: { Allow: "POST" },
     };
   }
@@ -137,13 +140,31 @@ exports.handler = async (event) => {
   };
 
   try {
+    const markdownPath = `data/${handle}-${risk}.md`;
+    const qaOrGasSubmissionBody = `See the markdown file with the details of this report [here](https://github.com/${owner}/${repo}/blob/main/${markdownPath}).`;
+    const isQaOrGasSubmission = Boolean(risk === "G" || risk === "Q");
+    if (isQaOrGasSubmission) {
+      const existingReport = await getMarkdownReportForUser(
+        octokit,
+        repo,
+        handle,
+        risk
+      );
+      if (existingReport) {
+        throw {
+          status: 400,
+          message: `It looks like you've already submitted a ${risk} report for this contest.`,
+        };
+      }
+    }
+
     const issueResult = await octokit.request(
       "POST /repos/{owner}/{repo}/issues",
       {
         owner,
         repo,
         title,
-        body,
+        body: isQaOrGasSubmission ? qaOrGasSubmissionBody : body,
         labels: [...labels, "old-submission-method"],
       }
     );
@@ -174,6 +195,16 @@ exports.handler = async (event) => {
       message,
       content,
     });
+
+    if (isQaOrGasSubmission) {
+      await octokit.request("PUT /repos/{owner}/{repo}/contents/{path}", {
+        owner,
+        repo,
+        path: markdownPath,
+        message: `${handle} data for issue #${issueId}`,
+        content: Buffer.from(body).toString("base64"),
+      });
+    }
 
     // Special email used for testing
     if (email === "@@@") {

@@ -6,7 +6,7 @@ export interface Finding {
     color: string;
   }[];
   risk: string;
-  state: string;
+  state: "OPEN" | "CLOSED";
   createdAt: string;
   updatedAt: string;
   issueNumber: number;
@@ -17,12 +17,12 @@ export interface FindingEditRequest {
   issue: number;
   contest: number;
   emailAddresses: string[];
-  attributedTo?: {
+  attributedTo: {
     newValue: string;
     oldValue: string;
     address: string;
   };
-  risk?: {
+  risk: {
     newValue: string;
     oldValue: string;
   };
@@ -47,4 +47,10 @@ export interface FindingCreateRequest {
   title: string;
   body: string;
   labels: string[];
+}
+
+export interface FindingDeleteRequest {
+  attributedTo: string;
+  risk: string;
+  emailAddresses: string[];
 }

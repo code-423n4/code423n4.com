@@ -1,5 +1,6 @@
 import clsx from "clsx";
 import { navigate } from "@reach/router";
+import { Link } from "gatsby";
 import React, { useEffect, useState, useCallback } from "react";
 import { toast } from "react-toastify";
 
@@ -45,12 +46,14 @@ enum FormStatus {
   Unsubmitted = "unsubmitted",
   Submitting = "submitting",
   Submitted = "submitted",
+  Deleting = "deleting",
   Error = "error",
 }
 
 interface SubmitFindingsProps {
   sponsor: string;
   contest: string;
+  contestPath: string;
   repo: string;
   title: string;
   initialState: ReportState;
@@ -61,11 +64,13 @@ interface SubmitFindingsProps {
   successMessage: string;
   successButtonText?: string;
   cancelButtonText?: string;
+  onDelete?: () => Promise<void>;
 }
 
 const SubmitFindings = ({
   sponsor,
   contest,
+  contestPath,
   repo,
   title,
   initialState,
@@ -76,6 +81,7 @@ const SubmitFindings = ({
   successMessage,
   successButtonText,
   cancelButtonText,
+  onDelete,
 }: SubmitFindingsProps) => {
   // hooks
   const { currentUser } = useUser();
@@ -87,7 +93,6 @@ const SubmitFindings = ({
     false
   );
   const [errorMessage, setErrorMessage] = useState<string>("An error occurred");
-  const [isExpanded, setIsExpanded] = useState<boolean>(false);
   const [state, setState] = useState<ReportState>(initialState);
   const [additionalEmailAddresses, setAdditionalEmailAddresses] = useState<
     string[]
@@ -219,6 +224,37 @@ const SubmitFindings = ({
     setState(initialState);
   };
 
+  const handleDeleteClick = async () => {
+    if (!onDelete) {
+      return;
+    }
+    showModal({
+      title: "Withdraw Finding",
+      body: "Are you sure you want to withdraw this finding?",
+      primaryButtonAction: handleDelete,
+      primaryButtonText: "Withdraw",
+    });
+  };
+
+  const handleDelete = useCallback(async (): Promise<void> => {
+    if (!onDelete) {
+      return;
+    }
+    setStatus(FormStatus.Deleting);
+    try {
+      await onDelete();
+      if (typeof window !== `undefined`) {
+        window.localStorage.removeItem(findingId);
+      }
+      // clear location state
+      navigate("", { state: {} });
+      setStatus(FormStatus.Submitted);
+    } catch (error) {
+      setStatus(FormStatus.Error);
+      setErrorMessage(error);
+    }
+  }, [status]);
+
   const submitFinding = useCallback(async () => {
     const isQaOrGasFinding = checkQaOrGasFinding(state.risk);
 
@@ -264,9 +300,7 @@ const SubmitFindings = ({
           toast.error(error);
         } else {
           setStatus(FormStatus.Error);
-          if (error) {
-            setErrorMessage(error);
-          }
+          setErrorMessage(error);
         }
       }
     } catch (error) {
@@ -355,30 +389,14 @@ const SubmitFindings = ({
       });
     } else {
       submitFinding();
-      setIsExpanded(false);
     }
   };
 
   return (
-    <div
-      className={
-        !isExpanded ? clsx(styles.Form) : clsx(styles.Form, styles.FormMax)
-      }
-    >
-      <div className={clsx(styles.FormHeader)}>
-        <h1 className={styles.Heading1}>{`${title} finding`}</h1>
-        <button
-          onClick={() => setIsExpanded(!isExpanded)}
-          className={clsx(styles.FormIconButton)}
-        >
-          <img
-            src={isExpanded ? "/images/compress.svg" : "/images/expand.svg"}
-            alt={isExpanded ? "compress form" : "expand form"}
-            className={clsx(styles.FormIcons)}
-          />
-        </button>
-      </div>
+    <div className={styles.Form}>
+      <h1 className={styles.Heading1}>{`${title} finding`}</h1>
       {(status === FormStatus.Unsubmitted ||
+        status === FormStatus.Deleting ||
         status === FormStatus.Submitting) && (
         <form>
           <fieldset className={widgetStyles.Fields}>
@@ -523,15 +541,26 @@ const SubmitFindings = ({
                 {cancelButtonText}
               </button>
             )}
+            {onDelete && (
+              <button
+                className="button cta-button danger"
+                type="button"
+                onClick={handleDeleteClick}
+              >
+                {status === FormStatus.Deleting
+                  ? "Withdrawing..."
+                  : "Withdraw finding"}
+              </button>
+            )}
             <button
               className="button cta-button"
               type="button"
               onClick={handleSubmit}
               disabled={status !== FormStatus.Unsubmitted}
             >
-              {status === FormStatus.Unsubmitted
-                ? submitButtonText
-                : "Submitting..."}
+              {status === FormStatus.Submitting
+                ? "Submitting..."
+                : submitButtonText}
             </button>
           </div>
         </form>
@@ -552,15 +581,20 @@ const SubmitFindings = ({
         <div className="centered-text">
           <h2 className={styles.Heading2}>Thank you!</h2>
           <p>{successMessage}</p>
-          {successButtonText && (
-            <button
-              className="button cta-button"
-              type="button"
-              onClick={handleReset}
-            >
-              Submit another
-            </button>
-          )}
+          <div className={styles.ButtonsWrapper}>
+            <Link to={contestPath} className="button cta-button secondary">
+              Back to contest
+            </Link>
+            {successButtonText && (
+              <button
+                className="button cta-button"
+                type="button"
+                onClick={handleReset}
+              >
+                Submit another
+              </button>
+            )}
+          </div>
         </div>
       )}
     </div>

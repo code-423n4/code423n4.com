@@ -24,7 +24,7 @@ const DEFAULT_STATE: ModalContext = {
 const ModalContext = createContext(DEFAULT_STATE);
 
 export const ModalProvider = ({ children }) => {
-  const [modalProps, setModalProps] = useState<ModalProps>(
+  const [modalProps, setModalProps] = useState<ModalProps | null>(
     DEFAULT_STATE.modalProps
   );
 
