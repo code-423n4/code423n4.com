@@ -1,5 +1,4 @@
 const { createPullRequest } = require("octokit-plugin-create-pull-request");
-const csv = require("csvtojson");
 const dedent = require("dedent");
 const fetch = require("node-fetch");
 const { Moralis } = require("moralis/node");
@@ -13,11 +12,16 @@ const {
   moralisServerUrl,
 } = require("../_config");
 
-import { getContest, isContestActive } from "../util/contest-utils";
+import { TeamData } from "../../types/user";
+
+import { checkTeamAuth } from "../util/auth-utils";
 import {
-  checkAndUpdateTeamAddress,
-  sendConfirmationEmail,
-} from "../util/user-utils";
+  getContest,
+  getRiskCodeFromGithubLabel,
+  isContestActive,
+} from "../util/contest-utils";
+import { getMarkdownReportForUser } from "../util/github-utils";
+import { updateTeamAddress, sendConfirmationEmail } from "../util/user-utils";
 
 const OctokitClient = Octokit.plugin(createPullRequest);
 const octokit = new OctokitClient({ auth: token });
@@ -151,7 +155,19 @@ exports.handler = async (event) => {
       };
     }
 
-    await checkAndUpdateTeamAddress(attributedTo, user, address);
+    if (attributedTo !== user) {
+      const team: TeamData = await checkTeamAuth(attributedTo, user);
+      if (!team.address) {
+        try {
+          await updateTeamAddress(team, address);
+        } catch (error) {
+          // don't throw error if this PR fails - there will likely be duplicates
+          // due to the fact that PRs take some time to review and merge and we
+          // don't want to block teams from submitting findings in the meantime
+          console.warn(error);
+        }
+      }
+    }
   } catch (error) {
     return {
       statusCode: error.status || 500,
@@ -210,15 +226,34 @@ exports.handler = async (event) => {
   }
 
   const owner = process.env.GITHUB_CONTEST_REPO_OWNER;
+  const riskCode = getRiskCodeFromGithubLabel(risk);
 
   try {
+    const markdownPath = `data/${attributedTo}-${riskCode}.md`;
+    const qaOrGasSubmissionBody = `See the markdown file with the details of this report [here](https://github.com/${owner}/${repo}/blob/main/${markdownPath}).`;
+    const isQaOrGasSubmission = Boolean(riskCode === "G" || riskCode === "Q");
+    if (isQaOrGasSubmission) {
+      const existingReport = await getMarkdownReportForUser(
+        octokit,
+        repo,
+        attributedTo,
+        riskCode as "Q" | "G"
+      );
+      if (existingReport) {
+        throw {
+          status: 400,
+          message: `It looks like you've already submitted a ${risk} report for this contest.`,
+        };
+      }
+    }
+
     const issueResult = await octokit.request(
       "POST /repos/{owner}/{repo}/issues",
       {
         owner,
         repo,
         title,
-        body,
+        body: isQaOrGasSubmission ? qaOrGasSubmissionBody : body,
         labels,
       }
     );
@@ -232,7 +267,7 @@ exports.handler = async (event) => {
       contest,
       handle: attributedTo,
       address,
-      risk: risk.slice(0, 1), // @todo: explicit mapping
+      risk: riskCode,
       title,
       issueId,
       issueUrl,
@@ -249,6 +284,16 @@ exports.handler = async (event) => {
       message,
       content,
     });
+
+    if (isQaOrGasSubmission) {
+      await octokit.request("PUT /repos/{owner}/{repo}/contents/{path}", {
+        owner,
+        repo,
+        path: markdownPath,
+        message: `${attributedTo} data for issue #${issueId}`,
+        content: Buffer.from(body).toString("base64"),
+      });
+    }
 
     if (apiKey && domain && process.env.EMAIL_SENDER) {
       const text = dedent`
