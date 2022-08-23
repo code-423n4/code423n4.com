@@ -28,15 +28,15 @@ interface UserState {
   moralisId: string;
   teams: { username: string; address?: string; image?: string }[];
   isLoggedIn: boolean;
-  image?: string | null;
-  link?: string | null;
+  image?: string | undefined;
+  link?: string | undefined;
 }
 
 interface User {
   currentUser: UserState;
-  logUserOut?: () => void;
-  connectWallet?: () => Promise<void>;
-  reFetchUser?: () => Promise<void>;
+  logUserOut: () => void;
+  connectWallet: () => Promise<void>;
+  reFetchUser: () => Promise<void>;
 }
 
 const DEFAULT_STATE: UserState = {
@@ -48,11 +48,16 @@ const DEFAULT_STATE: UserState = {
   moralisId: "",
   teams: [],
   isLoggedIn: false,
-  image: null,
-  link: null,
+  image: undefined,
+  link: undefined,
 };
 
-const UserContext = createContext<User>({ currentUser: DEFAULT_STATE });
+const UserContext = createContext<User>({
+  currentUser: DEFAULT_STATE,
+  logUserOut: () => {},
+  connectWallet: async () => {},
+  reFetchUser: async () => {},
+});
 
 const UserProvider = ({ children }) => {
   const { isAuthenticated, logout, user, isInitialized } = useMoralis();
@@ -86,6 +91,11 @@ const UserProvider = ({ children }) => {
     }
     const initializeEventListeners = () => {
       Moralis.onAccountChanged(async (account) => {
+        if (!account) {
+          // wallet locked
+          return;
+        }
+
         const user = await Moralis.User.current();
         if (!user) {
           toast.error(
@@ -128,10 +138,9 @@ const UserProvider = ({ children }) => {
               </>
             ),
             primaryButtonText: "Link address",
-            secondaryButtonText: "Logout",
+            secondaryButtonText: "Cancel",
             primaryButtonAction: async () =>
               await linkAccount(account, username),
-            secondaryButtonAction: logout,
           });
         } catch (error) {
           toast.error(error.message);
@@ -295,8 +304,8 @@ const UserProvider = ({ children }) => {
 };
 
 export const wrapRootElement = ({ element }) => {
-  const appId = process.env.GATSBY_MORALIS_APP_ID;
-  const serverUrl = process.env.GATSBY_MORALIS_SERVER;
+  const appId = process.env.GATSBY_MORALIS_APP_ID!;
+  const serverUrl = process.env.GATSBY_MORALIS_SERVER!;
 
   return (
     <MoralisProvider appId={appId} serverUrl={serverUrl}>
