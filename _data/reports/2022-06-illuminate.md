@@ -1556,10 +1556,6 @@ The protocol is using low level calls with solidity version 0.8.14 which can res
 
 <https://medium.com/certora/overly-optimistic-optimizer-certora-bug-disclosure-2101e3f7994d>
 
-### Proof of Concept
-
-https://github.com/NibblNFT/nibbl-smartcontracts/blob/master/contracts/NibblVault.sol#L3<br>
-
 ### Recommended Mitigation Steps
 
 Consider upgrading to solidity 0.8.15.
