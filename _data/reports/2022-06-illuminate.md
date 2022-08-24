@@ -1479,17 +1479,15 @@ Missing events and timelocks do not promote transparency and if such changes imm
 
 ### Proof of Concept
 
-Navigate to the following contract.
+Navigate to the following contracts:
 
-<!---->
+https://github.com/code-423n4/2022-06-illuminate/blob/main/marketplace/MarketPlace.sol#L109<br>
 
-    https://github.com/code-423n4/2022-06-illuminate/blob/main/marketplace/MarketPlace.sol#L109
+https://github.com/code-423n4/2022-06-illuminate/blob/main/marketplace/MarketPlace.sol#L98<br>
 
-    https://github.com/code-423n4/2022-06-illuminate/blob/main/marketplace/MarketPlace.sol#L98
+https://github.com/code-423n4/2022-06-illuminate/blob/main/lender/Lender.sol#L129<br>
 
-    https://github.com/code-423n4/2022-06-illuminate/blob/main/lender/Lender.sol#L129
-
-    https://github.com/code-423n4/2022-06-illuminate/blob/main/lender/Lender.sol#L137
+https://github.com/code-423n4/2022-06-illuminate/blob/main/lender/Lender.sol#L137<br>
 
 See similar High-severity H03 finding OpenZeppelin’s Audit of Audius (<https://blog.openzeppelin.com/audius-contracts-audit/#high>) and Medium-severity M01 finding OpenZeppelin’s Audit of UMA Phase 4 (<https://blog.openzeppelin.com/uma-audit-phase-4/>)
 
@@ -1503,17 +1501,15 @@ The critical procedures should be two step process.
 
 ### Proof of Concept
 
-1.  Navigate to the following contract.
+1.  Navigate to the following contracts:
 
-<!---->
+https://github.com/code-423n4/2022-06-illuminate/blob/main/marketplace/MarketPlace.sol#L109<br>
 
-    https://github.com/code-423n4/2022-06-illuminate/blob/main/marketplace/MarketPlace.sol#L109
+https://github.com/code-423n4/2022-06-illuminate/blob/main/marketplace/MarketPlace.sol#L98<br>
 
-    https://github.com/code-423n4/2022-06-illuminate/blob/main/marketplace/MarketPlace.sol#L98
+https://github.com/code-423n4/2022-06-illuminate/blob/main/lender/Lender.sol#L129<br>
 
-    https://github.com/code-423n4/2022-06-illuminate/blob/main/lender/Lender.sol#L129
-
-    https://github.com/code-423n4/2022-06-illuminate/blob/main/lender/Lender.sol#L137
+https://github.com/code-423n4/2022-06-illuminate/blob/main/lender/Lender.sol#L137<br>
 
 ### Recommended Mitigation Steps
 
@@ -1527,7 +1523,7 @@ In the contracts, floating pragmas should not be used. Contracts should be deplo
 
 <https://swcregistry.io/docs/SWC-103>
 
-    All Contracts
+All Contracts
 
 ### Recommended Mitigation Steps
 
@@ -1541,15 +1537,13 @@ Missing checks for zero-addresses may lead to infunctional protocol, if the vari
 
 Navigate to the following contracts.
 
-<!---->
+https://github.com/code-423n4/2022-06-illuminate/blob/main/marketplace/MarketPlace.sol#L109<br>
 
-    https://github.com/code-423n4/2022-06-illuminate/blob/main/marketplace/MarketPlace.sol#L109
+https://github.com/code-423n4/2022-06-illuminate/blob/main/marketplace/MarketPlace.sol#L98<br>
 
-    https://github.com/code-423n4/2022-06-illuminate/blob/main/marketplace/MarketPlace.sol#L98
+https://github.com/code-423n4/2022-06-illuminate/blob/main/lender/Lender.sol#L129<br>
 
-    https://github.com/code-423n4/2022-06-illuminate/blob/main/lender/Lender.sol#L129
-
-    https://github.com/code-423n4/2022-06-illuminate/blob/main/lender/Lender.sol#L137
+https://github.com/code-423n4/2022-06-illuminate/blob/main/lender/Lender.sol#L137<br>
 
 ### Recommended Mitigation Steps
 
@@ -1561,10 +1555,6 @@ require(newAddr != address(0));.
 The protocol is using low level calls with solidity version 0.8.14 which can result in optimizer bug.
 
 <https://medium.com/certora/overly-optimistic-optimizer-certora-bug-disclosure-2101e3f7994d>
-
-### Proof of Concept
-
-    https://github.com/NibblNFT/nibbl-smartcontracts/blob/master/contracts/NibblVault.sol#L3
 
 ### Recommended Mitigation Steps
 
@@ -1582,7 +1572,7 @@ When trying to re-approve an already approved token, all transactions revert and
 
 ### Proof of Concept
 
-(<https://github.com/code-423n4/2022-06-illuminate/blob/main/lender/Lender.sol#L93>)
+https://github.com/code-423n4/2022-06-illuminate/blob/main/lender/Lender.sol#L93<br>
 
 ### Recommended Mitigation Steps
 
@@ -1596,9 +1586,7 @@ Block timestamps have historically been used for a variety of applications, such
 
 Navigate to the following contract.
 
-<!---->
-
-    https://github.com/code-423n4/2022-06-illuminate/blob/main/lender/Lender.sol#L688
+https://github.com/code-423n4/2022-06-illuminate/blob/main/lender/Lender.sol#L688<br>
 
 ### Recommended Mitigation Steps
 
@@ -1618,9 +1606,7 @@ During the lending, If the inflationary/deflationary tokens are used excepted am
 
 Navigate to the following contract.
 
-<!---->
-
-    https://github.com/code-423n4/2022-06-illuminate/blob/main/lender/Lender.sol#L215
+https://github.com/code-423n4/2022-06-illuminate/blob/main/lender/Lender.sol#L215<br>
 
 
 ### Recommended Mitigation Steps
@@ -1635,7 +1621,7 @@ On the Redemeer contract, there is not setter function on the apwineAddr address
 
 ### Proof of Concept
 
-1.  Navigate to "<https://github.com/code-423n4/2022-06-illuminate/blob/main/redeemer/Redeemer.sol#L33>" contract.
+1.  Navigate to contract: https://github.com/code-423n4/2022-06-illuminate/blob/main/redeemer/Redeemer.sol#L33<br>
 2.  apwineAddr address is set on the constructor.
 3.  Setter function is missing on the contract. Misdeployed contract can cause failure of apwineAddr integration.
 
