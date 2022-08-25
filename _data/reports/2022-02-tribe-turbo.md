@@ -30,7 +30,7 @@ During the audit contest outlined in this document, C4 conducted an analysis of 
   1. [Ruhum](https://twitter.com/0xruhum)
   1. [0xliumin](https://twitter.com/0xliumin)
   1. hyh
-  1. nascent ([brock](https://twitter.com/brockjelmore), [0xAndreas](https://twitter.com/andreasbigger), and [chris_nascent](https://twitter.com/Chris_8086))
+  1. nascent ([brock](https://twitter.com/brockjelmore), [asnared](https://twitter.com/asnared), and [chris_nascent](https://twitter.com/Chris_8086))
   1. [csanuragjain](https://twitter.com/csanuragjain)
   1. IllIllI
   1. samruna

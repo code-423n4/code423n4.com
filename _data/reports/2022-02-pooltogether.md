@@ -32,7 +32,7 @@ During the audit contest outlined in this document, C4 conducted an analysis of 
   1. [Rhynorater](https://twitter.com/rhynorater)
   1. robee
   1. chunter
-  1. nascent ([brock](https://twitter.com/brockjelmore), [0xAndreas](https://twitter.com/andreasbigger), and [chris_nascent](https://twitter.com/Chris_8086))
+  1. nascent ([brock](https://twitter.com/brockjelmore), [asnared](https://twitter.com/asnared), and [chris_nascent](https://twitter.com/Chris_8086))
   1. jayjonah8
   1. IllIllI
   1. [Tomio](https://twitter.com/meidhiwirara)

@@ -23,7 +23,7 @@ During the code contest outlined in this document, C4 conducted an analysis of t
 
 1. nascent
    * [brock](https://twitter.com/brockjelmore)
-   * [0xAndreas](https://twitter.com/andreasbigger)
+   * [asnared](https://twitter.com/asnared)
    * [chris_nascent](https://twitter.com/Chris_8086)
 2. [jmak](https://twitter.com/jonathanjmak)
 3. [pauliax](https://twitter.com/SolidityDev)
