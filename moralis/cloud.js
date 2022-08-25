@@ -34,7 +34,6 @@ Moralis.Cloud.beforeDelete(Moralis.User, async (req) => {
   const addresses = await ethAddressQuery.find({ useMasterKey: true });
 
   for (let addr of addresses) {
-    logger.info("removing: " + JSON.stringify(addr));
     await addr.destroy({ useMasterKey: true })
       .then((res) => {
         logger.info("Deleted user _EthAddress: " + JSON.stringify(res));
