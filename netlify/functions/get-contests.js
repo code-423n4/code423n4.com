@@ -1,5 +1,5 @@
 const { Client } = require("@notionhq/client");
-const { notionToken, notionContestDb } = require("./_config");
+const { notionToken, notionContestDb } = require("../_config");
 const notion = new Client({ auth: notionToken });
 
 exports.handler = async () => {

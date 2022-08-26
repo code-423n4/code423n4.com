@@ -16,16 +16,16 @@ export default function SiteIndex({ data }) {
     updateContestStatusChanges(contestStatusChanges + 1);
   };
 
-  const sortContests = (array, status) => {
+  const sortContests = (contestsArray, status) => {
     let statusObject = {
       upcomingContests: [],
       activeContests: [],
     };
 
-    array.forEach((element) => {
-      const statusAndIdObj = status.filter(
-        (el) => el.contestId === element.node.contestid
-      );
+    contestsArray.forEach((element) => {
+      const statusAndIdObj = status.filter((el) => {
+        return el.contestId === element.node.contestid;
+      });
       if (statusAndIdObj === []) {
         return null;
       }
@@ -33,6 +33,7 @@ export default function SiteIndex({ data }) {
         ...element.node,
         status: statusAndIdObj[0]?.status,
       };
+
       switch (statusAndIdObj[0]?.status) {
         case "Pre-Contest":
         case "Preview week":
