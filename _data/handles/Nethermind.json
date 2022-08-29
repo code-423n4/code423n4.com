@@ -12,5 +12,6 @@
   ],
   "link": "https://nethermind.io/",
   "image": "./avatars/nethermind.png",
-  "address": "0xBc11295936Aa79d594139de1B2e12629414F3BDB"
+  "address": "0xBc11295936Aa79d594139de1B2e12629414F3BDB",
+  "showOnLeaderboard": false
 }
