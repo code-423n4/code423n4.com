@@ -4,10 +4,58 @@ import { createFilePath } from "gatsby-source-filesystem";
 import fetch from "node-fetch";
 import path from "path";
 import webpack from "webpack";
-
 import SchemaCustomization from "./schema";
-
+// Notion
+import { Client } from "@notionhq/client";
 const { token } = require("./netlify/_config");
+const notionToken = process.env.NOTION_CONTEST_INTEGRATION_TOKEN;
+const notionContestDb = process.env.NOTION_CONTEST_DATABASE_ID;
+const notion = new Client({ auth: notionToken });
+const getContestData = async () => {
+  try {
+    const pages = [];
+    let cursor = undefined;
+    //cursor is to handle pagination in notion query
+    while (true) {
+      const { results, next_cursor } = await notion.databases.query({
+        database_id: notionContestDb,
+        start_cursor: cursor,
+        filter: {
+          and: [
+            {
+              property: "ContestID",
+              number: {
+                is_not_empty: true,
+              },
+            },
+          ],
+        },
+      });
+      pages.push(...results);
+      if (!next_cursor) {
+        break;
+      }
+      cursor = next_cursor;
+    }
+
+    const statusObject = pages.map((page) => {
+      if (
+        page.properties.Status.select.name !== "Lost deal" ||
+        page.properties.Status.select.name !== "Possible" ||
+        page.properties.Status.select.name ||
+        page.properties.ContestID.number
+      ) {
+        return {
+          contestId: page.properties.ContestID.number || null,
+          status: page.properties.Status.select.name || null,
+        };
+      }
+    });
+    return statusObject;
+  } catch (err) {
+    return null;
+  }
+};
 
 const graphqlWithAuth = graphql.defaults({
   headers: {
@@ -96,6 +144,7 @@ const queries = {
             contestPath
             readmeContent
             artPath
+            status
           }
         }
       }
@@ -156,6 +205,17 @@ exports.onCreateNode = async ({ node, getNode, actions }) => {
       node,
       name: `readmeContent`,
       value: readmeMarkdown,
+    });
+
+    const result = await getContestData();
+
+    const status = result.filter(
+      (element) => element.contestId === node.contestid
+    );
+    createNodeField({
+      node,
+      name: `status`,
+      value: status.length > 0 ? status[0].status : undefined,
     });
 
     const socialImageUrl = await fetchSocialImage(node);
