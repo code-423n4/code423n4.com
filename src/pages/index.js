@@ -9,39 +9,27 @@ export default function SiteIndex({ data }) {
   // @todo: implement global state management instead of props drilling
   const [contestStatusChanges, updateContestStatusChanges] = useState(0);
   const [filteredContests, setFilteredContest] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
   const contests = data.contests.edges;
 
   const updateContestStatus = () => {
     updateContestStatusChanges(contestStatusChanges + 1);
   };
 
-  const sortContests = (contestsArray, status) => {
+  const sortContests = (contestsArray) => {
     let statusObject = {
       upcomingContests: [],
       activeContests: [],
     };
 
     contestsArray.forEach((element) => {
-      const statusAndIdObj = status.filter((el) => {
-        return el.contestId === element.node.contestid;
-      });
-      if (statusAndIdObj === []) {
-        return null;
-      }
-      const data = {
-        ...element.node,
-        status: statusAndIdObj[0]?.status,
-      };
-
-      switch (statusAndIdObj[0]?.status) {
+      switch (element.node.fields.status) {
         case "Pre-Contest":
         case "Preview week":
-          statusObject.upcomingContests.push(data);
+          statusObject.upcomingContests.push(element.node);
           break;
         case "Active":
         case "Active Contest":
-          statusObject.activeContests.push(data);
+          statusObject.activeContests.push(element.node);
           break;
         default:
           break;
@@ -61,24 +49,9 @@ export default function SiteIndex({ data }) {
   };
 
   useEffect(() => {
-    setIsLoading(true);
-    fetch("/.netlify/functions/get-contests")
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        }
-        throw res;
-      })
-      .then((data) => {
-        setFilteredContest(sortContests(contests, data));
-      })
-      .then((res) => {
-        setIsLoading(false);
-      })
-      .catch((err) => {
-        setIsLoading(false);
-        console.log(err);
-      });
+    if (contests) {
+      setFilteredContest(sortContests(contests));
+    }
   }, [contests]);
 
   return (
@@ -87,37 +60,31 @@ export default function SiteIndex({ data }) {
         <HeroIndex />
       </div>
       <div className="wrapper-main">
-        {isLoading ? (
-          <div className="wrapper-main">
-            <h2 className="center">Loading contests...</h2>
-          </div>
-        ) : (
-          <section>
-            {filteredContests && filteredContests.activeContests.length > 0 ? (
-              <section>
-                <h1 className="upcoming-header">
-                  Active contests ({filteredContests.activeContests.length})
-                </h1>
-                <ContestList
-                  updateContestStatus={updateContestStatus}
-                  contests={filteredContests.activeContests}
-                />
-              </section>
-            ) : null}
-            {filteredContests &&
-            filteredContests.upcomingContests.length > 0 ? (
-              <section>
-                <h1 className="upcoming-header">
-                  Upcoming contests ({filteredContests.upcomingContests.length})
-                </h1>
-                <ContestList
-                  updateContestStatus={updateContestStatus}
-                  contests={filteredContests.upcomingContests}
-                />
-              </section>
-            ) : null}
-          </section>
-        )}
+        <section>
+          {filteredContests && filteredContests.activeContests.length > 0 ? (
+            <section>
+              <h1 className="upcoming-header">
+                Active contests ({filteredContests.activeContests.length})
+              </h1>
+              <ContestList
+                updateContestStatus={updateContestStatus}
+                contests={filteredContests.activeContests}
+              />
+            </section>
+          ) : null}
+          {filteredContests && filteredContests.upcomingContests.length > 0 ? (
+            <section>
+              <h1 className="upcoming-header">
+                Upcoming contests ({filteredContests.upcomingContests.length})
+              </h1>
+              <ContestList
+                updateContestStatus={updateContestStatus}
+                contests={filteredContests.upcomingContests}
+              />
+            </section>
+          ) : null}
+        </section>
+
         <section>
           <Testimonials />
         </section>
@@ -166,6 +133,7 @@ export const query = graphql`
           fields {
             submissionPath
             contestPath
+            status
           }
           contestid
         }
