@@ -112,6 +112,7 @@ const JudgeApplication = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const { currentUser } = useUser();
   const { user, isInitialized } = useMoralis();
+  const [isLoggedInErrorMessage, setisLoggedInErrorMessage] = useState(false)
 
   const fields = config.fields;
 
@@ -150,6 +151,9 @@ const JudgeApplication = () => {
       !currentUser.isLoggedIn ||
       !Object.values(state).every((val) => !!val)
     ) {
+      if(!currentUser.isLoggedIn){
+        setisLoggedInErrorMessage(true);
+      }
       return;
     }
     const handle = currentUser.username;
@@ -205,6 +209,10 @@ const JudgeApplication = () => {
                         </p>
                       </div>
                     )}
+                    {isLoggedInErrorMessage ? <p 
+                    className = "error-message"
+                    > User must be logged in to submit this form. 
+                    </p> : ''}
                     <button
                       className="button cta-button"
                       type="button"
