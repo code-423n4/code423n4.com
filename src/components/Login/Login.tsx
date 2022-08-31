@@ -55,6 +55,7 @@ const Login = ({ displayAsButtons = false }) => {
       }
     } catch (error) {
       logUserOut();
+      console.error("authenticate failed:", error);
       toast.update(id, {
         render: "Something went wrong. Please refresh the page and try again.",
         type: "error",
@@ -117,6 +118,7 @@ const Login = ({ displayAsButtons = false }) => {
           closeButton: true,
         });
       } else {
+        console.error("connect wallet failed: ", error);
         toast.update(id, {
           render:
             "Something went wrong. Please refresh the page and try again.",

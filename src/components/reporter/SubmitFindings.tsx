@@ -108,19 +108,6 @@ const SubmitFindings = ({
 
   // effects
   useEffect(() => {
-    if (currentUser.isLoggedIn) {
-      if (attributedTo === currentUser.username) {
-        setPolygonAddress(currentUser.address);
-      } else {
-        const team = currentUser.teams.find(
-          (team) => team.username === attributedTo
-        );
-        setPolygonAddress(team?.address || "");
-      }
-    }
-  }, [currentUser]);
-
-  useEffect(() => {
     if (!attributedTo) {
       setAttributedTo(initialAttributedTo);
     }
@@ -132,13 +119,14 @@ const SubmitFindings = ({
   }, [findingId, initialState]);
 
   useEffect(() => {
+    if (!currentUser.isLoggedIn) {
+      return;
+    }
     if (attributedTo !== currentUser.username) {
       const team = currentUser.teams.find((t) => t.username === attributedTo);
       if (team) {
-        setPolygonAddress(team.address || newTeamAddress);
+        setPolygonAddress(team.polygonAddress || newTeamAddress);
       }
-    } else {
-      setPolygonAddress(currentUser.address);
     }
   }, [attributedTo, currentUser]);
 
@@ -274,12 +262,15 @@ const SubmitFindings = ({
       repo: repo.split("/").pop() || "",
       emailAddresses: emailAddressList,
       attributedTo,
-      address: polygonAddress,
       risk: state.risk,
       title: getTitle(state.title, state.risk),
       body: formattedBody,
       labels: [config.labelAll, state.risk],
     };
+    if (attributedTo !== currentUser.username) {
+      data.address = polygonAddress;
+    }
+
     setStatus(FormStatus.Submitting);
     try {
       const response = await onSubmit(data);
@@ -369,7 +360,7 @@ const SubmitFindings = ({
     const team = currentUser.teams.find(
       (team) => team.username === attributedTo
     );
-    if (team && !team.address) {
+    if (team && !team.polygonAddress) {
       // confirm saving the team's address
       showModal({
         title: `Save address for team ${attributedTo}`,
@@ -419,7 +410,6 @@ const SubmitFindings = ({
                     />
                     <WardenDetails
                       username={currentUser.username}
-                      address={currentUser.address}
                       image={currentUser.image}
                     />
                   </label>
@@ -440,11 +430,11 @@ const SubmitFindings = ({
                         />
                         <WardenDetails
                           username={team.username}
-                          address={team.address}
                           image={team.image}
                         />
                       </label>
-                      {!team.address && attributedTo === team.username && (
+                      {/* @todo: remove this once all teams have saved a payment address */}
+                      {!team.polygonAddress && attributedTo === team.username && (
                         <div style={{ margin: "10px 0 0 40px" }}>
                           <label htmlFor={"newTeamAddress"}>
                             Team Polygon Address *
@@ -486,7 +476,6 @@ const SubmitFindings = ({
             ) : (
               <WardenDetails
                 username={currentUser.username}
-                address={currentUser.address}
                 image={currentUser.image}
                 className={widgetStyles.Container}
               />

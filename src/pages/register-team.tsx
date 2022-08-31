@@ -23,10 +23,6 @@ export default function TeamRegistration({ data }) {
     >
       <div className="wrapper-main">
         <h1 className="page-header">Register a Team</h1>
-        <p className="center">
-          Before you register your team, please ensure each member has connected
-          their wallet to their C4 account.
-        </p>
         <TeamRegistrationForm handles={handles} wardens={wardens} />
       </div>
     </ProtectedPage>

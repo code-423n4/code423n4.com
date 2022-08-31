@@ -12,7 +12,10 @@ export interface UserData extends UserFileData {
 export interface TeamData extends UserFileData {
   members: string[];
   imageUrl?: string;
-  address?: string;
+  paymentAddresses: {
+    chain: string;
+    address: string;
+  }[];
 }
 
 export interface PaymentAddress {

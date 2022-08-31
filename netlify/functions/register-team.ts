@@ -6,6 +6,8 @@ const sharp = require("sharp");
 import { Octokit } from "@octokit/core";
 
 import { token, moralisAppId, moralisServerUrl } from "../_config";
+import { TeamData } from "../../types/user";
+import { getTeamEmails, sendConfirmationEmail } from "../util/user-utils";
 
 const OctokitClient = Octokit.plugin(createPullRequest);
 const octokit = new OctokitClient({ auth: token });
@@ -28,7 +30,15 @@ exports.handler = async (event) => {
     }
 
     const data = JSON.parse(event.body);
-    const { teamName, username, image, link, members, address } = data;
+    const {
+      teamName,
+      username,
+      image,
+      link,
+      members,
+      polygonAddress,
+      ethereumAddress,
+    } = data;
 
     // ensure we have the data we need
     if (!teamName) {
@@ -49,7 +59,7 @@ exports.handler = async (event) => {
       };
     }
 
-    if (!address) {
+    if (!polygonAddress) {
       return {
         statusCode: 422,
         body: JSON.stringify({
@@ -138,13 +148,18 @@ exports.handler = async (event) => {
       };
     }
 
-    const formattedTeamData: {
-      handle: string;
-      members: string[];
-      address: string;
-      link?: string;
-      image?: string;
-    } = { handle: teamName, members, address, link };
+    const paymentAddresses = [{ chain: "polygon", address: polygonAddress }];
+    if (ethereumAddress) {
+      paymentAddresses.push({ chain: "ethereum", address: ethereumAddress });
+    }
+
+    const formattedTeamData: TeamData = {
+      handle: teamName,
+      members,
+      link,
+      paymentAddresses,
+    };
+
     let avatarFilename = "";
     let base64Avatar = "";
     if (image) {
@@ -196,6 +211,13 @@ exports.handler = async (event) => {
           body: JSON.stringify({ error: "Failed to create pull request." }),
         };
       }
+
+      const emails = await getTeamEmails(formattedTeamData);
+      const emailSubject = `Code4rena team "${teamName}" has been created`;
+      const emailBody = `A new Code4rena team (${teamName}) has been created with members: \n\n${members.join(
+        ", "
+      )}. \n\nYou can see the PR here: ${res.data.html_url}`;
+      await sendConfirmationEmail(emails, emailSubject, emailBody);
 
       return {
         statusCode: 201,

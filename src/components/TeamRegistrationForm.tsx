@@ -18,6 +18,7 @@ import * as widgetStyles from "../components/reporter/widgets/Widgets.module.scs
 interface teamState {
   teamName: string;
   polygonAddress: string;
+  ethereumAddress: string;
   link?: string;
   avatar?: File | null;
 }
@@ -32,6 +33,7 @@ const initialState: teamState = {
   link: "",
   avatar: null,
   polygonAddress: "",
+  ethereumAddress: "",
 };
 
 function getFileAsBase64(file) {
@@ -114,8 +116,9 @@ export default function TeamRegistrationForm({
       teamMembers.length < 2 ||
       handles.has(state.teamName) ||
       !teamMembers.find((member) => member.value === currentUser.username) ||
-      // @todo: better validation for polygon address
+      // @todo: better validation for addresses
       state.polygonAddress.length !== 42 ||
+      state.ethereumAddress.length !== 42 ||
       state.teamName.match(/^[0-9a-zA-Z_\-]+$/) === null
     ) {
       return true;
@@ -143,7 +146,8 @@ export default function TeamRegistrationForm({
       members,
       link: state.link,
       image,
-      address: state.polygonAddress,
+      polygonAddress: state.polygonAddress,
+      ethereumAddress: state.ethereumAddress,
     };
 
     const sessionToken = user.attributes.sessionToken;
@@ -201,10 +205,10 @@ export default function TeamRegistrationForm({
     [currentUser]
   );
 
-  const validatePolygonAddress = (address: string): (string | ReactNode)[] => {
+  const validateAddress = (address: string): (string | ReactNode)[] => {
     const errors: (string | ReactNode)[] = [];
     if (address.length !== 42) {
-      errors.push("Polygon address must be 42 characters long.");
+      errors.push("Wallet address must be 42 characters long.");
     }
     return errors;
   };
@@ -248,7 +252,18 @@ export default function TeamRegistrationForm({
           label="Polygon Address"
           helpText="Address where your team's prize should go. If you use a smart contract wallet, please contact one of our organizers in Discord in addition to adding the address here."
           handleChange={handleChange}
-          validator={validatePolygonAddress}
+          validator={validateAddress}
+          maxLength={42}
+        />
+        <Input
+          name="ethereumAddress"
+          placeholder="0x00000..."
+          value={state.ethereumAddress}
+          label="Ethereum Address"
+          helpText="Address where we can send ethereum for contests that are awarded in eth"
+          handleChange={handleChange}
+          validator={validateAddress}
+          maxLength={42}
         />
         <Input
           name="link"
