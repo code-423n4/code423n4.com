@@ -134,7 +134,7 @@ _Submitted by cmichel_
 The `LendingPair.liquidateAccount` function tries to pay out underlying supply tokens to the liquidator using `_safeTransfer(IERC20(supplyToken), msg.sender, supplyOutput)` but there's no reason why there should be enough `supplyOutput` amount in the contract, the contract only ensures `minReserve`.
 
 As a result, no liquidations can be performed if all tokens are lent out.
-**Example:** User A supplies 1k$ WETH, User B supplies 1.5k$ DAI and borrows the ~1k$ WETH (only leaves `minReserve`). The ETH price drops but user B cannot be liquidated as there's not enough WETH in the pool anymore to pay out the liquidator.
+**Example:** User A supplies 1k\$ WETH, User B supplies 1.5k\$ DAI and borrows the ~1k\$ WETH (only leaves `minReserve`). The ETH price drops but user B cannot be liquidated as there's not enough WETH in the pool anymore to pay out the liquidator.
 
 Recommend minting LP supply tokens to `msg.sender` instead, these are the LP supply tokens that were burnt from the borrower. This way the liquidator basically seizes the borrower's LP tokens.
 
@@ -233,8 +233,8 @@ function accrueAccount(address _account) public {
 }
 ```
 
-The borrow rates (see `borrowRatePerBlock`) are wrong due to the wrong utilization ratio: The borrow utilization rate uses `LPToken.totalSupply`. Assume there's a single lender supplying $100k, another single borrower borrows $70k (ignoring irrelevant details like liquidation and the borrower not putting up collateral for the sake of the argument).
-After some time debt accrued and the supplier "updates" by calling `accrue` (but the borrower does not update), this increases the LP total supply to, say, $110k, while total debt is not updated. The utilization rate and thus the borrow rate is now less than before (from 70/100=70% to 70/110=63%). In reality, it should have increased as the supplier interest is only a fraction of the borrower accumulated debt. From now on less debt than expected accrues until the borrower is updated and total debt is increased.
+The borrow rates (see `borrowRatePerBlock`) are wrong due to the wrong utilization ratio: The borrow utilization rate uses `LPToken.totalSupply`. Assume there's a single lender supplying \$100k, another single borrower borrows \$70k (ignoring irrelevant details like liquidation and the borrower not putting up collateral for the sake of the argument).
+After some time debt accrued and the supplier "updates" by calling `accrue` (but the borrower does not update), this increases the LP total supply to, say, \$110k, while total debt is not updated. The utilization rate and thus the borrow rate is now less than before (from 70/100=70% to 70/110=63%). In reality, it should have increased as the supplier interest is only a fraction of the borrower accumulated debt. From now on less debt than expected accrues until the borrower is updated and total debt is increased.
 To get the correct borrow rates in the current system, every borrower and every supplier would need to be updated on every accrual which is infeasible.
 
 Recommend doing it like Compound/Aave, increase total debt and total supply on each accrual by the **total** new interest (not by the specific user's interest only).

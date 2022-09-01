@@ -57,14 +57,18 @@ export default function RegistrationForm({ handles, wardens, className }) {
   const { authenticate } = useMoralis();
 
   // state
-  const [state, setState] = useState(initialState);
-  const [isNewUser, setIsNewUser] = useState(true);
-  const [hasValidationErrors, setHasValidationErrors] = useState(false);
-  const [isValidDiscord, setIsValidDiscord] = useState(true);
+  const [state, setState] = useState<userState>(initialState);
+  const [isNewUser, setIsNewUser] = useState<boolean>(true);
+  const [hasValidationErrors, setHasValidationErrors] = useState<boolean>(
+    false
+  );
+  const [isValidDiscord, setIsValidDiscord] = useState<boolean>(true);
   const [status, setStatus] = useState<FormStatus>(FormStatus.Unsubmitted);
   const [errorMessage, setErrorMessage] = useState<string | ReactNode>("");
-  const [isDangerousUsername, setisDangerousUsername] = useState(false);
-  const [captchaToken, setCaptchaToken] = useState("");
+  const [isDangerousUsername, setisDangerousUsername] = useState<boolean>(
+    false
+  );
+  const [captchaToken, setCaptchaToken] = useState<string>("");
 
   // global variables
   const avatarInputRef = useRef<HTMLInputElement>();
@@ -72,7 +76,7 @@ export default function RegistrationForm({ handles, wardens, className }) {
   const instructions = isNewUser ? (
     <p>
       To register as a warden, please fill out this form and join us in{" "}
-      <a href="https://discord.gg/code4rena" target="_blank">
+      <a href="https://discord.gg/code4rena" target="_blank" rel="noreferrer">
         Discord
       </a>
     </p>
@@ -91,7 +95,11 @@ export default function RegistrationForm({ handles, wardens, className }) {
         <span>
           It looks like this username has already been registered. Don't forget
           to join us in{" "}
-          <a href="https://discord.gg/code4rena" target="_blank">
+          <a
+            href="https://discord.gg/code4rena"
+            target="_blank"
+            rel="noreferrer"
+          >
             Discord
           </a>{" "}
           and give us a howl in #i-want-to-be-a-warden"
@@ -156,7 +164,6 @@ export default function RegistrationForm({ handles, wardens, className }) {
           !state.username ||
           !state.discordUsername ||
           !isValidDiscord ||
-          !state.gitHubUsername ||
           !state.emailAddress ||
           isDangerousUsername ||
           (isNewUser && handles.has(state.username))
@@ -168,7 +175,7 @@ export default function RegistrationForm({ handles, wardens, className }) {
         setHasValidationErrors(false);
         setStatus(FormStatus.Submitting);
 
-        let image = undefined;
+        let image: unknown = undefined;
         try {
           if (state.avatar) {
             image = await getFileAsBase64(state.avatar);
@@ -179,7 +186,7 @@ export default function RegistrationForm({ handles, wardens, className }) {
           });
 
           if (user === undefined) {
-            // user clicked "cancel" when prompted to sign message
+            // user clicked "cancel" when prompted to sign message (or some unknown error occurred)
             // @todo: update messaging
             setStatus(FormStatus.Error);
             updateErrorMessage("You must sign the message to register");
@@ -240,7 +247,9 @@ export default function RegistrationForm({ handles, wardens, className }) {
             try {
               user.set("c4Username", state.username);
               user.set("discordUsername", state.discordUsername);
-              user.set("gitHubUsername", state.gitHubUsername);
+              if (state.gitHubUsername) {
+                user.set("gitHubUsername", state.gitHubUsername);
+              }
               user.set("emailAddress", state.emailAddress);
               // @todo: add role
               await user.save();
@@ -257,7 +266,9 @@ export default function RegistrationForm({ handles, wardens, className }) {
               // allow confirmation email to fail; don't save a bad email address
               user.set("c4Username", state.username);
               user.set("discordUsername", state.discordUsername);
-              user.set("gitHubUsername", state.gitHubUsername);
+              if (state.gitHubUsername) {
+                user.set("gitHubUsername", state.gitHubUsername);
+              }
               // @todo: add role
               await user.save();
               setStatus(FormStatus.Submitted);
@@ -388,17 +399,11 @@ export default function RegistrationForm({ handles, wardens, className }) {
                 options={wardens}
                 onChange={(e) => {
                   setState((state) => {
-                    return { ...state, username: e.target.value };
+                    return { ...state, username: e.target.value as string };
                   });
                 }}
-                fieldState={state}
-                isInvalid={hasValidationErrors && !state.username}
+                fieldState={state.username}
               />
-              {hasValidationErrors && !state.username && (
-                <p className={widgetStyles.ErrorMessage}>
-                  <small>This field is required</small>
-                </p>
-              )}
             </div>
           )}
           <div className={widgetStyles.Container}>
@@ -439,32 +444,6 @@ export default function RegistrationForm({ handles, wardens, className }) {
             )}
           </div>
           <div className={widgetStyles.Container}>
-            <label htmlFor="gitHubUsername" className={widgetStyles.Label}>
-              GitHub Username *
-            </label>
-            <p className={widgetStyles.Help}>
-              Used in case we need to give you access to certain repositories.
-            </p>
-            <input
-              className={clsx(
-                widgetStyles.Control,
-                widgetStyles.Text,
-                hasValidationErrors && !state.gitHubUsername && "input-error"
-              )}
-              type="text"
-              id="gitHubUsername"
-              name="gitHubUsername"
-              placeholder="Username"
-              value={state.gitHubUsername}
-              onChange={handleChange}
-            />
-            {hasValidationErrors && !state.gitHubUsername && (
-              <p className={widgetStyles.ErrorMessage}>
-                <small>This field is required</small>
-              </p>
-            )}
-          </div>
-          <div className={widgetStyles.Container}>
             <label htmlFor="emailAddress" className={widgetStyles.Label}>
               Email Address *
             </label>
@@ -489,6 +468,23 @@ export default function RegistrationForm({ handles, wardens, className }) {
                 <small>This field is required</small>
               </p>
             )}
+          </div>
+          <div className={widgetStyles.Container}>
+            <label htmlFor="gitHubUsername" className={widgetStyles.Label}>
+              GitHub Username (Optional)
+            </label>
+            <p className={widgetStyles.Help}>
+              Used in case we need to give you access to certain repositories.
+            </p>
+            <input
+              className={clsx(widgetStyles.Control, widgetStyles.Text)}
+              type="text"
+              id="gitHubUsername"
+              name="gitHubUsername"
+              placeholder="Username"
+              value={state.gitHubUsername}
+              onChange={handleChange}
+            />
           </div>
           {isNewUser && (
             <>
@@ -523,6 +519,7 @@ export default function RegistrationForm({ handles, wardens, className }) {
                   id="avatar"
                   name="avatar"
                   accept=".png,.jpg,.jpeg,.webp"
+                  // @ts-ignore // @todo: fix typescript error
                   ref={avatarInputRef}
                   onChange={handleAvatarChange}
                 />

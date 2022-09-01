@@ -650,7 +650,7 @@ Both of these conditions can be easily circumvented by the primary seller.
 
 1.  He could transfer the NFT to a different wallet and sell it from there to break the first condition.
 
-2.  He can make a private sale to himself for 1$  (paying the 15% fee on a dust amount) and then do a public auction with the real price.
+2.  He can make a private sale to himself for 1\$  (paying the 15% fee on a dust amount) and then do a public auction with the real price.
 
 With any of these 2 methods, the primary seller can circumvent the 15% fee and pay 5% as a secondary seller which makes the primary seller fee optional to pay.
 
