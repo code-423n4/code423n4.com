@@ -1,0 +1,16 @@
+{
+  "handle": "MangoLlamaBurger",
+  "members": [
+    "BurgerTime",
+    "CaptainMango",
+    "liveactionllama"
+  ],
+  "link": "code4rena.com",
+  "image": "./avatars/MangoLlamaBurger.jpeg",
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x0000000000000000000000000000000000000000"
+    }
+  ]
+}
