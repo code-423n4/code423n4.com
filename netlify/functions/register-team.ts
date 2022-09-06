@@ -7,13 +7,10 @@ import { token } from "../_config";
 import { TeamData } from "../../types/user";
 import { getTeamEmails, sendConfirmationEmail } from "../util/user-utils";
 import { checkAuth } from "../util/auth-utils";
+import { isDangerousHandle } from "../util/validation-utils";
 
 const OctokitClient = Octokit.plugin(createPullRequest);
 const octokit = new OctokitClient({ auth: token });
-
-function isDangerous(s) {
-  return s.match(/^[0-9a-zA-Z_\-]+$/) === null;
-}
 
 exports.handler = async (event) => {
   // only allow POST
@@ -67,7 +64,7 @@ exports.handler = async (event) => {
       };
     }
 
-    if (isDangerous(teamName)) {
+    if (isDangerousHandle(teamName)) {
       return {
         statusCode: 400,
         body: JSON.stringify({

@@ -1,5 +1,6 @@
 import fs, { readFileSync } from "fs";
 import { TeamData } from "../../types/user";
+import { isDangerousHandle } from "../util/validation-utils";
 
 exports.handler = async (event) => {
   // only allow GET
@@ -9,10 +10,6 @@ exports.handler = async (event) => {
       body: "Method not allowed",
       headers: { Allow: "GET" },
     };
-  }
-
-  function isDangerousHandle(s) {
-    return s.match(/^[0-9a-zA-Z_\-]+$/) === null;
   }
 
   const userHandle = event.queryStringParameters.id;

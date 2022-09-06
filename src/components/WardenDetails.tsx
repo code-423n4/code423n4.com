@@ -8,18 +8,25 @@ interface WardenDetailsProps {
   username: string;
   image?: string;
   className?: string;
+  avatarSize?: string;
 }
 
 export default function WardenDetails({
   image,
   username,
   className,
+  avatarSize,
 }: WardenDetailsProps) {
   return (
     <div className={clsx(styles.Wrapper, className)}>
       <div className={styles.Username}>
         <span className={styles.Icon}>
-          <Avatar src={image} name={username} size="32px" round="32px" />
+          <Avatar
+            src={image}
+            name={username}
+            size={avatarSize || "32px"}
+            round={avatarSize || "32px"}
+          />
         </span>
         <span>{username}</span>
       </div>

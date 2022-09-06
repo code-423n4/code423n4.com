@@ -43,8 +43,6 @@ export default function TeamManagement({ data, location }) {
       );
       if (teamResponse.status === 200) {
         const teamData: TeamData = await teamResponse.json();
-        console.log(teamData);
-        console.log(teamData.paymentAddresses);
         const polygonAddress =
           teamData.paymentAddresses &&
           teamData.paymentAddresses.find(
@@ -104,6 +102,7 @@ export default function TeamManagement({ data, location }) {
         throw { error: "Missing old information" };
       }
 
+      // @todo: don't allow changing team name
       const requestBody: TeamUpdateRequest = {
         teamName: {
           oldValue: teamState.teamName,

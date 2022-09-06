@@ -235,10 +235,6 @@ export default function TeamForm({
       if (members.length < 2) {
         errors.push("You must have at least 2 members on a team.");
       }
-      // @todo: allow users to remove themselves from a team
-      if (!members.find((member) => member.value === currentUser.username)) {
-        errors.push("You must add yourself to the team you are creating.");
-      }
       return errors;
     },
     [currentUser]

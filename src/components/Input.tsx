@@ -125,7 +125,7 @@ export function Input({
         />
         {canRemove && handleRemoveInputField && (
           <button
-            className={styles.DeleteButton}
+            className={styles.RemoveButton}
             type="button"
             onClick={() => handleRemoveInputField(name)}
             aria-label="Remove this field"
@@ -148,7 +148,7 @@ export function Input({
         )}
         {button && handleButtonClick && (
           <button
-            className={styles.DeleteButton}
+            className={styles.RemoveButton}
             type="button"
             onClick={() => handleButtonClick(value)}
           >

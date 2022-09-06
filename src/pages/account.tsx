@@ -1,4 +1,3 @@
-import clsx from "clsx";
 import { Link } from "gatsby";
 import React, { ReactNode, useEffect, useState, useCallback } from "react";
 import { useMoralis } from "react-moralis";
@@ -8,17 +7,18 @@ import { toast } from "react-toastify";
 import { PaymentAddress } from "../../types/user";
 
 // hooks
-import useUser from "../hooks/UserContext";
+import { useModalContext } from "../hooks/ModalContext";
+import useUser, { TeamInfo } from "../hooks/UserContext";
 
 // components
+import Card from "../components/Card";
 import { Input } from "../components/Input";
 import ProtectedPage from "../components/ProtectedPage";
 import WardenDetails from "../components/WardenDetails";
 
 // styles
-import * as styles from "../components/form/Form.module.scss";
+import * as formStyles from "../components/form/Form.module.scss";
 import * as inputStyles from "../components/Input.module.scss";
-import { useModalContext } from "../hooks/ModalContext";
 
 const initialState = {
   discordUsername: "",
@@ -107,9 +107,12 @@ export default function AccountManagementPage() {
     return [];
   };
 
-  const validatePaymentAddress = (): (string | ReactNode)[] => {
-    // @todo: write validation for addresses
-    return [];
+  const validatePaymentAddress = (value): (string | ReactNode)[] => {
+    const errors: string[] = [];
+    if (value.length > 0 && value.length !== 42) {
+      errors.push("Address must be 42 characters long");
+    }
+    return errors;
   };
 
   const handleSaveUserInfo = async (fieldName: string, value: string) => {
@@ -187,6 +190,45 @@ export default function AccountManagementPage() {
     [storedPaymentAddresses]
   );
 
+  const handleDelete = (team: TeamInfo) => {
+    showModal({
+      title: `Delete Team: ${team.username}`,
+      body: `Are you sure you want to delete the team ${team.username}?`,
+      primaryButtonAction: async () => deleteTeam(team),
+      primaryButtonText: "Delete",
+    });
+  };
+
+  const deleteTeam = useCallback(
+    async (team: TeamInfo) => {
+      if (!user || !isInitialized) {
+        return;
+      }
+      const sessionToken = user.attributes.sessionToken;
+      try {
+        const response = await fetch("/.netlify/functions/manage-team", {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            "X-Authorization": `Bearer ${sessionToken}`,
+            "C4-User": currentUser.username,
+          },
+          body: JSON.stringify({ teamName: team.username }),
+        });
+        if (!response.ok) {
+          toast.error("An error ocurred while trying to delete your team");
+        } else {
+          toast.info(
+            "Success! Your request to delete your team has been submitted. It will take upt to 48 hours to process your request."
+          );
+        }
+      } catch (error) {
+        toast.error(error.message);
+      }
+    },
+    [user, isInitialized, currentUser]
+  );
+
   const resetValue = (fieldName: string): void => {
     if (!isInitialized || !user) {
       return;
@@ -224,8 +266,8 @@ export default function AccountManagementPage() {
       ) : (
         <div className="wrapper-main">
           <h1 className="page-header">Manage Account</h1>
-          <form className={clsx(styles.Form)}>
-            <h2 className={styles.Heading2}>Payment Information</h2>
+          <form className={formStyles.Form}>
+            <h2 className={formStyles.Heading2}>Payment Information</h2>
             <Input
               label="Polygon Address"
               handleChange={handleChange}
@@ -244,10 +286,10 @@ export default function AccountManagementPage() {
               toggleEdit={true}
               handleSaveInputValue={handleSavePaymentAddress}
             />
-            <div className={styles.DividingLine}></div>
-            <h2 className={styles.Heading2}>User Information</h2>
+            <div className={formStyles.DividingLine}></div>
+            <h2 className={formStyles.Heading2}>User Information</h2>
             <span className={inputStyles.Label}>Login Addresses</span>
-            <ul className={styles.List}>
+            <ul className={formStyles.List}>
               {authAddresses.map((address) => (
                 <li>{address}</li>
               ))}
@@ -279,7 +321,7 @@ export default function AccountManagementPage() {
               toggleEdit={true}
               handleSaveInputValue={handleSaveUserInfo}
             />
-            <div className={styles.ButtonsWrapper}>
+            <div className={formStyles.ButtonsWrapper}>
               <button
                 type="button"
                 className="button cta-button"
@@ -288,43 +330,83 @@ export default function AccountManagementPage() {
                 Reset Password
               </button>
             </div>
-            <div className={styles.DividingLine}></div>
-            <h2 className={styles.Heading2}>Team Information</h2>
-            {(currentUser.teams || []).length === 0
-              ? "You are not a member of any teams"
-              : currentUser.teams.map((team) => (
+            <div className={formStyles.DividingLine}></div>
+            <h2 className={formStyles.Heading2}>Team Information</h2>
+            {(currentUser.teams || []).length === 0 ? (
+              "You are not a member of any teams"
+            ) : (
+              <div
+                className={currentUser.teams.length > 1 ? "card-wrapper" : ""}
+              >
+                {currentUser.teams.map((team) => (
                   // @todo: style this card
-                  <div>
-                    <WardenDetails
-                      username={team.username}
-                      image={team.image}
-                    />
-                    <span className={inputStyles.Label}>Members:</span>
-                    <ul>
-                      {team.members.map((member) => (
-                        <li>{member}</li>
-                      ))}
-                    </ul>
-                    <span className={inputStyles.Label}>
-                      Payment addresses:
-                    </span>
-                    <ul>
-                      {team.polygonAddress && (
-                        <li>polygon: {team.polygonAddress}</li>
-                      )}
-                      {team.ethereumAddress && (
-                        <li>ethereum: {team.ethereumAddress}</li>
-                      )}
-                    </ul>
-                    <Link
-                      to={`/manage-team?team=${team.username}`}
-                      state={team}
-                    >
-                      Edit
-                    </Link>
-                  </div>
+                  <Card
+                    title={
+                      <WardenDetails
+                        username={team.username}
+                        image={team.image}
+                        avatarSize="40px"
+                        className={inputStyles.Label}
+                      />
+                    }
+                    buttons={
+                      <>
+                        <Link
+                          to={`/manage-team?team=${team.username}`}
+                          state={team}
+                          className={inputStyles.IconButton}
+                        >
+                          <img src="/images/pencil.png" alt="edit" />
+                        </Link>
+                        <button
+                          type="button"
+                          className={inputStyles.IconButton}
+                          onClick={() => handleDelete(team)}
+                        >
+                          <img src="/images/trash-can.png" alt="delete" />
+                        </button>
+                      </>
+                    }
+                  >
+                    <>
+                      <span className={inputStyles.Label}>Members:</span>
+                      <ul className={formStyles.List}>
+                        {team.members.map((member) => (
+                          <li>{member}</li>
+                        ))}
+                      </ul>
+                      {team.ethereumAddress ||
+                        (team.polygonAddress && (
+                          <>
+                            <span className={inputStyles.Label}>
+                              Payment addresses:
+                            </span>
+                            <ul className={formStyles.List}>
+                              {team.polygonAddress && (
+                                <li>
+                                  polygon:{" "}
+                                  {team.polygonAddress.slice(0, 5) +
+                                    "..." +
+                                    team.polygonAddress.slice(-4)}
+                                </li>
+                              )}
+                              {team.ethereumAddress && (
+                                <li>
+                                  ethereum:{" "}
+                                  {team.ethereumAddress.slice(0, 5) +
+                                    "..." +
+                                    team.ethereumAddress.slice(-4)}
+                                </li>
+                              )}
+                            </ul>
+                          </>
+                        ))}
+                    </>
+                  </Card>
                 ))}
-            <div className={styles.ButtonsWrapper}>
+              </div>
+            )}
+            <div className={formStyles.ButtonsWrapper}>
               <Link
                 to="/register-team"
                 className="button cta-button centered secondary"

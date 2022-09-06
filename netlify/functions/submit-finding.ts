@@ -26,13 +26,10 @@ import {
   sendConfirmationEmail,
   getTeamEmails,
 } from "../util/user-utils";
+import { isDangerousHandle } from "../util/validation-utils";
 
 const OctokitClient = Octokit.plugin(createPullRequest);
 const octokit = new OctokitClient({ auth: token });
-
-function isDangerousHandle(s) {
-  return s.match(/^[0-9a-zA-Z_\-]+$/) === null;
-}
 
 function isDangerousRepo(s) {
   return s.match(/^[0-9a-zA-Z\-]+$/) === null;

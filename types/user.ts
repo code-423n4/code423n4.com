@@ -56,3 +56,7 @@ export interface TeamUpdateRequest {
   };
   image?: string;
 }
+
+export interface TeamDeleteRequest {
+  teamName: string;
+}

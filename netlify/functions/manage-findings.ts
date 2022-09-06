@@ -95,14 +95,6 @@ async function getFindings(
   contest: Contest,
   includeTeams: boolean = true
 ): Promise<Response> {
-  // first phase:
-  // given active contest id
-  // [x] warden can see own findings
-  // [x] warden can see team findings
-  // [x] can see specific finding
-  // [x] team findings
-  // [x] make team findings optional
-
   const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
 
   const wardenFindings: Finding[] = await wardenFindingsForContest(
@@ -431,13 +423,6 @@ async function deleteFinding(
   attributedTo: string,
   emailAddresses: string[]
 ) {
-  // @todo:
-  // [x] delete markdown file for QA and Gas reports
-  // [x] close issue
-  // [x] add comment "withdrawn by x"
-  // [x] add "withdrawn by warden" and "Invalid" labels
-  // [x] send confirmation email
-
   const CustOcto = Octokit.plugin(createOrUpdateTextFile);
   const client = new CustOcto({ auth: process.env.GITHUB_TOKEN });
 
