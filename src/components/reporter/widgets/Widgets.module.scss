@@ -113,6 +113,7 @@ input[type="file"].Avatar::file-selector-button {
   background-color: transparent;
   color: #fff;
   box-shadow: inset 0px 0px 0px 2px #fff;
+  margin-left: 10px;
 
   &:hover {
     background-color: var(--main-purple);

@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import React, { ReactNode, useState } from "react";
+import React, { ReactNode, useCallback, useEffect, useState } from "react";
 
 import * as styles from "./Input.module.scss";
 
@@ -19,6 +19,7 @@ interface InputProps {
   toggleEdit?: boolean;
   // optional button to show after the input
   button?: string;
+  forceValidation?: boolean;
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleRemoveInputField?: (name: string) => void;
   handleButtonClick?: (value: string) => void;
@@ -40,6 +41,7 @@ export function Input({
   canRemove = false,
   toggleEdit,
   button,
+  forceValidation,
   handleChange,
   handleRemoveInputField,
   handleButtonClick,
@@ -51,6 +53,12 @@ export function Input({
   const [validationErrors, setValidationErrors] = useState<
     (string | ReactNode)[]
   >([]);
+
+  useEffect(() => {
+    if (forceValidation) {
+      validate();
+    }
+  }, [forceValidation]);
 
   const validate = (): (string | ReactNode)[] => {
     let errorMessages: (string | ReactNode)[] = [];

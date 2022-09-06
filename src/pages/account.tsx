@@ -13,6 +13,7 @@ import useUser from "../hooks/UserContext";
 // components
 import { Input } from "../components/Input";
 import ProtectedPage from "../components/ProtectedPage";
+import WardenDetails from "../components/WardenDetails";
 
 // styles
 import * as styles from "../components/form/Form.module.scss";
@@ -32,7 +33,7 @@ const initialPaymentAddressesState = {
   ethereumAddress: { address: "", id: "", chain: "ethereum" },
 };
 
-export default function ConfirmAccount() {
+export default function AccountManagementPage() {
   // hooks
   const { isInitialized, isInitializing, user, Moralis } = useMoralis();
   const { currentUser, reFetchUser } = useUser();
@@ -288,18 +289,41 @@ export default function ConfirmAccount() {
               </button>
             </div>
             <div className={styles.DividingLine}></div>
-            <h2 className={styles.Heading2}>Teams</h2>
-            <p>Team Management coming soon!</p>
-            <p>
-              If you need help with managing your team in the meantime,{" "}
-              <Link to="/help">contact us</Link>.
-            </p>
-            <span className={inputStyles.Label}>Your Teams:</span>
-            <p>
-              {(currentUser.teams || []).length === 0
-                ? "You are not a member of any teams"
-                : currentUser.teams.map((e) => e.username).join(", ")}
-            </p>
+            <h2 className={styles.Heading2}>Team Information</h2>
+            {(currentUser.teams || []).length === 0
+              ? "You are not a member of any teams"
+              : currentUser.teams.map((team) => (
+                  // @todo: style this card
+                  <div>
+                    <WardenDetails
+                      username={team.username}
+                      image={team.image}
+                    />
+                    <span className={inputStyles.Label}>Members:</span>
+                    <ul>
+                      {team.members.map((member) => (
+                        <li>{member}</li>
+                      ))}
+                    </ul>
+                    <span className={inputStyles.Label}>
+                      Payment addresses:
+                    </span>
+                    <ul>
+                      {team.polygonAddress && (
+                        <li>polygon: {team.polygonAddress}</li>
+                      )}
+                      {team.ethereumAddress && (
+                        <li>ethereum: {team.ethereumAddress}</li>
+                      )}
+                    </ul>
+                    <Link
+                      to={`/manage-team?team=${team.username}`}
+                      state={team}
+                    >
+                      Edit
+                    </Link>
+                  </div>
+                ))}
             <div className={styles.ButtonsWrapper}>
               <Link
                 to="/register-team"

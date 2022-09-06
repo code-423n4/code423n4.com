@@ -30,9 +30,10 @@ interface UserBasicInfo {
   link?: string | undefined;
 }
 
-interface TeamAddresses {
+export interface TeamInfo extends UserBasicInfo {
   polygonAddress?: string;
   ethereumAddress?: string;
+  members: string[];
 }
 
 interface UserState extends UserBasicInfo {
@@ -40,7 +41,7 @@ interface UserState extends UserBasicInfo {
   gitHubUsername: string;
   emailAddress: string;
   moralisId: string;
-  teams: (UserBasicInfo & TeamAddresses)[];
+  teams: TeamInfo[];
   isLoggedIn: boolean;
 }
 
@@ -191,7 +192,7 @@ const UserProvider = ({ children }) => {
     const teamsResponse = await fetch(
       `/.netlify/functions/get-team?id=${username}`
     );
-    let teams: (UserBasicInfo & TeamAddresses)[] = [];
+    let teams: TeamInfo[] = [];
     if (teamsResponse.status === 200) {
       const teamsData: TeamData[] = await teamsResponse.json();
       teams = teamsData.map((team) => {
@@ -207,6 +208,7 @@ const UserProvider = ({ children }) => {
           link: team.link,
           polygonAddress: polygonAddress?.address || "",
           ethereumAddress: ethereumAddress?.address || "",
+          members: team.members,
         };
       });
     }

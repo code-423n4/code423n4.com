@@ -1,13 +1,12 @@
-import fetch from "node-fetch";
-import Moralis from "moralis-v1/node";
 import { createPullRequest } from "octokit-plugin-create-pull-request";
 import { File } from "octokit-plugin-create-pull-request/dist-types/types";
 const sharp = require("sharp");
 import { Octokit } from "@octokit/core";
 
-import { token, moralisAppId, moralisServerUrl } from "../_config";
+import { token } from "../_config";
 import { TeamData } from "../../types/user";
 import { getTeamEmails, sendConfirmationEmail } from "../util/user-utils";
+import { checkAuth } from "../util/auth-utils";
 
 const OctokitClient = Octokit.plugin(createPullRequest);
 const octokit = new OctokitClient({ auth: token });
@@ -32,13 +31,13 @@ exports.handler = async (event) => {
     const data = JSON.parse(event.body);
     const {
       teamName,
-      username,
       image,
       link,
       members,
       polygonAddress,
       ethereumAddress,
     } = data;
+    const username = event.headers["c4-user"];
 
     // ensure we have the data we need
     if (!teamName) {
@@ -96,54 +95,11 @@ exports.handler = async (event) => {
       };
     }
 
-    const authorization = event.headers["x-authorization"];
-    if (!authorization) {
+    if (!(await checkAuth(event))) {
       return {
         statusCode: 401,
         body: JSON.stringify({
           error: "Unauthorized",
-        }),
-      };
-    }
-
-    await Moralis.start({
-      serverUrl: moralisServerUrl,
-      appId: moralisAppId,
-    });
-
-    const userUrl = `${process.env.URL}/.netlify/functions/get-user?id=${username}`;
-    const userResponse = await fetch(userUrl);
-    if (!userResponse.ok) {
-      return {
-        statusCode: 401,
-        body: JSON.stringify({
-          error: "You must be a registered warden to create a team",
-        }),
-      };
-    }
-
-    const userData = await userResponse.json();
-    if (!userData || !userData.moralisId) {
-      return {
-        statusCode: 401,
-        body: JSON.stringify({
-          error: "You must be a registered warden to create a team",
-        }),
-      };
-    }
-
-    const { moralisId } = userData;
-    const sessionToken = authorization.split("Bearer ")[1];
-    const confirmed = await Moralis.Cloud.run("confirmUser", {
-      sessionToken,
-      moralisId,
-      username,
-    });
-    if (!confirmed) {
-      return {
-        statusCode: 401,
-        body: JSON.stringify({
-          error: "Authorization failed",
         }),
       };
     }

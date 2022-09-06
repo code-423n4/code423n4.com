@@ -1,6 +1,17 @@
 import { navigate } from "gatsby";
-import React, { useCallback, useState, useRef, ReactNode } from "react";
+import Moralis from "moralis/types";
+import React, {
+  useCallback,
+  useState,
+  useRef,
+  ReactNode,
+  useEffect,
+} from "react";
+import Avatar from "react-avatar";
 import { useMoralis } from "react-moralis";
+
+// types
+import { TeamCreateRequest } from "../../types/user";
 
 // hooks
 import useUser from "../hooks/UserContext";
@@ -8,59 +19,67 @@ import useUser from "../hooks/UserContext";
 // components
 import Form from "./form/Form";
 import { Input } from "./Input";
-import WardenField, {
-  WardenFieldOption,
-} from "../components/reporter/widgets/WardenField";
+import WardenField, { WardenFieldOption } from "./reporter/widgets/WardenField";
 
 // styles
 import * as widgetStyles from "../components/reporter/widgets/Widgets.module.scss";
 
-interface teamState {
+export interface TeamState {
   teamName: string;
   polygonAddress: string;
   ethereumAddress: string;
   link?: string;
-  avatar?: File | null;
+  avatarFile?: File | undefined;
+  teamImage?: string;
 }
 
-interface TeamRegistrationFormProps {
+interface TeamFormProps {
   handles: Set<string>;
   wardens: WardenFieldOption[];
+  initialState?: TeamState;
+  initialTeamMembers?: WardenFieldOption[];
+  submitButtonText: string;
+  successMessage: string;
+  onSubmit: (data: TeamCreateRequest, user: Moralis.User) => Promise<Response>;
 }
 
-const initialState: teamState = {
+const defaultInitialState: TeamState = {
   teamName: "",
-  link: "",
-  avatar: null,
   polygonAddress: "",
   ethereumAddress: "",
+  link: "",
+  avatarFile: undefined,
+  teamImage: "",
 };
 
-function getFileAsBase64(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => {
-      const dataUrl = reader.result as string;
-      const data = dataUrl.substr(dataUrl.indexOf(",") + 1);
-      resolve(data);
-    };
-    reader.onerror = (err) => reject(err);
-  });
-}
-
-export default function TeamRegistrationForm({
+export default function TeamForm({
   handles,
   wardens,
-}: TeamRegistrationFormProps) {
+  initialState,
+  initialTeamMembers,
+  submitButtonText,
+  successMessage,
+  onSubmit,
+}: TeamFormProps) {
   const { currentUser } = useUser();
   const { user, isInitialized } = useMoralis();
 
-  const [state, setState] = useState(initialState);
+  const [fileReader] = useState<FileReader>(new FileReader());
+  const [state, setState] = useState(defaultInitialState);
+  const [submitted, setSubmitted] = useState(false);
   const [teamMembers, setTeamMembers] = useState<WardenFieldOption[]>([
     wardens.find((warden) => warden.value === currentUser.username)!,
   ]);
   const avatarInputRef = useRef<HTMLInputElement>();
+
+  useEffect(() => {
+    if (initialState) {
+      setState(initialState);
+    }
+    if (initialTeamMembers) {
+      setTeamMembers(initialTeamMembers);
+    }
+  }, [initialTeamMembers, initialState]);
 
   const handleChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -72,17 +91,37 @@ export default function TeamRegistrationForm({
     [state]
   );
 
-  const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+  const getFileAsBase64 = (file) => {
+    if (file.type && !file.type.startsWith("image/")) {
+      console.log("File is not an image.", file.type, file);
+      return;
+    }
+    return new Promise((resolve, reject) => {
+      fileReader.readAsDataURL(file);
+      fileReader.onload = (e) => {
+        const dataUrl = fileReader.result;
+        resolve(dataUrl);
+      };
+      fileReader.onerror = (err) => reject(err);
+    });
+    return;
+  };
+
+  const handleAvatarChange = async (
+    e: React.ChangeEvent<HTMLInputElement>
+  ): Promise<void> => {
     if (!e.target.files || e.target.files.length < 1) {
       setState((prevState) => {
-        return { ...prevState, avatar: null };
+        return { ...prevState, avatarFile: undefined };
       });
       return;
     }
     const file = e.target.files[0];
     setState((prevState) => {
-      return { ...prevState, avatar: file };
+      return { ...prevState, avatarFile: file };
     });
+    const res = await getFileAsBase64(file);
+    setState((prevState) => ({ ...prevState, teamImage: res as string }));
   };
 
   const removeAvatar = (): void => {
@@ -91,7 +130,11 @@ export default function TeamRegistrationForm({
     }
     avatarInputRef.current.value = "";
     setState((prevState) => {
-      return { ...prevState, avatar: null };
+      return {
+        ...prevState,
+        avatarFile: undefined,
+        teamImage: initialState?.teamImage,
+      };
     });
   };
 
@@ -111,55 +154,49 @@ export default function TeamRegistrationForm({
   };
 
   const validator = useCallback(() => {
+    setSubmitted(true);
     if (
       !state.teamName ||
       teamMembers.length < 2 ||
-      handles.has(state.teamName) ||
-      !teamMembers.find((member) => member.value === currentUser.username) ||
+      (state.teamName !== initialState?.teamName &&
+        handles.has(state.teamName)) ||
       // @todo: better validation for addresses
       state.polygonAddress.length !== 42 ||
-      state.ethereumAddress.length !== 42 ||
+      (state.ethereumAddress && state.ethereumAddress.length !== 42) ||
       state.teamName.match(/^[0-9a-zA-Z_\-]+$/) === null
     ) {
       return true;
     }
     return false;
-  }, [state, teamMembers, handles, currentUser]);
+  }, [state, teamMembers, handles, currentUser, initialState]);
 
-  const submitRegistration = useCallback(async (): Promise<void> => {
-    const url = `/.netlify/functions/register-team`;
+  const submit = useCallback(async (): Promise<void> => {
     if (!currentUser.isLoggedIn || !user || !isInitialized) {
+      console.log(!currentUser.isLoggedIn, !user, !isInitialized);
       navigate("/");
       return;
     }
-
-    let image: unknown = undefined;
     const members = teamMembers.map((member) => member.value);
 
-    if (state.avatar) {
-      image = await getFileAsBase64(state.avatar);
-    }
-
-    const requestBody = {
+    const requestBody: TeamCreateRequest = {
       teamName: state.teamName,
-      username: currentUser.username,
       members,
-      link: state.link,
-      image,
       polygonAddress: state.polygonAddress,
       ethereumAddress: state.ethereumAddress,
     };
 
-    const sessionToken = user.attributes.sessionToken;
+    if (state.avatarFile && state.teamImage) {
+      requestBody.image = state.teamImage.substr(
+        state.teamImage.indexOf(",") + 1
+      );
+    }
 
-    const response = await fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "X-Authorization": `Bearer ${sessionToken}`,
-      },
-      body: JSON.stringify(requestBody),
-    });
+    if (state.link) {
+      requestBody.link = state.link;
+    }
+
+    const response = await onSubmit(requestBody, user);
+    setSubmitted(false);
 
     if (!response.ok) {
       const res = await response.json();
@@ -173,6 +210,7 @@ export default function TeamRegistrationForm({
     handles,
     user,
     isInitialized,
+    onSubmit,
   ]);
 
   const validateTeamName = useCallback(
@@ -183,12 +221,12 @@ export default function TeamRegistrationForm({
           "Supports alphanumeric characters, underscores, and hyphens"
         );
       }
-      if (handles.has(teamName)) {
+      if (teamName !== initialState?.teamName && handles.has(teamName)) {
         errors.push(`${teamName} is already registered as a team or warden.`);
       }
       return errors;
     },
-    [handles]
+    [handles, initialState]
   );
 
   const validateTeamMembers = useCallback(
@@ -197,6 +235,7 @@ export default function TeamRegistrationForm({
       if (members.length < 2) {
         errors.push("You must have at least 2 members on a team.");
       }
+      // @todo: allow users to remove themselves from a team
       if (!members.find((member) => member.value === currentUser.username)) {
         errors.push("You must add yourself to the team you are creating.");
       }
@@ -207,21 +246,23 @@ export default function TeamRegistrationForm({
 
   const validateAddress = (address: string): (string | ReactNode)[] => {
     const errors: (string | ReactNode)[] = [];
-    if (address.length !== 42) {
+    if (address && address.length !== 42) {
       errors.push("Wallet address must be 42 characters long.");
     }
+    console.log(errors);
     return errors;
   };
 
   return (
     <Form
-      successMessage="Your registration application has been submitted."
-      onSubmit={submitRegistration}
-      submitButtonText="Register Team"
+      successMessage={successMessage}
+      onSubmit={submit}
+      submitButtonText={submitButtonText}
       validator={validator}
     >
       <>
         <Input
+          forceValidation={submitted === true}
           name="teamName"
           placeholder="TeamName"
           value={state.teamName}
@@ -245,6 +286,7 @@ export default function TeamRegistrationForm({
           label="Members"
         />
         <Input
+          forceValidation={submitted === true}
           name="polygonAddress"
           placeholder="0x00000..."
           value={state.polygonAddress}
@@ -256,6 +298,7 @@ export default function TeamRegistrationForm({
           maxLength={42}
         />
         <Input
+          forceValidation={submitted === true}
           name="ethereumAddress"
           placeholder="0x00000..."
           value={state.ethereumAddress}
@@ -266,6 +309,7 @@ export default function TeamRegistrationForm({
           maxLength={42}
         />
         <Input
+          forceValidation={submitted === true}
           name="link"
           placeholder="https://twitter.com/code4rena"
           value={state.link || ""}
@@ -281,6 +325,12 @@ export default function TeamRegistrationForm({
           <p className={widgetStyles.Help}>
             An avatar displayed next to your name on the leaderboard.
           </p>
+          <Avatar
+            src={state.teamImage}
+            name={state.teamName}
+            size="50px"
+            round="50px"
+          />
           <input
             className={widgetStyles.Avatar}
             type="file"
@@ -291,7 +341,7 @@ export default function TeamRegistrationForm({
             ref={avatarInputRef}
             onChange={handleAvatarChange}
           />
-          {state.avatar && (
+          {state.avatarFile && (
             <button
               className="remove-line-button"
               type="button"
