@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { StaticQuery, graphql } from "gatsby";
 
-import DefaultLayout from "../templates/DefaultLayout";
 import Widgets from "../components/reporter/widgets/Widgets";
 import useUser from "../hooks/UserContext";
 import { useMoralis } from "react-moralis";
+
+import ProtectedPage from "../components/ProtectedPage";
 
 const config = {
   labelAll: "candidate",
@@ -112,7 +113,6 @@ const JudgeApplication = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const { currentUser } = useUser();
   const { user, isInitialized } = useMoralis();
-  const [isLoggedInErrorMessage, setisLoggedInErrorMessage] = useState(false)
 
   const fields = config.fields;
 
@@ -151,9 +151,6 @@ const JudgeApplication = () => {
       !currentUser.isLoggedIn ||
       !Object.values(state).every((val) => !!val)
     ) {
-      if(!currentUser.isLoggedIn){
-        setisLoggedInErrorMessage(true);
-      }
       return;
     }
     const handle = currentUser.username;
@@ -180,7 +177,7 @@ const JudgeApplication = () => {
         fields[0].options = wardens;
 
         return (
-          <DefaultLayout
+          <ProtectedPage
             bodyClass="judge-application"
             pageTitle="Judge Application | Code4rena"
           >
@@ -209,10 +206,6 @@ const JudgeApplication = () => {
                         </p>
                       </div>
                     )}
-                    {isLoggedInErrorMessage ? <p 
-                    className = "error-message"
-                    > User must be logged in to submit this form. 
-                    </p> : ''}
                     <button
                       className="button cta-button"
                       type="button"
@@ -278,7 +271,7 @@ const JudgeApplication = () => {
                 </div>
               )}
             </div>
-          </DefaultLayout>
+          </ProtectedPage>
         );
       }}
     />
