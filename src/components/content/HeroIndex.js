@@ -1,7 +1,7 @@
 import React from "react";
 
 import Definitions from "../content/Definitions";
-import TrustBar from "../../TrustBar";
+import TrustBar from "../TrustBar";
 
 const HeroIndex = () => {
   return (

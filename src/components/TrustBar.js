@@ -27,11 +27,10 @@ const TrustBar = () => (
 		<img src="elasticswap.svg" alt="Elastic Swap" />
 		<img src="juicebox.svg" alt="JuiceBox" />
 		<img src="forgotten-runes.svg" alt="Forgotten Runes" />
-	</>
+	</div>
 )
 
-
-
+export default TrustBar;
 
 
 
