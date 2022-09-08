@@ -21,9 +21,8 @@ const HeroIndex = () => {
           Message us on Telegram
         </a>
       </h5>
-
-      <Definitions />
       <TrustBar />
+
     </div>
   );
 };

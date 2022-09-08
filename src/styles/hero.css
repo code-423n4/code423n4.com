@@ -30,6 +30,15 @@
   font-size: 26px;
 }
 
+.trustbar {
+  text-align: center;
+}
+
+.trustbar .logos img {
+  height: 30px;
+  padding: 10px;
+}
+
 .definitions div {
   background: rgba(0, 0, 0, 0.3);
   border-radius: 10px;
@@ -82,6 +91,11 @@
 
   .hero h5 {
     font-size: 20px;
+  }
+  
+  .trustbar .logos img {
+    height: 20px;
+    padding: 5px;
   }
 
   .definitions {

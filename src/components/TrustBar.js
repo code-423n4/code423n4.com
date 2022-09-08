@@ -2,7 +2,6 @@ import React from "react";
 
 const TrustBar = () => (
 	<div className="trustbar">
-		<h5>Code4rena has performed <strong>156</strong> audits.</h5>
 		<h5>Trusted by</h5>
 		<img src="/images/logos/opensea.svg" alt="OpenSea" />
 		<img src="/images/logos/ens.svg" alt="ENS" />
