@@ -1,6 +1,7 @@
 import React from "react";
 
 import Definitions from "../content/Definitions";
+import TrustBar from "../../TrustBar";
 
 const HeroIndex = () => {
   return (
@@ -22,6 +23,7 @@ const HeroIndex = () => {
       </h5>
 
       <Definitions />
+      <TrustBar />
     </div>
   );
 };
