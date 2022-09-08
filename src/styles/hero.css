@@ -39,6 +39,11 @@
 .trustbar .logos img {
   height: 30px;
   padding: 10px;
+  opacity: .7;
+}
+
+.unlock-protocol {
+  width: 100px;
 }
 
 .definitions div {
