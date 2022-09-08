@@ -57,6 +57,9 @@ const TrustBar = () => (
 		<a href="https://unlock-protocol.com/">
 			<img src="/images/logos/unlock.svg" alt="Unlock" />
 		</a>
+		<a href="https://maple.finance/">
+			<img src="/images/logos/maple.svg" alt="Maple Finance" />
+		</a>
 		<a href="https://www.gravitybridge.net/">
 			<img src="/images/logos/gravity-bridge.svg" alt="Gravity Bridge" />
 		</a>
