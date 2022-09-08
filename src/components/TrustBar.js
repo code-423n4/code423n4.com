@@ -4,29 +4,29 @@ const TrustBar = () => (
 	<div className="trustbar">
 		<h5>Code4rena has performed <strong>156</strong> audits.</h5>
 		<h5>Trusted by</h5>
-		<img src="opensea.svg" alt="OpenSea" />
-		<img src="ens.svg" alt="ENS" />
-		<img src="aave.svg" alt="Aave" />
-		<img src="pooltogether.svg" alt="PoolTogether" />
-		<img src="sushi.svg" alt="Sushi" />
-		<img src="slingshot.svg" alt="Slingshot" />
-		<img src="mechanism.png" alt="Mechanism" />
-		<img src="nascent.svg" alt="Nascent" />
-		<img src="1kx.svg" alt="1kx" />
-		<img src="framework.svg" alt="Framework" />
-		<img src="connext.svg" alt="Connext" />
-		<img src="foundation.svg" alt="Foundation" />
-		<img src="nounsdao.svg" alt="NounsDAO" />
-		<img src="olympusdao.svg" alt="OlympusDAO" />
-		<img src="tally.svg" alt="Tally Wallet" />
-		<img src="alchemix.svg" alt="Alchemix" />
-		<img src="fraxfinance.svg" alt="Frax Finance" />
-		<img src="unlock.svg" alt="Unlock" />
-		<img src="gravity-bridge.svg" alt="Gravity Bridge" />
-		<img src="yield.svg" alt="Yield" />
-		<img src="elasticswap.svg" alt="Elastic Swap" />
-		<img src="juicebox.svg" alt="JuiceBox" />
-		<img src="forgotten-runes.svg" alt="Forgotten Runes" />
+		<img src="/images/logos/opensea.svg" alt="OpenSea" />
+		<img src="/images/logos/ens.svg" alt="ENS" />
+		<img src="/images/logos/aave.svg" alt="Aave" />
+		<img src="/images/logos/pooltogether.svg" alt="PoolTogether" />
+		<img src="/images/logos/sushi.svg" alt="Sushi" />
+		<img src="/images/logos/slingshot.svg" alt="Slingshot" />
+		<img src="/images/logos/mechanism.png" alt="Mechanism" />
+		<img src="/images/logos/nascent.svg" alt="Nascent" />
+		<img src="/images/logos/1kx.svg" alt="1kx" />
+		<img src="/images/logos/framework.svg" alt="Framework" />
+		<img src="/images/logos/connext.svg" alt="Connext" />
+		<img src="/images/logos/foundation.svg" alt="Foundation" />
+		<img src="/images/logos/nounsdao.svg" alt="NounsDAO" />
+		<img src="/images/logos/olympusdao.svg" alt="OlympusDAO" />
+		<img src="/images/logos/tally.svg" alt="Tally Wallet" />
+		<img src="/images/logos/alchemix.svg" alt="Alchemix" />
+		<img src="/images/logos/fraxfinance.svg" alt="Frax Finance" />
+		<img src="/images/logos/unlock.svg" alt="Unlock" />
+		<img src="/images/logos/gravity-bridge.svg" alt="Gravity Bridge" />
+		<img src="/images/logos/yield.svg" alt="Yield" />
+		<img src="/images/logos/elasticswap.svg" alt="Elastic Swap" />
+		<img src="/images/logos/juicebox.svg" alt="JuiceBox" />
+		<img src="/images/logos/forgotten-runes.svg" alt="Forgotten Runes" />
 	</div>
 )
 
