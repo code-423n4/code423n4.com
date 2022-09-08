@@ -31,26 +31,3 @@ const TrustBar = () => (
 )
 
 export default TrustBar;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-export default TrustBar;
