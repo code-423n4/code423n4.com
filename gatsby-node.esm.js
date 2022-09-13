@@ -7,9 +7,7 @@ import webpack from "webpack";
 import SchemaCustomization from "./schema";
 // Notion
 import { Client } from "@notionhq/client";
-const { token } = require("./netlify/_config");
-const notionToken = process.env.NOTION_CONTEST_INTEGRATION_TOKEN;
-const notionContestDb = process.env.NOTION_CONTEST_DATABASE_ID;
+const { token, notionToken, notionContestDb } = require("./netlify/_config");
 const notion = new Client({ auth: notionToken });
 const getContestData = async () => {
   try {
