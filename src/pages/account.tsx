@@ -339,7 +339,6 @@ export default function AccountManagementPage() {
                 className={currentUser.teams.length > 1 ? "card-wrapper" : ""}
               >
                 {currentUser.teams.map((team) => (
-                  // @todo: style this card
                   <Card
                     title={
                       <WardenDetails

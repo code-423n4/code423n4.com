@@ -221,7 +221,7 @@ export default function TeamForm({
           "Supports alphanumeric characters, underscores, and hyphens"
         );
       }
-      if (teamName !== initialState?.teamName && handles.has(teamName)) {
+      if (!initialState && handles.has(teamName)) {
         errors.push(`${teamName} is already registered as a team or warden.`);
       }
       return errors;
@@ -245,7 +245,6 @@ export default function TeamForm({
     if (address && address.length !== 42) {
       errors.push("Wallet address must be 42 characters long.");
     }
-    console.log(errors);
     return errors;
   };
 
@@ -257,18 +256,19 @@ export default function TeamForm({
       validator={validator}
     >
       <>
-        <Input
-          forceValidation={submitted === true}
-          name="teamName"
-          placeholder="TeamName"
-          value={state.teamName}
-          required={true}
-          label="Team Name"
-          helpText="Used to report findings, as well as display your total award amount on the leaderboard. Supports alphanumeric characters, underscores, and hyphens. Maximum 25 characters."
-          handleChange={handleChange}
-          validator={validateTeamName}
-        />
-        {/* @todo: make current user a fixed option */}
+        {(!initialState || !initialState.teamName) && (
+          <Input
+            forceValidation={submitted === true}
+            name="teamName"
+            placeholder="TeamName"
+            value={state.teamName}
+            required={true}
+            label="Team Name"
+            helpText="Used to report findings, as well as display your total award amount on the leaderboard. Supports alphanumeric characters, underscores, and hyphens. Maximum 25 characters."
+            handleChange={handleChange}
+            validator={validateTeamName}
+          />
+        )}
         <WardenField
           name="teamMembers"
           required={true}

@@ -34,10 +34,7 @@ export interface TeamCreateRequest {
 }
 
 export interface TeamUpdateRequest {
-  teamName: {
-    oldValue: string;
-    newValue: string;
-  };
+  teamName: string;
   members: {
     oldValue: string[];
     newValue: string[];

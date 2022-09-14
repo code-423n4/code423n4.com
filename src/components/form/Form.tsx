@@ -1,5 +1,4 @@
-import React, { ReactNode, useCallback, useState } from "react";
-import clsx from "clsx";
+import React, { ReactNode, useState } from "react";
 
 import * as styles from "./Form.module.scss";
 

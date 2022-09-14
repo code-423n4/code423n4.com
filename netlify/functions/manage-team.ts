@@ -1,4 +1,5 @@
 import dedent from "dedent";
+import isEqual from "lodash/isEqual";
 import { createPullRequest } from "octokit-plugin-create-pull-request";
 import { File } from "octokit-plugin-create-pull-request/dist-types/types";
 const sharp = require("sharp");
@@ -15,7 +16,6 @@ import {
 } from "../../types/user";
 import { checkAuth, checkTeamAuth } from "../util/auth-utils";
 import { getTeamEmails, sendConfirmationEmail } from "../util/user-utils";
-import { isDangerousHandle } from "../util/validation-utils";
 
 const OctokitClient = Octokit.plugin(createPullRequest, createOrUpdateTextFile);
 const octokit = new OctokitClient({ auth: token });
@@ -33,21 +33,11 @@ async function editTeam(
     ethereumAddress,
   }: TeamUpdateRequest = data;
 
-  // @todo: don't allow changing team name
-  if (!teamName || !teamName.oldValue || !teamName.newValue) {
+  if (!teamName) {
     return {
       statusCode: 422,
       body: JSON.stringify({
         error: "Team name is required",
-      }),
-    };
-  }
-
-  if (teamName.newValue.length > 25) {
-    return {
-      statusCode: 400,
-      body: JSON.stringify({
-        error: "Team name's length is limited to 25 characters.",
       }),
     };
   }
@@ -57,16 +47,6 @@ async function editTeam(
       statusCode: 422,
       body: JSON.stringify({
         error: "Polygon address is required",
-      }),
-    };
-  }
-
-  if (isDangerousHandle(teamName.newValue)) {
-    return {
-      statusCode: 400,
-      body: JSON.stringify({
-        error:
-          "Team name can only use alphanumeric characters [a-zA-Z0-9], underscores (_), and hyphens (-).",
       }),
     };
   }
@@ -82,7 +62,7 @@ async function editTeam(
 
   let oldTeamData;
   try {
-    oldTeamData = await checkTeamAuth(teamName.oldValue, username);
+    oldTeamData = await checkTeamAuth(teamName, username);
     delete oldTeamData.imageUrl;
   } catch (error) {
     return {
@@ -103,7 +83,6 @@ async function editTeam(
 
   const newTeamData: TeamData = {
     ...oldTeamData,
-    handle: teamName.newValue,
     members: members.newValue,
     paymentAddresses,
   };
@@ -122,16 +101,20 @@ async function editTeam(
       .resize({ width: 512 })
       .toBuffer({ resolveWithObject: true });
     base64Avatar = data.toString("base64");
-    avatarFilename = `${teamName.newValue}.${info.format}`;
-    newTeamData.image = `./avatars/${teamName.newValue}.${info.format}`;
+    avatarFilename = `${teamName}.${info.format}`;
+    newTeamData.image = `./avatars/${teamName}.${info.format}`;
+  }
+
+  // Don't create a PR if the json content and image have not changed
+  if (isEqual(newTeamData, oldTeamData) && !image) {
+    return {
+      statusCode: 422,
+      body: JSON.stringify({ error: "Nothing changed" }),
+    };
   }
 
   const files: { [path: string]: string | File } = {
-    [`_data/handles/${teamName.newValue}.json`]: JSON.stringify(
-      newTeamData,
-      null,
-      2
-    ),
+    [`_data/handles/${teamName}.json`]: JSON.stringify(newTeamData, null, 2),
   };
   if (image) {
     files[`_data/handles/avatars/${avatarFilename}`] = {
@@ -140,9 +123,9 @@ async function editTeam(
     };
   }
 
-  const title = `Edit team ${teamName.oldValue}`;
-  const body = `This auto-generated PR modifies the team ${teamName.oldValue}`;
-  const branchName = `team/${teamName.newValue}`;
+  const title = `Edit team ${teamName}`;
+  const body = `This auto-generated PR modifies the team ${teamName}`;
+  const branchName = `team/${teamName}`;
 
   try {
     const res = await octokit.createPullRequest({
@@ -167,38 +150,12 @@ async function editTeam(
       };
     }
 
-    /*
-     * If teamName changed, delete the old team json file.
-     * This must be done after the pull request is created because
-     * the branch does not exist before that and `createOrUpdateTextFile`
-     * does not create a branch if you provide a non-existent branch name.
-     */
-    if (teamName.newValue !== teamName.oldValue) {
-      const removedFile = await octokit.createOrUpdateTextFile({
-        owner: process.env.GITHUB_REPO_OWNER!,
-        repo: process.env.REPO!,
-        path: `_data/handles/${teamName.oldValue}.json`,
-        content: null,
-        message: `File replaced with ${teamName.newValue}.json by ${username}`,
-        branch: branchName,
-      });
-
-      if (!removedFile.deleted) {
-        return {
-          statusCode: 500,
-          body: JSON.stringify({ error: "Problem deleting old file" }),
-        };
-      }
-    }
-
     const newMemberEmails = await getTeamEmails(newTeamData);
     const oldMemberEmails = await getTeamEmails(oldTeamData);
-    const emailSubject = `Code4rena team "${teamName.oldValue}" has been modified`;
+    const emailSubject = `Code4rena team "${teamName}" has been modified`;
 
     const emailBody = dedent`
-      Changes to the team ${teamName.oldValue} have been requested:
-
-      Team name: ${teamName.newValue}
+      Changes to the team ${teamName} have been requested.
 
       Members: ${members.newValue.join(", ")}
 

@@ -1,4 +1,5 @@
 import { graphql } from "gatsby";
+import isEqual from "lodash/isEqual";
 import React, { useCallback, useEffect, useState } from "react";
 
 //types
@@ -16,9 +17,13 @@ import ProtectedPage from "../components/ProtectedPage";
 import TeamForm, { TeamState } from "../components/TeamForm";
 import { WardenFieldOption } from "../components/reporter/widgets/WardenField";
 
+// styles
+import * as styles from "../components/form/Form.module.scss";
+
 export default function TeamManagement({ data, location }) {
   const { currentUser } = useUser();
 
+  const [unauthorized, setIsUnauthorized] = useState<boolean>(false);
   const [teamState, setTeamState] = useState<TeamState | undefined>();
   const [teamMembers, setTeamMembers] = useState<
     WardenFieldOption[] | undefined
@@ -53,7 +58,7 @@ export default function TeamManagement({ data, location }) {
           teamData.paymentAddresses.find(
             (address) => address.chain === "ethereum"
           );
-        const team = {
+        const team: TeamInfo = {
           username: teamData.handle,
           image: teamData.imageUrl,
           link: teamData.link,
@@ -64,9 +69,22 @@ export default function TeamManagement({ data, location }) {
         initializeState(team);
       }
     })();
-  }, [location]);
+  }, [location, currentUser]);
 
   const initializeState = (team: TeamInfo) => {
+    if (!team.members.includes(currentUser.username)) {
+      setIsUnauthorized(true);
+      return;
+    }
+    setIsUnauthorized(false);
+
+    const members: WardenFieldOption[] = [];
+    team.members.forEach((m) => {
+      const member = wardens.find((warden) => warden.value === m);
+      member && members.push(member);
+    });
+    setTeamMembers(members);
+
     const state: TeamState = {
       teamName: team.username,
       polygonAddress: team.polygonAddress || "",
@@ -75,13 +93,6 @@ export default function TeamManagement({ data, location }) {
       teamImage: team.image,
     };
     setTeamState(state);
-
-    const members: WardenFieldOption[] = [];
-    team.members.forEach((m) => {
-      const member = wardens.find((warden) => warden.value === m);
-      member && members.push(member);
-    });
-    setTeamMembers(members);
   };
 
   const handles: Set<string> = new Set(
@@ -99,15 +110,23 @@ export default function TeamManagement({ data, location }) {
     async (data: TeamCreateRequest, user) => {
       const sessionToken = user.attributes.sessionToken;
       if (!teamState || !teamMembers) {
-        throw { error: "Missing old information" };
+        throw "Missing old information";
+      }
+      if (
+        isEqual(
+          data.members,
+          teamMembers.map((member) => member.value)
+        ) &&
+        !data.image &&
+        data.link === teamState.link &&
+        data.ethereumAddress === teamState.ethereumAddress &&
+        data.polygonAddress === teamState.polygonAddress
+      ) {
+        throw "There were no changes to save";
       }
 
-      // @todo: don't allow changing team name
       const requestBody: TeamUpdateRequest = {
-        teamName: {
-          oldValue: teamState.teamName,
-          newValue: data.teamName,
-        },
+        teamName: teamState.teamName,
         members: {
           oldValue: teamMembers.map((member) => member.value),
           newValue: data.members,
@@ -155,22 +174,33 @@ export default function TeamManagement({ data, location }) {
       message="You need to be a registered warden, currently connected via wallet to manage a team."
     >
       <div className="wrapper-main">
-        <h1 className="page-header">
-          Manage Team {teamState && `"${teamState?.teamName}"`}
-        </h1>
-        <TeamForm
-          onSubmit={onSubmit}
-          handles={handles}
-          wardens={wardens}
-          initialState={teamState}
-          initialTeamMembers={teamMembers}
-          submitButtonText="Save team"
-          successMessage={
-            "Your changes have been submitted! " +
-            "Please note: it may take up to 48 hrs for your changes to take effect. " +
-            "You should get an email with a link to track the progress of your changes."
-          }
-        />
+        {unauthorized ? (
+          <div className="centered-text">
+            <div className={styles.Form}>
+              <h1>Unauthorized</h1>
+              <p>You are not authorized to view or edit this team.</p>
+            </div>
+          </div>
+        ) : (
+          <>
+            <h1 className="page-header">
+              Manage Team {teamState && `"${teamState?.teamName}"`}
+            </h1>
+            <TeamForm
+              onSubmit={onSubmit}
+              handles={handles}
+              wardens={wardens}
+              initialState={teamState}
+              initialTeamMembers={teamMembers}
+              submitButtonText="Save team"
+              successMessage={
+                "Your changes have been submitted! " +
+                "Please note: it may take up to 48 hrs for your changes to take effect. " +
+                "You should get an email with a link to track the progress of your changes."
+              }
+            />
+          </>
+        )}
       </div>
     </ProtectedPage>
   );
