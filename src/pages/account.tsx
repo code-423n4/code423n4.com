@@ -219,7 +219,7 @@ export default function AccountManagementPage() {
           toast.error("An error ocurred while trying to delete your team");
         } else {
           toast.info(
-            "Success! Your request to delete your team has been submitted. It will take upt to 48 hours to process your request."
+            "Success! Your request to delete your team has been submitted. It will take up to 48 hours to process your request."
           );
         }
       } catch (error) {
