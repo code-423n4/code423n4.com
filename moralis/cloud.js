@@ -1,3 +1,5 @@
+const logger = Moralis.Cloud.getLogger();
+
 Moralis.Cloud.beforeSave(Moralis.User, async (req) => {
   const c4Username = await req.object.get("c4Username");
   if (!req.original) {
@@ -21,6 +23,40 @@ Moralis.Cloud.beforeSave(Moralis.User, async (req) => {
         throw `There is already a registered user with the username ${c4Username}`;
       }
     }
+  }
+});
+
+Moralis.Cloud.beforeDelete(Moralis.User, async (req) => {
+  const r = await req;
+
+  const ethAddressQuery = new Moralis.Query("_EthAddress");
+  ethAddressQuery.equalTo("user", r.object);
+  const addresses = await ethAddressQuery.find({ useMasterKey: true });
+
+  for (let addr of addresses) {
+    await addr.destroy({ useMasterKey: true })
+      .then((res) => {
+        logger.info("Deleted user _EthAddress: " + JSON.stringify(res));
+      })
+      .catch((error) => {
+        logger.error("Error deleting user _EthAddress: " + JSON.stringify(error));
+        throw error;
+      });
+  }
+
+  const sessionQuery = new Moralis.Query("_Session");
+  sessionQuery.equalTo("user", r.object);
+  const sessions = await sessionQuery.find({ useMasterKey: true });
+  
+  for (let sess of sessions) {
+    await sess.destroy({ useMasterKey: true })
+      .then((res) => {
+        logger.info("Deleted user _Session: " + JSON.stringify(res));
+      })
+      .catch((error) => {
+        logger.error("Error deleting user _Session: " + JSON.stringify(error));
+        throw error;
+      });
   }
 });
 
