@@ -194,11 +194,21 @@ export default function TeamManagement({ data, location }) {
               initialTeamMembers={teamMembers}
               submitButtonText="Save team"
               successMessage={
-                "Your changes have been submitted! " +
-                "Please note: it may take up to 48 hrs for your changes to take effect. " +
-                "You should get an email with a link to track the progress of your changes."
+                <p>
+                  Your changes have been submitted!
+                  <br />
+                  <strong>Please note: </strong>it may take up to 48 hrs for
+                  your changes to take effect. You should get an email with a
+                  link to track the progress of your changes.
+                </p>
               }
-            />
+            >
+              <p>
+                <strong>Heads up!</strong> Changes you make to your team are not
+                immediately effective. It may take up to 48 hours for your
+                changes to be reviewed and completed.
+              </p>
+            </TeamForm>
           </>
         )}
       </div>

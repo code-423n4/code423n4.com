@@ -6,6 +6,7 @@ import React, {
   useRef,
   ReactNode,
   useEffect,
+  PropsWithChildren,
 } from "react";
 import Avatar from "react-avatar";
 import { useMoralis } from "react-moralis";
@@ -33,13 +34,13 @@ export interface TeamState {
   teamImage?: string;
 }
 
-interface TeamFormProps {
+interface TeamFormProps extends PropsWithChildren {
   handles: Set<string>;
   wardens: WardenFieldOption[];
   initialState?: TeamState;
   initialTeamMembers?: WardenFieldOption[];
   submitButtonText: string;
-  successMessage: string;
+  successMessage: string | ReactNode;
   onSubmit: (data: TeamCreateRequest, user: Moralis.User) => Promise<Response>;
 }
 
@@ -60,6 +61,7 @@ export default function TeamForm({
   submitButtonText,
   successMessage,
   onSubmit,
+  children,
 }: TeamFormProps) {
   const { currentUser } = useUser();
   const { user, isInitialized } = useMoralis();
@@ -142,12 +144,19 @@ export default function TeamForm({
     if (!message) {
       throw "";
     } else if (message === "Reference already exists") {
-      throw (
-        "It looks like a team or warden with this name has a " +
-        "pending registration. If you already submitted a registration " +
-        "for this team, please wait for our team to review and approve " +
-        "your request. Otherwise, try choosing a different name."
-      );
+      if (!initialState) {
+        throw (
+          "It looks like a team or warden with this name has a " +
+          "pending registration. If you already submitted a registration " +
+          "for this team, please wait for our team to review and approve " +
+          "your request. Otherwise, try choosing a different name."
+        );
+      } else {
+        throw (
+          "It looks like there is already a pending request to edit this team. " +
+          "Check your email for a link to the PR on GitHub."
+        );
+      }
     } else {
       throw message;
     }
@@ -348,6 +357,7 @@ export default function TeamForm({
             </button>
           )}
         </div>
+        {children}
       </>
     </Form>
   );

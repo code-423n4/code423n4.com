@@ -335,75 +335,82 @@ export default function AccountManagementPage() {
             {(currentUser.teams || []).length === 0 ? (
               "You are not a member of any teams"
             ) : (
-              <div
-                className={currentUser.teams.length > 1 ? "card-wrapper" : ""}
-              >
-                {currentUser.teams.map((team) => (
-                  <Card
-                    title={
-                      <WardenDetails
-                        username={team.username}
-                        image={team.image}
-                        avatarSize="40px"
-                        className={inputStyles.Label}
-                      />
-                    }
-                    buttons={
+              <>
+                <p>
+                  <strong>Heads up!</strong> Changes you make to your team are
+                  not immediately effective. It may take up to 48 hours for your
+                  changes to be reviewed and completed.
+                </p>
+                <div
+                  className={currentUser.teams.length > 1 ? "card-wrapper" : ""}
+                >
+                  {currentUser.teams.map((team) => (
+                    <Card
+                      title={
+                        <WardenDetails
+                          username={team.username}
+                          image={team.image}
+                          avatarSize="40px"
+                          className={inputStyles.Label}
+                        />
+                      }
+                      buttons={
+                        <>
+                          <Link
+                            to={`/manage-team?team=${team.username}`}
+                            state={team}
+                            className={inputStyles.IconButton}
+                          >
+                            <img src="/images/pencil.png" alt="edit" />
+                          </Link>
+                          <button
+                            type="button"
+                            className={inputStyles.IconButton}
+                            onClick={() => handleDelete(team)}
+                          >
+                            <img src="/images/trash-can.png" alt="delete" />
+                          </button>
+                        </>
+                      }
+                    >
                       <>
-                        <Link
-                          to={`/manage-team?team=${team.username}`}
-                          state={team}
-                          className={inputStyles.IconButton}
-                        >
-                          <img src="/images/pencil.png" alt="edit" />
-                        </Link>
-                        <button
-                          type="button"
-                          className={inputStyles.IconButton}
-                          onClick={() => handleDelete(team)}
-                        >
-                          <img src="/images/trash-can.png" alt="delete" />
-                        </button>
+                        <span className={inputStyles.Label}>Members:</span>
+                        <ul className={formStyles.List}>
+                          {team.members.map((member) => (
+                            <li>{member}</li>
+                          ))}
+                        </ul>
+                        {team.ethereumAddress ||
+                          (team.polygonAddress && (
+                            <>
+                              <span className={inputStyles.Label}>
+                                Payment addresses:
+                              </span>
+                              <ul className={formStyles.List}>
+                                {team.polygonAddress && (
+                                  <li>
+                                    polygon:{" "}
+                                    {team.polygonAddress.slice(0, 5) +
+                                      "..." +
+                                      team.polygonAddress.slice(-4)}
+                                  </li>
+                                )}
+                                {team.ethereumAddress && (
+                                  <li>
+                                    ethereum:{" "}
+                                    {team.ethereumAddress.slice(0, 5) +
+                                      "..." +
+                                      team.ethereumAddress.slice(-4)}
+                                  </li>
+                                )}
+                              </ul>
+                            </>
+                          ))}
                       </>
-                    }
-                  >
-                    <>
-                      <span className={inputStyles.Label}>Members:</span>
-                      <ul className={formStyles.List}>
-                        {team.members.map((member) => (
-                          <li>{member}</li>
-                        ))}
-                      </ul>
-                      {team.ethereumAddress ||
-                        (team.polygonAddress && (
-                          <>
-                            <span className={inputStyles.Label}>
-                              Payment addresses:
-                            </span>
-                            <ul className={formStyles.List}>
-                              {team.polygonAddress && (
-                                <li>
-                                  polygon:{" "}
-                                  {team.polygonAddress.slice(0, 5) +
-                                    "..." +
-                                    team.polygonAddress.slice(-4)}
-                                </li>
-                              )}
-                              {team.ethereumAddress && (
-                                <li>
-                                  ethereum:{" "}
-                                  {team.ethereumAddress.slice(0, 5) +
-                                    "..." +
-                                    team.ethereumAddress.slice(-4)}
-                                </li>
-                              )}
-                            </ul>
-                          </>
-                        ))}
-                    </>
-                  </Card>
-                ))}
-              </div>
+                    </Card>
+                  ))}
+                </div>
+              </>
             )}
             <div className={formStyles.ButtonsWrapper}>
               <Link
