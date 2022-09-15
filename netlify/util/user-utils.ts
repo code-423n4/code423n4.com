@@ -17,7 +17,7 @@ const {
   moralisServerUrl,
 } = require("../_config");
 
-import { isDangerousHandle } from "../util/validation-utils";
+import { isDangerousHandle } from "./validation-utils";
 
 const OctokitClient = Octokit.plugin(createPullRequest);
 const octokit = new OctokitClient({ auth: token });
