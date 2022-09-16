@@ -9,9 +9,8 @@ export interface UserData extends UserFileData {
   imageUrl?: string;
 }
 
-export interface TeamData extends UserFileData {
+export interface TeamData extends UserData {
   members: string[];
-  imageUrl?: string;
   paymentAddresses: {
     chain: string;
     address: string;
