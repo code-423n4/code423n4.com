@@ -29,21 +29,21 @@ const getContestData = async () => {
             {
               property: "Status",
               select: {
-                does_not_equal: "Lost deal"
-              }
+                does_not_equal: "Lost deal",
+              },
             },
             {
               property: "Status",
               select: {
-                does_not_equal: "Possible"
-              }
+                does_not_equal: "Possible",
+              },
             },
             {
               property: "Classified?",
               checkbox: {
-                equals: false
-              }
-            }
+                equals: false,
+              },
+            },
           ],
         },
       });
@@ -59,7 +59,7 @@ const getContestData = async () => {
         page.properties.Status.select.name !== "Possible" ||
         page.properties.Status.select.name ||
         page.properties.ContestID.number ||
-        page.properties['Classified?'].checkbox === false
+        page.properties["Classified?"].checkbox === false
       ) {
         return {
           contestId: page.properties.ContestID.number || null,
@@ -223,17 +223,6 @@ exports.onCreateNode = async ({ node, getNode, actions }) => {
       value: readmeMarkdown,
     });
 
-    const result = await getContestData();
-
-    const status = result.filter(
-      (element) => element.contestId === node.contestid
-    );
-    createNodeField({
-      node,
-      name: `status`,
-      value: status.length > 0 ? status[0].status : undefined,
-    });
-
     const socialImageUrl = await fetchSocialImage(node);
     createNodeField({
       node,
@@ -241,6 +230,25 @@ exports.onCreateNode = async ({ node, getNode, actions }) => {
       value: socialImageUrl,
     });
   }
+};
+
+exports.sourceNodes = async ({ actions, getNodes }) => {
+  const { createNodeField } = actions;
+  const nodes = await getNodes();
+  const result = await getContestData();
+
+  nodes.forEach((node, index) => {
+    if (node.internal.type === `ContestsCsv`) {
+      const status = result.filter(
+        (element) => element.contestId === node.contestid
+      );
+      createNodeField({
+        node,
+        name: `status`,
+        value: status.length > 0 ? status[0].status : undefined,
+      });
+    }
+  });
 };
 
 exports.createPages = async ({ graphql, actions }) => {
