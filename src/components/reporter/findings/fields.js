@@ -70,6 +70,63 @@ export const riskField = {
   ],
 };
 
+export const classificationField = {
+  name: "classification",
+  label: "Issue Classification *",
+  widget: "select",
+  required: true,
+  options: [
+    {
+      label: "Blockchain - Block content manipulation",
+      value: "Block content manipulation",
+    },
+    {
+      label: "Blockchain - Contract interaction",
+      value: "Contract interaction",
+    },
+    {
+      label: "Blockchain - Gas limitations",
+      value: "Gas limitations",
+    },
+    {
+      label: "Blockchain - Message structure",
+      value: "Message structure",
+    },
+    {
+      label: "Blockchain - Ether transfer",
+      value: "Ether transfer",
+    },
+    {
+      label: "Language - Arithmetic",
+      value: "Arithmetic",
+    },
+    {
+      label: "Language - Storage access",
+      value: "Storage access",
+    },
+    {
+      label: "Language - Internal control flow",
+      value: "Internal control flow",
+    },
+    {
+      label: "Model - Authorization",
+      value: "Authorization",
+    },
+    {
+      label: "Model - Trust",
+      value: "Trust",
+    },
+    {
+      label: "Model - Privacy",
+      value: "Privacy",
+    },
+    {
+      label: "Model - Economy",
+      value: "Economy",
+    }
+  ],
+};
+
 export const vulnerabilityDetailsField = {
   name: "details",
   label: "Vulnerability details *",

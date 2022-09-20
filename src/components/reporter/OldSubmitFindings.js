@@ -9,6 +9,7 @@ import {
   linksToCodeField,
   vulnerabilityDetailsField,
   qaGasDetailsField,
+  classificationField
 } from "./findings/fields";
 import {
   initStateFromStorage,
@@ -33,6 +34,7 @@ const initialState = {
   polygonAddress: "",
   title: "",
   risk: "",
+  classification: "",
   details: mdTemplate,
   qaGasDetails: "",
   linksToCode: [""],
@@ -50,6 +52,7 @@ const OldSubmitFindings = ({ wardensList, sponsor, contest, repo }) => {
     emailField,
     addressField,
     riskField,
+    classificationField
   ]);
 
   useEffect(() => {
@@ -138,9 +141,10 @@ const OldSubmitFindings = ({ wardensList, sponsor, contest, repo }) => {
       handle,
       address: polygonAddress,
       risk: formattedRisk,
+      classification: "",
       title: getTitle(state.title, state.risk),
       body: formattedBody,
-      labels: [config.labelAll, state.risk],
+      labels: [config.labelAll, state.risk, state.classification],
     };
     const submissionUrl = `/.netlify/functions/old-submit-finding`;
     const response = await fetch(submissionUrl, {
@@ -164,6 +168,7 @@ const OldSubmitFindings = ({ wardensList, sponsor, contest, repo }) => {
         emailField,
         addressField,
         riskField,
+        classificationField,
         qaGasDetailsField,
       ]);
     } else {
@@ -172,6 +177,7 @@ const OldSubmitFindings = ({ wardensList, sponsor, contest, repo }) => {
         emailField,
         addressField,
         riskField,
+        classificationField,
         titleField,
         linksToCodeField,
         vulnerabilityDetailsField,
@@ -186,6 +192,7 @@ const OldSubmitFindings = ({ wardensList, sponsor, contest, repo }) => {
         ...prevState,
         title: "",
         risk: "",
+        classification: "",
         details: initialState.details,
         qaGasDetails: "",
         linksToCode: [""],

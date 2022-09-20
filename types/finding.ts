@@ -6,6 +6,7 @@ export interface Finding {
     color: string;
   }[];
   risk: string;
+  classification: string;
   state: "OPEN" | "CLOSED";
   createdAt: string;
   updatedAt: string;
@@ -44,6 +45,7 @@ export interface FindingCreateRequest {
   attributedTo: string;
   address: string;
   risk: string;
+  classification: string;
   title: string;
   body: string;
   labels: string[];

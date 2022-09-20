@@ -18,6 +18,7 @@ import {
   linksToCodeField,
   vulnerabilityDetailsField,
   qaGasDetailsField,
+  classificationField,
 } from "./findings/fields";
 import {
   config,
@@ -144,7 +145,7 @@ const SubmitFindings = ({
 
   useEffect(() => {
     // set which fields are shown based on risk
-    let fieldList: Field[] = [riskField];
+    let fieldList: Field[] = [riskField, classificationField];
     if (!state.risk) {
       setFieldList(fieldList);
       return;
@@ -256,6 +257,7 @@ const SubmitFindings = ({
   }, [status]);
 
   const submitFinding = useCallback(async () => {
+
     const isQaOrGasFinding = checkQaOrGasFinding(state.risk);
 
     const linksToCodeString = state.linksToCode.join("\n");
@@ -266,7 +268,7 @@ const SubmitFindings = ({
       (email) => !!email
     );
     emailAddressList.push(currentUser.emailAddress);
-
+    
     const data: FindingCreateRequest = {
       user: currentUser.username,
       contest,
@@ -276,9 +278,10 @@ const SubmitFindings = ({
       attributedTo,
       address: polygonAddress,
       risk: state.risk,
+      classification: state.classification,
       title: getTitle(state.title, state.risk),
       body: formattedBody,
-      labels: [config.labelAll, state.risk],
+      labels: [config.labelAll, state.risk, state.classification],
     };
     setStatus(FormStatus.Submitting);
     try {
@@ -360,7 +363,6 @@ const SubmitFindings = ({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     const isInvalid = validator();
     if (isInvalid) {
       return;

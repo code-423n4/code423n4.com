@@ -25,6 +25,7 @@ import * as styles from "../components/form/Form.module.scss";
 export interface ReportState {
   title: string;
   risk: string;
+  classification: string;
   details: string;
   qaGasDetails: string;
   linksToCode: string[];
@@ -43,6 +44,7 @@ const mdTemplate =
 const initialState: ReportState = {
   title: "",
   risk: "",
+  classification: "",
   details: mdTemplate,
   qaGasDetails: "",
   linksToCode: [""],
@@ -66,7 +68,7 @@ const ReportForm = ({ data, location }) => {
   // state
   const [state, setState] = useState<ReportState>(initialState);
   const [attributedTo, setAttributedTo] = useState<string>("");
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [mode, setMode] = useState<FormMode>(FormMode.Create);
   const [issueId, setIssueId] = useState<number>(0);
   const [findingId, setFindingId] = useState<string>(contestid);
@@ -190,6 +192,7 @@ const ReportForm = ({ data, location }) => {
     setState({
       title: finding.title,
       risk: finding.risk,
+      classification: finding.classification,
       details: body,
       qaGasDetails: normalizedBody,
       linksToCode: links,
@@ -210,7 +213,7 @@ const ReportForm = ({ data, location }) => {
     (async () => {
       if (currentUser.isLoggedIn) {
         const user = await Moralis.User.current();
-
+      
         if (location.state && location.state.finding) {
           const finding = location.state.finding;
           initializeEditState(finding);
@@ -290,6 +293,7 @@ const ReportForm = ({ data, location }) => {
         </>
       }
     >
+    <div>
       {isLoading ? (
         // @todo: style a loading state
         <span>Loading...</span>
@@ -344,6 +348,7 @@ const ReportForm = ({ data, location }) => {
           onDelete={mode === FormMode.Edit ? onDelete : undefined}
         />
       )}
+      </div>
     </ProtectedPage>
   );
 };
