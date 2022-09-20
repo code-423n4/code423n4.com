@@ -26,6 +26,24 @@ const getContestData = async () => {
                 is_not_empty: true,
               },
             },
+            {
+              property: "Status",
+              select: {
+                does_not_equal: "Lost deal"
+              }
+            },
+            {
+              property: "Status",
+              select: {
+                does_not_equal: "Possible"
+              }
+            },
+            {
+              property: "Classified?",
+              checkbox: {
+                equals: false
+              }
+            }
           ],
         },
       });
@@ -35,13 +53,13 @@ const getContestData = async () => {
       }
       cursor = next_cursor;
     }
-
     const statusObject = pages.map((page) => {
       if (
         page.properties.Status.select.name !== "Lost deal" ||
         page.properties.Status.select.name !== "Possible" ||
         page.properties.Status.select.name ||
-        page.properties.ContestID.number
+        page.properties.ContestID.number ||
+        page.properties['Classified?'].checkbox === false
       ) {
         return {
           contestId: page.properties.ContestID.number || null,
