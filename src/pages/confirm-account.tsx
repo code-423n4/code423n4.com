@@ -92,6 +92,7 @@ export default function ConfirmAccount() {
       e.preventDefault();
       const url = `/.netlify/functions/register-warden`;
       if (
+        !user ||
         !captchaToken ||
         !discordUsername ||
         !isValidDiscord ||
@@ -121,9 +122,13 @@ export default function ConfirmAccount() {
 
       if (response.ok) {
         try {
-          user.set("c4Username", confirmedHandle);
+          if (!user.attributes.uuid) {
+            user.set("uuid", user.attributes.username);
+          }
+          user.set("username", confirmedHandle);
           user.set("discordUsername", discordUsername);
-          user.set("emailAddress", emailAddress);
+          user.set("email", emailAddress);
+          user.set("registrationComplete", true);
           user.set("handlesPendingConfirmation", []);
           if (gitHubUsername) {
             user.set("gitHubUsername", gitHubUsername);

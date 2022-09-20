@@ -57,7 +57,7 @@
     "jsonwebtoken": "^8.5.1",
     "kickbox": "^2.0.4",
     "mailgun.js": "^6.0.1",
-    "moralis": "^1.11.0",
+    "moralis-v1": "^1.11.0",
     "node-fetch": "^2.6.6",
     "octokit-plugin-create-pull-request": "^3.9.3",
     "os-browserify": "^0.3.0",

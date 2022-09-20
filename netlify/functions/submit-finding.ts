@@ -1,7 +1,7 @@
 const { createPullRequest } = require("octokit-plugin-create-pull-request");
 const dedent = require("dedent");
 const fetch = require("node-fetch");
-const { Moralis } = require("moralis/node");
+const { Moralis } = require("moralis-v1/node");
 const { Octokit } = require("@octokit/core");
 
 const {

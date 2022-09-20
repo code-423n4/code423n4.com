@@ -1,7 +1,7 @@
 import React, { useCallback, useState, useRef, ReactNode } from "react";
 import clsx from "clsx";
 import HCaptcha from "@hcaptcha/react-hcaptcha";
-import Moralis from "moralis/types";
+import Moralis from "moralis-v1/types";
 import { toast } from "react-toastify";
 import { useMoralis } from "react-moralis";
 
@@ -195,8 +195,9 @@ export default function RegistrationForm({ handles, wardens, className }) {
 
           const moralisId = user.id;
           const polygonAddress = user.get("ethAddress");
-          const username = await user.get("c4Username");
-          if (username) {
+          const username = await user.get("username");
+          const isRegistrationComplete = await user.get("registrationComplete");
+          if (isRegistrationComplete) {
             await logUserOut();
             setStatus(FormStatus.Error);
             if (username !== state.username) {
@@ -245,13 +246,16 @@ export default function RegistrationForm({ handles, wardens, className }) {
 
           if (response.ok) {
             try {
-              user.set("c4Username", state.username);
+              if (!user.attributes.uuid) {
+                user.set("uuid", user.attributes.username);
+              }
+              user.set("username", state.username);
               user.set("discordUsername", state.discordUsername);
               if (state.gitHubUsername) {
                 user.set("gitHubUsername", state.gitHubUsername);
               }
-              user.set("emailAddress", state.emailAddress);
-              // @todo: add role
+              user.set("email", state.emailAddress);
+              user.set("registrationComplete", true);
               await user.save();
               setStatus(FormStatus.Submitted);
             } catch (error) {
@@ -264,11 +268,15 @@ export default function RegistrationForm({ handles, wardens, className }) {
             const { error } = await response.json();
             if (error.startsWith("Failed to send confirmation email")) {
               // allow confirmation email to fail; don't save a bad email address
-              user.set("c4Username", state.username);
+              if (!user.attributes.uuid) {
+                user.set("uuid", user.attributes.username);
+              }
+              user.set("username", state.username);
               user.set("discordUsername", state.discordUsername);
               if (state.gitHubUsername) {
                 user.set("gitHubUsername", state.gitHubUsername);
               }
+              user.set("registrationComplete", true);
               // @todo: add role
               await user.save();
               setStatus(FormStatus.Submitted);

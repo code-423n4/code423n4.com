@@ -7,7 +7,7 @@ import React, {
   useState,
 } from "react";
 import { MoralisProvider, useMoralis } from "react-moralis";
-import Moralis from "moralis";
+import Moralis from "moralis-v1";
 import { toast } from "react-toastify";
 import { navigate } from "gatsby";
 import { ModalProvider, useModalContext } from "./ModalContext";
@@ -115,14 +115,7 @@ const UserProvider = ({ children }) => {
             return;
           }
 
-          const username = user.get("c4Username");
-          if (!username) {
-            toast.error(
-              "Only registered users can link accounts; your wallet has been disconnected"
-            );
-            await logout();
-            return;
-          }
+          const username = user.get("username");
           showModal({
             title: "Link this address to your account",
             body: (
@@ -154,14 +147,14 @@ const UserProvider = ({ children }) => {
 
   const getUserInfo = async (user: Moralis.User): Promise<void> => {
     const {
-      c4Username,
+      username,
       ethAddress,
       discordUsername,
       gitHubUsername,
-      emailAddress,
+      email,
     } = user.attributes;
     const userResponse = await fetch(
-      `/.netlify/functions/get-user?id=${c4Username}`
+      `/.netlify/functions/get-user?id=${username}`
     );
     if (!userResponse.ok) {
       const error = await userResponse.json();
@@ -186,7 +179,7 @@ const UserProvider = ({ children }) => {
 
     // fetching teams
     const teamsResponse = await fetch(
-      `/.netlify/functions/get-team?id=${c4Username}`
+      `/.netlify/functions/get-team?id=${username}`
     );
     let teams = [];
     if (teamsResponse.status === 200) {
@@ -199,12 +192,12 @@ const UserProvider = ({ children }) => {
     }
 
     setCurrentUser({
-      username: c4Username,
+      username,
       moralisId,
       address: ethAddress,
       discordUsername,
       gitHubUsername,
-      emailAddress,
+      emailAddress: email,
       link,
       image,
       teams,
@@ -222,8 +215,8 @@ const UserProvider = ({ children }) => {
       return;
     }
 
-    const username = await user.get("c4Username");
-    if (!username) {
+    const isRegistrationComplete = await user.get("registrationComplete");
+    if (!isRegistrationComplete) {
       const handlesPendingConfirmation = await user.get(
         "handlesPendingConfirmation"
       );
@@ -272,8 +265,10 @@ const UserProvider = ({ children }) => {
           if (!user) {
             logUserOut();
           } else {
-            const username = await user.get("c4Username");
-            if (username) {
+            const isRegistrationComplete = await user.get(
+              "registrationComplete"
+            );
+            if (isRegistrationComplete) {
               await getUserInfo(user);
             }
           }
@@ -289,8 +284,8 @@ const UserProvider = ({ children }) => {
     if (!isInitialized || !isAuthenticated || !user) {
       return;
     }
-    const username = await user.get("c4Username");
-    if (username) {
+    const isRegistrationComplete = await user.get("registrationComplete");
+    if (isRegistrationComplete) {
       await getUserInfo(user);
     }
   }, [isInitialized, isAuthenticated, user]);

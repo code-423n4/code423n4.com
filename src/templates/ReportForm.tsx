@@ -1,5 +1,5 @@
 import { graphql, Link } from "gatsby";
-import Moralis from "moralis";
+import Moralis from "moralis-v1";
 import React, { useCallback, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 

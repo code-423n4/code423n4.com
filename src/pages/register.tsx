@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import { graphql, navigate } from "gatsby";
-import Moralis from "moralis";
+import Moralis from "moralis-v1";
 import React, { useEffect, useState } from "react";
 import { useMoralis } from "react-moralis";
 

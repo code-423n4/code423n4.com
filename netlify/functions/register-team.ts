@@ -1,5 +1,5 @@
 import fetch from "node-fetch";
-import Moralis from "moralis/node";
+import Moralis from "moralis-v1/node";
 import { createPullRequest } from "octokit-plugin-create-pull-request";
 import { File } from "octokit-plugin-create-pull-request/dist-types/types";
 const sharp = require("sharp");

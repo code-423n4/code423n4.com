@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import React, { useEffect, useState } from "react";
-import Moralis from "moralis";
+import Moralis from "moralis-v1";
 import { navigate } from "gatsby";
 import { toast } from "react-toastify";
 import { useMoralis } from "react-moralis";
