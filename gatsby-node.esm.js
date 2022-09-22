@@ -182,15 +182,6 @@ exports.createPages = async ({ graphql, actions }) => {
           contestId: contest.node.contestid,
         },
       });
-
-      // XXX: inject old-style reporting form
-      createPage({
-        path: contest.node.fields.submissionPath + "-old",
-        component: path.resolve("./src/templates/OldReportForm.js"),
-        context: {
-          contestId: contest.node.contestid,
-        },
-      });
     }
 
     createPage({

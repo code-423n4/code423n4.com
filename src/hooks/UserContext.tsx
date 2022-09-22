@@ -281,14 +281,20 @@ const UserProvider = ({ children }) => {
   }, [isAuthenticated, user, isInitialized]);
 
   const reFetchUser = useCallback(async (): Promise<void> => {
-    if (!isInitialized || !isAuthenticated || !user) {
+    if (!isInitialized) {
+      return;
+    }
+    // need to explicitly fetch current user because `user` from useMoralis
+    // hook is not updated from login with username and password
+    const user = await Moralis.User.current();
+    if (!user) {
       return;
     }
     const isRegistrationComplete = await user.get("registrationComplete");
     if (isRegistrationComplete) {
       await getUserInfo(user);
     }
-  }, [isInitialized, isAuthenticated, user]);
+  }, [isInitialized]);
 
   const userContext = useMemo(() => {
     return { currentUser, logUserOut, connectWallet, reFetchUser };

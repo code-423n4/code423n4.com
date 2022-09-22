@@ -11,6 +11,7 @@ interface InputProps {
   helpText?: string | ReactNode;
   required?: boolean;
   placeholder?: string;
+  type?: string;
   value: string;
   canRemove?: boolean;
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -28,6 +29,7 @@ export function Input({
   helpText,
   required,
   placeholder,
+  type,
   value,
   canRemove = false,
   handleChange,
@@ -62,7 +64,7 @@ export function Input({
   };
 
   return (
-    <div>
+    <div className={styles.Input}>
       {label && (
         <label className={styles.Label} htmlFor={name}>
           {required ? label + " *" : label}
@@ -78,7 +80,7 @@ export function Input({
           )}
           name={name}
           placeholder={placeholder || ""}
-          type="text"
+          type={type || "text"}
           value={value}
           autoComplete="off"
           onBlur={validate}

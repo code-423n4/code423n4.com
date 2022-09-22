@@ -14,6 +14,7 @@ import ProtectedPage from "../components/ProtectedPage";
 // styles
 import * as styles from "../components/form/Form.module.scss";
 import * as inputStyles from "../components/Input.module.scss";
+import { useModalContext } from "../hooks/ModalContext";
 
 const initialState = {
   discordUsername: "",
@@ -30,8 +31,9 @@ enum FormStatus {
 
 export default function ConfirmAccount() {
   // hooks
-  const { isInitialized, isInitializing, user } = useMoralis();
+  const { isInitialized, isInitializing, user, Moralis } = useMoralis();
   const { currentUser, reFetchUser } = useUser();
+  const { showModal } = useModalContext();
 
   // state
   const [state, setState] = useState<Record<string, string>>(initialState);
@@ -40,7 +42,7 @@ export default function ConfirmAccount() {
 
   const getUser = async (): Promise<void> => {
     const { discordUsername, gitHubUsername, emailAddress } = currentUser;
-    const accounts = await user.get("accounts");
+    const accounts = await user!.get("accounts");
     setAddresses(accounts || []);
     setState({ discordUsername, gitHubUsername, emailAddress });
   };
@@ -110,6 +112,26 @@ export default function ConfirmAccount() {
     getUser();
   };
 
+  const resetPassword = () => {
+    showModal({
+      title: "Reset Password",
+      body: "Are you sure you want to reset your password?",
+      primaryButtonText: "Reset",
+      primaryButtonAction: async () => {
+        try {
+          await Moralis.Cloud.run("resetPassword");
+          toast.info(
+            "An email has been sent with a link to reset your password"
+          );
+        } catch (error) {
+          toast.error(
+            `Oops...something went wrong:  ${error.message || error}`
+          );
+        }
+      },
+    });
+  };
+
   return (
     <ProtectedPage pageTitle="My Account | Code 423n4">
       {isInitializing ? (
@@ -120,6 +142,15 @@ export default function ConfirmAccount() {
           <h1 className="page-header">Manage Account</h1>
           <form className={clsx(styles.Form)}>
             <h2 className={styles.Heading2}>Warden Information</h2>
+            <div className={styles.ButtonsWrapper}>
+              <button
+                type="button"
+                className="button cta-button"
+                onClick={resetPassword}
+              >
+                Reset Password
+              </button>
+            </div>
             <span className={inputStyles.Label}>Addresses:</span>
             <ul>
               {addresses.map((address) => (

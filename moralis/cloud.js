@@ -121,3 +121,11 @@ Moralis.Cloud.define("markUserConfirmed", async (req) => {
   user.set("confirmed", true);
   user.save(null, { useMasterKey: true });
 });
+
+Moralis.Cloud.define("resetPassword", async (req) => {
+  const { email } = req.user.attributes;
+  if (!email) {
+    throw "You must have an email address saved to reset your password";
+  }
+  Moralis.User.requestPasswordReset(email);
+});
