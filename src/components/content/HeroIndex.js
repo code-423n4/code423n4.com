@@ -1,6 +1,7 @@
 import React from "react";
 
 import Definitions from "../content/Definitions";
+import TrustBar from "../TrustBar";
 
 const HeroIndex = () => {
   return (
@@ -20,8 +21,8 @@ const HeroIndex = () => {
           Message us on Telegram
         </a>
       </h5>
+      <TrustBar />
 
-      <Definitions />
     </div>
   );
 };
