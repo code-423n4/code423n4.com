@@ -68,7 +68,7 @@ const ReportForm = ({ data, location }) => {
   // state
   const [state, setState] = useState<ReportState>(initialState);
   const [attributedTo, setAttributedTo] = useState<string>("");
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [mode, setMode] = useState<FormMode>(FormMode.Create);
   const [issueId, setIssueId] = useState<number>(0);
   const [findingId, setFindingId] = useState<string>(contestid);

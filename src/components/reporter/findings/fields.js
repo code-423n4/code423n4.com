@@ -78,19 +78,19 @@ export const classificationField = {
   options: [
     {
       label: "Blockchain - Block content manipulation",
-      value: "Block content manipulation",
+      value: "Classification-Block content manipulation",
     },
     {
       label: "Blockchain - Contract interaction",
-      value: "Contract interaction",
+      value: "Classification-Contract interaction",
     },
     {
       label: "Blockchain - Gas limitations",
-      value: "Gas limitations",
+      value: "Classification-Gas limitations",
     },
     {
       label: "Blockchain - Message structure",
-      value: "Message structure",
+      value: "Classification-Message structure",
     },
     {
       label: "Blockchain - Ether transfer",
@@ -98,31 +98,31 @@ export const classificationField = {
     },
     {
       label: "Language - Arithmetic",
-      value: "Arithmetic",
+      value: "Classification-Arithmetic",
     },
     {
       label: "Language - Storage access",
-      value: "Storage access",
+      value: "Classification-Storage access",
     },
     {
       label: "Language - Internal control flow",
-      value: "Internal control flow",
+      value: "Classification-Internal control flow",
     },
     {
       label: "Model - Authorization",
-      value: "Authorization",
+      value: "Classification-Authorization",
     },
     {
       label: "Model - Trust",
-      value: "Trust",
+      value: "Classification-Trust",
     },
     {
       label: "Model - Privacy",
-      value: "Privacy",
+      value: "Classification-Privacy",
     },
     {
       label: "Model - Economy",
-      value: "Economy",
+      value: "Classification-Economy",
     }
   ],
 };
