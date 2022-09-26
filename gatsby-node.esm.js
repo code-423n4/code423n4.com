@@ -57,6 +57,9 @@ async function fetchReadmeMarkdown(contestNode) {
       process.env.GITHUB_CONTEST_REPO_OWNER
     }/${getRepoName(contestNode)}/main/README.md`
   );
+  if (response.status === 404) {
+    return "This contest is private";
+  }
   const data = await response.text();
   return data;
 }
