@@ -132,7 +132,7 @@ const Login = ({ displayAsButtons = false }) => {
   const openLoginModal = (e: React.MouseEvent) => {
     e.preventDefault();
     showModal({
-      title: "Log in with username and password",
+      title: "Log in",
       body: "",
       type: "login",
     });

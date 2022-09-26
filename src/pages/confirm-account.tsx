@@ -2,14 +2,18 @@ import clsx from "clsx";
 import { navigate } from "gatsby";
 import React, { MouseEvent, useEffect, useState, useCallback } from "react";
 import { useMoralis } from "react-moralis";
+import HCaptcha from "@hcaptcha/react-hcaptcha";
 
+// hooks
 import useUser from "../hooks/UserContext";
 
+// components
 import DefaultLayout from "../templates/DefaultLayout";
+import { Input } from "../components/Input";
 
+// styles
 import * as styles from "../components/form/Form.module.scss";
 import * as widgetStyles from "../components/reporter/widgets/Widgets.module.scss";
-import HCaptcha from "@hcaptcha/react-hcaptcha";
 
 enum FormStatus {
   Unsubmitted = "unsubmitted",
@@ -19,6 +23,20 @@ enum FormStatus {
   Loading = "loading",
 }
 
+interface userState {
+  discordUsername: string;
+  gitHubUsername: string;
+  emailAddress: string;
+  password: string;
+}
+
+const initialState: userState = {
+  discordUsername: "",
+  gitHubUsername: "",
+  emailAddress: "",
+  password: "",
+};
+
 export default function ConfirmAccount() {
   // hooks
   const { isAuthenticated, user, isInitialized, isInitializing } = useMoralis();
@@ -27,12 +45,7 @@ export default function ConfirmAccount() {
   // state
   const [handles, setHandles] = useState<string[]>([]);
   const [confirmedHandle, setConfirmedHandle] = useState<string>("");
-  const [discordUsername, setDiscordUsername] = useState<string>("");
-  const [gitHubUsername, setGitHubUsername] = useState<string>("");
-  const [emailAddress, setEmailAddress] = useState<string>("");
-  const [hasValidationErrors, setHasValidationErrors] = useState<boolean>(
-    false
-  );
+  const [state, setState] = useState<userState>(initialState);
   const [isValidDiscord, setIsValidDiscord] = useState(true);
   const [status, setStatus] = useState<FormStatus>(FormStatus.Loading);
   const [errorMessage, setErrorMessage] = useState<string>("");
@@ -78,10 +91,15 @@ export default function ConfirmAccount() {
     getUser();
   }, [isAuthenticated, user, isInitialized]);
 
-  const handleDiscordUsernameChange = (e) => {
-    setDiscordUsername(e.target.value);
-    setIsValidDiscord(discordUsernameRegex.test(e.target.value));
-  };
+  const handleChange = useCallback((e) => {
+    const { name, value } = e.target;
+    setState((prevState) => {
+      return { ...prevState, [name]: value };
+    });
+    if (name === "discordUsername") {
+      setIsValidDiscord(!value.match(/.*#[0-9]{4}/));
+    }
+  }, []);
 
   const handleCaptchaVerification = useCallback((token) => {
     setCaptchaToken(token);
@@ -94,19 +112,21 @@ export default function ConfirmAccount() {
       if (
         !user ||
         !captchaToken ||
-        !discordUsername ||
+        !state.discordUsername ||
         !isValidDiscord ||
-        !emailAddress
+        !state.emailAddress ||
+        !state.password ||
+        state.password.length < 18 ||
+        !confirmedHandle
       ) {
-        setHasValidationErrors(true);
         return;
       }
       setStatus(FormStatus.Submitting);
       const requestBody = {
         handle: confirmedHandle,
         moralisId: user.id,
-        gitHubUsername,
-        emailAddress,
+        gitHubUsername: state.gitHubUsername,
+        emailAddress: state.emailAddress,
         isUpdate: true,
         polygonAddress: user.attributes.ethAddress,
       };
@@ -126,14 +146,14 @@ export default function ConfirmAccount() {
             user.set("uuid", user.attributes.username);
           }
           user.set("username", confirmedHandle);
-          user.set("discordUsername", discordUsername);
-          user.set("email", emailAddress);
+          user.set("discordUsername", state.discordUsername);
+          user.set("email", state.emailAddress);
+          user.set("password", state.password);
           user.set("registrationComplete", true);
           user.set("handlesPendingConfirmation", []);
-          if (gitHubUsername) {
-            user.set("gitHubUsername", gitHubUsername);
+          if (state.gitHubUsername) {
+            user.set("gitHubUsername", state.gitHubUsername);
           }
-
           await user.save();
           logUserOut();
           setStatus(FormStatus.Submitted);
@@ -152,20 +172,34 @@ export default function ConfirmAccount() {
         }
       }
     },
-    [
-      captchaToken,
-      user,
-      discordUsername,
-      gitHubUsername,
-      emailAddress,
-      confirmedHandle,
-    ]
+    [captchaToken, user, state, confirmedHandle]
   );
 
   const resetForm = () => {
     setErrorMessage("");
     setStatus(FormStatus.Unsubmitted);
   };
+
+  const validatePassword = (value: string) => {
+    const validationErrors: (string | React.ReactNode)[] = [];
+    if (value.length < 18) {
+      validationErrors.push("Password should be at least 18 characters long.");
+    }
+    return validationErrors;
+  };
+
+  const validateDiscordUsername = useCallback(
+    (value: string) => {
+      const validationErrors: (string | React.ReactNode)[] = [];
+      if (!isValidDiscord) {
+        validationErrors.push(
+          "Make sure you enter your discord username, and not your server nickname. It should end with '#' followed by 4 digits."
+        );
+      }
+      return validationErrors;
+    },
+    [isValidDiscord]
+  );
 
   return (
     <DefaultLayout hideConnectWalletDropdown={true}>
@@ -176,7 +210,7 @@ export default function ConfirmAccount() {
         <div className="wrapper-main">
           <h1 className="page-header">
             {handles.length === 1
-              ? `Welcome back, ${handles[0]}!`
+              ? `Welcome back, ${confirmedHandle}!`
               : "Welcome back!"}
           </h1>
           {(status === FormStatus.Unsubmitted ||
@@ -209,90 +243,45 @@ export default function ConfirmAccount() {
                   </fieldset>
                 </>
               )}
-              <p>Polygon Address: {user.attributes.ethAddress}</p>
-              <div className={widgetStyles.Container}>
-                <label htmlFor="discordUsername" className={widgetStyles.Label}>
-                  Discord Username *
-                </label>
-                <p className={widgetStyles.Help}>
-                  Used in case we need to contact you about your submissions or
-                  winnings.
-                </p>
-                <input
-                  className={clsx(
-                    widgetStyles.Control,
-                    widgetStyles.Text,
-                    hasValidationErrors &&
-                      (!discordUsername || !isValidDiscord) &&
-                      "input-error"
-                  )}
-                  type="text"
-                  id="discordUsername"
-                  name="discordUsername"
-                  placeholder="Warden#1234"
-                  value={discordUsername}
-                  onChange={handleDiscordUsernameChange}
-                />
-                {!discordUsername && hasValidationErrors && (
-                  <p className={widgetStyles.ErrorMessage}>
-                    <small>This field is required</small>
-                  </p>
-                )}
-                {hasValidationErrors && !isValidDiscord && (
-                  <p className={widgetStyles.ErrorMessage}>
-                    <small>
-                      Make sure you enter your discord username, and not your
-                      server nickname. It should end with '#' followed by 4
-                      digits.
-                    </small>
-                  </p>
-                )}
-              </div>
-              <div className={widgetStyles.Container}>
-                <label htmlFor="emailAddress" className={widgetStyles.Label}>
-                  Email Address *
-                </label>
-                <p className={widgetStyles.Help}>
-                  Used for sending confirmation emails for each of your
-                  submissions.
-                </p>
-                <input
-                  className={clsx(
-                    widgetStyles.Control,
-                    widgetStyles.Text,
-                    hasValidationErrors && !emailAddress && "input-error"
-                  )}
-                  type="text"
-                  id="emailAddress"
-                  name="emailAddress"
-                  placeholder="warden@email.com"
-                  value={emailAddress}
-                  onChange={(e) => setEmailAddress(e.target.value)}
-                />
-                {!emailAddress && hasValidationErrors && (
-                  <p className={widgetStyles.ErrorMessage}>
-                    <small>This field is required</small>
-                  </p>
-                )}
-              </div>
-              <div className={widgetStyles.Container}>
-                <label htmlFor="gitHubUsername" className={widgetStyles.Label}>
-                  GitHub Username (Optional)
-                </label>
-                <p className={widgetStyles.Help}>
-                  Used in case we need to give you access to certain
-                  repositories.
-                </p>
-                <input
-                  className={clsx(widgetStyles.Control, widgetStyles.Text)}
-                  type="text"
-                  id="gitHubUsername"
-                  name="gitHubUsername"
-                  placeholder="Username"
-                  value={gitHubUsername}
-                  onChange={(e) => setGitHubUsername(e.target.value)}
-                />
-              </div>
+              <p>Polygon Address: {user!.attributes.ethAddress}</p>
+              <Input
+                label="Discord Username"
+                required={true}
+                helpText="Used in case we need to contact you about your submissions or winnings."
+                name="discordUsername"
+                placeholder="Warden#1234"
+                value={state.discordUsername}
+                handleChange={handleChange}
+                validator={validateDiscordUsername}
+              />
+              <Input
+                label="Email Address"
+                required={true}
+                helpText="Used for sending confirmation emails for each of your submissions."
+                name="emailAddress"
+                placeholder="warden@email.com"
+                value={state.emailAddress}
+                handleChange={handleChange}
+              />
+              <Input
+                label="Password"
+                required={true}
+                name="password"
+                placeholder="Password"
+                type="password"
+                value={state.password}
+                handleChange={handleChange}
+                validator={validatePassword}
+              />
+              <Input
+                label="GitHub Username"
+                required={false}
+                helpText="Used in case we need to give you access to certain repositories."
+                name="gitHubUsername"
+                placeholder="Username"
+                value={state.gitHubUsername}
+                handleChange={handleChange}
+              />
               <div className="captcha-container">
                 <HCaptcha
                   sitekey={process.env.GATSBY_HCAPTCHA_SITE_KEY!}
