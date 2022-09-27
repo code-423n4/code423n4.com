@@ -1,8 +1,8 @@
 export interface UserFileData {
   handle: string;
+  moralisId: string;
   link?: string;
   image?: string;
-  members?: string[];
 }
 
 export interface UserData extends UserFileData {

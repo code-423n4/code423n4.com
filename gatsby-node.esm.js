@@ -182,15 +182,6 @@ exports.createPages = async ({ graphql, actions }) => {
           contestId: contest.node.contestid,
         },
       });
-
-      // XXX: inject old-style reporting form
-      createPage({
-        path: contest.node.fields.submissionPath + "-old",
-        component: path.resolve("./src/templates/OldReportForm.js"),
-        context: {
-          contestId: contest.node.contestid,
-        },
-      });
     }
 
     createPage({
@@ -211,6 +202,7 @@ exports.onCreateWebpackConfig = ({ actions }) => {
         contextRegExp: /jsdom$/,
       }),
       new webpack.ProvidePlugin({
+        process: "process/browser",
         Buffer: [require.resolve("buffer/"), "Buffer"],
       }),
     ],
@@ -222,6 +214,7 @@ exports.onCreateWebpackConfig = ({ actions }) => {
         https: require.resolve("https-browserify"),
         os: require.resolve("os-browserify/browser"),
         stream: require.resolve("stream-browserify"),
+        url: require.resolve("url"),
       },
     },
   });

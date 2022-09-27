@@ -3,6 +3,7 @@ import React, { createContext, useContext, ReactNode, useState } from "react";
 interface ModalProps {
   title: string | ReactNode;
   body: string | ReactNode;
+  type?: string;
   primaryButtonAction?: () => Promise<void>;
   primaryButtonText?: string | ReactNode;
   secondaryButtonAction?: () => Promise<void>;

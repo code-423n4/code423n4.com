@@ -1,31 +1,5 @@
 const logger = Moralis.Cloud.getLogger();
 
-Moralis.Cloud.beforeSave(Moralis.User, async (req) => {
-  const c4Username = await req.object.get("c4Username");
-  if (!req.original) {
-    // expect username to be undefined when user is first created
-    if (c4Username !== undefined) {
-      throw "users must register through the code4rena website";
-    }
-  } else {
-    const previousUsername = await req.original.get("c4Username");
-    // if updated username is not different from previous username, skip validation
-    if (previousUsername !== c4Username) {
-      if (previousUsername && !c4Username) {
-        throw "You cannot delete your username";
-      }
-
-      const query = new Moralis.Query("_User");
-      query.equalTo("c4Username", c4Username);
-      const result = await query.find({ useMasterKey: true });
-
-      if (result.length > 0) {
-        throw `There is already a registered user with the username ${c4Username}`;
-      }
-    }
-  }
-});
-
 Moralis.Cloud.beforeDelete(Moralis.User, async (req) => {
   const r = await req;
 
@@ -34,12 +8,15 @@ Moralis.Cloud.beforeDelete(Moralis.User, async (req) => {
   const addresses = await ethAddressQuery.find({ useMasterKey: true });
 
   for (let addr of addresses) {
-    await addr.destroy({ useMasterKey: true })
+    await addr
+      .destroy({ useMasterKey: true })
       .then((res) => {
         logger.info("Deleted user _EthAddress: " + JSON.stringify(res));
       })
       .catch((error) => {
-        logger.error("Error deleting user _EthAddress: " + JSON.stringify(error));
+        logger.error(
+          "Error deleting user _EthAddress: " + JSON.stringify(error)
+        );
         throw error;
       });
   }
@@ -47,9 +24,10 @@ Moralis.Cloud.beforeDelete(Moralis.User, async (req) => {
   const sessionQuery = new Moralis.Query("_Session");
   sessionQuery.equalTo("user", r.object);
   const sessions = await sessionQuery.find({ useMasterKey: true });
-  
+
   for (let sess of sessions) {
-    await sess.destroy({ useMasterKey: true })
+    await sess
+      .destroy({ useMasterKey: true })
       .then((res) => {
         logger.info("Deleted user _Session: " + JSON.stringify(res));
       })
@@ -120,7 +98,7 @@ Moralis.Cloud.define("confirmUser", async (req) => {
   sessionQuery.equalTo("sessionToken", sessionToken);
 
   const userQuery = new Moralis.Query("_User");
-  userQuery.equalTo("c4Username", username);
+  userQuery.equalTo("username", username);
   userQuery.equalTo("objectId", moralisId);
 
   sessionQuery.matchesQuery("user", userQuery);
@@ -142,4 +120,12 @@ Moralis.Cloud.define("markUserConfirmed", async (req) => {
 
   user.set("confirmed", true);
   user.save(null, { useMasterKey: true });
+});
+
+Moralis.Cloud.define("resetPassword", async (req) => {
+  const { email } = req.user.attributes;
+  if (!email) {
+    throw "You must have an email address saved to reset your password";
+  }
+  Moralis.User.requestPasswordReset(email);
 });

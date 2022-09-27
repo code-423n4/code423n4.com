@@ -51,7 +51,8 @@ function ContactUs() {
       widget: "textarea",
       maxSize: 2000,
       required: true,
-      helpText: "For content longer than 2000 characters, please include a link to a gist in GitHub"
+      helpText:
+        "For content longer than 2000 characters, please include a link to a gist in GitHub",
     },
   ];
 
@@ -122,7 +123,8 @@ function ContactUs() {
       (!fieldState.discordHandle && !fieldState.email) ||
       fields.some((field) => {
         return field.required && !fieldState[field.name];
-      }) || fieldState.description.length > 2000
+      }) ||
+      fieldState.description.length > 2000
     ) {
       setValidationErrors(true);
       return;
@@ -184,7 +186,7 @@ function ContactUs() {
           </fieldset>
           <div className="captcha-container">
             <HCaptcha
-              sitekey="4963abcb-188b-4972-8e44-2887e315af52"
+              sitekey={process.env.GATSBY_HCAPTCHA_SITE_KEY}
               theme="dark"
               onVerify={handleCaptchaVerification}
             />
@@ -193,7 +195,11 @@ function ContactUs() {
             className="button cta-button centered"
             type="button"
             onClick={handleSubmit}
-            disabled={status !== FormStatus.Unsubmitted || !captchaToken || fieldState.description.length > 2000}
+            disabled={
+              status !== FormStatus.Unsubmitted ||
+              !captchaToken ||
+              fieldState.description.length > 2000
+            }
           >
             {status === FormStatus.Unsubmitted ? "Submit" : "Submitting..."}
           </button>

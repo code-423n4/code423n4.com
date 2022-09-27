@@ -11,6 +11,8 @@ interface InputProps {
   helpText?: string | ReactNode;
   required?: boolean;
   placeholder?: string;
+  type?: string;
+  maxLength?: number;
   value: string;
   canRemove?: boolean;
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -28,6 +30,8 @@ export function Input({
   helpText,
   required,
   placeholder,
+  type,
+  maxLength,
   value,
   canRemove = false,
   handleChange,
@@ -62,10 +66,10 @@ export function Input({
   };
 
   return (
-    <div>
+    <div className={styles.Input}>
       {label && (
         <label className={styles.Label} htmlFor={name}>
-          {required ? label + " *" : label}
+          {required ? label + " *" : label + " (Optional)"}
         </label>
       )}
       {helpText && <p className={styles.Help}>{helpText}</p>}
@@ -78,11 +82,12 @@ export function Input({
           )}
           name={name}
           placeholder={placeholder || ""}
-          type="text"
+          type={type || "text"}
           value={value}
           autoComplete="off"
           onBlur={validate}
           onChange={handleChange}
+          maxLength={maxLength}
         />
         {canRemove && handleRemoveInputField && (
           <button

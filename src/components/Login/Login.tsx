@@ -1,18 +1,24 @@
 import clsx from "clsx";
 import React, { useEffect, useState } from "react";
-import Moralis from "moralis";
+import Moralis from "moralis-v1";
 import { navigate } from "gatsby";
 import { toast } from "react-toastify";
 import { useMoralis } from "react-moralis";
+
+// hooks
+import { useModalContext } from "../../hooks/ModalContext";
 import useUser, { UserLoginError } from "../../hooks/UserContext";
 
+// components
 import Dropdown from "../Dropdown";
 
+// styles
 import * as styles from "./Login.module.scss";
 import * as dropdownStyles from "../Dropdown.module.scss";
 
 const Login = ({ displayAsButtons = false }) => {
   const { logUserOut, connectWallet } = useUser();
+  const { showModal } = useModalContext();
   const { authenticate } = useMoralis();
   const [isMetaMaskEnabled, setIsMetaMaskEnabled] = useState(false);
 
@@ -123,6 +129,15 @@ const Login = ({ displayAsButtons = false }) => {
     }
   };
 
+  const openLoginModal = (e: React.MouseEvent) => {
+    e.preventDefault();
+    showModal({
+      title: "Log in",
+      body: "",
+      type: "login",
+    });
+  };
+
   return (
     <>
       {displayAsButtons ? (
@@ -138,7 +153,7 @@ const Login = ({ displayAsButtons = false }) => {
                 alt="logout icon"
                 className={styles.Icon}
               />
-              Connect MetaMask
+              MetaMask
             </button>
           ) : (
             <a
@@ -165,7 +180,19 @@ const Login = ({ displayAsButtons = false }) => {
               alt="logout icon"
               className={styles.Icon}
             />
-            Connect WalletConnect
+            WalletConnect
+          </button>
+          <button
+            className={clsx("button", styles.SmallerButton)}
+            type="button"
+            onClick={openLoginModal}
+          >
+            <img
+              src="/images/sign-out.svg"
+              alt="login icon"
+              className={styles.Icon}
+            />
+            Log in
           </button>
         </div>
       ) : (
@@ -173,7 +200,7 @@ const Login = ({ displayAsButtons = false }) => {
           <Dropdown
             wrapperClass={styles.LoginButtonWrapper}
             triggerButtonClass={styles.LoginButton}
-            triggerButton="Connect Wallet"
+            triggerButton="Connect"
             openOnHover={true}
             className={styles.Desktop}
           >
@@ -188,7 +215,7 @@ const Login = ({ displayAsButtons = false }) => {
                   alt="logout icon"
                   className={styles.Icon}
                 />
-                Connect MetaMask
+                MetaMask
               </button>
             ) : (
               <a
@@ -215,7 +242,19 @@ const Login = ({ displayAsButtons = false }) => {
                 alt="logout icon"
                 className={styles.Icon}
               />
-              Connect WalletConnect
+              WalletConnect
+            </button>
+            <button
+              className={clsx(dropdownStyles.Button, styles.Desktop)}
+              type="button"
+              onClick={openLoginModal}
+            >
+              <img
+                src="/images/sign-out.svg"
+                alt="login icon"
+                className={styles.Icon}
+              />
+              Log in
             </button>
           </Dropdown>
           <div className={styles.Mobile}>
@@ -244,6 +283,14 @@ const Login = ({ displayAsButtons = false }) => {
                 className={styles.Icon}
               />
               Connect WalletConnect
+            </a>
+            <a href="" className={styles.Link} onClick={openLoginModal}>
+              <img
+                src="/images/sign-out.svg"
+                alt="login icon"
+                className={styles.Icon}
+              />
+              Log in
             </a>
           </div>
         </>

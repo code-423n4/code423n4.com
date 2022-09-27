@@ -1,23 +1,28 @@
 import React, { useCallback, useState, useRef, ReactNode } from "react";
 import clsx from "clsx";
 import HCaptcha from "@hcaptcha/react-hcaptcha";
-import Moralis from "moralis/types";
+import Moralis from "moralis-v1/types";
 import { toast } from "react-toastify";
 import { useMoralis } from "react-moralis";
 
+// hooks
 import useUser from "../hooks/UserContext";
 
+// components
 import Agreement from "./content/Agreement";
-import WardenField from "../components/reporter/widgets/WardenField";
+import { Input } from "./Input";
+import WardenField from "./reporter/widgets/WardenField";
 
-import * as styles from "../components/form/Form.module.scss";
-import * as widgetStyles from "../components/reporter/widgets/Widgets.module.scss";
+// styles
+import * as styles from "./form/Form.module.scss";
+import * as widgetStyles from "./reporter/widgets/Widgets.module.scss";
 
 interface userState {
   username: string;
   discordUsername: string;
   gitHubUsername: string;
   emailAddress: string;
+  password: string;
   link?: string;
   avatar?: File | null;
 }
@@ -34,6 +39,7 @@ const initialState: userState = {
   discordUsername: "",
   gitHubUsername: "",
   emailAddress: "",
+  password: "",
   link: "",
   avatar: null,
 };
@@ -59,13 +65,10 @@ export default function RegistrationForm({ handles, wardens, className }) {
   // state
   const [state, setState] = useState<userState>(initialState);
   const [isNewUser, setIsNewUser] = useState<boolean>(true);
-  const [hasValidationErrors, setHasValidationErrors] = useState<boolean>(
-    false
-  );
   const [isValidDiscord, setIsValidDiscord] = useState<boolean>(true);
   const [status, setStatus] = useState<FormStatus>(FormStatus.Unsubmitted);
   const [errorMessage, setErrorMessage] = useState<string | ReactNode>("");
-  const [isDangerousUsername, setisDangerousUsername] = useState<boolean>(
+  const [isDangerousUsername, setIsDangerousUsername] = useState<boolean>(
     false
   );
   const [captchaToken, setCaptchaToken] = useState<string>("");
@@ -124,7 +127,7 @@ export default function RegistrationForm({ handles, wardens, className }) {
       setIsValidDiscord(discordUsernameRegex.test(value));
     }
     if (name === "username") {
-      setisDangerousUsername(value.match(/^[0-9a-zA-Z_\-]+$/) === null);
+      setIsDangerousUsername(value.match(/^[0-9a-zA-Z_\-]+$/) === null);
     }
   }, []);
 
@@ -165,14 +168,14 @@ export default function RegistrationForm({ handles, wardens, className }) {
           !state.discordUsername ||
           !isValidDiscord ||
           !state.emailAddress ||
+          !state.password ||
+          state.password.length < 18 ||
           isDangerousUsername ||
           (isNewUser && handles.has(state.username))
         ) {
-          setHasValidationErrors(true);
           return;
         }
 
-        setHasValidationErrors(false);
         setStatus(FormStatus.Submitting);
 
         let image: unknown = undefined;
@@ -195,8 +198,9 @@ export default function RegistrationForm({ handles, wardens, className }) {
 
           const moralisId = user.id;
           const polygonAddress = user.get("ethAddress");
-          const username = await user.get("c4Username");
-          if (username) {
+          const username = await user.get("username");
+          const isRegistrationComplete = await user.get("registrationComplete");
+          if (isRegistrationComplete) {
             await logUserOut();
             setStatus(FormStatus.Error);
             if (username !== state.username) {
@@ -245,13 +249,17 @@ export default function RegistrationForm({ handles, wardens, className }) {
 
           if (response.ok) {
             try {
-              user.set("c4Username", state.username);
+              if (!user.attributes.uuid) {
+                user.set("uuid", user.attributes.username);
+              }
+              user.set("username", state.username);
+              user.set("password", state.password);
               user.set("discordUsername", state.discordUsername);
               if (state.gitHubUsername) {
                 user.set("gitHubUsername", state.gitHubUsername);
               }
-              user.set("emailAddress", state.emailAddress);
-              // @todo: add role
+              user.set("email", state.emailAddress);
+              user.set("registrationComplete", true);
               await user.save();
               setStatus(FormStatus.Submitted);
             } catch (error) {
@@ -264,16 +272,21 @@ export default function RegistrationForm({ handles, wardens, className }) {
             const { error } = await response.json();
             if (error.startsWith("Failed to send confirmation email")) {
               // allow confirmation email to fail; don't save a bad email address
-              user.set("c4Username", state.username);
+              if (!user.attributes.uuid) {
+                user.set("uuid", user.attributes.username);
+              }
+              user.set("username", state.username);
+              user.set("password", state.password);
               user.set("discordUsername", state.discordUsername);
               if (state.gitHubUsername) {
                 user.set("gitHubUsername", state.gitHubUsername);
               }
+              user.set("registrationComplete", true);
               // @todo: add role
               await user.save();
               setStatus(FormStatus.Submitted);
               toast.error(
-                "The email you entered was invalid. Confirmation email failed to send and email address has not been saved"
+                "The email you entered was invalid. Confirmation email failed to send and email address has not been saved."
               );
             } else {
               setStatus(FormStatus.Error);
@@ -293,7 +306,7 @@ export default function RegistrationForm({ handles, wardens, className }) {
       state,
       isNewUser,
       handles,
-      hasValidationErrors,
+      isDangerousUsername,
       isValidDiscord,
       captchaToken,
     ]
@@ -306,6 +319,43 @@ export default function RegistrationForm({ handles, wardens, className }) {
     setState((prevState) => {
       return { ...prevState, username: "" };
     });
+  };
+
+  const usernameValidator = useCallback(
+    (value: string) => {
+      const validationErrors: (string | React.ReactNode)[] = [];
+      if (handles.has(value)) {
+        validationErrors.push(`${value} is already a registered username.`);
+      }
+      if (isDangerousUsername) {
+        validationErrors.push(
+          "Supports alphanumeric characters, underscores, and hyphens."
+        );
+      }
+      return validationErrors;
+    },
+    [isDangerousUsername, handles]
+  );
+
+  const discordUsernameValidator = useCallback(
+    (value: string) => {
+      const validationErrors: (string | React.ReactNode)[] = [];
+      if (!isValidDiscord) {
+        validationErrors.push(
+          "Make sure you enter your discord username, and not your server nickname. It should end with '#' followed by 4 digits."
+        );
+      }
+      return validationErrors;
+    },
+    [isValidDiscord]
+  );
+
+  const passwordValidator = (value: string) => {
+    const validationErrors: (string | React.ReactNode)[] = [];
+    if (value.length < 18) {
+      validationErrors.push("Password should be at least 18 characters long.");
+    }
+    return validationErrors;
   };
 
   return (
@@ -340,53 +390,25 @@ export default function RegistrationForm({ handles, wardens, className }) {
           </fieldset>
           {instructions}
           {isNewUser ? (
-            <div className={widgetStyles.Container}>
-              <label htmlFor="username" className={widgetStyles.Label}>
-                Code4rena Username *
-              </label>
-              <p className={widgetStyles.Help}>
-                Used to report findings, as well as display your total award
-                amount on the leaderboard. Supports alphanumeric characters,
-                underscores, and hyphens. (Note: for consistency, please ensure
-                your server nickname in our Discord matches the username you
-                provide here)
-              </p>
-              <input
-                className={clsx(
-                  widgetStyles.Control,
-                  widgetStyles.Text,
-                  hasValidationErrors &&
-                    (!state.username ||
-                      isDangerousUsername ||
-                      (isNewUser && handles.has(state.username))) &&
-                    "input-error"
-                )}
-                type="text"
-                id="username"
-                name="username"
-                placeholder="Username"
-                value={state.username}
-                onChange={handleChange}
-                maxLength={25}
-              />
-              {handles.has(state.username) && (
-                <p className={widgetStyles.ErrorMessage}>
-                  <small>{`${state.username} is already a registered username.`}</small>
-                </p>
-              )}
-              {hasValidationErrors && !state.username && (
-                <p className={widgetStyles.ErrorMessage}>
-                  <small>This field is required</small>
-                </p>
-              )}
-              {hasValidationErrors && isDangerousUsername && (
-                <p className={widgetStyles.ErrorMessage}>
-                  <small>
-                    Supports alphanumeric characters, underscores, and hyphens
-                  </small>
-                </p>
-              )}
-            </div>
+            <Input
+              label="Code4rena Username"
+              required={true}
+              helpText={
+                <>
+                  Used to report findings, as well as display your total award
+                  amount on the leaderboard. Supports alphanumeric characters,
+                  underscores, and hyphens. (Note: for consistency, please
+                  ensure your server nickname in our Discord matches the
+                  username you provide here)
+                </>
+              }
+              name="username"
+              placeholder="Username"
+              value={state.username}
+              handleChange={handleChange}
+              maxLength={25}
+              validator={usernameValidator}
+            />
           ) : (
             <div className={widgetStyles.Container}>
               <label className={widgetStyles.Label}>Code4rena Username *</label>
@@ -406,106 +428,55 @@ export default function RegistrationForm({ handles, wardens, className }) {
               />
             </div>
           )}
-          <div className={widgetStyles.Container}>
-            <label htmlFor="discordUsername" className={widgetStyles.Label}>
-              Discord Username *
-            </label>
-            <p className={widgetStyles.Help}>
-              Used in case we need to contact you about your submissions or
-              winnings.
-            </p>
-            <input
-              className={clsx(
-                widgetStyles.Control,
-                widgetStyles.Text,
-                hasValidationErrors &&
-                  (!state.discordUsername || !isValidDiscord) &&
-                  "input-error"
-              )}
-              type="text"
-              id="discordUsername"
-              name="discordUsername"
-              placeholder="Warden#1234"
-              value={state.discordUsername}
-              onChange={handleChange}
-            />
-            {hasValidationErrors && !state.discordUsername && (
-              <p className={widgetStyles.ErrorMessage}>
-                <small>This field is required</small>
-              </p>
-            )}
-            {hasValidationErrors && !isValidDiscord && (
-              <p className={widgetStyles.ErrorMessage}>
-                <small>
-                  Make sure you enter your discord username, and not your server
-                  nickname. It should end with '#' followed by 4 digits.
-                </small>
-              </p>
-            )}
-          </div>
-          <div className={widgetStyles.Container}>
-            <label htmlFor="emailAddress" className={widgetStyles.Label}>
-              Email Address *
-            </label>
-            <p className={widgetStyles.Help}>
-              Used for sending confirmation emails for each of your submissions.
-            </p>
-            <input
-              className={clsx(
-                widgetStyles.Control,
-                widgetStyles.Text,
-                hasValidationErrors && !state.emailAddress && "input-error"
-              )}
-              type="text"
-              id="emailAddress"
-              name="emailAddress"
-              placeholder="warden@email.com"
-              value={state.emailAddress}
-              onChange={handleChange}
-            />
-            {hasValidationErrors && !state.emailAddress && (
-              <p className={widgetStyles.ErrorMessage}>
-                <small>This field is required</small>
-              </p>
-            )}
-          </div>
-          <div className={widgetStyles.Container}>
-            <label htmlFor="gitHubUsername" className={widgetStyles.Label}>
-              GitHub Username (Optional)
-            </label>
-            <p className={widgetStyles.Help}>
-              Used in case we need to give you access to certain repositories.
-            </p>
-            <input
-              className={clsx(widgetStyles.Control, widgetStyles.Text)}
-              type="text"
-              id="gitHubUsername"
-              name="gitHubUsername"
-              placeholder="Username"
-              value={state.gitHubUsername}
-              onChange={handleChange}
-            />
-          </div>
+          <Input
+            label="Discord Username"
+            required={true}
+            name="discordUsername"
+            helpText="Used in case we need to contact you about your submissions or winnings."
+            placeholder="Warden#1234"
+            value={state.discordUsername}
+            handleChange={handleChange}
+            validator={discordUsernameValidator}
+          />
+          <Input
+            label="Email Address"
+            required={true}
+            helpText="Used for sending confirmation emails for each of your submissions."
+            name="emailAddress"
+            placeholder="warden@email.com"
+            value={state.emailAddress}
+            handleChange={handleChange}
+          />
+          <Input
+            label="Password"
+            required={true}
+            name="password"
+            placeholder="Password"
+            type="password"
+            value={state.password}
+            handleChange={handleChange}
+            validator={passwordValidator}
+          />
+          <Input
+            label="GitHub Username"
+            required={false}
+            helpText="Used in case we need to give you access to certain repositories."
+            name="gitHubUsername"
+            placeholder="Username"
+            value={state.gitHubUsername}
+            handleChange={handleChange}
+          />
           {isNewUser && (
             <>
-              <div className={widgetStyles.Container}>
-                <label htmlFor="link" className={widgetStyles.Label}>
-                  Link (Optional)
-                </label>
-                <p className={widgetStyles.Help}>
-                  Link your leaderboard entry to a personal website or social
-                  media account.
-                </p>
-                <input
-                  className={clsx(widgetStyles.Control, widgetStyles.Text)}
-                  type="text"
-                  id="link"
-                  name="link"
-                  placeholder="https://twitter.com/code4rena"
-                  value={state.link}
-                  onChange={handleChange}
-                />
-              </div>
+              <Input
+                label="Link"
+                required={false}
+                helpText="Link your leaderboard entry to a personal website or social media account."
+                name="link"
+                placeholder="https://twitter.com/code4rena"
+                value={state.link || ""}
+                handleChange={handleChange}
+              />
               <div className={widgetStyles.Container}>
                 <label htmlFor="avatar" className={widgetStyles.Label}>
                   Avatar (Optional)
@@ -538,7 +509,7 @@ export default function RegistrationForm({ handles, wardens, className }) {
           )}
           <div className="captcha-container">
             <HCaptcha
-              sitekey="4963abcb-188b-4972-8e44-2887e315af52"
+              sitekey={process.env.GATSBY_HCAPTCHA_SITE_KEY!}
               theme="dark"
               onVerify={handleCaptchaVerification}
             />
