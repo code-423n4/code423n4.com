@@ -3,6 +3,7 @@ import Moralis from "moralis-v1";
 import { Moralis as MoralisTypes } from "moralis-v1/types";
 import React, { useCallback, useState, useRef, ReactNode } from "react";
 import { useMoralis } from "react-moralis";
+import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
 import { toast } from "react-toastify";
 import HCaptcha from "@hcaptcha/react-hcaptcha";
 
@@ -12,6 +13,7 @@ import useUser from "../hooks/UserContext";
 // components
 import Agreement from "./content/Agreement";
 import { Input } from "./Input";
+import RegistrationFormCommonFields from "./RegistrationFormCommonFields";
 
 // styles
 import * as styles from "./form/Form.module.scss";
@@ -32,6 +34,7 @@ interface userState {
 enum FormStatus {
   Unsubmitted = "unsubmitted",
   Submitting = "submitting",
+  SubmitAttempted = "submitAttempted",
   Submitted = "submitted",
   Error = "error",
 }
@@ -47,6 +50,11 @@ const initialState: userState = {
   link: "",
   avatar: null,
 };
+
+enum RegistrationType {
+  Wallet = "wallet",
+  UsernameAndPassword = "usernameAndPassword",
+}
 
 function getFileAsBase64(file) {
   return new Promise((resolve, reject) => {
@@ -64,7 +72,7 @@ function getFileAsBase64(file) {
 export default function RegistrationForm({ handles }) {
   // hooks
   const { logUserOut } = useUser();
-  const { authenticate } = useMoralis();
+  const { authenticate, signup } = useMoralis();
 
   // state
   const [state, setState] = useState<userState>(initialState);
@@ -75,6 +83,9 @@ export default function RegistrationForm({ handles }) {
     false
   );
   const [captchaToken, setCaptchaToken] = useState<string>("");
+  const [registrationType, setRegistrationType] = useState<RegistrationType>(
+    RegistrationType.Wallet
+  );
 
   // global variables
   const avatarInputRef = useRef<HTMLInputElement>();
@@ -108,7 +119,7 @@ export default function RegistrationForm({ handles }) {
     setStatus(FormStatus.Unsubmitted);
   };
 
-  const handleChange = useCallback((e) => {
+  const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setState((prevState) => {
       return { ...prevState, [name]: value };
@@ -121,18 +132,21 @@ export default function RegistrationForm({ handles }) {
     }
   }, []);
 
-  const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    if (!e.target.files || e.target.files.length < 1) {
+  const handleAvatarChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>): void => {
+      if (!e.target.files || e.target.files.length < 1) {
+        setState((prevState) => {
+          return { ...prevState, avatar: null };
+        });
+        return;
+      }
+      const file = e.target.files[0];
       setState((prevState) => {
-        return { ...prevState, avatar: null };
+        return { ...prevState, avatar: file };
       });
-      return;
-    }
-    const file = e.target.files[0];
-    setState((prevState) => {
-      return { ...prevState, avatar: file };
-    });
-  };
+    },
+    []
+  );
 
   const toggleUseCustomPaymentAddress = () => {
     setState((prevState) => {
@@ -157,9 +171,36 @@ export default function RegistrationForm({ handles }) {
     });
   };
 
+  const saveUserInfo = async (user, polygonAddress) => {
+    try {
+      if (!user.attributes.uuid) {
+        user.set("uuid", user.attributes.username);
+      }
+      user.set("username", state.username);
+      user.set("password", state.password);
+      user.set("discordUsername", state.discordUsername);
+      if (state.gitHubUsername) {
+        user.set("gitHubUsername", state.gitHubUsername);
+      }
+      user.set("registrationComplete", true);
+      await user.save();
+      await Moralis.Cloud.run("addPaymentAddress", {
+        address: polygonAddress,
+        chain: "polygon",
+      });
+      setStatus(FormStatus.Submitted);
+    } catch (error) {
+      setStatus(FormStatus.Error);
+      updateErrorMessage("");
+      console.error(error);
+    }
+    setStatus(FormStatus.Submitted);
+  };
+
   const submitRegistration = useCallback(
-    (provider: MoralisTypes.Web3ProviderType = "metamask") => {
+    (provider?: MoralisTypes.Web3ProviderType) => {
       const url = `/.netlify/functions/register-warden`;
+      setStatus(FormStatus.SubmitAttempted);
       (async () => {
         if (
           !captchaToken ||
@@ -170,11 +211,15 @@ export default function RegistrationForm({ handles }) {
           !state.password ||
           state.password.length < 18 ||
           isDangerousUsername ||
-          handles.has(state.username)
+          handles.has(state.username) ||
+          (registrationType === RegistrationType.UsernameAndPassword &&
+            !state.polygonAddress) ||
+          (registrationType === RegistrationType.Wallet &&
+            state.useCustomPaymentAddress &&
+            !state.polygonAddress)
         ) {
           return;
         }
-
         setStatus(FormStatus.Submitting);
 
         let image: unknown = undefined;
@@ -182,10 +227,15 @@ export default function RegistrationForm({ handles }) {
           if (state.avatar) {
             image = await getFileAsBase64(state.avatar);
           }
-          const user = await authenticate({
-            provider,
-            signingMessage: "Code4rena registration",
-          });
+          let user;
+          if (!provider) {
+            user = await signup(state.username, state.password);
+          } else {
+            user = await authenticate({
+              provider,
+              signingMessage: "Code4rena registration",
+            });
+          }
 
           if (user === undefined) {
             // user clicked "cancel" when prompted to sign message (or some unknown error occurred)
@@ -196,7 +246,7 @@ export default function RegistrationForm({ handles }) {
           }
 
           const moralisId = user.id;
-          const polygonAddress = user.get("ethAddress");
+          const authAddress = (await user.get("ethAddress")) || null;
           const username = await user.get("username");
           const isRegistrationComplete = await user.get("registrationComplete");
           if (isRegistrationComplete) {
@@ -218,7 +268,7 @@ export default function RegistrationForm({ handles }) {
             handle: state.username,
             gitHubUsername: state.gitHubUsername,
             emailAddress: state.emailAddress,
-            polygonAddress,
+            polygonAddress: authAddress,
             moralisId,
             link: state.link,
             image,
@@ -226,6 +276,7 @@ export default function RegistrationForm({ handles }) {
             handle: string;
             gitHubUsername: string;
             emailAddress: string;
+            polygonAddress?: string;
             moralisId: string;
             link?: string;
             image?: unknown;
@@ -240,48 +291,20 @@ export default function RegistrationForm({ handles }) {
             body: JSON.stringify(requestBody),
           });
 
+          const paymentAddress =
+            registrationType === RegistrationType.UsernameAndPassword ||
+            state.useCustomPaymentAddress
+              ? state.polygonAddress
+              : authAddress;
+
           if (response.ok) {
-            try {
-              if (!user.attributes.uuid) {
-                user.set("uuid", user.attributes.username);
-              }
-              user.set("username", state.username);
-              user.set("password", state.password);
-              user.set("discordUsername", state.discordUsername);
-              if (state.gitHubUsername) {
-                user.set("gitHubUsername", state.gitHubUsername);
-              }
-              user.set("email", state.emailAddress);
-              user.set("registrationComplete", true);
-              await user.save();
-              await Moralis.Cloud.run("addPaymentAddress", {
-                address: polygonAddress,
-                chain: "polygon",
-              });
-              setStatus(FormStatus.Submitted);
-            } catch (error) {
-              setStatus(FormStatus.Error);
-              updateErrorMessage("");
-              console.error(error);
-            }
-            setStatus(FormStatus.Submitted);
+            user.set("email", state.emailAddress);
+            saveUserInfo(user, paymentAddress);
           } else {
             const { error } = await response.json();
             if (error.startsWith("Failed to send confirmation email")) {
               // allow confirmation email to fail; don't save a bad email address
-              if (!user.attributes.uuid) {
-                user.set("uuid", user.attributes.username);
-              }
-              user.set("username", state.username);
-              user.set("password", state.password);
-              user.set("discordUsername", state.discordUsername);
-              if (state.gitHubUsername) {
-                user.set("gitHubUsername", state.gitHubUsername);
-              }
-              user.set("registrationComplete", true);
-              // @todo: add role
-              await user.save();
-              setStatus(FormStatus.Submitted);
+              saveUserInfo(user, paymentAddress);
               toast.error(
                 "The email you entered was invalid. Confirmation email failed to send and email address has not been saved."
               );
@@ -354,145 +377,101 @@ export default function RegistrationForm({ handles }) {
   };
 
   return (
-    <form className={styles.EmphasizedInputGroup}>
+    <>
       {(status === FormStatus.Unsubmitted ||
-        status === FormStatus.Submitting) && (
+        status === FormStatus.Submitting ||
+        status === FormStatus.SubmitAttempted) && (
         <>
-          <p>
-            To register as a warden, please fill out this form and join us in{" "}
-            <a
-              href="https://discord.gg/code4rena"
-              target="_blank"
-              rel="noreferrer"
-            >
-              Discord
-            </a>
-          </p>
-          <Input
-            label="Code4rena Username"
-            required={true}
-            helpText={
-              <>
-                <strong className={styles.Heading4}>
-                  Choose wisely! Your username cannot be changed later.
-                </strong>
-                <br />
-                Used to report findings, as well as display your total award
-                amount on the leaderboard. Supports alphanumeric characters,
-                underscores, and hyphens.
-                <br />
-                (Note: for consistency, please ensure your server nickname in
-                our Discord matches the username you provide here)
-              </>
-            }
-            name="username"
-            placeholder="Username"
-            value={state.username}
-            handleChange={handleChange}
-            maxLength={25}
-            validator={usernameValidator}
-          />
-          <Input
-            label="Discord Username"
-            required={true}
-            name="discordUsername"
-            helpText="Used in case we need to contact you about your submissions or winnings."
-            placeholder="Warden#1234"
-            value={state.discordUsername}
-            handleChange={handleChange}
-            validator={discordUsernameValidator}
-          />
-          <Input
-            label="Email Address"
-            required={true}
-            helpText="Used for sending confirmation emails for each of your submissions."
-            name="emailAddress"
-            placeholder="warden@email.com"
-            value={state.emailAddress}
-            handleChange={handleChange}
-          />
-          <Input
-            label="Password"
-            required={true}
-            name="password"
-            placeholder="Password"
-            type="password"
-            value={state.password}
-            handleChange={handleChange}
-            validator={passwordValidator}
-          />
-          <Input
-            label="GitHub Username"
-            required={false}
-            helpText="Used in case we need to give you access to certain repositories."
-            name="gitHubUsername"
-            placeholder="Username"
-            value={state.gitHubUsername}
-            handleChange={handleChange}
-          />
-          <Input
-            label="Link"
-            required={false}
-            helpText="Link your leaderboard entry to a personal website or social media account."
-            name="link"
-            placeholder="https://twitter.com/code4rena"
-            value={state.link || ""}
-            handleChange={handleChange}
-          />
-          <div className={widgetStyles.Container}>
-            <label htmlFor="avatar" className={widgetStyles.Label}>
-              Avatar (Optional)
-            </label>
-            <p className={widgetStyles.Help}>
-              An avatar displayed next to your name on the leaderboard.
-            </p>
-            <input
-              className={widgetStyles.Avatar}
-              type="file"
-              id="avatar"
-              name="avatar"
-              accept=".png,.jpg,.jpeg,.webp"
-              // @ts-ignore // @todo: fix typescript error
-              ref={avatarInputRef}
-              onChange={handleAvatarChange}
-            />
-            {state.avatar && (
-              <button
-                className="remove-line-button"
-                type="button"
-                onClick={removeAvatar}
-                aria-label="Remove avatar"
+          <Tabs className="form-tab">
+            <TabList>
+              <Tab onClick={() => setRegistrationType(RegistrationType.Wallet)}>
+                Register with Wallet
+              </Tab>
+              <Tab
+                onClick={() =>
+                  setRegistrationType(RegistrationType.UsernameAndPassword)
+                }
               >
-                &#x2715;
-              </button>
-            )}
-          </div>
-          <div className={widgetStyles.Container}>
-            <label
-              htmlFor="useCustomPaymentAddress"
-              className={widgetStyles.RadioLabel}
-            >
-              <input
-                className={widgetStyles.Checkbox}
-                type="checkbox"
-                id="useCustomPaymentAddress"
-                name="useCustomPaymentAddress"
-                checked={!state.useCustomPaymentAddress}
-                onChange={toggleUseCustomPaymentAddress}
-              />
-              Use my wallet address for payment on Polygon
-            </label>
-          </div>
-          {state.useCustomPaymentAddress && (
-            <Input
-              label="Polygon Address"
-              required={true}
-              handleChange={handleChange}
-              value={state.polygonAddress}
-              name="polygonAddress"
-              validator={customPaymentAddressValidator}
-            />
-          )}
+                Register with Username and Password
+              </Tab>
+            </TabList>
+            <TabPanel>
+              <form>
+                <RegistrationFormCommonFields
+                  username={state.username}
+                  discordUsername={state.discordUsername}
+                  emailAddress={state.emailAddress}
+                  password={state.password}
+                  gitHubUsername={state.gitHubUsername}
+                  link={state.link}
+                  avatar={state.avatar}
+                  avatarInputRef={avatarInputRef}
+                  handleChange={handleChange}
+                  handleAvatarChange={handleAvatarChange}
+                  removeAvatar={removeAvatar}
+                  usernameValidator={usernameValidator}
+                  discordUsernameValidator={discordUsernameValidator}
+                  passwordValidator={passwordValidator}
+                  submitted={status === FormStatus.SubmitAttempted}
+                />
+                <label
+                  htmlFor="useCustomPaymentAddress"
+                  className={widgetStyles.RadioLabel}
+                >
+                  <input
+                    className={widgetStyles.Checkbox}
+                    type="checkbox"
+                    id="useCustomPaymentAddress"
+                    name="useCustomPaymentAddress"
+                    checked={!state.useCustomPaymentAddress}
+                    onChange={toggleUseCustomPaymentAddress}
+                  />
+                  Use my wallet address for payment on Polygon
+                </label>
+                {state.useCustomPaymentAddress && (
+                  <Input
+                    label="Polygon Address"
+                    required={true}
+                    handleChange={handleChange}
+                    value={state.polygonAddress}
+                    name="polygonAddress"
+                    validator={customPaymentAddressValidator}
+                    forceValidation={status === FormStatus.SubmitAttempted}
+                  />
+                )}
+              </form>
+            </TabPanel>
+            <TabPanel>
+              <form>
+                <RegistrationFormCommonFields
+                  username={state.username}
+                  discordUsername={state.discordUsername}
+                  emailAddress={state.emailAddress}
+                  password={state.password}
+                  gitHubUsername={state.gitHubUsername}
+                  link={state.link}
+                  avatar={state.avatar}
+                  avatarInputRef={avatarInputRef}
+                  handleChange={handleChange}
+                  handleAvatarChange={handleAvatarChange}
+                  removeAvatar={removeAvatar}
+                  usernameValidator={usernameValidator}
+                  discordUsernameValidator={discordUsernameValidator}
+                  passwordValidator={passwordValidator}
+                  submitted={status === FormStatus.SubmitAttempted}
+                />
+                <Input
+                  label="Polygon Address"
+                  required={true}
+                  handleChange={handleChange}
+                  value={state.polygonAddress}
+                  name="polygonAddress"
+                  validator={customPaymentAddressValidator}
+                  forceValidation={status === FormStatus.SubmitAttempted}
+                />
+              </form>
+            </TabPanel>
+          </Tabs>
           <div className="captcha-container">
             <HCaptcha
               sitekey={process.env.GATSBY_HCAPTCHA_SITE_KEY!}
@@ -506,12 +485,20 @@ export default function RegistrationForm({ handles }) {
               <span className={clsx("button cta-button", styles.Button)}>
                 Submitting...
               </span>
+            ) : registrationType === RegistrationType.UsernameAndPassword ? (
+              <button
+                className={clsx("button cta-button", styles.Button)}
+                type="button"
+                onClick={() => submitRegistration()}
+              >
+                Register
+              </button>
             ) : (
               <>
                 <button
                   className={clsx("button cta-button", styles.Button)}
                   type="button"
-                  onClick={() => submitRegistration()}
+                  onClick={() => submitRegistration("metamask")}
                 >
                   Register with MetaMask
                 </button>
@@ -521,14 +508,6 @@ export default function RegistrationForm({ handles }) {
                   onClick={() => submitRegistration("walletConnect")}
                 >
                   Register with WalletConnect
-                </button>
-                <button
-                  className={clsx("button cta-button", styles.Button)}
-                  type="button"
-                  disabled={true}
-                  onClick={() => submitRegistration("walletConnect")}
-                >
-                  Register without a wallet
                 </button>
               </>
             )}
@@ -568,6 +547,6 @@ export default function RegistrationForm({ handles }) {
           <p>We look forward to seeing you in the arena!</p>
         </>
       )}
-    </form>
+    </>
   );
 }

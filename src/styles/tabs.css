@@ -89,3 +89,15 @@
 .alternate-tab .react-tabs__tab--selected {
   background-color: var(--lightest-background-purple);
 }
+
+.form-tab .react-tabs__tab-panel--selected {
+  background: var(--header-background-purple);
+  margin: 0 -40px 20px -40px;
+  padding: 30px 45px 20px 45px;
+  border-bottom: 2px solid var(--border-lightest-background);
+  border-top: 2px solid var(--border-lightest-background);
+}
+
+.form-tab .react-tabs__tab--selected {
+  background: var(--header-background-purple);
+}

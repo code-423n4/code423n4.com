@@ -56,6 +56,16 @@ export default function UserRegistration({ data }) {
       <div className="wrapper-main">
         <div className={styles.Form}>
           <h1 className={styles.Heading1}>Warden Registration</h1>
+          <p>
+            To register as a warden, please fill out this form and join us in{" "}
+            <a
+              href="https://discord.gg/code4rena"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Discord
+            </a>
+          </p>
           <RegistrationForm handles={handles} />
         </div>
       </div>
