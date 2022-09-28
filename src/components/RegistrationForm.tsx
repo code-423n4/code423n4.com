@@ -12,7 +12,6 @@ import useUser from "../hooks/UserContext";
 // components
 import Agreement from "./content/Agreement";
 import { Input } from "./Input";
-import WardenField from "./reporter/widgets/WardenField";
 
 // styles
 import * as styles from "./form/Form.module.scss";
@@ -24,6 +23,8 @@ interface userState {
   gitHubUsername: string;
   emailAddress: string;
   password: string;
+  useCustomPaymentAddress: boolean;
+  polygonAddress: string;
   link?: string;
   avatar?: File | null;
 }
@@ -41,6 +42,8 @@ const initialState: userState = {
   gitHubUsername: "",
   emailAddress: "",
   password: "",
+  useCustomPaymentAddress: false,
+  polygonAddress: "",
   link: "",
   avatar: null,
 };
@@ -58,14 +61,13 @@ function getFileAsBase64(file) {
   });
 }
 
-export default function RegistrationForm({ handles, wardens, className }) {
+export default function RegistrationForm({ handles }) {
   // hooks
   const { logUserOut } = useUser();
   const { authenticate } = useMoralis();
 
   // state
   const [state, setState] = useState<userState>(initialState);
-  const [isNewUser, setIsNewUser] = useState<boolean>(true);
   const [isValidDiscord, setIsValidDiscord] = useState<boolean>(true);
   const [status, setStatus] = useState<FormStatus>(FormStatus.Unsubmitted);
   const [errorMessage, setErrorMessage] = useState<string | ReactNode>("");
@@ -77,19 +79,6 @@ export default function RegistrationForm({ handles, wardens, className }) {
   // global variables
   const avatarInputRef = useRef<HTMLInputElement>();
   const discordUsernameRegex = new RegExp(/.*#[0-9]{4}/, "g");
-  const instructions = isNewUser ? (
-    <p>
-      To register as a warden, please fill out this form and join us in{" "}
-      <a href="https://discord.gg/code4rena" target="_blank" rel="noreferrer">
-        Discord
-      </a>
-    </p>
-  ) : (
-    <p>
-      If you are an established code4rena Warden, create an account to login
-      with your wallet.
-    </p>
-  );
 
   const updateErrorMessage = (message: string | undefined): void => {
     if (!message) {
@@ -145,6 +134,15 @@ export default function RegistrationForm({ handles, wardens, className }) {
     });
   };
 
+  const toggleUseCustomPaymentAddress = () => {
+    setState((prevState) => {
+      return {
+        ...prevState,
+        useCustomPaymentAddress: !prevState.useCustomPaymentAddress,
+      };
+    });
+  };
+
   const handleCaptchaVerification = useCallback((token) => {
     setCaptchaToken(token);
   }, []);
@@ -172,7 +170,7 @@ export default function RegistrationForm({ handles, wardens, className }) {
           !state.password ||
           state.password.length < 18 ||
           isDangerousUsername ||
-          (isNewUser && handles.has(state.username))
+          handles.has(state.username)
         ) {
           return;
         }
@@ -222,6 +220,8 @@ export default function RegistrationForm({ handles, wardens, className }) {
             emailAddress: state.emailAddress,
             polygonAddress,
             moralisId,
+            link: state.link,
+            image,
           } as {
             handle: string;
             gitHubUsername: string;
@@ -229,15 +229,7 @@ export default function RegistrationForm({ handles, wardens, className }) {
             moralisId: string;
             link?: string;
             image?: unknown;
-            isUpdate?: boolean;
           };
-
-          if (isNewUser) {
-            requestBody.link = state.link;
-            requestBody.image = image;
-          } else {
-            requestBody.isUpdate = true;
-          }
 
           const response = await fetch(url, {
             method: "POST",
@@ -309,22 +301,12 @@ export default function RegistrationForm({ handles, wardens, className }) {
     [
       avatarInputRef,
       state,
-      isNewUser,
       handles,
       isDangerousUsername,
       isValidDiscord,
       captchaToken,
     ]
   );
-
-  const handleFormChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ): void => {
-    setIsNewUser(event.target.value === "newUser");
-    setState((prevState) => {
-      return { ...prevState, username: "" };
-    });
-  };
 
   const usernameValidator = useCallback(
     (value: string) => {
@@ -363,76 +345,53 @@ export default function RegistrationForm({ handles, wardens, className }) {
     return validationErrors;
   };
 
+  const customPaymentAddressValidator = (value): (string | ReactNode)[] => {
+    const errors: string[] = [];
+    if (value.length > 0 && value.length !== 42) {
+      errors.push("Address must be 42 characters long");
+    }
+    return errors;
+  };
+
   return (
-    <>
-      {status === FormStatus.Unsubmitted || status === FormStatus.Submitting ? (
-        <form className={className}>
-          <fieldset
-            className={clsx(widgetStyles.Fields, widgetStyles.RadioGroup)}
-          >
-            <label className={widgetStyles.RadioLabel}>
-              <input
-                className={widgetStyles.Radio}
-                type="radio"
-                value="newUser"
-                name="isNewUser"
-                checked={isNewUser}
-                onChange={handleFormChange}
-              />
-              I'm new here
-            </label>
-            <label className={widgetStyles.RadioLabel}>
-              <input
-                className={widgetStyles.Radio}
-                type="radio"
-                value="establishedUser"
-                name="isNewUser"
-                checked={!isNewUser}
-                onChange={handleFormChange}
-              />
-              I'm a registered warden
-            </label>
-          </fieldset>
-          {instructions}
-          {isNewUser ? (
-            <Input
-              label="Code4rena Username"
-              required={true}
-              helpText={
-                <>
-                  Used to report findings, as well as display your total award
-                  amount on the leaderboard. Supports alphanumeric characters,
-                  underscores, and hyphens. (Note: for consistency, please
-                  ensure your server nickname in our Discord matches the
-                  username you provide here)
-                </>
-              }
-              name="username"
-              placeholder="Username"
-              value={state.username}
-              handleChange={handleChange}
-              maxLength={25}
-              validator={usernameValidator}
-            />
-          ) : (
-            <div className={widgetStyles.Container}>
-              <label className={widgetStyles.Label}>Code4rena Username *</label>
-              <p className={widgetStyles.Help}>
-                The username you use to submit your findings
-              </p>
-              <WardenField
-                name="handle"
-                required={true}
-                options={wardens}
-                onChange={(e) => {
-                  setState((state) => {
-                    return { ...state, username: e.target.value as string };
-                  });
-                }}
-                fieldState={state.username}
-              />
-            </div>
-          )}
+    <form className={styles.EmphasizedInputGroup}>
+      {(status === FormStatus.Unsubmitted ||
+        status === FormStatus.Submitting) && (
+        <>
+          <p>
+            To register as a warden, please fill out this form and join us in{" "}
+            <a
+              href="https://discord.gg/code4rena"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Discord
+            </a>
+          </p>
+          <Input
+            label="Code4rena Username"
+            required={true}
+            helpText={
+              <>
+                <strong className={styles.Heading4}>
+                  Choose wisely! Your username cannot be changed later.
+                </strong>
+                <br />
+                Used to report findings, as well as display your total award
+                amount on the leaderboard. Supports alphanumeric characters,
+                underscores, and hyphens.
+                <br />
+                (Note: for consistency, please ensure your server nickname in
+                our Discord matches the username you provide here)
+              </>
+            }
+            name="username"
+            placeholder="Username"
+            value={state.username}
+            handleChange={handleChange}
+            maxLength={25}
+            validator={usernameValidator}
+          />
           <Input
             label="Discord Username"
             required={true}
@@ -471,46 +430,68 @@ export default function RegistrationForm({ handles, wardens, className }) {
             value={state.gitHubUsername}
             handleChange={handleChange}
           />
-          {isNewUser && (
-            <>
-              <Input
-                label="Link"
-                required={false}
-                helpText="Link your leaderboard entry to a personal website or social media account."
-                name="link"
-                placeholder="https://twitter.com/code4rena"
-                value={state.link || ""}
-                handleChange={handleChange}
+          <Input
+            label="Link"
+            required={false}
+            helpText="Link your leaderboard entry to a personal website or social media account."
+            name="link"
+            placeholder="https://twitter.com/code4rena"
+            value={state.link || ""}
+            handleChange={handleChange}
+          />
+          <div className={widgetStyles.Container}>
+            <label htmlFor="avatar" className={widgetStyles.Label}>
+              Avatar (Optional)
+            </label>
+            <p className={widgetStyles.Help}>
+              An avatar displayed next to your name on the leaderboard.
+            </p>
+            <input
+              className={widgetStyles.Avatar}
+              type="file"
+              id="avatar"
+              name="avatar"
+              accept=".png,.jpg,.jpeg,.webp"
+              // @ts-ignore // @todo: fix typescript error
+              ref={avatarInputRef}
+              onChange={handleAvatarChange}
+            />
+            {state.avatar && (
+              <button
+                className="remove-line-button"
+                type="button"
+                onClick={removeAvatar}
+                aria-label="Remove avatar"
+              >
+                &#x2715;
+              </button>
+            )}
+          </div>
+          <div className={widgetStyles.Container}>
+            <label
+              htmlFor="useCustomPaymentAddress"
+              className={widgetStyles.RadioLabel}
+            >
+              <input
+                className={widgetStyles.Checkbox}
+                type="checkbox"
+                id="useCustomPaymentAddress"
+                name="useCustomPaymentAddress"
+                checked={!state.useCustomPaymentAddress}
+                onChange={toggleUseCustomPaymentAddress}
               />
-              <div className={widgetStyles.Container}>
-                <label htmlFor="avatar" className={widgetStyles.Label}>
-                  Avatar (Optional)
-                </label>
-                <p className={widgetStyles.Help}>
-                  An avatar displayed next to your name on the leaderboard.
-                </p>
-                <input
-                  className={widgetStyles.Avatar}
-                  type="file"
-                  id="avatar"
-                  name="avatar"
-                  accept=".png,.jpg,.jpeg,.webp"
-                  // @ts-ignore // @todo: fix typescript error
-                  ref={avatarInputRef}
-                  onChange={handleAvatarChange}
-                />
-                {state.avatar && (
-                  <button
-                    className="remove-line-button"
-                    type="button"
-                    onClick={removeAvatar}
-                    aria-label="Remove avatar"
-                  >
-                    &#x2715;
-                  </button>
-                )}
-              </div>
-            </>
+              Use my wallet address for payment on Polygon
+            </label>
+          </div>
+          {state.useCustomPaymentAddress && (
+            <Input
+              label="Polygon Address"
+              required={true}
+              handleChange={handleChange}
+              value={state.polygonAddress}
+              name="polygonAddress"
+              validator={customPaymentAddressValidator}
+            />
           )}
           <div className="captcha-container">
             <HCaptcha
@@ -541,13 +522,22 @@ export default function RegistrationForm({ handles, wardens, className }) {
                 >
                   Register with WalletConnect
                 </button>
+                <button
+                  className={clsx("button cta-button", styles.Button)}
+                  type="button"
+                  disabled={true}
+                  onClick={() => submitRegistration("walletConnect")}
+                >
+                  Register without a wallet
+                </button>
               </>
             )}
           </div>
-        </form>
-      ) : status === FormStatus.Error ? (
-        <div className="centered-text">
-          <h1>Whoops!</h1>
+        </>
+      )}
+      {status === FormStatus.Error && (
+        <>
+          <h2>Whoops!</h2>
           <p>An error occurred while processing your registration.</p>
           {errorMessage !== "" && (
             <p>
@@ -557,32 +547,27 @@ export default function RegistrationForm({ handles, wardens, className }) {
           <button className="button cta-button" onClick={resetForm}>
             Try again
           </button>
-        </div>
-      ) : isNewUser ? (
-        <div className="centered-text">
-          <h1>Thank you!</h1>
-          <p>Your registration has been submitted.</p>
-          <h2>One more thing...</h2>
-          <p>
-            Before we can complete your registration, please join us in{" "}
-            <a href="https://discord.gg/code4rena">Discord</a> and give us a
-            howl in #i-want-to-be-a-warden! <br />
-            We look forward to seeing you in the arena!
-          </p>
-        </div>
-      ) : (
-        <div className="centered-text">
-          <h1>Thank you!</h1>
-          <p>Your wallet has successfully been connected to your account.</p>
-          <p>
-            You should receive an email confirmation with a link to the pull
-            request to update your warden file. You will also be tagged in the
-            pull request, so you will know when your request has been fully
-            processed and you can begin to submit findings again.
-          </p>
-          <p>See you in the arena! 🐺</p>
-        </div>
+        </>
       )}
-    </>
+      {status === FormStatus.Submitted && (
+        <>
+          <h2>Thank you!</h2>
+          <p>Your registration has been submitted.</p>
+          <h2>A few more things...</h2>
+          <ol>
+            <li>
+              Join us in <a href="https://discord.gg/code4rena">Discord</a> if
+              you haven't already.
+            </li>
+            <li>
+              Make sure that your server nickname in Discord matches the
+              username you just registered with.
+            </li>
+            <li>Give us a howl in #i-want-to-be-a-warden!</li>
+          </ol>
+          <p>We look forward to seeing you in the arena!</p>
+        </>
+      )}
+    </form>
   );
 }

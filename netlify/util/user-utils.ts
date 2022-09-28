@@ -1,5 +1,5 @@
 import { readFileSync } from "fs";
-import Moralis from "moralis/node";
+import Moralis from "moralis-v1/node";
 import fetch from "node-fetch";
 import uniq from "lodash/uniq";
 const { Octokit } = require("@octokit/core");
