@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import React, { ReactNode, useState } from "react";
+import React, { ReactNode, useCallback, useEffect, useState } from "react";
 
 import * as styles from "./Input.module.scss";
 
@@ -7,45 +7,60 @@ import * as styles from "./Input.module.scss";
 
 interface InputProps {
   name: string;
-  label?: string | ReactNode;
-  helpText?: string | ReactNode;
+  value: string;
   required?: boolean;
   placeholder?: string;
+  disabled?: boolean;
   type?: string;
   maxLength?: number;
-  value: string;
+  label?: string | ReactNode;
+  helpText?: string | ReactNode;
   canRemove?: boolean;
+  toggleEdit?: boolean;
+  // optional button to show after the input
+  button?: string;
+  forceValidation?: boolean;
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleRemoveInputField?: (name: string) => void;
-  // optional button to show on the right of the input
-  button?: string;
   handleButtonClick?: (value: string) => void;
+  handleSaveInputValue?: (name: string, value: string) => void;
   // returns an array of error messages
   validator?: (value: string) => (string | ReactNode)[];
 }
 
 export function Input({
   name,
-  label,
-  helpText,
+  value,
   required,
   placeholder,
+  disabled,
   type,
   maxLength,
-  value,
+  label,
+  helpText,
   canRemove = false,
+  toggleEdit,
+  button,
+  forceValidation,
   handleChange,
   handleRemoveInputField,
-  validator,
-  button,
   handleButtonClick,
+  handleSaveInputValue,
+  validator,
 }: InputProps) {
   const [isInvalid, setIsInvalid] = useState<boolean>(false);
+  const [isEditing, setIsEditing] = useState<boolean>(false);
   const [validationErrors, setValidationErrors] = useState<
     (string | ReactNode)[]
   >([]);
 
-  const validate = (): void => {
+  useEffect(() => {
+    if (forceValidation) {
+      validate();
+    }
+  }, [forceValidation]);
+
+  const validate = (): (string | ReactNode)[] => {
     let errorMessages: (string | ReactNode)[] = [];
     if (validator) {
       const validationErrors = validator(value);
@@ -62,6 +77,23 @@ export function Input({
     } else {
       setIsInvalid(false);
       setValidationErrors([]);
+    }
+    return errorMessages;
+  };
+
+  const handleEditOrSaveClick = () => {
+    if (!isEditing) {
+      setIsEditing((prevState) => !prevState);
+      return;
+    }
+
+    if (handleSaveInputValue) {
+      const errorMessages = validate();
+      if (errorMessages.length > 0) {
+        return;
+      }
+      handleSaveInputValue(name, value);
+      setIsEditing(false);
     }
   };
 
@@ -88,10 +120,11 @@ export function Input({
           onBlur={validate}
           onChange={handleChange}
           maxLength={maxLength}
+          disabled={disabled || (toggleEdit && !isEditing)}
         />
         {canRemove && handleRemoveInputField && (
           <button
-            className={styles.DeleteButton}
+            className={styles.RemoveButton}
             type="button"
             onClick={() => handleRemoveInputField(name)}
             aria-label="Remove this field"
@@ -99,10 +132,22 @@ export function Input({
             &#x2715;
           </button>
         )}
+        {toggleEdit && handleSaveInputValue && (
+          <button
+            type="button"
+            onClick={handleEditOrSaveClick}
+            aria-label="Edit this field"
+            className={clsx(
+              styles.SmallButton,
+              isEditing ? styles.SaveButton : styles.EditButton
+            )}
+          >
+            {isEditing ? "Save" : "Edit"}
+          </button>
+        )}
         {button && handleButtonClick && (
           <button
-            //className="button button-tiny secondary"
-            className={styles.DeleteButton}
+            className={styles.RemoveButton}
             type="button"
             onClick={() => handleButtonClick(value)}
           >

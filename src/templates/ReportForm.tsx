@@ -12,7 +12,6 @@ import {
 } from "../../types/finding";
 
 // hooks
-import { useModalContext } from "../hooks/ModalContext";
 import useUser from "../hooks/UserContext";
 
 // components
@@ -60,7 +59,6 @@ const ReportForm = ({ data, location }) => {
   } = data.contestsCsv;
 
   // hooks
-  const { showModal } = useModalContext();
   const { currentUser } = useUser();
 
   // state

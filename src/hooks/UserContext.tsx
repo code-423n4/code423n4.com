@@ -10,6 +10,11 @@ import { MoralisProvider, useMoralis } from "react-moralis";
 import Moralis from "moralis-v1";
 import { toast } from "react-toastify";
 import { navigate } from "gatsby";
+
+// types
+import { TeamData } from "../../types/user";
+
+// hooks
 import { ModalProvider, useModalContext } from "./ModalContext";
 
 export enum UserLoginError {
@@ -19,17 +24,26 @@ export enum UserLoginError {
   Unknown = "",
 }
 
-interface UserState {
-  address: string;
+interface UserBasicInfo {
   username: string;
-  discordUsername: string;
-  gitHubUsername: string;
-  emailAddress: string;
-  moralisId: string;
-  teams: { username: string; address?: string; image?: string }[];
-  isLoggedIn: boolean;
   image?: string | undefined;
   link?: string | undefined;
+}
+
+export interface TeamInfo extends UserBasicInfo {
+  polygonAddress?: string;
+  ethereumAddress?: string;
+  members: string[];
+}
+
+interface UserState extends UserBasicInfo {
+  discordUsername: string;
+  gitHubUsername: string;
+  polygonPaymentAddress?: string | undefined;
+  emailAddress: string;
+  moralisId: string;
+  teams: TeamInfo[];
+  isLoggedIn: boolean;
 }
 
 interface User {
@@ -40,7 +54,6 @@ interface User {
 }
 
 const DEFAULT_STATE: UserState = {
-  address: "",
   username: "",
   discordUsername: "",
   gitHubUsername: "",
@@ -75,7 +88,7 @@ const UserProvider = ({ children }) => {
       console.error(error);
       if (error.message === "this auth is already used") {
         toast.error(
-          `Account cannot be linked to ${username} because it is already associated with another user. You have been logged out.`
+          `This wallet cannot be linked to ${username} because it is already associated with another user. You have been logged out.`
         );
       }
       await logout();
@@ -148,7 +161,6 @@ const UserProvider = ({ children }) => {
   const getUserInfo = async (user: Moralis.User): Promise<void> => {
     const {
       username,
-      ethAddress,
       discordUsername,
       gitHubUsername,
       email,
@@ -177,26 +189,47 @@ const UserProvider = ({ children }) => {
     const link = registeredUser.link || null;
     const image = registeredUser.imageUrl || null;
 
+    const userQuery = new Moralis.Query("_User");
+    userQuery.equalTo("objectId", moralisId);
+
+    const query = new Moralis.Query("PaymentAddress");
+    query.matchesQuery("user", userQuery);
+    query.equalTo("chain", "polygon");
+    const results = await query.find();
+    const polygonPaymentAddress =
+      results.length > 0 ? results[0].attributes.address : undefined;
+
     // fetching teams
     const teamsResponse = await fetch(
       `/.netlify/functions/get-team?id=${username}`
     );
-    let teams = [];
+    let teams: TeamInfo[] = [];
     if (teamsResponse.status === 200) {
-      const teamsData = await teamsResponse.json();
-      teams = teamsData.map((team) => ({
-        username: team.handle,
-        address: team.address,
-        image: team.imageUrl,
-      }));
+      const teamsData: TeamData[] = await teamsResponse.json();
+      teams = teamsData.map((team) => {
+        const polygonAddress =
+          team.paymentAddresses &&
+          team.paymentAddresses.find((address) => address.chain === "polygon");
+        const ethereumAddress =
+          team.paymentAddresses &&
+          team.paymentAddresses.find((address) => address.chain === "ethereum");
+        return {
+          username: team.handle,
+          image: team.imageUrl,
+          link: team.link,
+          polygonAddress: polygonAddress?.address || "",
+          ethereumAddress: ethereumAddress?.address || "",
+          members: team.members,
+        };
+      });
     }
 
     setCurrentUser({
       username,
       moralisId,
-      address: ethAddress,
       discordUsername,
       gitHubUsername,
+      polygonPaymentAddress,
       emailAddress: email,
       link,
       image,
@@ -262,6 +295,9 @@ const UserProvider = ({ children }) => {
         return;
       } else {
         try {
+          // need to explicitly fetch current user because `user` from useMoralis
+          // hook is not updated from signup or login with username and password
+          const user = await Moralis.User.current();
           if (!user) {
             logUserOut();
           } else {

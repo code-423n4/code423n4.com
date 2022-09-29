@@ -108,6 +108,9 @@ export default function ConfirmAccount() {
   const handleSubmit = useCallback(
     async (e: MouseEvent<HTMLButtonElement>): Promise<void> => {
       e.preventDefault();
+      if (!user) {
+        return;
+      }
       const url = `/.netlify/functions/register-warden`;
       if (
         !user ||
@@ -160,7 +163,13 @@ export default function ConfirmAccount() {
         } catch (error) {
           logUserOut();
           setStatus(FormStatus.Error);
-          setErrorMessage(error.message || "");
+          if (error.message === "Reference already exists") {
+            setErrorMessage(
+              "It looks like your account confirmation is already pending. Check your email for a link to the PR in GitHub."
+            );
+          } else {
+            setErrorMessage(error.message || "");
+          }
         }
       } else {
         setStatus(FormStatus.Error);

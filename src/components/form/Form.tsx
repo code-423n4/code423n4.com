@@ -1,5 +1,4 @@
-import React, { ReactNode, useCallback, useState } from "react";
-import clsx from "clsx";
+import React, { ReactNode, useState } from "react";
 
 import * as styles from "./Form.module.scss";
 
@@ -86,8 +85,8 @@ const Form = ({
         </form>
       )}
       {status === FormStatus.Error && (
-        <div className="centered-text">
-          <h2 className={styles.Heading2}>Whoops!</h2>
+        <>
+          <h2>Whoops!</h2>
           <p>{errorMessage}</p>
           <button
             className="button cta-button"
@@ -96,11 +95,11 @@ const Form = ({
           >
             Try again
           </button>
-        </div>
+        </>
       )}
       {status === FormStatus.Submitted && (
-        <div className="centered-text">
-          <h2 className={styles.Heading2}>Thank you!</h2>
+        <>
+          <h2>Thank you!</h2>
           <p>{successMessage}</p>
           {successButtonText && (
             <button
@@ -111,7 +110,7 @@ const Form = ({
               {successButtonText}
             </button>
           )}
-        </div>
+        </>
       )}
     </div>
   );

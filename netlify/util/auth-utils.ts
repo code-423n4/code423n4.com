@@ -52,13 +52,13 @@ async function checkTeamAuth(teamName, username) {
     `${process.env.URL}/.netlify/functions/get-user?id=${teamName}`
   );
   if (!teamResponse.ok) {
-    throw { status: 401, message: "Unauthorized" };
+    throw { status: 401, message: "Team does not exist" };
   }
   const team = await teamResponse.json();
   if (!team.members || !team.members.includes(username)) {
     throw {
       status: 401,
-      message: "Unauthorized",
+      message: `${username} is not a member of team ${teamName}`,
     };
   }
   return team;
