@@ -64,6 +64,12 @@ export default function UserDropdown() {
           </span>
           {currentUser.username}
         </span>
+        <Link
+          to="/account"
+          className={clsx(styles.Button, styles.MobileMenuItem)}
+        >
+          Manage Account
+        </Link>
         <button
           onClick={logUserOut}
           className={clsx(styles.Button, styles.MobileMenuItem)}

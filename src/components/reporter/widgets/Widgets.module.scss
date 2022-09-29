@@ -209,3 +209,12 @@ input[type="file"].Avatar::file-selector-button {
     padding: 6px 13px;
   }
 }
+
+@media (max-width: 600px) {
+  .RadioGroup {
+    padding-left: 8px;
+  }
+  .RadioLabel {
+    padding: 10px 10px;
+  }
+}

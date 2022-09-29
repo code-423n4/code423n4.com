@@ -121,7 +121,6 @@ export function Input({
           onChange={handleChange}
           maxLength={maxLength}
           disabled={disabled || (toggleEdit && !isEditing)}
-          maxLength={maxLength}
         />
         {canRemove && handleRemoveInputField && (
           <button

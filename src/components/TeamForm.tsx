@@ -318,7 +318,7 @@ export default function TeamForm({
           name="link"
           placeholder="https://twitter.com/code4rena"
           value={state.link || ""}
-          label="Link (Optional)"
+          label="Link"
           helpText="Link your leaderboard entry to a personal website or social media account."
           handleChange={handleChange}
         />

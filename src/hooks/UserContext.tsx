@@ -283,6 +283,9 @@ const UserProvider = ({ children }) => {
         return;
       } else {
         try {
+          // need to explicitly fetch current user because `user` from useMoralis
+          // hook is not updated from signup or login with username and password
+          const user = await Moralis.User.current();
           if (!user) {
             logUserOut();
           } else {

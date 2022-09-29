@@ -7,6 +7,9 @@ import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
 import { toast } from "react-toastify";
 import HCaptcha from "@hcaptcha/react-hcaptcha";
 
+// utils
+import { generateId } from "../utils/uuid";
+
 // hooks
 import useUser from "../hooks/UserContext";
 
@@ -91,7 +94,9 @@ export default function RegistrationForm({ handles }) {
   const avatarInputRef = useRef<HTMLInputElement>();
   const discordUsernameRegex = new RegExp(/.*#[0-9]{4}/, "g");
 
-  const updateErrorMessage = (message: string | undefined): void => {
+  const updateErrorMessage = (
+    message: string | React.ReactNode | undefined
+  ): void => {
     if (!message) {
       setErrorMessage("");
     } else if (message === "Reference already exists") {
@@ -171,165 +176,177 @@ export default function RegistrationForm({ handles }) {
     });
   };
 
-  const saveUserInfo = async (user, polygonAddress) => {
+  const saveUserInfo = async (user, polygonAddress): Promise<void> => {
+    const userId = generateId();
     try {
-      if (!user.attributes.uuid) {
-        user.set("uuid", user.attributes.username);
-      }
-      user.set("username", state.username);
-      user.set("password", state.password);
+      user.set("uuid", userId);
       user.set("discordUsername", state.discordUsername);
-      if (state.gitHubUsername) {
-        user.set("gitHubUsername", state.gitHubUsername);
+      user.set("gitHubUsername", state.gitHubUsername || undefined);
+      if (registrationType === RegistrationType.Wallet) {
+        user.set("username", state.username);
+        user.set("password", state.password);
+        user.set("email", state.emailAddress);
       }
-      user.set("registrationComplete", true);
       await user.save();
+    } catch (error) {
+      throw error.message || `${error}`;
+    }
+    try {
       await Moralis.Cloud.run("addPaymentAddress", {
         address: polygonAddress,
         chain: "polygon",
       });
-      setStatus(FormStatus.Submitted);
     } catch (error) {
-      setStatus(FormStatus.Error);
-      updateErrorMessage("");
-      console.error(error);
+      toast.error(
+        <>
+          There was a problem saving your Polygon address:{" "}
+          <strong>error.message || error</strong>
+          <br />
+          Please update your payment information after your registration is
+          complete
+        </>
+      );
+    } finally {
+      setStatus(FormStatus.Submitted);
     }
-    setStatus(FormStatus.Submitted);
   };
 
-  const submitRegistration = useCallback(
-    (provider?: MoralisTypes.Web3ProviderType) => {
-      const url = `/.netlify/functions/register-warden`;
-      setStatus(FormStatus.SubmitAttempted);
-      (async () => {
-        if (
-          !captchaToken ||
-          !state.username ||
-          !state.discordUsername ||
-          !isValidDiscord ||
-          !state.emailAddress ||
-          !state.password ||
-          state.password.length < 18 ||
-          isDangerousUsername ||
-          handles.has(state.username) ||
-          (registrationType === RegistrationType.UsernameAndPassword &&
-            !state.polygonAddress) ||
-          (registrationType === RegistrationType.Wallet &&
-            state.useCustomPaymentAddress &&
-            !state.polygonAddress)
-        ) {
-          return;
-        }
-        setStatus(FormStatus.Submitting);
+  const submitRegistration = async (
+    provider?: MoralisTypes.Web3ProviderType
+  ) => {
+    const url = `/.netlify/functions/register-warden`;
+    setStatus(FormStatus.SubmitAttempted);
+    if (
+      !captchaToken ||
+      !state.username ||
+      !state.discordUsername ||
+      !isValidDiscord ||
+      !state.emailAddress ||
+      !state.password ||
+      state.password.length < 18 ||
+      isDangerousUsername ||
+      handles.has(state.username) ||
+      (registrationType === RegistrationType.UsernameAndPassword &&
+        !state.polygonAddress) ||
+      (registrationType === RegistrationType.UsernameAndPassword &&
+        state.polygonAddress.length !== 42) ||
+      (registrationType === RegistrationType.Wallet &&
+        state.useCustomPaymentAddress &&
+        !state.polygonAddress) ||
+      (registrationType === RegistrationType.Wallet &&
+        state.useCustomPaymentAddress &&
+        state.polygonAddress.length !== 42)
+    ) {
+      return;
+    }
+    setStatus(FormStatus.Submitting);
 
-        let image: unknown = undefined;
+    let image: unknown = undefined;
+    try {
+      if (state.avatar) {
+        image = await getFileAsBase64(state.avatar);
+      }
+      let user;
+      if (!provider) {
         try {
-          if (state.avatar) {
-            image = await getFileAsBase64(state.avatar);
-          }
-          let user;
-          if (!provider) {
-            user = await signup(state.username, state.password);
-          } else {
-            user = await authenticate({
-              provider,
-              signingMessage: "Code4rena registration",
-            });
-          }
-
-          if (user === undefined) {
-            // user clicked "cancel" when prompted to sign message (or some unknown error occurred)
-            // @todo: update messaging
-            setStatus(FormStatus.Error);
-            updateErrorMessage("You must sign the message to register");
-            return;
-          }
-
-          const moralisId = user.id;
-          const authAddress = (await user.get("ethAddress")) || null;
-          const username = await user.get("username");
-          const isRegistrationComplete = await user.get("registrationComplete");
-          if (isRegistrationComplete) {
-            await logUserOut();
-            setStatus(FormStatus.Error);
-            if (username !== state.username) {
-              // user tried to register more than one account with this address
-              updateErrorMessage(
-                `This address is already registered with the username "${username}"`
-              );
-            } else {
-              // registration is pending
-              updateErrorMessage("Reference already exists");
-            }
-            return;
-          }
-
-          const requestBody = {
-            handle: state.username,
-            gitHubUsername: state.gitHubUsername,
-            emailAddress: state.emailAddress,
-            polygonAddress: authAddress,
-            moralisId,
-            link: state.link,
-            image,
-          } as {
-            handle: string;
-            gitHubUsername: string;
-            emailAddress: string;
-            polygonAddress?: string;
-            moralisId: string;
-            link?: string;
-            image?: unknown;
-          };
-
-          const response = await fetch(url, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: captchaToken,
-            },
-            body: JSON.stringify(requestBody),
-          });
-
-          const paymentAddress =
-            registrationType === RegistrationType.UsernameAndPassword ||
-            state.useCustomPaymentAddress
-              ? state.polygonAddress
-              : authAddress;
-
-          if (response.ok) {
-            user.set("email", state.emailAddress);
-            saveUserInfo(user, paymentAddress);
-          } else {
-            const { error } = await response.json();
-            if (error.startsWith("Failed to send confirmation email")) {
-              // allow confirmation email to fail; don't save a bad email address
-              saveUserInfo(user, paymentAddress);
-              toast.error(
-                "The email you entered was invalid. Confirmation email failed to send and email address has not been saved."
-              );
-            } else {
-              setStatus(FormStatus.Error);
-              updateErrorMessage(error);
-            }
-          }
-          logUserOut();
+          user = await signup(
+            state.username,
+            state.password,
+            state.emailAddress
+          );
         } catch (error) {
-          logUserOut();
-          setStatus(FormStatus.Error);
-          updateErrorMessage(error);
+          throw error.message || `${error}`;
         }
-      })();
-    },
-    [
-      avatarInputRef,
-      state,
-      handles,
-      isDangerousUsername,
-      isValidDiscord,
-      captchaToken,
-    ]
-  );
+      } else {
+        user = await authenticate({
+          provider,
+          signingMessage: "Code4rena registration",
+        });
+      }
+
+      if (user === undefined) {
+        // user clicked "cancel" when prompted to sign message (or some unknown error occurred)
+        // @todo: update messaging
+        throw "You must sign the message to register";
+      }
+
+      const moralisId = user.id;
+      const authAddress = (await user.get("ethAddress")) || null;
+      const username = await user.get("username");
+      const isRegistrationComplete = await user.get("registrationComplete");
+      if (isRegistrationComplete) {
+        if (username !== state.username) {
+          // user tried to register more than one account with this address
+          throw `This address is already registered with the username "${username}"`;
+        } else {
+          // registration is pending
+          throw "Reference already exists";
+        }
+      }
+      const paymentAddress =
+        registrationType === RegistrationType.UsernameAndPassword ||
+        state.useCustomPaymentAddress
+          ? state.polygonAddress
+          : authAddress;
+
+      try {
+        await saveUserInfo(user, paymentAddress);
+      } catch (error) {
+        throw error.message || `${error}`;
+      }
+
+      const requestBody = {
+        handle: state.username,
+        gitHubUsername: state.gitHubUsername,
+        emailAddress: state.emailAddress,
+        polygonAddress: paymentAddress,
+        moralisId,
+        link: state.link,
+        image,
+      } as {
+        handle: string;
+        gitHubUsername: string;
+        emailAddress: string;
+        polygonAddress: string;
+        moralisId: string;
+        link?: string;
+        image?: unknown;
+      };
+
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: captchaToken,
+        },
+        body: JSON.stringify(requestBody),
+      });
+
+      const res = await response.json();
+
+      if (response.ok) {
+        user.set("registrationComplete", true);
+        await user.save();
+      } else if (res.error.startsWith("Failed to send confirmation email")) {
+        // allow confirmation email to fail; don't save a bad email address
+        user.set("registrationComplete", true);
+        await user.save();
+        toast.error(
+          <>
+            The email you entered was invalid and has not been saved. Please
+            save a valid email address once your registration is complete.
+          </>
+        );
+      } else {
+        throw res.error;
+      }
+      logUserOut();
+    } catch (error) {
+      logUserOut();
+      setStatus(FormStatus.Error);
+      updateErrorMessage(error);
+    }
+  };
 
   const usernameValidator = useCallback(
     (value: string) => {
@@ -382,6 +399,16 @@ export default function RegistrationForm({ handles }) {
         status === FormStatus.Submitting ||
         status === FormStatus.SubmitAttempted) && (
         <>
+          <p>
+            To register as a warden, please fill out this form and join us in{" "}
+            <a
+              href="https://discord.gg/code4rena"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Discord
+            </a>
+          </p>
           <Tabs className="form-tab">
             <TabList>
               <Tab onClick={() => setRegistrationType(RegistrationType.Wallet)}>
@@ -392,7 +419,7 @@ export default function RegistrationForm({ handles }) {
                   setRegistrationType(RegistrationType.UsernameAndPassword)
                 }
               >
-                Register with Username and Password
+                Register with Password
               </Tab>
             </TabList>
             <TabPanel>
@@ -437,6 +464,7 @@ export default function RegistrationForm({ handles }) {
                     name="polygonAddress"
                     validator={customPaymentAddressValidator}
                     forceValidation={status === FormStatus.SubmitAttempted}
+                    maxLength={42}
                   />
                 )}
               </form>
@@ -468,6 +496,7 @@ export default function RegistrationForm({ handles }) {
                   name="polygonAddress"
                   validator={customPaymentAddressValidator}
                   forceValidation={status === FormStatus.SubmitAttempted}
+                  maxLength={42}
                 />
               </form>
             </TabPanel>

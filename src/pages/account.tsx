@@ -314,7 +314,7 @@ export default function AccountManagementPage() {
               handleSaveInputValue={handleSaveUserInfo}
             />
             <Input
-              label="Github Username (Optional)"
+              label="Github Username"
               handleChange={handleChange}
               value={state.gitHubUsername}
               name="gitHubUsername"
