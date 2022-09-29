@@ -270,12 +270,14 @@ export default function AccountManagementPage() {
             <h2 className={formStyles.Heading2}>Payment Information</h2>
             <Input
               label="Polygon Address"
+              required={true}
               handleChange={handleChange}
               value={state.polygonAddress}
               name="polygonAddress"
               validator={validatePaymentAddress}
               toggleEdit={true}
               handleSaveInputValue={handleSavePaymentAddress}
+              maxLength={42}
             />
             <Input
               label="Ethereum Address"
@@ -285,15 +287,20 @@ export default function AccountManagementPage() {
               validator={validatePaymentAddress}
               toggleEdit={true}
               handleSaveInputValue={handleSavePaymentAddress}
+              maxLength={42}
             />
             <div className={formStyles.DividingLine}></div>
             <h2 className={formStyles.Heading2}>User Information</h2>
-            <span className={inputStyles.Label}>Login Addresses</span>
-            <ul className={formStyles.List}>
-              {authAddresses.map((address) => (
-                <li>{address}</li>
-              ))}
-            </ul>
+            {authAddresses.length > 0 && (
+              <>
+                <span className={inputStyles.Label}>Login Addresses</span>
+                <ul className={formStyles.List}>
+                  {authAddresses.map((address) => (
+                    <li>{address}</li>
+                  ))}
+                </ul>
+              </>
+            )}
             <Input
               label="Discord Username"
               handleChange={handleChange}

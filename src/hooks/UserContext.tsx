@@ -39,6 +39,7 @@ export interface TeamInfo extends UserBasicInfo {
 interface UserState extends UserBasicInfo {
   discordUsername: string;
   gitHubUsername: string;
+  polygonPaymentAddress?: string | undefined;
   emailAddress: string;
   moralisId: string;
   teams: TeamInfo[];
@@ -188,6 +189,16 @@ const UserProvider = ({ children }) => {
     const link = registeredUser.link || null;
     const image = registeredUser.imageUrl || null;
 
+    const userQuery = new Moralis.Query("_User");
+    userQuery.equalTo("objectId", moralisId);
+
+    const query = new Moralis.Query("PaymentAddress");
+    query.matchesQuery("user", userQuery);
+    query.equalTo("chain", "polygon");
+    const results = await query.find();
+    const polygonPaymentAddress =
+      results.length > 0 ? results[0].attributes.address : undefined;
+
     // fetching teams
     const teamsResponse = await fetch(
       `/.netlify/functions/get-team?id=${username}`
@@ -218,6 +229,7 @@ const UserProvider = ({ children }) => {
       moralisId,
       discordUsername,
       gitHubUsername,
+      polygonPaymentAddress,
       emailAddress: email,
       link,
       image,

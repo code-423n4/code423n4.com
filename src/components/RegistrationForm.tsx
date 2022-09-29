@@ -36,8 +36,8 @@ interface userState {
 
 enum FormStatus {
   Unsubmitted = "unsubmitted",
-  Submitting = "submitting",
   SubmitAttempted = "submitAttempted",
+  Submitting = "submitting",
   Submitted = "submitted",
   Error = "error",
 }
