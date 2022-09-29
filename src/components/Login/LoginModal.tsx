@@ -1,3 +1,4 @@
+import { Link } from "gatsby";
 import React, { useState } from "react";
 import { useMoralis } from "react-moralis";
 import { toast } from "react-toastify";
@@ -8,6 +9,9 @@ import useUser from "../../hooks/UserContext";
 
 // components
 import { Input } from "../Input";
+
+// styles
+import * as styles from "./Login.module.scss";
 
 const LoginModal = () => {
   const { Moralis } = useMoralis();
@@ -182,6 +186,13 @@ const LoginModal = () => {
                 {isLoading ? "Submitting..." : "Log in"}
               </button>
             </div>
+            <div className={styles.DividingLine}></div>
+            <span>
+              Not a warden yet?{" "}
+              <Link to="/register" onClick={handleClose}>
+                Sign up
+              </Link>
+            </span>
           </>
         )}
       </form>
