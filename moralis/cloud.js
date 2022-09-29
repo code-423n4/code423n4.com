@@ -36,6 +36,24 @@ Moralis.Cloud.beforeDelete(Moralis.User, async (req) => {
         throw error;
       });
   }
+
+  const paymentAddressQuery = new Moralis.Query("PaymentAddress");
+  paymentAddressQuery.equalTo("user", r.object);
+  const payments = await paymentAddressQuery.find({ useMasterKey: true });
+
+  for (let payment of payments) {
+    await payment
+      .destroy({ useMasterKey: true })
+      .then((res) => {
+        logger.info("Deleted user PaymentAddress: " + JSON.stringify(res));
+      })
+      .catch((error) => {
+        logger.error(
+          "Error deleting user PaymentAddress: " + JSON.stringify(error)
+        );
+        throw error;
+      });
+  }
 });
 
 Moralis.Cloud.define("findUser", async (req) => {
