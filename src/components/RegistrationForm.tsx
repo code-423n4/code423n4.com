@@ -458,6 +458,7 @@ export default function RegistrationForm({ handles }) {
                 {state.useCustomPaymentAddress && (
                   <Input
                     label="Polygon Address"
+                    helpText="Polygon address where we should send your awards"
                     required={true}
                     handleChange={handleChange}
                     value={state.polygonAddress}
@@ -490,6 +491,7 @@ export default function RegistrationForm({ handles }) {
                 />
                 <Input
                   label="Polygon Address"
+                  helpText="Polygon address where we should send your awards"
                   required={true}
                   handleChange={handleChange}
                   value={state.polygonAddress}

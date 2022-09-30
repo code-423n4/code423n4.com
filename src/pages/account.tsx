@@ -47,8 +47,12 @@ export default function AccountManagementPage() {
   >(initialPaymentAddressesState);
 
   const initializeUserInfo = async (): Promise<void> => {
+    const user = Moralis.User.current();
+    if (!user) {
+      return;
+    }
     const { discordUsername, gitHubUsername, emailAddress } = currentUser;
-    const accounts = await user!.get("accounts");
+    const accounts = await user.get("accounts");
     setAuthAddresses(accounts || []);
 
     const userQuery = new Moralis.Query("_User");
@@ -81,11 +85,11 @@ export default function AccountManagementPage() {
   };
 
   useEffect(() => {
-    if (!isInitialized || !user) {
+    if (!currentUser.isLoggedIn) {
       return;
     }
     initializeUserInfo();
-  }, [currentUser, isInitialized]);
+  }, [currentUser]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     setState((prevState) => ({

@@ -17,7 +17,6 @@ interface FormProps extends JSX.ElementChildrenAttribute {
   resetForm?: () => void;
   validator?: () => boolean;
   submitButtonText?: string;
-  customSubmitComponent?: ReactNode;
 }
 
 const Form = ({
@@ -29,7 +28,6 @@ const Form = ({
   resetForm,
   validator,
   submitButtonText,
-  customSubmitComponent,
 }: FormProps) => {
   // Component State
   const [status, setStatus] = useState<FormStatus>(FormStatus.Unsubmitted);
@@ -67,20 +65,16 @@ const Form = ({
         <form>
           <>
             {children}
-            {customSubmitComponent ? (
-              customSubmitComponent
-            ) : (
-              <button
-                className="button cta-button centered"
-                type="button"
-                onClick={submit}
-                disabled={status !== FormStatus.Unsubmitted}
-              >
-                {status === FormStatus.Unsubmitted
-                  ? submitButtonText
-                  : "Submitting..."}
-              </button>
-            )}
+            <button
+              className="button cta-button centered"
+              type="button"
+              onClick={submit}
+              disabled={status !== FormStatus.Unsubmitted}
+            >
+              {status === FormStatus.Unsubmitted &&
+                (submitButtonText || "Submit")}
+              {status === FormStatus.Submitting && "Submitting..."}
+            </button>
           </>
         </form>
       )}
