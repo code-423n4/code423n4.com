@@ -30,6 +30,7 @@ interface userState {
   gitHubUsername: string;
   emailAddress: string;
   password: string;
+  confirmPassword: string;
   polygonPaymentAddress: string;
 }
 
@@ -38,6 +39,7 @@ const initialState: userState = {
   gitHubUsername: "",
   emailAddress: "",
   password: "",
+  confirmPassword: "",
   polygonPaymentAddress: "",
 };
 
@@ -201,6 +203,17 @@ export default function ConfirmAccount() {
     return validationErrors;
   };
 
+  const validateConfirmPassword = useCallback(
+    (value: string) => {
+      const validationErrors: (string | React.ReactNode)[] = [];
+      if (value !== state.password) {
+        validationErrors.push("Passwords do not match.");
+      }
+      return validationErrors;
+    },
+    [state.password]
+  );
+
   const validateDiscordUsername = useCallback(
     (value: string) => {
       const validationErrors: (string | React.ReactNode)[] = [];
@@ -303,6 +316,17 @@ export default function ConfirmAccount() {
               value={state.password}
               handleChange={handleChange}
               validator={validatePassword}
+              forceValidation={status === FormStatus.SubmitAttempted}
+            />
+            <Input
+              label="Confirm Password"
+              required={true}
+              name="confirmPassword"
+              placeholder="Password"
+              type="password"
+              value={state.confirmPassword}
+              handleChange={handleChange}
+              validator={validateConfirmPassword}
               forceValidation={status === FormStatus.SubmitAttempted}
             />
             <Input

@@ -9,6 +9,7 @@ interface RegistrationFormCommonFieldsProps {
   discordUsername: string;
   emailAddress: string;
   password: string;
+  confirmPassword: string;
   gitHubUsername: string;
   link?: string | undefined;
   avatar?: File | null | undefined;
@@ -19,6 +20,7 @@ interface RegistrationFormCommonFieldsProps {
   usernameValidator: (value: string) => (string | ReactNode)[];
   discordUsernameValidator: (value: string) => (string | ReactNode)[];
   passwordValidator: (value: string) => (string | ReactNode)[];
+  confirmPasswordValidator: (value: string) => (string | ReactNode)[];
   submitted: boolean;
 }
 
@@ -27,6 +29,7 @@ export default function RegistrationFormCommonFields({
   discordUsername,
   emailAddress,
   password,
+  confirmPassword,
   gitHubUsername,
   link,
   avatar,
@@ -37,6 +40,7 @@ export default function RegistrationFormCommonFields({
   usernameValidator,
   discordUsernameValidator,
   passwordValidator,
+  confirmPasswordValidator,
   submitted,
 }: RegistrationFormCommonFieldsProps) {
   return (
@@ -96,6 +100,17 @@ export default function RegistrationFormCommonFields({
         value={password}
         handleChange={handleChange}
         validator={passwordValidator}
+        forceValidation={submitted === true}
+      />
+      <Input
+        label="Confirm Password"
+        required={true}
+        name="confirmPassword"
+        placeholder="Password"
+        type="password"
+        value={confirmPassword}
+        handleChange={handleChange}
+        validator={confirmPasswordValidator}
         forceValidation={submitted === true}
       />
       <Input

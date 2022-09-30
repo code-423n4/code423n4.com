@@ -28,6 +28,7 @@ interface userState {
   gitHubUsername: string;
   emailAddress: string;
   password: string;
+  confirmPassword: string;
   useCustomPaymentAddress: boolean;
   polygonAddress: string;
   link?: string;
@@ -48,6 +49,7 @@ const initialState: userState = {
   gitHubUsername: "",
   emailAddress: "",
   password: "",
+  confirmPassword: "",
   useCustomPaymentAddress: false,
   polygonAddress: "",
   link: "",
@@ -385,6 +387,17 @@ export default function RegistrationForm({ handles }) {
     return validationErrors;
   };
 
+  const confirmPasswordValidator = useCallback(
+    (value: string) => {
+      const validationErrors: (string | React.ReactNode)[] = [];
+      if (value !== state.password) {
+        validationErrors.push("Passwords do not match.");
+      }
+      return validationErrors;
+    },
+    [state.password]
+  );
+
   const customPaymentAddressValidator = (value): (string | ReactNode)[] => {
     const errors: string[] = [];
     if (value.length > 0 && value.length !== 42) {
@@ -429,6 +442,7 @@ export default function RegistrationForm({ handles }) {
                   discordUsername={state.discordUsername}
                   emailAddress={state.emailAddress}
                   password={state.password}
+                  confirmPassword={state.confirmPassword}
                   gitHubUsername={state.gitHubUsername}
                   link={state.link}
                   avatar={state.avatar}
@@ -439,6 +453,7 @@ export default function RegistrationForm({ handles }) {
                   usernameValidator={usernameValidator}
                   discordUsernameValidator={discordUsernameValidator}
                   passwordValidator={passwordValidator}
+                  confirmPasswordValidator={confirmPasswordValidator}
                   submitted={status === FormStatus.SubmitAttempted}
                 />
                 <label
@@ -477,6 +492,7 @@ export default function RegistrationForm({ handles }) {
                   discordUsername={state.discordUsername}
                   emailAddress={state.emailAddress}
                   password={state.password}
+                  confirmPassword={state.confirmPassword}
                   gitHubUsername={state.gitHubUsername}
                   link={state.link}
                   avatar={state.avatar}
@@ -487,6 +503,7 @@ export default function RegistrationForm({ handles }) {
                   usernameValidator={usernameValidator}
                   discordUsernameValidator={discordUsernameValidator}
                   passwordValidator={passwordValidator}
+                  confirmPasswordValidator={confirmPasswordValidator}
                   submitted={status === FormStatus.SubmitAttempted}
                 />
                 <Input
