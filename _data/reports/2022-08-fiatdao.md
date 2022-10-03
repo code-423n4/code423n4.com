@@ -432,7 +432,7 @@ But in case 1, sender’s lock was not delegated to another, the sender can dele
 
 Here is the script :
 
-```typescript=
+```typescript
 describe("voting escrow", async () => {
     it("increase unlock time issue", async () => {
       await createSnapshot(provider);
