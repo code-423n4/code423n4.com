@@ -853,7 +853,7 @@ Use (e.g. 1e6) rather than decimal literals (e.g. 1000000), for better code read
     VotingEscrow.sol::57 => Point[1000000000000000000] public pointHistory; // 1e9 * userPointHistory-length, so sufficient for 1e9 users
     VotingEscrow.sol::58 => mapping(address => Point[1000000000]) public userPointHistory;
 
-## [N-03] Use scientific notation (e.g. 1e18) rather than exponentiation (e.g. 10\*\*18)
+## [N-03] Use scientific notation (e.g. 1e18) rather than exponentiation (e.g. 10&ast;&ast;18)
 
 Scientific notation should be used for better code readability
 
@@ -1773,7 +1773,7 @@ File: contracts/VotingEscrow.sol
 
 ## [G‑21]  `require()` or `revert()` statements that check input arguments should be at the top of the function
 
-Checks that involve constants should come before checks that involve state variables, function calls, and calculations. By doing these checks first, the function is able to revert before wasting a Gcoldsload (**2100 gas**\*) in a function that may ultimately revert in the unhappy case.
+Checks that involve constants should come before checks that involve state variables, function calls, and calculations. By doing these checks first, the function is able to revert before wasting a Gcoldsload (**2100 gas**&ast;) in a function that may ultimately revert in the unhappy case.
 
 *There are 2 instances of this issue:*
 
