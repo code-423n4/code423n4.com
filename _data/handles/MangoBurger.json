@@ -2,7 +2,8 @@
   "handle": "MangoBurger",
   "members": [
     "BurgerTime",
-    "CaptainMango"
+    "CaptainMango",
+    "liveactionllama"
   ],
   "link": "code4rena.com",
   "image": "./avatars/MangoBurger.jpeg",
