@@ -4,6 +4,7 @@ import ContestList from "../components/ContestList";
 import DefaultLayout from "../templates/DefaultLayout";
 import HeroIndex from "../components/content/HeroIndex";
 import Testimonials from "../components/Testimonials";
+import { getDates } from "../utils/time";
 
 export default function SiteIndex({ data }) {
   // @todo: implement global state management instead of props drilling
@@ -30,6 +31,20 @@ export default function SiteIndex({ data }) {
         case "Active":
         case "Active Contest":
           statusObject.activeContests.push(element.node);
+          break;
+        case null:
+          if (
+            getDates(element.node.start_time, element.node.end_time)
+              .contestStatus === "active"
+          ) {
+            statusObject.activeContests.push(element.node);
+            console.log("active");
+          } else if (
+            getDates(element.node.start_time, element.node.end_time)
+              .contestStatus === "soon"
+          ) {
+            statusObject.upcomingContests.push(element.node);
+          }
           break;
         default:
           break;

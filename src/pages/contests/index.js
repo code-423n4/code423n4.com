@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { graphql } from "gatsby";
-
 import ContestList from "../../components/ContestList";
 import DefaultLayout from "../../templates/DefaultLayout";
-
+import { getDates } from "../../utils/time";
 export default function Contests({ data }) {
   const [filteredContests, setFilteredContest] = useState(null);
   const [contestStatusChanges, updateContestStatusChanges] = useState(0);
@@ -51,6 +50,20 @@ export default function Contests({ data }) {
           break;
         case "Completed":
           statusObject.completed.push(element.node);
+          break;
+        case null:
+          if (
+            getDates(element.node.start_time, element.node.end_time)
+              .contestStatus === "active"
+          ) {
+            statusObject.activeContests.push(element.node);
+            console.log("active");
+          } else if (
+            getDates(element.node.start_time, element.node.end_time)
+              .contestStatus === "soon"
+          ) {
+            statusObject.upcomingContests.push(element.node);
+          }
           break;
         default:
           statusObject.other.push(element.node);
