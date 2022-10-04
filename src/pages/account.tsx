@@ -349,8 +349,8 @@ export default function AccountManagementPage() {
               <>
                 <p>
                   <strong>Heads up!</strong> Changes you make to your team are
-                  not immediately effective. It may take up to 48 hours for your
-                  changes to be reviewed and completed.
+                  not immediately effective. It may take a few business days for
+                  your changes to be reviewed and completed.
                 </p>
                 <div
                   className={currentUser.teams.length > 1 ? "card-wrapper" : ""}

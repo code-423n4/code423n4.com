@@ -48,8 +48,10 @@ export default function TeamRegistration({ data }) {
           wardens={wardens}
           submitButtonText="Register team"
           successMessage={
-            "Your registration application has been submitted. " +
-            "Please note: it may take up to 48 hrs for your submission to be approved."
+            <>
+              Your registration application has been submitted. Please note: it
+              may take a few business days for your submission to be approved.
+            </>
           }
         />
       </div>
