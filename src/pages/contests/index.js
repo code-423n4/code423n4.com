@@ -88,7 +88,7 @@ export default function Contests({ data }) {
       <div className="wrapper-main">
         {filteredContests && filteredContests.activeContests.length > 0 ? (
           <section>
-            <h1>Active contests ({filteredContests.activeContests.length})</h1>
+            <h1>Active contests</h1>
             <ContestList
               updateContestStatus={updateContestStatus}
               contests={filteredContests.activeContests}
@@ -98,7 +98,7 @@ export default function Contests({ data }) {
         {filteredContests && filteredContests.upcomingContests.length > 0 ? (
           <section>
             <h1>
-              Upcoming contests ({filteredContests.upcomingContests.length})
+              Upcoming contests
             </h1>
             <ContestList
               updateContestStatus={updateContestStatus}
@@ -109,8 +109,7 @@ export default function Contests({ data }) {
         {filteredContests && filteredContests.sponsorReview.length > 0 ? (
           <section>
             <h1>
-              Sponsor review in progress (
-              {filteredContests.sponsorReview.length})
+              Sponsor review in progress
             </h1>
             <ContestList
               updateContestStatus={updateContestStatus}
@@ -120,7 +119,7 @@ export default function Contests({ data }) {
         ) : null}
         {filteredContests && filteredContests.judging.length > 0 ? (
           <section>
-            <h1>Judging in progress ({filteredContests.judging.length})</h1>
+            <h1>Judging in progress</h1>
             <ContestList
               updateContestStatus={updateContestStatus}
               contests={filteredContests.judging}
@@ -129,7 +128,7 @@ export default function Contests({ data }) {
         ) : null}
         {filteredContests && filteredContests.awarding.length > 0 ? (
           <section>
-            <h1>Awarding in progress ({filteredContests.awarding.length})</h1>
+            <h1>Awarding in progress</h1>
             <ContestList
               updateContestStatus={updateContestStatus}
               contests={filteredContests.awarding}
@@ -138,7 +137,7 @@ export default function Contests({ data }) {
         ) : null}
         {filteredContests && filteredContests.reporting.length > 0 ? (
           <section>
-            <h1>Reporting in progress ({filteredContests.reporting.length})</h1>
+            <h1>Reporting in progress</h1>
             <ContestList
               updateContestStatus={updateContestStatus}
               contests={filteredContests.reporting}
@@ -147,7 +146,7 @@ export default function Contests({ data }) {
         ) : null}
         {filteredContests && filteredContests.completed.length > 0 ? (
           <section>
-            <h1>Completed contests ({filteredContests.completed.length})</h1>
+            <h1>Completed contests</h1>
             <ContestList
               updateContestStatus={updateContestStatus}
               contests={filteredContests.completed.reverse()}
