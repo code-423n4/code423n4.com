@@ -70,7 +70,6 @@ function ContactUs() {
   const { Moralis } = useMoralis();
   const [hasValidationErrors, setValidationErrors] = useState(false);
   const [fieldState, setFieldState] = useState(initialState);
-  const [errorMessage, setErrorMessage] = useState("An error occurred");
   const [captchaToken, setCaptchaToken] = useState("");
 
   useEffect(() => {
@@ -96,7 +95,9 @@ function ContactUs() {
 
   const validateFields = useCallback(() => {
     if (
-      (!fieldState.discordHandle && !fieldState.email) ||
+      (!fieldState.discordHandle &&
+        !fieldState.email &&
+        !currentUser.isLoggedIn) ||
       fields.some((field) => {
         return field.required && !fieldState[field.name];
       }) ||
@@ -142,9 +143,6 @@ function ContactUs() {
     setCaptchaToken(token);
   }, []);
 
-  const invalidContact =
-    hasValidationErrors && !fieldState.discordHandle && !fieldState.email;
-
   return (
     <DefaultLayout
       pageDescription="Need help with something? Contact us here."
@@ -160,26 +158,33 @@ function ContactUs() {
         validator={validateFields}
       >
         <fieldset className={widgetStyles.Fields}>
-          <FormField
-            name="contactInfo"
-            label="Contact Information *"
-            isInvalid={invalidContact}
-            errorMessage="You must enter either your discord handle or email address"
-            helpText="Please enter your discord handle or your email address so we can follow up with you"
-          >
-            <Input
-              name="discordHandle"
-              label="Discord Handle"
-              value={fieldState.discordHandle}
-              handleChange={handleChange}
-            />
-            <Input
-              name="email"
-              label="Email Address"
-              value={fieldState.email}
-              handleChange={handleChange}
-            />
-          </FormField>
+          {!currentUser.isLoggedIn && (
+            <FormField
+              name="contactInfo"
+              label="Contact Information *"
+              isInvalid={
+                hasValidationErrors &&
+                !fieldState.discordHandle &&
+                !fieldState.email &&
+                !currentUser.isLoggedIn
+              }
+              errorMessage="You must enter either your discord handle or email address"
+              helpText="Please enter your discord handle or your email address so we can follow up with you"
+            >
+              <Input
+                name="discordHandle"
+                label="Discord Handle"
+                value={fieldState.discordHandle}
+                handleChange={handleChange}
+              />
+              <Input
+                name="email"
+                label="Email Address"
+                value={fieldState.email}
+                handleChange={handleChange}
+              />
+            </FormField>
+          )}
           <Widgets
             fields={fields}
             onChange={handleChange}

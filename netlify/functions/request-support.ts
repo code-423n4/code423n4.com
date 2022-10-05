@@ -196,6 +196,16 @@ async function handler(event) {
         type: "checkbox",
         checkbox: true,
       };
+      body.properties["Submitted By"] = {
+        rich_text: [
+          {
+            type: "text",
+            text: {
+              content: username,
+            },
+          },
+        ],
+      };
     }
 
     if (ticketTags[ticket.request]) {
