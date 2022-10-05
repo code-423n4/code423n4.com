@@ -79,7 +79,7 @@ export default function SiteIndex({ data }) {
           {filteredContests && filteredContests.activeContests.length > 0 ? (
             <section>
               <h1 className="upcoming-header">
-                Active contests ({filteredContests.activeContests.length})
+                Active contests
               </h1>
               <ContestList
                 updateContestStatus={updateContestStatus}
@@ -90,7 +90,7 @@ export default function SiteIndex({ data }) {
           {filteredContests && filteredContests.upcomingContests.length > 0 ? (
             <section>
               <h1 className="upcoming-header">
-                Upcoming contests ({filteredContests.upcomingContests.length})
+                Upcoming contests
               </h1>
               <ContestList
                 updateContestStatus={updateContestStatus}
