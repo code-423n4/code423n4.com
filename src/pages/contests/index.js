@@ -34,20 +34,10 @@ export default function Contests({ data }) {
           statusObject.activeContests.push(element.node);
           break;
         case "Sponsor Review":
-          statusObject.sponsorReview.push(element.node);
-          break;
         case "Needs Judging":
-          statusObject.judging.push(element.node);
-          break;
         case "Judging Complete":
-          statusObject.judging.push(element.node);
-          break;
         case "Awarding":
-          statusObject.awarding.push(element.node);
-          break;
         case "Reporting":
-          statusObject.reporting.push(element.node);
-          break;
         case "Completed":
           statusObject.completed.push(element.node);
           break;
