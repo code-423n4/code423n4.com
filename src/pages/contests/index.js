@@ -86,6 +86,15 @@ export default function Contests({ data }) {
       pageDescription="Current, upcoming, and past audit contests"
     >
       <div className="wrapper-main">
+        {filteredContests && filteredContests.activeContests.length > 0 ? (
+          <section>
+            <h1>Active contests ({filteredContests.activeContests.length})</h1>
+            <ContestList
+              updateContestStatus={updateContestStatus}
+              contests={filteredContests.activeContests}
+            />
+          </section>
+        ) : null}
         {filteredContests && filteredContests.upcomingContests.length > 0 ? (
           <section>
             <h1>
@@ -94,15 +103,6 @@ export default function Contests({ data }) {
             <ContestList
               updateContestStatus={updateContestStatus}
               contests={filteredContests.upcomingContests}
-            />
-          </section>
-        ) : null}
-        {filteredContests && filteredContests.activeContests.length > 0 ? (
-          <section>
-            <h1>Active contests ({filteredContests.activeContests.length})</h1>
-            <ContestList
-              updateContestStatus={updateContestStatus}
-              contests={filteredContests.activeContests}
             />
           </section>
         ) : null}
