@@ -37,12 +37,7 @@ export default function UserDropdown() {
         className={styles.Desktop}
       >
         <div className={styles.UserDropdownList}>
-          <span className={styles.UserInfo}>
-            Address:{" "}
-            {currentUser.address.slice(0, 5) +
-              "..." +
-              currentUser.address.slice(-4)}
-          </span>
+          <span className={styles.UserInfo}>{currentUser.username}</span>
           <Link to="/account" className={dropdownStyles.Button}>
             Manage Account
           </Link>
@@ -67,10 +62,14 @@ export default function UserDropdown() {
               round="30px"
             />
           </span>
-          {currentUser.address.slice(0, 5) +
-            "..." +
-            currentUser.address.slice(-4)}
+          {currentUser.username}
         </span>
+        <Link
+          to="/account"
+          className={clsx(styles.Button, styles.MobileMenuItem)}
+        >
+          Manage Account
+        </Link>
         <button
           onClick={logUserOut}
           className={clsx(styles.Button, styles.MobileMenuItem)}
