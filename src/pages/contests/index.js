@@ -34,20 +34,10 @@ export default function Contests({ data }) {
           statusObject.activeContests.push(element.node);
           break;
         case "Sponsor Review":
-          statusObject.sponsorReview.push(element.node);
-          break;
         case "Needs Judging":
-          statusObject.judging.push(element.node);
-          break;
         case "Judging Complete":
-          statusObject.judging.push(element.node);
-          break;
         case "Awarding":
-          statusObject.awarding.push(element.node);
-          break;
         case "Reporting":
-          statusObject.reporting.push(element.node);
-          break;
         case "Completed":
           statusObject.completed.push(element.node);
           break;
@@ -96,6 +86,15 @@ export default function Contests({ data }) {
       pageDescription="Current, upcoming, and past audit contests"
     >
       <div className="wrapper-main">
+        {filteredContests && filteredContests.activeContests.length > 0 ? (
+          <section>
+            <h1>Active contests ({filteredContests.activeContests.length})</h1>
+            <ContestList
+              updateContestStatus={updateContestStatus}
+              contests={filteredContests.activeContests}
+            />
+          </section>
+        ) : null}
         {filteredContests && filteredContests.upcomingContests.length > 0 ? (
           <section>
             <h1>
@@ -104,15 +103,6 @@ export default function Contests({ data }) {
             <ContestList
               updateContestStatus={updateContestStatus}
               contests={filteredContests.upcomingContests}
-            />
-          </section>
-        ) : null}
-        {filteredContests && filteredContests.activeContests.length > 0 ? (
-          <section>
-            <h1>Active contests ({filteredContests.activeContests.length})</h1>
-            <ContestList
-              updateContestStatus={updateContestStatus}
-              contests={filteredContests.activeContests}
             />
           </section>
         ) : null}
