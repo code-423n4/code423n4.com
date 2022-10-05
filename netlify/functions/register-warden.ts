@@ -3,27 +3,25 @@ const dedent = require("dedent");
 const formData = require("form-data");
 const Kickbox = require("kickbox");
 const Mailgun = require("mailgun.js");
-const { Moralis } = require("moralis/node");
+const { Moralis } = require("moralis-v1/node");
 const { Octokit } = require("@octokit/core");
 const sharp = require("sharp");
 const { verify } = require("hcaptcha");
+const { resolve } = require("core-js/fn/promise");
 
-const {
+import {
   token,
   apiKey,
   domain,
   moralisAppId,
   moralisServerUrl,
   kickboxApiKey,
-} = require("../_config");
-const { resolve } = require("core-js/fn/promise");
+} from "../_config";
+import { isDangerousHandle } from "../util/validation-utils";
+import { UserFileData } from "../../types/user";
 
 const OctokitClient = Octokit.plugin(createPullRequest);
 const octokit = new OctokitClient({ auth: token });
-
-function isDangerous(s) {
-  return s.match(/^[0-9a-zA-Z_\-]+$/) === null;
-}
 
 function getPrData(isUpdate, handle, gitHubUsername) {
   let sentenceVerb = "Register";
@@ -107,7 +105,7 @@ exports.handler = async (event) => {
       };
     }
 
-    if (isDangerous(handle)) {
+    if (isDangerousHandle(handle)) {
       return {
         statusCode: 400,
         body: JSON.stringify({
@@ -194,7 +192,7 @@ exports.handler = async (event) => {
       };
     }
 
-    const formattedHandleData = { handle, link, moralisId };
+    const formattedHandleData: UserFileData = { handle, link, moralisId };
     let avatarFilename = "";
     let base64Avatar = "";
     if (image) {
@@ -207,7 +205,7 @@ exports.handler = async (event) => {
       formattedHandleData.image = `./avatars/${handle}.${info.format}`;
     }
 
-    const files = {
+    const files: Record<string, unknown> = {
       [`_data/handles/${handle}.json`]: JSON.stringify(
         formattedHandleData,
         null,
@@ -236,6 +234,7 @@ exports.handler = async (event) => {
 
         const content = JSON.stringify(
           {
+            // @ts-ignore // @todo: fix this typescript error
             ...JSON.parse(Buffer.from(wardenFile.data.content, "base64")),
             moralisId,
           },

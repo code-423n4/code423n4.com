@@ -3,6 +3,7 @@ import React from "react";
 import { SelectField, TextArea, TextField } from "./";
 import LinksToCode from "../LinksToCodeInput";
 import WardenField from "./WardenField";
+import ContestWarning from "../findings/ContestWarning";
 
 const Widget = ({ field, fieldState, isInvalid, onChange }) => {
   const { widget, name, required, options, maxSize } = field;
@@ -33,14 +34,19 @@ const Widget = ({ field, fieldState, isInvalid, onChange }) => {
   );
 
   const selectFieldWidget = (
-    <SelectField
-      name={name}
-      required={required}
-      onChange={handleChange}
-      options={options}
-      fieldState={fieldState[name]}
-      isInvalid={isInvalid}
-    />
+    <>
+      <SelectField
+        name={name}
+        required={required}
+        onChange={handleChange}
+        options={options}
+        fieldState={fieldState[name]}
+        isInvalid={isInvalid}
+      />
+      {(fieldState[name] === "G (Gas Optimization)" ||
+        fieldState === "QA (Quality Assurance)") &&
+        name === "risk" && <ContestWarning />}
+    </>
   );
 
   const wardenFieldWidget = (
