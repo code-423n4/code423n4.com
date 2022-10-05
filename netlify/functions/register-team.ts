@@ -35,6 +35,7 @@ exports.handler = async (event) => {
       ethereumAddress,
     } = data;
     const username = event.headers["c4-user"];
+    const authorization = event.headers["x-authorization"];
 
     // ensure we have the data we need
     if (!teamName) {
@@ -101,6 +102,8 @@ exports.handler = async (event) => {
       };
     }
 
+    const sessionToken = authorization.split("Bearer ")[1];
+
     const paymentAddresses = [{ chain: "polygon", address: polygonAddress }];
     if (ethereumAddress) {
       paymentAddresses.push({ chain: "ethereum", address: ethereumAddress });
@@ -164,6 +167,22 @@ exports.handler = async (event) => {
           body: JSON.stringify({ error: "Failed to create pull request." }),
         };
       }
+
+      // submit helpdesk ticket
+      await fetch(`${process.env.URL}/.netlify/functions/request-support`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Authorization": `Bearer ${sessionToken}`,
+          "C4-User": username,
+        },
+        body: JSON.stringify({
+          subject: "New team request",
+          request: "team",
+          description: `PR link: ${res.data.html_url}`,
+          discordHandle: username,
+        }),
+      });
 
       const emails = await getTeamEmails(formattedTeamData);
       const emailSubject = `Code4rena team "${teamName}" has been created`;

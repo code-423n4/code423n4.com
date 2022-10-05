@@ -16,13 +16,15 @@ import {
 } from "../../types/user";
 import { checkAuth, checkTeamAuth } from "../util/auth-utils";
 import { getTeamEmails, sendConfirmationEmail } from "../util/user-utils";
+import fetch from "node-fetch";
 
 const OctokitClient = Octokit.plugin(createPullRequest, createOrUpdateTextFile);
 const octokit = new OctokitClient({ auth: token });
 
 async function editTeam(
   data: TeamUpdateRequest,
-  username: string
+  username: string,
+  sessionToken: string
 ): Promise<Response> {
   const {
     teamName,
@@ -124,7 +126,11 @@ async function editTeam(
   }
 
   const title = `Edit team ${teamName}`;
-  const body = `This auto-generated PR modifies the team ${teamName}`;
+  const body = dedent`
+  This auto-generated PR modifies the team ${teamName}
+
+  The request was made by ${username}
+  `;
   const branchName = `team/${teamName}`;
 
   try {
@@ -149,6 +155,22 @@ async function editTeam(
         body: JSON.stringify({ error: "Failed to create pull request." }),
       };
     }
+
+    // submit helpdesk ticket
+    await fetch(`${process.env.URL}/.netlify/functions/request-support`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Authorization": `Bearer ${sessionToken}`,
+        "C4-User": username,
+      },
+      body: JSON.stringify({
+        subject: "Team Update",
+        request: "team",
+        description: `PR link: ${res.data.html_url}`,
+        discordHandle: username,
+      }),
+    });
 
     const newMemberEmails = await getTeamEmails(newTeamData);
     const oldMemberEmails = await getTeamEmails(oldTeamData);
@@ -192,7 +214,8 @@ async function editTeam(
 
 async function deleteTeam(
   data: TeamDeleteRequest,
-  username: string
+  username: string,
+  sessionToken: string
 ): Promise<Response> {
   const { teamName } = data;
   if (!teamName) {
@@ -256,9 +279,29 @@ async function deleteTeam(
     });
   }
 
+  // submit helpdesk ticket
+  await fetch(`${process.env.URL}/.netlify/functions/request-support`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "X-Authorization": `Bearer ${sessionToken}`,
+      "C4-User": username,
+    },
+    body: JSON.stringify({
+      subject: "Delete Team",
+      request: "team",
+      description: `PR link: ${res.data.html_url}`,
+      discordHandle: username,
+    }),
+  });
+
   const teamEmails = await getTeamEmails(team);
   const emailSubject = `Code4rena team "${teamName}" has been deleted`;
-  const emailBody = `Team ${teamName} deleted by ${username}`;
+  const emailBody = dedent`
+  Team ${teamName} deleted by ${username}
+
+  You can see the PR here: ${res.data.html_url}
+  `;
   await sendConfirmationEmail(teamEmails, emailSubject, emailBody);
   return {
     statusCode: 201,
@@ -296,12 +339,15 @@ exports.handler = async (event: Event): Promise<Response> => {
     };
   }
 
+  const authorization = event.headers["x-authorization"];
+  const sessionToken = authorization!.split("Bearer ")[1];
+
   try {
     switch (event.httpMethod) {
       case "POST":
-        return await editTeam(data, username);
+        return await editTeam(data, username, sessionToken);
       case "DELETE":
-        return await deleteTeam(data, username);
+        return await deleteTeam(data, username, sessionToken);
       default:
         return {
           statusCode: 405,
