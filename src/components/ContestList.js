@@ -7,7 +7,7 @@ const ContestList = ({ contests, updateContestStatus }) => {
       {contests.map((contest) => (
         <ContestTile
           contest={contest}
-          key={contest.id}
+          key={contest.node.id}
           updateContestStatus={updateContestStatus}
         />
       ))}

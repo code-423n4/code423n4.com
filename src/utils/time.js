@@ -63,8 +63,8 @@ const getDates = (start, end) => {
     contestStatus,
     start: startTime,
     end: endTime,
-    startDay: isValid(startDate) ? format(startDate, 'd MMMM yyyy') : '',
-    endDay: isValid(endDate) ? format(endDate, 'd MMMM yyyy') : '',
+    startDay: format(startDate, 'd MMMM yyyy'),
+    endDay: format(endDate, 'd MMMM yyyy'),
     daysDuration,
   };
 

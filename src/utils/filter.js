@@ -4,10 +4,10 @@ import { sortByContestStart } from "./sort";
 function contestsByState({ contests }) {
   console.log(contests);
   const filteredContests = {
-    active: contests.node.filter(
+    active: contests.filter(
       (c) => getDates(c.node.start_time, c.node.end_time).contestStatus === "active"
     ),
-    soon: contests.node.filter(
+    soon: contests.filter(
       (c) => getDates(c.node.start_time, c.node.end_time).contestStatus === "soon"
     ),
     completed: contests
