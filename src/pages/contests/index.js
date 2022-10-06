@@ -24,40 +24,39 @@ export default function Contests({ data }) {
     };
 
     contestArray.forEach((element) => {
-      switch (element.node.fields.status) {
-        case "Pre-Contest":
-        case "Preview week":
-          statusObject.upcomingContests.push(element.node);
-          break;
-        case "Active":
-        case "Active Contest":
-          statusObject.activeContests.push(element.node);
-          break;
-        case "Sponsor Review":
-        case "Needs Judging":
-        case "Judging Complete":
-        case "Awarding":
-        case "Reporting":
-        case "Completed":
-          statusObject.completed.push(element.node);
-          break;
-        case null:
-          if (
-            getDates(element.node.start_time, element.node.end_time)
-              .contestStatus === "active"
-          ) {
-            statusObject.activeContests.push(element.node);
-            console.log("active");
-          } else if (
-            getDates(element.node.start_time, element.node.end_time)
-              .contestStatus === "soon"
-          ) {
+      const statusBasedOnDates = getDates(
+        element.node.start_time,
+        element.node.end_time
+      ).contestStatus;
+      if (statusBasedOnDates === "soon") {
+        switch (element.node.fields.status) {
+          case "Pre-Contest":
+          case "Preview week":
+          default:
             statusObject.upcomingContests.push(element.node);
-          }
-          break;
-        default:
-          statusObject.other.push(element.node);
-          break;
+            break;
+        }
+      } else if (statusBasedOnDates === "active") {
+        switch (element.node.fields.status) {
+          case "Active":
+          case "Active Contest":
+          default:
+            statusObject.activeContests.push(element.node);
+            break;
+        }
+      } else if (statusBasedOnDates === "completed") {
+        switch (element.node.fields.status) {
+          case "Sponsor Review":
+          case "Needs Judging":
+          case "Judging Complete":
+          case "Awarding":
+          case "Reporting":
+          default:
+            statusObject.completed.push(element.node);
+            break;
+        }
+      } else {
+        statusObject.other.push(element.node);
       }
     });
     for (const keys in statusObject) {
@@ -97,9 +96,7 @@ export default function Contests({ data }) {
         ) : null}
         {filteredContests && filteredContests.upcomingContests.length > 0 ? (
           <section>
-            <h1>
-              Upcoming contests
-            </h1>
+            <h1>Upcoming contests</h1>
             <ContestList
               updateContestStatus={updateContestStatus}
               contests={filteredContests.upcomingContests}
@@ -108,9 +105,7 @@ export default function Contests({ data }) {
         ) : null}
         {filteredContests && filteredContests.sponsorReview.length > 0 ? (
           <section>
-            <h1>
-              Sponsor review in progress
-            </h1>
+            <h1>Sponsor review in progress</h1>
             <ContestList
               updateContestStatus={updateContestStatus}
               contests={filteredContests.sponsorReview}
