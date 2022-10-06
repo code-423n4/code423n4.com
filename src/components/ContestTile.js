@@ -59,18 +59,18 @@ const ContestTile = ({ contest, updateContestStatus }) => {
         )}
         <ClientOnly>
           <a
-            href={fields?.contestPath || "/"}
+            href={fields?.contestPath || "/"}
             className="contest-repo button button-small cta-button primary"
           >
             {`${findingsRepo === "" ? "Preview" : "View"} Contest`}
           </a>
           {t.contestStatus === "active" && contestRepo && (
-            <Link
-              to={contestRepo}
+            <a
+              href={contestRepo}
               className="button button-small cta-button secondary"
             >
               View Repo
-            </Link>
+            </a>
           )}
           {(t.contestStatus === "active" || status === "Active Contest") &&
           findingsRepo &&
