@@ -141,12 +141,12 @@ Recommend that the `rewardsPerToken_.lastUpdated` field must always be updated i
 
 **[alcueca (Yield) confirmed](https://github.com/code-423n4/2021-08-yield-findings/issues/28#issuecomment-898824250):**
  > You are right, that's a great finding. For the record, I think that this is what [this line in Unipool.sol](https://github.com/k06a/Unipool/blob/bb1843b454bbb10b3b1ccf48edf5e72a80b2acfe/contracts/Unipool.sol#L70) does:
-> ```solidity
->     function rewardPerToken() public view returns (uint256) {
->         if (totalSupply() == 0) {
->             return rewardPerTokenStored;
->         }
-> ```
+```solidity
+function rewardPerToken() public view returns (uint256) {
+  if (totalSupply() == 0) {
+    return rewardPerTokenStored;
+  }
+```
 >
 > I'll apply the mitigation step suggested, with a conditional to not do the `rewardsPerToken_.accumulated` math that would revert.
 >
@@ -218,13 +218,13 @@ As suggested by Alberto, the simplest it to probably not update the `rewardsPerT
 >
 > Also, it needs to be taken into account that `rewardsPerToken.accumulated` is stored scaled up by 1e18, to avoid losing much ground to rounding.
 >
-> ```
->     struct RewardsPerToken {
->         uint128 accumulated;                            // Accumulated rewards per token for the period, scaled up by 1e18
->         uint32 lastUpdated;                             // Last time the rewards per token accumulator was updated
->         uint96 rate;                                    // Wei rewarded per second among all token holders
->     }
-> ```
+```solidity
+struct RewardsPerToken {
+  uint128 accumulated;                            // Accumulated rewards per token for the period, scaled up by 1e18
+  uint32 lastUpdated;                             // Last time the rewards per token accumulator was updated
+  uint96 rate;                                    // Wei rewarded per second among all token holders
+}
+```
 >
 > One of the largest cap tokens is Dai, with a distribution close to 1e28.
 > If ERC20Rewards were to distribute 1 cent/second among all token holders (which wouldn't be very exciting), and block times were of 1 second, the accumulator would still accumulate.
@@ -356,15 +356,15 @@ The `updateTime` result of the function `get` doesn't seem to be used in the cod
 // https://github.com/code-423n4/2021-08-yield/blob/main/contracts/oracles/composite/CompositeMultiOracle.sol#L94
 function get(bytes32 base, bytes32 quote, uint256 amount)  external virtual override  returns (uint256 value, uint256 updateTime)  {
 ...
-        for (uint256 p = 0; p < path.length; p++) {
-            (price, updateTime) = _get(base_, path[p], price, updateTime);
+for (uint256 p = 0; p < path.length; p++) {
+  (price, updateTime) = _get(base_, path[p], price, updateTime);
 
 function _get(bytes6 base, bytes6 quote, uint256 priceIn, uint256 updateTimeIn)  private returns (uint priceOut, uint updateTimeOut) {
-    ...
-        (priceOut, updateTimeOut) = IOracle(source.source).get(base, quote, 10 ** source.decimals);    // Get price for one unit
-      ...
-        updateTimeOut = (updateTimeOut < updateTimeIn) ? updateTimeOut : updateTimeIn;                 // Take the oldest update time
-    }
+...
+  (priceOut, updateTimeOut) = IOracle(source.source).get(base, quote, 10 ** source.decimals);    // Get price for one unit
+  ...
+  updateTimeOut = (updateTimeOut < updateTimeIn) ? updateTimeOut : updateTimeIn;                 // Take the oldest update time
+}
 ```
 
 Recommend adding the following in the beginning of the `_get` function:
@@ -498,10 +498,10 @@ However if the function template would change slightly, for example when `uint12
 
 It is safer to use the function selector, as is done in [`EmergencyBrake.sol`](https://github.com/code-423n4/2021-08-yield/blob/main/contracts/Wand.sol#L27)
 ```solidity
-    bytes4 public constant JOIN = bytes4(keccak256("join(address,uint128)"));
-    bytes4 public constant EXIT = bytes4(keccak256("exit(address,uint128)"));
-    bytes4 public constant MINT = bytes4(keccak256("mint(address,uint256)"));
-    bytes4 public constant BURN = bytes4(keccak256("burn(address,uint256)"));
+  bytes4 public constant JOIN = bytes4(keccak256("join(address,uint128)"));
+  bytes4 public constant EXIT = bytes4(keccak256("exit(address,uint128)"));
+  bytes4 public constant MINT = bytes4(keccak256("mint(address,uint256)"));
+  bytes4 public constant BURN = bytes4(keccak256("burn(address,uint256)"));
 ```
 
 ```solidity

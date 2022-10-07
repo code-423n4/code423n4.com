@@ -290,7 +290,7 @@ The following functions use a [] memory parameter:
 
 This an example to show the exploit:
 
-```
+```solidity
 // based on https://github.com/paradigm-operations/paradigm-ctf-2021/blob/master/swap/private/Exploit.sol
 
 pragma solidity ^0.4.24; // only works with low solidity version
@@ -344,7 +344,7 @@ Recommend double checking to see if safe math functions really are not necessary
 
 Contract CEther fallback function was refactored to be compatible with the Solidity 0.6 version:
 
-```
+```solidity
 /**
 * @notice Send Ether to CEther to mint
 */
@@ -372,7 +372,7 @@ Recommend replacing "fallback" with "receive".
 
 Here the condition should be '<=', not '<' to allow filling the cap fully:
 
-```
+```solidity
 require(nextTotalBorrows < borrowCap, "market borrow cap reached");
 
 require(nextTotalBorrows <= borrowCap, "market borrow cap reached");
@@ -464,7 +464,7 @@ There did not appear to be any such mistakes in the current code, but changes in
 
 ErrorReporter.sol:
 
-```
+```solidity
 contract ComptrollerErrorReporter {
     enum Error {
         NO_ERROR,
@@ -480,7 +480,7 @@ contract TokenErrorReporter {
 
 CarefulMath.sol
 
-```
+```solidity
 contract CarefulMath {
     enum MathError {
         NO_ERROR,
@@ -493,7 +493,7 @@ Take care that the same enum values still have the same underlying value to prev
 
 You could for example do the following:
 
-```
+```solidity
 ComptrollerErrorReporter  NO_ERROR = 0
 ComptrollerErrorReporter  UNAUTHORIZED = 1
 ComptrollerErrorReporter  COMPTROLLER_MISMATCH = 2
@@ -561,7 +561,7 @@ Recommend sorting the enum values in alphabetical order or remove the comment.
 
 Cether.sol has a function `requireNoError` to check for errors. This is used most of the time, however in one occasion it isn't used.
 
-```
+```solidity
 function getCashPrior() internal view returns (uint) {
     (MathError err, uint startingBalance) = subUInt(address(this).balance, msg.value);
     require(err == MathError.NO_ERROR);

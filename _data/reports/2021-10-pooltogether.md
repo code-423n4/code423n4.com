@@ -141,7 +141,7 @@ QED.
 
 <https://github.com/pooltogether/v4-core/blob/055335bf9b09e3f4bbe11a788710dd04d827bf37/contracts/DrawCalculator.sol#L423-L431>
 
-```solidity=412{423-431}
+```solidity
 /**
     * @notice Calculates the number of prizes for a given prizeDistributionIndex
     * @param _bitRangeSize Bit range size for Draw

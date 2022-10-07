@@ -60,7 +60,7 @@
   left: -4px;
   right: -4px;
   bottom: -5px;
-  background: #fff;
+  background: var(--secondary-background-purple);
 }
 
 .react-tabs__tab-panel {
@@ -88,4 +88,34 @@
 
 .alternate-tab .react-tabs__tab--selected {
   background-color: var(--lightest-background-purple);
+}
+
+.form-tab .react-tabs__tab-panel--selected {
+  background: var(--header-background-purple);
+  margin: 0 -40px 20px -40px;
+  padding: 30px 45px 20px 45px;
+  border-bottom: 2px solid var(--border-lightest-background);
+  border-top: 2px solid var(--border-lightest-background);
+}
+
+.form-tab .react-tabs__tab--selected {
+  background: var(--header-background-purple);
+}
+
+@media (max-width: 600px) {
+  .form-tab .react-tabs__tab-panel--selected {
+    /* @todo: use variables or mixins for interdependent margin/padding */
+    margin: 0 -15px 15px -15px;
+    padding: 15px;
+  }
+
+  .form-tab .react-tabs__tab:first-of-type {
+    margin-left: 5px;
+  }
+
+  .react-tabs__tab {
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    padding: 8px;
+  }
 }

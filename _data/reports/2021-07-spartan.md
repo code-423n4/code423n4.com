@@ -102,11 +102,11 @@ Recommend keeping it simple and removing the condition.
 
 ```jsx
 function _approve(address owner, address spender, uint256 amount) internal virtual {
-        require(owner != address(0), "!owner");
-        require(spender != address(0), "!spender");
-        _allowances[owner][spender] = amount;
-        emit Approval(owner, spender, amount);
-    }
+    require(owner != address(0), "!owner");
+    require(spender != address(0), "!spender");
+    _allowances[owner][spender] = amount;
+    emit Approval(owner, spender, amount);
+}
 ```
 
 **[SamusElderg (Spartan) confirmed](https://github.com/code-423n4/2021-07-spartan-findings/issues/29#issuecomment-885456808):**
@@ -308,14 +308,14 @@ _Submitted by jonah1005_
 
 The liquidity tokens are calculated at `Utils:calcLiquidityUnits`
 ```solidity
-            // units = ((P (t B + T b))/(2 T B)) * slipAdjustment
-            // P * (part1 + part2) / (part3) * slipAdjustment
-            uint slipAdjustment = getSlipAdustment(b, B, t, T);
-            uint part1 = t*(B);
-            uint part2 = T*(b);
-            uint part3 = T*(B)*(2);
-            uint _units = (P * (part1 + (part2))) / (part3);
-            return _units * slipAdjustment / one;  // Divide by 10**18
+// units = ((P (t B + T b))/(2 T B)) * slipAdjustment
+// P * (part1 + part2) / (part3) * slipAdjustment
+uint slipAdjustment = getSlipAdustment(b, B, t, T);
+uint part1 = t*(B);
+uint part2 = T*(b);
+uint part3 = T*(B)*(2);
+uint _units = (P * (part1 + (part2))) / (part3);
+return _units * slipAdjustment / one;  // Divide by 10**18
 ```
 where `P` stands for `totalSupply` of current Pool. If `P` is too small (e.g, 1) then all the units would be rounding to 0.
 
@@ -387,32 +387,32 @@ The Pool was initialized with 10000:10000 in both cases. While the first case(sw
 
 The debt should be considered in the AMM pool so I recommend to maintain a debt variable in the Pool and use `tokenAmount - debt` when the Pool calculates the token price. Here's some idea of it:
 ```solidity
-    uint256 public debt;
-    function _tokenAmount() returns (uint256) {
-        return tokenAmount - debt;
-    }
+uint256 public debt;
+function _tokenAmount() returns (uint256) {
+    return tokenAmount - debt;
+}
 
-    // Swap SPARTA for Synths
-    function mintSynth(address synthOut, address member) external returns(uint outputAmount, uint fee) {
-        require(iSYNTHFACTORY(_DAO().SYNTHFACTORY()).isSynth(synthOut) == true, "!synth"); // Must be a valid Synth
-        uint256 _actualInputBase = _getAddedBaseAmount(); // Get received SPARTA amount
+// Swap SPARTA for Synths
+function mintSynth(address synthOut, address member) external returns(uint outputAmount, uint fee) {
+    require(iSYNTHFACTORY(_DAO().SYNTHFACTORY()).isSynth(synthOut) == true, "!synth"); // Must be a valid Synth
+    uint256 _actualInputBase = _getAddedBaseAmount(); // Get received SPARTA amount
 
-        // Use tokenAmount - debt to calculate the value
-        uint output = iUTILS(_DAO().UTILS()).calcSwapOutput(_actualInputBase, baseAmount, _tokenAmount()); // Calculate value of swapping SPARTA to the relevant underlying TOKEN
+    // Use tokenAmount - debt to calculate the value
+    uint output = iUTILS(_DAO().UTILS()).calcSwapOutput(_actualInputBase, baseAmount, _tokenAmount()); // Calculate value of swapping SPARTA to the relevant underlying TOKEN
 
-        // increment the debt
-        debt += output
+    // increment the debt
+    debt += output
 
-        uint _liquidityUnits = iUTILS(_DAO().UTILS()).calcLiquidityUnitsAsym(_actualInputBase, address(this)); // Calculate LP tokens to be minted
-        _incrementPoolBalances(_actualInputBase, 0); // Update recorded SPARTA amount
-        uint _fee = iUTILS(_DAO().UTILS()).calcSwapFee(_actualInputBase, baseAmount, tokenAmount); // Calc slip fee in TOKEN
-        fee = iUTILS(_DAO().UTILS()).calcSpotValueInBase(TOKEN, _fee); // Convert TOKEN fee to SPARTA
-        _mint(synthOut, _liquidityUnits); // Mint the LP tokens directly to the Synth contract to hold
-        iSYNTH(synthOut).mintSynth(member, output); // Mint the Synth tokens directly to the user
-        _addPoolMetrics(fee); // Add slip fee to the revenue metrics
-        emit MintSynth(member, BASE, _actualInputBase, TOKEN, outputAmount);
-      return (output, fee);
-    }
+    uint _liquidityUnits = iUTILS(_DAO().UTILS()).calcLiquidityUnitsAsym(_actualInputBase, address(this)); // Calculate LP tokens to be minted
+    _incrementPoolBalances(_actualInputBase, 0); // Update recorded SPARTA amount
+    uint _fee = iUTILS(_DAO().UTILS()).calcSwapFee(_actualInputBase, baseAmount, tokenAmount); // Calc slip fee in TOKEN
+    fee = iUTILS(_DAO().UTILS()).calcSpotValueInBase(TOKEN, _fee); // Convert TOKEN fee to SPARTA
+    _mint(synthOut, _liquidityUnits); // Mint the LP tokens directly to the Synth contract to hold
+    iSYNTH(synthOut).mintSynth(member, output); // Mint the Synth tokens directly to the user
+    _addPoolMetrics(fee); // Add slip fee to the revenue metrics
+    emit MintSynth(member, BASE, _actualInputBase, TOKEN, outputAmount);
+    return (output, fee);
+}
 ```
 
 **[verifyfirst (Spartan) confirmed](https://github.com/code-423n4/2021-07-spartan-findings/issues/59#issuecomment-883866084):**
@@ -677,40 +677,40 @@ However in the mean time, the DAO has been updated and `Reserve.sol` doesn't kno
 `Dao.sol` [L452](https://github.com/code-423n4/2021-07-spartan/blob/main/contracts/Dao.sol#L452)
 ```solidity
 function moveDao(uint _proposalID) internal {
-        address _proposedAddress = mapPID_address[_proposalID]; // Get the proposed new address
-        require(_proposedAddress != address(0), "!address"); // Proposed address must be valid
-        DAO = _proposedAddress; // Change the DAO to point to the new DAO address
-        iBASE(BASE).changeDAO(_proposedAddress); // Change the BASE contract to point to the new DAO address
-        daoHasMoved = true; // Set status of this old DAO
-        completeProposal(_proposalID); // Finalise the proposal
-    }
+    address _proposedAddress = mapPID_address[_proposalID]; // Get the proposed new address
+    require(_proposedAddress != address(0), "!address"); // Proposed address must be valid
+    DAO = _proposedAddress; // Change the DAO to point to the new DAO address
+    iBASE(BASE).changeDAO(_proposedAddress); // Change the BASE contract to point to the new DAO address
+    daoHasMoved = true; // Set status of this old DAO
+    completeProposal(_proposalID); // Finalise the proposal
+}
 
-    function grantFunds(uint _proposalID) internal {
-        uint256 _proposedAmount = mapPID_param[_proposalID]; // Get the proposed SPARTA grant amount
-        address _proposedAddress = mapPID_address[_proposalID]; // Get the proposed SPARTA grant recipient
-        require(_proposedAmount != 0, "!param"); // Proposed grant amount must be valid
-        require(_proposedAddress != address(0), "!address"); // Proposed recipient must be valid
-        _RESERVE.grantFunds(_proposedAmount, _proposedAddress); // Grant the funds to the recipient
-        completeProposal(_proposalID); // Finalise the proposal
-    }
+function grantFunds(uint _proposalID) internal {
+    uint256 _proposedAmount = mapPID_param[_proposalID]; // Get the proposed SPARTA grant amount
+    address _proposedAddress = mapPID_address[_proposalID]; // Get the proposed SPARTA grant recipient
+    require(_proposedAmount != 0, "!param"); // Proposed grant amount must be valid
+    require(_proposedAddress != address(0), "!address"); // Proposed recipient must be valid
+    _RESERVE.grantFunds(_proposedAmount, _proposedAddress); // Grant the funds to the recipient
+    completeProposal(_proposalID); // Finalise the proposal
+}
 ```
 `Reserve.sol` [L17](https://github.com/code-423n4/2021-07-spartan/blob/main/contracts/outside-scope/Reserve.sol#L17)
 ```solidity
-  modifier onlyGrantor() {
-        require(msg.sender == DAO || msg.sender == ROUTER || msg.sender == DEPLOYER || msg.sender == LEND || msg.sender == SYNTHVAULT, "!DAO");
-        _;
-    }
+modifier onlyGrantor() {
+    require(msg.sender == DAO || msg.sender == ROUTER || msg.sender == DEPLOYER || msg.sender == LEND || msg.sender == SYNTHVAULT, "!DAO");
+    _;
+}
 
-  function grantFunds(uint amount, address to) external onlyGrantor {
-      ....
-    }
+function grantFunds(uint amount, address to) external onlyGrantor {
+    ....
+}
 
-   function setIncentiveAddresses(address _router, address _lend, address _synthVault, address _Dao) external onlyGrantor {
-        ROUTER = _router;
-        LEND = _lend;
-        SYNTHVAULT = _synthVault;
-        DAO = _Dao;
-    }
+function setIncentiveAddresses(address _router, address _lend, address _synthVault, address _Dao) external onlyGrantor {
+    ROUTER = _router;
+    LEND = _lend;
+    SYNTHVAULT = _synthVault;
+    DAO = _Dao;
+}
 ```
 Recommend calling `setIncentiveAddresses(..)` when a DAO upgrade is done.
 
@@ -728,57 +728,58 @@ The array `arrayPools` can be increased in size arbitrarily by repeatedly doing 
 These actions will use gas to perform.
 
 
- ```solidity
- // https://github.com/code-423n4/2021-07-spartan/blob/main/contracts/poolFactory.sol#L45
- function createPoolADD(uint256 inputBase, uint256 inputToken, address token) external payable returns(address pool){
-        require(getPool(token) == address(0)); // Must be a valid token
-        require((inputToken > 0 && inputBase >= (10000*10**18)), "!min"); // User must add at least 10,000 SPARTA liquidity & ratio must be finite
-        Pool newPool; address _token = token;
-        if(token == address(0)){_token = WBNB;} // Handle BNB -> WBNB
-        require(_token != BASE && iBEP20(_token).decimals() == 18); // Token must not be SPARTA & it's decimals must be 18
-        newPool = new Pool(BASE, _token); // Deploy new pool
-        pool = address(newPool); // Get address of new pool
-        mapToken_Pool[_token] = pool; // Record the new pool address in PoolFactory
-        _handleTransferIn(BASE, inputBase, pool); // Transfer SPARTA liquidity to new pool
-        _handleTransferIn(token, inputToken, pool); // Transfer TOKEN liquidity to new pool
-        arrayPools.push(pool); // Add pool address to the pool array
-       ..
+```solidity
+// https://github.com/code-423n4/2021-07-spartan/blob/main/contracts/poolFactory.sol#L45
+function createPoolADD(uint256 inputBase, uint256 inputToken, address token) external payable returns(address pool){
+    require(getPool(token) == address(0)); // Must be a valid token
+    require((inputToken > 0 && inputBase >= (10000*10**18)), "!min"); // User must add at least 10,000 SPARTA liquidity & ratio must be finite
+    Pool newPool; address _token = token;
+    if(token == address(0)){_token = WBNB;} // Handle BNB -> WBNB
+    require(_token != BASE && iBEP20(_token).decimals() == 18); // Token must not be SPARTA & it's decimals must be 18
+    newPool = new Pool(BASE, _token); // Deploy new pool
+    pool = address(newPool); // Get address of new pool
+    mapToken_Pool[_token] = pool; // Record the new pool address in PoolFactory
+    _handleTransferIn(BASE, inputBase, pool); // Transfer SPARTA liquidity to new pool
+    _handleTransferIn(token, inputToken, pool); // Transfer TOKEN liquidity to new pool
+    arrayPools.push(pool); // Add pool address to the pool array
+    ..
 
 function curatedPoolCount() internal view returns (uint){
-        uint cPoolCount;
-        for(uint i = 0; i< arrayPools.length; i++){
-            if(isCuratedPool[arrayPools[i]] == true){
-                cPoolCount += 1;
-            }
+    uint cPoolCount;
+    for(uint i = 0; i< arrayPools.length; i++){
+        if(isCuratedPool[arrayPools[i]] == true){
+            cPoolCount += 1;
         }
-        return cPoolCount;
     }
+    return cPoolCount;
+}
 ```
- ```solidity
- function addCuratedPool(address token) external onlyDAO {
-        ...
-        require(curatedPoolCount() < curatedPoolSize, "maxCurated"); // Must be room in the Curated list
+
+```solidity
+function addCuratedPool(address token) external onlyDAO {
+    ...
+    require(curatedPoolCount() < curatedPoolSize, "maxCurated"); // Must be room in the Curated list
 ```
 
 
 ```solidity
 // https://github.com/code-423n4/2021-07-spartan/blob/main/contracts/Pool.sol#L187
-  function remove() external returns (uint outputBase, uint outputToken) {
-        return removeForMember(msg.sender);
-    }
+function remove() external returns (uint outputBase, uint outputToken) {
+    return removeForMember(msg.sender);
+}
 
-    // Contract removes liquidity for the user
-    function removeForMember(address member) public returns (uint outputBase, uint outputToken) {
-        uint256 _actualInputUnits = balanceOf(address(this)); // Get the received LP units amount
-        outputBase = iUTILS(_DAO().UTILS()).calcLiquidityHoldings(_actualInputUnits, BASE, address(this)); // Get the SPARTA value of LP units
-        outputToken = iUTILS(_DAO().UTILS()).calcLiquidityHoldings(_actualInputUnits, TOKEN, address(this)); // Get the TOKEN value of LP units
-        _decrementPoolBalances(outputBase, outputToken); // Update recorded BASE and TOKEN amounts
-        _burn(address(this), _actualInputUnits); // Burn the LP tokens
-        iBEP20(BASE).transfer(member, outputBase); // Transfer the SPARTA to user
-        iBEP20(TOKEN).transfer(member, outputToken); // Transfer the TOKENs to user
-        emit RemoveLiquidity(member, outputBase, outputToken, _actualInputUnits);
-        return (outputBase, outputToken);
-    }
+// Contract removes liquidity for the user
+function removeForMember(address member) public returns (uint outputBase, uint outputToken) {
+    uint256 _actualInputUnits = balanceOf(address(this)); // Get the received LP units amount
+    outputBase = iUTILS(_DAO().UTILS()).calcLiquidityHoldings(_actualInputUnits, BASE, address(this)); // Get the SPARTA value of LP units
+    outputToken = iUTILS(_DAO().UTILS()).calcLiquidityHoldings(_actualInputUnits, TOKEN, address(this)); // Get the TOKEN value of LP units
+    _decrementPoolBalances(outputBase, outputToken); // Update recorded BASE and TOKEN amounts
+    _burn(address(this), _actualInputUnits); // Burn the LP tokens
+    iBEP20(BASE).transfer(member, outputBase); // Transfer the SPARTA to user
+    iBEP20(TOKEN).transfer(member, outputToken); // Transfer the TOKENs to user
+    emit RemoveLiquidity(member, outputBase, outputToken, _actualInputUnits);
+    return (outputBase, outputToken);
+}
 ```
 Recommend creating a variable `curatedPoolCount` and increase it in `addCuratedPool` and decrease it in `removeCuratedPool`.
 
@@ -1072,15 +1073,15 @@ A good compromise would be to take in an array of asset indexes, so that users c
 
 ```jsx
 function claimAllForMember(address member, uint256[] calldata assetIndexes)  external returns (bool){
-        address [] memory listedAssets = listedBondAssets; // Get array of bond assets
-        for(uint i = 0; i < assetIndexes.length; i++){
-            uint claimA = calcClaimBondedLP(member, listedAssets[assetIndexes[i]]); // Check user's unlocked Bonded LPs for each asset
-            if(claimA > 0){
-               _BONDVAULT.claimForMember(listedAssets[assetIndexes[i]], member); // Claim LPs if any unlocked
-            }
+    address [] memory listedAssets = listedBondAssets; // Get array of bond assets
+    for(uint i = 0; i < assetIndexes.length; i++){
+        uint claimA = calcClaimBondedLP(member, listedAssets[assetIndexes[i]]); // Check user's unlocked Bonded LPs for each asset
+        if(claimA > 0){
+            _BONDVAULT.claimForMember(listedAssets[assetIndexes[i]], member); // Claim LPs if any unlocked
         }
-        return true;
     }
+    return true;
+}
 ```
 
 **[SamusElderg (Spartan) confirmed ](https://github.com/code-423n4/2021-07-spartan-findings/issues/37#issuecomment-896558338):**
@@ -1130,29 +1131,29 @@ This will mean the `memberCount()` doesn't show accurate results. Also `allMembe
 ```solidity
 // https://github.com/code-423n4/2021-07-spartan/blob/main/contracts/BondVault.sol#L60
 function depositForMember(address asset, address member, uint LPS) external onlyDAO returns(bool){
-        if(!mapBondAsset_memberDetails[asset].isMember[member]){
-            mapBondAsset_memberDetails[asset].isMember[member] = true; // Register user as member (scope: user -> asset)
-            arrayMembers.push(member); // Add user to member array (scope: vault)
-            mapBondAsset_memberDetails[asset].members.push(member); // Add user to member array (scope: user -> asset)
-        }
-       ...
+    if(!mapBondAsset_memberDetails[asset].isMember[member]){
+        mapBondAsset_memberDetails[asset].isMember[member] = true; // Register user as member (scope: user -> asset)
+        arrayMembers.push(member); // Add user to member array (scope: vault)
+        mapBondAsset_memberDetails[asset].members.push(member); // Add user to member array (scope: user -> asset)
+    }
+    ...
 
-    // Get the total count of all existing & past BondVault members
-    function memberCount() external view returns (uint256 count){
-        return arrayMembers.length;
-    }
-    function allMembers() external view returns (address[] memory _allMembers){
-        return arrayMembers;
-    }
+// Get the total count of all existing & past BondVault members
+function memberCount() external view returns (uint256 count){
+    return arrayMembers.length;
+}
+function allMembers() external view returns (address[] memory _allMembers){
+    return arrayMembers;
+}
 ```
 
 Use a construction like this:
 ```solidity
 mapping(address => bool) isMember;
-   if(!isMember[member]){
-            isMember[member] = true;
-            arrayMembers.push(member);
-   }
+if(!isMember[member]){
+        isMember[member] = true;
+        arrayMembers.push(member);
+}
 ```
 
 **[SamusElderg (Spartan) confirmed and disagreed with severity](https://github.com/code-423n4/2021-07-spartan-findings/issues/26#issuecomment-885523844):**
@@ -1174,27 +1175,27 @@ Additionally the reverts that will occur if the result of `getPool`==0 are perha
 
 ```solidity
 //https://github.com/code-423n4/2021-07-spartan/blob/main/contracts/poolFactory.sol#L119
-    function getPool(address token) public view returns(address pool){
-        if(token == address(0)){
-            pool = mapToken_Pool[WBNB];   // Handle BNB
-        } else {
-            pool = mapToken_Pool[token];  // Handle normal token
-        }
-        return pool;
+function getPool(address token) public view returns(address pool){
+    if(token == address(0)){
+        pool = mapToken_Pool[WBNB];   // Handle BNB
+    } else {
+        pool = mapToken_Pool[token];  // Handle normal token
     }
+    return pool;
+}
 
 function createPoolADD(uint256 inputBase, uint256 inputToken, address token) external payable returns(address pool){
-        require(getPool(token) == address(0)); // Must be a valid token
+    require(getPool(token) == address(0)); // Must be a valid token
 
 function createPool(address token) external onlyDAO returns(address pool){
-        require(getPool(token) == address(0)); // Must be a valid token
+    require(getPool(token) == address(0)); // Must be a valid token
 ```
 ```solidity
 // https://github.com/code-423n4/2021-07-spartan/blob/main/contracts/synthFactory.sol#L37
- function createSynth(address token) external returns(address synth){
-        require(getSynth(token) == address(0), "exists"); // Synth must not already exist
-        address _pool = iPOOLFACTORY(_DAO().POOLFACTORY()).getPool(token); // Get pool address
-        require(iPOOLFACTORY(_DAO().POOLFACTORY()).isCuratedPool(_pool) == true, "!curated"); // Pool must be Curated
+function createSynth(address token) external returns(address synth){
+    require(getSynth(token) == address(0), "exists"); // Synth must not already exist
+    address _pool = iPOOLFACTORY(_DAO().POOLFACTORY()).getPool(token); // Get pool address
+    require(iPOOLFACTORY(_DAO().POOLFACTORY()).isCuratedPool(_pool) == true, "!curated"); // Pool must be Curated
 ```
 
 
@@ -1227,16 +1228,16 @@ In addition, calculations for both `calcSwapOutput` and `calcSwapFee` will phant
 
 ```jsx
 function calcSwapFeeAndOutput(uint x, uint X, uint Y) public pure returns (uint output, uint swapFee) {
-		   uint xAddX = x + X;
-		   uint rawOutput = FullMath.mulDiv(x, Y, xAddX);
-		   swapFee = FullMath.mulDiv(rawOutput, x, xAddX);
-		   output = rawOutput - swapFee;
+    uint xAddX = x + X;
+    uint rawOutput = FullMath.mulDiv(x, Y, xAddX);
+    swapFee = FullMath.mulDiv(rawOutput, x, xAddX);
+    output = rawOutput - swapFee;
 }
 
 function calcSwapValueInBaseWithPool(address pool, uint amount) public view returns (uint _output){
-       uint _baseAmount = iPOOL(pool).baseAmount();
-       uint _tokenAmount = iPOOL(pool).tokenAmount();
-       (_output, ) = calcSwapFeeAndOutput(amount, _tokenAmount, _baseAmount);
+    uint _baseAmount = iPOOL(pool).baseAmount();
+    uint _tokenAmount = iPOOL(pool).tokenAmount();
+    (_output, ) = calcSwapFeeAndOutput(amount, _tokenAmount, _baseAmount);
 }
 ```
 
@@ -1284,38 +1285,38 @@ However in the function `_handleTransferIn()` in poolFactory.sol there is no pro
 As a comparison, the function `_handleTransferIn()` of Router.sol does check for _token == address(0) and takes appropriate action.
 ```solidity
 //https://github.com/code-423n4/2021-07-spartan/blob/main/contracts/poolFactory.sol#L45
- function createPoolADD(uint256 inputBase, uint256 inputToken, address token) external payable returns(address pool){
-   ...
-        address _token = token;
-        if(token == address(0)){_token = WBNB;} // Handle BNB -> WBNB
-         ...
-        _handleTransferIn(token, inputToken, pool); // Transfer TOKEN liquidity to new pool
+function createPoolADD(uint256 inputBase, uint256 inputToken, address token) external payable returns(address pool){
+...
+    address _token = token;
+    if(token == address(0)){_token = WBNB;} // Handle BNB -> WBNB
+        ...
+    _handleTransferIn(token, inputToken, pool); // Transfer TOKEN liquidity to new pool
 
-    function _handleTransferIn(address _token, uint256 _amount, address _pool) internal returns(uint256 actual){
-        if(_amount > 0) {
-            uint startBal = iBEP20(_token).balanceOf(_pool);
-            iBEP20(_token).transferFrom(msg.sender, _pool, _amount);
-            actual = iBEP20(_token).balanceOf(_pool) - (startBal);
-        }
+function _handleTransferIn(address _token, uint256 _amount, address _pool) internal returns(uint256 actual){
+    if(_amount > 0) {
+        uint startBal = iBEP20(_token).balanceOf(_pool);
+        iBEP20(_token).transferFrom(msg.sender, _pool, _amount);
+        actual = iBEP20(_token).balanceOf(_pool) - (startBal);
     }
+}
 ```
 ```solidity
 //https://github.com/code-423n4/2021-07-spartan/blob/main/contracts/Router.sol#L197
- function _handleTransferIn(address _token, uint256 _amount, address _pool) internal returns(uint256 actual){
-        if(_amount > 0) {
-            if(_token == address(0)){
-                require((_amount == msg.value));
-                (bool success, ) = payable(WBNB).call{value: _amount}(""); // Wrap BNB
-                require(success, "!send");
-                iBEP20(WBNB).transfer(_pool, _amount); // Transfer WBNB from ROUTER to pool
-                actual = _amount;
-            } else {
-                uint startBal = iBEP20(_token).balanceOf(_pool); // Get prior TOKEN balance of pool
-                iBEP20(_token).transferFrom(msg.sender, _pool, _amount); // Transfer TOKEN to pool
-                actual = iBEP20(_token).balanceOf(_pool)-(startBal); // Get received TOKEN amount
-            }
+function _handleTransferIn(address _token, uint256 _amount, address _pool) internal returns(uint256 actual){
+    if(_amount > 0) {
+        if(_token == address(0)){
+            require((_amount == msg.value));
+            (bool success, ) = payable(WBNB).call{value: _amount}(""); // Wrap BNB
+            require(success, "!send");
+            iBEP20(WBNB).transfer(_pool, _amount); // Transfer WBNB from ROUTER to pool
+            actual = _amount;
+        } else {
+            uint startBal = iBEP20(_token).balanceOf(_pool); // Get prior TOKEN balance of pool
+            iBEP20(_token).transferFrom(msg.sender, _pool, _amount); // Transfer TOKEN to pool
+            actual = iBEP20(_token).balanceOf(_pool)-(startBal); // Get received TOKEN amount
         }
     }
+}
 ```
 
 Recommend applying the same function as `_handleTransferIn` of Router.sol to `_handleTransferIn` of poolFactory.sol. Better yet deduplicate the function by moving it to a library/included solidity file. Note:  There is also a  `_handleTransferIn` in Synth.sol which isn't used.

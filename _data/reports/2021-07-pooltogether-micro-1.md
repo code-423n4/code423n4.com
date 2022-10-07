@@ -137,7 +137,7 @@ It is possible to make use of this problem in the following way:
 ```solidity
 // https://github.com/pooltogether/swappable-yield-source/blob/main/contracts/SwappableYieldSource.sol
 function setYieldSource(IYieldSource _newYieldSource) external `onlyOwnerOrAssetManager` returns (bool) {
-    _setYieldSource(_newYieldSource);
+  _setYieldSource(_newYieldSource);
 
 function _setYieldSource(IYieldSource _newYieldSource) internal {
 ..
@@ -398,23 +398,23 @@ _Submitted by JMukesh_
 Since immutable state variable cant be change after initialization in constructor, their value should be checked before initialization
 [`MStableYieldSource.sol` L45](https://github.com/pooltogether/pooltogether-mstable/blob/0bcbd363936fadf5830e9c48392415695896ddb5/contracts/yield-source/MStableYieldSource.sol#L45)
 ```solidity
-    constructor(ISavingsContractV2 _savings) ReentrancyGuard() {
+constructor(ISavingsContractV2 _savings) ReentrancyGuard() {
 
-           // @audit --> there should be a input validation
+  // @audit --> there should be a input validation
 
-        // As immutable storage variables can not be accessed in the constructor,
-        // create in-memory variables that can be used instead.
-        IERC20 mAssetMemory = IERC20(_savings.underlying());
+  // As immutable storage variables can not be accessed in the constructor,
+  // create in-memory variables that can be used instead.
+  IERC20 mAssetMemory = IERC20(_savings.underlying());
 
-        // infinite approve Savings Contract to transfer mAssets from this contract
-        mAssetMemory.safeApprove(address(_savings), type(uint256).max);
+  // infinite approve Savings Contract to transfer mAssets from this contract
+  mAssetMemory.safeApprove(address(_savings), type(uint256).max);
 
-        // save to immutable storage
-        savings = _savings;
-        mAsset = mAssetMemory;
+  // save to immutable storage
+  savings = _savings;
+  mAsset = mAssetMemory;
 
-        emit Initialized(_savings);
-    }
+  emit Initialized(_savings);
+}
 ```
 
 Recommend adding a require condition to validate input values.
@@ -487,7 +487,7 @@ function initialize( IYieldSource _yieldSource, uint8 _decimals, string calldata
 
 Recommend adding the following statement to `_setYieldSource`:
 ```solidity
-    _requireYieldSource(_newYieldSource);
+_requireYieldSource(_newYieldSource);
 ```
 
 **[PierrickGT (PoolTogether) disputed](https://github.com/code-423n4/2021-07-pooltogether-findings/issues/7#issuecomment-897160115):**
@@ -515,15 +515,15 @@ This is confusing for readers and future maintainers. Future maintainers could e
 ```solidity
 // https://github.com/pooltogether/swappable-yield-source/blob/main/contracts/SwappableYieldSource.sol#L74
 function _requireYieldSource(IYieldSource _yieldSource) internal view {
-    require(address(_yieldSource) != address(0), "SwappableYieldSource/yieldSource-not-zero-address");
-    (, bytes memory depositTokenAddressData) = address(_yieldSource).staticcall(abi.encode(_yieldSource.depositToken.selector));
-    bool isInvalidYieldSource;
-    if (depositTokenAddressData.length > 0) {
-      (address depositTokenAddress) = abi.decode(depositTokenAddressData, (address));
-      isInvalidYieldSource = depositTokenAddress != address(0);
-    }
-    require(isInvalidYieldSource, "SwappableYieldSource/invalid-yield-source");
+  require(address(_yieldSource) != address(0), "SwappableYieldSource/yieldSource-not-zero-address");
+  (, bytes memory depositTokenAddressData) = address(_yieldSource).staticcall(abi.encode(_yieldSource.depositToken.selector));
+  bool isInvalidYieldSource;
+  if (depositTokenAddressData.length > 0) {
+    (address depositTokenAddress) = abi.decode(depositTokenAddressData, (address));
+    isInvalidYieldSource = depositTokenAddress != address(0);
   }
+  require(isInvalidYieldSource, "SwappableYieldSource/invalid-yield-source");
+}
 ```
 
 Recommend changing `isInvalidYieldSource` to `isValidYieldSource`

@@ -449,9 +449,9 @@ Uncertain what the recommendation should be.
 >
 > - With the current active maturities (longest dated maturity is one year), a 20% change in interest rates could decrease the collateral value of an account’s fCash by a maximum of ~20%.
 >
-> - Pushing the interest rate to the top of the range requires the attacker to borrow all of the cash sitting in the liquidity pool. If you assume there is $100M sitting in the pool, then the attacker would have to borrow $100M. At worst, if they execute the borrow all in one shot, their realized borrow rate would be 25%. At best, if they execute the borrow in pieces (increasing the time taken and risk of the attack), their realized borrow rate would be ~15%. This implies that the attacker has placed at least $15M at risk (his total interest owed) as there is no guarantee that he can exit his position in profit or at cost.
+> - Pushing the interest rate to the top of the range requires the attacker to borrow all of the cash sitting in the liquidity pool. If you assume there is \$100M sitting in the pool, then the attacker would have to borrow \$100M. At worst, if they execute the borrow all in one shot, their realized borrow rate would be 25%. At best, if they execute the borrow in pieces (increasing the time taken and risk of the attack), their realized borrow rate would be ~15%. This implies that the attacker has placed at least \$15M at risk (his total interest owed) as there is no guarantee that he can exit his position in profit or at cost.
 >
-> - In order for this to be a profitable attack, the attacker needs to offset their borrowing by executing an fCash liquidation that would allow them to lend at the artificially inflated interest rate. This means that there must be an account, or set of accounts, which have borrowed against their fCash, are 20% away from under collateralization, and have enough fCash such that the attacker can offset his borrow by liquidating their fCash. In other words, there would need to be $100M+ of fCash held in the system that is being used as collateral and is close to liquidation.
+> - In order for this to be a profitable attack, the attacker needs to offset their borrowing by executing an fCash liquidation that would allow them to lend at the artificially inflated interest rate. This means that there must be an account, or set of accounts, which have borrowed against their fCash, are 20% away from under collateralization, and have enough fCash such that the attacker can offset his borrow by liquidating their fCash. In other words, there would need to be \$100M+ of fCash held in the system that is being used as collateral and is close to liquidation.
 >
 > - These conditions are possible, but improbable. It would imply that the amount of outstanding loans that are being borrowed against (and are close to under collateralization) is greater than the total liquidity in the pool. This strikes me as unlikely for two reasons:
 >
@@ -473,24 +473,24 @@ Different parameter are being set in `Approval` event in `transferFrom()`
 
 ```solidity
 function transferFrom(
-        address from,
-        address to,
-        uint256 amount
-    ) external override returns (bool) {
-        (bool success, uint256 newAllowance) =
-            proxy.nTokenTransferFrom(currencyId, msg.sender, from, to, amount);
+    address from,
+    address to,
+    uint256 amount
+) external override returns (bool) {
+    (bool success, uint256 newAllowance) =
+        proxy.nTokenTransferFrom(currencyId, msg.sender, from, to, amount);
 
-        // Emit transfer events here so they come from the correct contract
-        emit Transfer(from, to, amount);
+    // Emit transfer events here so they come from the correct contract
+    emit Transfer(from, to, amount);
 
- // here first parameter should be owner and second should be spender
- //   as mentioned in ntokenErc20.sol that is :
+// here first parameter should be owner and second should be spender
+//   as mentioned in ntokenErc20.sol that is :
 // event Approval(address indexed owner, // address indexed spender, uint256 amount);
 
-        emit Approval(msg.sender, from, newAllowance);
+    emit Approval(msg.sender, from, newAllowance);
 
-        return success;
-    }
+    return success;
+}
 ```
 
 The impact is that, this error may negatively impact off-chain tools that are monitoring critical transfer events of the token. See [`nTokenERC20Proxy.sol` L100](https://github.com/code-423n4/2021-08-notional/blob/4b51b0de2b448e4d36809781c097c7bc373312e9/contracts/external/adapters/nTokenERC20Proxy.sol#L100).
@@ -518,12 +518,12 @@ _Submitted by JMukesh_
 
 ```solidity
 function migrateBorrowFromCompound(
-        address cTokenBorrow,
-        uint256 cTokenRepayAmount,
-        uint16[] memory notionalV2CollateralIds,
-        uint256[] memory notionalV2CollateralAmounts,
-        BalanceActionWithTrades[] calldata borrowAction
-    ) ;
+    address cTokenBorrow,
+    uint256 cTokenRepayAmount,
+    uint16[] memory notionalV2CollateralIds,
+    uint256[] memory notionalV2CollateralAmounts,
+    BalanceActionWithTrades[] calldata borrowAction
+) ;
 ```
 
 if the array length of `notionalV2CollateralId` , `notionalV2CollateralAmounts` and `borrowAction` is not equal, it can lead to an error. See [`CompoundToNotionalV2.sol` L24](https://github.com/code-423n4/2021-08-notional/blob/4b51b0de2b448e4d36809781c097c7bc373312e9/contracts/external/adapters/CompoundToNotionalV2.sol#L24).

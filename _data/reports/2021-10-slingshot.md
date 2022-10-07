@@ -79,7 +79,7 @@ _Submitted by WatchPug, also found by daejunpark, gpersoon, hickuphh3, kenzo, an
 
 <https://github.com/code-423n4/2021-10-slingshot/blob/9c0432cca2e43731d5a0ae9c151dacf7835b8719/contracts/Slingshot.sol#L65-L92>
 
-```solidity=65{81,88}
+```solidity
 function executeTrades(
     address fromToken,
     address toToken,
@@ -113,7 +113,7 @@ function executeTrades(
 
 <https://github.com/code-423n4/2021-10-slingshot/blob/9c0432cca2e43731d5a0ae9c151dacf7835b8719/contracts/Slingshot.sol#L157-L163>
 
-```solidity=157
+```solidity
 function _getTokenBalance(address token) internal view returns (uint256) {
     if (token == nativeToken) {
         return address(executioner).balance;

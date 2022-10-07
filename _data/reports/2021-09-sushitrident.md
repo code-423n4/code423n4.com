@@ -85,26 +85,26 @@ I consider this a high-risk issue.
 [IndexPool.sol#L196-L223](https://github.com/sushiswap/trident/blob/9130b10efaf9c653d74dc7a65bde788ec4b354b5/contracts/pool/IndexPool.sol#L196-L223)
 
 ```solidity
-        ITridentCallee(msg.sender).tridentSwapCallback(context);
-        // @dev Check Trident router has sent `amountIn` for skim into pool.
-        unchecked { // @dev This is safe from under/overflow - only logged amounts handled.
-            require(_balance(tokenIn) >= amountIn + inRecord.reserve, "NOT_RECEIVED");
-            inRecord.reserve += uint120(amountIn);
-            outRecord.reserve -= uint120(amountOut);
-        }
-        _transfer(tokenOut, amountOut, recipient, unwrapBento);
+ITridentCallee(msg.sender).tridentSwapCallback(context);
+// @dev Check Trident router has sent `amountIn` for skim into pool.
+unchecked { // @dev This is safe from under/overflow - only logged amounts handled.
+    require(_balance(tokenIn) >= amountIn + inRecord.reserve, "NOT_RECEIVED");
+    inRecord.reserve += uint120(amountIn);
+    outRecord.reserve -= uint120(amountOut);
+}
+_transfer(tokenOut, amountOut, recipient, unwrapBento);
 ```
 
 #### Recommended Mitigation Steps
 ```solidity
-        _transfer(tokenOut, amountOut, recipient, unwrapBento);
-        ITridentCallee(msg.sender).tridentSwapCallback(context);
-        // @dev Check Trident router has sent `amountIn` for skim into pool.
-        unchecked { // @dev This is safe from under/overflow - only logged amounts handled.
-            require(_balance(tokenIn) >= amountIn + inRecord.reserve, "NOT_RECEIVED");
-            inRecord.reserve += uint120(amountIn);
-            outRecord.reserve -= uint120(amountOut);
-        }
+_transfer(tokenOut, amountOut, recipient, unwrapBento);
+ITridentCallee(msg.sender).tridentSwapCallback(context);
+// @dev Check Trident router has sent `amountIn` for skim into pool.
+unchecked { // @dev This is safe from under/overflow - only logged amounts handled.
+    require(_balance(tokenIn) >= amountIn + inRecord.reserve, "NOT_RECEIVED");
+    inRecord.reserve += uint120(amountIn);
+    outRecord.reserve -= uint120(amountOut);
+}
 ```
 
 **[maxsam4 (Sushi) commented](https://github.com/code-423n4/2021-09-sushitrident-findings/issues/26#issuecomment-952521402):**
@@ -169,13 +169,13 @@ print(token_received)
 The brackets of `for` were missed.
 
 ```solidity
-    function _pow(uint256 a, uint256 n) internal pure returns (uint256 output) {
-        output = n % 2 != 0 ? a : BASE;
-        for (n /= 2; n != 0; n /= 2) {
-            a = a * a;
-            if (n % 2 != 0) output = output * a;
-        }
+function _pow(uint256 a, uint256 n) internal pure returns (uint256 output) {
+    output = n % 2 != 0 ? a : BASE;
+    for (n /= 2; n != 0; n /= 2) {
+        a = a * a;
+        if (n % 2 != 0) output = output * a;
     }
+}
 ```
 
 ## [[H-03] `IndexPool` pow overflows when `weightRatio` > 10.](https://github.com/code-423n4/2021-09-sushitrident-findings/issues/28)
@@ -191,12 +191,12 @@ Lp providers can still provide liquidity to the pool where no one can swap. All 
 It's easy to trigger this bug by deploying a 1:10 `IndexPool`.
 
 ```python
-    deployed_code = encode_abi(["address[]","uint136[]","uint256"], [
-        (link.address, dai.address),
-        (10**18, 10 * 10**18),
-        10**13
-    ])
-    tx_hash = master_deployer.functions.deployPool(index_pool_factory.address, deployed_code).transact()
+deployed_code = encode_abi(["address[]","uint136[]","uint256"], [
+    (link.address, dai.address),
+    (10**18, 10 * 10**18),
+    10**13
+])
+tx_hash = master_deployer.functions.deployPool(index_pool_factory.address, deployed_code).transact()
 ```
 
 Transactions would be reverted when buying `link` with `dai`.
@@ -371,7 +371,7 @@ Given:
 *   Alice is the first liquidity provider.
 
 1.  Alice transfers 1e18 WBTC and 1e18 USDT to mint 100e18 of liquidity;
-2.  Bob can use 100e18 USDT (\~$100) to swap out most of the balance of WBTC.
+2.  Bob can use 100e18 USDT (\~\$100) to swap out most of the balance of WBTC.
 
 ##### Impact
 A significant portion (>90% in the case above) of the user's funds can be lost due to arbitrage.
@@ -449,8 +449,8 @@ This implies that all tokens must be provided in equal "raw amounts", regardless
 ###### Issue 1
 
 Imagine I want to create a DAI/WBTC pool.
-If I want to initialize the pool with 100$ of DAI, `amountIn = ratio` needs to be `100*1e18=1e20` as DAI has 18 decimals.
-However, I now also need to supply `1e20` of WBTC (which has 8 decimals) and I'd need to pay `1e20/1e8 * priceOfBTC`, over a quadrillion dollars to match it with the 100$ of DAI.
+If I want to initialize the pool with 100\$ of DAI, `amountIn = ratio` needs to be `100*1e18=1e20` as DAI has 18 decimals.
+However, I now also need to supply `1e20` of WBTC (which has 8 decimals) and I'd need to pay `1e20/1e8 * priceOfBTC`, over a quadrillion dollars to match it with the 100\$ of DAI.
 
 ###### Issue 2
 
@@ -530,14 +530,14 @@ Mitigation:
 
 Add `else` condition to mitigate it.
 ```solidity
-    unchecked {
-              if (a > b) {
-                  diff = a - b;
-              }
-              else {
-                  diff = b - a;
-              }
-          }
+unchecked {
+    if (a > b) {
+        diff = a - b;
+    }
+    else {
+        diff = b - a;
+    }
+}
 ```
 
 **[maxsam4 (Sushi) confirmed](https://github.com/code-423n4/2021-09-sushitrident-findings/issues/139)**

@@ -331,7 +331,7 @@ Recommend put authorization on who can call the liquidate function, review the m
 
 The following functions have no entry check or a trivial entry check:
 
-```
+```solidity
 withdrawHourlyBond Lending.sol
 closeHourlyBondAccount Lending.sol
 haircut Lending.sol
@@ -492,16 +492,16 @@ In both cases the used return value is compared to the first parameter of the fu
 
 Recommend simplifying the code:
 
-```
+```solidity
 function ASmallerThanB(address tokenA, address tokenB)
 internal
 pure
 returns (bool)
 {
-require(tokenA != tokenB, "Identical address!");
-require(tokenA != address(0), "Zero address!");
-require(tokenB != address(0), "Zero address!");
-return tokenA < tokenB;
+    require(tokenA != tokenB, "Identical address!");
+    require(tokenA != address(0), "Zero address!");
+    require(tokenB != address(0), "Zero address!");
+    return tokenA < tokenB;
 }
 ```
 
@@ -513,21 +513,21 @@ Change this:
 
 ```solidity
 if (maintenanceStakePerBlock > currentStake) {
-// skip
-staker = nextMaintenanceStaker[staker];
-currentStake = getMaintenanceStakerStake(staker);
+    // skip
+    staker = nextMaintenanceStaker[staker];
+    currentStake = getMaintenanceStakerStake(staker);
 } else {
-startBlock += currentStake / maintenanceStakePerBlock;
-staker = nextMaintenanceStaker[staker];
-currentStake = getMaintenanceStakerStake(staker);
+    startBlock += currentStake / maintenanceStakePerBlock;
+    staker = nextMaintenanceStaker[staker];
+    currentStake = getMaintenanceStakerStake(staker);
 }
 ```
 
 To this:
 
-```
+```solidity
 if (maintenanceStakePerBlock <= currentStake) {
-startBlock += currentStake / maintenanceStakePerBlock;
+     += currentStake / maintenanceStakePerBlock;
 }
 staker = nextMaintenanceStaker[staker];
 currentStake = getMaintenanceStakerStake(staker);
@@ -540,11 +540,7 @@ Magic Numbers are used in `Admin.\_stake()`, which both obscure the purpose of t
 In `Admin.\_stake()`, change this:
 
 ```solidity
-IncentiveDistribution(incentiveDistributor()).addToClaimAmount(
-1,
-holder,
-amount
-);
+IncentiveDistribution(incentiveDistributor()).addToClaimAmount(1,holder,amount);
 ```
 
 to this:

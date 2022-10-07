@@ -1,33 +1,44 @@
-import React, { useState } from "react";
 import clsx from "clsx";
-import * as styles from "./Widgets.module.scss";
+import React, { useCallback } from "react";
+import Select from "react-select";
 
-const SelectField = ({ name, options, onChange, isInvalid }) => {
-  const [value, setValue] = useState("");
+import * as formStyles from "./WardenField.module.scss";
 
-  const handleChange = (e) => {
-    setValue(e.target.value);
-    onChange(e);
-  };
+const SelectFieldOptionLabel = ({ label }) => {
+  return (
+    <div className={formStyles.OptionContainer}>
+      <span>{label}</span>
+    </div>
+  );
+};
+
+const SelectField = ({
+  name,
+  options,
+  onChange,
+  isInvalid,
+  fieldState,
+  required,
+}) => {
+  const handleChange = useCallback(
+    (option) => {
+      const value = option && option.value ? option.value : "";
+      onChange({ target: { name, value } });
+    },
+    [onChange, name]
+  );
 
   return (
-    <select
-      className={clsx(
-        styles.Control,
-        styles.Select,
-        isInvalid && "input-error",
-        value === "" && styles.Placeholder
-      )}
+    <Select
       name={name}
+      required={required}
+      value={options.find((o) => o.value === fieldState) || "Select ..."}
+      formatOptionLabel={SelectFieldOptionLabel}
+      options={options}
       onChange={handleChange}
-    >
-      <option value="">Select...</option>
-      {options.map((option, index) => (
-        <option key={"option-" + index} value={option.value}>
-          {option.label}
-        </option>
-      ))}
-    </select>
+      className={clsx(formStyles.ReactSelect, isInvalid && formStyles.Invalid)}
+      classNamePrefix="react-select"
+    />
   );
 };
 

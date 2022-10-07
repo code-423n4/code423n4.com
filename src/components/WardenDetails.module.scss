@@ -1,0 +1,17 @@
+.Wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 18px;
+  width: 100%;
+}
+
+.Icon {
+  margin-right: 15px;
+}
+
+.Username {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}

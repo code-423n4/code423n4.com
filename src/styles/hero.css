@@ -30,6 +30,22 @@
   font-size: 26px;
 }
 
+.trustbar {
+  text-align: center;
+  max-width: 900px;
+  margin: 20px auto 50px auto;
+}
+
+.trustbar .logos img {
+  height: 30px;
+  padding: 10px;
+  opacity: .7;
+}
+
+.unlock-protocol {
+  width: 100px;
+}
+
 .definitions div {
   background: rgba(0, 0, 0, 0.3);
   border-radius: 10px;
@@ -52,6 +68,10 @@
 
 .definitions h3 + p {
   margin-top: 0.5em;
+}
+
+.hero-or {
+  margin: -10px 0 -10px 0;
 }
 
 @media screen and (max-width: 900px) {
@@ -78,6 +98,11 @@
 
   .hero h5 {
     font-size: 20px;
+  }
+  
+  .trustbar .logos img {
+    height: 20px;
+    padding: 5px;
   }
 
   .definitions {

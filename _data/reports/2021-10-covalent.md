@@ -269,8 +269,8 @@ Validator can fail to receive commission reward by calling `redeemAllRewards`.
 There's a check in `redeemAllRewards`
 
 ```solidity
-        uint128 rewards = sharesToTokens(s.shares, v.exchangeRate) - s.staked;
-        require(rewards > 0, "Nothing to redeem");
+uint128 rewards = sharesToTokens(s.shares, v.exchangeRate) - s.staked;
+require(rewards > 0, "Nothing to redeem");
 ```
 
 The validator's tx might be reverted here even if he got some commission reward to receive.

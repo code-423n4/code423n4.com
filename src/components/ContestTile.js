@@ -1,11 +1,13 @@
 import React from "react";
 import { Link } from "gatsby";
-import Countdown from "./Countdown";
-import { getDates } from "../utils/time";
-import SponsorLink from './SponsorLink';
-import ClientOnly from "./ClientOnly";
 
-const ContestTile = ({ contest: { node }, updateContestStatus }) => {
+import { getDates } from "../utils/time";
+
+import ClientOnly from "./ClientOnly";
+import Countdown from "./Countdown";
+import SponsorLink from "./SponsorLink";
+
+const ContestTile = ({ contest, updateContestStatus }) => {
   const {
     sponsor,
     title,
@@ -15,15 +17,15 @@ const ContestTile = ({ contest: { node }, updateContestStatus }) => {
     start_time,
     end_time,
     findingsRepo,
+    repo: contestRepo,
     fields,
-  } = node;
-  const { submissionPath, contestPath } = fields;
-  
+    status,
+  } = contest;
   const t = getDates(start_time, end_time);
-  
+
   return (
     <div className={"wrapper-contest " + t.contestStatus}>
-      <SponsorLink sponsor={sponsor}/>
+      <SponsorLink sponsor={sponsor} />
       <div className="wrapper-contest-content">
         {league === "cosmos" ? (
           <Link to="/cosmos">
@@ -56,15 +58,25 @@ const ContestTile = ({ contest: { node }, updateContestStatus }) => {
           </p>
         )}
         <ClientOnly>
-          <Link
-            to={contestPath}
+          <a
+            href={fields?.contestPath || "/"}
             className="contest-repo button button-small cta-button primary"
           >
             {`${findingsRepo === "" ? "Preview" : "View"} Contest`}
-          </Link>
-          {t.contestStatus === "active" && findingsRepo && submissionPath ? (
+          </a>
+          {t.contestStatus === "active" && contestRepo && (
+            <a
+              href={contestRepo}
+              className="button button-small cta-button secondary"
+            >
+              View Repo
+            </a>
+          )}
+          {(t.contestStatus === "active" || status === "Active Contest") &&
+          findingsRepo &&
+          fields.submissionPath ? (
             <Link
-              to={submissionPath}
+              to={fields.submissionPath}
               className="button button-small cta-button secondary"
             >
               Submit Finding

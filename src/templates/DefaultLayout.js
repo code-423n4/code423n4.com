@@ -1,7 +1,11 @@
 import React from "react";
 import Helmet from "react-helmet";
+import { ToastContainer } from "react-toastify";
+
 import Footer from "../components/content/Footer";
 import Header from "../components/content/Header";
+import LoginModal from "../components/Login/LoginModal";
+import Modal from "../components/Modal";
 
 const DefaultLayout = (props) => {
   const {
@@ -11,6 +15,7 @@ const DefaultLayout = (props) => {
     children,
     url,
     preview,
+    hideConnectWalletDropdown = false,
   } = props;
   return (
     <>
@@ -77,15 +82,10 @@ const DefaultLayout = (props) => {
         </title>
         <body className={bodyClass} />
       </Helmet>
-      <div className="message-bar">
-        <p>
-          ✨ New!✨ &nbsp;C4 Cosmos league
-          <a href="https://medium.com/code-423n4/code4rena-comes-to-cosmos-29269f4d13d">
-            Read more »
-          </a>
-        </p>
-      </div>
-      <Header />
+      <Header hideConnectWalletDropdown={hideConnectWalletDropdown} />
+      <ToastContainer />
+      <Modal />
+      <LoginModal />
       <main>
         {children}
         <Footer />

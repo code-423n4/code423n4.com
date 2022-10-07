@@ -1,8 +1,9 @@
 import React from "react";
 import { graphql } from "gatsby";
+
+import ContestList from "../components/ContestList";
 import DefaultLayout from "../templates/DefaultLayout";
 import Definitions from "../components/content/Definitions";
-import ContestList from "../components/ContestList";
 
 export default function Contests({ data }) {
   const contests = data.contests.edges;

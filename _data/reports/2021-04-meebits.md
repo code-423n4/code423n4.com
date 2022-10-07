@@ -126,18 +126,18 @@ Finally, before an NFT has even been minted at all, it is assumed to have an own
 ## [[H-04] function `tokenByIndex` treats last index as invalid](https://github.com/code-423n4/2021-04-meebits-findings/issues/73)
 
 NFT indexes start from 0:
-```
+```solidity
 // Don't allow a zero index, start counting at 1
 return value.add(1);
 ```
 So if there are 30 tokens, indexes would be 1-30. However, function `tokenByIndex` sets such boundaries:
-```
+```solidity
 require(index > 0 && index < TOKEN_LIMIT);
 ```
 This means that the last token (with index 30 in this case) will not be valid.
 
 Recommend using:
-```
+```solidity
 require(index > 0 && index <= TOKEN_LIMIT);
 ```
 
@@ -163,7 +163,7 @@ Recommend using a safe wrapper library, such as the OpenZeppelin `Address` libra
 
 `randomIndex' is not random. Any miner has access to these values:
 
-```
+```solidity
 uint index = uint(keccak256(abi.encodePacked(nonce, msg.sender, block.difficulty, block.timestamp))) % totalSize;
 ```
 
@@ -181,12 +181,12 @@ Recommend not generating random IDs and instead using counters. It makes the cod
 
 ## [[M-02] instead of `call()` , `transfer()` is used to withdraw the ether](https://github.com/code-423n4/2021-04-meebits-findings/issues/2)
 
-```
+```solidity
 function withdraw(uint amount) external {
-   require(amount <= ethBalance[msg.sender]);
-   ethBalance[msg.sender] = ethBalance[msg.sender].sub(amount);
-   msg.sender.transfer(amount);
-   emit Withdraw(msg.sender, amount);
+  require(amount <= ethBalance[msg.sender]);
+  ethBalance[msg.sender] = ethBalance[msg.sender].sub(amount);
+  msg.sender.transfer(amount);
+  emit Withdraw(msg.sender, amount);
 }
 ```
 
@@ -274,7 +274,7 @@ These state variables can be declared constants to save the gas: `nftName` and `
 ## [[G-03] public function that could be declared external](https://github.com/code-423n4/2021-04-meebits-findings/issues/5)
 
 public function that could be declared external to save gas
-```
+```solidity
 1.totalSupply()
 2.tokenByIndex(uint256)
 3.hashToSign(address,address,uint256,uint256[],uint256,uint256[],uint256,uint256)
@@ -288,7 +288,7 @@ Suggestions provided [here](https://gist.github.com/alexon1234/126320751f7a108e9
 It is unclear why this mapping points to uint: ```mapping (uint256 => uint256) public creatorNftMints; ``` the only values it could get is either 0 or 1, so a boolean type might be more suitable here.
 
 Recommend using true/false values if the intention was that 0 means false and 1 means true:
-```
+```solidity
 mapping (uint256 => boolean) public creatorNftMints;
 ```
 

@@ -29,6 +29,17 @@
   margin: 0 0 20px 20px;
 }
 
+.report-toc *  {
+  margin:4px;
+  text-decoration: none;
+}
+
+.floating-button {
+  position: sticky;
+  bottom: 20px;
+  right: 20px;
+}
+
 @media screen and (min-width: 800px) {
   .wrapper-reports {
     display: grid;

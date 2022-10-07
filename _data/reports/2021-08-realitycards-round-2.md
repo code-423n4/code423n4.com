@@ -82,21 +82,21 @@ Of course having `maxDeletions==1` is very unlikely in practice.
 // https://github.com/code-423n4/2021-08-realitycards/blob/main/contracts/RCOrderbook.sol#L549
  function findNewOwner(uint256 _card, uint256 _timeOwnershipChanged)  external  override  onlyMarkets  {
 ...
-        // delete current owner
-        do {
-            _newPrice = _removeBidFromOrderbookIgnoreOwner( _head.next, _market, _card );
-            _loopCounter++;             // delete next bid if foreclosed
-        } while (    treasury.foreclosureTimeUser( _head.next, _newPrice,  _timeOwnershipChanged ) <  minimumTimeToOwnTo &&
-                _loopCounter < maxDeletions );
+    // delete current owner
+    do {
+        _newPrice = _removeBidFromOrderbookIgnoreOwner( _head.next, _market, _card );
+        _loopCounter++;             // delete next bid if foreclosed
+    } while (    treasury.foreclosureTimeUser( _head.next, _newPrice,  _timeOwnershipChanged ) <  minimumTimeToOwnTo &&
+            _loopCounter < maxDeletions );
 
-        if (_loopCounter != maxDeletions) {   // the old owner is dead, long live the new owner
-            _newOwner = ....
-            ...
-        } else {
-            // we hit the limit, save the old owner, we'll try again next time
-           ...
-        }
+    if (_loopCounter != maxDeletions) {   // the old owner is dead, long live the new owner
+        _newOwner = ....
+        ...
+    } else {
+        // we hit the limit, save the old owner, we'll try again next time
+        ...
     }
+}
 ```
 
 Recommend using a different way to determine that the processing is done. This could save some gas.
@@ -112,9 +112,9 @@ Perhaps in `setDeletionLimit`, doublecheck that `_deletionLimit` > 1.
 **[Splidge (Reality Cards) commented](https://github.com/code-423n4/2021-08-realitycards-findings/issues/27#issuecomment-905523120):**
  > I have since thought of an attack that could have used this and might raise it to 3 (High risk).
 >
-> Due to the difficultly of monitoring which cards you own all the time a valid strategy which some users employ is to bid high enough to scare off other users (usually bidding significantly beyond the 10% minimum increase). Suppose Alice employs this strategy by bidding $100 on a card that was previously only $10.
-> Mal (our attacker) wishes to rent the card but wants to pay less than $100. Mal could use Sybil accounts to place `maxDeletions - 1` bids all for the minimum rental duration (only funding the accounts for the minimum duration). Mal would then need to wait for the minimum duration of all these bids to expire, `(maxDeletions - 1 ) * minimumRentalDuration`
-> Once this has completed Mal can place a bid at $11, this will trigger a rent collection which will attempt to `findNewOwner`, Alice being the user that was found on the last iteration of the loop would be considered as invalid. There will not be a change of ownership or any events emitted about this until the next rent collection is triggered.
+> Due to the difficultly of monitoring which cards you own all the time a valid strategy which some users employ is to bid high enough to scare off other users (usually bidding significantly beyond the 10% minimum increase). Suppose Alice employs this strategy by bidding \$100 on a card that was previously only \$10.
+> Mal (our attacker) wishes to rent the card but wants to pay less than \$100. Mal could use Sybil accounts to place `maxDeletions - 1` bids all for the minimum rental duration (only funding the accounts for the minimum duration). Mal would then need to wait for the minimum duration of all these bids to expire, `(maxDeletions - 1 ) * minimumRentalDuration`
+> Once this has completed Mal can place a bid at \$11, this will trigger a rent collection which will attempt to `findNewOwner`, Alice being the user that was found on the last iteration of the loop would be considered as invalid. There will not be a change of ownership or any events emitted about this until the next rent collection is triggered.
 > This means that the UI would still consider Alice to be the owner of card (Mals' Sybil bids having had `LogRemoveFromOrderbook` and `LogUserForeclosed` events emitted) and other users might not consider trying to outbid this, whereas actually Mal is accruing time at a significantly cheaper rate.
 >
 > Thinking about it, this doesn't really even need Alice at all, Mal could have placed all the higher bids to simultaneously scare off other users while renting at a lower price.
@@ -200,25 +200,25 @@ Examples are:
 
 ```solidity
 // https://github.com/code-423n4/2021-08-realitycards/blob/main/contracts/RCFactory.sol#L586
- function setNftHubAddress(IRCNftHubL2 _newAddress) external override onlyUberOwner {
-        require(address(_newAddress) != address(0), "Must set Address");
-        nfthub = _newAddress;
-    }
+function setNftHubAddress(IRCNftHubL2 _newAddress) external override onlyUberOwner {
+    require(address(_newAddress) != address(0), "Must set Address");
+    nfthub = _newAddress;
+}
 
-    function setOrderbookAddress(IRCOrderbook _newOrderbook) external override {
-        require( treasury.checkPermission(TREASURY, msgSender()), "Not approved" );
-        orderbook = _newOrderbook;
-    }
+function setOrderbookAddress(IRCOrderbook _newOrderbook) external override {
+    require( treasury.checkPermission(TREASURY, msgSender()), "Not approved" );
+    orderbook = _newOrderbook;
+}
 
- function setLeaderboardAddress(IRCLeaderboard _newLeaderboard) external override {
-        require( treasury.checkPermission(TREASURY, msgSender()), "Not approved");
-        leaderboard = _newLeaderboard;
-    }
+function setLeaderboardAddress(IRCLeaderboard _newLeaderboard) external override {
+    require( treasury.checkPermission(TREASURY, msgSender()), "Not approved");
+    leaderboard = _newLeaderboard;
+}
 
 //https://github.com/code-423n4/2021-08-realitycards/blob/main/contracts/RCTreasury.sol#L188
- function setMinRental(uint256 _newDivisor) public override onlyRole(OWNER) {
-        minRentalDayDivisor = _newDivisor;
-    }
+function setMinRental(uint256 _newDivisor) public override onlyRole(OWNER) {
+    minRentalDayDivisor = _newDivisor;
+}
 ```
 
 Recommend implementing a way to notify the underlying contracts of the updates.
@@ -266,43 +266,43 @@ Note: this is low risk because `getMarketInfo` is a backup function (although yo
 
 ```solidity
 // https://github.com/code-423n4/2021-08-realitycards/blob/main/contracts/RCFactory.sol#L227
-  function getMarketInfo( IRCMarket.Mode _mode, uint256 _state, uint256 _skipResults  )  external view
-        returns ( address[] memory, string[] memory, string[] memory, uint256[] memory ) {
-        ..
-        uint256 _resultNumber = 0;
-       ..
-        while (_resultNumber < marketInfoResults && _marketIndex > 1) {
-           ...
-                if (_resultNumber < _skipResults) {
-                    _resultNumber++;
-                } else {
-                    _marketAddresses[_resultNumber] = _market;   // will never reach this part if _skipResults >= marketInfoResults
-                    ....
-                    _resultNumber++;
-                }
+function getMarketInfo( IRCMarket.Mode _mode, uint256 _state, uint256 _skipResults  )  external view
+    returns ( address[] memory, string[] memory, string[] memory, uint256[] memory ) {
+    ..
+    uint256 _resultNumber = 0;
+    ..
+    while (_resultNumber < marketInfoResults && _marketIndex > 1) {
+        ...
+            if (_resultNumber < _skipResults) {
+                _resultNumber++;
+            } else {
+                _marketAddresses[_resultNumber] = _market;   // will never reach this part if _skipResults >= marketInfoResults
+                ....
+                _resultNumber++;
             }
         }
-        return (_marketAddresses, _ipfsHashes, _slugs, _potSizes);
+    }
+    return (_marketAddresses, _ipfsHashes, _slugs, _potSizes);
 ```
 
 Recommend updating the code to something like the following:
 ```solidity
- uint idx;
- while (idx < marketInfoResults && _marketIndex > 1) {
-            _marketIndex--;
-            address _market = marketAddresses[_mode][_marketIndex];
-            if (IRCMarket(_market).state() == IRCMarket.States(_state)) {
-                if (_resultNumber < _skipResults) {
-                    _resultNumber++;
-                } else {
-                    _marketAddresses[idx] = _market;
-                    _ipfsHashes[idx] = ipfsHash[_market];
-                    _slugs[idx] = addressToSlug[_market];
-                    _potSizes[idx] = IRCMarket(_market).totalRentCollected();
-                    idx++;
-                }
-            }
+uint idx;
+while (idx < marketInfoResults && _marketIndex > 1) {
+    _marketIndex--;
+    address _market = marketAddresses[_mode][_marketIndex];
+    if (IRCMarket(_market).state() == IRCMarket.States(_state)) {
+        if (_resultNumber < _skipResults) {
+            _resultNumber++;
+        } else {
+            _marketAddresses[idx] = _market;
+            _ipfsHashes[idx] = ipfsHash[_market];
+            _slugs[idx] = addressToSlug[_market];
+            _potSizes[idx] = IRCMarket(_market).totalRentCollected();
+            idx++;
         }
+    }
+}
 ```
 
 **[Splidge (Reality Cards) confirmed](https://github.com/code-423n4/2021-08-realitycards-findings/issues/14#issuecomment-904562553):**
@@ -503,9 +503,9 @@ function tokenExists(uint256 _card) internal view returns (bool) {
 Recommend changing the function to something like the following:
 ```solidity
 function tokenExists(uint256 _card) internal view returns (bool) {
-       if (_cardId >= numberOfCards) return false;
-       if (tokenIds[_card] == 0) return false;
-       return tokenIds[_card] != type(uint256).max;
+    if (_cardId >= numberOfCards) return false;
+    if (tokenIds[_card] == 0) return false;
+    return tokenIds[_card] != type(uint256).max;
 }
 ```
 
@@ -532,8 +532,8 @@ Check for "`<= type(uint32).max`" in the second statement is useless because `_b
 // https://github.com/code-423n4/2021-08-realitycards/blob/main/contracts/RCMarket.sol#L507
  function setWinner(uint256 _winningOutcome) internal {
 ...
-            uint256 _blockTimestamp = uint32(block.timestamp);
-            require(_blockTimestamp <= type(uint32).max, "Overflow");
+    uint256 _blockTimestamp = uint32(block.timestamp);
+    require(_blockTimestamp <= type(uint32).max, "Overflow");
 
 
 //Testcode:
@@ -547,8 +547,8 @@ contract Convert {
 
 Recommend doing the `require` first (without a typecast to `uint32`):
 ```solidity
-            require( block.timestamp <= type(uint32).max, "Overflow");
-            uint256 _blockTimestamp = uint32(block.timestamp);
+    require( block.timestamp <= type(uint32).max, "Overflow");
+    uint256 _blockTimestamp = uint32(block.timestamp);
 ```
 
 **[Splidge (Reality Cards) confirmed](https://github.com/code-423n4/2021-08-realitycards-findings/issues/28#issuecomment-905304973):**
@@ -573,37 +573,37 @@ It is confusing to have multiple functions with almost the same name, this could
 
 ```solidity
 // https://github.com/code-423n4/2021-08-realitycards/blob/main/contracts/lib/NativeMetaTransaction.sol#L105
- function msgSender() internal view returns (address payable sender) {
-        if (msg.sender == address(this)) {
-            assembly {   sender := shr(96, calldataload(sub(calldatasize(), 20)))   }
-        } else {
-             sender = payable(msg.sender);
-        }
-        return sender;
+function msgSender() internal view returns (address payable sender) {
+    if (msg.sender == address(this)) {
+        assembly {   sender := shr(96, calldataload(sub(calldatasize(), 20)))   }
+    } else {
+            sender = payable(msg.sender);
     }
+    return sender;
+}
 ```
 ```solidity
 // https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/utils/Context.sol
-  function _msgSender() internal view virtual returns (address) {
-        return msg.sender;
-    }
+function _msgSender() internal view virtual returns (address) {
+    return msg.sender;
+}
 ```
 ```solidity
 //https://github.com/code-423n4/2021-08-realitycards/blob/main/contracts/nfthubs/RCNftHubL2.sol#L164
-  function withdraw(uint256 tokenId) external override {
-        require(  _msgSender() == ownerOf(tokenId), "ChildMintableERC721: INVALID_TOKEN_OWNER" ); // _msgSender()
-        withdrawnTokens[tokenId] = true;
-        _burn(tokenId);
-    }
+function withdraw(uint256 tokenId) external override {
+    require(  _msgSender() == ownerOf(tokenId), "ChildMintableERC721: INVALID_TOKEN_OWNER" ); // _msgSender()
+    withdrawnTokens[tokenId] = true;
+    _burn(tokenId);
+}
 ```
 ```solidity
-    function withdrawWithMetadata(uint256 tokenId) external override {
-        require( msgSender() == ownerOf(tokenId), "ChildMintableERC721: INVALID_TOKEN_OWNER" );  // msgSender()
-        withdrawnTokens[tokenId] = true;
-        // Encoding metadata associated with tokenId & emitting event
-        emit TransferWithMetadata( ownerOf(tokenId), address(0), tokenId, this.encodeTokenMetadata(tokenId) );
-        _burn(tokenId);
-    }
+function withdrawWithMetadata(uint256 tokenId) external override {
+    require( msgSender() == ownerOf(tokenId), "ChildMintableERC721: INVALID_TOKEN_OWNER" );  // msgSender()
+    withdrawnTokens[tokenId] = true;
+    // Encoding metadata associated with tokenId & emitting event
+    emit TransferWithMetadata( ownerOf(tokenId), address(0), tokenId, this.encodeTokenMetadata(tokenId) );
+    _burn(tokenId);
+}
 ```
 ```solidity
 RCNftHubL1.sol:      _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
@@ -636,37 +636,37 @@ This immediately shows the issue.
 
 ```solidity
 // https://github.com/code-423n4/2021-08-realitycards/blob/main/contracts/RCMarket.sol#L691 ==> simplified version
- function calc(uint256 currentPrice) returns(uint256) {
-        if (currentPrice == 0)
-            return MIN_RENTAL_VALUE;
-        return (currentPrice *(minimumPriceIncreasePercent + 100)) / 100;
-    }
+function calc(uint256 currentPrice) returns(uint256) {
+    if (currentPrice == 0)
+        return MIN_RENTAL_VALUE;
+    return (currentPrice *(minimumPriceIncreasePercent + 100)) / 100;
+}
 
-    function rentAllCards(uint256 _maxSumOfPrices) external override {
-      ..
-        uint256 _actualSumOfPrices = 0;
-        for (uint256 i = 0; i < numberOfCards; i++) {
-            _actualSumOfPrices += calc(card[i].cardPrice);   // no check for  (ownerOf(i) != msgSender()) {
-        }
-        require(_actualSumOfPrices <= _maxSumOfPrices, "Prices too high");
+function rentAllCards(uint256 _maxSumOfPrices) external override {
+    ..
+    uint256 _actualSumOfPrices = 0;
+    for (uint256 i = 0; i < numberOfCards; i++) {
+        _actualSumOfPrices += calc(card[i].cardPrice);   // no check for  (ownerOf(i) != msgSender()) {
+    }
+    require(_actualSumOfPrices <= _maxSumOfPrices, "Prices too high");
 
-        for (uint256 i = 0; i < numberOfCards; i++) {
-            if (ownerOf(i) != msgSender()) {
-                uint256 _newPrice=calc(card[i].cardPrice);
-                newRental(_newPrice, 0, address(0), i);
-            }
+    for (uint256 i = 0; i < numberOfCards; i++) {
+        if (ownerOf(i) != msgSender()) {
+            uint256 _newPrice=calc(card[i].cardPrice);
+            newRental(_newPrice, 0, address(0), i);
         }
     }
+}
 ```
 
 Add "`if (ownerOf(i) != msgSender()) {`" also in the first part of the code of `rentAllCards`
 ```solidity
-        uint256 _actualSumOfPrices = 0;
-        for (uint256 i = 0; i < numberOfCards; i++) {
-             if (ownerOf(i) != msgSender()) {              // extra if statement
-                 _actualSumOfPrices += calc(card[i].cardPrice);
-             }
-        }
+uint256 _actualSumOfPrices = 0;
+for (uint256 i = 0; i < numberOfCards; i++) {
+    if (ownerOf(i) != msgSender()) {              // extra if statement
+        _actualSumOfPrices += calc(card[i].cardPrice);
+    }
+}
 ```
 
 **[Splidge (Reality Cards) confirmed and patched](https://github.com/code-423n4/2021-08-realitycards-findings/issues/21#issuecomment-914177127):**
@@ -680,17 +680,17 @@ The function `getMostRecentMarket` of `RCFactory.sol` will revert if no markets 
 
 ```solidity
 // https://github.com/code-423n4/2021-08-realitycards/blob/main/contracts/RCFactory.sol#L171
-    function getMostRecentMarket(IRCMarket.Mode _mode)  external view override  returns (address)
-    {
-        return marketAddresses[_mode][marketAddresses[_mode].length - (1)];
-    }
+function getMostRecentMarket(IRCMarket.Mode _mode)  external view override  returns (address)
+{
+    return marketAddresses[_mode][marketAddresses[_mode].length - (1)];
+}
 ```
 
 Recommend changing the function `getMostRecentMarket` to something like:
 ```solidity
 function getMostRecentMarket(IRCMarket.Mode _mode)  external view override  returns (address) {
-     if ( marketAddresses[_mode].length ==0) return address(0);
-     return marketAddresses[_mode][marketAddresses[_mode].length - (1)];
+    if ( marketAddresses[_mode].length ==0) return address(0);
+    return marketAddresses[_mode][marketAddresses[_mode].length - (1)];
 }
 ```
 
