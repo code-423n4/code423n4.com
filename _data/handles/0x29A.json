@@ -1,8 +1,10 @@
 {
   "handle": "0x29A",
-  "members": [
-    "0x4non",
-    "rotcivegaf"
-  ],
-  "address": "0x0Ea7d69Be83460913E8b6428302d468BDa585D1b"
+  "members": ["0x4non", "rotcivegaf"],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x0Ea7d69Be83460913E8b6428302d468BDa585D1b"
+    }
+  ]
 }
