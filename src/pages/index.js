@@ -1,23 +1,73 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { graphql } from "gatsby";
-
-import { contestsByState } from "../utils/filter";
-
 import ContestList from "../components/ContestList";
 import DefaultLayout from "../templates/DefaultLayout";
 import HeroIndex from "../components/content/HeroIndex";
 import Testimonials from "../components/Testimonials";
+import { getDates } from "../utils/time";
 
 export default function SiteIndex({ data }) {
   // @todo: implement global state management instead of props drilling
   const [contestStatusChanges, updateContestStatusChanges] = useState(0);
+  const [filteredContests, setFilteredContest] = useState(null);
+  const contests = data.contests.edges;
 
   const updateContestStatus = () => {
     updateContestStatusChanges(contestStatusChanges + 1);
   };
 
-  const contests = data.contests.edges;
-  const filteredContests = contestsByState({ contests });
+  const sortContests = (contestsArray) => {
+    let statusObject = {
+      upcomingContests: [],
+      activeContests: [],
+    };
+
+    contestsArray.forEach((element) => {
+      switch (element.node.fields.status) {
+        case "Pre-Contest":
+        case "Preview week":
+          statusObject.upcomingContests.push(element.node);
+          break;
+        case "Active":
+        case "Active Contest":
+          statusObject.activeContests.push(element.node);
+          break;
+        case null:
+          if (
+            getDates(element.node.start_time, element.node.end_time)
+              .contestStatus === "active"
+          ) {
+            statusObject.activeContests.push(element.node);
+            console.log("active");
+          } else if (
+            getDates(element.node.start_time, element.node.end_time)
+              .contestStatus === "soon"
+          ) {
+            statusObject.upcomingContests.push(element.node);
+          }
+          break;
+        default:
+          break;
+      }
+    });
+
+    for (const keys in statusObject) {
+      statusObject[keys].sort(function (a, b) {
+        let keyA = new Date(a.start_time);
+        let keyB = new Date(b.start_time);
+        if (keyA < keyB) return -1;
+        if (keyA > keyB) return 1;
+        return 0;
+      });
+    }
+    return statusObject;
+  };
+
+  useEffect(() => {
+    if (contests) {
+      setFilteredContest(sortContests(contests));
+    }
+  }, [contests]);
 
   return (
     <DefaultLayout bodyClass="landing" key={"landing" + contestStatusChanges}>
@@ -26,20 +76,30 @@ export default function SiteIndex({ data }) {
       </div>
       <div className="wrapper-main">
         <section>
-          {filteredContests.active.length > 0 ? (
-            <ContestList
-              contests={filteredContests.active}
-              updateContestStatus={updateContestStatus}
-            />
+          {filteredContests && filteredContests.activeContests.length > 0 ? (
+            <section>
+              <h1 className="upcoming-header">
+                Active contests
+              </h1>
+              <ContestList
+                updateContestStatus={updateContestStatus}
+                contests={filteredContests.activeContests}
+              />
+            </section>
           ) : null}
-          <h1 className="upcoming-header">Upcoming Contests</h1>
-          {filteredContests.soon.length > 0 ? (
-            <ContestList
-              contests={filteredContests.soon}
-              updateContestStatus={updateContestStatus}
-            />
+          {filteredContests && filteredContests.upcomingContests.length > 0 ? (
+            <section>
+              <h1 className="upcoming-header">
+                Upcoming contests
+              </h1>
+              <ContestList
+                updateContestStatus={updateContestStatus}
+                contests={filteredContests.upcomingContests}
+              />
+            </section>
           ) : null}
         </section>
+
         <section>
           <Testimonials />
         </section>
@@ -88,7 +148,9 @@ export const query = graphql`
           fields {
             submissionPath
             contestPath
+            status
           }
+          contestid
         }
       }
     }

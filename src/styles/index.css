@@ -16,7 +16,7 @@
   font-size: 35px;
   text-align: center;
   line-height: 120%;
-  margin-top: calc(var(--page-margin) * 2);
+  margin-top: 20px;
 }
 
 .landing main {
