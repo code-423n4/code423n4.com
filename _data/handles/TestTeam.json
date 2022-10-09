@@ -1,0 +1,13 @@
+{
+  "handle": "TestTeam",
+  "members": [
+    "Trust",
+    "testing123"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x87607992fdd5eae12201bfbe83432d469944ee1c"
+    }
+  ]
+}
