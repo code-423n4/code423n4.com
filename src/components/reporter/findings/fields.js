@@ -123,6 +123,10 @@ export const classificationField = {
     {
       label: "Model - Economy",
       value: "Classification-Economy",
+    },
+    {
+      label: "Other",
+      value: "Classification-Other",
     }
   ],
 };
