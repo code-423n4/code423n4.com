@@ -24,31 +24,26 @@ export default function SiteIndex({ data }) {
     };
 
     contestsArray.forEach((element) => {
-      switch (element.node.fields.status) {
-        case "Pre-Contest":
-        case "Preview week":
-          statusObject.upcomingContests.push(element.node);
-          break;
-        case "Active":
-        case "Active Contest":
-          statusObject.activeContests.push(element.node);
-          break;
-        case null:
-          if (
-            getDates(element.node.start_time, element.node.end_time)
-              .contestStatus === "active"
-          ) {
-            statusObject.activeContests.push(element.node);
-            console.log("active");
-          } else if (
-            getDates(element.node.start_time, element.node.end_time)
-              .contestStatus === "soon"
-          ) {
+      const statusBasedOnDates = getDates(
+        element.node.start_time,
+        element.node.end_time
+      ).contestStatus;
+      if (statusBasedOnDates === "soon") {
+        switch (element.node.fields.status) {
+          case "Pre-Contest":
+          case "Preview week":
+          default:
             statusObject.upcomingContests.push(element.node);
-          }
-          break;
-        default:
-          break;
+            break;
+        }
+      } else if (statusBasedOnDates === "active") {
+        switch (element.node.fields.status) {
+          case "Active":
+          case "Active Contest":
+          default:
+            statusObject.activeContests.push(element.node);
+            break;
+        }
       }
     });
 
