@@ -1,5 +1,5 @@
 import { graphql, Link } from "gatsby";
-import Moralis from "moralis";
+import Moralis from "moralis-v1";
 import React, { useCallback, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
@@ -12,7 +12,6 @@ import {
 } from "../../types/finding";
 
 // hooks
-import { useModalContext } from "../hooks/ModalContext";
 import useUser from "../hooks/UserContext";
 
 // components
@@ -62,7 +61,6 @@ const ReportForm = ({ data, location }) => {
   } = data.contestsCsv;
 
   // hooks
-  const { showModal } = useModalContext();
   const { currentUser } = useUser();
 
   // state
@@ -161,7 +159,6 @@ const ReportForm = ({ data, location }) => {
     const body: FindingDeleteRequest = {
       attributedTo,
       risk: state.risk,
-      // @todo: enable adding multiple email addresses
       emailAddresses: [currentUser.emailAddress],
     };
     const response = await fetch(`/.netlify/functions/manage-findings?` + q, {
@@ -278,22 +275,7 @@ const ReportForm = ({ data, location }) => {
   };
 
   return (
-    <ProtectedPage
-      pageTitle="Submit finding | Code 423n4"
-      message={
-        <>
-          You need to be a registered warden currently connected via wallet to
-          see this page.
-          {/* <p> */}
-          If authentication isn't working, you may{" "}
-          <Link to={fields.submissionPath + "-old"}>
-            try the unauthenticated submission form
-          </Link>
-          .{/* </p> */}
-        </>
-      }
-    >
-    <div>
+    <ProtectedPage pageTitle="Submit finding | Code 423n4">
       {isLoading ? (
         // @todo: style a loading state
         <span>Loading...</span>
@@ -348,7 +330,6 @@ const ReportForm = ({ data, location }) => {
           onDelete={mode === FormMode.Edit ? onDelete : undefined}
         />
       )}
-      </div>
     </ProtectedPage>
   );
 };

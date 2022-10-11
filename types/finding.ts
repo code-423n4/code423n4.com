@@ -21,7 +21,8 @@ export interface FindingEditRequest {
   attributedTo: {
     newValue: string;
     oldValue: string;
-    address: string;
+    // @todo: remove this once all teams have a saved polygon address
+    address?: string;
   };
   risk: {
     newValue: string;
@@ -43,12 +44,12 @@ export interface FindingCreateRequest {
   repo: string;
   emailAddresses: string[];
   attributedTo: string;
-  address: string;
   risk: string;
   classification: string;
   title: string;
   body: string;
   labels: string[];
+  address?: string;
 }
 
 export interface FindingDeleteRequest {

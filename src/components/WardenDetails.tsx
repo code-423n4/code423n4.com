@@ -7,29 +7,29 @@ import * as styles from "./WardenDetails.module.scss";
 interface WardenDetailsProps {
   username: string;
   image?: string;
-  address?: string;
   className?: string;
+  avatarSize?: string;
 }
 
 export default function WardenDetails({
   image,
   username,
-  address,
   className,
+  avatarSize,
 }: WardenDetailsProps) {
   return (
     <div className={clsx(styles.Wrapper, className)}>
       <div className={styles.Username}>
         <span className={styles.Icon}>
-          <Avatar src={image} name={username} size="32px" round="32px" />
+          <Avatar
+            src={image}
+            name={username}
+            size={avatarSize || "32px"}
+            round={avatarSize || "32px"}
+          />
         </span>
         <span>{username}</span>
       </div>
-      {address && (
-        <span className={styles.Address}>
-          {address.slice(0, 5) + "..." + address.slice(-4)}
-        </span>
-      )}
     </div>
   );
 }
