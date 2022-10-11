@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { graphql } from "gatsby";
 import ContestList from "../components/ContestList";
 import DefaultLayout from "../templates/DefaultLayout";
@@ -12,9 +12,10 @@ export default function SiteIndex({ data }) {
   const [filteredContests, setFilteredContest] = useState(null);
   const contests = data.contests.edges;
 
-  const updateContestStatus = () => {
+  const updateContestStatus = useCallback(() => {
     updateContestStatusChanges(contestStatusChanges + 1);
-  };
+    setFilteredContest(sortContests(contests));
+  }, [contests]);
 
   const sortContests = (contestsArray) => {
     let statusObject = {
@@ -78,9 +79,7 @@ export default function SiteIndex({ data }) {
         <section>
           {filteredContests && filteredContests.activeContests.length > 0 ? (
             <section>
-              <h1 className="upcoming-header">
-                Active contests
-              </h1>
+              <h1 className="upcoming-header">Active contests</h1>
               <ContestList
                 updateContestStatus={updateContestStatus}
                 contests={filteredContests.activeContests}
@@ -89,9 +88,7 @@ export default function SiteIndex({ data }) {
           ) : null}
           {filteredContests && filteredContests.upcomingContests.length > 0 ? (
             <section>
-              <h1 className="upcoming-header">
-                Upcoming contests
-              </h1>
+              <h1 className="upcoming-header">Upcoming contests</h1>
               <ContestList
                 updateContestStatus={updateContestStatus}
                 contests={filteredContests.upcomingContests}

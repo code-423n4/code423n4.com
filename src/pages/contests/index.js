@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { graphql } from "gatsby";
 import ContestList from "../../components/ContestList";
 import DefaultLayout from "../../templates/DefaultLayout";
@@ -7,9 +7,12 @@ export default function Contests({ data }) {
   const [filteredContests, setFilteredContest] = useState(null);
   const [contestStatusChanges, updateContestStatusChanges] = useState(0);
   const contests = data.contests.edges;
-  const updateContestStatus = () => {
+
+  const updateContestStatus = useCallback(() => {
+    // force react to rehydrate
     updateContestStatusChanges(contestStatusChanges + 1);
-  };
+    setFilteredContest(sortContests(contests));
+  }, [contests]);
 
   const sortContests = (contestArray) => {
     let statusObject = {
