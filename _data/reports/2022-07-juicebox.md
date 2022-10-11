@@ -730,14 +730,14 @@ Given the following (don't mind the floating point arithmetic, this is only for 
 *   `MAX_FEE_DISCOUNT` - 100
 *   `MAX_FEE` - 100
 
-$discountedFee = fee - {{fee \* feeDiscount} \over MAX_FEE_DISCOUNT}$\
-$discountedFee = 5 - {{5 \* 10} \over 100}$\
+$discountedFee = fee - {{fee &ast; feeDiscount} \over MAX_FEE_DISCOUNT}$\
+$discountedFee = 5 - {{5 &ast; 10} \over 100}$\
 $discountedFee = 4.5$
 
 Calculating the fee amount based on the discounted fee of $4.5$:
 
-$fee\_{Amount} = amount - {{amount \* MAX_FEE} \over {discountedFee + MAX_FEE}}$\
-$fee\_{Amount} = 1000 - {{1000 \* 100} \over {4.5 + 100}}$\
+$fee\_{Amount} = amount - {{amount &ast; MAX_FEE} \over {discountedFee + MAX_FEE}}$\
+$fee\_{Amount} = 1000 - {{1000 &ast; 100} \over {4.5 + 100}}$\
 $fee\_{Amount} = 1000 - 956.93779904$\
 $fee\_{Amount} = 43.06220096$
 
@@ -747,15 +747,15 @@ The calculated and wrong fee amount is `~43`, instead, it should be `45`. The is
 
 I omitted the `discountedFee` calculation as this formula is correct.
 
-$fee\_{Amount} = {{amount \* discountedFee} \over {MAX_FEE}}$\
-$fee\_{Amount} = {{1000 \* 4.5} \over {100}}$\
+$fee\_{Amount} = {{amount &ast; discountedFee} \over {MAX_FEE}}$\
+$fee\_{Amount} = {{1000 &ast; 4.5} \over {100}}$\
 $fee\_{Amount} = 45$
 
 ### Recommended Mitigation Steps
 
 Fix the discounted fee calculation by adjusting the formula to:
 
-$$fee\_{Amount} = amount \* {fee - fee \* {discount \over MAX\_{FEE_DISCOUNT}} \over MAX\_{FEE}}$$
+$$fee\_{Amount} = amount &ast; {fee - fee &ast; {discount \over MAX\_{FEE_DISCOUNT}} \over MAX\_{FEE}}$$
 
 In Solidity:
 
@@ -1256,8 +1256,8 @@ Given the following (don't mind the floating point arithmetic, this is only for 
 $unprocessedTokenBalanceOf = 0 + (--1000)$\
 $unprocessedTokenBalanceOf = 1000$
 
-$reservedTokenAmount = {{unprocessedTokenBalanceOf \* MAX_RESERVED_RATE} \over {MAX_RESERVED_RATE - reservedRate}} - unprocessedTokenBalanceOf$\
-$reservedTokenAmount = {{1000 \* 100} \over {100 - 10}} - 1000$\
+$reservedTokenAmount = {{unprocessedTokenBalanceOf &ast; MAX_RESERVED_RATE} \over {MAX_RESERVED_RATE - reservedRate}} - unprocessedTokenBalanceOf$\
+$reservedTokenAmount = {{1000 &ast; 100} \over {100 - 10}} - 1000$\
 $reservedTokenAmount = 1111.111 - 1000$\
 $reservedTokenAmount = 111,111$
 
@@ -1265,8 +1265,8 @@ The calculated and wrong amount is `~111`, instead it should be `100` (10% of 10
 
 **Now the correct way:**
 
-$reservedTokenAmount = {{unprocessedTokenBalanceOf \* reservedRate} \over MAX_RESERVED_RATE}$\
-$reservedTokenAmount = {{1000 \* 10} \over 100}$\
+$reservedTokenAmount = {{unprocessedTokenBalanceOf &ast; reservedRate} \over MAX_RESERVED_RATE}$\
+$reservedTokenAmount = {{1000 &ast; 10} \over 100}$\
 $reservedTokenAmount = 100$
 
 ### Recommended Mitigation Steps
