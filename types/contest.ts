@@ -11,4 +11,10 @@ export interface Contest {
   findingsRepo: string;
   hide: "True" | "False";
   league: string;
+  fields: {
+    submissionPath: string;
+    contestPath: string;
+    artPath: string;
+    status: string;
+  };
 }

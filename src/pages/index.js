@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { graphql } from "gatsby";
 import ContestList from "../components/ContestList";
 import DefaultLayout from "../templates/DefaultLayout";
@@ -12,42 +12,26 @@ export default function SiteIndex({ data }) {
   const [filteredContests, setFilteredContest] = useState(null);
   const contests = data.contests.edges;
 
-  const updateContestStatus = () => {
+  const updateContestStatus = useCallback(() => {
     updateContestStatusChanges(contestStatusChanges + 1);
-  };
+    setFilteredContest(sortContests(contests));
+  }, [contests]);
 
-  const sortContests = (contestsArray) => {
+  const sortContests = (contestArray) => {
     let statusObject = {
       upcomingContests: [],
       activeContests: [],
     };
 
-    contestsArray.forEach((element) => {
-      switch (element.node.fields.status) {
-        case "Pre-Contest":
-        case "Preview week":
-          statusObject.upcomingContests.push(element.node);
-          break;
-        case "Active":
-        case "Active Contest":
-          statusObject.activeContests.push(element.node);
-          break;
-        case null:
-          if (
-            getDates(element.node.start_time, element.node.end_time)
-              .contestStatus === "active"
-          ) {
-            statusObject.activeContests.push(element.node);
-            console.log("active");
-          } else if (
-            getDates(element.node.start_time, element.node.end_time)
-              .contestStatus === "soon"
-          ) {
-            statusObject.upcomingContests.push(element.node);
-          }
-          break;
-        default:
-          break;
+    contestArray.forEach((element) => {
+      const statusBasedOnDates = getDates(
+        element.node.start_time,
+        element.node.end_time
+      ).contestStatus;
+      if (statusBasedOnDates === "soon") {
+        statusObject.upcomingContests.push(element.node);
+      } else if (statusBasedOnDates === "active") {
+        statusObject.activeContests.push(element.node);
       }
     });
 
@@ -78,9 +62,7 @@ export default function SiteIndex({ data }) {
         <section>
           {filteredContests && filteredContests.activeContests.length > 0 ? (
             <section>
-              <h1 className="upcoming-header">
-                Active contests
-              </h1>
+              <h1 className="upcoming-header">Active contests</h1>
               <ContestList
                 updateContestStatus={updateContestStatus}
                 contests={filteredContests.activeContests}
@@ -89,9 +71,7 @@ export default function SiteIndex({ data }) {
           ) : null}
           {filteredContests && filteredContests.upcomingContests.length > 0 ? (
             <section>
-              <h1 className="upcoming-header">
-                Upcoming contests
-              </h1>
+              <h1 className="upcoming-header">Upcoming contests</h1>
               <ContestList
                 updateContestStatus={updateContestStatus}
                 contests={filteredContests.upcomingContests}
