@@ -243,8 +243,9 @@ const ContestLayout = (props) => {
                   <article>
                     <ReactMarkdown
                       className={clsx(styles.Control, styles.Markdown)}
-                      remarkPlugins={[remarkGfm, remarkBreaks, remarkMath]}
-                      rehypePlugins={[rehypeKatex]}
+                      remarkPlugins={[remarkGfm, remarkBreaks ]}
+                      // remarkPlugins={[remarkGfm, remarkBreaks, remarkMath]}
+                      // rehypePlugins={[rehypeKatex]}
                     >
                       {`${fields.readmeContent}`}
                     </ReactMarkdown>
