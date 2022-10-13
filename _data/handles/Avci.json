@@ -4,7 +4,11 @@
     "0xArshia",
     "0xdanial"
   ],
-  "address": "0xF5a4D9F57161E96b1587cE604bbf682C3C536439",
-  "link": "",
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xE36d5f8cd620d6C396315a81A60129AEf1234d2c"
+    }
+  ],
   "image": "./avatars/Avci.jpeg"
 }
