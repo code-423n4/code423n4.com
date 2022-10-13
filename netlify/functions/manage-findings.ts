@@ -23,14 +23,14 @@ import {
 } from "../util/contest-utils";
 import {
   getAvailableFindings,
-  getMarkdownReportForUser,
   getRepoName,
   wardenFindingsForContest,
 } from "../util/github-utils";
 import {
   getUserTeams,
-  updateTeamAddress,
+  updateTeamAddresses,
   sendConfirmationEmail,
+  getTeamEmails,
 } from "../util/user-utils";
 
 // config
@@ -95,14 +95,6 @@ async function getFindings(
   contest: Contest,
   includeTeams: boolean = true
 ): Promise<Response> {
-  // first phase:
-  // given active contest id
-  // [x] warden can see own findings
-  // [x] warden can see team findings
-  // [x] can see specific finding
-  // [x] team findings
-  // [x] make team findings optional
-
   const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
 
   const wardenFindings: Finding[] = await wardenFindingsForContest(
@@ -143,14 +135,22 @@ async function handleAttributionChange(
   repoName,
   issueNumber,
   username,
-  attributedTo: { newValue: string; oldValue: string; address: string }
+  attributedTo: { newValue: string; oldValue: string; address?: string }
 ) {
   if (attributedTo.newValue !== username) {
     const team: TeamData = await checkTeamAuth(attributedTo.newValue, username);
-    // @todo: remove this once all teams have saved addresses
-    if (!team.address) {
+    // @todo: remove this once all teams have a saved polygon address
+    const teamPolygonAddress =
+      team.paymentAddresses &&
+      team.paymentAddresses.find((address) => address.chain === "polygon");
+    if (attributedTo.address && !teamPolygonAddress) {
       try {
-        await updateTeamAddress(team, attributedTo.address);
+        const teamPaymentAddresses = team.paymentAddresses || [];
+        teamPaymentAddresses.push({
+          chain: "polygon",
+          address: attributedTo.address,
+        });
+        await updateTeamAddresses(username, team, teamPaymentAddresses);
       } catch (error) {
         // don't throw error if this PR fails - there will likely be duplicates
         // due to the fact that PRs take some time to review and merge and we
@@ -176,7 +176,6 @@ async function handleAttributionChange(
     Buffer.from(oldContents.data.content, "base64").toString()
   );
   newContents.handle = attributedTo.newValue;
-  newContents.address = attributedTo.address;
 
   const newFileResponse = await client.createOrUpdateTextFile({
     owner: process.env.GITHUB_REPO_OWNER!,
@@ -251,6 +250,15 @@ async function editFinding(
   }
 
   let edited = false;
+  let teamEmails: string[] = [];
+
+  if (data.attributedTo.newValue !== username) {
+    const team: TeamData = await checkTeamAuth(
+      data.attributedTo.newValue,
+      username
+    );
+    teamEmails = await getTeamEmails(team);
+  }
 
   const owner = process.env.GITHUB_REPO_OWNER!;
   const repoName = getRepoName(contest);
@@ -290,7 +298,6 @@ async function editFinding(
     );
     emailBody =
       `Attribution changed from ${data.attributedTo.oldValue} to ${data.attributedTo.newValue}\n\n` +
-      `Wallet address: ${data.attributedTo.address}\n\n` +
       emailBody;
     edited = true;
   }
@@ -400,7 +407,11 @@ async function editFinding(
   if (apiKey && domain && process.env.EMAIL_SENDER) {
     const subject = `C4 ${contest.sponsor} finding updated`;
 
-    await sendConfirmationEmail(data.emailAddresses, subject, emailBody);
+    await sendConfirmationEmail(
+      [...data.emailAddresses, ...teamEmails],
+      subject,
+      emailBody
+    );
   }
 }
 
@@ -412,13 +423,6 @@ async function deleteFinding(
   attributedTo: string,
   emailAddresses: string[]
 ) {
-  // @todo:
-  // [x] delete markdown file for QA and Gas reports
-  // [x] close issue
-  // [x] add comment "withdrawn by x"
-  // [x] add "withdrawn by warden" and "Invalid" labels
-  // [x] send confirmation email
-
   const CustOcto = Octokit.plugin(createOrUpdateTextFile);
   const client = new CustOcto({ auth: process.env.GITHUB_TOKEN });
 
@@ -548,6 +552,8 @@ const handler: Handler = async (event: Event): Promise<Response> => {
           risk,
           emailAddresses,
         }: FindingDeleteRequest = JSON.parse(event.body!);
+        let teamEmails: string[] = [];
+
         issueNumber = parseInt(event.queryStringParameters?.issue!);
         if (!issueNumber || !attributedTo || !risk) {
           return {
@@ -559,7 +565,8 @@ const handler: Handler = async (event: Event): Promise<Response> => {
         }
 
         if (attributedTo !== username) {
-          await checkTeamAuth(attributedTo, username);
+          const team: TeamData = await checkTeamAuth(attributedTo, username);
+          teamEmails = await getTeamEmails(team);
         }
         await deleteFinding(
           username,
@@ -567,7 +574,7 @@ const handler: Handler = async (event: Event): Promise<Response> => {
           issueNumber,
           risk,
           attributedTo,
-          emailAddresses
+          [...emailAddresses, ...teamEmails]
         );
         return {
           statusCode: 200,

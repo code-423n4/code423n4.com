@@ -1,6 +1,7 @@
 import clsx from "clsx";
 import { navigate } from "@reach/router";
 import { Link } from "gatsby";
+import Moralis from "moralis-v1";
 import React, { useEffect, useState, useCallback } from "react";
 import { toast } from "react-toastify";
 
@@ -29,7 +30,7 @@ import {
 
 // hooks
 import useUser from "../../hooks/UserContext";
-import { useModalContext } from "../../hooks/ModalContext";
+import { ModalProps, useModalContext } from "../../hooks/ModalContext";
 
 // components
 import Agreement from "../content/Agreement";
@@ -84,7 +85,7 @@ const SubmitFindings = ({
   onDelete,
 }: SubmitFindingsProps) => {
   // hooks
-  const { currentUser } = useUser();
+  const { currentUser, reFetchUser } = useUser();
   const { showModal } = useModalContext();
 
   // state
@@ -97,7 +98,6 @@ const SubmitFindings = ({
   const [additionalEmailAddresses, setAdditionalEmailAddresses] = useState<
     string[]
   >([]);
-  const [polygonAddress, setPolygonAddress] = useState<string>("");
   const [newTeamAddress, setNewTeamAddress] = useState<string>("");
   const [attributedTo, setAttributedTo] = useState<string>(initialAttributedTo);
   const [fieldList, setFieldList] = useState<Field[]>([
@@ -108,19 +108,6 @@ const SubmitFindings = ({
 
   // effects
   useEffect(() => {
-    if (currentUser.isLoggedIn) {
-      if (attributedTo === currentUser.username) {
-        setPolygonAddress(currentUser.address);
-      } else {
-        const team = currentUser.teams.find(
-          (team) => team.username === attributedTo
-        );
-        setPolygonAddress(team?.address || "");
-      }
-    }
-  }, [currentUser]);
-
-  useEffect(() => {
     if (!attributedTo) {
       setAttributedTo(initialAttributedTo);
     }
@@ -130,17 +117,6 @@ const SubmitFindings = ({
     const currentState = getCurrentStateFromStorage(findingId, initialState);
     setState(currentState);
   }, [findingId, initialState]);
-
-  useEffect(() => {
-    if (attributedTo !== currentUser.username) {
-      const team = currentUser.teams.find((t) => t.username === attributedTo);
-      if (team) {
-        setPolygonAddress(team.address || newTeamAddress);
-      }
-    } else {
-      setPolygonAddress(currentUser.address);
-    }
-  }, [attributedTo, currentUser]);
 
   useEffect(() => {
     // set which fields are shown based on risk
@@ -162,6 +138,16 @@ const SubmitFindings = ({
       ])
     );
   }, [state.risk, currentUser]);
+
+  useEffect(() => {
+    if (!currentUser.isLoggedIn) {
+      return;
+    }
+    // @todo: make chain dynamic based on contest
+    if (!currentUser.polygonPaymentAddress) {
+      showPaymentAddressModal();
+    }
+  }, [currentUser]);
 
   // change handlers
   const handleChange = (e) => {
@@ -209,7 +195,6 @@ const SubmitFindings = ({
 
   const handleNewAddressChange = (e) => {
     setNewTeamAddress(e.target.value);
-    setPolygonAddress(e.target.value);
   };
 
   const handleReset = () => {
@@ -255,9 +240,62 @@ const SubmitFindings = ({
     }
   }, [status]);
 
+  const showPaymentAddressModal = async () => {
+    const modalProps: Partial<ModalProps> = {
+      title: "Please save a payment address",
+      body: (
+        <>
+          It looks like you don't have a payment address saved for your account.
+          Please update your payment information before submitting findings.
+        </>
+      ),
+      primaryButtonAction: async () => {
+        navigate("/account");
+      },
+      primaryButtonText: "Update Payment Info",
+    };
+
+    const user = await Moralis.User.current();
+    const authAddress = await user?.get("ethAddress");
+    if (authAddress) {
+      modalProps.body = (
+        <>Would you like to use {authAddress} for payment on Polygon?</>
+      );
+      modalProps.primaryButtonAction = saveAuthAddressAsPaymentAddress;
+      modalProps.primaryButtonText = "Save Address";
+      modalProps.secondaryButtonText = "Update Payment Information";
+      modalProps.secondaryButtonAction = async () => {
+        navigate("/account");
+      };
+    }
+    showModal(modalProps as ModalProps);
+  };
+
+  const saveAuthAddressAsPaymentAddress = async (): Promise<void> => {
+    try {
+      const user = await Moralis.User.current();
+      const authAddress = await user?.get("ethAddress");
+      await Moralis.Cloud.run("addPaymentAddress", {
+        address: authAddress,
+        chain: "polygon",
+      });
+      await reFetchUser();
+      toast.success(`Your Polygon payment address has been saved`);
+    } catch (error) {
+      toast.error(
+        <>
+          An error occurred and your payment address has not been saved:{" "}
+          {error.message}
+          <br />
+          Go to your <Link to="/account">account management page</Link> to
+          update your payment information
+        </>
+      );
+    }
+  };
+
   const submitFinding = useCallback(async () => {
     const isQaOrGasFinding = checkQaOrGasFinding(state.risk);
-
     const linksToCodeString = state.linksToCode.join("\n");
     const details = isQaOrGasFinding ? state.qaGasDetails : state.details;
     const markdownBody = `# Lines of code\n\n${linksToCodeString}\n\n\n# Vulnerability details\n\n${details}`;
@@ -274,12 +312,18 @@ const SubmitFindings = ({
       repo: repo.split("/").pop() || "",
       emailAddresses: emailAddressList,
       attributedTo,
-      address: polygonAddress,
       risk: state.risk,
       title: getTitle(state.title, state.risk),
       body: formattedBody,
       labels: [config.labelAll, state.risk],
     };
+    if (attributedTo !== currentUser.username) {
+      const team = currentUser.teams.find(
+        (team) => team.username === attributedTo
+      );
+      data.address = team?.polygonAddress || newTeamAddress;
+    }
+
     setStatus(FormStatus.Submitting);
     try {
       const response = await onSubmit(data);
@@ -314,7 +358,7 @@ const SubmitFindings = ({
     currentUser,
     state,
     additionalEmailAddresses,
-    polygonAddress,
+    newTeamAddress,
     sponsor,
     repo,
     attributedTo,
@@ -339,9 +383,18 @@ const SubmitFindings = ({
     }
 
     // @todo: better validation for polygon address
-    if (!polygonAddress || polygonAddress.length !== 42) {
-      setHasValidationErrors(true);
-      return true;
+    // @todo: make chain dynamic based on contest
+    if (attributedTo !== currentUser.username) {
+      const team = currentUser.teams.find(
+        (team) => team.username === attributedTo
+      );
+      if (
+        !team ||
+        (!team.polygonAddress &&
+          (!newTeamAddress || newTeamAddress.length !== 42))
+      ) {
+        return true;
+      }
     }
 
     const linksToCodeRegex = new RegExp("#L[0-9]+(-L[0-9]+)?$");
@@ -356,7 +409,7 @@ const SubmitFindings = ({
 
     setHasValidationErrors(false);
     return false;
-  }, [state, polygonAddress, currentUser]);
+  }, [state, newTeamAddress, currentUser]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -366,10 +419,15 @@ const SubmitFindings = ({
       return;
     }
 
+    if (!currentUser.polygonPaymentAddress) {
+      await showPaymentAddressModal();
+      return;
+    }
+
     const team = currentUser.teams.find(
       (team) => team.username === attributedTo
     );
-    if (team && !team.address) {
+    if (team && !team.polygonAddress) {
       // confirm saving the team's address
       showModal({
         title: `Save address for team ${attributedTo}`,
@@ -380,7 +438,7 @@ const SubmitFindings = ({
               will be saved for your team. Are you sure you entered it
               correctly?
             </p>
-            <p>{polygonAddress}</p>
+            <p>{newTeamAddress}</p>
           </>
         ),
         primaryButtonAction: submitFinding,
@@ -419,7 +477,6 @@ const SubmitFindings = ({
                     />
                     <WardenDetails
                       username={currentUser.username}
-                      address={currentUser.address}
                       image={currentUser.image}
                     />
                   </label>
@@ -440,11 +497,11 @@ const SubmitFindings = ({
                         />
                         <WardenDetails
                           username={team.username}
-                          address={team.address}
                           image={team.image}
                         />
                       </label>
-                      {!team.address && attributedTo === team.username && (
+                      {/* @todo: remove this once all teams have saved a payment address */}
+                      {!team.polygonAddress && attributedTo === team.username && (
                         <div style={{ margin: "10px 0 0 40px" }}>
                           <label htmlFor={"newTeamAddress"}>
                             Team Polygon Address *
@@ -486,7 +543,6 @@ const SubmitFindings = ({
             ) : (
               <WardenDetails
                 username={currentUser.username}
-                address={currentUser.address}
                 image={currentUser.image}
                 className={widgetStyles.Container}
               />

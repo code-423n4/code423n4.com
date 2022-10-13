@@ -1,10 +1,19 @@
+@import "../styles/mixins.scss";
+
+.Input {
+  text-align: left;
+  width: 100%;
+}
+
 .InputWrapper {
   display: flex;
   padding: 0;
+  font-family: var(--font-family);
+  align-items: center;
 }
 
-.DeleteButton {
-  height: 36px;
+.RemoveButton {
+  height: 40px;
   white-space: nowrap;
   align-self: center;
   background: none;
@@ -20,6 +29,54 @@
   }
 }
 
+.SmallButton {
+  @include button;
+  height: 40px;
+  width: 50px;
+  padding: 0;
+  font-size: 14px;
+  white-space: nowrap;
+  align-self: center;
+  margin-left: 3px;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.SaveButton {
+  background-color: var(--main-purple);
+
+  &:hover {
+    background-color: rgba(var(--main-purple-rgb), 0.8);
+    box-shadow: inset 0px 0px 0px 2px #fff;
+  }
+}
+
+.EditButton {
+  background-color: transparent;
+  box-shadow: inset 0px 0px 0px 2px #fff;
+
+  &:hover {
+    background-color: var(--main-purple);
+  }
+}
+
+.IconButton {
+  @include button;
+  padding: 8px;
+  font-size: 14px;
+  white-space: nowrap;
+  display: flex;
+  background: transparent;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+}
+
 .Control {
   display: block;
   margin: 10px 0;
@@ -30,9 +87,19 @@
   height: 40px;
   width: 100%;
   box-sizing: border-box;
+  background: var(--lightest-background-purple);
+  color: white;
+  border-radius: 4px;
+  border: none;
+  cursor: text;
 
   &::placeholder {
     color: rgba(255, 255, 255, 0.5);
+  }
+
+  &:disabled {
+    color: rgba(255, 255, 255, 0.5);
+    cursor: default;
   }
 }
 
@@ -41,6 +108,7 @@
   font-size: 20px;
   color: white;
   display: block;
+  font-family: var(--font-family);
 }
 
 .Help {
@@ -68,6 +136,7 @@ input[type="text"].InputError,
 
 .ErrorMessage {
   display: flex;
+  font-family: var(--font-family);
   &::before {
     content: "";
     width: 8px;
