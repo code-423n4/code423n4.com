@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import { graphql, Link } from "gatsby";
-import Moralis from "moralis";
+import Moralis from "moralis-v1";
 import React, { useEffect, useState } from "react";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import rehypeKatex from "rehype-katex";

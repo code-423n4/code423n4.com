@@ -24,6 +24,7 @@
   padding: 10px 20px;
   border-radius: 4px;
   display: flex;
+  align-items: center;
 
   &:hover {
     background-color: var(--header-background-purple);
@@ -112,6 +113,7 @@ input[type="file"].Avatar::file-selector-button {
   background-color: transparent;
   color: #fff;
   box-shadow: inset 0px 0px 0px 2px #fff;
+  margin-left: 10px;
 
   &:hover {
     background-color: var(--main-purple);
@@ -205,5 +207,14 @@ input[type="file"].Avatar::file-selector-button {
   th {
     border: 1px solid var(--border-lightest-background);
     padding: 6px 13px;
+  }
+}
+
+@media (max-width: 600px) {
+  .RadioGroup {
+    padding-left: 8px;
+  }
+  .RadioLabel {
+    padding: 10px 10px;
   }
 }

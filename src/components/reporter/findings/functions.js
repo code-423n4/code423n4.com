@@ -14,36 +14,6 @@ export const getTitle = (title, risk) => {
   }
 };
 
-// @todo: remove this function once old submit findings form is removed
-export const initStateFromStorage = (contest, initialState, setState) => {
-  if (typeof window === "undefined") {
-    return;
-  }
-
-  const findingData = JSON.parse(window.localStorage.getItem(contest));
-  if (!findingData) {
-    return;
-  }
-
-  const riskIndex = riskField.options.findIndex(
-    (element) => element.value === findingData.risk
-  );
-  setState((prevState) => {
-    return {
-      ...prevState,
-      title: findingData.title || initialState.title,
-      risk:
-        riskIndex >= 0 ? riskField.options[riskIndex].value : initialState.risk,
-      details: findingData.details || initialState.details,
-      qaGasDetails: findingData.qaGasDetails || initialState.qaGasDetails,
-      linksToCode:
-        findingData.linksToCode && findingData.linksToCode.length > 0
-          ? findingData.linksToCode
-          : initialState.linksToCode,
-    };
-  });
-};
-
 export const getCurrentStateFromStorage = (localStorageKey, initialState) => {
   if (typeof window === "undefined") {
     return initialState;
