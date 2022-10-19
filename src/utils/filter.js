@@ -2,11 +2,12 @@ import { getDates } from "./time";
 import { sortByContestStart } from "./sort";
 
 function contestsByState({ contests }) {
+  console.log(contests);
   const filteredContests = {
-    active: contests.filter(
+    active: contests.node.filter(
       (c) => getDates(c.node.start_time, c.node.end_time).contestStatus === "active"
     ),
-    soon: contests.filter(
+    soon: contests.node.filter(
       (c) => getDates(c.node.start_time, c.node.end_time).contestStatus === "soon"
     ),
     completed: contests

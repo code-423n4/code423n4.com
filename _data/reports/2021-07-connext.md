@@ -177,7 +177,7 @@ Unless there is a good reason not to, it is safer to include `hashInvariantTrans
 Recommend evaluating if the signature should contain only tx ID, or the entire digest, and then changing the logic appropriately.
 
 **[LayneHaber (Connext) acknowledged](https://github.com/code-423n4/2021-07-connext-findings/issues/54#issuecomment-878569946):**
- > User should be able to break up large transfers across multiple routers using the same `transactionId` to keep the transaction  unlocking atomic. For example, say I want to transfer $100K, but there are only 8 routers who each have $60K available. I should be able to break up the single transaction into $20K transactions split across 5 of the routers. When unlocking this, I should only need to broadcast a single signature, so all of the transactions can be unlocked simultaneously.
+ > User should be able to break up large transfers across multiple routers using the same `transactionId` to keep the transaction  unlocking atomic. For example, say I want to transfer \$100K, but there are only 8 routers who each have \$60K available. I should be able to break up the single transaction into \$20K transactions split across 5 of the routers. When unlocking this, I should only need to broadcast a single signature, so all of the transactions can be unlocked simultaneously.
 
 **[ghoul-sol (Judge) commented](https://github.com/code-423n4/2021-07-connext-findings/issues/54#issuecomment-890612308):**
  > Bumping to medium risk as replay attack can have significant consequences

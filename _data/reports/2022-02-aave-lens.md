@@ -82,9 +82,9 @@ Base fee modules require minimum fixed fee amount to be at least BPS_MAX, which 
 
 This turns out to be a functionality restricting requirement for some currencies.
 
-For example, WBTC (<https://etherscan.io/token/0x2260fac5e5542a773aa44fbcfedf7c193bc2c599>, #10 in ERC20 token rankings), has decimals of 8 and current market rate around $40k, i.e. if you want to use any WBTC based collect fee, it has to be at least $4 per collect or fee enabled follow.
+For example, WBTC (<https://etherscan.io/token/0x2260fac5e5542a773aa44fbcfedf7c193bc2c599>, #10 in ERC20 token rankings), has decimals of 8 and current market rate around \$40k, i.e. if you want to use any WBTC based collect fee, it has to be at least \$4 per collect or fee enabled follow.
 
-Tether and USDC (<https://etherscan.io/token/0xdac17f958d2ee523a2206206994597c13d831ec7> and <https://etherscan.io/token/0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48>, #1 and #3) have decimals of 6, so it is at least $0.01 per collect/follow, which also looks a bit tight for a hard floor minimum.
+Tether and USDC (<https://etherscan.io/token/0xdac17f958d2ee523a2206206994597c13d831ec7> and <https://etherscan.io/token/0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48>, #1 and #3) have decimals of 6, so it is at least \$0.01 per collect/follow, which also looks a bit tight for a hard floor minimum.
 
 ### Proof of Concept
 

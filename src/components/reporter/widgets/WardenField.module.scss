@@ -3,17 +3,15 @@
   align-items: center;
   min-height: 32px;
 
-  & img {
-    width: 32px;
-    border-radius: 32px;
-    margin-right: 16px;
-  }
-
   & span {
     flex: 1;
     font-family: inherit;
     color: white;
   }
+}
+
+.Avatar {
+  margin-right: 10px;
 }
 
 .Invalid.ReactSelect {
@@ -26,9 +24,11 @@
 
 .ReactSelect {
   :global {
+    margin: 10px 0;
+
     .react-select__control {
       background-color: var(--lightest-background-purple);
-      padding: 5px;
+      padding: 0;
       color: white;
       border: 2px solid transparent;
 
@@ -67,11 +67,21 @@
 
     .react-select__placeholder {
       color: white;
-      opacity: 0.75;
+      opacity: 0.5;
+      font-size: 0.9em;
     }
 
     .react-select__input {
       color: white;
+    }
+
+    .react-select__multi-value {
+      background-color: var(--main-purple);
+    }
+
+    .react-select__multi-value__remove:hover {
+      color: var(--hot-pink);
+      background-color: rgba(255, 255, 255, 0.1);
     }
   }
 }

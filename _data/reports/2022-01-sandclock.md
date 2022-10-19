@@ -327,11 +327,11 @@ The swap fee of depositing is not paid by the depositor but evenly distributed a
 Given:
 
 *   A NonUST vault and strategy is created for `FRAX`;
-*   The liquidity in FRAX-UST curve pool is relatively small (<$1M).
+*   The liquidity in FRAX-UST curve pool is relatively small (<\$1M).
 
 The attacker can do the following:
 
-1.  Add $1M worth of liquidity to the FRAX-UST curve pool, get >50% share of the pool;
+1.  Add \$1M worth of liquidity to the FRAX-UST curve pool, get >50% share of the pool;
 2.  Deposit 1M FRAX to the vault, get a `depositAmount` of 1M;
 3.  The strategy will swap 1M FRAX to UST via the curve pool, paying a certain amount of swap fee;
 4.  Withdraw all the funds from the vault.
@@ -384,7 +384,7 @@ This introduces a high centralization risk, which can cause funds to be frozen i
 Given:
 
 *   `investPerc` = 80%
-*   1,000 users deposited 1M UST in total ($1000 each user in avg), 800k invested into AUST (`EthAnchor`)
+*   1,000 users deposited 1M UST in total (\$1000 each user in avg), 800k invested into AUST (`EthAnchor`)
 
 If the key holders lose access to their keys ("hit by a bus"). The 800k will be frozen in `EthAnchor` as no one can `initRedeemStable()`.
 
@@ -559,7 +559,7 @@ It is critical to ensure that `_minLockPeriod > 0` because it is immutable and c
 
 Assume the vault’s underlying token is MIM, and the curve pool to be used is the MIM-UST pool. Further assume that both the vault and the strategy holds substantial funds in MIM and UST respectively.
 
-1.  Flash loan MIM from the [Uniswap V3 MIM-USDC pool](https://etherscan.io/address/0x298b7c5e0770d151e4c5cf6cca4dae3a3ffc8e27) (currently has \~$3.5M in MIM at the time of writing).
+1.  Flash loan MIM from the [Uniswap V3 MIM-USDC pool](https://etherscan.io/address/0x298b7c5e0770d151e4c5cf6cca4dae3a3ffc8e27) (currently has \~\$3.5M in MIM at the time of writing).
 2.  Convert half of the loaned MIM to UST to inflate and deflate their prices respectively.
 3.  Deposit the other half of the loaned MIM into the vault. We expect `curvePool.get_dy_underlying(ustI, underlyingI, ustAssets);` to return a smaller amount than expected because of the previous step. As a result, the attacker is allocated more shares than expected.
 4.  Exchange UST back to MIM, bringing back the spot price of MIM-UST to a normal level.

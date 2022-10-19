@@ -267,10 +267,10 @@ When a user calls `ConcentratedLiquidityPosition.sol#burn()` to burn their liqui
 The `_updatePosition()` function will return `amount0fees` and `amount1fees` of the whole position with the `lower` and `upper` tick and send them to the `recipient` alongside the burned liquidity amounts.
 
 #### Proof of Concept
-1.  Alice minted $10000 worth of liquidity with `lower` and `upper` tick set to 99 and 199;
-2.  Alice accumulated $1000 worth of fee in token0 and token1;
-3.  The attacker can mint a small amount ($1 worth) of liquidity using the same `lower` and `upper` tick;
-4.  The attacker calls `ConcentratedLiquidityPosition.sol#burn()` to steal all the unclaimed yield with the ticks of (99, 199) include the $1000 worth of yield from Alice.
+1.  Alice minted \$10000 worth of liquidity with `lower` and `upper` tick set to 99 and 199;
+2.  Alice accumulated \$1000 worth of fee in token0 and token1;
+3.  The attacker can mint a small amount (\$1 worth) of liquidity using the same `lower` and `upper` tick;
+4.  The attacker calls `ConcentratedLiquidityPosition.sol#burn()` to steal all the unclaimed yield with the ticks of (99, 199) include the \$1000 worth of yield from Alice.
 
 #### Recommended Mitigation Steps
 Consider making `ConcentratedLiquidityPosition.sol#burn()` always use `address(this)` as `recipient` in:
@@ -927,12 +927,12 @@ Consider making adding `token0` or `token1` as incentives disallowed, or keep a 
 
 I'm adding this as an issue because I didn't see it mentioned anywhere in the codebase, and I think its a fair point that relates to how the protocol gives out rewards to users. As I understand , the point of staking is to provide users with additional compensation for providing liquidity (and taking on risk) for the good of the protocol. If a large fraction of rewards go to users who don't provide a huge benefit to the protocol, that's a problem.
 
-Consider two different pools: USDC-DAI and USDC-ETH. Suppose a user has $10K worth of tokens and decides to provide liquidity to each of these pools.
+Consider two different pools: USDC-DAI and USDC-ETH. Suppose a user has \$10K worth of tokens and decides to provide liquidity to each of these pools.
 
-In the USDC-DAI pool the user can very safely provide the $10K with a 1% spread between upper and lower tick. The total amount of liquidity he provides is roughly $10K \* (1/0.01) = $1 M dollars of liquidity per second. The impermanent loss here is going to be basically 0 in normal conditions. The liquidity will be in range all the time.
+In the USDC-DAI pool the user can very safely provide the \$10K with a 1% spread between upper and lower tick. The total amount of liquidity he provides is roughly \$10K \* (1/0.01) = \$1 M dollars of liquidity per second. The impermanent loss here is going to be basically 0 in normal conditions. The liquidity will be in range all the time.
 
 The same situation in the USDC-ETH pool on the other hand:
-Suppose a user has $10K worth of USDC+ETH, provides it with a 1% spread between upper and lower ticks at the current price => roughly $1 M dollars of liquidity per second, the same as before. However, now there is a good chance that price ranges by more than 1% meaning he loses all of his more valuable tokens for the cheaper ones due to impermanent loss. The liquidity will be out of range for a much longer percentage of the time.
+Suppose a user has \$10K worth of USDC+ETH, provides it with a 1% spread between upper and lower ticks at the current price => roughly \$1 M dollars of liquidity per second, the same as before. However, now there is a good chance that price ranges by more than 1% meaning he loses all of his more valuable tokens for the cheaper ones due to impermanent loss. The liquidity will be out of range for a much longer percentage of the time.
 
 However, if the incentives for each pool are the same, the staking protocol would value the liquidity per second of each LP situation equally. To make things "fair per unit of risk/liquidity" the incentive on the USDC-ETH should be something like 10x or 20x the incentive on the USDC-DAI pool. The pools with higher volatility should have a *significantly* higher incentive.
 

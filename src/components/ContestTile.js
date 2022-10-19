@@ -7,7 +7,7 @@ import ClientOnly from "./ClientOnly";
 import Countdown from "./Countdown";
 import SponsorLink from "./SponsorLink";
 
-const ContestTile = ({ contest: { node }, updateContestStatus }) => {
+const ContestTile = ({ contest, updateContestStatus }) => {
   const {
     sponsor,
     title,
@@ -19,9 +19,8 @@ const ContestTile = ({ contest: { node }, updateContestStatus }) => {
     findingsRepo,
     repo: contestRepo,
     fields,
-  } = node;
-  const { submissionPath, contestPath } = fields;
-
+    status,
+  } = contest;
   const t = getDates(start_time, end_time);
 
   return (
@@ -59,20 +58,25 @@ const ContestTile = ({ contest: { node }, updateContestStatus }) => {
           </p>
         )}
         <ClientOnly>
-          <Link
-            to={contestPath}
+          <a
+            href={fields?.contestPath || "/"}
             className="contest-repo button button-small cta-button primary"
           >
             {`${findingsRepo === "" ? "Preview" : "View"} Contest`}
-          </Link>
-          {(t.contestStatus === "active" && contestRepo) && (
-            <Link to={contestRepo} className="button button-small cta-button secondary">
+          </a>
+          {t.contestStatus === "active" && contestRepo && (
+            <a
+              href={contestRepo}
+              className="button button-small cta-button secondary"
+            >
               View Repo
-            </Link>
+            </a>
           )}
-          {t.contestStatus === "active" && findingsRepo && submissionPath ? (
+          {(t.contestStatus === "active" || status === "Active Contest") &&
+          findingsRepo &&
+          fields.submissionPath ? (
             <Link
-              to={submissionPath}
+              to={fields.submissionPath}
               className="button button-small cta-button secondary"
             >
               Submit Finding

@@ -1,16 +1,78 @@
-import path from "path";
-import SchemaCustomization from "./schema";
-import { createFilePath } from "gatsby-source-filesystem";
-import { Octokit } from "@octokit/core";
 import { graphql } from "@octokit/graphql";
 import format from "date-fns/format";
+import { createFilePath } from "gatsby-source-filesystem";
+import fetch from "node-fetch";
+import path from "path";
 import webpack from "webpack";
+import SchemaCustomization from "./schema";
+// Notion
+import { Client } from "@notionhq/client";
+const { token, notionToken, notionContestDb } = require("./netlify/_config");
+const notion = new Client({ auth: notionToken });
+const getContestData = async () => {
+  try {
+    const pages = [];
+    let cursor = undefined;
+    //cursor is to handle pagination in notion query
+    while (true) {
+      const { results, next_cursor } = await notion.databases.query({
+        database_id: notionContestDb,
+        start_cursor: cursor,
+        filter: {
+          and: [
+            {
+              property: "ContestID",
+              number: {
+                is_not_empty: true,
+              },
+            },
+            {
+              property: "Status",
+              select: {
+                does_not_equal: "Lost deal",
+              },
+            },
+            {
+              property: "Status",
+              select: {
+                does_not_equal: "Possible",
+              },
+            },
+            {
+              property: "Classified?",
+              checkbox: {
+                equals: false,
+              },
+            },
+          ],
+        },
+      });
+      pages.push(...results);
+      if (!next_cursor) {
+        break;
+      }
+      cursor = next_cursor;
+    }
+    const statusObject = pages.map((page) => {
+      if (
+        page.properties.Status.select.name !== "Lost deal" ||
+        page.properties.Status.select.name !== "Possible" ||
+        page.properties.Status.select.name ||
+        page.properties.ContestID.number ||
+        page.properties["Classified?"].checkbox === false
+      ) {
+        return {
+          contestId: page.properties.ContestID.number || null,
+          status: page.properties.Status.select.name || null,
+        };
+      }
+    });
+    return statusObject;
+  } catch (err) {
+    return null;
+  }
+};
 
-const { token } = require("./functions/_config");
-
-const octokit = new Octokit({
-  auth: token,
-});
 const graphqlWithAuth = graphql.defaults({
   headers: {
     authorization: `Bearer ${token}`,
@@ -54,21 +116,20 @@ function getRepoName(contestNode) {
 }
 
 async function fetchReadmeMarkdown(contestNode) {
-  const { data } = await octokit.request("GET /repos/{owner}/{repo}/readme", {
-    owner: "code-423n4",
-    repo: `${getRepoName(contestNode)}`,
-    headers: {
-      accept: "application/vnd.github.v3.html+json",
-    },
-  });
-
+  const response = await fetch(
+    `https://raw.githubusercontent.com/${
+      process.env.GITHUB_CONTEST_REPO_OWNER
+    }/${getRepoName(contestNode)}/main/README.md`
+  );
+  const data = await response.text();
   return data;
 }
 
 async function fetchSocialImage(contestNode) {
+  // @todo: fetch without auth
   const { repository } = await graphqlWithAuth(
     `query socialImage($repo: String!) {
-    repository(owner: "code-423n4", name: $repo) {
+    repository(owner: "${process.env.GITHUB_CONTEST_REPO_OWNER}", name: $repo) {
       openGraphImageUrl
       usesCustomOpenGraphImage
     }
@@ -99,6 +160,7 @@ const queries = {
             contestPath
             readmeContent
             artPath
+            status
           }
         }
       }
@@ -119,7 +181,6 @@ exports.createSchemaCustomization = ({ actions }) => {
 exports.onCreateNode = async ({ node, getNode, actions }) => {
   const { createNodeField } = actions;
   if (node.internal.type === `MarkdownRemark`) {
-    const value = createFilePath({ node, getNode });
     const parent = getNode(node.parent);
     let slug;
     if (node.frontmatter.slug) {
@@ -171,12 +232,31 @@ exports.onCreateNode = async ({ node, getNode, actions }) => {
   }
 };
 
+exports.sourceNodes = async ({ actions, getNodes }) => {
+  const { createNodeField } = actions;
+  const nodes = await getNodes();
+  const result = await getContestData();
+
+  nodes.forEach((node, index) => {
+    if (node.internal.type === `ContestsCsv`) {
+      const status = result.filter(
+        (element) => element.contestId === node.contestid
+      );
+      createNodeField({
+        node,
+        name: `status`,
+        value: status.length > 0 ? status[0].status : undefined,
+      });
+    }
+  });
+};
+
 exports.createPages = async ({ graphql, actions }) => {
   const { createPage } = actions;
 
-  let contests = await graphql(queries.contests);
-  const formTemplate = path.resolve("./src/templates/ReportForm.js");
-  const contestTemplate = path.resolve("./src/templates/ContestLayout.js");
+  const contests = await graphql(queries.contests);
+  const formTemplate = path.resolve("./src/templates/ReportForm.tsx");
+  const contestTemplate = path.resolve("./src/templates/ContestLayout.tsx");
   contests.data.contests.edges.forEach((contest) => {
     if (contest.node.findingsRepo) {
       createPage({
@@ -205,6 +285,21 @@ exports.onCreateWebpackConfig = ({ actions }) => {
         resourceRegExp: /canvas/,
         contextRegExp: /jsdom$/,
       }),
+      new webpack.ProvidePlugin({
+        process: "process/browser",
+        Buffer: [require.resolve("buffer/"), "Buffer"],
+      }),
     ],
+    resolve: {
+      fallback: {
+        assert: require.resolve("assert"),
+        crypto: require.resolve("crypto-browserify"),
+        http: require.resolve("stream-http"),
+        https: require.resolve("https-browserify"),
+        os: require.resolve("os-browserify/browser"),
+        stream: require.resolve("stream-browserify"),
+        url: require.resolve("url"),
+      },
+    },
   });
 };
