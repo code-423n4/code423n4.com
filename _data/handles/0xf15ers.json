@@ -1,5 +1,10 @@
 {
-    "image": "",
-    "handle": "0xf15ers",
-    "members": ["remora", "twojoy"]
+  "handle": "0xf15ers",
+  "members": ["remora", "twojoy"],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x1434b95234155DA830c20d02548aF22f14A38FbE"
+    }
+  ]
 }

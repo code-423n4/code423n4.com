@@ -1,0 +1,11 @@
+{
+  "handle": "OptimismSec",
+  "members": ["sseefried", "tofunmi"],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xa3707d01100C11f866117b941e71b81084D63A16"
+    }
+  ],
+  "link": ""
+}
