@@ -1,6 +1,11 @@
 {
   "handle": "PwnedNoMore",
-  "members": ["izhuer", "ItsNio", "papr1ka2"],
+  "members": [
+    "izhuer",
+    "ItsNio",
+    "papr1ka2",
+    "wen"
+  ],
   "paymentAddresses": [
     {
       "chain": "polygon",
