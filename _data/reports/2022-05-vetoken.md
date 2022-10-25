@@ -2554,7 +2554,7 @@ Total: 84 instances over 14 issues
 *There is 1 instance of this issue:*
 
 ```solidity
-File: contracts/VoterProxy.sol   #1
+File: contracts/VoterProxy.sol   \#1
 
 119:          return balance;
 ```
