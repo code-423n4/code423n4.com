@@ -862,14 +862,14 @@ add extra amount to `queuedRewards` so it would be distributed on next `notifyRe
 
 ***
 
-## [[M-10] Unable To Get Rewards If Admin Withdraws $VE3D tokens From `VeTokenMinter` Contract](https://github.com/code-423n4/2022-05-vetoken-findings/issues/202)
+## [[M-10] Unable To Get Rewards If Admin Withdraws \$VE3D tokens From `VeTokenMinter` Contract](https://github.com/code-423n4/2022-05-vetoken-findings/issues/202)
 _Submitted by xiaoming90, also found by 0x1f8b, and VAD37_
 
-It was observed that users will not be able to get their rewards from the reward contract at certain point of time if admin withdraws $VE3D token from the `VeTokenMinter` contract.
+It was observed that users will not be able to get their rewards from the reward contract at certain point of time if admin withdraws \$VE3D token from the `VeTokenMinter` contract.
 
 ### Proof of Concept
 
-Based on the deployment script, it was understood that at the start of the project deployment, 30 million $VE3D tokens will be pre-minted for the `VeTokenMinter` contract. Thus, the `veToken.balanceOf(VeTokenMinter.address)` will be 30 million $VE3D tokens after the deployment.
+Based on the deployment script, it was understood that at the start of the project deployment, 30 million \$VE3D tokens will be pre-minted for the `VeTokenMinter` contract. Thus, the `veToken.balanceOf(VeTokenMinter.address)` will be 30 million \$VE3D tokens after the deployment.
 
 <https://github.com/code-423n4/2022-05-vetoken/blob/2d7cd1f6780a9bcc8387dea8fecfbd758462c152/migrations/2_deploy_basic_contracts.js#L18>
 
@@ -885,7 +885,7 @@ await vetoken.mint(vetokenMinter.address, web3.utils.toWei("30000000"), { from: 
 addContract("system", "vetoken", veTokenAddress);
 ```
 
-In the ` VeTokenMinter  ` contract, there is a function called `VeTokenMinter.withdraw` that allows the admin to withdraw $VE3D tokens from the contract. Noted that this withdraw function only perform the transfer, but did not update any of the state variables (e.g. totalSupply, maxSupply) in the contract.
+In the ` VeTokenMinter  ` contract, there is a function called `VeTokenMinter.withdraw` that allows the admin to withdraw \$VE3D tokens from the contract. Noted that this withdraw function only perform the transfer, but did not update any of the state variables (e.g. totalSupply, maxSupply) in the contract.
 
 <https://github.com/code-423n4/2022-05-vetoken/blob/2d7cd1f6780a9bcc8387dea8fecfbd758462c152/contracts/VeTokenMinter.sol#L77>
 
@@ -897,11 +897,11 @@ function withdraw(address _destination, uint256 _amount) external onlyOwner {
 }
 ```
 
-Assuming that an admin withdrawed 29 million $VE3D tokens from the `VoteProxy` with the appropriate approval from the DAO or community for some valid purposes. The `veToken.balanceOf(VeTokenMinter.address)` will be 1 million $VE3D tokens after the withdrawal.
+Assuming that an admin withdrawed 29 million \$VE3D tokens from the `VoteProxy` with the appropriate approval from the DAO or community for some valid purposes. The `veToken.balanceOf(VeTokenMinter.address)` will be 1 million \$VE3D tokens after the withdrawal.
 
-At this point, notice that `veToken.balanceOf(VeTokenMinter.address)` is 1 million, while the `VeTokenMinter.maxSupply` constant is 30 million. Therefore, there exists a discrepency between the actual amount of $VE3D tokens (1 million) stored in the contact versus the max supply (30 million).
+At this point, notice that `veToken.balanceOf(VeTokenMinter.address)` is 1 million, while the `VeTokenMinter.maxSupply` constant is 30 million. Therefore, there exists a discrepency between the actual amount of \$VE3D tokens (1 million) stored in the contact versus the max supply (30 million).
 
-This discrepency will cause an issue in the `VeTokenMinter.mint` function because the calculation of the amount of $VE3D tokens to be transferred is based on the fact that 30 million $VE3D tokens is always sitting in the `VeTokenMinter` contract, and thus there is always sufficient $VE3D tokens available in the `VeTokenMinter` contract to send to its users.
+This discrepency will cause an issue in the `VeTokenMinter.mint` function because the calculation of the amount of \$VE3D tokens to be transferred is based on the fact that 30 million \$VE3D tokens is always sitting in the `VeTokenMinter` contract, and thus there is always sufficient \$VE3D tokens available in the `VeTokenMinter` contract to send to its users.
 
 The `uint256 amtTillMax = maxSupply.sub(supply);` code shows that the calculation is based on `maxSupply` constant, which is 30 million.
 
@@ -919,7 +919,7 @@ Assume that `mint(0x001, 10 million)` is called, and the value of the state vari
 *   `(_amount > amtTillMax)` = `False` (since "3.340 million > 10 million" = false )
 *   `veToken.safeTransfer(0x001, 3.340 million)` (This will revert. Insufficent balance)
 
-The `veToken.safeTransfer(0x001, 3.340 million` will fail and revert because `VeTokenMinter` contract does not hold sufficent amount of $VE3D tokens to transfer out.`veToken.balanceOf(VeTokenMinter.address)` = 1 million, while the contract was attempting to send out 3.340 million.
+The `veToken.safeTransfer(0x001, 3.340 million` will fail and revert because `VeTokenMinter` contract does not hold sufficent amount of \$VE3D tokens to transfer out.`veToken.balanceOf(VeTokenMinter.address)` = 1 million, while the contract was attempting to send out 3.340 million.
 
 <https://github.com/code-423n4/2022-05-vetoken/blob/2d7cd1f6780a9bcc8387dea8fecfbd758462c152/contracts/VeTokenMinter.sol#L48>
 
@@ -1008,11 +1008,11 @@ function getReward(address _account, bool _claimExtras)
 
 ### Recommended Mitigation Steps
 
-Remove the `VeTokenMinter.withdraw` function if possible. Otherwise, update the internal accounting of `VeTokenMinter` contract during withdrawal so that the actual balance of the $VE3D tokens is taken into consideration within the `VeTokenMinter.mint`, and the contract will not attempt to transfer more tokens than what it has.
+Remove the `VeTokenMinter.withdraw` function if possible. Otherwise, update the internal accounting of `VeTokenMinter` contract during withdrawal so that the actual balance of the \$VE3D tokens is taken into consideration within the `VeTokenMinter.mint`, and the contract will not attempt to transfer more tokens than what it has.
 
 On a side note, [Convex's Minter contract](https://github.com/convex-eth/platform/blob/main/contracts/contracts/Cvx.sol), will mint the `CRX` gov tokens to the users on the fly. See <https://github.com/convex-eth/platform/blob/1f11027d429e454dacc4c959502687eaeffdb74a/contracts/contracts/Cvx.sol#L76>. Thus, there will not be a case where there is not sufficient `CRV` tokens in the contract to send to it users.
 
-However, in VeToken Protocol, it attempts to transfer the portion of pre-minted $VE3D tokens (30 millions) to the users. See <https://github.com/code-423n4/2022-05-vetoken/blob/2d7cd1f6780a9bcc8387dea8fecfbd758462c152/contracts/VeTokenMinter.sol#L72>. Thus, it is possible that there is not enough $VE3D tokens to send to its users if the admin withdraw the pre-minted $VE3D tokens.
+However, in VeToken Protocol, it attempts to transfer the portion of pre-minted \$VE3D tokens (30 millions) to the users. See <https://github.com/code-423n4/2022-05-vetoken/blob/2d7cd1f6780a9bcc8387dea8fecfbd758462c152/contracts/VeTokenMinter.sol#L72>. Thus, it is possible that there is not enough \$VE3D tokens to send to its users if the admin withdraw the pre-minted \$VE3D tokens.
 
 **[solvetony (veToken Finance) confirmed and commented](https://github.com/code-423n4/2022-05-vetoken-findings/issues/202#issuecomment-1156661445):**
  > We might need to withdraw, so we need to fix it.
@@ -1040,7 +1040,7 @@ _Submitted by xiaoming90, also found by 0xNazgul, berndartmueller, cccz, FSchmoe
 
 ### Proof of Concept
 
-The `Booster.setFeeInfo` function is responsible for setting the allocation of gauge fees between lockers and $VE3D stakers.  `lockFeesIncentive` and `stakerLockFeesIncentive` should add up to `10000` , which is equivalent to `100%`.
+The `Booster.setFeeInfo` function is responsible for setting the allocation of gauge fees between lockers and \$VE3D stakers.  `lockFeesIncentive` and `stakerLockFeesIncentive` should add up to `10000` , which is equivalent to `100%`.
 
 However, there is no validation check to ensure that that `_lockFeesIncentive` and `_stakerLockFeesIncentive` add up to `10000`. Thus, it entirely depends on the developer to get these two values right.
 
