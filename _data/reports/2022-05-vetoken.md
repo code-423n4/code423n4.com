@@ -158,7 +158,7 @@ Note that`IGauge(_gauge).claim_rewards()` will claim all available reward tokens
 
 <https://github.com/code-423n4/2022-05-vetoken/blob/2d7cd1f6780a9bcc8387dea8fecfbd758462c152/contracts/Booster.sol#L495>
 
-```solidity
+```
 //claim veAsset and extra rewards and disperse to reward contracts
 function _earmarkRewards(uint256 _pid) internal {
     PoolInfo storage pool = poolInfo[_pid];
@@ -191,7 +191,7 @@ Subsequently, the code `IERC20(veAsset).safeTransfer(operator, _balance);` will 
 
 <https://github.com/code-423n4/2022-05-vetoken/blob/2d7cd1f6780a9bcc8387dea8fecfbd758462c152/contracts/VoterProxy.sol#L224>
 
-```solidity
+```
 function claimVeAsset(address _gauge) external returns (uint256) {
     require(msg.sender == operator, "!auth");
 
@@ -233,7 +233,7 @@ Following is Angle's Gauge Contract for reference:
 
 > Note: Angle Protocol is observed to use LiquidityGaugeV4 contract for all of their gauges. Thus, ExtraRewardStashV3 is utilised during pool creation.
 
-```python
+```
 @external
 @nonreentrant('lock')
 def claim_rewards(_addr: address = msg.sender, _receiver: address = ZERO_ADDRESS):
@@ -261,7 +261,7 @@ As we can see, the DAI reward tokens are still stuck in the `VoterProxy` contrac
 
 <https://github.com/AngleProtocol/angle-core/blob/4d854e0d74be703a3707898f26ea2dd4166bc9b6/contracts/staking/LiquidityGaugeV4.vy#L332>
 
-```python
+```
 def set_rewards_receiver(_receiver: address):
     """
     @notice Set the default reward receiver for the caller.
@@ -273,7 +273,7 @@ def set_rewards_receiver(_receiver: address):
 
 <https://github.com/code-423n4/2022-05-vetoken/blob/2d7cd1f6780a9bcc8387dea8fecfbd758462c152/contracts/ExtraRewardStashV3.sol#L61>
 
-```solidity
+```
 //try claiming if there are reward tokens registered
 function claimRewards() external returns (bool) {
     require(msg.sender == operator, "!authorized");
@@ -309,7 +309,7 @@ Consider triggering `Booster.setGaugeRedirect` during the deployment to set gaug
 
 Alternatively, update the `Booster._earmarkRewards` to as follows:
 
-```solidity
+```
 //claim veAsset and extra rewards and disperse to reward contracts
 function _earmarkRewards(uint256 _pid) internal {
 	PoolInfo storage pool = poolInfo[_pid];
@@ -387,7 +387,7 @@ Compromised `owner` can `withdraw()` entire balance of `VeTokenMinter.sol` to an
 
 <https://github.com/code-423n4/2022-05-vetoken/blob/2d7cd1f6780a9bcc8387dea8fecfbd758462c152/contracts/VeTokenMinter.sol#L77-L81>
 
-```solidity
+```
 function withdraw(address _destination, uint256 _amount) external onlyOwner {
     veToken.safeTransfer(_destination, _amount);
 
@@ -628,7 +628,7 @@ The same issue exists in `VE3DLocker`.  Where rewards can be added by either `Bo
 
 ### Proof of Concept
 
-```solidity
+```
     function addReward(
         address _rewardToken,
         address _veAssetDeposits,
@@ -642,7 +642,7 @@ The same issue exists in `VE3DLocker`.  Where rewards can be added by either `Bo
     }
 ```
 
-```solidity
+```
     function addReward(
         address _rewardsToken,
         address _veAssetDeposits,
@@ -748,7 +748,7 @@ Using just method calls from `VeTokenMinter` one could rectify this situation by
 
 However, the `removeOperator` function should just be rewritten to be as follows:
 
-```solidity
+```
 function removeOperator(address _operator) public onlyOwner {
     totalWeight -= veAssetWeights[_operator];
     veAssetWeights[_operator] = 0;
@@ -889,7 +889,7 @@ In the ` VeTokenMinter  ` contract, there is a function called `VeTokenMinter.wi
 
 <https://github.com/code-423n4/2022-05-vetoken/blob/2d7cd1f6780a9bcc8387dea8fecfbd758462c152/contracts/VeTokenMinter.sol#L77>
 
-```solidity
+```
 function withdraw(address _destination, uint256 _amount) external onlyOwner {
     veToken.safeTransfer(_destination, _amount);
 
@@ -923,7 +923,7 @@ The `veToken.safeTransfer(0x001, 3.340 million` will fail and revert because `Ve
 
 <https://github.com/code-423n4/2022-05-vetoken/blob/2d7cd1f6780a9bcc8387dea8fecfbd758462c152/contracts/VeTokenMinter.sol#L48>
 
-```solidity
+```
 function mint(address _to, uint256 _amount) external {
     require(operators.contains(_msgSender()), "not an operator");
 
@@ -960,7 +960,7 @@ This issue will affect all projects (Curve, Pickle, Ribbon, Idle, Angle, Balance
 
 <https://github.com/code-423n4/2022-05-vetoken/blob/2d7cd1f6780a9bcc8387dea8fecfbd758462c152/contracts/Booster.sol#L598>
 
-```solidity
+```
 function rewardClaimed(
     uint256 _pid,
     address _address,
@@ -982,7 +982,7 @@ function rewardClaimed(
 
 <https://github.com/code-423n4/2022-05-vetoken/blob/2d7cd1f6780a9bcc8387dea8fecfbd758462c152/contracts/BaseRewardPool.sol#L267>
 
-```solidity
+```
 function getReward(address _account, bool _claimExtras)
     public
     updateReward(_account)
@@ -1048,7 +1048,7 @@ As such, it is possible to set `lockFeesIncentive + takerLockFeesIncentive` to b
 
 <https://github.com/code-423n4/2022-05-vetoken/blob/2d7cd1f6780a9bcc8387dea8fecfbd758462c152/contracts/Booster.sol#L193>
 
-```solidity
+```
 uint256 public constant FEE_DENOMINATOR = 10000;
 
 // Set reward token and claim contract, get from Curve's registry
@@ -1065,7 +1065,7 @@ Assume that `setFeeInfo(40, 60)` is called instead of of `setFeeInfo(4000, 6000)
 
 <https://github.com/code-423n4/2022-05-vetoken/blob/2d7cd1f6780a9bcc8387dea8fecfbd758462c152/contracts/Booster.sol#L576>
 
-```solidity
+```
 function earmarkFees() external returns (bool) {
     //claim fee rewards
     IStaker(staker).claimFees(feeDistro, feeToken);
@@ -1100,7 +1100,7 @@ Users will lost their gauge fee if this happens.
 
 Implement validation check to ensure that `lockFeesIncentive` and `takerLockFeesIncentive` add up to 100% to eliminate any risk of misconfiguration.
 
-```solidity
+```
 uint256 public constant FEE_DENOMINATOR = 10000;
 
 // Set reward token and claim contract, get from Curve's registry
@@ -1261,7 +1261,7 @@ Add some mechanism to recalculate `rewardRate` or calculated undistributed rewar
 > 
 > Meaning that the accumulator used for rewards is not redistributing the old rewards
 > 
-> ```python
+> ```
 > >>> x.lastTimeRewardApplicable()
 > 0
 > >>> x.queueNewRewards(1e18, {"from": a[0]})
@@ -1512,7 +1512,7 @@ The admin may fat-finger a change, or be malicious, and have the weights be extr
 
 No bounds checks in the update function:
 
-```solidity
+```
 File: contracts/VeTokenMinter.sol   \#1
 
 41       function updateveAssetWeight(address veAssetOperator, uint256 newWeight) external onlyOwner {
@@ -1527,7 +1527,7 @@ File: contracts/VeTokenMinter.sol   \#1
 
 The value is used by the reward contract to determine how much to mint:
 
-```solidity
+```
 File: contracts/Booster.sol   \#2
 
 598       function rewardClaimed(
@@ -1790,7 +1790,7 @@ When a user call `stake()` with 1 wei,  it updates the `_totalSupply` as 1 wei  
 This modifier calls `rewardPerToken()` to assign the return to `rewardPerTokenStored` and assigns it to the account via `userRewardPerTokenPaid[account] = rewardPerTokenStored;`
 `rewardPerToken()` formula is as below;
 
-```solidity
+```
 function rewardPerToken() public view returns (uint256) {
         if (totalSupply() == 0) {
             return rewardPerTokenStored;
@@ -2011,7 +2011,7 @@ Affected code:
 
 *   File: Booster.sol
 
-```solidity
+```
 345:     function deposit(
 346:         uint256 _pid,
 347:         uint256 _amount,
@@ -2033,7 +2033,7 @@ Affected code:
 
 *   File: VE3DRewardPool.sol
 
-```solidity
+```
 336:     function donate(address _rewardToken, uint256 _amount) external {
 337:         IERC20(_rewardToken).safeTransferFrom(msg.sender, address(this), _amount); //@audit medium: not compatible with Fee On Transfer Tokens
 338:         rewardTokenInfo[_rewardToken].queuedRewards += _amount;
@@ -2072,7 +2072,7 @@ _Submitted by WatchPug, also found by Dravee, gzeon, and TerrierLover_
 
 ### Vulnerability Details
 
-```solidity
+```
 function totalSupplyAtEpoch(uint256 _epoch) external view returns (uint256 supply) {
     uint256 epochStart = uint256(epochs[_epoch].date).div(rewardsDuration).mul(
         rewardsDuration
@@ -2124,7 +2124,7 @@ As a result, all these functions will be malfunctioning and all the internal and
 
 Change `VE3DLocker.sol#L315` to:
 
-```solidity
+```
 for (uint256 i = locks.length; i > 0; i--) {
     uint256 lockEpoch = uint256(locks[i - 1].unlockTime).sub(lockDuration);
     //lock epoch must be less or equal to the epoch we're basing from.
@@ -2135,7 +2135,7 @@ for (uint256 i = locks.length; i > 0; i--) {
 
 Change `VE3DLocker.sol#L360` to:
 
-```solidity
+```
 for (uint256 i = locks.length; i > 0; i--) {
     uint256 lockEpoch = uint256(locks[i - 1].unlockTime).sub(lockDuration);
 
@@ -2150,14 +2150,14 @@ for (uint256 i = locks.length; i > 0; i--) {
 
 Change `VE3DLocker.sol#L387` to:
 
-```solidity
+```
 for (uint256 i = epochindex; i > 0; i--) {
     Epoch storage e = epochs[i - 1];
 ```
 
 Change `VE3DLocker.sol#L406` to:
 
-```solidity
+```
 for (uint256 i = _epoch + 1; i > 0; i--) {
     Epoch storage e = epochs[i - 1];
     if (uint256(e.date) <= cutoffEpoch) {
@@ -2204,7 +2204,7 @@ In the case of unsuccessful withdrawAll() call the pool nevertheless will be mar
 
 <https://github.com/code-423n4/2022-05-vetoken/blob/2d7cd1f6780a9bcc8387dea8fecfbd758462c152/contracts/Booster.sol#L312-L320>
 
-```solidity
+```
         //withdraw from gauge
         try IStaker(staker).withdrawAll(pool.lptoken, pool.gauge) {} catch {}
 
@@ -2220,7 +2220,7 @@ It will block the withdrawals as there will be not enough funds to fulfil the cl
 
 <https://github.com/code-423n4/2022-05-vetoken/blob/2d7cd1f6780a9bcc8387dea8fecfbd758462c152/contracts/Booster.sol#L408-L422>
 
-```solidity
+```
         //pull from gauge if not shutdown
         // if shutdown tokens will be in this contract
         if (!pool.shutdown) {
@@ -2248,7 +2248,7 @@ The shutdownPool logic can to be updated:
 
 Consider unifying the logic with shutdownSystem() and marking the pool shutdown only if withdraw was successful, for example:
 
-```solidity
+```
 //shutdown pool
 function shutdownPool(uint256 _pid, bool forced) external returns (bool){
     require(msg.sende == poolManager, "!auth");
@@ -2314,7 +2314,7 @@ Setting the severity to medium as reward gathering is a base functionality of th
 
 <https://github.com/code-423n4/2022-05-vetoken/blob/2d7cd1f6780a9bcc8387dea8fecfbd758462c152/contracts/ExtraRewardStashV2.sol#L193-L203>
 
-```solidity
+```
     if (activeCount > 1) {
         //take difference of before/after(only send new tokens)
         uint256 amount = IERC20(token).balanceOf(address(this));
@@ -2332,7 +2332,7 @@ If `IStaker(staker).withdraw()` produced no new tokens for any reason, the `amou
 
 <https://github.com/code-423n4/2022-05-vetoken/blob/2d7cd1f6780a9bcc8387dea8fecfbd758462c152/contracts/ExtraRewardStashV2.sol#L188-L189>
 
-```solidity
+```
     uint256 before = IERC20(token).balanceOf(address(this));
     IStaker(staker).withdraw(token);
 ```
@@ -2347,7 +2347,7 @@ If this be the case then the whole stashRewards() call will be failing until `IS
 
 Consider running the transfer only when amount is positive:
 
-```solidity
+```
 -   if (activeCount > 1) {
 +   if (amount > 0 && activeCount > 1) {
         //take difference of before/after(only send new tokens)
@@ -2394,7 +2394,7 @@ This poses a significant centralisation risk if the owner private key is comprom
 
 After the owner has updated the `operator` via `setOperator()` they are able to call `VoterProxy.execute()` to execute any call to any smart contract.
 
-```solidity
+```
     function execute(
         address _to,
         uint256 _value,
@@ -2413,7 +2413,7 @@ After the owner has updated the `operator` via `setOperator()` they are able to 
 
 Similarly, for `withdraw()` and `withdrawAll()`
 
-```solidity
+```
     function withdraw(
         address _token,
         address _gauge,
@@ -2513,7 +2513,7 @@ There are more blocks in a year during a leap year. Using a static value for the
 
 *There is 1 instance of this issue:*
 
-```solidity
+```
 File: contracts/BaseRewardPool.sol   \#1
 
 343      function getAPY() external view returns (uint256) {
@@ -2553,7 +2553,7 @@ Total: 84 instances over 14 issues
 
 *There is 1 instance of this issue:*
 
-```solidity
+```
 File: contracts/VoterProxy.sol   \#1
 
 119:          return balance;
@@ -2577,7 +2577,7 @@ There are [units](https://docs.soliditylang.org/en/latest/units-and-global-varia
 
 *There is 1 instance of this issue:*
 
-```solidity
+```
 File: contracts/VeAssetDepositor.sol   \#1
 
 /// @audit 86400
@@ -2590,7 +2590,7 @@ File: contracts/VeAssetDepositor.sol   \#1
 
 *There is 1 instance of this issue:*
 
-```solidity
+```
 File: contracts/VeTokenMinter.sol   \#1
 
 15:       uint256 public constant maxSupply = 30 * 1000000 * 1e18; //30mil
@@ -2632,7 +2632,7 @@ Some lines use `// x` and some use `//x`. The instances below point out the usag
 
 *There is 1 instance of this issue:*
 
-```solidity
+```
 File: contracts/VoterProxy.sol   \#1
 
 /// @audit Missing: '@param bytes'
@@ -2655,7 +2655,7 @@ Use [alternative variants](https://www.zdnet.com/article/mysql-drops-master-slav
 
 *There is 1 instance of this issue:*
 
-```solidity
+```
 File: contracts/VE3DRewardPool.sol   \#1
 204:         //fees dont apply until whitelist+veVeAsset lock begins so will report
 ```
@@ -2724,7 +2724,7 @@ The assignment of `totalWeight` can be optimized by summing the old and new weig
 
 *There is 1 instance of this issue:*
 
-```solidity
+```
 File: contracts/VeTokenMinter.sol   \#1
 
 43           totalWeight -= veAssetWeights[veAssetOperator];
@@ -2740,7 +2740,7 @@ Saves a storage slot for the mapping. Depending on the circumstances and sizes o
 
 *There is 1 instance of this issue:*
 
-```solidity
+```
 File: contracts/BaseRewardPool.sol   \#1
 
 75        mapping(address => uint256) public userRewardPerTokenPaid;
@@ -2809,7 +2809,7 @@ It should be saved to an immutable variable, and the variable used instead. If t
 
 *There is 1 instance of this issue:*
 
-```solidity
+```
 File: contracts/Booster.sol   \#1
 
 488:              bytes4(keccak256("set_rewards_receiver(address)")),
@@ -2819,7 +2819,7 @@ File: contracts/Booster.sol   \#1
 
 ## [G-12] Using `bool`s for storage incurs overhead
 
-```solidity
+```
     // Booleans are more expensive than uint256 or any type that takes up a full
     // word because each write operation emits an extra SLOAD to first read the
     // slot's contents, replace the bits taken up by the boolean, and then write
