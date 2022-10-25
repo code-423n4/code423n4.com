@@ -245,7 +245,7 @@ def claim_rewards(_addr: address = msg.sender, _receiver: address = ZERO_ADDRESS
                      for the caller
     """
     if _receiver != ZERO_ADDRESS:
-        assert _addr == msg.sender  # dev: cannot redirect when claiming for another user
+        assert _addr == msg.sender  \# dev: cannot redirect when claiming for another user
     self._checkpoint_rewards(_addr, self.totalSupply, True, _receiver)
 ```
 
@@ -1284,7 +1284,7 @@ Add some mechanism to recalculate `rewardRate` or calculated undistributed rewar
 > 1659308766
 > >>> 1658703966 - 1659308766
 > -604800
-> >>> chain.sleep(604800 // 3) ## Sleep for third of time
+> >>> chain.sleep(604800 // 3) \#\# Sleep for third of time
 > >>> chain.time()
 > 1658905644
 > >>> 1658905644- 1659308766
@@ -1513,7 +1513,7 @@ The admin may fat-finger a change, or be malicious, and have the weights be extr
 No bounds checks in the update function:
 
 ```solidity
-File: contracts/VeTokenMinter.sol   #1
+File: contracts/VeTokenMinter.sol   \#1
 
 41       function updateveAssetWeight(address veAssetOperator, uint256 newWeight) external onlyOwner {
 42           require(operators.contains(veAssetOperator), "not an veAsset operator");
@@ -1528,7 +1528,7 @@ File: contracts/VeTokenMinter.sol   #1
 The value is used by the reward contract to determine how much to mint:
 
 ```solidity
-File: contracts/Booster.sol   #2
+File: contracts/Booster.sol   \#2
 
 598       function rewardClaimed(
 599           uint256 _pid,
@@ -1899,17 +1899,17 @@ The team might consider to add boundries to reward the stakers to be consistent 
 > >>> x.userRewardPerTokenPaid(a[1])
 > 266715305335072250583333333333333333
 > 
-> ## Second User (10 deposited)
+> \#\# Second User (10 deposited)
 > >>> history[-1].events
 > {'RewardUpdated': [OrderedDict([('user', '0x33A4622B82D4c04a53e170c638B944ce27cffce3'), ('reward', 666615685626040430), ('rewardPerTokenStored', 266715305335072250583333333333333333), ('lastUpdateTime', 1659485217)])]}
-> ## First user 2 deposited (early 1 /10th of time)
+> \#\# First user 2 deposited (early 1 /10th of time)
 > >>> history[-2].events
 > {'RewardUpdated': [OrderedDict([('user', '0x66aB6D9362d4F35596279692F0251Db635165871'), ('reward', 333384314373866769), ('rewardPerTokenStored', 266715305335072250583333333333333333), ('lastUpdateTime', 1659485217)])]}
 > >>>
 > ```
 > 
 > 
-> ## Deposit, front-run rewards and withdraw
+> \#\# Deposit, front-run rewards and withdraw
 > ```
 > >>> x.stake(1, {"from": a[0]})
 > Transaction sent: 0x03971a1e78ab54979f834746436488f1cb49c5a483957f0ce01f409124bd38d5
@@ -2514,7 +2514,7 @@ There are more blocks in a year during a leap year. Using a static value for the
 *There is 1 instance of this issue:*
 
 ```solidity
-File: contracts/BaseRewardPool.sol   #1
+File: contracts/BaseRewardPool.sol   \#1
 
 343      function getAPY() external view returns (uint256) {
 344          return rewardRate.mul(BLOCKS_PER_YEAR).mul(1e18).div(totalSupply());
@@ -2578,7 +2578,7 @@ There are [units](https://docs.soliditylang.org/en/latest/units-and-global-varia
 *There is 1 instance of this issue:*
 
 ```solidity
-File: contracts/VeAssetDepositor.sol   #1
+File: contracts/VeAssetDepositor.sol   \#1
 
 /// @audit 86400
 18:       uint256 private constant WEEK = 7 * 86400;
@@ -2591,7 +2591,7 @@ File: contracts/VeAssetDepositor.sol   #1
 *There is 1 instance of this issue:*
 
 ```solidity
-File: contracts/VeTokenMinter.sol   #1
+File: contracts/VeTokenMinter.sol   \#1
 
 15:       uint256 public constant maxSupply = 30 * 1000000 * 1e18; //30mil
 ```
@@ -2633,7 +2633,7 @@ Some lines use `// x` and some use `//x`. The instances below point out the usag
 *There is 1 instance of this issue:*
 
 ```solidity
-File: contracts/VoterProxy.sol   #1
+File: contracts/VoterProxy.sol   \#1
 
 /// @audit Missing: '@param bytes'
 191       /**
@@ -2656,7 +2656,7 @@ Use [alternative variants](https://www.zdnet.com/article/mysql-drops-master-slav
 *There is 1 instance of this issue:*
 
 ```solidity
-File: contracts/VE3DRewardPool.sol   #1
+File: contracts/VE3DRewardPool.sol   \#1
 204:         //fees dont apply until whitelist+veVeAsset lock begins so will report
 ```
 
@@ -2725,7 +2725,7 @@ The assignment of `totalWeight` can be optimized by summing the old and new weig
 *There is 1 instance of this issue:*
 
 ```solidity
-File: contracts/VeTokenMinter.sol   #1
+File: contracts/VeTokenMinter.sol   \#1
 
 43           totalWeight -= veAssetWeights[veAssetOperator];
 44           veAssetWeights[veAssetOperator] = newWeight;
@@ -2741,7 +2741,7 @@ Saves a storage slot for the mapping. Depending on the circumstances and sizes o
 *There is 1 instance of this issue:*
 
 ```solidity
-File: contracts/BaseRewardPool.sol   #1
+File: contracts/BaseRewardPool.sol   \#1
 
 75        mapping(address => uint256) public userRewardPerTokenPaid;
 76        mapping(address => uint256) public rewards;
@@ -2810,7 +2810,7 @@ It should be saved to an immutable variable, and the variable used instead. If t
 *There is 1 instance of this issue:*
 
 ```solidity
-File: contracts/Booster.sol   #1
+File: contracts/Booster.sol   \#1
 
 488:              bytes4(keccak256("set_rewards_receiver(address)")),
 ```
