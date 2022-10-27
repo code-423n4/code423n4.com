@@ -1,0 +1,14 @@
+{
+  "handle": "ThoseWhoHackFurther",
+  "members": [
+    "Dravee",
+    "cryptphi"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x87a4cc3115524eD1b700ccE62F41fa2B386027d4"
+    }
+  ],
+  "image": "./avatars/ThoseWhoHackFurther.jpeg"
+}

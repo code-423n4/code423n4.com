@@ -153,7 +153,7 @@ const LoginModal = () => {
             <div className="modal-main-content">
               <Input
                 name="username"
-                label="Username"
+                label="Code4rena Username"
                 required={true}
                 value={username}
                 handleChange={handleUsernameChange}
