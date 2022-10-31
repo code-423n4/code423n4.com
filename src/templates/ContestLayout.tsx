@@ -183,7 +183,7 @@ const ContestLayout = (props) => {
 
               {t.contestStatus === "active" &&
               findingsRepo &&
-              fields.submissionPath ? (
+              fields.submissionPath && fields.classified === false ? (
                 <Link
                   to={fields.submissionPath}
                   className="button cta-button button-medium secondary"
@@ -320,6 +320,7 @@ export const query = graphql`
         readmeContent
         contestPath
         artPath
+        classified
       }
       hide
       league

@@ -58,12 +58,12 @@ const getContestData = async () => {
         page.properties.Status.select.name !== "Lost deal" ||
         page.properties.Status.select.name !== "Possible" ||
         page.properties.Status.select.name ||
-        page.properties.ContestID.number ||
-        page.properties["Classified?"].checkbox === false
+        page.properties.ContestID.number
       ) {
         return {
           contestId: page.properties.ContestID.number || null,
           status: page.properties.Status.select.name || null,
+          classified: page.properties["Classified?"].checkbox,
         };
       }
     });
@@ -246,6 +246,11 @@ exports.sourceNodes = async ({ actions, getNodes }) => {
         node,
         name: `status`,
         value: status.length > 0 ? status[0].status : undefined,
+      });
+      createNodeField({
+        node,
+        name: `classified`,
+        value: status.length > 0 ? status[0].classified : undefined,
       });
     }
   });
