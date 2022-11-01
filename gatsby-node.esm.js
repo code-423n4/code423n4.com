@@ -1,5 +1,6 @@
 import { graphql } from "@octokit/graphql";
 import format from "date-fns/format";
+import dedent from "dedent";
 import { createFilePath } from "gatsby-source-filesystem";
 import fetch from "node-fetch";
 import path from "path";
@@ -73,6 +74,12 @@ const getContestData = async () => {
   }
 };
 
+const privateContestMessage = dedent`
+# Contest details are not available. Why not?
+
+The contest is limited to specific participants. Most Code4rena contests are open and public, but some have special requirements. In those cases, the code and contest details remain private (at least for now).
+`;
+
 const graphqlWithAuth = graphql.defaults({
   headers: {
     authorization: `Bearer ${token}`,
@@ -121,6 +128,9 @@ async function fetchReadmeMarkdown(contestNode) {
       process.env.GITHUB_CONTEST_REPO_OWNER
     }/${getRepoName(contestNode)}/main/README.md`
   );
+  if (response.status === 404) {
+    return privateContestMessage;
+  }
   const data = await response.text();
   return data;
 }

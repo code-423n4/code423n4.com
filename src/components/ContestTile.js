@@ -74,6 +74,7 @@ const ContestTile = ({ contest, updateContestStatus }) => {
           )}
           {(t.contestStatus === "active" || status === "Active Contest") &&
           findingsRepo &&
+          fields.status &&
           fields.submissionPath ? (
             <Link
               to={fields.submissionPath}
