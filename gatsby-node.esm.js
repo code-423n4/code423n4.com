@@ -89,6 +89,8 @@ const privateContestMessage = dedent`
 # Contest details are not available. Why not?
 
 The contest is limited to specific participants. Most Code4rena contests are open and public, but some have special requirements. In those cases, the code and contest details remain private (at least for now).
+
+For more information on participating in a private audit, please see this [post](https://mirror.xyz/c4blog.eth/Ww3sILR-e5iWoMYNpZEB9UME_vA8G0Yqa6TYvpSdEM0).
 `;
 
 const graphqlWithAuth = graphql.defaults({

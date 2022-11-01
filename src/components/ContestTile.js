@@ -31,7 +31,7 @@ const ContestTile = ({ contest, updateContestStatus, user }) => {
     } else if (fields.codeAccess === "certified" && user.isCertified) {
       setCanViewContest(true);
     } else {
-      return;
+      setCanViewContest(false);
     }
   }, [fields, user]);
 

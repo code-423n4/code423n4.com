@@ -81,6 +81,7 @@ const ContestLayout = (props) => {
       } else if (fields.codeAccess === "certified" && currentUser.isCertified) {
         setCanViewContest(true);
       } else {
+        setCanViewContest(false);
         return;
       }
       if (currentUser.isLoggedIn) {
