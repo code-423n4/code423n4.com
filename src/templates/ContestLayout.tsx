@@ -183,7 +183,8 @@ const ContestLayout = (props) => {
 
               {t.contestStatus === "active" &&
               findingsRepo &&
-              fields.submissionPath ? (
+              fields.submissionPath &&
+              fields.status ? (
                 <Link
                   to={fields.submissionPath}
                   className="button cta-button button-medium secondary"
