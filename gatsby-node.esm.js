@@ -77,9 +77,7 @@ const getContestData = async () => {
 const privateContestMessage = dedent`
 # Contest details are not available. Why not?
 
-There are two possible explanations:
-1. There's a slight delay in opening the contest repo. Sometimes the website needs a few minutes to update itself after a contest goes live.
-2. The contest is limited to specific participants. Most Code4rena contests are open and public, but some have special requirements. In those cases, the code and contest details remain private (at least for now).
+The contest is limited to specific participants. Most Code4rena contests are open and public, but some have special requirements. In those cases, the code and contest details remain private (at least for now).
 `;
 
 const graphqlWithAuth = graphql.defaults({
