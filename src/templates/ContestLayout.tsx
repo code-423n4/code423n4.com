@@ -42,6 +42,7 @@ const ContestLayout = (props) => {
     FindingsStatus.Fetching
   );
   const [errorMessage, setErrorMessage] = useState<string>("");
+  const [canViewContest, setCanViewContest] = useState<boolean>(false);
 
   // hooks
   const { currentUser } = useUser();
@@ -75,6 +76,14 @@ const ContestLayout = (props) => {
 
   useEffect(() => {
     (async () => {
+      if (fields.codeAccess === "public") {
+        setCanViewContest(true);
+      } else if (fields.codeAccess === "certified" && currentUser.isCertified) {
+        setCanViewContest(true);
+      } else {
+        setCanViewContest(false);
+        return;
+      }
       if (currentUser.isLoggedIn) {
         const user = Moralis.User.current();
         const sessionToken = user?.attributes.sessionToken;
@@ -108,7 +117,7 @@ const ContestLayout = (props) => {
         setFindingsList({ user: [], teams: {} });
       }
     })();
-  }, [currentUser, contestid]);
+  }, [currentUser, contestid, fields]);
 
   return (
     <DefaultLayout
@@ -172,33 +181,34 @@ const ContestLayout = (props) => {
             <h1>{title}</h1>
             <p>{details}</p>
             <div className="button-wrapper">
-              {t.contestStatus !== "soon" ? (
+              {t.contestStatus !== "soon" && canViewContest && (
                 <a
                   href={repo}
                   className="button cta-button button-medium primary"
                 >
                   View Repo
                 </a>
-              ) : null}
+              )}
 
               {t.contestStatus === "active" &&
-              findingsRepo &&
-              fields.submissionPath ? (
-                <Link
-                  to={fields.submissionPath}
-                  className="button cta-button button-medium secondary"
-                >
-                  Submit Finding
-                </Link>
-              ) : null}
-              {canViewReport ? (
+                findingsRepo &&
+                fields.submissionPath &&
+                canViewContest && (
+                  <Link
+                    to={fields.submissionPath}
+                    className="button cta-button button-medium secondary"
+                  >
+                    Submit Finding
+                  </Link>
+                )}
+              {canViewReport && (
                 <Link
                   to={reportUrl}
                   className="button cta-button button-medium secondary"
                 >
                   View Report
                 </Link>
-              ) : null}
+              )}
             </div>
           </div>
           <div className="top-section-amount">
@@ -321,6 +331,8 @@ export const query = graphql`
         readmeContent
         contestPath
         artPath
+        status
+        codeAccess
       }
       hide
       league
