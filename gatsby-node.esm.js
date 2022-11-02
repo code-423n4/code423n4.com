@@ -39,12 +39,6 @@ const getContestData = async () => {
                 does_not_equal: "Possible",
               },
             },
-            {
-              property: "Classified?",
-              checkbox: {
-                equals: false,
-              },
-            },
           ],
         },
       });
@@ -59,13 +53,30 @@ const getContestData = async () => {
         page.properties.Status.select.name !== "Lost deal" ||
         page.properties.Status.select.name !== "Possible" ||
         page.properties.Status.select.name ||
-        page.properties.ContestID.number ||
-        page.properties["Classified?"].checkbox === false
+        page.properties.ContestID.number
       ) {
-        return {
-          contestId: page.properties.ContestID.number || null,
-          status: page.properties.Status.select.name || null,
-        };
+        if (page.properties["Classified?"].checkbox === false) {
+          return {
+            contestId: page.properties.ContestID.number || null,
+            status: page.properties.Status.select.name || null,
+            codeAccess: "public",
+          };
+        } else if (
+          page.properties["Code access"].select &&
+          page.properties["Code access"].select.name.trim() === "Certified only"
+        ) {
+          return {
+            contestId: page.properties.ContestID.number || null,
+            status: page.properties.Status.select.name || null,
+            codeAccess: "certified",
+          };
+        } else {
+          return {
+            contestId: page.properties.ContestID.number || null,
+            status: page.properties.Status.select.name || null,
+            codeAccess: null,
+          };
+        }
       }
     });
     return statusObject;
@@ -78,6 +89,8 @@ const privateContestMessage = dedent`
 # Contest details are not available. Why not?
 
 The contest is limited to specific participants. Most Code4rena contests are open and public, but some have special requirements. In those cases, the code and contest details remain private (at least for now).
+
+For more information on participating in a private audit, please see this [post](https://mirror.xyz/c4blog.eth/Ww3sILR-e5iWoMYNpZEB9UME_vA8G0Yqa6TYvpSdEM0).
 `;
 
 const graphqlWithAuth = graphql.defaults({
@@ -245,17 +258,28 @@ exports.onCreateNode = async ({ node, getNode, actions }) => {
 exports.sourceNodes = async ({ actions, getNodes }) => {
   const { createNodeField } = actions;
   const nodes = await getNodes();
-  const result = await getContestData();
+  const contestStatusData = await getContestData();
 
   nodes.forEach((node, index) => {
     if (node.internal.type === `ContestsCsv`) {
-      const status = result.filter(
+      const dataForCurrentContest = contestStatusData.filter(
         (element) => element.contestId === node.contestid
       );
       createNodeField({
         node,
         name: `status`,
-        value: status.length > 0 ? status[0].status : undefined,
+        value:
+          dataForCurrentContest.length > 0
+            ? dataForCurrentContest[0].status
+            : undefined,
+      });
+      createNodeField({
+        node,
+        name: `codeAccess`,
+        value:
+          dataForCurrentContest.length > 0
+            ? dataForCurrentContest[0].codeAccess
+            : undefined,
       });
     }
   });
