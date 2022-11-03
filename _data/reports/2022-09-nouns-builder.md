@@ -223,7 +223,7 @@ Further information regarding the severity criteria referenced throughout the su
 
 # High Risk Findings (5)
 ## [[H-01] User can get unlimited votes](https://github.com/code-423n4/2022-09-nouns-builder-findings/issues/469)
-_Submitted by saian, also found by 0x4non, Ch\_301, davidbrai, izhuer, MEP, Picodes, PwnPatrol, R2, rotcivegaf, scaraven, and Soosh_
+*Submitted by saian, also found by 0x4non, Ch\_301, davidbrai, izhuer, MEP, Picodes, PwnPatrol, R2, rotcivegaf, scaraven, and Soosh*
 
 `aftertokenTransfer` in ERC721Votes transfers votes between user addresses instead of the delegated addresses, so a user can cause overflow in `_moveDelegates` and get unlimited votes.
 
@@ -574,7 +574,7 @@ Consider batching multiple checkpoints writes per block/timestamp similar to how
 ***
 
 ## [[H-04] `ERC721Votes`: Token owners can double voting power through self delegation](https://github.com/code-423n4/2022-09-nouns-builder-findings/issues/413)
-_Submitted by zkhorse, also found by berndartmueller, Ch\_301, hxzy, hyh, MEP, pcarranzav, pfapostol, Picodes, and Solimander_
+*Submitted by zkhorse, also found by berndartmueller, Ch\_301, hxzy, hyh, MEP, pcarranzav, pfapostol, Picodes, and Solimander*
 
 The owner of one or many `ERC721Votes` tokens can double their voting power once (and only once) by delegating to their own address as their first delegation.
 
@@ -831,7 +831,7 @@ Note that the original NounsDAO contracts follow this pattern. (See [here](https
 ***
 
 ## [[H-05] `_transferFrom()` can be used to indefinitely increase voting power](https://github.com/code-423n4/2022-09-nouns-builder-findings/issues/224)
-_Submitted by Soosh, also found by Ch\_301, davidbrai, and PwnPatrol_
+*Submitted by Soosh, also found by Ch\_301, davidbrai, and PwnPatrol*
 
 It is possible to indefinitely increase voting power by creating new accounts (addresses) and delegating. This will lead to unfair governance as a user can vote with more votes than actual.
 
@@ -1380,7 +1380,7 @@ Use `_tokenId` instead of `baseTokenId`.
 ***
 
 ## [[M-04] Founders can receive less tokens that expected](https://github.com/code-423n4/2022-09-nouns-builder-findings/issues/269)
-_Submitted by MEP, also found by \_\_141345\_\_, 0xSky, antonttc, azephiar, cccz, CertoraInc, d3e4, datapunk, davidbrai, easy\_peasy, hansfriese, hansfriese, MiloTruck, minhtrng, neumo, pcarranzav, peritoflores, PwnPatrol, R2, scaraven, teawaterwire, Tointer, tonisives, unforgiven, V\_B, wagmi, zkhorse, and zzzitron_
+*Submitted by MEP, also found by &#95;&#95;141345&#95;&#95;, 0xSky, antonttc, azephiar, cccz, CertoraInc, d3e4, datapunk, davidbrai, easy&#95;peasy, hansfriese, hansfriese, MiloTruck, minhtrng, neumo, pcarranzav, peritoflores, PwnPatrol, R2, scaraven, teawaterwire, Tointer, tonisives, unforgiven, V&#95;B, wagmi, zkhorse, and zzzitron*
 
 [Token.sol#L118](https://github.com/code-423n4/2022-09-nouns-builder/blob/7e9fddbbacdd7d7812e912a369cfd862ee67dc03/src/token/Token.sol#L118)<br>
 
@@ -1482,7 +1482,7 @@ Replace the line 118 of `Token.sol` by `baseTokenId = (baseTokenId + schedule) %
 ***
 
 ## [[M-05] A proposal can be cancelled by anyone if the proposal has exactly proposalThreshold votes](https://github.com/code-423n4/2022-09-nouns-builder-findings/issues/194)
-_Submitted by davidbrai, also found by cccz, Ch\_301, Chom, datapunk, elad, GimelSec, pauliax, PwnPatrol, and rbserver_
+*Submitted by davidbrai, also found by cccz, Ch\_301, Chom, datapunk, elad, GimelSec, pauliax, PwnPatrol, and rbserver*
 
 <https://github.com/code-423n4/2022-09-nouns-builder/blob/main/src/governance/governor/Governor.sol#L128><br>
 <https://github.com/code-423n4/2022-09-nouns-builder/blob/main/src/governance/governor/Governor.sol#L363>
@@ -1849,7 +1849,7 @@ When `_to` isn't zero there always be an addition in \_moveDelegateVotes(), so t
 ***
 
 ## [[M-08] Delegation should not be allowed to address(0)](https://github.com/code-423n4/2022-09-nouns-builder-findings/issues/203)
-_Submitted by davidbrai, also found by bin2chen, Ch\_301, Chom, cryptphi, pashov, and PwnPatrol_
+*Submitted by davidbrai, also found by bin2chen, Ch\_301, Chom, cryptphi, pashov, and PwnPatrol*
 
 [ERC721Votes.sol#L179-L190](https://github.com/code-423n4/2022-09-nouns-builder/blob/main/src/lib/token/ERC721Votes.sol#L179-L190)<br>
 
@@ -2051,7 +2051,7 @@ The maximum amount of properties an owner can add should be less than the maximu
 ***
 
 ## [[M-10] The quorum votes calculations don't take into account burned tokens](https://github.com/code-423n4/2022-09-nouns-builder-findings/issues/423)
-_Submitted by azephiar, also found by \_\_141345\_\_, 0x52, 0xSmartContract, bin2chen, Ch\_301, indijanc, and Tointer_
+*Submitted by azephiar, also found by &#95;&#95;141345&#95;&#95;, 0x52, 0xSmartContract, bin2chen, Ch\_301, indijanc, and Tointer*
 
 <https://github.com/code-423n4/2022-09-nouns-builder/blob/main/src/governance/governor/Governor.sol#L475><br>
 <https://github.com/code-423n4/2022-09-nouns-builder/blob/main/src/governance/governor/Governor.sol#L524>
@@ -2661,7 +2661,7 @@ Consider adding a per-account nonce storage variable (e.g. `mapping(address => u
 ***
 
 ## [[M-15] Malicious pausing the contract](https://github.com/code-423n4/2022-09-nouns-builder-findings/issues/719)
-_Submitted by V\_B_
+*Submitted by V\_B*
 
 [Auction.sol#L204](https://github.com/code-423n4/2022-09-nouns-builder/blob/7e9fddbbacdd7d7812e912a369cfd862ee67dc03/src/auction/Auction.sol#L204)<br>
 [Auction.sol#L206](https://github.com/code-423n4/2022-09-nouns-builder/blob/7e9fddbbacdd7d7812e912a369cfd862ee67dc03/src/auction/Auction.sol#L206)<br>
@@ -2721,7 +2721,7 @@ Add a special check for upper bound of `gasLeft` at start of `_createAuction` fu
 ***
 
 ## [[M-16] Auction parameters can be changed during ongoing auction](https://github.com/code-423n4/2022-09-nouns-builder-findings/issues/450)
-_Submitted by \_\_141345\_\_, also found by pauliax, rbserver, rvierdiiev, and sorrynotsorry_
+*Submitted by &#95;&#95;141345&#95;&#95;, also found by pauliax, rbserver, rvierdiiev, and sorrynotsorry*
 
 [Auction.sol#L307-L335](https://github.com/code-423n4/2022-09-nouns-builder/blob/7e9fddbbacdd7d7812e912a369cfd862ee67dc03/src/auction/Auction.sol#L307-L335)<br>
 
@@ -2779,7 +2779,7 @@ src/auction/Auction.sol
 ***
 
 ## [[M-17] A proposal can pass with 0 votes in favor at early DAO stages](https://github.com/code-423n4/2022-09-nouns-builder-findings/issues/436)
-_Submitted by azephiar, also found by \_\_141345\_\_, bin2chen, cccz, davidbrai, pauliax, R2, rbserver, and Solimander_
+*Submitted by azephiar, also found by &#95;&#95;141345&#95;&#95;, bin2chen, cccz, davidbrai, pauliax, R2, rbserver, and Solimander*
 
 It's possible to create a proposal for a DAO as soon as it's deployed and the proposal can pass even if nobody votes.
 
@@ -3081,7 +3081,7 @@ function deleteVotingPower(address _blackListed,uint _weight, uint _support) ext
 ***
 
 ## [[M-21] Truncation in casting can lead to a founder receiving all the base tokens](https://github.com/code-423n4/2022-09-nouns-builder-findings/issues/303)
-_Submitted by CertoraInc, also found by 0xSky, antonttc, bin2chen, izhuer, pcarranzav, peritoflores, PwnPatrol, rbserver, scaraven, Tomo, V\_B, wagmi, and zzzitron_
+*Submitted by CertoraInc, also found by 0xSky, antonttc, bin2chen, izhuer, pcarranzav, peritoflores, PwnPatrol, rbserver, scaraven, Tomo, V\_B, wagmi, and zzzitron*
 
 <https://github.com/code-423n4/2022-09-nouns-builder/blob/7e9fddbbacdd7d7812e912a369cfd862ee67dc03/src/token/Token.sol#L71-L126><br>
 <https://github.com/code-423n4/2022-09-nouns-builder/blob/7e9fddbbacdd7d7812e912a369cfd862ee67dc03/src/token/Token.sol#L88>
