@@ -1,5 +1,7 @@
 import { readFileSync } from "fs";
+import Moralis from "moralis-v1/node";
 import fetch from "node-fetch";
+import uniq from "lodash/uniq";
 const { Octokit } = require("@octokit/core");
 const { createPullRequest } = require("octokit-plugin-create-pull-request");
 const formData = require("form-data");
@@ -7,9 +9,15 @@ const Mailgun = require("mailgun.js");
 
 import { TeamData, UserData, UserFileData } from "../../types/user";
 
-const { token, apiKey, domain } = require("../_config");
+const {
+  token,
+  apiKey,
+  domain,
+  moralisAppId,
+  moralisServerUrl,
+} = require("../_config");
 
-import { isDangerousHandle } from "../util/validation-utils";
+import { isDangerousHandle } from "./validation-utils";
 
 const OctokitClient = Octokit.plugin(createPullRequest);
 const octokit = new OctokitClient({ auth: token });
@@ -49,26 +57,27 @@ export async function getUserTeams(username: string): Promise<string[]> {
   return teamHandles;
 }
 
-export async function updateTeamAddress(
+export async function updateTeamAddresses(
+  username: string,
   team: TeamData,
-  newPolygonAddress: string
+  addresses: {
+    chain: string;
+    address: string;
+  }[]
 ): Promise<void> {
-  const updatedTeamData = JSON.stringify(
-    {
-      ...team,
-      address: newPolygonAddress,
-    },
-    null,
-    2
-  );
+  const teamData: TeamData = {
+    ...team,
+    paymentAddresses: addresses,
+  };
+  const updatedTeamData = JSON.stringify(teamData, null, 2);
   const teamName = team.handle;
   const files = {
     [`_data/handles/${teamName}.json`]: updatedTeamData,
   };
   const owner = process.env.GITHUB_REPO_OWNER;
-  const body = `This auto-generated PR updates polygon address for team ${teamName}`;
-  const title = `Add address for team ${teamName}`;
-  await octokit.createPullRequest({
+  const body = `This auto-generated PR updates payment addresses for team ${teamName}. (request made by ${username})`;
+  const title = `Update payment addresses for team ${teamName}`;
+  const res = await octokit.createPullRequest({
     owner,
     repo: process.env.REPO,
     title,
@@ -82,6 +91,33 @@ export async function updateTeamAddress(
       },
     ],
   });
+  const teamEmails = await getTeamEmails(team);
+  const emailSubject = `Payment addresses updated for ${team.handle}`;
+  const emailBody = `This update was made by ${username}. You can see the pull request here: ${res.data.html_url}.`;
+  await sendConfirmationEmail(teamEmails, emailSubject, emailBody);
+}
+
+export async function getTeamEmails(team: TeamData): Promise<string[]> {
+  await Moralis.start({
+    serverUrl: moralisServerUrl,
+    appId: moralisAppId,
+    masterKey: process.env.MORALIS_MASTER_KEY,
+  });
+
+  const { members } = team;
+  const emails = members.map(async (member) => {
+    const query = new Moralis.Query("_User");
+    query.equalTo("username", member);
+    query.select("email");
+    const results = await query.find({ useMasterKey: true });
+    if (results.length === 0) {
+      return "";
+    }
+    const email = results[0].attributes.email;
+    return email || "";
+  });
+
+  return Promise.all(emails);
 }
 
 export async function sendConfirmationEmail(
@@ -92,7 +128,7 @@ export async function sendConfirmationEmail(
   const mailgun = new Mailgun(formData);
   const mg = mailgun.client({ username: "api", key: apiKey });
 
-  const recipients = `${emailAddresses.join(", ")}, ${
+  const recipients = `${uniq(emailAddresses).join(", ")}, ${
     process.env.EMAIL_SENDER
   }`;
 

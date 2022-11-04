@@ -1,27 +1,25 @@
 import clsx from "clsx";
 import React, { useEffect, useState } from "react";
-import Moralis from "moralis";
+import Moralis from "moralis-v1";
 import { navigate } from "gatsby";
 import { toast } from "react-toastify";
 import { useMoralis } from "react-moralis";
+
+// hooks
+import { useModalContext } from "../../hooks/ModalContext";
 import useUser, { UserLoginError } from "../../hooks/UserContext";
 
+// components
 import Dropdown from "../Dropdown";
 
+// styles
 import * as styles from "./Login.module.scss";
 import * as dropdownStyles from "../Dropdown.module.scss";
 
 const Login = ({ displayAsButtons = false }) => {
   const { logUserOut, connectWallet } = useUser();
+  const { showModal } = useModalContext();
   const { authenticate } = useMoralis();
-  const [isMetaMaskEnabled, setIsMetaMaskEnabled] = useState(false);
-
-  useEffect(() => {
-    // @ts-ignore // @todo: fix typescript error
-    if (typeof window !== "undefined" && window.ethereum) {
-      setIsMetaMaskEnabled(true);
-    }
-  }, []);
 
   const handleLogin = async (
     event: React.MouseEvent,
@@ -36,10 +34,25 @@ const Login = ({ displayAsButtons = false }) => {
         signingMessage: "Code4rena login",
       });
       if (user === undefined) {
-        // user clicked "cancel" when prompted to sign message
-        // @todo: update messaging
+        let message: string | React.ReactNode = "";
+        // @ts-ignore // @todo: fix typescript error
+        if (typeof window.ethereum === "undefined") {
+          // user does not have MetaMask installed
+          message = (
+            <>
+              Please{" "}
+              <a href="https://metamask.io/" target="_blank" rel="noreferrer">
+                install MetaMask
+              </a>
+            </>
+          );
+        } else {
+          // user clicked "cancel" when prompted to sign message
+          // @todo: update messaging
+          message = "You must sign the message to connect your wallet";
+        }
         toast.update(id, {
-          render: "You must sign the message to connect your wallet",
+          render: message,
           type: "error",
           isLoading: false,
           autoClose: 3000,
@@ -49,6 +62,7 @@ const Login = ({ displayAsButtons = false }) => {
       }
     } catch (error) {
       logUserOut();
+      console.error("authenticate failed:", error);
       toast.update(id, {
         render: "Something went wrong. Please refresh the page and try again.",
         type: "error",
@@ -111,6 +125,7 @@ const Login = ({ displayAsButtons = false }) => {
           closeButton: true,
         });
       } else {
+        console.error("connect wallet failed: ", error);
         toast.update(id, {
           render:
             "Something went wrong. Please refresh the page and try again.",
@@ -123,38 +138,31 @@ const Login = ({ displayAsButtons = false }) => {
     }
   };
 
+  const openLoginModal = (e: React.MouseEvent) => {
+    e.preventDefault();
+    showModal({
+      title: "Log in",
+      body: "",
+      type: "login",
+    });
+  };
+
   return (
     <>
       {displayAsButtons ? (
         <div className={clsx(styles.NoDropdown)}>
-          {isMetaMaskEnabled ? (
-            <button
-              type="button"
-              onClick={(e) => handleLogin(e)}
-              className={clsx("button", styles.SmallerButton)}
-            >
-              <img
-                src="/images/meta-mask-logo.svg"
-                alt="logout icon"
-                className={styles.Icon}
-              />
-              Connect MetaMask
-            </button>
-          ) : (
-            <a
-              href="https://metamask.io/"
-              target="_blank"
-              rel="noreferrer"
-              className={clsx("button", styles.SmallerButton)}
-            >
-              <img
-                src="/images/meta-mask-logo.svg"
-                alt="logout icon"
-                className={styles.Icon}
-              />
-              Install MetaMask
-            </a>
-          )}
+          <button
+            type="button"
+            onClick={(e) => handleLogin(e)}
+            className={clsx("button", styles.SmallerButton)}
+          >
+            <img
+              src="/images/meta-mask-logo.svg"
+              alt="logout icon"
+              className={styles.Icon}
+            />
+            MetaMask
+          </button>
           <button
             type="button"
             onClick={(e) => handleLogin(e, "walletConnect")}
@@ -165,7 +173,19 @@ const Login = ({ displayAsButtons = false }) => {
               alt="logout icon"
               className={styles.Icon}
             />
-            Connect WalletConnect
+            WalletConnect
+          </button>
+          <button
+            className={clsx("button", styles.SmallerButton)}
+            type="button"
+            onClick={openLoginModal}
+          >
+            <img
+              src="/images/sign-out.svg"
+              alt="login icon"
+              className={styles.Icon}
+            />
+            Log in
           </button>
         </div>
       ) : (
@@ -173,38 +193,22 @@ const Login = ({ displayAsButtons = false }) => {
           <Dropdown
             wrapperClass={styles.LoginButtonWrapper}
             triggerButtonClass={styles.LoginButton}
-            triggerButton="Connect Wallet"
+            triggerButton="Connect"
             openOnHover={true}
             className={styles.Desktop}
           >
-            {isMetaMaskEnabled ? (
-              <button
-                type="button"
-                onClick={(e) => handleLogin(e)}
-                className={clsx(dropdownStyles.Button, styles.Desktop)}
-              >
-                <img
-                  src="/images/meta-mask-logo.svg"
-                  alt="logout icon"
-                  className={styles.Icon}
-                />
-                Connect MetaMask
-              </button>
-            ) : (
-              <a
-                href="https://metamask.io/"
-                target="_blank"
-                rel="noreferrer"
-                className={clsx(dropdownStyles.Button, styles.Desktop)}
-              >
-                <img
-                  src="/images/meta-mask-logo.svg"
-                  alt="logout icon"
-                  className={styles.Icon}
-                />
-                Install MetaMask
-              </a>
-            )}
+            <button
+              type="button"
+              onClick={(e) => handleLogin(e)}
+              className={clsx(dropdownStyles.Button, styles.Desktop)}
+            >
+              <img
+                src="/images/meta-mask-logo.svg"
+                alt="logout icon"
+                className={styles.Icon}
+              />
+              MetaMask
+            </button>
             <button
               type="button"
               onClick={(e) => handleLogin(e, "walletConnect")}
@@ -215,15 +219,27 @@ const Login = ({ displayAsButtons = false }) => {
                 alt="logout icon"
                 className={styles.Icon}
               />
-              Connect WalletConnect
+              WalletConnect
+            </button>
+            <button
+              className={clsx(dropdownStyles.Button, styles.Desktop)}
+              type="button"
+              onClick={openLoginModal}
+            >
+              <img
+                src="/images/sign-out.svg"
+                alt="login icon"
+                className={styles.Icon}
+              />
+              Log in
             </button>
           </Dropdown>
           <div className={styles.Mobile}>
             <a
-              href={isMetaMaskEnabled ? "" : "https://metamask.io/"}
+              href=""
               target="_blank"
               rel="noreferrer"
-              onClick={isMetaMaskEnabled ? (e) => handleLogin(e) : undefined}
+              onClick={(e) => handleLogin(e)}
               className={styles.Link}
             >
               <img
@@ -231,7 +247,7 @@ const Login = ({ displayAsButtons = false }) => {
                 alt="logout icon"
                 className={styles.Icon}
               />
-              {isMetaMaskEnabled ? "Connect MetaMask" : "Install MetaMask"}
+              Connect MetaMask
             </a>
             <a
               href=""
@@ -244,6 +260,14 @@ const Login = ({ displayAsButtons = false }) => {
                 className={styles.Icon}
               />
               Connect WalletConnect
+            </a>
+            <a href="" className={styles.Link} onClick={openLoginModal}>
+              <img
+                src="/images/sign-out.svg"
+                alt="login icon"
+                className={styles.Icon}
+              />
+              Log in
             </a>
           </div>
         </>

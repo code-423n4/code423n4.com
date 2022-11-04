@@ -14519,10 +14519,10 @@ moralis-admin-cli@^2.1.16:
     rimraf "^3.0.2"
     syntax-error "^1.4.0"
 
-moralis@^1.3.5:
-  version "1.5.8"
-  resolved "https://registry.yarnpkg.com/moralis/-/moralis-1.5.8.tgz#5bf0bd8b4bba6964ce29f847f63ef255733a6486"
-  integrity sha512-fShSFaSphFzXH1yRk+vSxO6QBfgL4h33l0Vl+a401PquqWeFbxDqnkNPxKkdvMEFANYp3eLNPto4Zb684wohcQ==
+moralis-v1@^1.11.0:
+  version "1.11.0"
+  resolved "https://registry.yarnpkg.com/moralis-v1/-/moralis-v1-1.11.0.tgz#fc8f5055d14b91c8301337ab58b331fa6e4b4f60"
+  integrity sha512-6FxKTdh1kOLme+R5Z6kIT++MHwZzTrYGhiS/E7hRnapomY423RThrxsnYgs7XnLEe8g2TLvA4Sx0+DIgwYWTjg==
   dependencies:
     "@babel/runtime" "7.16.7"
     "@babel/runtime-corejs3" "7.16.8"
@@ -17063,10 +17063,10 @@ react-markdown@^7.1.2:
     unist-util-visit "^4.0.0"
     vfile "^5.0.0"
 
-react-moralis@^1.3.2:
-  version "1.3.5"
-  resolved "https://registry.yarnpkg.com/react-moralis/-/react-moralis-1.3.5.tgz#d811e8c7e16d6ff3988fc2115a6bcce7e85263bd"
-  integrity sha512-Z78gjQStR301biEzfJe4MZYGqWZh3bk8hfBzguobWM/98MR7DEBiCCWEEeUqkphc2zkCzo9mKRGV/YTdTdD/vg==
+react-moralis@^1.4.0:
+  version "1.4.2"
+  resolved "https://registry.yarnpkg.com/react-moralis/-/react-moralis-1.4.2.tgz#745cd5fba311071ecb23267966f35784862f585b"
+  integrity sha512-M6R9+AO4r/ZmJEMbv2IySnp1+8fRvzu1osehAWYqQgN8cPsHWGuDpnmNSd8Q+DegZ/sjiBkfWjuEXFRwrHYorQ==
   dependencies:
     fast-deep-equal "^3.1.3"
     immer "^9.0.7"
