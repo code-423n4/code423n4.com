@@ -196,7 +196,7 @@ Final report assembled by [liveactionllama](https://twitter.com/liveactionllama)
 
 # Summary
 
-The C4 analysis yielded an aggregated total of 33 unique vulnerabilities. Of these vulnerabilities, 5 received a risk rating in the category of HIGH severity and 28 received a risk rating in the category of MEDIUM severity.
+The C4 analysis yielded an aggregated total of 33 unique vulnerabilities. Of these vulnerabilities, 5 received a risk rating in the category of HIGH severity and 28 received a risk rating in the category of MEDIUM severity. Per Nouns Builder, all of these HIGH and MEDIUM severity findings have been addressed as of [this commit](https://github.com/ourzora/nouns-protocol/commit/dcfd8bcd1b33c05601c9e9244fc479130ba0d378).
 
 Additionally, C4 analysis included 124 reports detailing issues with a risk rating of LOW severity or non-critical. There were also 75 reports recommending gas optimizations.
 
