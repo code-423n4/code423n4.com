@@ -1,0 +1,13 @@
+{
+  "handle": "Team_Web3Tech",
+  "members": [
+    "web3tech",
+    "hashTheBlocks"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xd1A519bF524F32C69E4432bEb8679207e8706574"
+    }
+  ]
+}
