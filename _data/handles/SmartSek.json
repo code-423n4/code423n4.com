@@ -1,5 +1,14 @@
 {
-    "image": "./avatars/SmartSek.png",
-    "handle": "SmartSek",
-    "members": ["0xDjango", "hake"]
+  "image": "./avatars/SmartSek.png",
+  "handle": "SmartSek",
+  "members": [
+    "0xDjango",
+    "hake"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x0058dd50c91d60F0A973fE15Fb40e4430F4DAA08"
+    }
+  ]
 }
