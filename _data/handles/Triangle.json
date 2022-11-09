@@ -1,6 +1,5 @@
 {
   "handle": "Triangle",
-  "members": ["caventa", "DeviantArt"],
   "paymentAddresses": [
     {
       "chain": "polygon",
@@ -9,4 +8,5 @@
   ],
   "link": "",
   "image": "./avatars/Triangle.png"
+  "showOnLeaderboard: false"
 }
