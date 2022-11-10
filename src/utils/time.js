@@ -73,6 +73,10 @@ const getDates = (start, end) => {
     end: endTime,
     startDay: isValid(startDate) ? format(startDate, "d MMMM yyyy") : "",
     endDay: isValid(endDate) ? format(endDate, "d MMMM yyyy") : "",
+    startTime: isValid(startDate)
+      ? format(endDate, "d MMMM yyyy - h:mm a")
+      : "",
+    endTime: isValid(endDate) ? format(endDate, "d MMMM yyyy - h:mm a") : "",
     daysDuration,
   };
 
