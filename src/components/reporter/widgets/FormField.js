@@ -1,29 +1,37 @@
-import React from 'react'
+import React from "react";
+import ReactMarkdown from "react-markdown";
+
 import * as styles from "./Widgets.module.scss";
 
-function FormField({ 
+function FormField({
   name,
   label,
   helpText,
+  type = "",
   isInvalid,
   children,
-  errorMessage="This field is required"
+  errorMessage = "This field is required",
 }) {
   return (
     <div className={styles.Container}>
-      {label &&<label className={styles.Label} htmlFor={name}>{label}</label>}
-      {helpText && <p className={styles.Help}>{helpText}</p>}
+      {label && (
+        <label className={styles.Label} htmlFor={name}>
+          {label}
+        </label>
+      )}
+      {type !== "markdown" && helpText ? (
+        <p className={styles.Help}>{helpText}</p>
+      ) : (
+        <ReactMarkdown className={styles.Help}>{helpText}</ReactMarkdown>
+      )}
       {children}
-      {isInvalid &&
-        <label
-          htmlFor={name}
-          className={styles.ErrorMessage}
-        >
+      {isInvalid && name !== "linksToCode" && (
+        <label htmlFor={name} className={styles.ErrorMessage}>
           {errorMessage}
         </label>
-      }
+      )}
     </div>
-  )
+  );
 }
 
-export default FormField
+export default FormField;

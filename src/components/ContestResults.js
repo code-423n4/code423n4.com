@@ -15,9 +15,15 @@ function updateFindings(data, finding) {
       break;
     case "2":
       data.medRisk += 1;
+      if (finding.split === 1) {
+        data.soloMed += 1;
+      }
       break;
     case "3":
       data.highRisk += 1;
+      if (finding.split === 1) {
+        data.soloHigh += 1;
+      }
       break;
     case "g":
       data.gasOptz += 1;
@@ -33,7 +39,7 @@ const ContestResults = ({ results }) => {
     let handles = {};
 
     for (const finding of results.findings) {
-      if ( !(finding.handle.handle in handles) ) {
+      if (!(finding.handle.handle in handles)) {
         const handleData = {
           handle: finding.handle.handle,
           image: finding.handle.image,
@@ -41,7 +47,9 @@ const ContestResults = ({ results }) => {
           members: finding.handle.members,
           lowRisk: 0,
           medRisk: 0,
+          soloMed: 0,
           highRisk: 0,
+          soloHigh: 0,
           nonCrit: 0,
           gasOptz: 0,
           allFindings: 0,
@@ -61,9 +69,7 @@ const ContestResults = ({ results }) => {
     return resultData;
   }, [results]);
 
-  return (
-    <LeaderboardTable results={resultData} />
-  );
+  return <LeaderboardTable results={resultData} />;
 };
 
 export default ContestResults;

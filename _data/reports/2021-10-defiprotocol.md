@@ -1,8 +1,8 @@
 ---
-sponsor: "defiProtocol"
+sponsor: "Kuiper"
 slug: "2021-10-defiprotocol"
 date: "2022-01-26"
-title: "defiProtocol 2 contest"
+title: "Kuiper contest"
 findings: "https://github.com/code-423n4/2021-10-defiprotocol-findings/issues"
 contest: 41
 ---
@@ -15,11 +15,13 @@ Code4rena (C4) is an open organization consisting of security researchers, audit
 
 A C4 code contest is an event in which community participants, referred to as Wardens, review, audit, or analyze smart contract logic in exchange for a bounty provided by sponsoring projects.
 
-During the code contest outlined in this document, C4 conducted an analysis of defiProtocol contest smart contract system written in Solidity. The code contest took place between October 8—October 10 2021.
+During the code contest outlined in this document, C4 conducted an analysis of Kuiper contest smart contract system written in Solidity. The code contest took place between October 8—October 10 2021.
+
+_Note: this audit contest originally ran under the name `defiProtocol`._
 
 ## Wardens
 
-9 Wardens contributed reports to the defiProtocol contest:
+9 Wardens contributed reports to the Kuiper contest:
 
 1. [kenzo](https://twitter.com/KenzoAgada)
 1. pants
@@ -45,7 +47,7 @@ C4 analysis also identified 16 non-critical recommendations and 34 gas optimizat
 
 # Scope
 
-The code under review can be found within the [C4 defiProtocol contest repository](https://github.com/code-423n4/2021-10-defiProtocol), and is composed of 11 smart contracts written in the Solidity programming language and includes 552 lines of Solidity code and 460 lines of JavaScript.
+The code under review can be found within the [C4 Kuiper contest repository](https://github.com/code-423n4/2021-10-defiProtocol), and is composed of 11 smart contracts written in the Solidity programming language and includes 552 lines of Solidity code and 460 lines of JavaScript.
 
 # Severity Criteria
 
@@ -118,7 +120,7 @@ So that's really equivalent to the bonding scenario.
 
 I might be missing something but at the moment I see no detriment to removing the bonding mechanism.
 
-**[frank-beard (defiProtocol) acknowledged](https://github.com/code-423n4/2021-10-defiprotocol-findings/issues/48)** 
+**[frank-beard (Kuiper) acknowledged](https://github.com/code-423n4/2021-10-defiprotocol-findings/issues/48)** 
 
 
 **[itsmetechjay (organizer) commented](https://github.com/code-423n4/2021-10-defiprotocol-findings/issues/48#issuecomment-940068100):**
@@ -166,7 +168,7 @@ function mint(uint256 amount) public override {
 }
 ```
 
-**[frank-beard (defiProtocol) confirmed ](https://github.com/code-423n4/2021-10-defiprotocol-findings/issues/59)**
+**[frank-beard (Kuiper) confirmed ](https://github.com/code-423n4/2021-10-defiprotocol-findings/issues/59)**
 
 **[Alex the Entreprenerd (judge) commented](https://github.com/code-423n4/2021-10-defiprotocol-findings/issues/59#issuecomment-997438174):**
  > Mint is factually broken, definitely an oversight.
@@ -197,7 +199,7 @@ Manual code review.
 
 Add an appropriate require statement to the function `Factory.setAuctionDecrement()` to disallow setting `Factory.auctionDecrement` to zero.
 
-**[frank-beard (defiProtocol) acknowledged](https://github.com/code-423n4/2021-10-defiprotocol-findings/issues/24)**  
+**[frank-beard (Kuiper) acknowledged](https://github.com/code-423n4/2021-10-defiprotocol-findings/issues/24)**  
 
 **[Alex the Entreprenerd (judge) commented](https://github.com/code-423n4/2021-10-defiprotocol-findings/issues/24#issuecomment-997440110):**
  > I agree with the finding, because this shows a way to DOS the protocol, given specific conditions, I will raise the severity to medium
@@ -223,7 +225,7 @@ Manual code review.
 
 Add an appropriate require statement to the function `Factory.setBondPercentDiv()` to disallow setting `Factory.bondPercentDiv` to zero.
 
-**[frank-beard (defiProtocol) acknowledged](https://github.com/code-423n4/2021-10-defiprotocol-findings/issues/23)**
+**[frank-beard (Kuiper) acknowledged](https://github.com/code-423n4/2021-10-defiprotocol-findings/issues/23)**
 
 **[Alex the Entreprenerd (judge) commented](https://github.com/code-423n4/2021-10-defiprotocol-findings/issues/23#issuecomment-997440190):**
  > Similarly to #24 agree with finding and raising to medium
@@ -240,7 +242,7 @@ This means that the protocol request incorrect amounts when dealing with these t
 
 The protocol should use stored token balances instead of transfer for calculating amounts.
 
-**[frank-beard (defiProtocol) acknowledged](https://github.com/code-423n4/2021-10-defiprotocol-findings/issues/78)** 
+**[frank-beard (Kuiper) acknowledged](https://github.com/code-423n4/2021-10-defiprotocol-findings/issues/78)** 
 
 **[Alex the Entreprenerd (judge) commented](https://github.com/code-423n4/2021-10-defiprotocol-findings/issues/78#issuecomment-997464504):**
  > I agree with the finding and the severity.
@@ -261,7 +263,7 @@ function `createBasket` in Factory should also be `nonReentrant` as it interacts
 
 Add `nonReentrant` modifier to the declaration of createBasket.
 
-**[frank-beard (defiProtocol) confirmed](https://github.com/code-423n4/2021-10-defiprotocol-findings/issues/85)**
+**[frank-beard (Kuiper) confirmed](https://github.com/code-423n4/2021-10-defiprotocol-findings/issues/85)**
 
 **[Alex the Entreprenerd (judge) commented](https://github.com/code-423n4/2021-10-defiprotocol-findings/issues/85#issuecomment-997464699):**
  > I agree that since the function can potentially interact with any ERC20like token, the function is vulnerable to re-entrancy, because we don't have any specific POC for an attack, this is a medium severity finding
@@ -291,7 +293,7 @@ function `setBondPercentDiv` should validate that `newBondPercentDiv > 1`, other
 
 Consider applying suggested validations to make the protocol more robust.
 
-**[frank-beard (defiProtocol) acknowledged and disagreed with severity](https://github.com/code-423n4/2021-10-defiprotocol-findings/issues/84)**
+**[frank-beard (Kuiper) acknowledged and disagreed with severity](https://github.com/code-423n4/2021-10-defiprotocol-findings/issues/84)**
 
 **[Alex the Entreprenerd (judge) commented](https://github.com/code-423n4/2021-10-defiprotocol-findings/issues/84#issuecomment-997464902):**
  > I agree with the warden, adding these checks will provide additional safety guarantees to protocol users (by limiting owner privileges)
@@ -314,16 +316,16 @@ If everybody burns their shares, in the next mint, `totalSupply` will be 0, `han
 Vulnerable line:
 <https://github.com/code-423n4/2021-09-defiProtocol/blob/52b74824c42acbcd64248f68c40128fe3a82caf6/contracts/contracts/Basket.sol#L124>
 You can add the following test to Basket.test.js and see that it reverts (..after you remove "nonReentrant" from "mint", see other issue):
-`it("should divide by 0", async () => {
+```js
+it("should divide by 0", async () => {
 await basket.connect(addr1).burn(await basket.balanceOf(addr1.address));
-await basket.connect(addr2).burn(await basket.balanceOf(addr2.address));`
-
-    await UNI.connect(addr1).approve(basket.address, ethers.BigNumber.from(1));
-    await COMP.connect(addr1).approve(basket.address, ethers.BigNumber.from(1));
-    await AAVE.connect(addr1).approve(basket.address, ethers.BigNumber.from(1));
-    await basket.connect(addr1).mint(ethers.BigNumber.from(1));
-
+await basket.connect(addr2).burn(await basket.balanceOf(addr2.address));
+await UNI.connect(addr1).approve(basket.address, ethers.BigNumber.from(1));
+await COMP.connect(addr1).approve(basket.address, ethers.BigNumber.from(1));
+await AAVE.connect(addr1).approve(basket.address, ethers.BigNumber.from(1));
+await basket.connect(addr1).mint(ethers.BigNumber.from(1));
 });
+```
 
 #### Tools Used
 
@@ -334,10 +336,10 @@ Manual analysis, hardhat.
 Add a check to `handleFees: if totalSupply= 0`, you can just return, no need to calculate new `ibRatio` / fees.
 You might want to reset `ibRatio` to BASE at this point.
 
-[frank-beard (defiProtocol) confirmed](https://github.com/code-423n4/2021-10-defiprotocol-findings/issues/49)
+[frank-beard (Kuiper) confirmed](https://github.com/code-423n4/2021-10-defiprotocol-findings/issues/49)
 
 **[itsmetechjay (organizer) commented](https://github.com/code-423n4/2021-10-defiprotocol-findings/issues/49#issuecomment-940068525):**
- > Warden apologizes for linking the code of the previous defiProtocol contest, however these lines are not changed in the new contest.
+ > Warden apologizes for linking the code of the previous Kuiper contest, however these lines are not changed in the new contest.
 
 **[Alex the Entreprenerd (judge) commented](https://github.com/code-423n4/2021-10-defiprotocol-findings/issues/49#issuecomment-997467248):**
  > Burning all shares will bring `totalSupply` to 0, which will cause `handleFees` to revert.
@@ -363,19 +365,18 @@ If for some reason nobody has bonded and settled an auction and the publisher di
 These are the vulnerable lines:
 <https://github.com/code-423n4/2021-10-defiprotocol/blob/main/contracts/contracts/Auction.sol#L95:#L105>
 
-```
-        uint256 a = factory.auctionMultiplier() * basket.ibRatio();
-        uint256 b = (bondBlock - auctionStart) * BASE / factory.auctionDecrement();
-        uint256 newRatio = a - b;
+```solidity
+uint256 a = factory.auctionMultiplier() * basket.ibRatio();
+uint256 b = (bondBlock - auctionStart) * BASE / factory.auctionDecrement();
+uint256 newRatio = a - b;
 
-        (address[] memory pendingTokens, uint256[] memory pendingWeights) = basket.getPendingWeights();
-        IERC20 basketAsERC20 = IERC20(address(basket));
+(address[] memory pendingTokens, uint256[] memory pendingWeights) = basket.getPendingWeights();
+IERC20 basketAsERC20 = IERC20(address(basket));
 
-        for (uint256 i = 0; i < pendingWeights.length; i++) {
-            uint256 tokensNeeded = basketAsERC20.totalSupply() * pendingWeights[i] * newRatio / BASE / BASE;
-            require(IERC20(pendingTokens[i]).balanceOf(address(basket)) >= tokensNeeded);
-        }
-
+for (uint256 i = 0; i < pendingWeights.length; i++) {
+    uint256 tokensNeeded = basketAsERC20.totalSupply() * pendingWeights[i] * newRatio / BASE / BASE;
+    require(IERC20(pendingTokens[i]).balanceOf(address(basket)) >= tokensNeeded);
+}
 ```
 
 The function verifies that `pendingTokens[i].balanceOf(basket) >= basketAsERC20.totalSupply() * pendingWeights[i] * newRatio / BASE / BASE`. This is the formula that will be used later to mint/burn/withdraw user funds.
@@ -389,12 +390,13 @@ Manual analysis, hardhat.
 #### Recommended Mitigation Steps
 
 Your needed condition/math might be different, and you might also choose to burn the bond while you're at it, but I think at the minimum you should add a sanity check in `settleAuction`:
-
-    require (newRatio > basket.ibRatio());
+```solidity
+require (newRatio > basket.ibRatio());
+```
 
 Maybe you would require `newRatio` to be > BASE but not sure.
 
-**[frank-beard (defiProtocol) confirmed](https://github.com/code-423n4/2021-10-defiprotocol-findings/issues/51)**  
+**[frank-beard (Kuiper) confirmed](https://github.com/code-423n4/2021-10-defiprotocol-findings/issues/51)**  
 
 **[Alex the Entreprenerd (judge) commented](https://github.com/code-423n4/2021-10-defiprotocol-findings/issues/51#issuecomment-997466418):**
  > Would need to confirm with sponsor:
@@ -415,7 +417,7 @@ Maybe you would require `newRatio` to be > BASE but not sure.
 > 
 > What do you think @frank-beard ?
 
-**[frank-beard (defiProtocol) commented](https://github.com/code-423n4/2021-10-defiprotocol-findings/issues/51#issuecomment-999259347):**
+**[frank-beard (Kuiper) commented](https://github.com/code-423n4/2021-10-defiprotocol-findings/issues/51#issuecomment-999259347):**
  > Agree with @Alex the Entreprenerd. The purpose of the auction is to create an opportunity for participants to rebalance a basket if it is in their interest. However the warden is correct that there can be issues if the `ibRatio` drops too low, or even to 0, which would effectively allow someone to steal funds. We plan to mitigate this by having the auction have a minimum `ibRatio` at which it can be settled.
 
 **[Alex the Entreprenerd (judge) commented](https://github.com/code-423n4/2021-10-defiprotocol-findings/issues/51#issuecomment-1001265064):**

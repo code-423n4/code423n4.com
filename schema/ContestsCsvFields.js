@@ -4,6 +4,8 @@ type ContestsCsvFields implements Node @dontInfer {
   submissionPath: String
   artPath: String
   readmeContent: String
+  status: String
+  codeAccess: String
 }`;
 
 export default ContestsCsvFields;

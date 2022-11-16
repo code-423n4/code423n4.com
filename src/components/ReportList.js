@@ -1,4 +1,5 @@
 import React from "react";
+
 import Report from "./Report";
 
 function sortByContestId(a, b) {

@@ -182,22 +182,22 @@ but in future release of the software the calls to `createNewSyntheticMarket` an
 [`LongShort.sol` #L304](https://github.com/code-423n4/2021-08-floatcapital/blob/main/contracts/contracts/LongShort.sol#L304)
 ```solidity
 function _seedMarketInitially(uint256 initialMarketSeedForEachMarketSide, uint32 marketIndex) internal virtual {
-   ...
-    ISyntheticToken(syntheticTokens[latestMarket][true]).mint(PERMANENT_INITIAL_LIQUIDITY_HOLDER,initialMarketSeedForEachMarketSide);   // should be marketIndex
-    ISyntheticToken(syntheticTokens[latestMarket][false]).mint(PERMANENT_INITIAL_LIQUIDITY_HOLDER,initialMarketSeedForEachMarketSide);  // should be marketIndex
+  ...
+  ISyntheticToken(syntheticTokens[latestMarket][true]).mint(PERMANENT_INITIAL_LIQUIDITY_HOLDER,initialMarketSeedForEachMarketSide);   // should be marketIndex
+  ISyntheticToken(syntheticTokens[latestMarket][false]).mint(PERMANENT_INITIAL_LIQUIDITY_HOLDER,initialMarketSeedForEachMarketSide);  // should be marketIndex
 
-  function initializeMarket(
-     uint32 marketIndex,....)
-  ...
-    require(!marketExists[marketIndex], "already initialized");
-    require(marketIndex <= latestMarket, "index too high");
-    marketExists[marketIndex] = true;
+function initializeMarket(
+    uint32 marketIndex,....)
+...
+  require(!marketExists[marketIndex], "already initialized");
+  require(marketIndex <= latestMarket, "index too high");
+  marketExists[marketIndex] = true;
 ..
-    IStaker(staker).addNewStakingFund(
-      `latestMarket`,                                       // should be marketIndex.
-      syntheticTokens[latestMarket][true],   // should be marketIndex
-      syntheticTokens[latestMarket][false],  // should be marketIndex
-  ...
+  IStaker(staker).addNewStakingFund(
+    `latestMarket`,                                       // should be marketIndex.
+    syntheticTokens[latestMarket][true],   // should be marketIndex
+    syntheticTokens[latestMarket][false],  // should be marketIndex
+...
 ```
 
 Recommend replacing `latestMarket` with `marketIndex` in the functions `initializeMarket` and `_seedMarketInitially`.
@@ -248,9 +248,9 @@ When User calls `getUsersConfirmedButNotSettledSynthBalance(user, 1)`
 initial condition:
 ```solidity
 if (
-      userNextPrice_currentUpdateIndex[marketIndex][user] != 0 &&
-      userNextPrice_currentUpdateIndex[marketIndex][user] <= currentMarketUpdateIndex
-    )
+  userNextPrice_currentUpdateIndex[marketIndex][user] != 0 &&
+  userNextPrice_currentUpdateIndex[marketIndex][user] <= currentMarketUpdateIndex
+)
 ```
 will be true;
 [`LongShort.sol` L532](https://github.com/hack3r-0m/2021-08-floatcapital/blob/main/contracts/contracts/LongShort.sol#L532)
@@ -341,8 +341,8 @@ Reference: https://docs.aave.com/developers/guides/liquidity-mining#claimrewards
 
 Recommend changing to
 ```solidity
-    address[] memory rewardsDepositedAssets = new address[](1);
-    rewardsDepositedAssets[0] = address(aToken);
+  address[] memory rewardsDepositedAssets = new address[](1);
+  rewardsDepositedAssets[0] = address(aToken);
 ```
 
 **[DenhamPreen (Float) confirmed](https://github.com/code-423n4/2021-08-floatcapital-findings/issues/49#issuecomment-896811177):**
@@ -370,29 +370,29 @@ This means the `_executeOutstandingNextPrice`* functions will never be executed,
 [`LongShort.sol` L669](https://github.com/code-423n4/2021-08-floatcapital/blob/main/contracts/contracts/LongShort.sol#L669)
 ```solidity
 function `_updateSystemStateInternal`(uint32 marketIndex) internal virtual requireMarketExists(marketIndex) {
-   ...
-    int256 newAssetPrice = IOracleManager(oracleManagers[marketIndex]).updatePrice();
-    int256 oldAssetPrice = int256(assetPrice[marketIndex]);
-    bool assetPriceHasChanged = oldAssetPrice != newAssetPrice;
+  ...
+  int256 newAssetPrice = IOracleManager(oracleManagers[marketIndex]).updatePrice();
+  int256 oldAssetPrice = int256(assetPrice[marketIndex]);
+  bool assetPriceHasChanged = oldAssetPrice != newAssetPrice;
 
-    if (assetPriceHasChanged || msg.sender == staker) {
-      ....
-      if (!assetPriceHasChanged) {
-        return;
-      }
-      ....
-     marketUpdateIndex[marketIndex] += 1;  // never reaches this point if the price doesn't change
+  if (assetPriceHasChanged || msg.sender == staker) {
+    ....
+    if (!assetPriceHasChanged) {
+      return;
+    }
+    ....
+    marketUpdateIndex[marketIndex] += 1;  // never reaches this point if the price doesn't change
 
 // https://github.com/code-423n4/2021-08-floatcapital/blob/main/contracts/contracts/LongShort.sol#L1035
- function _executeOutstandingNextPriceSettlements(address user, uint32 marketIndex) internal virtual {
-    uint256 userCurrentUpdateIndex = userNextPrice_currentUpdateIndex[marketIndex][user];
-    if (userCurrentUpdateIndex != 0 && userCurrentUpdateIndex <= marketUpdateIndex[marketIndex]) { // needs marketUpdateIndex[marketIndex] to be increased
-      _executeOutstandingNextPriceMints(marketIndex, user, true);
-      _executeOutstandingNextPriceMints(marketIndex, user, false);
-      _executeOutstandingNextPriceRedeems(marketIndex, user, true);
-      _executeOutstandingNextPriceRedeems(marketIndex, user, false);
-      _executeOutstandingNextPriceTokenShifts(marketIndex, user, true);
-      _executeOutstandingNextPriceTokenShifts(marketIndex, user, false);
+function _executeOutstandingNextPriceSettlements(address user, uint32 marketIndex) internal virtual {
+  uint256 userCurrentUpdateIndex = userNextPrice_currentUpdateIndex[marketIndex][user];
+  if (userCurrentUpdateIndex != 0 && userCurrentUpdateIndex <= marketUpdateIndex[marketIndex]) { // needs marketUpdateIndex[marketIndex] to be increased
+    _executeOutstandingNextPriceMints(marketIndex, user, true);
+    _executeOutstandingNextPriceMints(marketIndex, user, false);
+    _executeOutstandingNextPriceRedeems(marketIndex, user, true);
+    _executeOutstandingNextPriceRedeems(marketIndex, user, false);
+    _executeOutstandingNextPriceTokenShifts(marketIndex, user, true);
+    _executeOutstandingNextPriceTokenShifts(marketIndex, user, false);
 ```
 
 Recommend enhancing `_updateSystemStateInternal` so that after a certain period of time without price movements (for example 1 day), the entire function is executed (including the `marketUpdateIndex[marketIndex]` += 1;)
@@ -525,28 +525,28 @@ However `transferFrom` in `SyntheticToken.sol` allows `longShort` to move tokens
 This is unlikely to happen because the current source of `LongShort.sol` doesn't allow for this action.
 However `LongShort.sol` is upgradable to in theory a future version could allow this. [LongShort.sol L34](https://github.com/code-423n4/2021-08-floatcapital/blob/main/contracts/contracts/LongShort.sol#L34)
 ```solidity
- /// @notice this is the address that permanently locked initial liquidity for markets is held by.
-  /// These tokens will never move so market can never have zero liquidity on a side.
-  /// @dev f10a7 spells float in hex - for fun - important part is that the private key for this address in not known.
- address public constant PERMANENT_INITIAL_LIQUIDITY_HOLDER = 0xf10A7_F10A7_f10A7_F10a7_F10A7_f10a7_F10A7_f10a7;
+/// @notice this is the address that permanently locked initial liquidity for markets is held by.
+/// These tokens will never move so market can never have zero liquidity on a side.
+/// @dev f10a7 spells float in hex - for fun - important part is that the private key for this address in not known.
+address public constant PERMANENT_INITIAL_LIQUIDITY_HOLDER = 0xf10A7_F10A7_f10A7_F10a7_F10A7_f10a7_F10A7_f10a7;
 
 //https://github.com/code-423n4/2021-08-floatcapital/blob/main/contracts/contracts/LongShort.sol#L304
 function _seedMarketInitially(uint256 initialMarketSeedForEachMarketSide, uint32 marketIndex) internal
 ...
-   ISyntheticToken(syntheticTokens[latestMarket][true]).mint(PERMANENT_INITIAL_LIQUIDITY_HOLDER,initialMarketSeedForEachMarketSide);
-   ISyntheticToken(syntheticTokens[latestMarket][false]).mint(PERMANENT_INITIAL_LIQUIDITY_HOLDER, initialMarketSeedForEachMarketSide);
+  ISyntheticToken(syntheticTokens[latestMarket][true]).mint(PERMANENT_INITIAL_LIQUIDITY_HOLDER,initialMarketSeedForEachMarketSide);
+  ISyntheticToken(syntheticTokens[latestMarket][false]).mint(PERMANENT_INITIAL_LIQUIDITY_HOLDER, initialMarketSeedForEachMarketSide);
 ```
 
 [`SyntheticToken.sol` L91](https://github.com/code-423n4/2021-08-floatcapital/blob/main/contracts/contracts/SyntheticToken.sol#L91)
 ```solidity
 function transferFrom(address sender, address recipient, uint256 amount) public override returns (bool) {
-    if (recipient == longShort && msg.sender == longShort) {   // sender could be any address
-      super._transfer(sender, recipient, amount);
-      return true;
-    } else {
-      return super.transferFrom(sender, recipient, amount);
-    }
+  if (recipient == longShort && msg.sender == longShort) {   // sender could be any address
+    super._transfer(sender, recipient, amount);
+    return true;
+  } else {
+    return super.transferFrom(sender, recipient, amount);
   }
+}
 ```
 Recommend accepting the risk and document this in the contract. Or, update `transferFrom` to contain the following:
 ```solidity

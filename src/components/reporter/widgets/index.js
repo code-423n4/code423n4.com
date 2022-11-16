@@ -1,13 +1,7 @@
-import SelectField from './SelectField';
-import TextField from './TextField';
-import TextArea from './TextArea';
-import Widgets from './Widgets';
-import Widget from './Widget';
+import SelectField from "./SelectField";
+import TextArea from "./TextArea";
+import TextField from "./TextField";
+import Widget from "./Widget";
+import Widgets from "./Widgets";
 
-export {
-  SelectField,
-  TextField,
-  TextArea,
-  Widgets,
-  Widget
-};
+export { SelectField, TextField, TextArea, Widgets, Widget };

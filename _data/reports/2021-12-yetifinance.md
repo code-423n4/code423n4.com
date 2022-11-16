@@ -131,40 +131,41 @@ Rebasing amount is added to `effectiveYetiTokenBalance`, so it should be limited
 It looks like only extra tokens should be used for the check, i.e. `yetiToken.balance - effectiveYetiTokenBalance`.
 
 Now:
-
-    function rebase() external {
-    		...
-    		uint256 yetiTokenBalance = yetiToken.balanceOf(address(this));
-    		uint256 valueOfContract = _getValueOfContract(yetiTokenBalance);
-    		uint256 additionalYetiTokenBalance = ...
-    		if (yetiTokenBalance < additionalYetiTokenBalance) {
-    				additionalYetiTokenBalance = yetiTokenBalance;
-    		}
-    		effectiveYetiTokenBalance = effectiveYetiTokenBalance.add(additionalYetiTokenBalance);
-    ...
-    function _getValueOfContract(uint _yetiTokenBalance) internal view returns (uint256) {
-    		uint256 adjustedYetiTokenBalance = _yetiTokenBalance.sub(effectiveYetiTokenBalance);
-    		uint256 yusdTokenBalance = yusdToken.balanceOf(address(this));
-    		return div(lastBuybackPrice.mul(adjustedYetiTokenBalance), (1e18)).add(yusdTokenBalance);
+```solidity
+function rebase() external {
+        ...
+    uint256 yetiTokenBalance = yetiToken.balanceOf(address(this));
+    uint256 valueOfContract = _getValueOfContract(yetiTokenBalance);
+    uint256 additionalYetiTokenBalance = ...
+    if (yetiTokenBalance < additionalYetiTokenBalance) {
+            additionalYetiTokenBalance = yetiTokenBalance;
     }
-
+    effectiveYetiTokenBalance = effectiveYetiTokenBalance.add(additionalYetiTokenBalance);
+...
+function _getValueOfContract(uint _yetiTokenBalance) internal view returns (uint256) {
+    uint256 adjustedYetiTokenBalance = _yetiTokenBalance.sub(effectiveYetiTokenBalance);
+    uint256 yusdTokenBalance = yusdToken.balanceOf(address(this));
+    return div(lastBuybackPrice.mul(adjustedYetiTokenBalance), (1e18)).add(yusdTokenBalance);
+}
+```
 As the `_getValueOfContract` function isn't used elsewhere, the logic can be simplified.
 To be:
-
-    function rebase() external {
-    		...
-    		uint256 adjustedYetiTokenBalance = (yetiToken.balanceOf(address(this))).sub(effectiveYetiTokenBalance);
-    		uint256 valueOfContract = _getValueOfContract(adjustedYetiTokenBalance);
-    		uint256 additionalYetiTokenBalance = ...
-    		if (additionalYetiTokenBalance > adjustedYetiTokenBalance) {
-    				additionalYetiTokenBalance = adjustedYetiTokenBalance;
-    		}
-    		effectiveYetiTokenBalance = effectiveYetiTokenBalance.add(additionalYetiTokenBalance);
+```solidity
+function rebase() external {
     ...
-    function _getValueOfContract(uint _adjustedYetiTokenBalance) internal view returns (uint256) {
-    		uint256 yusdTokenBalance = yusdToken.balanceOf(address(this));
-    		return div(lastBuybackPrice.mul(_adjustedYetiTokenBalance), (1e18)).add(yusdTokenBalance);
+    uint256 adjustedYetiTokenBalance = (yetiToken.balanceOf(address(this))).sub(effectiveYetiTokenBalance);
+    uint256 valueOfContract = _getValueOfContract(adjustedYetiTokenBalance);
+    uint256 additionalYetiTokenBalance = ...
+    if (additionalYetiTokenBalance > adjustedYetiTokenBalance) {
+            additionalYetiTokenBalance = adjustedYetiTokenBalance;
     }
+    effectiveYetiTokenBalance = effectiveYetiTokenBalance.add(additionalYetiTokenBalance);
+...
+function _getValueOfContract(uint _adjustedYetiTokenBalance) internal view returns (uint256) {
+    uint256 yusdTokenBalance = yusdToken.balanceOf(address(this));
+    return div(lastBuybackPrice.mul(_adjustedYetiTokenBalance), (1e18)).add(yusdTokenBalance);
+}
+```
 
 **[kingyetifinance (Yeti finance) disagreed with severity and confirmed](https://github.com/code-423n4/2021-12-yetifinance-findings/issues/121):**
  > @LilYeti: 
@@ -239,26 +240,25 @@ Example Medium Issue : <https://github.com/code-423n4/2021-08-notional-findings/
 
 2.  Only the following checks are implemented.
 
-```
-        if (!_response.success) {return true;}
-        // Check for an invalid roundId that is 0
-        if (_response.roundId == 0) {return true;}
-        // Check for an invalid timeStamp that is 0, or in the future
-        if (_response.timestamp == 0 || _response.timestamp > block.timestamp) {return true;}
-        // Check for non-positive price
-        if (_response.answer <= 0) {return true;}
-
-
+```js
+    if (!_response.success) {return true;}
+    // Check for an invalid roundId that is 0
+    if (_response.roundId == 0) {return true;}
+    // Check for an invalid timeStamp that is 0, or in the future
+    if (_response.timestamp == 0 || _response.timestamp > block.timestamp) {return true;}
+    // Check for non-positive price
+    if (_response.answer <= 0) {return true;}
 ```
 
 #### Recommended Mitigation Steps
 
 Consider to add checks on the return data with proper revert messages if the price is stale or the round is incomplete, for example:
-
-    (uint80 roundID, int256 price, , uint256 timeStamp, uint80 answeredInRound) = ETH_CHAINLINK.latestRoundData();
-    require(price > 0, "Chainlink price <= 0"); 
-    require(answeredInRound >= roundID, "...");
-    require(timeStamp != 0, "...");
+```solidity
+(uint80 roundID, int256 price, , uint256 timeStamp, uint80 answeredInRound) = ETH_CHAINLINK.latestRoundData();
+require(price > 0, "Chainlink price <= 0"); 
+require(answeredInRound >= roundID, "...");
+require(timeStamp != 0, "...");
+```
 
 **[kingyetifinance (Yeti finance) confirmed](https://github.com/code-423n4/2021-12-yetifinance-findings/issues/91#issuecomment-1005398691):**
  > @LilYeti: 
@@ -281,43 +281,42 @@ Contract instability and financial loss. This will happen if one of the allowed 
 
 2.  Assume sendCollaterals function is called by one of allowed contract with a non whitelisted token and amount as 1
 
-<!---->
+```solidity
+function sendCollaterals(address _to, address[] memory _tokens, uint[] memory _amounts) external override returns (bool) {
+    _requireCallerIsBOorTroveMorTMLorSP();
+    require(_tokens.length == _amounts.length);
+    for (uint i = 0; i < _tokens.length; i++) {
+        _sendCollateral(_to, _tokens[i], _amounts[i]); // reverts if send fails
+    }
 
-    function sendCollaterals(address _to, address[] memory _tokens, uint[] memory _amounts) external override returns (bool) {
-            _requireCallerIsBOorTroveMorTMLorSP();
-            require(_tokens.length == _amounts.length);
-            for (uint i = 0; i < _tokens.length; i++) {
-                _sendCollateral(_to, _tokens[i], _amounts[i]); // reverts if send fails
-            }
-
-            if (_needsUpdateCollateral(_to)) {
-                ICollateralReceiver(_to).receiveCollateral(_tokens, _amounts);
-            }
-            
-            return true;
-        }
+    if (_needsUpdateCollateral(_to)) {
+        ICollateralReceiver(_to).receiveCollateral(_tokens, _amounts);
+    }
+    
+    return true;
+}
+```
 
 3.  This calls \_sendCollateral with our non whitelisted token and amount as 1
 
-<!---->
+```solidity
+function _sendCollateral(address _to, address _collateral, uint _amount) internal returns (bool) {
+    uint index = whitelist.getIndex(_collateral);
+    poolColl.amounts[index] = poolColl.amounts[index].sub(_amount);
+    bool sent = IERC20(_collateral).transfer(_to, _amount);
+    require(sent);
 
-    function _sendCollateral(address _to, address _collateral, uint _amount) internal returns (bool) {
-            uint index = whitelist.getIndex(_collateral);
-            poolColl.amounts[index] = poolColl.amounts[index].sub(_amount);
-            bool sent = IERC20(_collateral).transfer(_to, _amount);
-            require(sent);
-
-            emit ActivePoolBalanceUpdated(_collateral, _amount);
-            emit CollateralSent(_collateral, _to, _amount);
-        }
-
+    emit ActivePoolBalanceUpdated(_collateral, _amount);
+    emit CollateralSent(_collateral, _to, _amount);
+}
+```
 4.  whitelist.getIndex(\_collateral); will return 0 as our collateral is not whitelisted and will not be present in whitelist.getIndex(\_collateral);. This means index will point to whitelisted collateral at index 0
 
 5.  poolColl.amounts\[index] will get updated for whitelisted collateral at index 0 even though this collateral was never meant to be updated
 
-<!---->
-
-    poolColl.amounts[index] = poolColl.amounts[index].sub(_amount);
+```solidity
+poolColl.amounts[index] = poolColl.amounts[index].sub(_amount);
+```
 
 6.  Finally our non supported token gets transferred to recipient and since \_needsUpdateCollateral is true so recipient poolColl.amounts gets increased even though recipient never received the whitelisted collateral
 
@@ -893,15 +892,15 @@ _Submitted by WatchPug_
 
 <https://github.com/code-423n4/2021-12-yetifinance/blob/5f5bf61209b722ba568623d8446111b1ea5cb61c/packages/contracts/contracts/TroveManagerLiquidations.sol#L409-L409>
 
-```solidity=409
-    _updateWAssetsRewardOwner(collsToUpdate, _borrower, yetiFinanceTreasury);
+```solidity
+_updateWAssetsRewardOwner(collsToUpdate, _borrower, yetiFinanceTreasury);
 ```
 
 In `_liquidateNormalMode()`, WAsset rewards for collToRedistribute will accrue to Yeti Finance Treasury, However, if a borrower wrap `WJLP` and set `_rewardOwner` to other address, `_updateWAssetsRewardOwner()` will fail due to failure of `IWAsset(token).updateReward()`.
 
 <https://github.com/code-423n4/2021-12-yetifinance/blob/5f5bf61209b722ba568623d8446111b1ea5cb61c/packages/contracts/contracts/AssetWrappers/WJLP/WJLP.sol#L126-L138>
 
-```solidity=126
+```solidity
 function wrap(uint _amount, address _from, address _to, address _rewardOwner) external override {
     JLP.transferFrom(_from, address(this), _amount);
     JLP.approve(address(_MasterChefJoe), _amount);
@@ -978,34 +977,34 @@ Monetary loss for user
 2.  Let us see \_sendJoeReward function
 
 <!---->
+```solidity
+function _sendJoeReward(address _rewardOwner, address _to) internal {
+        // harvests all JOE that the WJLP contract is owed
+        _MasterChefJoe.withdraw(_poolPid, 0);
 
-    function _sendJoeReward(address _rewardOwner, address _to) internal {
-            // harvests all JOE that the WJLP contract is owed
-            _MasterChefJoe.withdraw(_poolPid, 0);
+        // updates user.unclaimedJOEReward with latest data from TJ
+        _userUpdate(_rewardOwner, 0, true);
 
-            // updates user.unclaimedJOEReward with latest data from TJ
-            _userUpdate(_rewardOwner, 0, true);
-
-            uint joeToSend = userInfo[_rewardOwner].unclaimedJOEReward;
-            userInfo[_rewardOwner].unclaimedJOEReward = 0;
-            _safeJoeTransfer(_to, joeToSend);
-        }
-
+        uint joeToSend = userInfo[_rewardOwner].unclaimedJOEReward;
+        userInfo[_rewardOwner].unclaimedJOEReward = 0;
+        _safeJoeTransfer(_to, joeToSend);
+    }
+```
 3.  Lets say user reward are calculated to be 100 so \_safeJoeTransfer is called with joeToSend as 100. Also user remaining reward becomes 0
 
 4.  Let us see \_safeJoeTransfer function
 
 <!---->
-
-    function _safeJoeTransfer(address _to, uint256 _amount) internal {
-            uint256 joeBal = JOE.balanceOf(address(this));
-            if (_amount > joeBal) {
-                JOE.transfer(_to, joeBal);
-            } else {
-                JOE.transfer(_to, _amount);
-            }
+```solidity
+function _safeJoeTransfer(address _to, uint256 _amount) internal {
+        uint256 joeBal = JOE.balanceOf(address(this));
+        if (_amount > joeBal) {
+            JOE.transfer(_to, joeBal);
+        } else {
+            JOE.transfer(_to, _amount);
         }
-
+    }
+```
 5.  If the reward balance left in this contract is 90 then \_safeJoeTransfer will pass if condition and contract will transfer 90 amount. Thus user incur a loss of 100-90=10 amount (his remaining reward are already set to 0)
 
 #### Recommended Mitigation Steps
@@ -1036,9 +1035,10 @@ Would have to incur fees for simple unwrapping.
 
 The unwrap functionality is only available from `unwrapFor` function, and that function is only callable from AP or SP. [(Code ref)](https://github.com/code-423n4/2021-12-yetifinance/blob/main/packages/contracts/contracts/AssetWrappers/WJLP/WJLP.sol#L148:#L149)
 
-    function unwrapFor(address _to, uint _amount) external override {
-            _requireCallerIsAPorSP();
-
+```solidity
+function unwrapFor(address _to, uint _amount) external override {
+        _requireCallerIsAPorSP();
+```
 #### Recommended Mitigation Steps
 
 Allow anybody to call the function.
@@ -1065,28 +1065,28 @@ Lost yield for user.
 
 In ActivePool's `sendCollateralsUnwrap` (which is used throughout the protocol), it firsts unwraps the asset, and only afterwards calls `claimRewardFor` which will update the rewards:
 [(Code ref)](https://github.com/code-423n4/2021-12-yetifinance/blob/main/packages/contracts/contracts/ActivePool.sol#L186:#L188)
-
-    IWAsset(_tokens[i]).unwrapFor(_to, _amounts[i]);
-    if (_collectRewards) {
-            IWAsset(_tokens[i]).claimRewardFor(_to);
-    }
-
+```solidity
+IWAsset(_tokens[i]).unwrapFor(_to, _amounts[i]);
+if (_collectRewards) {
+        IWAsset(_tokens[i]).claimRewardFor(_to);
+}
+```
 `claimRewardFor` will end up calling `_userUpdate`: [(Code ref)](https://github.com/code-423n4/2021-12-yetifinance/blob/main/packages/contracts/contracts/AssetWrappers/WJLP/WJLP.sol#L246:#L263)
-
-        function _userUpdate(address _user, uint256 _amount, bool _isDeposit) private returns (uint pendingJoeSent) {
-            uint256 accJoePerShare = _MasterChefJoe.poolInfo(_poolPid).accJoePerShare;
-            UserInfo storage user = userInfo[_user];
-            if (user.amount > 0) {
-                user.unclaimedJOEReward = user.amount.mul(accJoePerShare).div(1e12).sub(user.rewardDebt);
-            }
-            if (_isDeposit) {
-                user.amount = user.amount.add(_amount);
-            } else {
-                user.amount = user.amount.sub(_amount);
-            }
-            user.rewardDebt = user.amount.mul(accJoePerShare).div(1e12);
-        }
-
+```solidity
+function _userUpdate(address _user, uint256 _amount, bool _isDeposit) private returns (uint pendingJoeSent) {
+    uint256 accJoePerShare = _MasterChefJoe.poolInfo(_poolPid).accJoePerShare;
+    UserInfo storage user = userInfo[_user];
+    if (user.amount > 0) {
+        user.unclaimedJOEReward = user.amount.mul(accJoePerShare).div(1e12).sub(user.rewardDebt);
+    }
+    if (_isDeposit) {
+        user.amount = user.amount.add(_amount);
+    } else {
+        user.amount = user.amount.sub(_amount);
+    }
+    user.rewardDebt = user.amount.mul(accJoePerShare).div(1e12);
+}
+```
 Now, as ActivePool has already called `unwrapFor` and has burnt the user's tokens, and let's assume they all were used as collateral, it means user.amount=0\*, and the user's unclaimedJOEReward won't get updated to reflect the rewards from the last user update.
 This is why, indeed as the comment in `unwrapFor` says, user's reward should be updated prior to that.
 

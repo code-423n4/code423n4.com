@@ -1,23 +1,28 @@
 import React from "react";
+
 import Definitions from "../content/Definitions";
+import TrustBar from "../TrustBar";
 
 const HeroIndex = () => {
   return (
     <div className="hero">
       <h1>
-        <span>C4 audit contests</span>{' '}
-        <span>find more bugs faster</span>{' '}
-        <span>than any other method.</span>
+        <span>Top auditors compete to </span> <span>keep high severity bugs</span>{" "}
+        <span>out of production.</span>
       </h1>
       <h5>
-        Book an audit contest as soon as this month.
+        Start a public or private audit within 48 hours.
         <br />
         <a href="https://discord.gg/code4rena" className="button button-small">
-          Join our Discord
+          Join #i-want-an-audit in Discord
+        </a>
+        <p className="hero-or">or</p>
+        <a href="https://t.me/trebienxyz" className="button button-small">
+          Message us on Telegram
         </a>
       </h5>
+      <TrustBar />
 
-      <Definitions />
     </div>
   );
 };
