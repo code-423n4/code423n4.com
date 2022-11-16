@@ -1,9 +1,14 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { graphql } from "gatsby";
+import { getDates } from "../../utils/time";
+import useUser from "../../hooks/UserContext";
+
 import ContestList from "../../components/ContestList";
 import DefaultLayout from "../../templates/DefaultLayout";
-import { getDates } from "../../utils/time";
+
 export default function Contests({ data }) {
+  const { currentUser } = useUser();
+
   const [filteredContests, setFilteredContest] = useState(null);
   const [contestStatusChanges, updateContestStatusChanges] = useState(0);
   const contests = data.contests.edges;
@@ -95,6 +100,7 @@ export default function Contests({ data }) {
             <ContestList
               updateContestStatus={updateContestStatus}
               contests={filteredContests.activeContests}
+              user={currentUser}
             />
           </section>
         ) : null}
@@ -104,6 +110,7 @@ export default function Contests({ data }) {
             <ContestList
               updateContestStatus={updateContestStatus}
               contests={filteredContests.upcomingContests}
+              user={currentUser}
             />
           </section>
         ) : null}
@@ -113,6 +120,7 @@ export default function Contests({ data }) {
             <ContestList
               updateContestStatus={updateContestStatus}
               contests={filteredContests.sponsorReview}
+              user={currentUser}
             />
           </section>
         ) : null}
@@ -122,6 +130,7 @@ export default function Contests({ data }) {
             <ContestList
               updateContestStatus={updateContestStatus}
               contests={filteredContests.judging}
+              user={currentUser}
             />
           </section>
         ) : null}
@@ -131,6 +140,7 @@ export default function Contests({ data }) {
             <ContestList
               updateContestStatus={updateContestStatus}
               contests={filteredContests.awarding}
+              user={currentUser}
             />
           </section>
         ) : null}
@@ -140,6 +150,7 @@ export default function Contests({ data }) {
             <ContestList
               updateContestStatus={updateContestStatus}
               contests={filteredContests.reporting}
+              user={currentUser}
             />
           </section>
         ) : null}
@@ -149,6 +160,7 @@ export default function Contests({ data }) {
             <ContestList
               updateContestStatus={updateContestStatus}
               contests={filteredContests.completed.reverse()}
+              user={currentUser}
             />
           </section>
         ) : null}
@@ -190,6 +202,7 @@ export const query = graphql`
             submissionPath
             contestPath
             status
+            codeAccess
           }
           contestid
         }
