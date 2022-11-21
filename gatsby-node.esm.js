@@ -70,6 +70,16 @@ const getContestData = async () => {
             status: page.properties.Status.select.name || null,
             codeAccess: "certified",
           };
+        } else if (
+          page.properties["Code access"].select &&
+          page.properties["Code access"].select.name.trim() ===
+            "Public (default)"
+        ) {
+          return {
+            contestId: page.properties.ContestID.number || null,
+            status: page.properties.Status.select.name || null,
+            codeAccess: "public",
+          };
         } else {
           return {
             contestId: page.properties.ContestID.number || null,
