@@ -58,6 +58,7 @@ export default function Contests({ data }) {
           case "Needs Judging":
           case "Judging Complete":
           case "Awarding":
+          case "Pre-sort":
           case "Reporting":
           default:
             statusObject.completed.push(element.node);
