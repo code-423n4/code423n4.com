@@ -1,0 +1,17 @@
+{
+  "handle": "UniversalCrypto",
+  "members": [
+    "amaechieth",
+    "tettehnetworks"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x49eca0bE77C7A004D15727eF00820Dd57Fd27D04"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x49eca0bE77C7A004D15727eF00820Dd57Fd27D04"
+    }
+  ]
+}
