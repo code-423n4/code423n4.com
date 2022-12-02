@@ -13,12 +13,8 @@ const HeroIndex = () => {
       <h5>
         Start a public or private audit within 48 hours.
         <br />
-        <a href="https://discord.gg/code4rena" className="button button-small">
-          Join #i-want-an-audit in Discord
-        </a>
-        <p className="hero-or">or</p>
-        <a href="https://t.me/trebienxyz" className="button button-small">
-          Message us on Telegram
+        <a href="https://code4rena.typeform.com/i-want-an-audit" className="button button-small">
+          I want an audit
         </a>
       </h5>
       <TrustBar />
