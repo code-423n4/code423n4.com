@@ -8,6 +8,7 @@ import webpack from "webpack";
 import SchemaCustomization from "./schema";
 // Notion
 import { Client } from "@notionhq/client";
+import { getApiContestData } from "./api/getData.ts";
 const { token, notionToken, notionContestDb } = require("./netlify/_config");
 const notion = new Client({ auth: notionToken });
 const getContestData = async () => {
@@ -211,6 +212,8 @@ exports.createSchemaCustomization = ({ actions }) => {
   }
 };
 
+
+
 exports.onCreateNode = async ({ node, getNode, actions }) => {
   const { createNodeField } = actions;
   if (node.internal.type === `MarkdownRemark`) {
@@ -265,8 +268,29 @@ exports.onCreateNode = async ({ node, getNode, actions }) => {
   }
 };
 
-exports.sourceNodes = async ({ actions, getNodes }) => {
-  const { createNodeField } = actions;
+exports.sourceNodes = async ({
+  actions,
+  getNodes,
+  createContentDigest,
+  createNodeId
+}) => {
+  const { createNode, createNodeField } = actions;
+  const apiContestsData = await getApiContestData();
+
+  apiContestsData.forEach((contest) => {
+    console.log(contest);
+    createNode({
+      ...contest,
+      id: createNodeId(`ContestsCsv-${contest.contestid}`),
+      parent: null,
+      children: [],
+      internal: {
+        type: "ContestsCsv",
+        contentDigest: createContentDigest(contest),
+      },
+    });
+  });
+
   const nodes = await getNodes();
   const contestStatusData = await getContestData();
 
@@ -275,6 +299,7 @@ exports.sourceNodes = async ({ actions, getNodes }) => {
       const dataForCurrentContest = contestStatusData.filter(
         (element) => element.contestId === node.contestid
       );
+
       createNodeField({
         node,
         name: `status`,
@@ -293,12 +318,13 @@ exports.sourceNodes = async ({ actions, getNodes }) => {
       });
     }
   });
+  return;
 };
 
 exports.createPages = async ({ graphql, actions }) => {
   const { createPage } = actions;
-
   const contests = await graphql(queries.contests);
+  // console.log(contests.data.contests.edges);
   const formTemplate = path.resolve("./src/templates/ReportForm.tsx");
   const contestTemplate = path.resolve("./src/templates/ContestLayout.tsx");
   contests.data.contests.edges.forEach((contest) => {

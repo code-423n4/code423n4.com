@@ -1,8 +1,11 @@
 import csv from "csvtojson";
 import { Contest } from "../../types/contest";
+import { getApiContestData } from '../../api/getData';
 
 async function getContest(contestId: number): Promise<Contest | undefined> {
-  const allContests = await csv().fromFile("_data/contests/contests.csv");
+  console.log('get contests');
+  // const allContests = await csv().fromFile("_data/contests/contests.csv");
+  const allContests = await getApiContestData();
   let contests: Contest[] = allContests;
   if (process.env.NODE_ENV === "development") {
     const testContests = await csv().fromFile(
