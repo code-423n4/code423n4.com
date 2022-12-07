@@ -1,5 +1,8 @@
-import format from "date-fns/format";
+import format from "date-fns-tz/format";
+import utcToZonedTime from "date-fns-tz/utcToZonedTime";
 import isValid from "date-fns/isValid";
+import parseISO from "date-fns/parseISO";
+
 import differenceInCalendarDays from "date-fns/differenceInCalendarDays";
 
 const left = (total) => {
@@ -66,6 +69,24 @@ const getDates = (start, end) => {
   }
 
   const daysDuration = differenceInCalendarDays(endDate, startDate);
+  const parsedEndTime = parseISO(end);
+  const parsedStartTime = parseISO(start);
+  const endUtc = format(
+    utcToZonedTime(parsedEndTime, "UTC"),
+    "d MMMM - h:mm a zzz",
+    {
+      timeZone: "UTC",
+    }
+  );
+  const startUtc = format(
+    utcToZonedTime(parsedStartTime, "UTC"),
+    "d MMMM - h:mm a zzz",
+    {
+      timeZone: "UTC",
+    }
+  );
+  const endLocal = format(endDate, "(d MMMM - h:mm a zzz)");
+  const startLocal = format(startDate, "(d MMMM - h:mm a zzz)");
 
   const t = {
     contestStatus,
@@ -73,10 +94,8 @@ const getDates = (start, end) => {
     end: endTime,
     startDay: isValid(startDate) ? format(startDate, "d MMMM yyyy") : "",
     endDay: isValid(endDate) ? format(endDate, "d MMMM yyyy") : "",
-    startTime: isValid(startDate)
-      ? format(startDate, "d MMMM yyyy - h:mm a")
-      : "",
-    endTime: isValid(endDate) ? format(endDate, "d MMMM yyyy - h:mm a") : "",
+    startTime: isValid(startDate) ? startUtc + " " + startLocal : "",
+    endTime: isValid(endDate) ? endUtc + " " + endLocal : "",
     daysDuration,
   };
 
