@@ -353,8 +353,10 @@ export default function RegistrationForm({ handles }) {
   const usernameValidator = useCallback(
     (value: string) => {
       const validationErrors: (string | React.ReactNode)[] = [];
-      const lowerCaseHandles = handles.map((handle) => handle.toLowerCase());
-      if (lowerCaseHandles.has(value.toLowerCase)) {
+      const lowerCaseHandles = [...handles].map((handle) =>
+        handle.toLowerCase()
+      );
+      if (lowerCaseHandles.includes(value.toLowerCase())) {
         validationErrors.push(`${value} is already a registered username.`);
       }
       if (isDangerousUsername) {
