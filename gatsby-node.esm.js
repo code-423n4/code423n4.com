@@ -11,6 +11,7 @@ import { Client } from "@notionhq/client";
 const { token, notionToken, notionContestDb } = require("./netlify/_config");
 const notion = new Client({ auth: notionToken });
 const getContestData = async () => {
+  // @todo: get contest type from notion
   try {
     const pages = [];
     let cursor = undefined;

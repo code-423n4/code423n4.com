@@ -68,6 +68,10 @@ interface SubmitFindingsProps {
   onDelete?: () => Promise<void>;
 }
 
+// @todo for Mitigation Review:
+// 1. add fields relevant to mitigation review
+// 2. update submit data to support mitigation reviews
+
 const SubmitFindings = ({
   sponsor,
   contest,

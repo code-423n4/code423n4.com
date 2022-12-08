@@ -36,6 +36,10 @@ function isDangerousRepo(s) {
 }
 
 exports.handler = async (event) => {
+  // @todo for Mitigation Review:
+  // extract relevant info from submission title and risk for mitigation reviews
+  // add proper labels to new issue
+
   // only allow POST
   if (event.httpMethod !== "POST") {
     return {
