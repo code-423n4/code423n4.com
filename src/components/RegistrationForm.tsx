@@ -354,7 +354,7 @@ export default function RegistrationForm({ handles }) {
     (value: string) => {
       const validationErrors: (string | React.ReactNode)[] = [];
       if (
-        [...handles].find(
+        Object.keys(handles).find(
           (handle) => handle.toLowerCase() === value.toLowerCase()
         )
       ) {
