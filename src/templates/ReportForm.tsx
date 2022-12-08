@@ -27,6 +27,8 @@ export interface ReportState {
   details: string;
   qaGasDetails: string;
   linksToCode: string[];
+  mitigationDetails: string;
+  isMitigated: boolean;
 }
 
 enum FormMode {
@@ -39,12 +41,21 @@ const mdTemplate =
   "Proof of Concept\nProvide direct links to all referenced code in GitHub. " +
   "Add screenshots, logs, or any other relevant proof that illustrates the concept." +
   "\n\n## Tools Used\n\n## Recommended Mitigation Steps";
+
+const mitigationTemplate = "## Mitigation review of: [enter report ID] \n\n";
+"## Impact\nDetailed description of the impact of this finding.\n\n## " +
+  "Proof of Concept\nProvide direct links to all referenced code in GitHub. " +
+  "Add screenshots, logs, or any other relevant proof that illustrates the concept." +
+  "\n\n## Tools Used\n\n## Recommended Mitigation Steps";
+
 const initialState: ReportState = {
   title: "",
   risk: "",
   details: mdTemplate,
   qaGasDetails: "",
   linksToCode: [""],
+  mitigationDetails: mitigationTemplate,
+  isMitigated: false,
 };
 
 const ReportForm = ({ data, location }) => {
@@ -56,6 +67,7 @@ const ReportForm = ({ data, location }) => {
     title,
     end_time,
     fields,
+    type,
   } = data.contestsCsv;
 
   // hooks
@@ -190,6 +202,8 @@ const ReportForm = ({ data, location }) => {
       details: body,
       qaGasDetails: normalizedBody,
       linksToCode: links,
+      isMitigated: finding.isMitigated || false,
+      mitigationDetails: body,
     });
     setAttributedTo(finding.handle);
     setFindingId(`${contestid}-${finding.issueNumber}`);
@@ -305,6 +319,8 @@ const ReportForm = ({ data, location }) => {
         <SubmitFindings
           sponsor={sponsor.name}
           contest={contestid}
+          // contestType={type || "Audit"}
+          contestType={type || "Mitigation review"}
           contestPath={fields.contestPath}
           repo={findingsRepo}
           title={title}
@@ -347,6 +363,7 @@ export const pageQuery = graphql`
       fields {
         submissionPath
         contestPath
+        type
       }
     }
   }

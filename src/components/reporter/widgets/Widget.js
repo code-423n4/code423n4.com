@@ -5,6 +5,8 @@ import LinksToCode from "../LinksToCodeInput";
 import WardenField from "./WardenField";
 import ContestWarning from "../findings/ContestWarning";
 
+import * as widgetStyles from "./Widgets.module.scss";
+
 const Widget = ({ field, fieldState, isInvalid, onChange }) => {
   const { widget, name, required, options, maxSize } = field;
 
@@ -64,12 +66,24 @@ const Widget = ({ field, fieldState, isInvalid, onChange }) => {
     <LinksToCode onChange={handleChange} linksToCode={fieldState[name]} />
   );
 
+  const checkboxWidget = (
+    <input
+      className={widgetStyles.Checkbox}
+      type="checkbox"
+      id={name}
+      name={name}
+      checked={fieldState[name] === true}
+      onChange={handleChange}
+    />
+  );
+
   const widgets = {
     text: textFieldWidget,
     textarea: textAreaWidget,
     select: selectFieldWidget,
     warden: wardenFieldWidget,
     linksToCode: linksToCodeInputGroup,
+    checkbox: checkboxWidget,
   };
 
   return widgets[widget];

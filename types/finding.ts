@@ -11,6 +11,7 @@ export interface Finding {
   updatedAt: string;
   issueNumber: number;
   handle: string;
+  isMitigated?: boolean;
 }
 
 export interface FindingEditRequest {
