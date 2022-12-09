@@ -4,7 +4,7 @@ import DefaultLayout from "../templates/DefaultLayout";
 import LeaderboardTable from "../components/LeaderboardTable";
 
 
-const Leaderboard = ({ data }) => {
+export default function Leaderboard({ data }) {
   const [timeFrame, setTimeFrame] = useState("2022");
   const [leaderboardResults, setLeaderboardResults] = useState([]);
 
@@ -115,5 +115,3 @@ const Leaderboard = ({ data }) => {
 //     }
 //   }
 // `;
-
-export default Leaderboard;
