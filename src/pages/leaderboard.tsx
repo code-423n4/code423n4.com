@@ -17,7 +17,7 @@ export default function Leaderboard({ data }) {
           // "C4-User": currentUser.username,
         }
       });
-  
+
       if (result.ok) {
         // @TODO: only return handles from endpoint? (maybe links?)
         // LeaderboardResult
