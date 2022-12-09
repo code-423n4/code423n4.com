@@ -8,41 +8,43 @@ export default function Leaderboard({ data }) {
   const [timeFrame, setTimeFrame] = useState("2022");
   const [leaderboardResults, setLeaderboardResults] = useState([]);
 
-  useMemo(async () => {
-    const result = await fetch(`/.netlify/functions/leaderboard?range=${timeFrame}`, {
-      headers: {
-        "Content-Type": "application/json",
-        // "X-Authorization": `Bearer ${sessionToken}`,
-        // "C4-User": currentUser.username,
+  useMemo(() => {
+    (async () => {
+      const result = await fetch(`/.netlify/functions/leaderboard?range=${timeFrame}`, {
+        headers: {
+          "Content-Type": "application/json",
+          // "X-Authorization": `Bearer ${sessionToken}`,
+          // "C4-User": currentUser.username,
+        }
+      });
+  
+      if (result.ok) {
+        // @TODO: only return handles from endpoint? (maybe links?)
+        // LeaderboardResult
+        // const handleData = {
+        //   handle: p.handle,
+        // ------------------------
+        //   image: p.image,
+        //   link: p.link,
+        //   members: p.members,
+        // ------------------------
+        //   lowRisk: 0,
+        //   medRisk: 0,
+        //   soloMed: 0,
+        //   highRisk: 0,
+        //   soloHigh: 0,
+        //   nonCrit: 0,
+        //   gasOptz: 0,
+        //   allFindings: 0,
+        //   awardTotal: 0,
+        // };
+        setLeaderboardResults(await result.json());
       }
-    });
-
-    if (result.ok) {
-      // @TODO: only return handles from endpoint? (maybe links?)
-      // LeaderboardResult
-      // const handleData = {
-      //   handle: p.handle,
-      // ------------------------
-      //   image: p.image,
-      //   link: p.link,
-      //   members: p.members,
-      // ------------------------
-      //   lowRisk: 0,
-      //   medRisk: 0,
-      //   soloMed: 0,
-      //   highRisk: 0,
-      //   soloHigh: 0,
-      //   nonCrit: 0,
-      //   gasOptz: 0,
-      //   allFindings: 0,
-      //   awardTotal: 0,
-      // };
-      setLeaderboardResults(await result.json());
-    }
-    else {
-      // @TODO: what to do here?
-      // throw "Unable to fetch leaderboard results.";
-    }
+      else {
+        // @TODO: what to do here?
+        // throw "Unable to fetch leaderboard results.";
+      }
+    })();
   }, [timeFrame]);
 
   const handleChange = (e) => {
