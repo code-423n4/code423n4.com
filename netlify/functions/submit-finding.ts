@@ -52,7 +52,6 @@ exports.handler = async (event) => {
   }
 
   const data = JSON.parse(event.body);
-  console.log(event.body);
   const {
     user,
     attributedTo,
@@ -67,7 +66,6 @@ exports.handler = async (event) => {
     mitigationOf
   } = data;
   let emailAddresses: string[] = data.emailAddresses;
-console.log('mitigation of variable exitst', mitigationOf);
   await Moralis.start({
     serverUrl: moralisServerUrl,
     appId: moralisAppId,
@@ -256,7 +254,6 @@ console.log('mitigation of variable exitst', mitigationOf);
   const owner = process.env.GITHUB_CONTEST_REPO_OWNER;
 
   try {
-    console.log('getting risk label causes problems??')
     let isQaOrGasSubmission = false;
     let qaOrGasSubmissionBody = '';
     let markdownPath = '';
