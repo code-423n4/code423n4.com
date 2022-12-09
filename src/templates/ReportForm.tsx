@@ -27,6 +27,8 @@ export interface ReportState {
   details: string;
   qaGasDetails: string;
   linksToCode: string[];
+  mitigationOf: string;
+  isMitigated: boolean;
 }
 
 enum FormMode {
@@ -39,12 +41,15 @@ const mdTemplate =
   "Proof of Concept\nProvide direct links to all referenced code in GitHub. " +
   "Add screenshots, logs, or any other relevant proof that illustrates the concept." +
   "\n\n## Tools Used\n\n## Recommended Mitigation Steps";
+
 const initialState: ReportState = {
   title: "",
   risk: "",
   details: mdTemplate,
   qaGasDetails: "",
   linksToCode: [""],
+  mitigationOf: "",
+  isMitigated: false,
 };
 
 const ReportForm = ({ data, location }) => {
@@ -190,6 +195,8 @@ const ReportForm = ({ data, location }) => {
       details: body,
       qaGasDetails: normalizedBody,
       linksToCode: links,
+      isMitigated: finding.isMitigated || false,
+      mitigationOf: finding.mitigationOf || "",
     });
     setAttributedTo(finding.handle);
     setFindingId(`${contestid}-${finding.issueNumber}`);
@@ -305,6 +312,7 @@ const ReportForm = ({ data, location }) => {
         <SubmitFindings
           sponsor={sponsor.name}
           contest={contestid}
+          contestType={fields.type || "Audit"}
           contestPath={fields.contestPath}
           repo={findingsRepo}
           title={title}
@@ -347,6 +355,7 @@ export const pageQuery = graphql`
       fields {
         submissionPath
         contestPath
+        type
       }
     }
   }
