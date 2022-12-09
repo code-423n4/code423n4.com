@@ -84,43 +84,43 @@ function computeResults(findings) {
 
 const Leaderboard = ({ data }) => {
   const [timeFrame, setTimeFrame] = useState("2022");
+  const [leaderboardResults, setLeaderboardResults] = useState([]);
 
-  const handles = /*data.handles.edges*/ [];
-
-  const resultData = useMemo(() => {
-    const result = [];
-
-    for (const handle of handles) {
-      const p = handle.node;
-
-      const handleData = {
-        handle: p.handle,
-        image: p.image,
-        link: p.link,
-        members: p.members,
-        lowRisk: 0,
-        medRisk: 0,
-        soloMed: 0,
-        highRisk: 0,
-        soloHigh: 0,
-        nonCrit: 0,
-        gasOptz: 0,
-        allFindings: 0,
-        awardTotal: 0,
-      };
-
-      const filteredFindings = filterFindingsByTimeFrame(p.findings, timeFrame);
-
-      const combinedData = {
-        ...handleData,
-        ...computeResults(filteredFindings),
-      };
-      if (combinedData.allFindings > 0) {
-        result.push(combinedData);
+  useMemo(async () => {
+    const result = await fetch(`/.netlify/functions/leaderboard?range=${timeFrame}`, {
+      headers: {
+        "Content-Type": "application/json",
+        // "X-Authorization": `Bearer ${sessionToken}`,
+        // "C4-User": currentUser.username,
       }
+    });
+
+    if (result.ok) {
+      // @TODO: only return handles from endpoint? (maybe links?)
+      // LeaderboardResult
+      // const handleData = {
+      //   handle: p.handle,
+      // ------------------------
+      //   image: p.image,
+      //   link: p.link,
+      //   members: p.members,
+      // ------------------------
+      //   lowRisk: 0,
+      //   medRisk: 0,
+      //   soloMed: 0,
+      //   highRisk: 0,
+      //   soloHigh: 0,
+      //   nonCrit: 0,
+      //   gasOptz: 0,
+      //   allFindings: 0,
+      //   awardTotal: 0,
+      // };
+      setLeaderboardResults(await result.json());
     }
-    return result;
-  }, [handles, timeFrame]);
+    else {
+      throw "Unable to fetch leaderboard results.";
+    }
+  }, [timeFrame]);
 
   const handleChange = (e) => {
     setTimeFrame(e.target.value);
@@ -147,7 +147,7 @@ const Leaderboard = ({ data }) => {
           </select>
         </div>
         <div className="leaderboard-container">
-          <LeaderboardTable results={resultData} />
+          <LeaderboardTable results={leaderboardResults} />
         </div>
       </div>
     </DefaultLayout>
