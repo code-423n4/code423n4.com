@@ -1,5 +1,4 @@
 import React, { useMemo, useState } from "react";
-import { graphql } from "gatsby";
 import { differenceInDays, getYear } from "date-fns";
 
 import DefaultLayout from "../templates/DefaultLayout";
@@ -86,7 +85,7 @@ function computeResults(findings) {
 const Leaderboard = ({ data }) => {
   const [timeFrame, setTimeFrame] = useState("2022");
 
-  const handles = data.handles.edges;
+  const handles = /*data.handles.edges*/ [];
 
   const resultData = useMemo(() => {
     const result = [];
@@ -155,43 +154,43 @@ const Leaderboard = ({ data }) => {
   );
 };
 
-export const query = graphql`
-  query {
-    handles: allHandlesJson(filter: { showOnLeaderboard: { ne: false } }) {
-      edges {
-        node {
-          handle
-          image {
-            childImageSharp {
-              resize(width: 40) {
-                src
-              }
-            }
-          }
-          link
-          members {
-            handle
-            image {
-              childImageSharp {
-                resize(width: 40) {
-                  src
-                }
-              }
-            }
-            link
-          }
-          findings {
-            awardUSD
-            risk
-            split
-            contest {
-              end_time
-            }
-          }
-        }
-      }
-    }
-  }
-`;
+// export const query = graphql`
+//   query {
+//     handles: allHandlesJson(filter: { showOnLeaderboard: { ne: false } }) {
+//       edges {
+//         node {
+//           handle
+//           image {
+//             childImageSharp {
+//               resize(width: 40) {
+//                 src
+//               }
+//             }
+//           }
+//           link
+//           members {
+//             handle
+//             image {
+//               childImageSharp {
+//                 resize(width: 40) {
+//                   src
+//                 }
+//               }
+//             }
+//             link
+//           }
+//           findings {
+//             awardUSD
+//             risk
+//             split
+//             contest {
+//               end_time
+//             }
+//           }
+//         }
+//       }
+//     }
+//   }
+// `;
 
 export default Leaderboard;

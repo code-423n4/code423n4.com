@@ -219,14 +219,14 @@ const ContestLayout = (props) => {
         <section>
           <Tabs className="contest-tabs">
             <TabList>
-              {props.data.leaderboardFindings.findings.length > 0 && (
+              {/*props.data.leaderboardFindings.findings.length*/ 0 > 0 && (
                 <Tab>Results</Tab>
               )}
               <Tab>Details</Tab>
               {t.contestStatus === "active" && <Tab>Findings</Tab>}
             </TabList>
 
-            {props.data.leaderboardFindings.findings.length > 0 && (
+            {/*props.data.leaderboardFindings.findings.length*/ 0 > 0 && (
               <TabPanel>
                 <div className="contest-wrapper">
                   <ContestResults results={props.data.leaderboardFindings} />
@@ -351,36 +351,37 @@ export const query = graphql`
       }
       title
     }
-    leaderboardFindings: contestsCsv(contestid: { eq: $contestId }) {
-      title
-      findings {
-        finding
-        awardUSD
-        risk
-        split
-        handle {
-          handle
-          image {
-            childImageSharp {
-              resize(width: 40) {
-                src
-              }
-            }
-          }
-          link
-          members {
-            handle
-            image {
-              childImageSharp {
-                resize(width: 40) {
-                  src
-                }
-              }
-            }
-            link
-          }
-        }
-      }
-    }
   }
 `;
+
+// leaderboardFindings: contestsCsv(contestid: { eq: $contestId }) {
+//   title
+//   findings {
+//     finding
+//     awardUSD
+//     risk
+//     split
+//     handle {
+//       handle
+//       image {
+//         childImageSharp {
+//           resize(width: 40) {
+//             src
+//           }
+//         }
+//       }
+//       link
+//       members {
+//         handle
+//         image {
+//           childImageSharp {
+//             resize(width: 40) {
+//               src
+//             }
+//           }
+//         }
+//         link
+//       }
+//     }
+//   }
+// }
