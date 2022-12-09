@@ -16,8 +16,8 @@ import {
   moralisAppId,
   moralisServerUrl,
   kickboxApiKey,
-} from "../_config";
-import { isDangerousHandle } from "../util/validation-utils";
+} from "../../util/_config";
+import { isDangerousHandle } from "../../util/validation-utils";
 import { UserFileData } from "../../types/user";
 
 const OctokitClient = Octokit.plugin(createPullRequest);

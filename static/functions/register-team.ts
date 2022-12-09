@@ -3,11 +3,11 @@ import { File } from "octokit-plugin-create-pull-request/dist-types/types";
 const sharp = require("sharp");
 import { Octokit } from "@octokit/core";
 
-import { token } from "../_config";
+import { token } from "../../util/_config";
 import { TeamData } from "../../types/user";
-import { getTeamEmails, sendConfirmationEmail } from "../util/user-utils";
-import { checkAuth } from "../util/auth-utils";
-import { isDangerousHandle } from "../util/validation-utils";
+import { getTeamEmails, sendConfirmationEmail } from "../../util/user-utils";
+import { checkAuth } from "../../util/auth-utils";
+import { isDangerousHandle } from "../../util/validation-utils";
 
 const OctokitClient = Octokit.plugin(createPullRequest);
 const octokit = new OctokitClient({ auth: token });

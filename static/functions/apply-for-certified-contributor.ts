@@ -9,7 +9,7 @@ const {
   domain,
   moralisAppId,
   moralisServerUrl,
-} = require("../_config");
+} = require("../../util/_config");
 
 const notionKey = process.env.NOTION_KEY;
 const notionDbId = process.env.NOTION_WARDEN_CERTIFICATION_DATABASE_ID!;

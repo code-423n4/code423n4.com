@@ -8,14 +8,14 @@ import { Event } from "@netlify/functions/src/function/event";
 import { Octokit } from "@octokit/core";
 import { createOrUpdateTextFile } from "@octokit/plugin-create-or-update-text-file";
 
-import { token } from "../_config";
+import { token } from "../../util/_config";
 import {
   TeamData,
   TeamDeleteRequest,
   TeamUpdateRequest,
 } from "../../types/user";
-import { checkAuth, checkTeamAuth } from "../util/auth-utils";
-import { getTeamEmails, sendConfirmationEmail } from "../util/user-utils";
+import { checkAuth, checkTeamAuth } from "../../util/auth-utils";
+import { getTeamEmails, sendConfirmationEmail } from "../../util/user-utils";
 import fetch from "node-fetch";
 
 const OctokitClient = Octokit.plugin(createPullRequest, createOrUpdateTextFile);

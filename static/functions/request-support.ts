@@ -1,7 +1,7 @@
 const { Client } = require("@notionhq/client");
 const { verify } = require("hcaptcha");
 
-import { checkAuth } from "../util/auth-utils";
+import { checkAuth } from "../../util/auth-utils";
 
 const notionKey = process.env.NOTION_KEY!;
 const helpdeskId = process.env.NOTION_HELPDESK_DATABASE_ID!;

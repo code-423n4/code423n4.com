@@ -1,6 +1,6 @@
 import fs, { readFileSync } from "fs";
 import { TeamData } from "../../types/user";
-import { isDangerousHandle } from "../util/validation-utils";
+import { isDangerousHandle } from "../../util/validation-utils";
 
 exports.handler = async (event) => {
   // only allow GET

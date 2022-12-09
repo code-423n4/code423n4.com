@@ -15,26 +15,26 @@ import {
 import { TeamData } from "../../types/user";
 
 // utils
-import { checkAuth, checkTeamAuth } from "../util/auth-utils";
+import { checkAuth, checkTeamAuth } from "../../util/auth-utils";
 import {
   getContest,
   getRiskCodeFromGithubLabel,
   isContestActive,
-} from "../util/contest-utils";
+} from "../../util/contest-utils";
 import {
   getAvailableFindings,
   getRepoName,
   wardenFindingsForContest,
-} from "../util/github-utils";
+} from "../../util/github-utils";
 import {
   getUserTeams,
   updateTeamAddresses,
   sendConfirmationEmail,
   getTeamEmails,
-} from "../util/user-utils";
+} from "../../util/user-utils";
 
 // config
-import { apiKey, domain } from "../_config";
+import { apiKey, domain } from "../../util/_config";
 
 async function getFinding(
   username: string,

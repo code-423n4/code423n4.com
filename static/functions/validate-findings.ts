@@ -2,7 +2,7 @@ import { Handler } from "@netlify/functions";
 import { Octokit } from "@octokit/core";
 import jwt from "jsonwebtoken";
 
-import { QueryResponse, getAllIssues } from "../util/github-utils";
+import { QueryResponse, getAllIssues } from "../../util/github-utils";
 
 
 function getRiskFromLabels(

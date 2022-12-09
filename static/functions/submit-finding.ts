@@ -14,19 +14,19 @@ const {
 
 import { TeamData } from "../../types/user";
 
-import { checkTeamAuth } from "../util/auth-utils";
+import { checkTeamAuth } from "../../util/auth-utils";
 import {
   getContest,
   getRiskCodeFromGithubLabel,
   isContestActive,
-} from "../util/contest-utils";
-import { getMarkdownReportForUser } from "../util/github-utils";
+} from "../../util/contest-utils";
+import { getMarkdownReportForUser } from "../../util/github-utils";
 import {
   updateTeamAddresses,
   sendConfirmationEmail,
   getTeamEmails,
-} from "../util/user-utils";
-import { isDangerousHandle } from "../util/validation-utils";
+} from "../../util/user-utils";
+import { isDangerousHandle } from "../../util/validation-utils";
 
 const OctokitClient = Octokit.plugin(createPullRequest);
 const octokit = new OctokitClient({ auth: token });

@@ -1,4 +1,4 @@
-import { findUser } from "../util/user-utils";
+import { findUser } from "../../util/user-utils";
 
 exports.handler = async (event) => {
   // only allow GET
