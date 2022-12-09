@@ -83,15 +83,6 @@ export const vulnerabilityDetailsField = {
   required: true,
 };
 
-export const mitigationVulnerabilityDetailsField = {
-  name: "details",
-  label: "Vulnerability details *",
-  helpText: "Please include the reportID of the original finding",
-  type: "markdown",
-  widget: "textarea",
-  required: true,
-};
-
 export const qaGasDetailsField = {
   name: "qaGasDetails",
   label: "Report contents *",
@@ -107,11 +98,14 @@ export const qaGasDetailsField = {
 
 export const mitigationField = {
   name: "isMitigated",
-  label: "Mitigation confirmed?",
-  helpText:
-    "If this is checked, it means the vulnerability " +
-    "from the original finding has successfully been mitigated " +
-    "and no new vulnerabilities have been detected in the mitigation.",
+  label: "Mitigation confirmed (no new vulnerabilities detected)",
   widget: "checkbox",
   required: false,
+};
+
+export const mitigationOfField = {
+  name: "mitigationOf",
+  label: "Report ID of original finding *",
+  widget: "text",
+  required: true,
 };

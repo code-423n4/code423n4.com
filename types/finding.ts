@@ -12,6 +12,7 @@ export interface Finding {
   issueNumber: number;
   handle: string;
   isMitigated?: boolean;
+  mitigationOf?: string;
 }
 
 export interface FindingEditRequest {
@@ -30,6 +31,10 @@ export interface FindingEditRequest {
   };
   title?: string;
   body?: string;
+  mitigationOf?: {
+    newValue: string;
+    oldValue: string;
+  };
 }
 
 export interface FindingsResponse {
@@ -49,6 +54,7 @@ export interface FindingCreateRequest {
   body: string;
   labels: string[];
   address?: string;
+  mitigationOf?: string;
 }
 
 export interface FindingDeleteRequest {

@@ -299,6 +299,14 @@ exports.sourceNodes = async ({ actions, getNodes }) => {
             ? dataForCurrentContest[0].codeAccess
             : undefined,
       });
+      createNodeField({
+        node,
+        name: `type`,
+        value:
+          dataForCurrentContest.length > 0
+            ? dataForCurrentContest[0].type
+            : undefined,
+      });
     }
   });
 };
