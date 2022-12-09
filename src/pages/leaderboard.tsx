@@ -40,7 +40,8 @@ const Leaderboard = ({ data }) => {
       setLeaderboardResults(await result.json());
     }
     else {
-      throw "Unable to fetch leaderboard results.";
+      // @TODO: what to do here?
+      // throw "Unable to fetch leaderboard results.";
     }
   }, [timeFrame]);
 
