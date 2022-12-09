@@ -4,6 +4,7 @@ const { readFile, stat } = require("fs/promises");
 const path = require("path");
 const glob = require("tiny-glob");
 const csv = require("csvtojson");
+import {getApiContestData} from '../api/getData';
 
 async function getUniqueHandles() {
   const handles = await glob("./_data/handles/*.json");
@@ -25,11 +26,7 @@ async function getUniqueHandles() {
 }
 
 async function getUniqueContestIds() {
-  const contests = await csv({
-    colParser: {
-      contestid: "number",
-    },
-  }).fromFile("./_data/contests/contests.csv");
+  const contests = await getApiContestData();
   const uniqueContestIds = new Set();
   for (const parsedContest of contests) {
     uniqueContestIds.add(parsedContest.contestid);
@@ -170,7 +167,7 @@ async function validateOrganizations() {
 async function validateContests() {
   let passedValidation = true;
 
-  const contests = await csv().fromFile("./_data/contests/contests.csv");
+  const contests = await getApiContestData();
   const orgs = await glob("./_data/orgs/*.json");
 
   const registeredOrganizations = new Set();

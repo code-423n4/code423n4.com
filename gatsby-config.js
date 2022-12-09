@@ -26,13 +26,6 @@ const plugins = [
       name: `handles`,
     },
   },
-  // {
-  //   resolve: `gatsby-source-filesystem`,
-  //   options: {
-  //     path: `${__dirname}/_data/contests/contests.csv`,
-  //     name: `contests`,
-  //   },
-  // },
   {
     resolve: `gatsby-source-filesystem`,
     options: {
@@ -137,15 +130,6 @@ const plugins = [
   `gatsby-plugin-sass`,
 ];
 
-if (process.env.NODE_ENV === "development") {
-  // plugins.push({
-  //   resolve: `gatsby-source-filesystem`,
-  //   options: {
-  //     path: `${__dirname}/_test-data/contests/contests.csv`,
-  //     name: `contests`,
-  //   },
-  // });
-}
 
 module.exports = {
   siteMetadata: {
