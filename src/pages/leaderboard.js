@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from "react";
 import { differenceInDays, getYear } from "date-fns";
+import fetch from "node-fetch";
 
 import DefaultLayout from "../templates/DefaultLayout";
 import LeaderboardTable from "../components/LeaderboardTable";
