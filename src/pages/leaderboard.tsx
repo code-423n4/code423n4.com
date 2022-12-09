@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import DefaultLayout from "../templates/DefaultLayout";
 import LeaderboardTable from "../components/LeaderboardTable";
@@ -8,7 +8,7 @@ export default function Leaderboard({ data }) {
   const [timeFrame, setTimeFrame] = useState("2022");
   const [leaderboardResults, setLeaderboardResults] = useState([]);
 
-  useMemo(() => {
+  useEffect(() => {
     (async () => {
       const result = await fetch(`/.netlify/functions/leaderboard?range=${timeFrame}`, {
         headers: {
