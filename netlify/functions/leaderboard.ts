@@ -1,4 +1,5 @@
 import { differenceInDays, getYear } from "date-fns";
+import csv from "csvtojson";
 
 const getLeaderboardResults = async (
   handle: string,
@@ -7,11 +8,42 @@ const getLeaderboardResults = async (
 ) => {
   // @TODO: filter handles don't display on leaderboard
   //   maybe also add links from files (so we'll be)
+  const allFindings = await csv().fromFile("_data/findings/findings.csv");
+  const allContests = await csv().fromFile("_data/contests/contests.csv");
+  const filteredContests = filterFindingsByTimeFrame(allContests, contestRange);
 
-  // read csv
+  /*
+  * Loop through all Findings
+  * If finding.contest !== in filterContests
+  * Return
+  * If yes
+  * generate the object and await csv().fromFile("_data/handles/*.json");
+  */
+  // console.log(allFindings)
+  // console.log(allContests)
+  // console.log(filteredContests)
+
+  // ?? read csv -- ok ✅
+  // ?? csv parser -- ok ✅
   // if using range, filter contest end_date
   // if using handle, filter handle
   // if using id, filter..
+
+  /* NOW
+    {
+    contest: '3',
+    handle: 'pauliax',
+    finding: 'G-07',
+    risk: 'g',
+    score: '',
+    pie: '1',
+    split: '1',
+    slice: '1',
+    award: '1250',
+    awardCoin: 'USDC',
+    awardUSD: '1250'
+  },
+  */
 
   // const handleData = {
   //   handle: p.handle,
@@ -45,7 +77,7 @@ const getLeaderboardResults = async (
     awardTotal: 10,
   }];
 
-  return result;
+  return {result, allContests: filteredContests, allFindings};
 };
 
 const withinLastNDays = (contestEnd, numDays) => {
@@ -56,26 +88,26 @@ const withinYear = (contestEnd, year) => {
   return getYear(contestEnd) === year;
 };
 
-function filterFindingsByTimeFrame(findings, timeFrame) {
+function filterFindingsByTimeFrame(allContests, timeFrame) {
   switch (timeFrame) {
     case "Last 60 days":
-      return findings.filter((f) =>
-        withinLastNDays(new Date(f.contest.end_time), 60)
+      return allContests.filter((f) =>
+        withinLastNDays(new Date(f.end_time), 60)
       );
     case "Last 90 days":
-      return findings.filter((f) =>
-        withinLastNDays(new Date(f.contest.end_time), 90)
+      return allContests.filter((f) =>
+        withinLastNDays(new Date(f.end_time), 90)
       );
     case "2022":
-      return findings.filter((f) =>
-        withinYear(new Date(f.contest.end_time), 2022)
+      return allContests.filter((f) =>
+        withinYear(new Date(f.end_time), 2022)
       );
     case "2021":
-      return findings.filter((f) =>
-        withinYear(new Date(f.contest.end_time), 2021)
+      return allContests.filter((f) =>
+        withinYear(new Date(f.end_time), 2021)
       );
     default:
-      return findings;
+      return allContests;
   }
 }
 

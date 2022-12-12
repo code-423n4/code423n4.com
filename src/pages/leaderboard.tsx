@@ -17,7 +17,7 @@ export default function Leaderboard({ data }) {
           // "C4-User": currentUser.username,
         }
       });
-
+      console.log("trigger async function")
       if (result.ok) {
         // @TODO: only return handles from endpoint? (maybe links?)
         // LeaderboardResult
@@ -38,7 +38,8 @@ export default function Leaderboard({ data }) {
         //   allFindings: 0,
         //   awardTotal: 0,
         // };
-        setLeaderboardResults(await result.json());
+        const response = await result.json();
+        setLeaderboardResults(response.result);
       }
       else {
         // @TODO: what to do here?
