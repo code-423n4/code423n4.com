@@ -9,24 +9,18 @@ export default function Leaderboard({ data }) {
 
   useEffect(() => {
     (async () => {
-      console.log("trigger async function");
-      const result = await fetch(
-        `/.netlify/functions/leaderboard?range=${timeFrame}`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            // "X-Authorization": `Bearer ${sessionToken}`,
-            // "C4-User": currentUser.username,
-          },
-        }
-      );
+      const result = await fetch(`/.netlify/functions/leaderboard?range=${timeFrame}`, {
+        headers: {
+          "Content-Type": "application/json",
+          // "X-Authorization": `Bearer ${sessionToken}`,
+          // "C4-User": currentUser.username,
+        },
+      });
       if (result.ok) {
-        const response = await result.json();
-        setLeaderboardResults(response);
+        setLeaderboardResults(await result.json());
       } else {
-        console.log("error 😱");
         // @TODO: what to do here?
-        // throw "Unable to fetch leaderboard results.";
+        throw "Unable to fetch leaderboard results.";
       }
     })();
   }, [timeFrame]);

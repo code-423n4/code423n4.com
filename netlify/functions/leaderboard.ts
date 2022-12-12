@@ -173,9 +173,7 @@ exports.handler = async (event) => {
 
     return {
       statusCode: 200,
-      body: JSON.stringify(
-        await getLeaderboardResults(contestRange, contestId, contestHandle)
-      ),
+      body: JSON.stringify(await getLeaderboardResults(contestRange, contestId, contestHandle)),
     };
   } catch (error) {
     return {
