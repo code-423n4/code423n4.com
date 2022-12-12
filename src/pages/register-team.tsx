@@ -72,7 +72,7 @@ export const query = graphql`
           }
           image {
             childImageSharp {
-              resize(width: 64, quality: 90) {
+              resize(width: 80) {
                 src
               }
             }
