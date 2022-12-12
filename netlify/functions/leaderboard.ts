@@ -1,51 +1,47 @@
 import { differenceInDays, getYear } from "date-fns";
+import fs, { readFileSync } from "fs";
+import csv from "csvtojson";
+
+const getWardenInfo = (handle: string) => {
+  const wardenFile = readFileSync(`./_data/handles/${handle}.json`);
+  const warden = JSON.parse(wardenFile.toString());
+
+  if (warden.image) {
+    warden.image = warden.image.replace(/^[.]\/avatars\//, "");
+  }
+
+  // get members for team if team
+  if (warden.members && warden.members.length > 0) {
+    warden.members = warden.members.map((handle) => getWardenInfo(handle));
+  }
+  return warden;
+};
 
 const getLeaderboardResults = async (
-  handle: string,
-  contestId: number,
   contestRange: string,
+  contestId?: string,
+  handle?: string
 ) => {
-  // @TODO: filter handles don't display on leaderboard
-  //   maybe also add links from files (so we'll be)
+  // @TODO: also filter by contestId (if provided)
+  const allContests = (await csv().fromFile("_data/contests/contests.csv"))
+    .filter((contest) => withinTimeframe(contest, contestRange))
+    .filter((contest) => !contestId || contestId === contest.contestid);
 
-  // read csv
-  // if using range, filter contest end_date
-  // if using handle, filter handle
-  // if using id, filter..
+  // get findings, filtered by contest
+  const allFindings = (await csv().fromFile("_data/findings/findings.csv"))
+    .map((finding) => {
+      finding.awardUSD = parseFloat(finding.awardUSD);
+      finding.split = parseInt(finding.split, 10);
+      return finding;
+    })
+    .filter((finding) => allContests.some((contest) => contest.contestid === finding.contest));
 
-  // const handleData = {
-  //   handle: p.handle,
-  //   image: p.image,
-  //   link: p.link,
-  //   members: p.members,
-  //   lowRisk: 0,
-  //   medRisk: 0,
-  //   soloMed: 0,
-  //   highRisk: 0,
-  //   soloHigh: 0,
-  //   nonCrit: 0,
-  //   gasOptz: 0,
-  //   allFindings: 0,
-  //   awardTotal: 0,
-  // };
+  // get deduplicated handles from findings
+  const allHandles = Array.from(new Set(allFindings.map((finding) => finding.handle)))
+    .map((handle) => getWardenInfo(handle))
+    .filter((handle) => handle.showOnLeaderboard === undefined || !handle.showOnLeaderboard);
 
-  let result = [{
-    handle: `${contestRange}-handle-1`,
-    image: "",
-    link: "",
-    members: [],
-    lowRisk: 1,
-    medRisk: 2,
-    soloMed: 0,
-    highRisk: 3,
-    soloHigh: 0,
-    nonCrit: 0,
-    gasOptz: 0,
-    allFindings: 6,
-    awardTotal: 10,
-  }];
-
-  return result;
+  return computeWardenStats(allHandles, allFindings);
 };
 
 const withinLastNDays = (contestEnd, numDays) => {
@@ -56,27 +52,56 @@ const withinYear = (contestEnd, year) => {
   return getYear(contestEnd) === year;
 };
 
-function filterFindingsByTimeFrame(findings, timeFrame) {
+function withinTimeframe(contest, timeFrame) {
   switch (timeFrame) {
     case "Last 60 days":
-      return findings.filter((f) =>
-        withinLastNDays(new Date(f.contest.end_time), 60)
-      );
+      return withinLastNDays(new Date(contest.end_time), 60);
     case "Last 90 days":
-      return findings.filter((f) =>
-        withinLastNDays(new Date(f.contest.end_time), 90)
-      );
+      withinLastNDays(new Date(contest.end_time), 90);
     case "2022":
-      return findings.filter((f) =>
-        withinYear(new Date(f.contest.end_time), 2022)
-      );
+      return withinYear(new Date(contest.end_time), 2022);
     case "2021":
-      return findings.filter((f) =>
-        withinYear(new Date(f.contest.end_time), 2021)
-      );
+      return withinYear(new Date(contest.end_time), 2021);
     default:
-      return findings;
+      return true;
   }
+}
+
+function computeWardenStats(wardens, findings) {
+  const result: any[] = [];
+  for (const wardenObj of wardens) {
+    const wardensFindings = findings.filter(
+      (finding) => finding.handle === wardenObj.handle
+    );
+
+    const handleData = {
+      handle: wardenObj.handle,
+      image: wardenObj.image
+        ? `https://raw.githubusercontent.com/code-423n4/code423n4.com/main/_data/handles/avatars/${wardenObj.image}`
+        : "",
+      link: wardenObj.link,
+      members: wardenObj.members,
+      lowRisk: 0,
+      medRisk: 0,
+      soloMed: 0,
+      highRisk: 0,
+      soloHigh: 0,
+      nonCrit: 0,
+      gasOptz: 0,
+      allFindings: 0,
+      awardTotal: 0,
+    };
+
+    const combinedData = {
+      ...handleData,
+      ...computeResults(wardensFindings),
+    };
+    if (combinedData.allFindings > 0) {
+      result.push(combinedData);
+    }
+  }
+
+  return result;
 }
 
 function computeResults(findings) {
@@ -148,7 +173,7 @@ exports.handler = async (event) => {
 
     return {
       statusCode: 200,
-      body: JSON.stringify(await getLeaderboardResults(contestHandle, contestId, contestRange)),
+      body: JSON.stringify(await getLeaderboardResults(contestRange, contestId, contestHandle)),
     };
   } catch (error) {
     return {
