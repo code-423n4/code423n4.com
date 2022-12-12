@@ -31,6 +31,7 @@ const getLeaderboardResults = async (
   const allFindings = (await csv().fromFile("_data/findings/findings.csv"))
     .map((finding) => {
       finding.awardUSD = parseFloat(finding.awardUSD);
+      finding.split = parseInt(finding.split, 10);
       return finding;
     })
     .filter((finding) => allContests.some((contest) => contest.contestid === finding.contest));
@@ -129,13 +130,13 @@ function computeResults(findings) {
         break;
       case "2":
         results.medRisk += 1;
-        if (+f.split === 1) {
+        if (f.split === 1) {
           results.soloMed += 1;
         }
         break;
       case "3":
         results.highRisk += 1;
-        if (+f.split === 1) {
+        if (f.split === 1) {
           results.soloHigh += 1;
         }
         break;
