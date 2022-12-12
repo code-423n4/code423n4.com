@@ -40,9 +40,10 @@ export default function Leaderboard({ data }) {
         // };
         const response = await result.json();
         console.log(response);
-        setLeaderboardResults(response.result);
+        setLeaderboardResults(response);
       }
       else {
+        console.log("error 😱")
         // @TODO: what to do here?
         // throw "Unable to fetch leaderboard results.";
       }
@@ -68,8 +69,8 @@ export default function Leaderboard({ data }) {
         <div className="dropdown-container">
         {/* browser-native select in firefox inherits the dropdown background color from the select element */}
           <select onChange={handleChange} className="dropdown">
-            {filterOptions.map((option) => (
-              <option value={option.value}>{option.label}</option>
+            {filterOptions.map((option, index) => (
+              <option value={option.value} key={`${option.value}-${index}`}>{option.label}</option>
             ))}
           </select>
         </div>
@@ -80,42 +81,3 @@ export default function Leaderboard({ data }) {
     </DefaultLayout>
   );
 };
-
-// export const query = graphql`
-//   query {
-//     handles: allHandlesJson(filter: { showOnLeaderboard: { ne: false } }) {
-//       edges {
-//         node {
-//           handle
-//           image {
-//             childImageSharp {
-//               resize(width: 40) {
-//                 src
-//               }
-//             }
-//           }
-//           link
-//           members {
-//             handle
-//             image {
-//               childImageSharp {
-//                 resize(width: 40) {
-//                   src
-//                 }
-//               }
-//             }
-//             link
-//           }
-//           findings {
-//             awardUSD
-//             risk
-//             split
-//             contest {
-//               end_time
-//             }
-//           }
-//         }
-//       }
-//     }
-//   }
-// `;

@@ -14,85 +14,69 @@ const getLeaderboardResults = async (
   contestRange: string
 ) => {
   const allFindings = await csv().fromFile("_data/findings/findings.csv");
-  const allContests = await csv().fromFile("_data/contests/contests.csv");
-  const filteredContests = filterFindingsByTimeFrame(allContests, contestRange);
-  const allHandles: string[] = [];
+  console.log("all findings OK");
+  // @TODO: also filter by contestId (if provided)
+  const allContests = (await csv().fromFile("_data/contests/contests.csv"))
+    .filter((contest) => withinTimeframe(contest, contestRange))
+    .map((contest) => parseInt(contest.contestid, 10));
+  console.log("All contests OK");
+
+  // get findings, filtered by contest
   const relevantFindings = allFindings
     .map((finding) => {
-      if (
-        filteredContests.some(
-          (contest) => contest.contestid === finding.contest
-        )
-      ) {
-        allHandles.push(finding.handle);
-        return finding;
-      } else {
-        return undefined;
-      }
+      finding.contest = parseInt(finding.contest, 10);
+      return finding;
     })
-    .filter((el) => el !== undefined);
+    .filter((finding) =>
+      allContests.some((contest) => contest === finding.contest)
+    );
+  console.log("Relevant Findings OK");
 
-  const buildResults = async () => {
-    const result: any[] = [];
+  // get deduplicated handles from findings
+  const allHandles: string[] = Array.from(
+    new Set(relevantFindings.map((finding) => finding.handle))
+  );
 
-    for (const handle of [...new Set(allHandles)]) {
-      const wardenInfo = await getWardenInfo(handle);
-      const wardensFindings = relevantFindings.filter(
-        (finding) => finding.handle === handle
-      );
-      const handleData = {
-        handle: wardenInfo.handle,
-        image: wardenInfo.image,
-        link: wardenInfo.link,
-        members: wardenInfo.members,
-        lowRisk: 0,
-        medRisk: 0,
-        soloMed: 0,
-        highRisk: 0,
-        soloHigh: 0,
-        nonCrit: 0,
-        gasOptz: 0,
-        allFindings: 0,
-        awardTotal: 0,
-      };
-
-      const combinedData = {
-        ...handleData,
-        ...computeResults(wardensFindings),
-      };
-      if (combinedData.allFindings > 0) {
-        result.push(combinedData);
-      }
-    }
-    return result;
-  };
-  const allFindingsFiltered = await buildResults();
-
-  let result = [
-    {
-      handle: `${contestRange}-handle-1`,
-      image: "",
-      link: "",
-      members: [],
-      lowRisk: 1,
-      medRisk: 2,
+  //TODO Fix avatar, as pointing to wrong path.
+  console.log("Trigger build results ....");
+  const result: any[] = [];
+  for (const handle of [...new Set(allHandles)]) {
+    const wardenInfo = await getWardenInfo(handle);
+    const wardensFindings = relevantFindings.filter(
+      (finding) => finding.handle === handle
+    );
+    const handleData = {
+      handle: wardenInfo.handle,
+      image: wardenInfo.image
+        ? `https://raw.githubusercontent.com/code-423n4/code423n4.com/main/_data/handles/avatars/${wardenInfo.image.slice(
+            2
+          )}`
+        : "",
+      link: wardenInfo.link,
+      members: wardenInfo.members,
+      lowRisk: 0,
+      medRisk: 0,
       soloMed: 0,
-      highRisk: 3,
+      highRisk: 0,
       soloHigh: 0,
       nonCrit: 0,
       gasOptz: 0,
-      allFindings: 6,
-      awardTotal: 10,
-    },
-  ];
+      allFindings: 0,
+      awardTotal: 0,
+    };
 
-  return {
-    result: allFindingsFiltered,
-    // allContests: filteredContests,
-    // allFindings,
-    // relevantFindings,
-    // allFindingsFiltered,
-  };
+    const combinedData = {
+      ...handleData,
+      ...computeResults(wardensFindings),
+    };
+    if (combinedData.allFindings > 0) {
+      result.push(combinedData);
+    }
+  }
+
+  // const leaderboardResults = await buildResults();
+  // return allHandles;
+  return result;
 };
 
 const withinLastNDays = (contestEnd, numDays) => {
@@ -103,22 +87,18 @@ const withinYear = (contestEnd, year) => {
   return getYear(contestEnd) === year;
 };
 
-function filterFindingsByTimeFrame(allContests, timeFrame) {
+function withinTimeframe(contest, timeFrame) {
   switch (timeFrame) {
     case "Last 60 days":
-      return allContests.filter((f) =>
-        withinLastNDays(new Date(f.end_time), 60)
-      );
+      return withinLastNDays(new Date(contest.end_time), 60);
     case "Last 90 days":
-      return allContests.filter((f) =>
-        withinLastNDays(new Date(f.end_time), 90)
-      );
+      withinLastNDays(new Date(contest.end_time), 90);
     case "2022":
-      return allContests.filter((f) => withinYear(new Date(f.end_time), 2022));
+      return withinYear(new Date(contest.end_time), 2022);
     case "2021":
-      return allContests.filter((f) => withinYear(new Date(f.end_time), 2021));
+      return withinYear(new Date(contest.end_time), 2021);
     default:
-      return allContests;
+      return true;
   }
 }
 
@@ -148,13 +128,13 @@ function computeResults(findings) {
         break;
       case "2":
         results.medRisk += 1;
-        if (f.split === 1) {
+        if (+f.split === 1) {
           results.soloMed += 1;
         }
         break;
       case "3":
         results.highRisk += 1;
-        if (f.split === 1) {
+        if (+f.split === 1) {
           results.soloHigh += 1;
         }
         break;
