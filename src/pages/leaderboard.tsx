@@ -39,6 +39,7 @@ export default function Leaderboard({ data }) {
         //   awardTotal: 0,
         // };
         const response = await result.json();
+        console.log(response);
         setLeaderboardResults(response.result);
       }
       else {

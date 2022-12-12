@@ -1,83 +1,98 @@
 import { differenceInDays, getYear } from "date-fns";
+import fs, { readFileSync } from "fs";
 import csv from "csvtojson";
+
+const getWardenInfo = async (handle: string): Promise<any> => {
+  const wardenFile = readFileSync(`./_data/handles/${handle}.json`);
+  const warden = await JSON.parse(wardenFile.toString());
+  return warden;
+};
 
 const getLeaderboardResults = async (
   handle: string,
   contestId: number,
-  contestRange: string,
+  contestRange: string
 ) => {
-  // @TODO: filter handles don't display on leaderboard
-  //   maybe also add links from files (so we'll be)
   const allFindings = await csv().fromFile("_data/findings/findings.csv");
   const allContests = await csv().fromFile("_data/contests/contests.csv");
   const filteredContests = filterFindingsByTimeFrame(allContests, contestRange);
+  const allHandles: string[] = [];
+  const relevantFindings = allFindings
+    .map((finding) => {
+      if (
+        filteredContests.some(
+          (contest) => contest.contestid === finding.contest
+        )
+      ) {
+        allHandles.push(finding.handle);
+        return finding;
+      } else {
+        return undefined;
+      }
+    })
+    .filter((el) => el !== undefined);
 
-  /*
-  * Loop through all Findings
-  * If finding.contest !== in filterContests
-  * Return
-  * If yes
-  * generate the object and await csv().fromFile("_data/handles/*.json");
-  */
-  // console.log(allFindings)
-  // console.log(allContests)
-  // console.log(filteredContests)
+  const buildResults = async () => {
+    const result: any[] = [];
 
-  // ?? read csv -- ok ✅
-  // ?? csv parser -- ok ✅
-  // if using range, filter contest end_date
-  // if using handle, filter handle
-  // if using id, filter..
+    for (const handle of [...new Set(allHandles)]) {
+      const wardenInfo = await getWardenInfo(handle);
+      const wardensFindings = relevantFindings.filter(
+        (finding) => finding.handle === handle
+      );
+      const handleData = {
+        handle: wardenInfo.handle,
+        image: wardenInfo.image,
+        link: wardenInfo.link,
+        members: wardenInfo.members,
+        lowRisk: 0,
+        medRisk: 0,
+        soloMed: 0,
+        highRisk: 0,
+        soloHigh: 0,
+        nonCrit: 0,
+        gasOptz: 0,
+        allFindings: 0,
+        awardTotal: 0,
+      };
 
-  /* NOW
+      const combinedData = {
+        ...handleData,
+        ...computeResults(wardensFindings),
+      };
+      if (combinedData.allFindings > 0) {
+        result.push(combinedData);
+      }
+    }
+    return result;
+  };
+  const allFindingsFiltered = await buildResults();
+
+  let result = [
     {
-    contest: '3',
-    handle: 'pauliax',
-    finding: 'G-07',
-    risk: 'g',
-    score: '',
-    pie: '1',
-    split: '1',
-    slice: '1',
-    award: '1250',
-    awardCoin: 'USDC',
-    awardUSD: '1250'
-  },
-  */
+      handle: `${contestRange}-handle-1`,
+      image: "",
+      link: "",
+      members: [],
+      lowRisk: 1,
+      medRisk: 2,
+      soloMed: 0,
+      highRisk: 3,
+      soloHigh: 0,
+      nonCrit: 0,
+      gasOptz: 0,
+      allFindings: 6,
+      awardTotal: 10,
+    },
+  ];
 
-  // const handleData = {
-  //   handle: p.handle,
-  //   image: p.image,
-  //   link: p.link,
-  //   members: p.members,
-  //   lowRisk: 0,
-  //   medRisk: 0,
-  //   soloMed: 0,
-  //   highRisk: 0,
-  //   soloHigh: 0,
-  //   nonCrit: 0,
-  //   gasOptz: 0,
-  //   allFindings: 0,
-  //   awardTotal: 0,
-  // };
-
-  let result = [{
-    handle: `${contestRange}-handle-1`,
-    image: "",
-    link: "",
-    members: [],
-    lowRisk: 1,
-    medRisk: 2,
-    soloMed: 0,
-    highRisk: 3,
-    soloHigh: 0,
-    nonCrit: 0,
-    gasOptz: 0,
-    allFindings: 6,
-    awardTotal: 10,
-  }];
-
-  return {result, allContests: filteredContests, allFindings};
+  return {
+    result: allFindingsFiltered,
+    // allContests: filteredContests,
+    // allFindings,
+    // relevantFindings,
+    // allFindingsFiltered,
+  };
 };
 
 const withinLastNDays = (contestEnd, numDays) => {
@@ -99,13 +114,9 @@ function filterFindingsByTimeFrame(allContests, timeFrame) {
         withinLastNDays(new Date(f.end_time), 90)
       );
     case "2022":
-      return allContests.filter((f) =>
-        withinYear(new Date(f.end_time), 2022)
-      );
+      return allContests.filter((f) => withinYear(new Date(f.end_time), 2022));
     case "2021":
-      return allContests.filter((f) =>
-        withinYear(new Date(f.end_time), 2021)
-      );
+      return allContests.filter((f) => withinYear(new Date(f.end_time), 2021));
     default:
       return allContests;
   }
@@ -126,7 +137,7 @@ function computeResults(findings) {
 
   findings.forEach((f) => {
     results.allFindings += 1;
-    results.awardTotal += f.awardUSD ?? 0;
+    results.awardTotal += +f.awardUSD ?? 0;
 
     switch (f.risk.toLowerCase()) {
       case "0":
@@ -180,7 +191,9 @@ exports.handler = async (event) => {
 
     return {
       statusCode: 200,
-      body: JSON.stringify(await getLeaderboardResults(contestHandle, contestId, contestRange)),
+      body: JSON.stringify(
+        await getLeaderboardResults(contestHandle, contestId, contestRange)
+      ),
     };
   } catch (error) {
     return {
