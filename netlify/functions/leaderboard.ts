@@ -2,81 +2,45 @@ import { differenceInDays, getYear } from "date-fns";
 import fs, { readFileSync } from "fs";
 import csv from "csvtojson";
 
-const getWardenInfo = async (handle: string): Promise<any> => {
+const getWardenInfo = (handle: string) => {
   const wardenFile = readFileSync(`./_data/handles/${handle}.json`);
-  const warden = await JSON.parse(wardenFile.toString());
+  const warden = JSON.parse(wardenFile.toString());
+
+  if (warden.image) {
+    warden.image = warden.image.replace(/^[.]\/avatars\//, "");
+  }
+
+  // get members for team if team
+  if (warden.members && warden.members.length > 0) {
+    warden.members = warden.members.map((handle) => getWardenInfo(handle));
+  }
   return warden;
 };
 
 const getLeaderboardResults = async (
-  handle: string,
-  contestId: number,
-  contestRange: string
+  contestRange: string,
+  contestId?: string,
+  handle?: string
 ) => {
-  const allFindings = await csv().fromFile("_data/findings/findings.csv");
-  console.log("all findings OK");
   // @TODO: also filter by contestId (if provided)
   const allContests = (await csv().fromFile("_data/contests/contests.csv"))
     .filter((contest) => withinTimeframe(contest, contestRange))
-    .map((contest) => parseInt(contest.contestid, 10));
-  console.log("All contests OK");
+    .filter((contest) => !contestId || contestId === contest.contestid);
 
   // get findings, filtered by contest
-  const relevantFindings = allFindings
+  const allFindings = (await csv().fromFile("_data/findings/findings.csv"))
     .map((finding) => {
-      finding.contest = parseInt(finding.contest, 10);
+      finding.awardUSD = parseFloat(finding.awardUSD);
       return finding;
     })
-    .filter((finding) =>
-      allContests.some((contest) => contest === finding.contest)
-    );
-  console.log("Relevant Findings OK");
+    .filter((finding) => allContests.some((contest) => contest.contestid === finding.contest));
 
   // get deduplicated handles from findings
-  const allHandles: string[] = Array.from(
-    new Set(relevantFindings.map((finding) => finding.handle))
-  );
+  const allHandles = Array.from(new Set(allFindings.map((finding) => finding.handle)))
+    .map((handle) => getWardenInfo(handle))
+    .filter((handle) => handle.showOnLeaderboard === undefined || !handle.showOnLeaderboard);
 
-  //TODO Fix avatar, as pointing to wrong path.
-  console.log("Trigger build results ....");
-  const result: any[] = [];
-  for (const handle of [...new Set(allHandles)]) {
-    const wardenInfo = await getWardenInfo(handle);
-    const wardensFindings = relevantFindings.filter(
-      (finding) => finding.handle === handle
-    );
-    const handleData = {
-      handle: wardenInfo.handle,
-      image: wardenInfo.image
-        ? `https://raw.githubusercontent.com/code-423n4/code423n4.com/main/_data/handles/avatars/${wardenInfo.image.slice(
-            2
-          )}`
-        : "",
-      link: wardenInfo.link,
-      members: wardenInfo.members,
-      lowRisk: 0,
-      medRisk: 0,
-      soloMed: 0,
-      highRisk: 0,
-      soloHigh: 0,
-      nonCrit: 0,
-      gasOptz: 0,
-      allFindings: 0,
-      awardTotal: 0,
-    };
-
-    const combinedData = {
-      ...handleData,
-      ...computeResults(wardensFindings),
-    };
-    if (combinedData.allFindings > 0) {
-      result.push(combinedData);
-    }
-  }
-
-  // const leaderboardResults = await buildResults();
-  // return allHandles;
-  return result;
+  return computeWardenStats(allHandles, allFindings);
 };
 
 const withinLastNDays = (contestEnd, numDays) => {
@@ -102,6 +66,43 @@ function withinTimeframe(contest, timeFrame) {
   }
 }
 
+function computeWardenStats(wardens, findings) {
+  const result: any[] = [];
+  for (const wardenObj of wardens) {
+    const wardensFindings = findings.filter(
+      (finding) => finding.handle === wardenObj.handle
+    );
+
+    const handleData = {
+      handle: wardenObj.handle,
+      image: wardenObj.image
+        ? `https://raw.githubusercontent.com/code-423n4/code423n4.com/main/_data/handles/avatars/${wardenObj.image}`
+        : "",
+      link: wardenObj.link,
+      members: wardenObj.members,
+      lowRisk: 0,
+      medRisk: 0,
+      soloMed: 0,
+      highRisk: 0,
+      soloHigh: 0,
+      nonCrit: 0,
+      gasOptz: 0,
+      allFindings: 0,
+      awardTotal: 0,
+    };
+
+    const combinedData = {
+      ...handleData,
+      ...computeResults(wardensFindings),
+    };
+    if (combinedData.allFindings > 0) {
+      result.push(combinedData);
+    }
+  }
+
+  return result;
+}
+
 function computeResults(findings) {
   const results = {
     lowRisk: 0,
@@ -117,7 +118,7 @@ function computeResults(findings) {
 
   findings.forEach((f) => {
     results.allFindings += 1;
-    results.awardTotal += +f.awardUSD ?? 0;
+    results.awardTotal += f.awardUSD ?? 0;
 
     switch (f.risk.toLowerCase()) {
       case "0":
@@ -172,7 +173,7 @@ exports.handler = async (event) => {
     return {
       statusCode: 200,
       body: JSON.stringify(
-        await getLeaderboardResults(contestHandle, contestId, contestRange)
+        await getLeaderboardResults(contestRange, contestId, contestHandle)
       ),
     };
   } catch (error) {
