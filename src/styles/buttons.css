@@ -50,6 +50,10 @@
   background-color: var(--main-purple);
 }
 
+.cta-button.secondary.lowercase {
+  text-transform: none;
+}
+
 .cta-button.danger {
   background-color: transparent;
   color: #fff;
