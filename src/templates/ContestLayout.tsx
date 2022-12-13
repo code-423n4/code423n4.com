@@ -73,7 +73,8 @@ const ContestLayout = (props) => {
       ? markdownRemark.frontmatter.altUrl
       : `/reports/${props.data.markdownRemark.frontmatter.slug}`;
   }
-
+  console.log('fields');
+console.log(fields)
   useEffect(() => {
     (async () => {
       if (fields.codeAccess === "public") {

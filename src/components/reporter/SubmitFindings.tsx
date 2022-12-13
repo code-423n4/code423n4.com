@@ -90,7 +90,7 @@ const SubmitFindings = ({
   // hooks
   const { currentUser, reFetchUser } = useUser();
   const { showModal } = useModalContext();
-
+console.log('initial state', initialState);
   // state
   const [status, setStatus] = useState<FormStatus>(FormStatus.Unsubmitted);
   const [hasValidationErrors, setHasValidationErrors] = useState<boolean>(
@@ -104,7 +104,7 @@ const SubmitFindings = ({
   const [newTeamAddress, setNewTeamAddress] = useState<string>("");
   const [attributedTo, setAttributedTo] = useState<string>(initialAttributedTo);
   const [fieldList, setFieldList] = useState<Field[]>([riskField]);
-
+console.log();
   // effects
   useEffect(() => {
     if (!attributedTo) {

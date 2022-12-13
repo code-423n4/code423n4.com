@@ -214,7 +214,8 @@ const ReportForm = ({ data, location }) => {
     (async () => {
       if (currentUser.isLoggedIn) {
         const user = await Moralis.User.current();
-
+        console.log('checking location need to figure out how to initialize the edit ability');
+        console.log('location', location)
         if (location.state && location.state.finding) {
           const finding = location.state.finding;
           initializeEditState(finding);
@@ -277,6 +278,7 @@ const ReportForm = ({ data, location }) => {
     }
     return { links: linksToCode, body };
   };
+
 
   return (
     <ProtectedPage pageTitle="Submit finding | Code 423n4">

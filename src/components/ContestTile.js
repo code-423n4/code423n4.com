@@ -84,20 +84,20 @@ const ContestTile = ({ contest, updateContestStatus, user }) => {
               View Repo
             </a>
           )}
-          {(t.contestStatus === "active" || status === "Active Contest") &&
+          {/* {(t.contestStatus === "active" || status === "Active Contest") &&
           findingsRepo &&
           fields.status &&
           fields.submissionPath &&
-          canViewContest ? (
+          canViewContest ? ( */}
             <Link
               to={fields.submissionPath}
               className="button button-small cta-button secondary"
             >
               Submit Finding
             </Link>
-          ) : (
-            ""
-          )}
+          {/* // ) : (
+          //   ""
+          // )} */}/
         </ClientOnly>
       </div>
     </div>
