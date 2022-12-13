@@ -17,7 +17,7 @@ const HeroIndex = () => {
         <a href="https://code4rena.typeform.com/i-want-an-audit" className="button button-small">
           I want an audit
         </a>
-        <a href="https://discord.gg/code4rena" className="button button-small cta-button lowercase secondary">
+        <a href="https://discord.gg/code4rena" target="_blank" className="button button-small cta-button lowercase secondary">
           I want to be an auditor
         </a>
       </div>
