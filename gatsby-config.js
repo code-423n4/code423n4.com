@@ -22,13 +22,6 @@ const plugins = [
   {
     resolve: `gatsby-source-filesystem`,
     options: {
-      path: `${__dirname}/_data/handles`,
-      name: `handles`,
-    },
-  },
-  {
-    resolve: `gatsby-source-filesystem`,
-    options: {
       path: `${__dirname}/_data/contests/contests.csv`,
       name: `contests`,
     },
