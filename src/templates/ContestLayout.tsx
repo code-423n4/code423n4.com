@@ -373,35 +373,3 @@ export const query = graphql`
     }
   }
 `;
-
-// leaderboardFindings: contestsCsv(contestid: { eq: $contestId }) {
-//   title
-//   findings {
-//     finding
-//     awardUSD
-//     risk
-//     split
-//     handle {
-//       handle
-//       image {
-//         childImageSharp {
-//           resize(width: 40) {
-//             src
-//           }
-//         }
-//       }
-//       link
-//       members {
-//         handle
-//         image {
-//           childImageSharp {
-//             resize(width: 40) {
-//               src
-//             }
-//           }
-//         }
-//         link
-//       }
-//     }
-//   }
-// }
