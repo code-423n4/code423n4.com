@@ -12,11 +12,16 @@ const HeroIndex = () => {
       </h1>
       <h5>
         Start a public or private audit within 48 hours.
-        <br />
+      </h5>
+      <div class="hero-buttons">
         <a href="https://code4rena.typeform.com/i-want-an-audit" className="button button-small">
           I want an audit
         </a>
-      </h5>
+        <a href="https://discord.gg/code4rena" className="button button-small cta-button lowercase secondary">
+          I want to be an auditor
+        </a>
+      </div>
+
       <TrustBar />
 
     </div>
