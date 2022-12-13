@@ -219,14 +219,14 @@ const ContestLayout = (props) => {
         <section>
           <Tabs className="contest-tabs">
             <TabList>
-              {/*props.data.leaderboardFindings.findings.length*/ 0 > 0 && (
+              {t.contestStatus === "completed" && (
                 <Tab>Results</Tab>
               )}
               <Tab>Details</Tab>
               {t.contestStatus === "active" && <Tab>Findings</Tab>}
             </TabList>
 
-            {/*props.data.leaderboardFindings.findings.length*/ 0 > 0 && (
+            {t.contestStatus === "completed" && (
               <TabPanel>
                 <div className="contest-wrapper">
                   <ContestResults results={props.data.leaderboardFindings} />
