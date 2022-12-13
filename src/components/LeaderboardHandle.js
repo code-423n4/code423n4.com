@@ -75,9 +75,7 @@ const LeaderboardHandle = ({ handle, image, link, members }) => {
                 <div className="member team-identifier" key={member.handle}>
                   <a href={member.link}>
                     <Avatar
-                      src={
-                        member.image
-                      }
+                      src={member.image}
                       name={member.handle}
                       size={mobileView === false ? "25px" : "13px"}
                       round={mobileView === false ? "25px" : "8px"}
