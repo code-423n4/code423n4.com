@@ -120,6 +120,25 @@ const ContestLayout = (props) => {
     })();
   }, [currentUser, contestid, fields]);
 
+  // get contest leaderboard results
+  useEffect(() => {
+    (async () => {
+      const result = await fetch(`/.netlify/functions/leaderboard?contest=${contestid}`, {
+        headers: {
+          "Content-Type": "application/json",
+          // "X-Authorization": `Bearer ${sessionToken}`,
+          // "C4-User": currentUser.username,
+        },
+      });
+      if (result.ok) {
+        setLeaderboardResults(await result.json());
+      } else {
+        // @TODO: what to do here?
+        throw "Unable to fetch leaderboard results.";
+      }
+    })();
+  }, [contestid]);
+
   return (
     <DefaultLayout
       pageTitle={pageTitle}
