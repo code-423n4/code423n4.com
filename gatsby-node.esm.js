@@ -278,7 +278,6 @@ exports.sourceNodes = async ({
   const apiContestsData = await getApiContestData();
 
   apiContestsData.forEach((contest) => {
-    console.log(contest);
     createNode({
       ...contest,
       id: createNodeId(`ContestsCsv-${contest.contestid}`),
@@ -324,7 +323,6 @@ exports.sourceNodes = async ({
 exports.createPages = async ({ graphql, actions }) => {
   const { createPage } = actions;
   const contests = await graphql(queries.contests);
-  // console.log(contests.data.contests.edges);
   const formTemplate = path.resolve("./src/templates/ReportForm.tsx");
   const contestTemplate = path.resolve("./src/templates/ContestLayout.tsx");
   contests.data.contests.edges.forEach((contest) => {
