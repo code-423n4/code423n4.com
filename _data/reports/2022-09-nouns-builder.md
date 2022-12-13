@@ -2882,7 +2882,7 @@ I would say that requiring at least 1 vote for a proposal to be considered `Succ
 
 At [Governor.sol#L441](https://github.com/code-423n4/2022-09-nouns-builder/blob/main/src/governance/governor/Governor.sol#L441) we have:
 
-```javscript
+```javascript
 else if (proposal.forVotes < proposal.againstVotes || proposal.forVotes < proposal.quorumVotes) {
         return ProposalState.Defeated;
 }
@@ -2890,7 +2890,7 @@ else if (proposal.forVotes < proposal.againstVotes || proposal.forVotes < propos
 
 which can be changed to:
 
-```javscript
+```javascript
 else if (proposal.forVotes == 0 || proposal.forVotes < proposal.againstVotes || proposal.forVotes < proposal.quorumVotes) {
         return ProposalState.Defeated;
 }
