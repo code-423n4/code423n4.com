@@ -796,7 +796,7 @@ Even if you need a string to represent an error, it can usually be done in less 
 
 Here are some examples of strings that can be shortened from codebase:
 
-```txt
+```
 ./contracts/TransactionManager.sol:96: "addLiquidity: ETH_WITH_ERC_TRANSFER"
 ./contracts/TransactionManager.sol:97: "addLiquidity: ERC20_TRANSFER_FAILED"
 ./contracts/TransactionManager.sol:122: "removeLiquidity: INSUFFICIENT_FUNDS"
