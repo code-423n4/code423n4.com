@@ -16,10 +16,10 @@ import { getDates } from "../utils/time";
 import useUser from "../hooks/UserContext";
 // components
 import ClientOnly from "../components/ClientOnly";
-import ContestResults from "../components/ContestResults";
 import Countdown from "../components/Countdown";
 import DefaultLayout from "./DefaultLayout";
 import FindingsList from "../components/FindingsList";
+import LeaderboardTable from "../components/LeaderboardTable";
 import WardenDetails from "../components/WardenDetails";
 import ReactMarkdown from "react-markdown";
 // styles
@@ -43,6 +43,7 @@ const ContestLayout = (props) => {
   );
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [canViewContest, setCanViewContest] = useState<boolean>(false);
+  const [leaderboardResults, setLeaderboardResults] = useState([]);
 
   // hooks
   const { currentUser } = useUser();
@@ -229,7 +230,7 @@ const ContestLayout = (props) => {
             {t.contestStatus === "completed" && (
               <TabPanel>
                 <div className="contest-wrapper">
-                  <ContestResults results={props.data.leaderboardFindings} />
+                  <LeaderboardTable results={leaderboardResults} />
                 </div>
               </TabPanel>
             )}
