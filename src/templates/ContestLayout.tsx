@@ -73,8 +73,7 @@ const ContestLayout = (props) => {
       ? markdownRemark.frontmatter.altUrl
       : `/reports/${props.data.markdownRemark.frontmatter.slug}`;
   }
-  console.log('fields');
-console.log(fields)
+
   useEffect(() => {
     (async () => {
       if (fields.codeAccess === "public") {
@@ -83,7 +82,7 @@ console.log(fields)
         setCanViewContest(true);
       } else {
         setCanViewContest(false);
-        return;
+        // return;
       }
       if (currentUser.isLoggedIn) {
         const user = Moralis.User.current();
