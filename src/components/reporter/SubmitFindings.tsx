@@ -431,7 +431,13 @@ const SubmitFindings = ({
     }
     if (contestType === "Mitigation review") {
       if (state.isMitigated) {
-        requiredFields = [state.mitigationOf];
+        // if the finding is mitigated, we only need "mitigation of"
+        if (!state.mitigationOf) {
+          setHasValidationErrors(true);
+          return true;
+        } else {
+          return false;
+        }
       } else {
         requiredFields.push(state.mitigationOf);
       }
