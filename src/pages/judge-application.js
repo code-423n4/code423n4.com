@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { StaticQuery, graphql } from "gatsby";
+import React, { useState, useEffect } from "react";
+// import { StaticQuery, graphql } from "gatsby";
 
 import Widgets from "../components/reporter/widgets/Widgets";
 import useUser from "../hooks/UserContext";
@@ -87,26 +87,6 @@ const FormStatus = {
   Error: "error",
 };
 
-const wardenListQuery = graphql`
-  query WardenList {
-    allHandlesJson(sort: { fields: handle, order: ASC }) {
-      edges {
-        node {
-          id
-          handle
-          image {
-            childImageSharp {
-              resize(width: 80) {
-                src
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-`;
-
 const JudgeApplication = () => {
   const [state, setState] = useState(initialState);
   const [status, setStatus] = useState("unsubmitted");
@@ -127,6 +107,7 @@ const JudgeApplication = () => {
     const url = `/.netlify/functions/apply-for-judge`;
     setStatus(FormStatus.Submitting);
     const sessionToken = user.attributes.sessionToken;
+    console.log(data);
     const response = await fetch(url, {
       method: "POST",
       headers: {
@@ -168,15 +149,6 @@ const JudgeApplication = () => {
   };
 
   return (
-    <StaticQuery
-      query={wardenListQuery}
-      render={(data) => {
-        const wardens = data.allHandlesJson.edges.map(({ node }) => {
-          return { value: node.handle, image: node.image };
-        });
-        fields[0].options = wardens;
-
-        return (
           <ProtectedPage
             bodyClass="judge-application"
             pageTitle="Judge Application | Code4rena"
@@ -272,9 +244,6 @@ const JudgeApplication = () => {
               )}
             </div>
           </ProtectedPage>
-        );
-      }}
-    />
   );
 };
 

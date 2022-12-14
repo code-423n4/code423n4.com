@@ -216,6 +216,7 @@ export default function TeamManagement({ data, location }) {
   );
 }
 
+//update querry here for new enpoint related to handles
 export const query = graphql`
   query {
     handles: allHandlesJson(sort: { fields: handle, order: ASC }) {

@@ -59,6 +59,7 @@ export default function TeamRegistration({ data }) {
   );
 }
 
+//update call here with new endpoint for dealing with handles
 export const query = graphql`
   query {
     handles: allHandlesJson(sort: { fields: handle, order: ASC }) {
