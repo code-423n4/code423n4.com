@@ -109,12 +109,6 @@ const plugins = [
       },
     },
   },
-  {
-    resolve: `gatsby-source-filesystem`,
-    options: {
-      path: `${__dirname}/_data/`,
-    },
-  },
   `gatsby-transformer-sharp`,
   `gatsby-plugin-sharp`,
   {
