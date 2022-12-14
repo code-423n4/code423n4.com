@@ -90,7 +90,6 @@ const SubmitFindings = ({
   // hooks
   const { currentUser, reFetchUser } = useUser();
   const { showModal } = useModalContext();
-console.log('initial state', initialState);
   // state
   const [status, setStatus] = useState<FormStatus>(FormStatus.Unsubmitted);
   const [hasValidationErrors, setHasValidationErrors] = useState<boolean>(
@@ -104,7 +103,6 @@ console.log('initial state', initialState);
   const [newTeamAddress, setNewTeamAddress] = useState<string>("");
   const [attributedTo, setAttributedTo] = useState<string>(initialAttributedTo);
   const [fieldList, setFieldList] = useState<Field[]>([riskField]);
-console.log();
   // effects
   useEffect(() => {
     if (!attributedTo) {
@@ -333,12 +331,13 @@ console.log();
     const isQaOrGasFinding = checkQaOrGasFinding(state.risk);
     const linksToCodeString = state.linksToCode.join("\n");
     const markdownBody = `# Lines of code\n\n${linksToCodeString}\n\n\n# Vulnerability details\n\n${state.details}`;
-
     let risk = state.risk;
     let title = getTitle(state.title, state.risk);
     let body = markdownBody;
     let labels = [config.labelAll, state.risk];
-    let mitigationOf: string | undefined = undefined;
+
+    //test here to make sure mitigigation of on a regular submit and edit are working correctly
+    let mitigationOf: string | undefined = state.mitigationOf ? state.mitigationOf : undefined;
 
     if (isQaOrGasFinding) {
       body = state.qaGasDetails;
@@ -431,7 +430,13 @@ console.log();
     }
     if (contestType === "Mitigation review") {
       if (state.isMitigated) {
-        requiredFields = [state.mitigationOf];
+        // if the finding is mitigated, we only need "mitigation of"
+        if (!state.mitigationOf) {
+          setHasValidationErrors(true);
+          return true;
+        } else {
+          return false;
+        }
       } else {
         requiredFields.push(state.mitigationOf);
       }

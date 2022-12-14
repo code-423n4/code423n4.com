@@ -129,6 +129,10 @@ const ReportForm = ({ data, location }) => {
         newValue: data.attributedTo,
         address: data.address,
       },
+      mitigationOf: data.mitigationOf ? {
+        newValue: data.mitigationOf!,
+        oldValue: state.mitigationOf,
+      } : undefined,
     };
     if (state.title !== data.title) {
       requestData.title = data.title;
@@ -214,8 +218,6 @@ const ReportForm = ({ data, location }) => {
     (async () => {
       if (currentUser.isLoggedIn) {
         const user = await Moralis.User.current();
-        console.log('checking location need to figure out how to initialize the edit ability');
-        console.log('location', location)
         if (location.state && location.state.finding) {
           const finding = location.state.finding;
           initializeEditState(finding);
