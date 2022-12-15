@@ -6,10 +6,10 @@ import FormField from "../components/reporter/widgets/FormField";
 import Form from "../components/form/Form";
 import Widgets from "../components/reporter/widgets/Widgets";
 
-import * as widgetStyles from "../components/reporter/widgets/Widgets.module.scss";
 import useUser from "../hooks/UserContext";
 import { useMoralis } from "react-moralis";
 import { Input } from "../components/Input";
+import * as widgetStyles from "../components/reporter/widgets/Widgets.module.scss";
 
 const initialState = {
   discordHandle: "",

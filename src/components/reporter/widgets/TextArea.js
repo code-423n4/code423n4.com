@@ -6,10 +6,8 @@ import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import clsx from "clsx";
-
 import * as styles from "./Widgets.module.scss";
 
-import "katex/dist/katex.min.css";
 
 const TextArea = ({
   name,

@@ -323,16 +323,16 @@ exports.createPages = async ({ graphql, actions }) => {
 };
 
 exports.onCreateWebpackConfig = ({ actions, stage, getConfig }) => {
-  if (stage === "develop" || stage === 'build-javascript') {
-    const config = getConfig()
-    const miniCssExtractPlugin = config.plugins.find(
-      plugin => plugin.constructor.name === "MiniCssExtractPlugin"
-    )
-    if (miniCssExtractPlugin) {
-      miniCssExtractPlugin.options.ignoreOrder = true
-    }
-    actions.replaceWebpackConfig(config)
-  }
+  // if (stage === "develop" || stage === 'build-javascript') {
+  //   const config = getConfig()
+  //   const miniCssExtractPlugin = config.plugins.find(
+  //     plugin => plugin.constructor.name === "MiniCssExtractPlugin"
+  //   )
+  //   if (miniCssExtractPlugin) {
+  //     miniCssExtractPlugin.options.ignoreOrder = true
+  //   }
+  //   actions.replaceWebpackConfig(config)
+  // }
   actions.setWebpackConfig({
     plugins: [
       new webpack.IgnorePlugin({

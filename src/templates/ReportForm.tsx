@@ -17,9 +17,9 @@ import useUser from "../hooks/UserContext";
 // components
 import ProtectedPage from "../components/ProtectedPage";
 import SubmitFindings from "../components/reporter/SubmitFindings";
-
 // styles
 import * as styles from "../components/form/Form.module.scss";
+
 
 export interface ReportState {
   title: string;
