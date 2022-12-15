@@ -1,4 +1,4 @@
-import { findUser } from "../util/user-utils";
+import { findUser, getUsers } from "../util/user-utils";
 
 exports.handler = async (event) => {
   // only allow GET
@@ -12,11 +12,17 @@ exports.handler = async (event) => {
 
   const userHandle = event.queryStringParameters.id;
   try {
-    const user = await findUser(userHandle);
+    let res;
+    if (userHandle === undefined) {
+      res = getUsers();
+    }
+    else {
+      res = await findUser(userHandle);
+    }
 
     return {
       statusCode: 200,
-      body: JSON.stringify(user),
+      body: JSON.stringify(res),
     };
   } catch (error) {
     return {
