@@ -17,8 +17,8 @@ import ProtectedPage from "../components/ProtectedPage";
 import WardenDetails from "../components/WardenDetails";
 
 // styles
-import * as formStyles from "../components/form/Form.module.scss";
 import * as inputStyles from "../components/Input.module.scss";
+import * as formStyles from "../components/form/Form.module.scss";
 
 const initialState = {
   discordUsername: "",
