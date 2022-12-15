@@ -1,4 +1,3 @@
-import { graphql } from "gatsby";
 import isEqual from "lodash/isEqual";
 import React, { useCallback, useEffect, useState } from "react";
 
@@ -28,6 +27,41 @@ export default function TeamManagement({ data, location }) {
   const [teamMembers, setTeamMembers] = useState<
     WardenFieldOption[] | undefined
   >();
+
+  // XXX: switching from gatsby graph
+  const [handles, setHandles] = useState<Set<string>>(new Set<string>());
+  const [wardens, setWardens] = useState([]);
+
+  // fetch wardens
+  useEffect(() => {
+    //   // fetch get-user
+    //   (async () => {
+    //     const result = await fetch(`/.netlify/functions/get-user`, {
+    //       headers: {
+    //         "Content-Type": "application/json",
+    //         // "X-Authorization": `Bearer ${sessionToken}`,
+    //         // "C4-User": currentUser.username,
+    //       },
+    //     });
+    //     if (result.ok) {
+    //       let users = await result.json();
+          
+    //       let handles = new Set(users.slice().map((e) => e.handle));
+    //       setHandles(handles);
+  
+    //       let wardens = users.slice.map((e) => { 
+    //         return {
+    //           value: e.handle,
+    //           image: e.image ?? "",
+    //         }
+    //       });
+    //       setWardens(wardens);
+    //     } else {
+    //       // @TODO: what to do here?
+    //       throw "Unable to fetch leaderboard results.";
+    //     }
+    //   })();
+    }, []);
 
   useEffect(() => {
     // @todo: show error message when user tries to manage a team they are not on
@@ -94,17 +128,6 @@ export default function TeamManagement({ data, location }) {
     };
     setTeamState(state);
   };
-
-  const handles: Set<string> = new Set(
-    data.handles.edges.map((h) => h.node.handle)
-  );
-
-  let wardens: { value: string; image: unknown }[] = [];
-  data.handles.edges.forEach(({ node }) => {
-    if (!node.members) {
-      wardens.push({ value: node.handle, image: node.image });
-    }
-  });
 
   const onSubmit = useCallback(
     async (data: TeamCreateRequest, user) => {
@@ -215,28 +238,3 @@ export default function TeamManagement({ data, location }) {
     </ProtectedPage>
   );
 }
-
-//update querry here for new enpoint related to handles
-export const query = graphql`
-  query {
-    handles: allHandlesJson(sort: { fields: handle, order: ASC }) {
-      edges {
-        node {
-          handle
-          link
-          moralisId
-          members {
-            handle
-          }
-          image {
-            childImageSharp {
-              resize(width: 80) {
-                src
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-`;
