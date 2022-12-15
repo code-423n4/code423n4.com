@@ -35,6 +35,10 @@ export interface FindingEditRequest {
     newValue: string;
     oldValue: string;
   };
+  isMitigated?: {
+    newValue: boolean;
+    oldValue: boolean;
+  }
 }
 
 export interface FindingsResponse {
@@ -55,6 +59,7 @@ export interface FindingCreateRequest {
   labels: string[];
   address?: string;
   mitigationOf?: string;
+  isMitigated?: boolean;
 }
 
 export interface FindingDeleteRequest {

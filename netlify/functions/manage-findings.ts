@@ -215,6 +215,7 @@ async function editFinding(
       message: `You cannot change the report id ${data.mitigationOf?.oldValue} for this mitigation issue.`,
     };
   }
+ 
   //is user marked issue as mitigation confirmed but then changed their minds remove the mitigation confirmed label and add new risk label and body
   //mitigation confirmed and no risk label exists
   let oldRiskCode = '';
@@ -367,11 +368,49 @@ async function editFinding(
       `Risk changed from ${data.risk.oldValue} to ${data.risk.newValue}\n\n` +
       emailBody;
     edited = true;
+  }else if(!isQaOrGasSubmission && data.isMitigated?.oldValue !== data.isMitigated?.newValue && data.isMitigated?.newValue){
+    try {
+      await client.request(
+        "DELETE /repos/{owner}/{repo}/issues/{issue_number}/labels/{name}",
+        {
+          owner: process.env.GITHUB_REPO_OWNER!,
+          repo: repoName,
+          issue_number: issueNumber,
+          name: data.risk.oldValue,
+        }
+      );
+    } catch (error) {
+      throw {
+        status: error.status || 500,
+        message: `Error removing old risk label: [${data.risk.oldValue}] - ${
+          error.message || "unknown"
+        }`,
+      };
+    }
+
+
+    try {
+      await client.request(
+        "POST /repos/{owner}/{repo}/issues/{issue_number}/labels",
+        {
+          owner: process.env.GITHUB_REPO_OWNER!,
+          repo: repoName,
+          issue_number: issueNumber,
+          labels: [`mitigation-confirmed`],
+        }
+      );
+    } catch (error) {
+      throw {
+        status: error.status || 500,
+        message: `Error adding new label: [mitigation-confirmed] - ${
+          error.message || "unknown"
+        }`,
+      };
+    }
   }
 
   // Simple field handling {title, body}
   const simpleFields: { title?: string; body?: string } = {};
-
   if (data.title) {
     simpleFields.title = data.title;
     emailBody = `Title changed: ${data.title}\n\n` + emailBody;
@@ -390,7 +429,10 @@ async function editFinding(
       // @todo: remove this once we can be sure all reports are saved as md files
       const markdownPath = `https://github.com/${owner}/${repoName}/blob/main/data/${data.attributedTo.newValue}-${newRiskCode}.md`;
       simpleFields.body = `See the markdown file with the details of this report [here](${markdownPath}).`;
-    } else {
+    } else if(data.isMitigated?.oldValue !== data.isMitigated?.newValue && data.isMitigated?.newValue && data.mitigationOf?.oldValue){
+      simpleFields.title = `Mitigation confirmed for ${data.mitigationOf.oldValue}`
+      simpleFields.body = '';
+    }else {
       simpleFields.body = data.body;
     }
     emailBody = `Report contents changed: ${data.body}\n\n` + emailBody;
