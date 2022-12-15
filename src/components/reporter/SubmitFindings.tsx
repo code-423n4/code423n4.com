@@ -336,8 +336,7 @@ const SubmitFindings = ({
     let body = markdownBody;
     let labels = [config.labelAll, state.risk];
 
-    //test here to make sure mitigigation of on a regular submit and edit are working correctly
-    let mitigationOf: string | undefined = state.mitigationOf ? state.mitigationOf : undefined;
+    let mitigationOf: string | undefined = state.mitigationOf;
 
     if (isQaOrGasFinding) {
       body = state.qaGasDetails;
@@ -370,6 +369,7 @@ const SubmitFindings = ({
       body,
       labels,
       mitigationOf,
+      isMitigated : state.isMitigated,
     };
     if (attributedTo !== currentUser.username) {
       const team = currentUser.teams.find(

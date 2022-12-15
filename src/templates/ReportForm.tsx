@@ -134,10 +134,11 @@ const ReportForm = ({ data, location }) => {
         oldValue: state.mitigationOf,
       } : undefined,
       isMitigated : { //update these values here from ui update
-        newValue: data.isMitigated ? data.isMitigated : false,
+        newValue: data.isMitigated!,
         oldValue: state.isMitigated,
       }
     };
+  
     if (state.title !== data.title) {
       requestData.title = data.title;
     }

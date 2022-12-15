@@ -288,7 +288,7 @@ exports.handler = async (event) => {
     }else if(
       isMitigationReport
     ){
-      labels.concat(`MR-${mitigationOf}`)
+      labels.push(`MR-${mitigationOf}`)
     }
 
     const issueResult = await octokit.request(

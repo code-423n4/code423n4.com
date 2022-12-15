@@ -317,9 +317,8 @@ async function editFinding(
       emailBody;
     edited = true;
   }
-
   // Only handle risk changes between Med and High
-  if (!isQaOrGasSubmission && data.risk.oldValue !== data.risk.newValue ) {
+  if (!isQaOrGasSubmission && data.risk.oldValue !== data.risk.newValue && !data.isMitigated?.newValue) {
     //if a mitigation was originally confirmed
     let removeMitigationConfirmedLabel = false;
     if(data.mitigationOf && data.risk.oldValue === ''){
@@ -388,7 +387,7 @@ async function editFinding(
       };
     }
 
-
+const migationConfirmedLabe = 'mitigation-confirmed'
     try {
       await client.request(
         "POST /repos/{owner}/{repo}/issues/{issue_number}/labels",
@@ -396,7 +395,7 @@ async function editFinding(
           owner: process.env.GITHUB_REPO_OWNER!,
           repo: repoName,
           issue_number: issueNumber,
-          labels: [`mitigation-confirmed`],
+          labels: [migationConfirmedLabe],
         }
       );
     } catch (error) {
@@ -416,7 +415,6 @@ async function editFinding(
     emailBody = `Title changed: ${data.title}\n\n` + emailBody;
     edited = true;
   }
-
   if (data.body) {
     if (isQaOrGasSubmission) {
       await client.createOrUpdateTextFile({
@@ -429,9 +427,6 @@ async function editFinding(
       // @todo: remove this once we can be sure all reports are saved as md files
       const markdownPath = `https://github.com/${owner}/${repoName}/blob/main/data/${data.attributedTo.newValue}-${newRiskCode}.md`;
       simpleFields.body = `See the markdown file with the details of this report [here](${markdownPath}).`;
-    } else if(data.isMitigated?.oldValue !== data.isMitigated?.newValue && data.isMitigated?.newValue && data.mitigationOf?.oldValue){
-      simpleFields.title = `Mitigation confirmed for ${data.mitigationOf.oldValue}`
-      simpleFields.body = '';
     }else {
       simpleFields.body = data.body;
     }
