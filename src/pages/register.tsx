@@ -12,13 +12,12 @@ import RegistrationForm from "../components/RegistrationForm";
 import * as styles from "../components/form/Form.module.scss";
 
 export default function UserRegistration({ data }) {
-  // const handles = new Set(data.handles.edges.map((h) => h.node.handle));
-  const [handles, setHandles] = useState([]);
+  const handles = new Set(data.handles.edges.map((h) => h.node.handle));
+  const [handlesData, setHandlesData] = useState([]);
   const [wardens, setWardens] = useState([]);
   const { isInitialized } = useMoralis();
   const { currentUser } = useUser();
 
-  console.log(data.handles.edges[601].node.image);
   useEffect((): void => {
     if (currentUser.isLoggedIn) {
       navigate("/");
@@ -28,30 +27,30 @@ export default function UserRegistration({ data }) {
   
 //this needs to be updated to use the handles from the netlify function.
 
-  // useEffect((): void => {
-  //   async function filterWardens(): Promise<void> {
-  //     if (!isInitialized) {
-  //       return;
-  //     }
-  //     const wardensWithSubmissions = await Moralis.Cloud.run(
-  //       "getWardensWithSubmissions"
-  //     );
-  //       console.log(data.handles.edges);
-  //     const wardens = data.handles.edges
-  //       .filter(({ node }) => {
-  //         if (node.members) {
-  //           return false;
-  //         }
-  //         if (wardensWithSubmissions.includes(node.handle)) {
-  //           return false;
-  //         }
-  //         return true;
-  //       })
-  //       .map(({ node }) => ({ value: node.handle, image: node.image }));
-  //     setWardens(wardens);
-  //   }
-  //   filterWardens();
-  // }, [wardens, isInitialized]);
+  useEffect((): void => {
+    async function filterWardens(): Promise<void> {
+      if (!isInitialized) {
+        return;
+      }
+      const wardensWithSubmissions = await Moralis.Cloud.run(
+        "getWardensWithSubmissions"
+      );
+        console.log(data.handles.edges);
+      const wardens = data.handles.edges
+        .filter(({ node }) => {
+          if (node.members) {
+            return false;
+          }
+          if (wardensWithSubmissions.includes(node.handle)) {
+            return false;
+          }
+          return true;
+        })
+        .map(({ node }) => ({ value: node.handle, image: node.image }));
+      setWardens(wardens);
+    }
+    filterWardens();
+  }, [wardens, isInitialized]);
 
   // this is for getting handles from netlify function. 
   useEffect(() => {
@@ -65,7 +64,7 @@ export default function UserRegistration({ data }) {
           return res;
       });
       if (result) {
-        setHandles(result);
+        setHandlesData(result);
       } else {
         throw "Unable to fetch handle results.";
       }

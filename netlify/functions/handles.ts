@@ -13,6 +13,7 @@ const getHandles = () => {
                 const imagePath = wardenFileData.image.slice(2);
                 wardenFileData.imageUrl = `https://raw.githubusercontent.com/${process.env.GITHUB_REPO_OWNER}/${process.env.REPO}/${process.env.BRANCH_NAME}/_data/handles/${imagePath}`;
               }
+              if(wardenFileData.members){console.log('warden exists', wardenFileData)}
                allHandles.push({...wardenFileData})
            }
        });
