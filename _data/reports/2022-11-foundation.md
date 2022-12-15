@@ -31,6 +31,7 @@ The codebase in question had already undergone two prior Code4rena contests. Sin
 # Scope
 
 Code reviewed consisted of the following contracts:
+
 | Contract Name                                                                                                                                          | SLOC  | Purpose                                                                                                              |
 | ------------------------------------------------------------------------------------------------------------------------------------------------------ | ----- | -------------------------------------------------------------------------------------------------------------------- |
 | [NFTDropMarket](https://github.com/f8n/fnd-contracts-staging/tree/master/contracts/NFTDropMarket.sol)                                              | 63    | The main / top-level contract for all drop market tools on Foundation.                                               |
