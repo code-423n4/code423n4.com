@@ -34,13 +34,6 @@ const plugins = [
     },
   },
   {
-    resolve: `gatsby-source-filesystem`,
-    options: {
-      path: `${__dirname}/_data/findings/findings.csv`,
-      name: `findings`,
-    },
-  },
-  {
     resolve: "gatsby-source-filesystem",
     options: {
       path: `${__dirname}/_data/pages`,
@@ -96,7 +89,7 @@ const plugins = [
           },
         },
         {
-          resolve: `gatsby-remark-mathjax-ssr`,
+          resolve: `gatsby-remark-mathjax`,
           options: {
           }
         },
@@ -114,12 +107,6 @@ const plugins = [
         hide: csvBooleanParser,
         contest: `number`,
       },
-    },
-  },
-  {
-    resolve: `gatsby-source-filesystem`,
-    options: {
-      path: `${__dirname}/_data/`,
     },
   },
   `gatsby-transformer-sharp`,
