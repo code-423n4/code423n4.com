@@ -124,7 +124,7 @@ export const query = graphql`
             name
             image {
               childImageSharp {
-                resize(width: 160) {
+                resize(width: 80) {
                   src
                 }
               }
