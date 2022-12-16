@@ -83,7 +83,6 @@ const ContestLayout = (props) => {
         setCanViewContest(true);
       } else {
         setCanViewContest(false);
-        return;
       }
       if (currentUser.isLoggedIn) {
         const user = Moralis.User.current();
