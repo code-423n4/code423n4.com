@@ -129,7 +129,16 @@ const ReportForm = ({ data, location }) => {
         newValue: data.attributedTo,
         address: data.address,
       },
+      mitigationOf: data.mitigationOf ? {
+        newValue: data.mitigationOf!,
+        oldValue: state.mitigationOf,
+      } : undefined,
+      isMitigated : { //update these values here from ui update
+        newValue: data.isMitigated!,
+        oldValue: state.isMitigated,
+      }
     };
+  
     if (state.title !== data.title) {
       requestData.title = data.title;
     }
@@ -214,7 +223,6 @@ const ReportForm = ({ data, location }) => {
     (async () => {
       if (currentUser.isLoggedIn) {
         const user = await Moralis.User.current();
-
         if (location.state && location.state.finding) {
           const finding = location.state.finding;
           initializeEditState(finding);
@@ -277,6 +285,7 @@ const ReportForm = ({ data, location }) => {
     }
     return { links: linksToCode, body };
   };
+
 
   return (
     <ProtectedPage pageTitle="Submit finding | Code 423n4">

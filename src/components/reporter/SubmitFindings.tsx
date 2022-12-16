@@ -90,7 +90,6 @@ const SubmitFindings = ({
   // hooks
   const { currentUser, reFetchUser } = useUser();
   const { showModal } = useModalContext();
-
   // state
   const [status, setStatus] = useState<FormStatus>(FormStatus.Unsubmitted);
   const [hasValidationErrors, setHasValidationErrors] = useState<boolean>(
@@ -104,7 +103,6 @@ const SubmitFindings = ({
   const [newTeamAddress, setNewTeamAddress] = useState<string>("");
   const [attributedTo, setAttributedTo] = useState<string>(initialAttributedTo);
   const [fieldList, setFieldList] = useState<Field[]>([riskField]);
-
   // effects
   useEffect(() => {
     if (!attributedTo) {
@@ -333,12 +331,12 @@ const SubmitFindings = ({
     const isQaOrGasFinding = checkQaOrGasFinding(state.risk);
     const linksToCodeString = state.linksToCode.join("\n");
     const markdownBody = `# Lines of code\n\n${linksToCodeString}\n\n\n# Vulnerability details\n\n${state.details}`;
-
     let risk = state.risk;
     let title = getTitle(state.title, state.risk);
     let body = markdownBody;
     let labels = [config.labelAll, state.risk];
-    let mitigationOf: string | undefined = undefined;
+
+    let mitigationOf: string | undefined = state.mitigationOf;
 
     if (isQaOrGasFinding) {
       body = state.qaGasDetails;
@@ -371,6 +369,7 @@ const SubmitFindings = ({
       body,
       labels,
       mitigationOf,
+      isMitigated : state.isMitigated,
     };
     if (attributedTo !== currentUser.username) {
       const team = currentUser.teams.find(
