@@ -8,7 +8,15 @@ import ContestWarning from "../findings/ContestWarning";
 import * as widgetStyles from "./Widgets.module.scss";
 
 const Widget = ({ field, fieldState, isInvalid, onChange }) => {
-  const { widget, name, required, options, maxSize, label } = field;
+  const {
+    widget,
+    name,
+    required,
+    options,
+    maxSize,
+    label,
+    placeholder,
+  } = field;
 
   function handleChange(e) {
     onChange(e);
@@ -21,6 +29,7 @@ const Widget = ({ field, fieldState, isInvalid, onChange }) => {
       onChange={handleChange}
       fieldState={fieldState[name]}
       isInvalid={isInvalid}
+      placeholder={placeholder}
     />
   );
 
