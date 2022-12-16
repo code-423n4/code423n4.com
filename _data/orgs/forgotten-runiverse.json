@@ -1,5 +1,5 @@
 {
-"name": "Forgotten Runiverse", (mandatory field; case sensitive)
-"link": "https://twitter.com/RuniverseGame", (optional field)
-"image": "./avatars/Forgotten-Runiverse.png" (mandatory field)
+"name": "Forgotten Runiverse"
+"link": "https://twitter.com/RuniverseGame",
+"image": "./avatars/Forgotten-Runiverse.png" 
 }
