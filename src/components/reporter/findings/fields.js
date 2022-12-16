@@ -106,6 +106,8 @@ export const mitigationField = {
 export const mitigationOfField = {
   name: "mitigationOf",
   label: "Report ID of original finding *",
+  helpText: `For new findings, please enter "NEW"`,
+  placeholder: "H-01",
   widget: "text",
   required: true,
 };
