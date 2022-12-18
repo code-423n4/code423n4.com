@@ -1,5 +1,4 @@
-import { graphql } from "gatsby";
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 import useUser from "../hooks/UserContext";
 import ProtectedPage from "../components/ProtectedPage";
@@ -7,16 +6,41 @@ import TeamForm from "../components/TeamForm";
 
 export default function TeamRegistration({ data }) {
   const { currentUser } = useUser();
-  const handles: Set<string> = new Set(
-    data.handles.edges.map((h) => h.node.handle)
-  );
 
-  let wardens: { value: string; image: unknown }[] = [];
-  data.handles.edges.forEach(({ node }) => {
-    if (!node.members) {
-      wardens.push({ value: node.handle, image: node.image });
-    }
-  });
+  // XXX: switching from gatsby graph
+  const [handles, setHandles] = useState<Set<string>>(new Set<string>());
+  const [wardens, setWardens] = useState([]);
+
+  // fetch wardens
+  useEffect(() => {
+  //   // fetch get-user
+  //   (async () => {
+  //     const result = await fetch(`/.netlify/functions/get-user`, {
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         // "X-Authorization": `Bearer ${sessionToken}`,
+  //         // "C4-User": currentUser.username,
+  //       },
+  //     });
+  //     if (result.ok) {
+  //       let users = await result.json();
+        
+  //       let handles = new Set(users.slice().map((e) => e.handle));
+  //       setHandles(handles);
+
+  //       let wardens = users.slice.map((e) => { 
+  //         return {
+  //           value: e.handle,
+  //           image: e.image ?? "",
+  //         }
+  //       });
+  //       setWardens(wardens);
+  //     } else {
+  //       // @TODO: what to do here?
+  //       throw "Unable to fetch leaderboard results.";
+  //     }
+  //   })();
+  }, []);
 
   const onSubmit = useCallback(
     async (requestBody, user) => {
@@ -58,28 +82,3 @@ export default function TeamRegistration({ data }) {
     </ProtectedPage>
   );
 }
-
-//update call here with new endpoint for dealing with handles
-export const query = graphql`
-  query {
-    handles: allHandlesJson(sort: { fields: handle, order: ASC }) {
-      edges {
-        node {
-          handle
-          link
-          moralisId
-          members {
-            handle
-          }
-          image {
-            childImageSharp {
-              resize(width: 80) {
-                src
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-`;

@@ -1,4 +1,4 @@
-import { readFileSync } from "fs";
+import { readFileSync, readdirSync } from "fs";
 import Moralis from "moralis-v1/node";
 import fetch from "node-fetch";
 import uniq from "lodash/uniq";
@@ -41,6 +41,17 @@ export async function findUser(userHandle) {
   } catch (error) {
     throw "User not found";
   }
+}
+
+export async function getUsers() {
+  const data = readdirSync(`./_data/handles`);
+  // just return the objects?
+  // without memebers
+}
+
+export async function getTeams() {
+  // just return the objects?
+  // with memebers
 }
 
 export async function getUserTeams(username: string): Promise<string[]> {
