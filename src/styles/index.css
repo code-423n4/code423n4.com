@@ -32,16 +32,6 @@
   padding: var(--page-margin);
   margin: 0 auto 0.6em;
 }
-
-.landing .hero-wrapper .hero .button.button-small {
-  font-size: 0.8em;
-  margin: 1.2em auto 1em;
-}
-
-.landing .hero-wrapper .hero .button.button-small:hover {
-  border-bottom: 0;
-}
-
 .landing .wrapper-main {
   padding: var(--page-margin);
   margin: 0 auto;
