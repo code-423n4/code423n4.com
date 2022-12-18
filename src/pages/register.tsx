@@ -44,7 +44,7 @@ export default function UserRegistration() {
           }
           return true;
         })
-        .map(( warden ) => ({ value: warden.handle, image: warden.image }));
+        .map(( warden ) => ({ value: warden.handle, image: warden.image ?? "" }));
       setWardens(wardens);
     }
     filterWardens();

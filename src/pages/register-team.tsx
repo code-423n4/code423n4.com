@@ -4,42 +4,41 @@ import useUser from "../hooks/UserContext";
 import ProtectedPage from "../components/ProtectedPage";
 import TeamForm from "../components/TeamForm";
 
-export default function TeamRegistration({ data }) {
+export default function TeamRegistration() {
   const { currentUser } = useUser();
 
   // XXX: switching from gatsby graph
   const [handles, setHandles] = useState<Set<string>>(new Set<string>());
-  const [wardens, setWardens] = useState([]);
+  const [wardens, setWardens] = useState<{value: any; image: any; }[]>([]);
 
   // fetch wardens
   useEffect(() => {
-  //   // fetch get-user
-  //   (async () => {
-  //     const result = await fetch(`/.netlify/functions/get-user`, {
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         // "X-Authorization": `Bearer ${sessionToken}`,
-  //         // "C4-User": currentUser.username,
-  //       },
-  //     });
-  //     if (result.ok) {
-  //       let users = await result.json();
-        
-  //       let handles = new Set(users.slice().map((e) => e.handle));
-  //       setHandles(handles);
+  //   // fetch handles
+    (async () => {
+      const result = await fetch(`/.netlify/functions/handles`, {
+        headers: {
+          "Content-Type": "application/json",
+          // "X-Authorization": `Bearer ${sessionToken}`,
+          // "C4-User": currentUser.username,
+        },
+      });
+      if (result.ok) {
+        let users = await result.json();
+        let handles : Set<string> = new Set(users.map((e) => e.handle));
+        setHandles(handles);
 
-  //       let wardens = users.slice.map((e) => { 
-  //         return {
-  //           value: e.handle,
-  //           image: e.image ?? "",
-  //         }
-  //       });
-  //       setWardens(wardens);
-  //     } else {
-  //       // @TODO: what to do here?
-  //       throw "Unable to fetch leaderboard results.";
-  //     }
-  //   })();
+        let wardens : {value: any; image: any; }[] = users.map((e) => { 
+          return {
+            value: e.handle,
+            image: e.image ?? "",
+          }
+        });
+        setWardens(wardens);
+      } else {
+        // @TODO: what to do here?
+        throw "Unable to fetch user data.";
+      }
+    })();
   }, []);
 
   const onSubmit = useCallback(
