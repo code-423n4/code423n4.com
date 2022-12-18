@@ -3,7 +3,7 @@ import fs, { readFileSync, readdir, readdirSync } from "fs";
 //need to set up the members portion of the handles data (i think the members field is for teams)
 //so my plan is to add a call to get the teams data here
 const getHandles = () => {
-    const allHandles : {handle : string, link : string, moralisId: string, image : string}[] = [];
+    const allHandles : {handle : string, link : string, moralisId: string, image : string, members: string[],  }[] = [];
     const data = readdirSync(`./_data/handles`);
     data.forEach((file) => {
            if(file.endsWith('.json')){
@@ -13,7 +13,7 @@ const getHandles = () => {
                 const imagePath = wardenFileData.image.slice(2);
                 wardenFileData.imageUrl = `https://raw.githubusercontent.com/${process.env.GITHUB_REPO_OWNER}/${process.env.REPO}/${process.env.BRANCH_NAME}/_data/handles/${imagePath}`;
               }
-               allHandles.push({...wardenFileData})
+                allHandles.push({...wardenFileData})
            }
        });
 
