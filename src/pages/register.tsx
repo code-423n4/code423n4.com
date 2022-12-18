@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { graphql,navigate } from "gatsby";
+import { navigate } from "gatsby";
 import Moralis from "moralis-v1";
 import React, { useEffect, useState } from "react";
 import { useMoralis } from "react-moralis";
@@ -11,10 +11,10 @@ import RegistrationForm from "../components/RegistrationForm";
 
 import * as styles from "../components/form/Form.module.scss";
 
-export default function UserRegistration({ data }) {
-  const handles = new Set(data.handles.edges.map((h) => h.node.handle));
-  const [handlesData, setHandlesData] = useState([]);
-  const [wardens, setWardens] = useState([]);
+export default function UserRegistration() {
+  const [handles, setHandles] = useState<Set<string>>(new Set<string>());
+  const [wardens, setWardens] = useState<{value: any; image: any; }[]> ([]);
+  const [handleData, setHandleData] = useState<any[]>([]);
   const { isInitialized } = useMoralis();
   const { currentUser } = useUser();
 
@@ -24,9 +24,8 @@ export default function UserRegistration({ data }) {
     }
   }, [currentUser.isLoggedIn]);
 
-  
-//this needs to be updated to use the handles from the netlify function.
 
+//do we need this function?? It setting wardens with a filtered set of wardens but then wardens is never used?? What am I missing??
   useEffect((): void => {
     async function filterWardens(): Promise<void> {
       if (!isInitialized) {
@@ -35,22 +34,21 @@ export default function UserRegistration({ data }) {
       const wardensWithSubmissions = await Moralis.Cloud.run(
         "getWardensWithSubmissions"
       );
-        console.log(data.handles.edges);
-      const wardens = data.handles.edges
-        .filter(({ node }) => {
-          if (node.members) {
+      const wardens = handleData
+        .filter((warden) => {
+          if (warden.warden) {
             return false;
           }
-          if (wardensWithSubmissions.includes(node.handle)) {
+          if (wardensWithSubmissions.includes(warden.handle)) {
             return false;
           }
           return true;
         })
-        .map(({ node }) => ({ value: node.handle, image: node.image }));
+        .map(( warden ) => ({ value: warden.handle, image: warden.image }));
       setWardens(wardens);
     }
     filterWardens();
-  }, [wardens, isInitialized]);
+  }, [isInitialized, handleData]);
 
   // this is for getting handles from netlify function. 
   useEffect(() => {
@@ -64,12 +62,13 @@ export default function UserRegistration({ data }) {
           return res;
       });
       if (result) {
-        setHandlesData(result);
+        setHandles(new Set(result.map((h) => h.handle)));
+        setHandleData(result);
       } else {
         throw "Unable to fetch handle results.";
       }
     })();
-  }, []);
+  }, [isInitialized]);
 
   
 
@@ -87,27 +86,4 @@ export default function UserRegistration({ data }) {
     </DefaultLayout>
   );
 }
-// update call here with new endpoint for handles
-// export const query = graphql`
-//   query {
-//     handles: allHandlesJson(sort: { fields: handle, order: ASC }) {
-//       edges {
-//         node {
-//           handle
-//           link
-//           moralisId
-//           members {
-//             handle
-//           }
-//           image {
-//             childImageSharp {
-//               resize(width: 80) {
-//                 src
-//               }
-//             }
-//           }
-//         }
-//       }
-//     }
-//   }
-// `;
+
