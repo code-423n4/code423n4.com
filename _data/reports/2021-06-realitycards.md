@@ -77,28 +77,28 @@ Today many tools, including OpenZeppelin, offer [a wrapper for “safe ERC20 tra
 RealityCards is not using such a wrapper, but instead tries to ensure successful transfers via the `balancedBooks` modifier:
 
 ```solidity
-    modifier balancedBooks {
-        _;
-        // using >= not == in case anyone sends tokens direct to contract
-        require(
-            erc20.balanceOf(address(this)) >=
-                totalDeposits + marketBalance + totalMarketPots,
-            "Books are unbalanced!"
-        );
-    }
+modifier balancedBooks {
+    _;
+    // using >= not == in case anyone sends tokens direct to contract
+    require(
+        erc20.balanceOf(address(this)) >=
+            totalDeposits + marketBalance + totalMarketPots,
+        "Books are unbalanced!"
+    );
+}
 ```
 
 This modifier is present on most functions, but is missing on `topupMarketBalance`:
 ```solidity
-    function topupMarketBalance(uint256 _amount) external override {
-        erc20.transferFrom(msgSender(), address(this), _amount);
-        if (_amount > marketBalanceDiscrepancy) {
-            marketBalanceDiscrepancy = 0;
-        } else {
-            marketBalanceDiscrepancy -= _amount;
-        }
-        marketBalance += _amount;
+function topupMarketBalance(uint256 _amount) external override {
+    erc20.transferFrom(msgSender(), address(this), _amount);
+    if (_amount > marketBalanceDiscrepancy) {
+        marketBalanceDiscrepancy = 0;
+    } else {
+        marketBalanceDiscrepancy -= _amount;
     }
+    marketBalance += _amount;
+}
 ```
 
 In the case where an ERC20 token which is not reverting on failures is used, a malicious actor could call `topupMarketBalance` with a failing transfer, but also move the value of `marketBalance` above the actual holdings. After this, `deposit`, `withdrawDeposit`, `payRent`, `payout`, `sponsor`, etc. could be locked up and always failing with “Books are unbalanced”.
@@ -136,18 +136,18 @@ https://github.com/code-423n4/2021-06-realitycards/blob/main/contracts/RCMarket.
         _;
     }
 
-  function upgradeCard(uint256 _card) external onlyTokenOwner(_card) {   // _card  could be higher than numberOfCards,
-        _checkState(States.WITHDRAW);
-        require(
-            !factory.trapIfUnapproved() ||
-                factory.isMarketApproved(address(this)),   // this can be circumvented by calling the function via another market
-            "Upgrade blocked"
-        );
-        uint256 _tokenId = _card + totalNftMintCount;    // _card  could be higher than numberOfCards, thus accessing a card in another market
-        _transferCard(ownerOf(_card), address(this), _card); // contract becomes final resting place
-        nfthub.withdrawWithMetadata(_tokenId);
-        emit LogNftUpgraded(_card, _tokenId);
-    }
+function upgradeCard(uint256 _card) external onlyTokenOwner(_card) {   // _card  could be higher than numberOfCards,
+    _checkState(States.WITHDRAW);
+    require(
+        !factory.trapIfUnapproved() ||
+            factory.isMarketApproved(address(this)),   // this can be circumvented by calling the function via another market
+        "Upgrade blocked"
+    );
+    uint256 _tokenId = _card + totalNftMintCount;    // _card  could be higher than numberOfCards, thus accessing a card in another market
+    _transferCard(ownerOf(_card), address(this), _card); // contract becomes final resting place
+    nfthub.withdrawWithMetadata(_tokenId);
+    emit LogNftUpgraded(_card, _tokenId);
+}
 ```
 
 Recommend adding the following to `ownerOf`:
@@ -918,7 +918,7 @@ It is recommended that the naming of the [following variables](https://github.co
    compile and run default test on contracts.
 3. Installed slither analyzer:
   https://github.com/crytic/slither
-4. Ran [$ slither .] against `RCOrderbook.sol` and all contracts to verify results
+4. Ran [\$ slither .] against `RCOrderbook.sol` and all contracts to verify results
 
 **[Splidge (Reality Cards) confirmed and resolved](https://github.com/code-423n4/2021-06-realitycards-findings/issues/124#issuecomment-865088374):**
  > fixed [here](https://github.com/RealityCards/RealityCards-Contracts/commit/2d6390acc4d87df13d01339b9da87f249843e932)

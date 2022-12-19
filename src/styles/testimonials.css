@@ -114,7 +114,7 @@
 }
 
 .testimonials figure.tweet figcaption {
-  background: #4a00b1;
+  background: var(--dark-purple);
   padding: 1.5em 2em;
   display: flex;
   border-bottom-left-radius: 10px;

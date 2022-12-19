@@ -294,7 +294,7 @@ _Submitted by WatchPug_
 
 <https://github.com/code-423n4/2021-11-fairside/blob/20c68793f48ee2678508b9d3a1bae917c007b712/contracts/network/FSDNetwork.sol#L274-L291>
 
-```solidity
+```js
 if (user.creation == 0) {
     user.creation = block.timestamp;
     user.gracePeriod =

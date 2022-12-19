@@ -1,0 +1,14 @@
+{
+  "handle": "Avci",
+  "members": [
+    "0xArshia",
+    "0xdanial"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xE36d5f8cd620d6C396315a81A60129AEf1234d2c"
+    }
+  ],
+  "image": "./avatars/Avci.jpeg"
+}

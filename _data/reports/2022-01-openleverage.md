@@ -255,38 +255,39 @@ Eth sent to Timelock will be locked in current implementation. I came across thi
 *   Send eth to timelock contract
 *   Setup a proposal to send 0.1 eth out. Code snippet in ether.js below. proxy refers to GovernorAlpha.
 
-<!---->
-
-        await proxy.propose(
-          [signers[3].address],
-          [ethers.utils.parseEther("0.1")],
-          [""],
-          [ethers.BigNumber.from(0)],
-          "Send funds to 3rd signer"
-        );
-
+```js
+await proxy.propose(
+    [signers[3].address],
+    [ethers.utils.parseEther("0.1")],
+    [""],
+    [ethers.BigNumber.from(0)],
+    "Send funds to 3rd signer"
+);
+```
 *   Vote and have the proposal succeed.
 *   Execute the proposal, the proposal number here is arbitrary.
 
-<!---->
-
-    await proxy.execute(2);  // this fails
+```js
+await proxy.execute(2);  // this fails
     await proxy.execute(2, {value: ethers.utils.parseEther("0.1")})  // this would work
     0.1 eth will be sent out, but it is sent from the msg.sender not from the timelock contract.
+```
 
 #### Recommended Mitigation Steps
 
 Consider implementing the following code.
+```solidity
 
-        function execute(uint proposalId) external {
-            require(state(proposalId) == ProposalState.Queued, "GovernorAlpha::execute: proposal can only be executed if it is queued");
-            Proposal storage proposal = proposals[proposalId];
-            proposal.executed = true;
-            for (uint i = 0; i < proposal.targets.length; i++) {
-                timelock.executeTransaction(proposal.targets[i], proposal.values[i], proposal.signatures[i], proposal.calldatas[i], proposal.eta);
-            }
-            emit ProposalExecuted(proposalId);
-        }
+function execute(uint proposalId) external {
+    require(state(proposalId) == ProposalState.Queued, "GovernorAlpha::execute: proposal can only be executed if it is queued");
+    Proposal storage proposal = proposals[proposalId];
+    proposal.executed = true;
+    for (uint i = 0; i < proposal.targets.length; i++) {
+        timelock.executeTransaction(proposal.targets[i], proposal.values[i], proposal.signatures[i], proposal.calldatas[i], proposal.eta);
+    }
+    emit ProposalExecuted(proposalId);
+}
+```
 
 #### Reference
 
@@ -346,11 +347,13 @@ There is a price check to avoid flash loan attacks which significantly moved the
 
 <https://github.com/code-423n4/2022-01-openleverage/blob/501e8f5c7ebaf1242572712626a77a3d65bdd3ad/openleverage-contracts/contracts/OpenLevV1Lib.sol#L191>
 
-                // Avoid flash loan
-                if (prices.price < prices.cAvgPrice) {
-                    uint differencePriceRatio = prices.cAvgPrice.mul(100).div(prices.price);
-                    require(differencePriceRatio - 100 < maxLiquidationPriceDiffientRatio, 'MPT');
-                }
+```solidity
+// Avoid flash loan
+if (prices.price < prices.cAvgPrice) {
+    uint differencePriceRatio = prices.cAvgPrice.mul(100).div(prices.price);
+    require(differencePriceRatio - 100 < maxLiquidationPriceDiffientRatio, 'MPT');
+}
+``` 
 
 #### Recommended Mitigation Steps
 

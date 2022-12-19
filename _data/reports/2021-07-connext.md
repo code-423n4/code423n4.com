@@ -129,31 +129,31 @@ _Submitted by pauliax, also found by 0xsanson, cmichel and shw_
 
 The function `fulfill` first approves the `callTo` to transfer an amount of `toSend` tokens and tries to call `IFulfillHelper`, but if the call fails, it transfers these assets directly. However, in such case the approval is not reset, so a malicous `callTo` can pull these tokens later:
 ```solidity
-    // First, approve the funds to the helper if needed
-        if (!LibAsset.isEther(txData.receivingAssetId) && toSend > 0) {
-          require(LibERC20.approve(txData.receivingAssetId, txData.callTo, toSend), "fulfill: APPROVAL_FAILED");
-        }
+// First, approve the funds to the helper if needed
+    if (!LibAsset.isEther(txData.receivingAssetId) && toSend > 0) {
+      require(LibERC20.approve(txData.receivingAssetId, txData.callTo, toSend), "fulfill: APPROVAL_FAILED");
+    }
 
-        // Next, call `addFunds` on the helper. Helpers should internally
-        // track funds to make sure no one user is able to take all funds
-        // for tx
-        if (toSend > 0) {
-          try
-            IFulfillHelper(txData.callTo).addFunds{ value: LibAsset.isEther(txData.receivingAssetId) ? toSend : 0}(
-              txData.user,
-              txData.transactionId,
-              txData.receivingAssetId,
-              toSend
-            )
-          {} catch {
-            // Regardless of error within the callData execution, send funds
-            // to the predetermined fallback address
-            require(
-              LibAsset.transferAsset(txData.receivingAssetId, payable(txData.receivingAddress), toSend),
-              "fulfill: TRANSFER_FAILED"
-            );
-          }
-        }
+    // Next, call `addFunds` on the helper. Helpers should internally
+    // track funds to make sure no one user is able to take all funds
+    // for tx
+    if (toSend > 0) {
+      try
+        IFulfillHelper(txData.callTo).addFunds{ value: LibAsset.isEther(txData.receivingAssetId) ? toSend : 0}(
+          txData.user,
+          txData.transactionId,
+          txData.receivingAssetId,
+          toSend
+        )
+      {} catch {
+        // Regardless of error within the callData execution, send funds
+        // to the predetermined fallback address
+        require(
+          LibAsset.transferAsset(txData.receivingAssetId, payable(txData.receivingAddress), toSend),
+          "fulfill: TRANSFER_FAILED"
+        );
+      }
+    }
 ```
 [Tuesday, August 10, 2021](x-fantastical3://show/calendar/2021-08-18)
 Recommend that `approval` should be placed inside the try/catch block or `approval` needs to be reset if the call fails.
@@ -177,7 +177,7 @@ Unless there is a good reason not to, it is safer to include `hashInvariantTrans
 Recommend evaluating if the signature should contain only tx ID, or the entire digest, and then changing the logic appropriately.
 
 **[LayneHaber (Connext) acknowledged](https://github.com/code-423n4/2021-07-connext-findings/issues/54#issuecomment-878569946):**
- > User should be able to break up large transfers across multiple routers using the same `transactionId` to keep the transaction  unlocking atomic. For example, say I want to transfer $100K, but there are only 8 routers who each have $60K available. I should be able to break up the single transaction into $20K transactions split across 5 of the routers. When unlocking this, I should only need to broadcast a single signature, so all of the transactions can be unlocked simultaneously.
+ > User should be able to break up large transfers across multiple routers using the same `transactionId` to keep the transaction  unlocking atomic. For example, say I want to transfer \$100K, but there are only 8 routers who each have \$60K available. I should be able to break up the single transaction into \$20K transactions split across 5 of the routers. When unlocking this, I should only need to broadcast a single signature, so all of the transactions can be unlocked simultaneously.
 
 **[ghoul-sol (Judge) commented](https://github.com/code-423n4/2021-07-connext-findings/issues/54#issuecomment-890612308):**
  > Bumping to medium risk as replay attack can have significant consequences
@@ -269,15 +269,15 @@ _Submitted by pauliax, also found by 0xRajeev and shw_
 
 The function `fulfill` treats `txData.expiry` = `block.timestamp` as expired tx:
 ```solidity
-    // Make sure the expiry has not elapsed
-    require(txData.expiry > block.timestamp, "fulfill: EXPIRED");
+// Make sure the expiry has not elapsed
+require(txData.expiry > block.timestamp, "fulfill: EXPIRED");
 ```
 
 However, function `cancel` has an inclusive check for the same condition:
 
 ```solidity
-    if (txData.expiry >= block.timestamp) {
-    // Timeout has not expired and tx may only be cancelled by router
+if (txData.expiry >= block.timestamp) {
+// Timeout has not expired and tx may only be cancelled by router
 ```
 
 Recommend unifying that to make the code coherent. Probably `txData.expiry` = `block.timestamp` should be treated as expired everywhere.
@@ -329,12 +329,12 @@ If the `returnData.length` is larger than 1, the "`abi.decode(returnData, (bool)
 
 ```solidity
 // https://github.com/code-423n4/2021-07-connext/blob/main/contracts/lib/LibERC20.sol#L21
-    function wrapCall(address assetId, bytes memory callData) internal returns (bool) {
-        ...
-        (bool success, bytes memory returnData) = assetId.call(callData);
-        LibUtils.revertIfCallFailed(success, returnData);
-        return returnData.length == 0 || abi.decode(returnData, (bool));
-    }
+function wrapCall(address assetId, bytes memory callData) internal returns (bool) {
+    ...
+    (bool success, bytes memory returnData) = assetId.call(callData);
+    LibUtils.revertIfCallFailed(success, returnData);
+    return returnData.length == 0 || abi.decode(returnData, (bool));
+}
 ```
 
 Recommend changing
@@ -415,43 +415,42 @@ _Submitted by GalloDaSballo_
 The code uses `hashVariantTransactionData` to verify the hash of the `VariantTransactionData`
 It also uses
 ```solidity
-    variantTransactionData[digest] = keccak256(abi.encode(VariantTransactionData({
-      amount: txData.amount,
-      expiry: txData.expiry,
-      preparedBlockNumber: 0
-    })));
+variantTransactionData[digest] = keccak256(abi.encode(VariantTransactionData({
+  amount: txData.amount,
+  expiry: txData.expiry,
+  preparedBlockNumber: 0
+})));
 ```
 
 To generate `VariantTransactionData` with `preparedBlockNumber` set to 0
 
 A simple refactoring of:
 ```solidity
-  function hashVariantTransactionData(TransactionData calldata txData) internal pure returns (bytes32) {
-    return hashVariantTransaction(txData.amount, txData.expiry, txData.preparedBlockNumber)
-  }
+function hashVariantTransactionData(TransactionData calldata txData) internal pure returns (bytes32) {
+  return hashVariantTransaction(txData.amount, txData.expiry, txData.preparedBlockNumber)
+}
 
-  function hashVariantTransaction(uint256 amount, uint256 expiry, uint256 prepareBlocNumber) internal pure returns (bytes32) {
-    return keccak256(abi.encode(VariantTransactionData({
-      amount: amount,
-      expiry: expiry,
-      preparedBlockNumber: preparedBlockNumber
-    })));
-  }
-
+function hashVariantTransaction(uint256 amount, uint256 expiry, uint256 prepareBlocNumber) internal pure returns (bytes32) {
+  return keccak256(abi.encode(VariantTransactionData({
+    amount: amount,
+    expiry: expiry,
+    preparedBlockNumber: preparedBlockNumber
+  })));
+}
 ```
 
 This would allow to further steamline the code from
 ```solidity
-    variantTransactionData[digest] = keccak256(abi.encode(VariantTransactionData({
-      amount: txData.amount,
-      expiry: txData.expiry,
-      preparedBlockNumber: 0
-    })));
+variantTransactionData[digest] = keccak256(abi.encode(VariantTransactionData({
+  amount: txData.amount,
+  expiry: txData.expiry,
+  preparedBlockNumber: 0
+})));
 ```
 
 to
 ```solidity
-    variantTransactionData[digest] = hashVariantTransaction(txData.amount, txData.expiry, 0)
+  variantTransactionData[digest] = hashVariantTransaction(txData.amount, txData.expiry, 0)
 ```
 
 This has no particular benefit beside making all code related to Variant Data consistent.
@@ -469,11 +468,11 @@ Using pure solidity improves readability.
 
 `LibUtils.sol` [L10](https://github.com/code-423n4/2021-07-connext/blob/main/contracts/lib/LibUtils.sol#L10)
 ```solidity
- function revertIfCallFailed(bool success, bytes memory returnData) internal pure {
-        if (!success) {
-            assembly {  revert(add(returnData, 0x20), mload(returnData))  }
-        }
-    }
+function revertIfCallFailed(bool success, bytes memory returnData) internal pure {
+  if (!success) {
+    assembly {  revert(add(returnData, 0x20), mload(returnData))  }
+  }
+}
 ```
 
 Recommend using the error constructs of solidity 0.8.4+
@@ -507,16 +506,18 @@ function hashVariantTransactionData(TransactionData calldata txData) internal pu
 _Submitted by pauliax_
 
 `ETHER_ASSETID` is a bit missleading name, I think a better name would be `NATIVE_ASSETID`:
-   address constant `ETHER_ASSETID` = address(0);
+```solidity
+address constant `ETHER_ASSETID` = address(0);
+```
 
 Misleading comment (should be 'for fulfillment'):
-  ```solidity
-  // The structure of the signed data for cancellations
-  struct SignedFulfillData {
+```solidity
+// The structure of the signed data for cancellations
+struct SignedFulfillData {
 ```
 `MIN_TIMEOUT` could be expressed in days:
 ```solidity
- uint256 public constant MIN_TIMEOUT = 1 days; // 24 hours
+uint256 public constant MIN_TIMEOUT = 1 days; // 24 hours
 ```
 
 **[sanchaymittal (Connext) confirmed and patched](https://github.com/code-423n4/2021-07-connext-findings/issues/29#issuecomment-879688577):**
@@ -586,8 +587,8 @@ And rewriting `TransactionManager.sol` [L254-L260](https://github.com/code-423n4
 ```solidity
 uint256 balance = routerBalances[invariantData.router][invariantData.receivingAssetId];
 require(
-    balance >= amount,
-    "prepare: INSUFFICIENT_LIQUIDITY"
+  balance >= amount,
+  "prepare: INSUFFICIENT_LIQUIDITY"
 );
 
 // Decrement the router liquidity
@@ -652,7 +653,7 @@ For example, change the code at line 364 to:
 
 ```solidity
 unchecked {
-    uint256 toSend = txData.amount - relayerFee;
+  uint256 toSend = txData.amount - relayerFee;
 }
 ```
 
@@ -711,7 +712,7 @@ _Submitted by hrkrshnn, also found by GalloDaSballo, cmichel, gpersoon and shw_
 
 The for loop can improved, here is a diff:
 
-``` diff
+```diff
 @@ -565,22 +565,26 @@ contract TransactionManager is ReentrancyGuard, ITransactionManager {
    /// @param user User who has completed a transaction
    /// @param preparedBlock The TransactionData.preparedBlockNumber to remove
@@ -761,13 +762,13 @@ should work 🙂
 
 Instead of trying to compute the index `i` where
 
-``` solidity
+```solidity
 activeTransactionBlocks[user][i] == blockIndex
 ```
 
 One can try to already compute this off chain and pass it as the parameter. This avoids the expensive step of reading values from storage on chain, and saves a significant amount of gas. Assume that this index `i` is passed as a parameter. On chain, all you need to do is have
 
-``` solidity
+```solidity
 require(activeTransactionBlocks[user][i] == blockIndex)
 ```
 
@@ -795,7 +796,7 @@ Even if you need a string to represent an error, it can usually be done in less 
 
 Here are some examples of strings that can be shortened from codebase:
 
-```txt
+```
 ./contracts/TransactionManager.sol:96: "addLiquidity: ETH_WITH_ERC_TRANSFER"
 ./contracts/TransactionManager.sol:97: "addLiquidity: ERC20_TRANSFER_FAILED"
 ./contracts/TransactionManager.sol:122: "removeLiquidity: INSUFFICIENT_FUNDS"

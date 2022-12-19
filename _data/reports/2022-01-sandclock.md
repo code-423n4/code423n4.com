@@ -92,7 +92,7 @@ _Submitted by WatchPug_
 
 <https://github.com/code-423n4/2022-01-sandclock/blob/a90ad3824955327597be00bb0bd183a9c228a4fb/sandclock/contracts/Vault.sol#L390-L401>
 
-```solidity=390
+```solidity
 if (_force && sponsorAmount > totalUnderlying()) {
     sponsorToTransfer = totalUnderlying();
 } else if (!_force) {
@@ -327,11 +327,11 @@ The swap fee of depositing is not paid by the depositor but evenly distributed a
 Given:
 
 *   A NonUST vault and strategy is created for `FRAX`;
-*   The liquidity in FRAX-UST curve pool is relatively small (<$1M).
+*   The liquidity in FRAX-UST curve pool is relatively small (<\$1M).
 
 The attacker can do the following:
 
-1.  Add $1M worth of liquidity to the FRAX-UST curve pool, get >50% share of the pool;
+1.  Add \$1M worth of liquidity to the FRAX-UST curve pool, get >50% share of the pool;
 2.  Deposit 1M FRAX to the vault, get a `depositAmount` of 1M;
 3.  The strategy will swap 1M FRAX to UST via the curve pool, paying a certain amount of swap fee;
 4.  Withdraw all the funds from the vault.
@@ -384,7 +384,7 @@ This introduces a high centralization risk, which can cause funds to be frozen i
 Given:
 
 *   `investPerc` = 80%
-*   1,000 users deposited 1M UST in total ($1000 each user in avg), 800k invested into AUST (`EthAnchor`)
+*   1,000 users deposited 1M UST in total (\$1000 each user in avg), 800k invested into AUST (`EthAnchor`)
 
 If the key holders lose access to their keys ("hit by a bus"). The 800k will be frozen in `EthAnchor` as no one can `initRedeemStable()`.
 
@@ -559,7 +559,7 @@ It is critical to ensure that `_minLockPeriod > 0` because it is immutable and c
 
 Assume the vault’s underlying token is MIM, and the curve pool to be used is the MIM-UST pool. Further assume that both the vault and the strategy holds substantial funds in MIM and UST respectively.
 
-1.  Flash loan MIM from the [Uniswap V3 MIM-USDC pool](https://etherscan.io/address/0x298b7c5e0770d151e4c5cf6cca4dae3a3ffc8e27) (currently has \~$3.5M in MIM at the time of writing).
+1.  Flash loan MIM from the [Uniswap V3 MIM-USDC pool](https://etherscan.io/address/0x298b7c5e0770d151e4c5cf6cca4dae3a3ffc8e27) (currently has \~\$3.5M in MIM at the time of writing).
 2.  Convert half of the loaned MIM to UST to inflate and deflate their prices respectively.
 3.  Deposit the other half of the loaned MIM into the vault. We expect `curvePool.get_dy_underlying(ustI, underlyingI, ustAssets);` to return a smaller amount than expected because of the previous step. As a result, the attacker is allocated more shares than expected.
 4.  Exchange UST back to MIM, bringing back the spot price of MIM-UST to a normal level.
@@ -632,14 +632,15 @@ While the strategy's funds could be withdrawn from EthAnchor and migrated to a n
 #### Proof of Concept
 
 The exchangeRateFeeder is being used to calculate the vault's invested assets, which is used extensively to calculate the correct amount of shares and amounts: [(Code ref)](https://github.com/code-423n4/2022-01-sandclock/blob/main/sandclock/contracts/strategy/BaseStrategy.sol#L275)
+```solidity
+function investedAssets() external view virtual override(IStrategy) returns (uint256) {
+    uint256 underlyingBalance = _getUnderlyingBalance() + pendingDeposits;
+    uint256 aUstBalance = _getAUstBalance() + pendingRedeems;
 
-        function investedAssets() external view virtual override(IStrategy) returns (uint256) {
-            uint256 underlyingBalance = _getUnderlyingBalance() + pendingDeposits;
-            uint256 aUstBalance = _getAUstBalance() + pendingRedeems;
-
-            return underlyingBalance + ((exchangeRateFeeder.exchangeRateOf(address(aUstToken), true) 
-                    * aUstBalance) / 1e18);
-        }
+    return underlyingBalance + ((exchangeRateFeeder.exchangeRateOf(address(aUstToken), true) 
+            * aUstBalance) / 1e18);
+}
+```
 
 EthAnchor documentation states that unlike other contracts, exchangeRateFeeder is not proxied and it's address may change in future: "the contract address of ExchangeRateFeeder may change as adjustments occur.
 " [(ref)](https://docs.anchorprotocol.com/ethanchor/ethanchor-contracts/deployed-contracts#core-contracts)
@@ -695,70 +696,72 @@ Therefore, an attacker could avoid paying their fair share of the performance fe
 #### Proof of Concept
 
 <https://github.com/code-423n4/2022-01-sandclock/blob/main/sandclock/contracts/strategy/BaseStrategy.sol#L180-L204>
+```solidity
+function finishRedeemStable(uint256 idx) public virtual {
+    require(redeemOperations.length > idx, "not running");
+    Operation storage operation = redeemOperations[idx];
+    uint256 aUstBalance = _getAUstBalance() + pendingRedeems;
+    uint256 originalUst = (convertedUst * operation.amount) / aUstBalance;
+    uint256 ustBalanceBefore = _getUstBalance();
 
-    function finishRedeemStable(uint256 idx) public virtual {
-        require(redeemOperations.length > idx, "not running");
-        Operation storage operation = redeemOperations[idx];
-        uint256 aUstBalance = _getAUstBalance() + pendingRedeems;
-        uint256 originalUst = (convertedUst * operation.amount) / aUstBalance;
-        uint256 ustBalanceBefore = _getUstBalance();
+    ethAnchorRouter.finishRedeemStable(operation.operator);
 
-        ethAnchorRouter.finishRedeemStable(operation.operator);
-
-        uint256 redeemedAmount = _getUstBalance() - ustBalanceBefore;
-        uint256 perfFee = redeemedAmount > originalUst
-            ? (redeemedAmount - originalUst).percOf(perfFeePct)
-            : 0;
-        if (perfFee > 0) {
-            ustToken.safeTransfer(treasury, perfFee);
-            emit PerfFeeClaimed(perfFee);
-        }
-        convertedUst -= originalUst;
-        pendingRedeems -= operation.amount;
-
-        operation.operator = redeemOperations[redeemOperations.length - 1]
-            .operator;
-        operation.amount = redeemOperations[redeemOperations.length - 1].amount;
-        redeemOperations.pop();
+    uint256 redeemedAmount = _getUstBalance() - ustBalanceBefore;
+    uint256 perfFee = redeemedAmount > originalUst
+        ? (redeemedAmount - originalUst).percOf(perfFeePct)
+        : 0;
+    if (perfFee > 0) {
+        ustToken.safeTransfer(treasury, perfFee);
+        emit PerfFeeClaimed(perfFee);
     }
+    convertedUst -= originalUst;
+    pendingRedeems -= operation.amount;
 
+    operation.operator = redeemOperations[redeemOperations.length - 1]
+        .operator;
+    operation.amount = redeemOperations[redeemOperations.length - 1].amount;
+    redeemOperations.pop();
+}
+```
 <https://github.com/code-423n4/2022-01-sandclock/blob/main/sandclock/contracts/strategy/BaseStrategy.sol#L263-L277>
+```solidity
+function investedAssets()
+    external
+    view
+    virtual
+    override(IStrategy)
+    returns (uint256)
+{
+    uint256 underlyingBalance = _getUnderlyingBalance() + pendingDeposits;
+    uint256 aUstBalance = _getAUstBalance() + pendingRedeems;
 
-    function investedAssets()
-        external
-        view
-        virtual
-        override(IStrategy)
-        returns (uint256)
-    {
-        uint256 underlyingBalance = _getUnderlyingBalance() + pendingDeposits;
-        uint256 aUstBalance = _getAUstBalance() + pendingRedeems;
-
-        return
-            underlyingBalance +
-            ((exchangeRateFeeder.exchangeRateOf(address(aUstToken), true) *
-                aUstBalance) / 1e18);
-    }
+    return
+        underlyingBalance +
+        ((exchangeRateFeeder.exchangeRateOf(address(aUstToken), true) *
+            aUstBalance) / 1e18);
+}
+```
 
 <https://github.com/code-423n4/2022-01-sandclock/blob/main/sandclock/contracts/strategy/NonUSTStrategy.sol#L120-L136>
+```solidity
+function investedAssets()
+    external
+    view
+    override(BaseStrategy)
+    returns (uint256)
+{
+    uint256 underlyingBalance = _getUnderlyingBalance();
+    uint256 aUstBalance = _getAUstBalance() + pendingRedeems;
 
-    function investedAssets()
-        external
-        view
-        override(BaseStrategy)
-        returns (uint256)
-    {
-        uint256 underlyingBalance = _getUnderlyingBalance();
-        uint256 aUstBalance = _getAUstBalance() + pendingRedeems;
-
-        uint256 ustAssets = ((exchangeRateFeeder.exchangeRateOf(
-            address(aUstToken),
-            true
-        ) * aUstBalance) / 1e18) + pendingDeposits;
-        return
-            underlyingBalance +
-            curvePool.get_dy_underlying(ustI, underlyingI, ustAssets);
-    }
+    uint256 ustAssets = ((exchangeRateFeeder.exchangeRateOf(
+        address(aUstToken),
+        true
+    ) * aUstBalance) / 1e18) + pendingDeposits;
+    return
+        underlyingBalance +
+        curvePool.get_dy_underlying(ustI, underlyingI, ustAssets);
+}
+```
 
 #### Tools Used
 
@@ -804,30 +807,31 @@ The `requiresTrust()` modifier is used on the strategy, vault and factory contra
 However, if any single account has its private keys compromised or decides to become malicious on their own, they can remove all other trusted accounts from the `isTrusted` mapping. As a result, they are effectively able to take over the trusted group that controls all restricted functions in the parent contract.
 
 #### Proof of Concept
+```solidity
+abstract contract Trust {
+    event UserTrustUpdated(address indexed user, bool trusted);
 
-    abstract contract Trust {
-        event UserTrustUpdated(address indexed user, bool trusted);
+    mapping(address => bool) public isTrusted;
 
-        mapping(address => bool) public isTrusted;
+    constructor(address initialUser) {
+        isTrusted[initialUser] = true;
 
-        constructor(address initialUser) {
-            isTrusted[initialUser] = true;
-
-            emit UserTrustUpdated(initialUser, true);
-        }
-
-        function setIsTrusted(address user, bool trusted) public virtual requiresTrust {
-            isTrusted[user] = trusted;
-
-            emit UserTrustUpdated(user, trusted);
-        }
-
-        modifier requiresTrust() {
-            require(isTrusted[msg.sender], "UNTRUSTED");
-
-            _;
-        }
+        emit UserTrustUpdated(initialUser, true);
     }
+
+    function setIsTrusted(address user, bool trusted) public virtual requiresTrust {
+        isTrusted[user] = trusted;
+
+        emit UserTrustUpdated(user, trusted);
+    }
+
+    modifier requiresTrust() {
+        require(isTrusted[msg.sender], "UNTRUSTED");
+
+        _;
+    }
+}
+```
 
 #### Recommended Mitigation Steps
 

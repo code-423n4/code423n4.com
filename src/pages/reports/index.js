@@ -1,5 +1,6 @@
 import React from "react";
 import { graphql } from "gatsby";
+
 import DefaultLayout from "../../templates/DefaultLayout";
 import ReportList from "../../components/ReportList";
 
@@ -42,7 +43,7 @@ export const query = graphql`
               id
               image {
                 childImageSharp {
-                  resize(width: 160) {
+                  resize(width: 80) {
                     src
                   }
                 }

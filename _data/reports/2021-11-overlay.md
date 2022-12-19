@@ -204,15 +204,15 @@ This omission might lead to unexpected results.
 
 ```JS
 function pow(uint256 x, uint256 y) internal pure returns (uint256) {
-        if (y == 0) {
-            // We solve the 0^0 indetermination by making it equal one.
-            return uint256(ONE_18);
-        }
+    if (y == 0) {
+        // We solve the 0^0 indetermination by making it equal one.
+        return uint256(ONE_18);
+    }
 
-        if (x == 0) {
-            return 0;
-        }      
-        _require(x < 2**255, Errors.X_OUT_OF_BOUNDS);
+    if (x == 0) {
+        return 0;
+    }      
+    _require(x < 2**255, Errors.X_OUT_OF_BOUNDS);
 ```
 
 #### Recommended Mitigation Steps
@@ -245,18 +245,18 @@ Note: `enableCollateral` also doesn't set `collateralActive\[\_collateral] = tru
 <https://github.com/code-423n4/2021-11-overlay/blob/914bed22f190ebe7088194453bab08c424c3f70c/contracts/mothership/OverlayV1Mothership.sol#L133-L153>
 
 ```JS
- function enableCollateral (address _collateral) external onlyGovernor {
-        require(collateralExists[_collateral], "OVLV1:!exists");
-        require(!collateralActive[_collateral], "OVLV1:!disabled");
-        OverlayToken(ovl).grantRole(OverlayToken(ovl).MINTER_ROLE(), _collateral);
-        OverlayToken(ovl).grantRole(OverlayToken(ovl).BURNER_ROLE(), _collateral);
-    }
+function enableCollateral (address _collateral) external onlyGovernor {
+    require(collateralExists[_collateral], "OVLV1:!exists");
+    require(!collateralActive[_collateral], "OVLV1:!disabled");
+    OverlayToken(ovl).grantRole(OverlayToken(ovl).MINTER_ROLE(), _collateral);
+    OverlayToken(ovl).grantRole(OverlayToken(ovl).BURNER_ROLE(), _collateral);
+}
 
-    function disableCollateral (address _collateral) external onlyGovernor {
-        require(collateralActive[_collateral], "OVLV1:!enabled");
-        OverlayToken(ovl).revokeRole(OverlayToken(ovl).MINTER_ROLE(), _collateral);
-        OverlayToken(ovl).revokeRole(OverlayToken(ovl).BURNER_ROLE(), _collateral);
-    }
+function disableCollateral (address _collateral) external onlyGovernor {
+    require(collateralActive[_collateral], "OVLV1:!enabled");
+    OverlayToken(ovl).revokeRole(OverlayToken(ovl).MINTER_ROLE(), _collateral);
+    OverlayToken(ovl).revokeRole(OverlayToken(ovl).BURNER_ROLE(), _collateral);
+}
 ```
 
 #### Recommended Mitigation Steps
@@ -286,13 +286,15 @@ But other protocols building on Overlay may use it, as well as user interfaces a
 
 <https://github.com/code-423n4/2021-11-overlay/blob/914bed22f190ebe7088194453bab08c424c3f70c/contracts/ovl/OverlayToken.sol#L349-L364>
 
-````JS
+```js
 function _mint( address account, uint256 amount) internal virtual {
    ...
       _totalSupply += amount;
+```
 
 https://github.com/code-423n4/2021-11-overlay/blob/914bed22f190ebe7088194453bab08c424c3f70c/contracts/ovl/OverlayToken.sol#L376-L395
-```JS
+
+```js
 function _burn(address account, uint256 amount) internal virtual {
    ...
         _totalSupply -= amount;
@@ -300,7 +302,8 @@ function _burn(address account, uint256 amount) internal virtual {
 https://github.com/code-423n4/2021-11-overlay/blob/914bed22f190ebe7088194453bab08c424c3f70c/contracts/ovl/OverlayToken.sol#L194-L212
 
 https://github.com/code-423n4/2021-11-overlay/blob/914bed22f190ebe7088194453bab08c424c3f70c/contracts/ovl/OverlayToken.sol#L268-L286
-````
+```
+
 ## Recommended Mitigation Steps
 Update `_totalSupply`  in `_transferMint()` and `_transferBurn()`
 
@@ -338,25 +341,25 @@ The fees are accounted for before position health check and aren't corrected the
 Adjust fees after position health check: accrue fees only on a remaining part of position that is available after taking debt into account.
 
 Now:
+```solidity
+uint _feeAmount = _userNotional.mulUp(mothership.fee());
 
-    uint _feeAmount = _userNotional.mulUp(mothership.fee());
-
-    uint _userValueAdjusted = _userNotional - _feeAmount;
-    if (_userValueAdjusted > _userDebt) _userValueAdjusted -= _userDebt;
-    else _userValueAdjusted = 0;
-
+uint _userValueAdjusted = _userNotional - _feeAmount;
+if (_userValueAdjusted > _userDebt) _userValueAdjusted -= _userDebt;
+else _userValueAdjusted = 0;
+```
 To be:
+```solidity
+uint _feeAmount = _userNotional.mulUp(mothership.fee());
 
-    uint _feeAmount = _userNotional.mulUp(mothership.fee());
-
-    uint _userValueAdjusted = _userNotional - _feeAmount;
-    if (_userValueAdjusted > _userDebt) {
-    	_userValueAdjusted -= _userDebt;
-    } else {
-    	_userValueAdjusted = 0;
-    	_feeAmount = _userNotional > _userDebt ? _userNotional - _userDebt : 0;
-    }
-
+uint _userValueAdjusted = _userNotional - _feeAmount;
+if (_userValueAdjusted > _userDebt) {
+    _userValueAdjusted -= _userDebt;
+} else {
+    _userValueAdjusted = 0;
+    _feeAmount = _userNotional > _userDebt ? _userNotional - _userDebt : 0;
+}
+```
 **[mikeyrf (Overlay) confirmed](https://github.com/code-423n4/2021-11-overlay-findings/issues/134)**
 
 ## [[M-06] Timelock and events for governor functions](https://github.com/code-423n4/2021-11-overlay-findings/issues/120)
@@ -391,14 +394,14 @@ _Submitted by pauliax_
 contract OverlayV1OVLCollateral and OverlayV1Governance cache ovl address:
 
 ```solidity
- IOverlayTokenNew immutable public ovl;
+IOverlayTokenNew immutable public ovl;
 ```
 
 This variable is initialized in the constructor and fetched from the mothership contract:
 
 ```solidity
-  mothership = IOverlayV1Mothership(_mothership);
-  ovl = IOverlayV1Mothership(_mothership).ovl();
+mothership = IOverlayV1Mothership(_mothership);
+ovl = IOverlayV1Mothership(_mothership).ovl();
 ```
 
 ovl is declared as immutable and later contract interacts with this cached version. However, mothership contains a setter function, so the governor can point it to a new address:
