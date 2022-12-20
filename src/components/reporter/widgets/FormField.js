@@ -2,7 +2,7 @@ import React from "react";
 import ReactMarkdown from "react-markdown";
 
 import * as styles from "../../../styles/Main.module.scss";
-console.log(styles)
+
 function FormField({
   name,
   label,
