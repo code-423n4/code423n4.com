@@ -23,7 +23,7 @@ import LeaderboardTable from "../components/LeaderboardTable";
 import WardenDetails from "../components/WardenDetails";
 import ReactMarkdown from "react-markdown";
 // styles
-import * as styles from "../components/reporter/widgets/Widgets.module.scss";
+import * as styles from "../styles/Main.module.scss";
 
 enum FindingsStatus {
   Fetching = "fetching",
@@ -272,7 +272,7 @@ const ContestLayout = (props) => {
                 ) : (
                   <article>
                     <ReactMarkdown
-                      className={clsx(styles.Control, styles.Markdown)}
+                      className={clsx(styles.Widget__Control, styles.Widget__Markdown)}
                       remarkPlugins={[remarkGfm, remarkBreaks, remarkMath]}
                       rehypePlugins={[rehypeKatex]}
                     >

@@ -1,4 +1,4 @@
-.List {
+.FindingsList__List {
   list-style: none;
   border: 1px solid var(--border-lightest-background);
   padding: 0;
@@ -6,7 +6,7 @@
   border-radius: 4px;
 }
 
-.ListItem {
+.FindingsList__ListItem {
   display: flex;
   padding: 10px;
   align-items: flex-start;
@@ -24,38 +24,38 @@
   }
 }
 
-.Status {
+.FindingsList__Status {
   fill: currentColor;
   margin-right: 10px;
 
-  &.OPEN {
+  &.FindingsList__OPEN {
     color: #3fb950; // color from GH
   }
 
-  &.CLOSED {
+  &.FindingsList__CLOSED {
     color: #a371f7; // color from GH
   }
 }
 
-.TitleAndLabels {
+.FindingsList__TitleAndLabels {
   display: flex;
   flex-direction: row;
   align-items: center;
 }
 
-.Title {
+.FindingsList__Title {
   text-decoration: none;
   font-weight: 600;
   line-height: 18px;
   font-size: 16px;
   margin-right: 5px;
 
-  &.CLOSED {
+  &.FindingsList__CLOSED {
     text-decoration: line-through;
   }
 }
 
-.Risk {
+.FindingsList__Risk {
   border: 1px solid currentColor;
   border-radius: 16px;
   font-size: 12px;
@@ -69,17 +69,17 @@
   background-color: var(--background-purple);
 }
 
-.Time {
+.FindingsList__Time {
   font-size: 12px;
   color: var(--light-purple);
   margin-top: 5px;
 }
 
-.Heading {
+.FindingsList__Heading {
   background-color: var(--header-background-purple);
 }
 
-.Details {
+.FindingsList__Details {
   display: flex;
   align-items: center;
 }

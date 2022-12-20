@@ -1,4 +1,4 @@
-.Wrapper {
+.WardenDetails__Wrapper {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -6,11 +6,11 @@
   width: 100%;
 }
 
-.Icon {
+.WardenDetails__Icon {
   margin-right: 15px;
 }
 
-.Username {
+.WardenDetails__Username {
   display: flex;
   justify-content: flex-start;
   align-items: center;

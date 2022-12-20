@@ -1,25 +1,25 @@
 // @todo: remove styles once inputs are replaced with new Input component
 
-.Fields {
+.Widget__Fields {
   border: none;
   min-width: 0px;
   display: table-cell;
   padding: 0;
 }
 
-.RadioGroup {
+.Widget__RadioGroup {
   display: flex;
   flex-direction: column;
   margin-bottom: 20px;
   padding-left: 20px;
 }
 
-.Radio,
-.Checkbox {
+.Widget__Radio,
+.Widget__Checkbox {
   margin: 10px 10px 10px 0;
 }
 
-.RadioLabel {
+.Widget__RadioLabel {
   cursor: pointer;
   padding: 10px 20px;
   border-radius: 4px;
@@ -31,18 +31,18 @@
   }
 }
 
-.Container {
+.Widget__Container {
   margin-bottom: 40px;
   width: 100%;
 }
 
-.Label {
+.Widget__Label {
   font-weight: bold;
   font-size: 20px;
   color: white;
 }
 
-.Help {
+.Widget__Help {
   color: inherit;
   font-size: 13px;
   margin-top: 5px;
@@ -57,7 +57,7 @@
   }
 }
 
-.ErrorMessage {
+.Widget__ErrorMessage {
   display: flex;
   &::before {
     content: "";
@@ -73,17 +73,17 @@
   }
 }
 
-.Placeholder {
+.Widget__Placeholder {
   color: rgba(255, 255, 255, 0.5);
 }
 
-.Control {
+.Widget__Control {
   display: block;
   margin: 10px 0;
   padding: 10px;
 }
 
-.Text {
+.Widget__Text {
   height: 40px;
   width: 100%;
   box-sizing: border-box;
@@ -93,13 +93,13 @@
   }
 }
 
-.Select {
+.Widget__Select {
   height: 40px;
   width: 100%;
   cursor: pointer;
 }
 
-input[type="file"].Avatar::file-selector-button {
+input[type="file"].Widget__Avatar::file-selector-button {
   border: none;
   border-radius: 5px;
   display: inline-block;
@@ -120,18 +120,18 @@ input[type="file"].Avatar::file-selector-button {
   }
 }
 
-.Textarea {
+.Widget__Textarea {
   height: 250px;
   font-family: inherit;
   resize: vertical;
   margin-top: 0;
 }
 
-.TextAreaContainer {
+.Widget__TextAreaContainer {
   position: relative;
 }
 
-.TextAreaCounter {
+.Widget__TextAreaCounter {
   text-align: right;
   position: absolute;
   bottom: 3px;
@@ -142,7 +142,7 @@ input[type="file"].Avatar::file-selector-button {
   color: black;
 }
 
-.Markdown {
+.Widget__Markdown {
   overflow: auto;
 
   h1,
@@ -211,10 +211,10 @@ input[type="file"].Avatar::file-selector-button {
 }
 
 @media (max-width: 600px) {
-  .RadioGroup {
+  .Widget__RadioGroup {
     padding-left: 8px;
   }
-  .RadioLabel {
+  .Widget__RadioLabel {
     padding: 10px 10px;
   }
 }
