@@ -1,5 +1,10 @@
 {
-    "image": "",
-    "handle": "Hawkeye",
-    "members": ["0xwags", "0xmint"]
-  }
+  "handle": "Hawkeye",
+  "members": ["0xwags", "0xmint"],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x426DC9dCB3C0d6A283268B4bb51AeC48CEB18854"
+    }
+  ]
+}
