@@ -3,7 +3,6 @@ import fetch from 'node-fetch';
 
 export const getApiContestData = async () => {
 
-    console.log('this is for testing the replacemt of contest Data');
     // let data : Contest[] = [];
     let data;
     const response = await fetch(`${process.env.C4_API_URL}/api/v0/getContest`, {

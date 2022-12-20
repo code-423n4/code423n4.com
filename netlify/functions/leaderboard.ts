@@ -1,5 +1,6 @@
 import { differenceInDays, getYear } from "date-fns";
 import fs, { readFileSync } from "fs";
+import { getApiContestData } from '../../api/getData'
 import csv from "csvtojson";
 
 const getWardenInfo = (handle: string) => {
@@ -23,7 +24,7 @@ const getLeaderboardResults = async (
   handle?: string
 ) => {
   // @TODO: also filter by contestId (if provided)
-  const allContests = (await csv().fromFile("_data/contests/contests.csv"))
+  const allContests = (await getApiContestData())
     .filter((contest) => withinTimeframe(contest, contestRange))
     .filter((contest) => !contestId || contestId === contest.contestid);
 
@@ -34,7 +35,7 @@ const getLeaderboardResults = async (
       finding.split = parseInt(finding.split, 10);
       return finding;
     })
-    .filter((finding) => allContests.some((contest) => contest.contestid === finding.contest));
+    .filter((finding) => allContests.some((contest) => contest.contestid.toString() === finding.contest));
 
   // get deduplicated handles from findings
   const allHandles = Array.from(new Set(allFindings.map((finding) => finding.handle)))
