@@ -535,7 +535,7 @@ VS code, hardhat
 ***
  
 # Medium Risk Findings (2)
-## [[M-01] Yul `call` return value not checked](https://github.com/code-423n4/2022-09-vtvl-findings/issues/3)
+## [[M-01] Yul `call` return value not checked](https://github.com/code-423n4/2022-11-non-fungible-findings/issues/90)
 *Submitted by rotcivegaf, also found by 0x4non, 0xDecorativePineapple, 9svR6w, adriro, ajtra, aviggiano, brgltd, carlitox477, chaduke, codexploder, corerouter, joestakey, ladboy233, s3cunda, saian, Trust, V\_B, and wait*
 
 [Exchange.sol#L212-L227](https://github.com/code-423n4/2022-11-non-fungible/blob/323b7cbf607425dd81da96c0777c8b12e800305d/contracts/Exchange.sol#L212-L227)<br>

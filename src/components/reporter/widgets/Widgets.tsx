@@ -13,6 +13,7 @@ export interface Field {
   helpText?: string;
   required?: boolean;
   options?: Record<string, unknown>[];
+  placeholder?: string;
 }
 
 interface WidgetsProps {
@@ -30,7 +31,7 @@ const Widgets = (props) => {
   return (
     <fieldset className={styles.Widget__Fields}>
       {fields.map((field, index) => {
-        const { name, label, helpText, required } = field;
+        const { name, label, helpText, required, placeholder } = field;
         const isInvalid = required && showValidationErrors && !fieldState[name];
 
         return (
