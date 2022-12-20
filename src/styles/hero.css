@@ -26,8 +26,41 @@
 .hero h5 {
   max-width: 800px;
   text-align: center;
-  margin: 0 auto var(--page-margin);
   font-size: 26px;
+  margin: 0 auto 1em;
+}
+
+.hero-buttons {
+  text-align: center;
+  margin: 0 auto 5em;
+}
+
+.hero-buttons a {
+  display: inline-block;
+  margin: 0 10px;
+  font-size: 1.3em;
+  padding: 0.8em 2.5em;
+}
+
+
+.trustbar {
+  text-align: center;
+  max-width: 900px;
+  margin: 20px auto 50px auto;
+}
+
+.trustbar h5 {
+  text-align: center;
+  margin: 0 auto var(--page-margin);
+}
+.trustbar .logos img {
+  height: 30px;
+  padding: 10px;
+  opacity: .7;
+}
+
+.unlock-protocol {
+  width: 100px;
 }
 
 .definitions div {
@@ -82,6 +115,11 @@
 
   .hero h5 {
     font-size: 20px;
+  }
+  
+  .trustbar .logos img {
+    height: 20px;
+    padding: 5px;
   }
 
   .definitions {

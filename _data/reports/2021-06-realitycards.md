@@ -918,7 +918,7 @@ It is recommended that the naming of the [following variables](https://github.co
    compile and run default test on contracts.
 3. Installed slither analyzer:
   https://github.com/crytic/slither
-4. Ran [$ slither .] against `RCOrderbook.sol` and all contracts to verify results
+4. Ran [\$ slither .] against `RCOrderbook.sol` and all contracts to verify results
 
 **[Splidge (Reality Cards) confirmed and resolved](https://github.com/code-423n4/2021-06-realitycards-findings/issues/124#issuecomment-865088374):**
  > fixed [here](https://github.com/RealityCards/RealityCards-Contracts/commit/2d6390acc4d87df13d01339b9da87f249843e932)

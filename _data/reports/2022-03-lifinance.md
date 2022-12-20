@@ -284,7 +284,7 @@ Consider also only calling `IAnyswapToken(_anyswapData.token).underlying()` once
 > We disagree with the severity as no funds should ever be left in the contract by design.
 
 **[gzeon (judge) decreased severity to Medium and commented](https://github.com/code-423n4/2022-03-lifinance-findings/issues/117#issuecomment-1100696054):**
- > Keeping this as Med Risk. There can be fund leftover in the contract under normal operation, for example [this tx](https://etherscan.io/tx/0xe78c36dd2c2f21cade00a4099701b9c9f82acc8da568e1048a4d7287ce2e45b0). In fact, ~$300 worth of token is left in the LI.Fi smart contract on ETH mainnet [0x5a9fd7c39a6c488e715437d7b1f3c823d5596ed1](https://etherscan.io/address/0x5a9fd7c39a6c488e715437d7b1f3c823d5596ed1) as of block 14597316. I don't think this is High Risk because the max amount lost is no more than allowed slippage, which can be loss to MEV too.
+ > Keeping this as Med Risk. There can be fund leftover in the contract under normal operation, for example [this tx](https://etherscan.io/tx/0xe78c36dd2c2f21cade00a4099701b9c9f82acc8da568e1048a4d7287ce2e45b0). In fact, ~\$300 worth of token is left in the LI.Fi smart contract on ETH mainnet [0x5a9fd7c39a6c488e715437d7b1f3c823d5596ed1](https://etherscan.io/address/0x5a9fd7c39a6c488e715437d7b1f3c823d5596ed1) as of block 14597316. I don't think this is High Risk because the max amount lost is no more than allowed slippage, which can be loss to MEV too.
 
 
 
@@ -346,7 +346,7 @@ Ensure funds are always subtracted from users account in `swap`, even if LiFi ha
  > We are aware that the contract allows users to use latent funds, although we disagree on it being an issue as **no funds** (ERC20 or native) should ever lay in the contract. To make sure that no value is ever kept by the diamond, we now provide refunds for outstanding user value (after bridges/swaps).
 
 **[gzeon (judge) commented](https://github.com/code-423n4/2022-03-lifinance-findings/issues/66#issuecomment-1100698703):**
- > Keeping this as Med Risk. There can be fund leftover in the contract under normal operation, for example [this tx](https://etherscan.io/tx/0xe78c36dd2c2f21cade00a4099701b9c9f82acc8da568e1048a4d7287ce2e45b0). In fact, ~$300 worth of token is left in the LI.Fi smart contract on ETH mainnet [0x5a9fd7c39a6c488e715437d7b1f3c823d5596ed1](https://etherscan.io/address/0x5a9fd7c39a6c488e715437d7b1f3c823d5596ed1) as of block 14597316. I don't think this is High Risk because the max amount lost is no more than allowed slippage, which can be loss to MEV too.
+ > Keeping this as Med Risk. There can be fund leftover in the contract under normal operation, for example [this tx](https://etherscan.io/tx/0xe78c36dd2c2f21cade00a4099701b9c9f82acc8da568e1048a4d7287ce2e45b0). In fact, ~\$300 worth of token is left in the LI.Fi smart contract on ETH mainnet [0x5a9fd7c39a6c488e715437d7b1f3c823d5596ed1](https://etherscan.io/address/0x5a9fd7c39a6c488e715437d7b1f3c823d5596ed1) as of block 14597316. I don't think this is High Risk because the max amount lost is no more than allowed slippage, which can be loss to MEV too.
 
 **[ezynda3 (Li.Fi) resolved and commented](https://github.com/code-423n4/2022-03-lifinance-findings/issues/66#issuecomment-1115936416):**
  > This has been fixed in the most recent version of `src/Helpers/Swapper.sol` which sweeps any latent funds back to the user's wallet.
@@ -449,7 +449,7 @@ This issue may be mitigated by only allowing `fromAssetId` to be the native toke
 > 
 
 **[gzeon (judge) decreased severity to Medium and commented](https://github.com/code-423n4/2022-03-lifinance-findings/issues/86#issuecomment-1100700006):**
- > Adjusting this as Medium Risk. There can be fund leftover in the contract under normal operation, for example [this tx](https://etherscan.io/tx/0xe78c36dd2c2f21cade00a4099701b9c9f82acc8da568e1048a4d7287ce2e45b0). In fact, ~$300 worth of token is left in the LI.Fi smart contract on ETH mainnet [0x5a9fd7c39a6c488e715437d7b1f3c823d5596ed1](https://etherscan.io/address/0x5a9fd7c39a6c488e715437d7b1f3c823d5596ed1) as of block 14597316. I don't think this is High Risk because the max amount lost is no more than allowed slippage, which can be loss to MEV too. Not a duplicate of M-02 since `msg.value` is the vector here.
+ > Adjusting this as Medium Risk. There can be fund leftover in the contract under normal operation, for example [this tx](https://etherscan.io/tx/0xe78c36dd2c2f21cade00a4099701b9c9f82acc8da568e1048a4d7287ce2e45b0). In fact, ~\$300 worth of token is left in the LI.Fi smart contract on ETH mainnet [0x5a9fd7c39a6c488e715437d7b1f3c823d5596ed1](https://etherscan.io/address/0x5a9fd7c39a6c488e715437d7b1f3c823d5596ed1) as of block 14597316. I don't think this is High Risk because the max amount lost is no more than allowed slippage, which can be loss to MEV too. Not a duplicate of M-02 since `msg.value` is the vector here.
 
 **[ezynda3 (Li.Fi) resolved and commented](https://github.com/code-423n4/2022-03-lifinance-findings/issues/86#issuecomment-1115936651):**
  > This has been fixed in the most recent version of `src/Helpers/Swapper.sol` which sweeps any latent funds back to the user's wallet.
@@ -918,7 +918,7 @@ There are 100 USDC tokens in the contract.
 **[gzeon (judge) decreased severity to Medium and commented](https://github.com/code-423n4/2022-03-lifinance-findings/issues/160#issuecomment-1100709584):**
  > Warden highlighted the vulnerability in `AnyswapFacet` which would allow attacker to grant approval to arbitrary contract. 
 > 
-> There can be fund leftover in the contract under normal operation, for example [this tx](https://etherscan.io/tx/0xe78c36dd2c2f21cade00a4099701b9c9f82acc8da568e1048a4d7287ce2e45b0). In fact, ~$300 worth of token is left in the LI.Fi smart contract on ETH mainnet [0x5a9fd7c39a6c488e715437d7b1f3c823d5596ed1](https://etherscan.io/address/0x5a9fd7c39a6c488e715437d7b1f3c823d5596ed1) as of block 14597316. I don't think this is High Risk because the max amount lost is no more than allowed slippage, which can be loss to MEV too.
+> There can be fund leftover in the contract under normal operation, for example [this tx](https://etherscan.io/tx/0xe78c36dd2c2f21cade00a4099701b9c9f82acc8da568e1048a4d7287ce2e45b0). In fact, ~\$300 worth of token is left in the LI.Fi smart contract on ETH mainnet [0x5a9fd7c39a6c488e715437d7b1f3c823d5596ed1](https://etherscan.io/address/0x5a9fd7c39a6c488e715437d7b1f3c823d5596ed1) as of block 14597316. I don't think this is High Risk because the max amount lost is no more than allowed slippage, which can be loss to MEV too.
 
 
 

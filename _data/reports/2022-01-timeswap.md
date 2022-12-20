@@ -837,7 +837,7 @@ an attacker can see it and frontrun to repay a single token for his debt (since 
 and since your solidity version is above 0.8.0 the line:
 `due.debt -= assetsIn[i];` will revert due to underflow
 
-The attacker can keep doing it everytime the user is going to pay and since 1 token is baisicly 0$ (18 decimals) the attacker doesn't lose real money
+The attacker can keep doing it everytime the user is going to pay and since 1 token is baisicly 0\$ (18 decimals) the attacker doesn't lose real money
 
 #### Impact
 

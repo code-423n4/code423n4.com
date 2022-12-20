@@ -1,3 +1,5 @@
+// @todo: remove styles once inputs are replaced with new Input component
+
 .Fields {
   border: none;
   min-width: 0px;
@@ -5,14 +7,40 @@
   padding: 0;
 }
 
+.RadioGroup {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+  padding-left: 20px;
+}
+
+.Radio,
+.Checkbox {
+  margin: 10px 10px 10px 0;
+}
+
+.RadioLabel {
+  cursor: pointer;
+  padding: 10px 20px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+
+  &:hover {
+    background-color: var(--header-background-purple);
+  }
+}
+
 .Container {
   margin-bottom: 40px;
   width: 100%;
+  display: block;
 }
 
 .Label {
   font-weight: bold;
   font-size: 20px;
+  color: white;
 }
 
 .Help {
@@ -47,7 +75,7 @@
 }
 
 .Placeholder {
-  color: rgba(255, 255, 255, 0.75);
+  color: rgba(255, 255, 255, 0.5);
 }
 
 .Control {
@@ -57,16 +85,40 @@
 }
 
 .Text {
-  width: calc(100% - 20px);
+  height: 40px;
+  width: 100%;
+  box-sizing: border-box;
 
   &::placeholder {
-    color: rgba(255, 255, 255, 0.75);
+    color: rgba(255, 255, 255, 0.5);
   }
 }
 
 .Select {
+  height: 40px;
   width: 100%;
   cursor: pointer;
+}
+
+input[type="file"].Avatar::file-selector-button {
+  border: none;
+  border-radius: 5px;
+  display: inline-block;
+  font-size: 14px;
+  padding: 8px 16px;
+  width: auto;
+  font-family: "Roboto", sans-serif;
+  text-decoration: none;
+  margin: 0.25rem 0.5rem 0.25rem 0;
+  cursor: pointer;
+  background-color: transparent;
+  color: #fff;
+  box-shadow: inset 0px 0px 0px 2px #fff;
+  margin-left: 10px;
+
+  &:hover {
+    background-color: var(--main-purple);
+  }
 }
 
 .Textarea {
@@ -76,8 +128,22 @@
   margin-top: 0;
 }
 
+.TextAreaContainer {
+  position: relative;
+}
+
+.TextAreaCounter {
+  text-align: right;
+  position: absolute;
+  bottom: 3px;
+  left: 3px;
+  background-color: rgba(204, 204, 204, 1);
+  padding: 1px;
+  border-radius: 2px;
+  color: black;
+}
+
 .Markdown {
-  height: 250px;
   overflow: auto;
 
   h1,
@@ -125,5 +191,31 @@
     overflow: visible;
     line-height: inherit;
     word-wrap: normal;
+  }
+
+  table {
+    border-collapse: collapse;
+    margin-bottom: 16px;
+  }
+
+  tbody {
+    tr:nth-child(2n) {
+      background-color: var(--lightest-background-purple);
+    }
+  }
+
+  td,
+  th {
+    border: 1px solid var(--border-lightest-background);
+    padding: 6px 13px;
+  }
+}
+
+@media (max-width: 600px) {
+  .RadioGroup {
+    padding-left: 8px;
+  }
+  .RadioLabel {
+    padding: 10px 10px;
   }
 }

@@ -2,12 +2,23 @@ import React from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import remarkBreaks from "remark-breaks";
+import remarkMath from "remark-math";
+import rehypeKatex from "rehype-katex";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import clsx from "clsx";
 
 import * as styles from "./Widgets.module.scss";
 
-const TextArea = ({ name, required, fieldState, isInvalid, onChange }) => {
+import "katex/dist/katex.min.css";
+
+const TextArea = ({
+  name,
+  required,
+  fieldState,
+  isInvalid,
+  onChange,
+  maxSize,
+}) => {
   function handleChange(e) {
     onChange(e);
   }
@@ -19,23 +30,35 @@ const TextArea = ({ name, required, fieldState, isInvalid, onChange }) => {
         <Tab>Preview</Tab>
       </TabList>
       <TabPanel>
-        <textarea
-          className={clsx(
-            styles.Control,
-            styles.Text,
-            styles.Textarea,
-            isInvalid && "input-error"
+        <div className={clsx(styles.TextAreaContainer)}>
+          <textarea
+            className={clsx(
+              styles.Control,
+              styles.Text,
+              styles.Textarea,
+              isInvalid && "input-error"
+            )}
+            name={name}
+            onChange={handleChange}
+            required={required}
+            value={fieldState}
+            maxLength={maxSize}
+          />
+
+          {maxSize && fieldState.length > maxSize - 100 ? (
+            <span className={clsx(styles.TextAreaCounter)}>
+              {maxSize - fieldState.length} char. remaining
+            </span>
+          ) : (
+            ""
           )}
-          name={name}
-          onChange={handleChange}
-          required={required}
-          value={fieldState}
-        />
+        </div>
       </TabPanel>
       <TabPanel>
         <ReactMarkdown
           className={clsx(styles.Control, styles.Markdown)}
-          remarkPlugins={[remarkGfm, remarkBreaks]}
+          remarkPlugins={[remarkGfm, remarkBreaks, remarkMath]}
+          rehypePlugins={[rehypeKatex]}
         >
           {fieldState}
         </ReactMarkdown>
