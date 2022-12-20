@@ -1,0 +1,13 @@
+{
+  "handle": "lol",
+  "members": [
+    "SWORD",
+    "Patrick"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x6bcca06490Db1EA2d95a40be8F6EFA3d1Cc9b6d8"
+    }
+  ]
+}
