@@ -5,7 +5,7 @@ import LinksToCode from "../LinksToCodeInput";
 import WardenField from "./WardenField";
 import ContestWarning from "../findings/ContestWarning";
 
-import * as widgetStyles from "./Widgets.module.scss";
+import * as styles from "../../../styles/Main.module.scss";
 
 const Widget = ({ field, fieldState, isInvalid, onChange }) => {
   const {
@@ -76,9 +76,9 @@ const Widget = ({ field, fieldState, isInvalid, onChange }) => {
   );
 
   const checkboxWidget = (
-    <label htmlFor={name} className={widgetStyles.Container}>
+    <label htmlFor={name} className={styles.Container}>
       <input
-        className={widgetStyles.Checkbox}
+        className={styles.Checkbox}
         type="checkbox"
         id={name}
         name={name}
