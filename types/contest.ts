@@ -12,6 +12,7 @@ export interface Contest {
   hide: boolean;
   league: string;
   fields: {
+    // contestType: "Audit" | "Mitigation Review"
     submissionPath: string;
     contestPath: string;
     artPath: string;

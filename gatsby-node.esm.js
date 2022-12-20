@@ -12,6 +12,10 @@ import { getApiContestData } from "./api/getData.ts";
 const { token, notionToken, notionContestDb } = require("./netlify/_config");
 const notion = new Client({ auth: notionToken });
 const getContestData = async () => {
+  // @todo: get contest type from notion
+  // if (process.env.NODE_ENV === "development") {
+  //   const testContestData =
+  // }
   try {
     const pages = [];
     let cursor = undefined;
@@ -49,7 +53,7 @@ const getContestData = async () => {
       }
       cursor = next_cursor;
     }
-    const statusObject = pages.map((page) => {
+    const notionContestFields = pages.map((page) => {
       if (
         page.properties.Status.select.name !== "Lost deal" ||
         page.properties.Status.select.name !== "Possible" ||
@@ -61,6 +65,7 @@ const getContestData = async () => {
             contestId: page.properties.ContestID.number || null,
             status: page.properties.Status.select.name || null,
             codeAccess: "public",
+            type: page.properties["Audit type"].select.name,
           };
         } else if (
           page.properties["Code access"].select &&
@@ -70,6 +75,7 @@ const getContestData = async () => {
             contestId: page.properties.ContestID.number || null,
             status: page.properties.Status.select.name || null,
             codeAccess: "certified",
+            type: page.properties["Audit type"].select.name,
           };
         } else if (
           page.properties["Code access"].select &&
@@ -80,17 +86,19 @@ const getContestData = async () => {
             contestId: page.properties.ContestID.number || null,
             status: page.properties.Status.select.name || null,
             codeAccess: "public",
+            type: page.properties["Audit type"].select.name,
           };
         } else {
           return {
             contestId: page.properties.ContestID.number || null,
             status: page.properties.Status.select.name || null,
             codeAccess: null,
+            type: page.properties["Audit type"].select.name,
           };
         }
       }
     });
-    return statusObject;
+    return notionContestFields;
   } catch (err) {
     return null;
   }
@@ -313,6 +321,14 @@ exports.sourceNodes = async ({
         value:
           dataForCurrentContest.length > 0
             ? dataForCurrentContest[0].codeAccess
+            : undefined,
+      });
+      createNodeField({
+        node,
+        name: `type`,
+        value:
+          dataForCurrentContest.length > 0
+            ? dataForCurrentContest[0].type
             : undefined,
       });
     }
