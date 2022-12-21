@@ -76,9 +76,9 @@ const Widget = ({ field, fieldState, isInvalid, onChange }) => {
   );
 
   const checkboxWidget = (
-    <label htmlFor={name} className={styles.Container}>
+    <label htmlFor={name} className={styles.Widget__Container}>
       <input
-        className={styles.Checkbox}
+        className={styles.Widget__Checkbox}
         type="checkbox"
         id={name}
         name={name}

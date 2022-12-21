@@ -130,14 +130,14 @@ export default function RegistrationFormCommonFields({
         value={link || ""}
         handleChange={handleChange}
       />
-      <label htmlFor="avatar" className={styles.widgetForm__Label}>
+      <label htmlFor="avatar" className={styles.Widget__Label}>
         Avatar (Optional)
       </label>
-      <p className={styles.widgetForm__Help}>
+      <p className={styles.Widget__Help}>
         An avatar displayed next to your name on the leaderboard.
       </p>
       <input
-        className={styles.widgetForm__Avatar}
+        className={styles.Widget__Avatar}
         type="file"
         id="avatar"
         name="avatar"
