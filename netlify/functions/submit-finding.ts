@@ -36,6 +36,10 @@ function isDangerousRepo(s) {
 }
 
 exports.handler = async (event) => {
+  // @todo for Mitigation Review:
+  // extract relevant info from submission title and risk for mitigation reviews
+  // add proper labels to new issue
+
   // only allow POST
   if (event.httpMethod !== "POST") {
     return {
@@ -59,9 +63,9 @@ exports.handler = async (event) => {
     sponsor,
     repo,
     address,
+    mitigationOf
   } = data;
   let emailAddresses: string[] = data.emailAddresses;
-
   await Moralis.start({
     serverUrl: moralisServerUrl,
     appId: moralisAppId,
@@ -84,10 +88,14 @@ exports.handler = async (event) => {
       }),
     };
   }
+  const isMitigationReport : boolean = mitigationOf ? true : false;
+  let mitigationLabels = ['mitigation-confirmed', `MR-${mitigationOf}`];
+  let mitigationTitle = `Mitigation Confirmed for ${mitigationOf}`;
 
   // ensure we have the data we need
   if (
-    emailAddresses.length == 0 ||
+    !isMitigationReport &&
+    (emailAddresses.length == 0 ||
     !user ||
     !risk ||
     !title ||
@@ -96,7 +104,7 @@ exports.handler = async (event) => {
     !contest ||
     !sponsor ||
     !attributedTo ||
-    !repo
+    !repo)
   ) {
     return {
       statusCode: 422,
@@ -244,25 +252,43 @@ exports.handler = async (event) => {
   }
 
   const owner = process.env.GITHUB_CONTEST_REPO_OWNER;
-  const riskCode = getRiskCodeFromGithubLabel(risk);
 
   try {
-    const markdownPath = `data/${attributedTo}-${riskCode}.md`;
-    const qaOrGasSubmissionBody = `See the markdown file with the details of this report [here](https://github.com/${owner}/${repo}/blob/main/${markdownPath}).`;
-    const isQaOrGasSubmission = Boolean(riskCode === "G" || riskCode === "Q");
-    if (isQaOrGasSubmission) {
-      const existingReport = await getMarkdownReportForUser(
-        octokit,
-        repo,
-        attributedTo,
-        riskCode as "Q" | "G"
-      );
-      if (existingReport) {
-        throw {
-          status: 400,
-          message: `It looks like you've already submitted a ${risk} report for this contest.`,
-        };
+    let isQaOrGasSubmission = false;
+    let qaOrGasSubmissionBody = '';
+    let markdownPath = '';
+    let riskCode = '';
+    if(!isMitigationReport){
+      const riskCode = getRiskCodeFromGithubLabel(risk);
+      markdownPath = `data/${attributedTo}-${riskCode}.md`;
+      qaOrGasSubmissionBody = `See the markdown file with the details of this report [here](https://github.com/${owner}/${repo}/blob/main/${markdownPath}).`;
+      isQaOrGasSubmission = Boolean(riskCode === "G" || riskCode === "Q");
+      if (isQaOrGasSubmission) {
+        const existingReport = await getMarkdownReportForUser(
+          octokit,
+          repo,
+          attributedTo,
+          riskCode as "Q" | "G"
+        );
+        if (existingReport) {
+          throw {
+            status: 400,
+            message: `It looks like you've already submitted a ${risk} report for this contest.`,
+          };
+        }
       }
+    }
+
+    //if it's a confirmed mitigation then no title will be provided
+    let isConfirmedMitigation = false;
+    if(isMitigationReport && (
+      !body || !title || !risk
+    )){
+      isConfirmedMitigation = true;
+    }else if(
+      isMitigationReport
+    ){
+      labels.push(`MR-${mitigationOf}`)
     }
 
     const issueResult = await octokit.request(
@@ -270,9 +296,9 @@ exports.handler = async (event) => {
       {
         owner,
         repo,
-        title,
+        title : !isConfirmedMitigation? title : mitigationTitle,
         body: isQaOrGasSubmission ? qaOrGasSubmissionBody : body,
-        labels,
+        labels : !isConfirmedMitigation? labels : mitigationLabels,
       }
     );
 
@@ -289,7 +315,7 @@ exports.handler = async (event) => {
       issueId,
       issueUrl,
     };
-
+  
     const content = Buffer.from(JSON.stringify(fileData, null, 2)).toString(
       "base64"
     );
