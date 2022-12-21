@@ -7,7 +7,7 @@
   "paymentAddresses": [
     {
       "chain": "polygon",
-      "address": "matic:0x4929141a48B6E7024ECDCf109ED20d629e"
+      "address": "0x4929141a48B6E7024ECDCf109ED20d629efC921C"
     }
   ]
 }
