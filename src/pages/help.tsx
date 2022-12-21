@@ -149,7 +149,7 @@ function ContactUs() {
       pageTitle="Help | Code 423n4"
     >
       <aside className="aside-alert">
-        ❄️ Note: the C4 office will be closed Dec 23-Jan 2, so it may take us a little longer than usual to respond. Thanks for your patience!
+        ❄️ Note: the C4 office will be closed Dec 23 - Jan 2 PST, so it may take us a little longer than usual to respond. Thanks for your patience!
       </aside>
       <Form
         title="How can we help?"
