@@ -33,6 +33,17 @@
 .hero-buttons {
   text-align: center;
   margin: 0 auto 5em;
+  display: flex;
+  justify-content: center;
+}
+
+@media screen and (max-width: 700px) {
+  .hero-buttons {
+    flex-direction: column;
+  }
+  .hero-buttons a:first-child {
+    margin-bottom: 1em;
+  }
 }
 
 .hero-buttons a {
@@ -41,7 +52,6 @@
   font-size: 1.3em;
   padding: 0.8em 2.5em;
 }
-
 
 .trustbar {
   text-align: center;
