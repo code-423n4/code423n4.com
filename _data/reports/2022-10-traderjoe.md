@@ -52,7 +52,7 @@ During the audit contest outlined in this document, C4 conducted an analysis of 
   29. Saintcode\_
   30. Shishigami
   31. SooYa
-  32. The_GUILD ([David_](https://twitter.com/davidpius10), [Ephraim](https://twitter.com/iamephraim_js), LeoGold, and greatsamist)
+  32. The\_GUILD ([David\_](https://twitter.com/davidpius10), [Ephraim](https://twitter.com/iamephraim_js), LeoGold, and greatsamist)
   33. [TomJ](https://mobile.twitter.com/tomj_bb)
   34. [Trust](https://twitter.com/trust__90)
   35. [Tutturu](https://twitter.com/TuturuTech)
