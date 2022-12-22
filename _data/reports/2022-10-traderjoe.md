@@ -476,7 +476,7 @@ Here is our test script to describe the impacts
 
 You can place this file into `/test` folder and run it using
 
-```bash=
+```
 forge test --match-contract High1Test -vv
 ```
 
@@ -630,7 +630,7 @@ Here is our test script to describe the impacts
 
 You can place this file into `/test` folder and run it using
 
-```bash=
+```
 forge test --match-test testBugSwapJoeV1PairWithLBRouter --fork-url https://rpc.ankr.com/avalanche --fork-block-number 21437560 -vv
 ```
 
