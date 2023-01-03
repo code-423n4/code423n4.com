@@ -4,11 +4,12 @@ import DefaultLayout from "../templates/DefaultLayout";
 import LeaderboardTable from "../components/LeaderboardTable";
 
 export default function Leaderboard({ data }) {
-  const [timeFrame, setTimeFrame] = useState("2022");
+  const [timeFrame, setTimeFrame] = useState("2023");
   const [leaderboardResults, setLeaderboardResults] = useState([]);
 
   useEffect(() => {
     (async () => {
+      console.log(`time frame in use effect ${timeFrame}`);
       const result = await fetch(`/.netlify/functions/leaderboard?range=${timeFrame}`, {
         headers: {
           "Content-Type": "application/json",
@@ -30,6 +31,7 @@ export default function Leaderboard({ data }) {
   };
 
   const filterOptions = [
+    { value: "2023", label: "2023" },
     { value: "2022", label: "2022" },
     { value: "2021", label: "2021" },
     { value: "Last 60 days", label: "Last 60 days" },
