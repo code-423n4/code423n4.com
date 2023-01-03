@@ -4,7 +4,7 @@ import DefaultLayout from "../templates/DefaultLayout";
 import LeaderboardTable from "../components/LeaderboardTable";
 
 export default function Leaderboard({ data }) {
-  const [timeFrame, setTimeFrame] = useState("All time");
+  const [timeFrame, setTimeFrame] = useState("Last 60 days");
   const [leaderboardResults, setLeaderboardResults] = useState([]);
 
   useEffect(() => {
@@ -30,12 +30,12 @@ export default function Leaderboard({ data }) {
   };
 
   const filterOptions = [
-    { value: "All time", label: "All time" },
-    { value: "2023", label: "2023" },
-    { value: "2022", label: "2022" },
-    { value: "2021", label: "2021" },
     { value: "Last 60 days", label: "Last 60 days" },
     { value: "Last 90 days", label: "Last 90 days" },
+    { value: "2021", label: "2021" },
+    { value: "2022", label: "2022" },
+    { value: "2023", label: "2023" },
+    { value: "All time", label: "All time" },
   ];
 
   return (
