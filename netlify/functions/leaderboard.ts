@@ -57,7 +57,10 @@ function withinTimeframe(contest, timeFrame) {
     case "Last 60 days":
       return withinLastNDays(new Date(contest.end_time), 60);
     case "Last 90 days":
-      withinLastNDays(new Date(contest.end_time), 90);
+      return withinLastNDays(new Date(contest.end_time), 90);
+    case "Current Year":
+      const currentYear = new Date().getFullYear()
+      return withinYear(new Date(contest.end_time), currentYear);
     case "2022":
       return withinYear(new Date(contest.end_time), 2022);
     case "2021":
