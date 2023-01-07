@@ -8,7 +8,6 @@ type HandlesJson implements Node {
   """
   showOnLeaderboard: Boolean
 
-  findings:          [FindingsCsv] @link(by: "handle.handle", from: "handle")
   members:           [HandlesJson] @link(by: "handle", from: "members")
 }`;
 

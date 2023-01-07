@@ -12,13 +12,14 @@ import { FindingCreateRequest } from "../../../types/finding";
 
 // helpers
 import {
-  emailField,
-  addressField,
   titleField,
   riskField,
   linksToCodeField,
   vulnerabilityDetailsField,
   qaGasDetailsField,
+  mitigationField,
+  mitigationRiskField,
+  mitigationOfField,
 } from "./findings/fields";
 import {
   config,
@@ -65,6 +66,7 @@ interface SubmitFindingsProps {
   successMessage: string;
   successButtonText?: string;
   cancelButtonText?: string;
+  contestType: "Mitigation review" | "Audit";
   onDelete?: () => Promise<void>;
 }
 
@@ -82,12 +84,12 @@ const SubmitFindings = ({
   successMessage,
   successButtonText,
   cancelButtonText,
+  contestType,
   onDelete,
 }: SubmitFindingsProps) => {
   // hooks
   const { currentUser, reFetchUser } = useUser();
   const { showModal } = useModalContext();
-
   // state
   const [status, setStatus] = useState<FormStatus>(FormStatus.Unsubmitted);
   const [hasValidationErrors, setHasValidationErrors] = useState<boolean>(
@@ -100,12 +102,7 @@ const SubmitFindings = ({
   >([]);
   const [newTeamAddress, setNewTeamAddress] = useState<string>("");
   const [attributedTo, setAttributedTo] = useState<string>(initialAttributedTo);
-  const [fieldList, setFieldList] = useState<Field[]>([
-    emailField,
-    addressField,
-    riskField,
-  ]);
-
+  const [fieldList, setFieldList] = useState<Field[]>([riskField]);
   // effects
   useEffect(() => {
     if (!attributedTo) {
@@ -119,25 +116,51 @@ const SubmitFindings = ({
   }, [findingId, initialState]);
 
   useEffect(() => {
-    // set which fields are shown based on risk
+    // set which fields are shown based on risk and audit type
     let fieldList: Field[] = [riskField];
-    if (!state.risk) {
-      setFieldList(fieldList);
+    if (contestType === "Mitigation review") {
+      fieldList = [mitigationOfField, mitigationField];
+      if (state.isMitigated) {
+        setFieldList(fieldList);
+        return;
+      }
+      fieldList.push(mitigationRiskField);
+      if (!state.risk) {
+        setFieldList(fieldList);
+        return;
+      }
+      if (checkQaOrGasFinding(state.risk)) {
+        fieldList.push(qaGasDetailsField);
+        setFieldList(fieldList);
+        return;
+      }
+      setFieldList(
+        fieldList.concat([
+          titleField,
+          linksToCodeField,
+          vulnerabilityDetailsField,
+        ])
+      );
       return;
+    } else {
+      if (!state.risk) {
+        setFieldList(fieldList);
+        return;
+      }
+      if (checkQaOrGasFinding(state.risk)) {
+        fieldList.push(qaGasDetailsField);
+        setFieldList(fieldList);
+        return;
+      }
+      setFieldList(
+        fieldList.concat([
+          titleField,
+          linksToCodeField,
+          vulnerabilityDetailsField,
+        ])
+      );
     }
-    if (checkQaOrGasFinding(state.risk)) {
-      fieldList.push(qaGasDetailsField);
-      setFieldList(fieldList);
-      return;
-    }
-    setFieldList(
-      fieldList.concat([
-        titleField,
-        linksToCodeField,
-        vulnerabilityDetailsField,
-      ])
-    );
-  }, [state.risk, currentUser]);
+  }, [state.risk, currentUser, state.isMitigated]);
 
   useEffect(() => {
     if (!currentUser.isLoggedIn) {
@@ -165,6 +188,16 @@ const SubmitFindings = ({
             const newState = {
               ...prevState,
               [name]: getTitle(value, prevState.risk),
+            };
+            setStateInLocalStorage(findingId, newState);
+            return newState;
+          });
+          break;
+        case "isMitigated":
+          setState((prevState) => {
+            const newState = {
+              ...prevState,
+              [name]: !prevState.isMitigated,
             };
             setStateInLocalStorage(findingId, newState);
             return newState;
@@ -297,9 +330,28 @@ const SubmitFindings = ({
   const submitFinding = useCallback(async () => {
     const isQaOrGasFinding = checkQaOrGasFinding(state.risk);
     const linksToCodeString = state.linksToCode.join("\n");
-    const details = isQaOrGasFinding ? state.qaGasDetails : state.details;
-    const markdownBody = `# Lines of code\n\n${linksToCodeString}\n\n\n# Vulnerability details\n\n${details}`;
-    const formattedBody = isQaOrGasFinding ? details : markdownBody;
+    const markdownBody = `# Lines of code\n\n${linksToCodeString}\n\n\n# Vulnerability details\n\n${state.details}`;
+    let risk = state.risk;
+    let title = getTitle(state.title, state.risk);
+    let body = markdownBody;
+    let labels = [config.labelAll, state.risk];
+
+    let mitigationOf: string | undefined = state.mitigationOf;
+
+    if (isQaOrGasFinding) {
+      body = state.qaGasDetails;
+    }
+
+    if (contestType === "Mitigation review") {
+      mitigationOf = state.mitigationOf;
+      labels = [state.risk];
+      if (state.isMitigated) {
+        body = "";
+        title = "";
+        risk = "";
+        labels = [];
+      }
+    }
     const emailAddressList: string[] = additionalEmailAddresses.filter(
       (email) => !!email
     );
@@ -312,10 +364,12 @@ const SubmitFindings = ({
       repo: repo.split("/").pop() || "",
       emailAddresses: emailAddressList,
       attributedTo,
-      risk: state.risk,
-      title: getTitle(state.title, state.risk),
-      body: formattedBody,
-      labels: [config.labelAll, state.risk],
+      risk,
+      title,
+      body,
+      labels,
+      mitigationOf,
+      isMitigated: state.isMitigated,
     };
     if (attributedTo !== currentUser.username) {
       const team = currentUser.teams.find(
@@ -370,9 +424,23 @@ const SubmitFindings = ({
     }
     const isQaOrGasFinding = checkQaOrGasFinding(state.risk);
     // extract required fields from field data for validation check
-    const requiredFields = isQaOrGasFinding
-      ? [state.risk, state.qaGasDetails]
-      : [state.risk, state.title, state.details];
+    let requiredFields = [state.risk, state.title, state.details];
+    if (isQaOrGasFinding) {
+      requiredFields = [state.risk, state.qaGasDetails];
+    }
+    if (contestType === "Mitigation review") {
+      if (state.isMitigated) {
+        // if the finding is mitigated, we only need "mitigation of"
+        if (!state.mitigationOf) {
+          setHasValidationErrors(true);
+          return true;
+        } else {
+          return false;
+        }
+      } else {
+        requiredFields.push(state.mitigationOf);
+      }
+    }
     const hasErrors = requiredFields.some((field) => {
       return field === "" || field === undefined;
     });
@@ -559,7 +627,11 @@ const SubmitFindings = ({
             </DynamicInputGroup>
           </fieldset>
           <fieldset className={styles.EmphasizedInputGroup}>
-            <h2 className={styles.Heading2}>Finding</h2>
+            <h2 className={styles.Heading2}>
+              {contestType === "Mitigation review"
+                ? "Mitigation Review"
+                : "Finding"}
+            </h2>
             {fieldList.map((field, index) => {
               let isInvalid = false;
               if (field.name === "linksToCode") {
@@ -567,7 +639,14 @@ const SubmitFindings = ({
               } else {
                 isInvalid = hasValidationErrors && !state[field.name];
               }
-              return (
+              return field.widget === "checkbox" ? (
+                <Widget
+                  field={field}
+                  onChange={handleChange}
+                  fieldState={state}
+                  isInvalid={false}
+                />
+              ) : (
                 <FormField
                   key={`${field.name} ${index}`}
                   name={field.name}
