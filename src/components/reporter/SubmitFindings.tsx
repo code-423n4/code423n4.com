@@ -368,7 +368,7 @@ const SubmitFindings = ({
       body,
       labels,
       mitigationOf,
-      isMitigated : state.isMitigated,
+      isMitigated: state.isMitigated,
     };
     if (attributedTo !== currentUser.username) {
       const team = currentUser.teams.find(
