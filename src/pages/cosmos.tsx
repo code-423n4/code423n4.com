@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { graphql } from "gatsby";
+import useUser from "../hooks/UserContext";
 
 import ContestList from "../components/ContestList";
 import DefaultLayout from "../templates/DefaultLayout";
@@ -34,6 +35,8 @@ export default function Contests({ data }) {
   const [filteredContests, setFilteredContest] = useState<ContestStatusMap>(
     defaultContests
   );
+
+  const { currentUser } = useUser();
 
   useEffect(() => {
     setFilteredContest(sortContests(data.contests.edges));
@@ -83,6 +86,7 @@ export default function Contests({ data }) {
           case "Needs Judging":
           case "Judging Complete":
           case "Awarding":
+          case "Pre-sort":
           case "Reporting":
           default:
             statusObject.completed.push(contest);
@@ -129,6 +133,7 @@ export default function Contests({ data }) {
           <ContestList
             updateContestStatus={updateContestStatus}
             contests={filteredContests.activeContests}
+            user={currentUser}
           />
         </section>
       )}
@@ -138,6 +143,7 @@ export default function Contests({ data }) {
           <ContestList
             updateContestStatus={updateContestStatus}
             contests={filteredContests.upcomingContests}
+            user={currentUser}
           />
         </section>
       )}
@@ -147,6 +153,7 @@ export default function Contests({ data }) {
           <ContestList
             updateContestStatus={updateContestStatus}
             contests={filteredContests.completed.reverse()}
+            user={currentUser}
           />
         </section>
       )}
@@ -188,7 +195,7 @@ export const query = graphql`
             name
             image {
               childImageSharp {
-                resize(width: 160) {
+                resize(width: 80) {
                   src
                 }
               }
@@ -200,6 +207,7 @@ export const query = graphql`
             contestPath
             artPath
             status
+            codeAccess
           }
         }
       }

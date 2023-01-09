@@ -1,12 +1,16 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { graphql } from "gatsby";
+import { getDates } from "../utils/time";
+import useUser from "../hooks/UserContext";
+
 import ContestList from "../components/ContestList";
 import DefaultLayout from "../templates/DefaultLayout";
 import HeroIndex from "../components/content/HeroIndex";
 import Testimonials from "../components/Testimonials";
-import { getDates } from "../utils/time";
 
 export default function SiteIndex({ data }) {
+  const { currentUser } = useUser();
+
   // @todo: implement global state management instead of props drilling
   const [contestStatusChanges, updateContestStatusChanges] = useState(0);
   const [filteredContests, setFilteredContest] = useState(null);
@@ -66,6 +70,7 @@ export default function SiteIndex({ data }) {
               <ContestList
                 updateContestStatus={updateContestStatus}
                 contests={filteredContests.activeContests}
+                user={currentUser}
               />
             </section>
           ) : null}
@@ -75,6 +80,7 @@ export default function SiteIndex({ data }) {
               <ContestList
                 updateContestStatus={updateContestStatus}
                 contests={filteredContests.upcomingContests}
+                user={currentUser}
               />
             </section>
           ) : null}
@@ -118,7 +124,7 @@ export const query = graphql`
             name
             image {
               childImageSharp {
-                resize(width: 160) {
+                resize(width: 80) {
                   src
                 }
               }
@@ -129,6 +135,7 @@ export const query = graphql`
             submissionPath
             contestPath
             status
+            codeAccess
           }
           contestid
         }

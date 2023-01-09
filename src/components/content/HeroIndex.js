@@ -3,6 +3,9 @@ import React from "react";
 import Definitions from "../content/Definitions";
 import TrustBar from "../TrustBar";
 
+const auditButtonText = "I want an audit"
+const auditorButtonText = "I want to be an auditor"
+
 const HeroIndex = () => {
   return (
     <div className="hero">
@@ -12,15 +15,16 @@ const HeroIndex = () => {
       </h1>
       <h5>
         Start a public or private audit within 48 hours.
-        <br />
-        <a href="https://discord.gg/code4rena" className="button button-small">
-          Join #i-want-an-audit in Discord
-        </a>
-        <p className="hero-or">or</p>
-        <a href="https://t.me/trebienxyz" className="button button-small">
-          Message us on Telegram
-        </a>
       </h5>
+      <div class="hero-buttons">
+        <a href="https://code4rena.typeform.com/i-want-an-audit" target="_blank" aria-label={auditButtonText + " (Opens in a new window)"} className="button button-small">
+        {auditButtonText}
+        </a>
+        <a href="https://discord.gg/code4rena" target="_blank" aria-label={auditorButtonText + " (Opens in a new window"} className="button button-small cta-button lowercase secondary">
+        {auditorButtonText}
+        </a>
+      </div>
+
       <TrustBar />
 
     </div>

@@ -1,7 +1,7 @@
 import React from "react";
 import ContestTile from "./ContestTile";
 
-const ContestList = ({ contests, updateContestStatus }) => {
+const ContestList = ({ contests, updateContestStatus, user }) => {
   return (
     <>
       {contests.map((contest) => (
@@ -9,6 +9,7 @@ const ContestList = ({ contests, updateContestStatus }) => {
           contest={contest}
           key={contest.id}
           updateContestStatus={updateContestStatus}
+          user={user}
         />
       ))}
     </>
