@@ -7,11 +7,11 @@
   "paymentAddresses": [
     {
       "chain": "polygon",
-      "address": "0xa322bd417154d04d5704952e550288f0f91044bd"
+      "address": "0xfce1978e81cbF38B9c45fF4b90Ca54d772Ee5087"
     },
     {
       "chain": "ethereum",
-      "address": "0xa322bd417154d04d5704952e550288f0f91044bd"
+      "address": "0xfce1978e81cbF38B9c45fF4b90Ca54d772Ee5087"
     }
   ],
   "image": "./avatars/SleepingBugs.jpeg"
