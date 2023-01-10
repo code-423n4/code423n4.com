@@ -1,4 +1,4 @@
-.UserDropdownWrapper {
+.UserDropDown__UserDropdownWrapper {
   display: inline-flex;
   padding-left: 15px;
   border-left: 3px solid var(--main-purple);
@@ -9,7 +9,7 @@
   font-family: var(--font-family);
 }
 
-.UserDropdown {
+.UserDropDown__UserDropdown {
   display: inline-flex;
   position: relative;
   height: 30px;
@@ -20,7 +20,7 @@
   cursor: pointer;
 }
 
-.UserDropdownList {
+.UserDropDown__UserDropdownList {
   display: flex;
   flex-direction: column;
   border-radius: 5px;
@@ -32,30 +32,30 @@
   width: 100%;
 }
 
-.UserInfo {
+.UserDropDown__UserInfo {
   margin: 10px;
   padding-bottom: 15px;
   border-bottom: 1px solid var(--main-purple);
   color: white;
 }
 
-.Avatar {
+.UserDropDown__Avatar {
   display: flex;
   flex-direction: row;
   align-items: center;
 }
 
-.Caret {
+.UserDropDown__Caret {
   padding-left: 5px;
 }
 
-.Desktop {
+.UserDropDown__Desktop {
   @media (max-width: 970px) {
     display: none;
   }
 }
 
-.Mobile {
+.UserDropDown__Mobile {
   @media (min-width: 970px) {
     display: none;
   }
@@ -63,7 +63,7 @@
   width: 100%;
 }
 
-.MobileMenuItem {
+.UserDropDown__MobileMenuItem {
   color: white;
   font-weight: 800;
   font-family: "Roboto", sans-serif;
@@ -79,7 +79,7 @@
   width: 100%;
 }
 
-.Button {
+.UserDropDown__Button {
   font-size: inherit;
   cursor: pointer;
   display: flex;
@@ -90,7 +90,7 @@
   }
 }
 
-.Icon {
+.UserDropDown__Icon {
   color: inherit;
   margin-right: 10px;
   height: 20px;
