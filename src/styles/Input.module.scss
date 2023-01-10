@@ -1,18 +1,18 @@
-@import "../styles/mixins.scss";
+@import "./mixins.scss";
 
-.Input {
+.Input__Input {
   text-align: left;
   width: 100%;
 }
 
-.InputWrapper {
+.Input__InputWrapper {
   display: flex;
   padding: 0;
   font-family: var(--font-family);
   align-items: center;
 }
 
-.RemoveButton {
+.Input__RemoveButton {
   height: 40px;
   white-space: nowrap;
   align-self: center;
@@ -29,7 +29,7 @@
   }
 }
 
-.SmallButton {
+.Input__SmallButton {
   @include button;
   height: 40px;
   width: 50px;
@@ -44,7 +44,7 @@
   justify-content: center;
 }
 
-.SaveButton {
+.Input__SaveButton {
   background-color: var(--main-purple);
 
   &:hover {
@@ -53,7 +53,7 @@
   }
 }
 
-.EditButton {
+.Input__EditButton {
   background-color: transparent;
   box-shadow: inset 0px 0px 0px 2px #fff;
 
@@ -62,7 +62,7 @@
   }
 }
 
-.IconButton {
+.Input__IconButton {
   @include button;
   padding: 8px;
   font-size: 14px;
@@ -77,13 +77,13 @@
   }
 }
 
-.Control {
+.Input__Control {
   display: block;
   margin: 10px 0;
   padding: 10px;
 }
 
-.Text {
+.Input__Text {
   height: 40px;
   width: 100%;
   box-sizing: border-box;
@@ -103,7 +103,7 @@
   }
 }
 
-.Label {
+.Input__Label {
   font-weight: bold;
   font-size: 20px;
   color: white;
@@ -111,7 +111,7 @@
   font-family: var(--font-family);
 }
 
-.Help {
+.Input__Help {
   color: inherit;
   font-size: 13px;
   margin-top: 5px;
@@ -129,12 +129,12 @@
 
 // @todo: remove specificity and delete old input styles
 // once all inputs use this component
-input[type="text"].InputError,
-.InputError {
+input[type="text"].Input__InputError,
+.Input__InputError {
   border: 2px solid var(--hot-pink);
 }
 
-.ErrorMessage {
+.Input__ErrorMessage {
   display: flex;
   font-family: var(--font-family);
   &::before {
