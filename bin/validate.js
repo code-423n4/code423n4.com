@@ -4,7 +4,9 @@ const { readFile, stat } = require("fs/promises");
 const path = require("path");
 const glob = require("tiny-glob");
 const csv = require("csvtojson");
-const getApiContestData = async () => {
+const fetch = require("node-fetch");
+
+async function getApiContestData () {
   // only allow GET
   try {
     const res = await fetch(`${process.env.C4_API_URL}/api/v0/getContest`, {
