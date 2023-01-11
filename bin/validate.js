@@ -4,19 +4,21 @@ const { readFile, stat } = require("fs/promises");
 const path = require("path");
 const glob = require("tiny-glob");
 const csv = require("csvtojson");
-const fetch = require("node-fetch");
+// !! commented the whole contests section as validate is supposed to check for site data
+// const fetch = require("node-fetch");
 
-async function getApiContestData () {
-  // only allow GET
-  try {
-    const res = await fetch(`${process.env.C4_API_URL}/api/v0/getContest`, {
-      method: "GET",
-    });
-    return await res.json();
-  } catch (err) {
-    console.log(err);
-  }
-};
+// async function getApiContestData () {
+//   // only allow GET
+//   try {
+//     const res = await fetch(`${process.env.C4_API_URL}/api/v0/getContest`, {
+//       method: "GET",
+//     });
+//     return await res.json();
+//   } catch (err) {
+//     console.log(err);
+//   }
+// };
+
 async function getUniqueHandles() {
   const handles = await glob("./_data/handles/*.json");
   const uniqueHandles = new Set();
@@ -36,15 +38,15 @@ async function getUniqueHandles() {
   return uniqueHandles;
 }
 
-async function getUniqueContestIds() {
-  const contests = await getApiContestData();
-  const uniqueContestIds = new Set();
-  for (const parsedContest of contests) {
-    uniqueContestIds.add(parsedContest.contestid);
-  }
+// async function getUniqueContestIds() {
+//   const contests = await getApiContestData();
+//   const uniqueContestIds = new Set();
+//   for (const parsedContest of contests) {
+//     uniqueContestIds.add(parsedContest.contestid);
+//   }
 
-  return uniqueContestIds;
-}
+//   return uniqueContestIds;
+// }
 
 // Validate handles.
 async function validateHandles() {
@@ -177,7 +179,7 @@ async function validateOrganizations() {
 
 async function validateContests() {
   let passedValidation = true;
-  const contests = await getApiContestData();
+  // const contests = await getApiContestData();
   const orgs = await glob("./_data/orgs/*.json");
 
   const registeredOrganizations = new Set();
@@ -242,7 +244,7 @@ async function validateFindings() {
   }
 
   const uniqueHandles = await getUniqueHandles();
-  const uniqueContestIds = await getUniqueContestIds();
+  // const uniqueContestIds = await getUniqueContestIds();
 
   const unknownHandles = new Set();
   const unknownContestIds = new Set();
@@ -253,11 +255,11 @@ async function validateFindings() {
       continue;
     }
 
-    if (!uniqueContestIds.has(finding.contest)) {
-      unknownContestIds.add(finding.contest);
-      passedValidation = false;
-      continue;
-    }
+    // if (!uniqueContestIds.has(finding.contest)) {
+    //   unknownContestIds.add(finding.contest);
+    //   passedValidation = false;
+    //   continue;
+    // }
   }
 
   if (unknownHandles.size > 0) {
@@ -284,7 +286,7 @@ async function validateFindings() {
     await validateHandles();
     await validateTeams();
     await validateOrganizations();
-    await validateContests();
+    // await validateContests();
     await validateFindings();
     console.log("Validation passed!");
   } catch (err) {
