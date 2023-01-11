@@ -6,7 +6,6 @@ import fetch from "node-fetch";
 import path from "path";
 import webpack from "webpack";
 import SchemaCustomization from "./schema";
-import { getApiContestData } from "./api/getContestsData.ts";
 const { token } = require("./netlify/_config");
 
 const privateContestMessage = dedent`
@@ -16,6 +15,19 @@ The contest is limited to specific participants. Most Code4rena contests are ope
 
 For more information on participating in a private audit, please see this [post](https://mirror.xyz/c4blog.eth/Ww3sILR-e5iWoMYNpZEB9UME_vA8G0Yqa6TYvpSdEM0).
 `;
+
+
+const getApiContestData = async () => {
+  try {
+    const res = await fetch(`${process.env.C4_API_URL}/api/v0/getContest`, {
+      method: "GET",
+    });
+    return await res.json();
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 
 const graphqlWithAuth = graphql.defaults({
   headers: {
