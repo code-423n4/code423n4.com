@@ -1,18 +1,15 @@
-import fetch from 'node-fetch';
-// import { Contest } from '../types/contest'
+import fetch from "node-fetch";
 
 export const getApiContestData = async () => {
-
-    // let data : Contest[] = [];
-    let data;
-    const response = await fetch(`${process.env.C4_API_URL}/api/v0/getContest`, {
-        method: 'GET',
-    })
+  let data;
+  await fetch(`${process.env.C4_API_URL}/api/v0/getContest`, {
+    method: "GET",
+  })
     .then((res) => res.json())
     .then((body) => {
-        data = body;
+      data = body;
     })
-    .catch((err) => console.log(err))
+    .catch((err) => console.log(err));
 
-return data;
-}
+  return data;
+};
