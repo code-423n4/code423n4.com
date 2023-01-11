@@ -8,9 +8,10 @@ const fetch = require("node-fetch");
 
 const getApiContestData = async () => {  // only allow GET
   try {
-    const res = await fetch(`${process.env.C4_API_URL}/api/v0/getContest`, {
+    const res = await fetch(`	https://deploy-preview-332--api-code4rena-com.netlify.app/api/v0/getContest`, {
       method: "GET",
     });
+    console.log(res);
     return await res.json();
   } catch (err) {
     console.log(err);
