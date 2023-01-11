@@ -4,6 +4,7 @@ const { readFile, stat } = require("fs/promises");
 const path = require("path");
 const glob = require("tiny-glob");
 const csv = require("csvtojson");
+const fetch = require("node-fetch");
 
 async function getUniqueHandles() {
   const handles = await glob("./_data/handles/*.json");
