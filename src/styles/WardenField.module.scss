@@ -1,4 +1,4 @@
-.OptionContainer {
+.WardenField__OptionContainer {
   display: flex;
   align-items: center;
   min-height: 32px;
@@ -10,11 +10,11 @@
   }
 }
 
-.Avatar {
+.WardenField__Avatar {
   margin-right: 10px;
 }
 
-.Invalid.ReactSelect {
+.WardenField__Invalid.ReactSelect {
   :global {
     .react-select__control {
       border: 2px solid var(--hot-pink);

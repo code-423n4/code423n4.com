@@ -3,7 +3,7 @@ import React from "react";
 import FormField from "./FormField";
 import Widget from "./Widget";
 
-import * as styles from "./Widgets.module.scss";
+import * as styles from "../../../styles/Main.module.scss";
 
 export interface Field {
   name: string;
@@ -29,7 +29,7 @@ const Widgets = (props) => {
     props.onChange(e);
   }
   return (
-    <fieldset className={styles.Fields}>
+    <fieldset className={styles.Widget__Fields}>
       {fields.map((field, index) => {
         const { name, label, helpText, required, placeholder } = field;
         const isInvalid = required && showValidationErrors && !fieldState[name];

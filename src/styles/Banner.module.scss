@@ -1,4 +1,4 @@
-.MessageBar {
+.Banner__MessageBar {
   display: flex;
   padding: 10px;
   justify-content: center;
@@ -11,6 +11,6 @@
   background-color: var(--main-purple);
 }
 
-.Message {
+.Banner__Message {
   margin: 8px;
 }
