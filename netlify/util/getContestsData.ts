@@ -1,6 +1,6 @@
 const fetch = require("node-fetch");
 
-export const getApiContestData = async () => {
+const getApiContestData = async () => {
   // only allow GET
   try {
     const res = await fetch(`${process.env.C4_API_URL}/api/v0/getContest`, {
@@ -11,3 +11,5 @@ export const getApiContestData = async () => {
     console.log(err);
   }
 };
+
+export {getApiContestData}
