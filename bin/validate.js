@@ -4,7 +4,7 @@ const { readFile, stat } = require("fs/promises");
 const path = require("path");
 const glob = require("tiny-glob");
 const csv = require("csvtojson");
-import {getApiContestData} from '../api/getData';
+const { getApiContestData } = require "../api/getData";
 
 async function getUniqueHandles() {
   const handles = await glob("./_data/handles/*.json");
