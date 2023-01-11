@@ -1,6 +1,6 @@
 import { differenceInDays, getYear } from "date-fns";
 import fs, { readFileSync } from "fs";
-import { getApiContestData } from '../../api/getData'
+import { getApiContestData } from '../../api/getContestsData'
 import csv from "csvtojson";
 
 const getWardenInfo = (handle: string) => {
