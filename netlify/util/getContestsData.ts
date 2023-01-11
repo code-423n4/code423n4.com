@@ -12,4 +12,4 @@ const getApiContestData = async () => {
   }
 };
 
-export {getApiContestData}
+export { getApiContestData };
