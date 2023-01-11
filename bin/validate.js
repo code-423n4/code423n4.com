@@ -4,19 +4,7 @@ const { readFile, stat } = require("fs/promises");
 const path = require("path");
 const glob = require("tiny-glob");
 const csv = require("csvtojson");
-const fetch = require("node-fetch");
-
-const getApiContestData = async () => {  // only allow GET
-  try {
-    const res = await fetch(`	https://deploy-preview-332--api-code4rena-com.netlify.app/api/v0/getContest`, {
-      method: "GET",
-    });
-    console.log(res);
-    return await res.json();
-  } catch (err) {
-    console.log(err);
-  }
-};
+const { getApiContestData } = require ("../netlify/util/getContestsData.ts");
 
 async function getUniqueHandles() {
   const handles = await glob("./_data/handles/*.json");
