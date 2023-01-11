@@ -1,5 +1,6 @@
 import { differenceInDays, getYear } from "date-fns";
 import fs, { readFileSync } from "fs";
+import { getApiContestData } from '../../api/getContestsData'
 import csv from "csvtojson";
 
 const getWardenInfo = (handle: string) => {
@@ -23,16 +24,7 @@ const getLeaderboardResults = async (
   handle?: string
 ) => {
   // @TODO: also filter by contestId (if provided)
-  const res = await fetch(`/.netlify/functions/getContestsData`, {
-    headers: {
-      "Content-Type": "application/json",
-      // "X-Authorization": `Bearer ${sessionToken}`,
-      // "C4-User": currentUser.username,
-    },
-  });
-  console.log(res)
-  const allContests = await res.json();
-  allContests
+  const allContests = (await getApiContestData())
     .filter((contest) => withinTimeframe(contest, contestRange))
     .filter((contest) => !contestId || contestId === contest.contestid);
 

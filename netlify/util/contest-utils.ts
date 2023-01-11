@@ -1,14 +1,8 @@
 import { Contest } from "../../types/contest";
+import { getApiContestData } from '../../api/getContestsData';
 
 async function getContest(contestId: number): Promise<Contest | undefined> {
-  const res = await fetch(`/.netlify/functions/getContestsData`, {
-    headers: {
-      "Content-Type": "application/json",
-      // "X-Authorization": `Bearer ${sessionToken}`,
-      // "C4-User": currentUser.username,
-    },
-  });
-  const allContests = await res.json();
+  const allContests = await getApiContestData();
   let contests: Contest[] = allContests;
   const contest = contests.find((c) => c.contestid == contestId);
   return contest;

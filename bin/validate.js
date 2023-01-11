@@ -4,7 +4,7 @@ const { readFile, stat } = require("fs/promises");
 const path = require("path");
 const glob = require("tiny-glob");
 const csv = require("csvtojson");
-const fetch = require("node-fetch");
+const { getApiContestData } = require("../api/getContestsData.ts");
 
 async function getUniqueHandles() {
   const handles = await glob("./_data/handles/*.json");
@@ -26,13 +26,7 @@ async function getUniqueHandles() {
 }
 
 async function getUniqueContestIds() {
-  const contests = await fetch(`/.netlify/functions/leaderboard?range=${timeFrame}`, {
-    headers: {
-      "Content-Type": "application/json",
-      // "X-Authorization": `Bearer ${sessionToken}`,
-      // "C4-User": currentUser.username,
-    },
-  });
+  const contests = await getApiContestData();
   const uniqueContestIds = new Set();
   for (const parsedContest of contests) {
     uniqueContestIds.add(parsedContest.contestid);
@@ -172,14 +166,7 @@ async function validateOrganizations() {
 
 async function validateContests() {
   let passedValidation = true;
-  const res = await fetch(`/.netlify/functions/getContestsData`, {
-    headers: {
-      "Content-Type": "application/json",
-      // "X-Authorization": `Bearer ${sessionToken}`,
-      // "C4-User": currentUser.username,
-    },
-  });
-  const contests = await res.json();
+  const contests = await getApiContestData();
   const orgs = await glob("./_data/orgs/*.json");
 
   const registeredOrganizations = new Set();
