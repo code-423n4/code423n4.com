@@ -34,7 +34,7 @@ function getRiskCodeFromGithubLabel(label: string): string {
       return code;
     }
   }
-  throw { message: "risk not found" };
+  return "";
 }
 
 function getGithubLabelFromRiskCode(code: string): string {

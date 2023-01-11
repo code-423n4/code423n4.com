@@ -9,7 +9,7 @@ import useUser from "../hooks/UserContext";
 import DefaultLayout from "../templates/DefaultLayout";
 import RegistrationForm from "../components/RegistrationForm";
 
-import * as styles from "../components/form/Form.module.scss";
+import * as styles from "../styles/Main.module.scss";
 
 export default function UserRegistration({ data }) {
   const handles = new Set(data.handles.edges.map((h) => h.node.handle));
@@ -54,8 +54,8 @@ export default function UserRegistration({ data }) {
       hideConnectWalletDropdown={true}
     >
       <div className="wrapper-main">
-        <div className={styles.Form}>
-          <h1 className={styles.Heading1}>Warden Registration</h1>
+        <div className={styles.Form__Form}>
+          <h1 className={styles.Form__Heading1}>Warden Registration</h1>
           <RegistrationForm handles={handles} />
         </div>
       </div>
