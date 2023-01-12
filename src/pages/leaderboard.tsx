@@ -6,7 +6,6 @@ import LeaderboardTable from "../components/LeaderboardTable";
 export default function Leaderboard({ data }) {
   const [timeFrame, setTimeFrame] = useState("Last 60 days");
   const [leaderboardResults, setLeaderboardResults] = useState([]);
-  console.log(timeFrame);
   useEffect(() => {
     (async () => {
       const result = await fetch(`/.netlify/functions/leaderboard?range=${timeFrame}`, {
