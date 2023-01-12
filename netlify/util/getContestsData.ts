@@ -1,10 +1,10 @@
 const fetch = require("node-fetch");
 
 const getApiContestData = async () => {
-  // only allow GET
   try {
-    const res = await fetch(`${process.env.C4_API_URL}/api/v0/getContest`, {
-      method: "GET",
+    const res = await fetch(`http://localhost:8888/api/v0/getContest`, {
+      method: "POST",
+      body: JSON.stringify({ token: process.env.C4_API_TOKEN }),
     });
     return await res.json();
   } catch (err) {
