@@ -1,5 +1,10 @@
 {
-  "image": "",
   "handle": "hubble",
-  "members": ["ksk2345", "shri4net"]
+  "members": ["ksk2345", "shri4net"],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xc343235Ec8143EAB788d706165D50082833FF137"
+    }
+  ]
 }
