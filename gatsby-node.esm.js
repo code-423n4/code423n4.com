@@ -186,6 +186,7 @@ exports.sourceNodes = async ({
 }) => {
   const { createNode } = actions;
   const apiContestsData = await getApiContestData();
+  console.log(apiContestsData)
   apiContestsData.forEach((contest) => {
     createNode({
       ...contest,
