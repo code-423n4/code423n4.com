@@ -125,8 +125,6 @@ exports.createSchemaCustomization = ({ actions }) => {
   }
 };
 
-
-
 exports.onCreateNode = async ({ node, getNode, actions }) => {
   const { createNodeField } = actions;
   if (node.internal.type === `MarkdownRemark`) {
@@ -184,7 +182,7 @@ exports.onCreateNode = async ({ node, getNode, actions }) => {
 exports.sourceNodes = async ({
   actions,
   createContentDigest,
-  createNodeId
+  createNodeId,
 }) => {
   const { createNode } = actions;
   const apiContestsData = await getApiContestData();
