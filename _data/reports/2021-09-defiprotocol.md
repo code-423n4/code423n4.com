@@ -94,11 +94,13 @@ _Submitted by cmichel_
 Note that the `Basket` contract approved the `Auction` contract with all tokens and the `settleAuction` function allows the auction bonder to transfer all funds out of the basket to themselves.
 The only limiting factor is the check afterwards that needs to be abided by. It checks if enough tokens are still in the basket after settlement:
 
-    // this is the safety check if basket still has all the tokens after removing arbitrary amounts
-    for (uint256 i = 0; i < pendingWeights.length; i++) {
-        uint256 tokensNeeded = basketAsERC20.totalSupply() * pendingWeights[i] * newRatio / BASE / BASE;
-        require(IERC20(pendingTokens[i]).balanceOf(address(basket)) >= tokensNeeded);
-    }
+```solidity
+// this is the safety check if basket still has all the tokens after removing arbitrary amounts
+for (uint256 i = 0; i < pendingWeights.length; i++) {
+    uint256 tokensNeeded = basketAsERC20.totalSupply() * pendingWeights[i] * newRatio / BASE / BASE;
+    require(IERC20(pendingTokens[i]).balanceOf(address(basket)) >= tokensNeeded);
+}
+``` 
 
 The bonder can pass in any `inputTokens`, even malicious ones they created.
 This allows them to re-enter the `settleAuction` multiple times for the same auction.
@@ -237,7 +239,7 @@ Burn 1 BASKET TOKEN will only get back 1 BTC and 1 ETH, which means, there are 1
 
 Change to:
 
-```solidity=
+```solidity
 function auctionBurn(uint256 amount) onlyAuction external override {
     handleFees();
     uint256 startSupply = totalSupply();
@@ -439,39 +441,40 @@ User can end up with more tokens than he started with. However, I didn't find a 
 Add the following test to `Basket.test.js`.
 The user starts with 5e18 UNI, 1e18 COMP, 1e18 AAVE,
 and ends with 5e18+4, 1e18+4, 1e18+4.
+```js
+it("should give to user more than he deserves", async () => {
+    await UNI.connect(owner).mint(ethers.BigNumber.from(UNI_WEIGHT).mul(1000000));
+    await COMP.connect(owner).mint(ethers.BigNumber.from(COMP_WEIGHT).mul(1000000));
+    await AAVE.connect(owner).mint(ethers.BigNumber.from(AAVE_WEIGHT).mul(1000000));
 
-    it("should give to user more than he deserves", async () => {
-            await UNI.connect(owner).mint(ethers.BigNumber.from(UNI_WEIGHT).mul(1000000));
-            await COMP.connect(owner).mint(ethers.BigNumber.from(COMP_WEIGHT).mul(1000000));
-            await AAVE.connect(owner).mint(ethers.BigNumber.from(AAVE_WEIGHT).mul(1000000));
-      
-            await UNI.connect(owner).approve(basket.address, ethers.BigNumber.from(UNI_WEIGHT).mul(1000000));
-            await COMP.connect(owner).approve(basket.address, ethers.BigNumber.from(COMP_WEIGHT).mul(1000000));
-            await AAVE.connect(owner).approve(basket.address, ethers.BigNumber.from(AAVE_WEIGHT).mul(1000000));
-      
-            console.log("User balance before minting:");
-            console.log("UNI balance: " + (await UNI.balanceOf(owner.address)).toString());
-            console.log("COMP balance: " + (await COMP.balanceOf(owner.address)).toString());
-            console.log("AAVE balance: " + (await AAVE.balanceOf(owner.address)).toString());
+    await UNI.connect(owner).approve(basket.address, ethers.BigNumber.from(UNI_WEIGHT).mul(1000000));
+    await COMP.connect(owner).approve(basket.address, ethers.BigNumber.from(COMP_WEIGHT).mul(1000000));
+    await AAVE.connect(owner).approve(basket.address, ethers.BigNumber.from(AAVE_WEIGHT).mul(1000000));
 
-            
-            await basket.connect(owner).mint(ethers.BigNumber.from(1).div(1));
-            await basket.connect(owner).mint(ethers.BigNumber.from(1).div(1));
-            await basket.connect(owner).mint(ethers.BigNumber.from(1).div(1));
-            await basket.connect(owner).mint(ethers.BigNumber.from(1).div(1));
-            await basket.connect(owner).mint(ethers.BigNumber.from(1).div(1));
+    console.log("User balance before minting:");
+    console.log("UNI balance: " + (await UNI.balanceOf(owner.address)).toString());
+    console.log("COMP balance: " + (await COMP.balanceOf(owner.address)).toString());
+    console.log("AAVE balance: " + (await AAVE.balanceOf(owner.address)).toString());
 
-            console.log("\nUser balance after minting 1 share 5 times:");
-            console.log("UNI balance: " + (await UNI.balanceOf(owner.address)).toString());
-            console.log("COMP balance: " + (await COMP.balanceOf(owner.address)).toString());
-            console.log("AAVE balance: " + (await AAVE.balanceOf(owner.address)).toString());
+    
+    await basket.connect(owner).mint(ethers.BigNumber.from(1).div(1));
+    await basket.connect(owner).mint(ethers.BigNumber.from(1).div(1));
+    await basket.connect(owner).mint(ethers.BigNumber.from(1).div(1));
+    await basket.connect(owner).mint(ethers.BigNumber.from(1).div(1));
+    await basket.connect(owner).mint(ethers.BigNumber.from(1).div(1));
 
-            await basket.connect(owner).burn(await basket.balanceOf(owner.address));
-            console.log("\nUser balance after burning all shares:");
-            console.log("UNI balance: " + (await UNI.balanceOf(owner.address)).toString());
-            console.log("COMP balance: " + (await COMP.balanceOf(owner.address)).toString());
-            console.log("AAVE balance: " + (await AAVE.balanceOf(owner.address)).toString());
-        });
+    console.log("\nUser balance after minting 1 share 5 times:");
+    console.log("UNI balance: " + (await UNI.balanceOf(owner.address)).toString());
+    console.log("COMP balance: " + (await COMP.balanceOf(owner.address)).toString());
+    console.log("AAVE balance: " + (await AAVE.balanceOf(owner.address)).toString());
+
+    await basket.connect(owner).burn(await basket.balanceOf(owner.address));
+    console.log("\nUser balance after burning all shares:");
+    console.log("UNI balance: " + (await UNI.balanceOf(owner.address)).toString());
+    console.log("COMP balance: " + (await COMP.balanceOf(owner.address)).toString());
+    console.log("AAVE balance: " + (await AAVE.balanceOf(owner.address)).toString());
+});
+```
 
 #### Tools Used
 
@@ -480,8 +483,9 @@ Manual analysis, hardhat.
 #### Recommended Mitigation Steps
 
 Add a check to `pullUnderlying`:
-
-    require(tokenAmount > 0);
+```solidity
+require(tokenAmount > 0);
+```
 
 I think it makes sense that if a user is trying to mint an amount so small that no tokens could be pulled from him, the mint request should be denied.
 Per my tests, for an initial ibRatio, this number (the minimal amount of shares that can be minted) is 2 for weights in magnitude of 1e18, and if the weights are eg. smaller by 100, this number will be 101.
@@ -573,16 +577,17 @@ If everybody burns their shares, in the next mint, `totalSupply` will be 0, `han
 Vulnerable line:
 <https://github.com/code-423n4/2021-09-defiProtocol/blob/52b74824c42acbcd64248f68c40128fe3a82caf6/contracts/contracts/Basket.sol#L124>
 You can add the following test to Basket.test.js and see that it reverts:
-`it("should divide by 0", async () => {
+```js
+it("should divide by 0", async () => {
 await basket.connect(addr1).burn(await basket.balanceOf(addr1.address));
-await basket.connect(addr2).burn(await basket.balanceOf(addr2.address));`
+await basket.connect(addr2).burn(await basket.balanceOf(addr2.address));
 
-      await UNI.connect(addr1).approve(basket.address, ethers.BigNumber.from(1));
-      await COMP.connect(addr1).approve(basket.address, ethers.BigNumber.from(1));
-      await AAVE.connect(addr1).approve(basket.address, ethers.BigNumber.from(1));
-      await basket.connect(addr1).mint(ethers.BigNumber.from(1));
-
+    await UNI.connect(addr1).approve(basket.address, ethers.BigNumber.from(1));
+    await COMP.connect(addr1).approve(basket.address, ethers.BigNumber.from(1));
+    await AAVE.connect(addr1).approve(basket.address, ethers.BigNumber.from(1));
+    await basket.connect(addr1).mint(ethers.BigNumber.from(1));
 });
+```
 
 #### Tools Used
 
@@ -611,9 +616,9 @@ _Submitted by jonah1005_
 The aution contract decides a new `ibRatio` in the function `settleAuction`. [Auction.sol#L89-L91](https://github.com/code-423n4/2021-09-defiProtocol/blob/main/contracts/contracts/Auction.sol#L89-L91)
 
 ```solidity
-        uint256 a = factory.auctionMultiplier() * basket.ibRatio();
-        uint256 b = (bondTimestamp - auctionStart) * BASE / factory.auctionDecrement();
-        uint256 newRatio = a - b;
+uint256 a = factory.auctionMultiplier() * basket.ibRatio();
+uint256 b = (bondTimestamp - auctionStart) * BASE / factory.auctionDecrement();
+uint256 newRatio = a - b;
 ```
 
 There's a chance that `newRatio` would be really close to zero. This imposes too much risk on the protocol. The network may not really be healthy all the time. Solana and Arbitrum were down and Ethereum was suffered a forking issue recently. Also, the network may be jammed from time to time. This could cause huge damage to a protocol. Please refer to [Black Thursday for makerdao 8.32 million was liquidated for 0 dai](https://medium.com/@whiterabbit_hq/black-thursday-for-makerdao-8-32-million-was-liquidated-for-0-dai-36b83cac56b6)
@@ -660,9 +665,9 @@ _Submitted by jonah1005_
 The auction contract decides a new `ibRatio` in the function `settleAuction`. [Auction.sol#L89-L91](https://github.com/code-423n4/2021-09-defiProtocol/blob/main/contracts/contracts/Auction.sol#L89-L91)
 
 ```solidity
-        uint256 a = factory.auctionMultiplier() * basket.ibRatio();
-        uint256 b = (bondTimestamp - auctionStart) * BASE / factory.auctionDecrement();
-        uint256 newRatio = a - b;
+uint256 a = factory.auctionMultiplier() * basket.ibRatio();
+uint256 b = (bondTimestamp - auctionStart) * BASE / factory.auctionDecrement();
+uint256 newRatio = a - b;
 ```
 
 In this equation, `a` would not always be greater than `b`. The `  auctionBonder ` may lock the token in `bondForRebalance()` at a point that `a-b` would always revert.
@@ -827,11 +832,11 @@ Now `settleAuction` will revert due to division by 0
 
 Add checks in `setAuctionDecrement`
 Refactor to
-```
+```solidity
 function setAuctionDecrement(uint256 newAuctionDecrement) public override onlyOwner {
-require(newAuctionDecrement > AMOUNT);
-require(newAuctionDecrement <= AMOUNT\_2);
-auctionDecrement = newAuctionDecrement;
+    require(newAuctionDecrement > AMOUNT);
+    require(newAuctionDecrement <= AMOUNT\_2);
+    auctionDecrement = newAuctionDecrement;
 }
 ```
 
@@ -861,11 +866,13 @@ This allows the owner to prevent bonding by setting the `bondPercentDiv` to 0
 
 Refactor to
 
-        function setBondPercentDiv(uint256 newBondPercentDiv) public override onlyOwner {
-            require(newBondPercentDiv > AMOUNT);
-            require(newBondPercentDiv <= AMOUNT_2);
-            bondPercentDiv = newBondPercentDiv;
-        }
+```solidity
+function setBondPercentDiv(uint256 newBondPercentDiv) public override onlyOwner {
+    require(newBondPercentDiv > AMOUNT);
+    require(newBondPercentDiv <= AMOUNT_2);
+    bondPercentDiv = newBondPercentDiv;
+}
+```
 
 **[frank-beard (Kuiper) acknowledged and disagreed with severity](https://github.com/code-423n4/2021-09-defiprotocol-findings/issues/121#issuecomment-929647297):**
  > the owner for this is intended to be a dao that acts in support of the protocol, however this is a good point to the centralization concerns for the protocol, we will most likely manage this by adding a timelock to these function
@@ -883,7 +890,7 @@ _Submitted by WatchPug_
 
 <https://github.com/code-423n4/2021-09-defiProtocol/blob/main/contracts/contracts/Basket.sol#L110-L129>
 
-```solidity=
+```solidity
 function handleFees() private {
     if (lastFee == 0) {
         lastFee = block.timestamp;
@@ -942,7 +949,7 @@ _Submitted by WatchPug_
 
 The `newRatio` that determines `tokensNeeded` to settle the auction is calculated based on `auctionMultiplier`, `bondTimestamp - auctionStart` and `auctionDecrement`.
 
-```solidity=
+```solidity
 uint256 a = factory.auctionMultiplier() * basket.ibRatio();
 uint256 b = (bondTimestamp - auctionStart) * BASE / factory.auctionDecrement();
 uint256 newRatio = a - b;
@@ -989,7 +996,7 @@ _Submitted by WatchPug_
 
 <https://github.com/code-423n4/2021-09-defiProtocol/blob/main/contracts/contracts/Auction.sol#L143>
 
-```solidity=140
+```solidity
 function withdrawBounty(uint256[] memory bountyIds) internal {
     // withdraw bounties
     for (uint256 i = 0; i < bountyIds.length; i++) {
@@ -1025,7 +1032,7 @@ An auction successfully bonded by a regular user won't be able to be settled if 
 
 Change to:
 
-```solidity=
+```solidity
 Bounty storage bounty = _bounties[bountyIds[i]];
 ```
 
@@ -1072,12 +1079,12 @@ None
 Recommend to use `safeApprove` instead and set the allowance to 0 before calling it.
 
 ```solidity
-    function approveUnderlying(address spender) private {
-        for (uint256 i = 0; i < weights.length; i++) {
-            IERC20(tokens[i]).safeApprove(spender, 0);
-            IERC20(tokens[i]).safeApprove(spender, type(uint256).max);
-        }
+function approveUnderlying(address spender) private {
+    for (uint256 i = 0; i < weights.length; i++) {
+        IERC20(tokens[i]).safeApprove(spender, 0);
+        IERC20(tokens[i]).safeApprove(spender, type(uint256).max);
     }
+}
 ```
 
 **[frank-beard (Kuiper) marked as duplicate](https://github.com/code-423n4/2021-09-defiprotocol-findings/issues/35#issuecomment-929652005):**
@@ -1154,16 +1161,18 @@ Check outputTokens are part of the previous basket tokens  (e.g. `basket.tokens(
 _Submitted by goatbug_
 
 #### Impact
-
-    function setAuctionMultiplier(uint256 newAuctionMultiplier) public override onlyOwner {
-        auctionMultiplier = newAuctionMultiplier;
-    }
+```solidity
+function setAuctionMultiplier(uint256 newAuctionMultiplier) public override onlyOwner {
+    auctionMultiplier = newAuctionMultiplier;
+}
+```
 
 auction multiplier can be set to zero by factory owner. This would stop the auction settling, function would always revert.
-
-    uint256 a = factory.auctionMultiplier() * basket.ibRatio();
-        uint256 b = (bondTimestamp - auctionStart) * BASE / factory.auctionDecrement();
-        uint256 newRatio = a - b;
+```solidity
+uint256 a = factory.auctionMultiplier() * basket.ibRatio();
+    uint256 b = (bondTimestamp - auctionStart) * BASE / factory.auctionDecrement();
+    uint256 newRatio = a - b;
+```
 
 causing a safe math error and `newRatio` to revert.
 
@@ -1193,159 +1202,158 @@ The issue was discovered in `validateWeights` function of Basket contract
 
 1.  User proposes a new Basket with 0 tokens and weights using `proposeBasketLicense` function in Factory contract
 
-<!---->
-
-     Proposal memory proposal = Proposal({
-                licenseFee: 10,
-                tokenName: abc,
-                tokenSymbol: aa,
-                proposer: 0xabc,
-                tokens: {},
-                weights: {},
-                basket: address(0)
-            });
+```solidity
+Proposal memory proposal = Proposal({
+        licenseFee: 10,
+        tokenName: abc,
+        tokenSymbol: aa,
+        proposer: 0xabc,
+        tokens: {},
+        weights: {},
+        basket: address(0)
+});
+```
 
 2.  `validateWeights` function is called and it returns success as the only check performed is `\_tokens.length == \_weights.length (0=0)`
 
-<!---->
+```solidity
+function validateWeights(address[] memory _tokens, uint256[] memory _weights) public override pure {
+    require(_tokens.length == _weights.length);
+    uint256 length = _tokens.length;
+    address[] memory tokenList = new address[](length);
 
-        function validateWeights(address[] memory _tokens, uint256[] memory _weights) public override pure {
-            require(_tokens.length == _weights.length);
-            uint256 length = _tokens.length;
-            address[] memory tokenList = new address[](length);
+    // check uniqueness of tokens and not token(0)
 
-            // check uniqueness of tokens and not token(0)
-
-            for (uint i = 0; i < length; i++) {
-               ...
-            }
-        }
+    for (uint i = 0; i < length; i++) {
+        ...
+    }
+}
+```
 
 3.  A new proposal gets created
-
-<!---->
-
-    _proposals.push(proposal);
+```solidity
+   _proposals.push(proposal);
+```
 
 4.  User creates new Basket with this proposal using `createBasket` function
 
-<!---->
+```solidity
+function createBasket(uint256 idNumber) external override returns (IBasket) {
+    Proposal memory bProposal = _proposals[idNumber];
+    require(bProposal.basket == address(0));
 
-    function createBasket(uint256 idNumber) external override returns (IBasket) {
-            Proposal memory bProposal = _proposals[idNumber];
-            require(bProposal.basket == address(0));
+    ....
 
-            ....
-
-            for (uint256 i = 0; i < bProposal.weights.length; i++) {
-                ...
-            }
-    		...
-            return newBasket;
-        }
+    for (uint256 i = 0; i < bProposal.weights.length; i++) {
+        ...
+    }
+    ...
+    return newBasket;
+}
+```
 
 5.  Since no weights and tokens were in this proposal so no token transfer is required (`bProposal.weights.length` will be 0 so loop won't run)
 
 6.  Basket gets created and user becomes publisher for this basket
 
-<!---->
-
-            newBasket.mintTo(BASE, msg.sender);
-            _proposals[idNumber].basket = address(newBasket);
+```solidity
+newBasket.mintTo(BASE, msg.sender);
+_proposals[idNumber].basket = address(newBasket);
+```
 
 7.  Publisher owned address calls the mint function with say amount 10 on `Basket.sol` contract
 
-<!---->
+```solidity
+function mint(uint256 amount) public override {
+    mintTo(amount, msg.sender);
+}
 
-        function mint(uint256 amount) public override {
-            mintTo(amount, msg.sender);
-        }
+function mintTo(uint256 amount, address to) public override {
+    ...
 
-        function mintTo(uint256 amount, address to) public override {
-            ...
-
-            pullUnderlying(amount, msg.sender);
-
-            _mint(to, amount);
-
-            ...
-        }
-
-8.  Since there is no weights so `pullUnderlying` function does nothing (weights.length is 0)
-
-<!---->
-
-        function pullUnderlying(uint256 amount, address from) private {
-            for (uint256 i = 0; i < weights.length; i++) {
-                uint256 tokenAmount = amount * weights[i] * ibRatio / BASE / BASE;
-                IERC20(tokens[i]).safeTransferFrom(from, address(this), tokenAmount);
-            }
-        }
-
-9.  Full amount 10 is minted to Publisher owned address setting `balanceOf(msg.sender) = 10`
-
-<!---->
+    pullUnderlying(amount, msg.sender);
 
     _mint(to, amount);
 
+    ...
+}
+```
+
+8.  Since there is no weights so `pullUnderlying` function does nothing (weights.length is 0)
+
+```solidity
+function pullUnderlying(uint256 amount, address from) private {
+    for (uint256 i = 0; i < weights.length; i++) {
+        uint256 tokenAmount = amount * weights[i] * ibRatio / BASE / BASE;
+        IERC20(tokens[i]).safeTransferFrom(from, address(this), tokenAmount);
+    }
+}
+```
+
+9.  Full amount 10 is minted to Publisher owned address setting `balanceOf(msg.sender) = 10`
+
+```solidity
+_mint(to, amount);
+```
+
 10. Now Publisher calls the `publishNewIndex` to set new weights. Since `pendingWeights.pending` is false, else condition gets executed
 
-<!---->
+```solidity
+function publishNewIndex(address[] memory _tokens, uint256[] memory _weights) onlyPublisher public override {
+    validateWeights(_tokens, _weights);
 
-        function publishNewIndex(address[] memory _tokens, uint256[] memory _weights) onlyPublisher public override {
-            validateWeights(_tokens, _weights);
+    if (pendingWeights.pending) {
+        require(block.number >= pendingWeights.block + TIMELOCK_DURATION);
+        if (auction.auctionOngoing() == false) {
+            auction.startAuction();
 
-            if (pendingWeights.pending) {
-                require(block.number >= pendingWeights.block + TIMELOCK_DURATION);
-                if (auction.auctionOngoing() == false) {
-                    auction.startAuction();
+            emit PublishedNewIndex(publisher);
+        } else if (auction.hasBonded()) {
 
-                    emit PublishedNewIndex(publisher);
-                } else if (auction.hasBonded()) {
+        } else {
+            auction.killAuction();
 
-                } else {
-                    auction.killAuction();
-
-                    pendingWeights.tokens = _tokens;
-                    pendingWeights.weights = _weights;
-                    pendingWeights.block = block.number;
-                }
-            } else {
-                pendingWeights.pending = true;
-                pendingWeights.tokens = _tokens;
-                pendingWeights.weights = _weights;
-                pendingWeights.block = block.number;
-            }
+            pendingWeights.tokens = _tokens;
+            pendingWeights.weights = _weights;
+            pendingWeights.block = block.number;
         }
+    } else {
+        pendingWeights.pending = true;
+        pendingWeights.tokens = _tokens;
+        pendingWeights.weights = _weights;
+        pendingWeights.block = block.number;
+    }
+}
+```
 
 11. Publisher calls the `publishNewIndex` again which starts the Auction. This auction is later settled using the `settleAuction` function in Auction contract
 
 12. Publisher owned address can now call burn and get the amount 10 even though he never made the payment since his `balanceOf(msg.sender) = 10` (Step 9)
 
-<!---->
+```solidity
+function burn(uint256 amount) public override {
+    require(auction.auctionOngoing() == false);
+    require(amount > 0);
+    require(balanceOf(msg.sender) >= amount);
 
-        function burn(uint256 amount) public override {
-            require(auction.auctionOngoing() == false);
-            require(amount > 0);
-            require(balanceOf(msg.sender) >= amount);
+    handleFees();
 
-            handleFees();
-
-            pushUnderlying(amount, msg.sender);
-            _burn(msg.sender, amount);
-            
-            emit Burned(msg.sender, amount);
-        }
-
+    pushUnderlying(amount, msg.sender);
+    _burn(msg.sender, amount);
+    
+    emit Burned(msg.sender, amount);
+}
+```
 #### Recommended Mitigation Steps
 
 Change `validateWeights` to check for 0 length token
 
-        function validateWeights(address[] memory _tokens, uint256[] memory _weights) public override pure {
-            require(_tokens.length>0);
-    		...
-        }
-
+```solidity
+function validateWeights(address[] memory _tokens, uint256[] memory _weights) public override pure {
+    require(_tokens.length>0);
+    ...
+}
+```
 
 **[frank-beard (defiProtocol) confirmed](https://github.com/code-423n4/2021-09-defiprotocol-findings/issues/21)**  
 
@@ -1418,14 +1426,16 @@ If for some reason nobody has settled an auction and the publisher didn't stop i
 These are the vulnerable lines:
 <https://github.com/code-423n4/2021-09-defiProtocol/blob/52b74824c42acbcd64248f68c40128fe3a82caf6/contracts/contracts/Auction.sol#L89:#L99>
 
-            uint256 a = factory.auctionMultiplier() * basket.ibRatio();
-            uint256 b = (bondTimestamp - auctionStart) * BASE / factory.auctionDecrement();
-            uint256 newRatio = a - b;
+```solidity
+uint256 a = factory.auctionMultiplier() * basket.ibRatio();
+uint256 b = (bondTimestamp - auctionStart) * BASE / factory.auctionDecrement();
+uint256 newRatio = a - b;
 
-            for (uint256 i = 0; i < pendingWeights.length; i++) {
-                uint256 tokensNeeded = basketAsERC20.totalSupply() * pendingWeights[i] * newRatio / BASE / BASE;
-                require(IERC20(pendingTokens[i]).balanceOf(address(basket)) >= tokensNeeded);
-            }
+for (uint256 i = 0; i < pendingWeights.length; i++) {
+    uint256 tokensNeeded = basketAsERC20.totalSupply() * pendingWeights[i] * newRatio / BASE / BASE;
+    require(IERC20(pendingTokens[i]).balanceOf(address(basket)) >= tokensNeeded);
+}
+```
 
 The function verifies that `pendingTokens[i].balanceOf(basket) >= basketAsERC20.totalSupply() * pendingWeights[i] * newRatio / BASE / BASE`. This is the formula that will be used later to mint/burn/withdraw user funds.
 As bondTimestamp increases, newRatio will get smaller, and there is no check on this.

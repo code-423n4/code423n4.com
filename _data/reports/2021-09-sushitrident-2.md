@@ -150,30 +150,27 @@ Notice that this bug is independent of another bug of incorrect casting `uint256
 #### Proof of Concept
 1.  Suppose that the current price is at the tick `500000`, an attacker calls the `mint` function with the following parameters:
 
-<!---->
 ```solidity
-    mintParams.lower = 100000
-    mintParams.upper = 500000
-    mintParams.amount1Desired = (1 << 128) - 47541305835 # a carefully chosen number
-    mintParams.amount0Desired = 0
+mintParams.lower = 100000
+mintParams.upper = 500000
+mintParams.amount1Desired = (1 << 128) - 47541305835 # a carefully chosen number
+mintParams.amount0Desired = 0
 ```
 2.  Since the current price is equal to the upper price, we have
 
-<!---->
 ```solidity
-    _liquidity = mintParams.amount1Desired * (1 << 96) // (priceUpper - priceLower)
-               = 4731732988155153573010127839
+_liquidity = mintParams.amount1Desired * (1 << 96) // (priceUpper - priceLower)
+    = 4731732988155153573010127839
 ```
 3.  The amounts of `token0` and `token1` that the attacker has to pay is
 
-<!---->
 ```solidity
-    amount0Actual = 0
-    amount1Actual = uint128(DyDxMath.getDy(_liquidity, priceLower, priceUpper, true))
-                  = uint128(_liquidity * (priceUpper - priceLower) // (1 << 96)) # round up
-                  = uint128(340282366920938463463374607384226905622)
-                  = 340282366920938463463374607384226905622
-                  = (1 << 128) - 47541305834
+amount0Actual = 0
+amount1Actual = uint128(DyDxMath.getDy(_liquidity, priceLower, priceUpper, true))
+    = uint128(_liquidity * (priceUpper - priceLower) // (1 << 96)) # round up
+    = uint128(340282366920938463463374607384226905622)
+    = 340282366920938463463374607384226905622
+    = (1 << 128) - 47541305834
 ```
 4.  As long as `reserve1` is greater than `47541305834`, the addition `amount1Actual + reserve1` overflows to a small number, causing the attacker to pass the balance check.
 
@@ -196,29 +193,26 @@ The `_getAmountsForLiquidity` function of `ConcentratedLiquidityPool` explicitly
 #### Proof of Concept
 1.  Suppose that the current price is at the tick `500000`, an attacker calls the `mint` function with the following parameters:
 
-<!---->
 ```solidity
-    mintParams.lower = 100000
-    mintParams.upper = 500000
-    mintParams.amount1Desired = (1 << 128) + 71914955423 # a carefully chosen number
-    mintParams.amount0Desired = 0
+mintParams.lower = 100000
+mintParams.upper = 500000
+mintParams.amount1Desired = (1 << 128) + 71914955423 # a carefully chosen number
+mintParams.amount0Desired = 0
 ```
 2.  Since the current price is equal to the upper price, we have
 
-<!---->
 ```solidity
-    _liquidity = mintParams.amount1Desired * (1 << 96) // (priceUpper - priceLower)
-               = 4731732988155153573010127840
+_liquidity = mintParams.amount1Desired * (1 << 96) // (priceUpper - priceLower)
+    = 4731732988155153573010127840
 ```
 3.  The amounts of `token0` and `token1` that the attacker has to pay is
 
-<!---->
 ```solidity
-    amount0Actual = 0
-    amount1Actual = uint128(DyDxMath.getDy(_liquidity, priceLower, priceUpper, true))
-                  = uint128(_liquidity * (priceUpper - priceLower) // (1 << 96)) # round up
-                  = uint128(340282366920938463463374607456141861046)             # exceed the max
-                  = 24373649590                                                  # truncated
+amount0Actual = 0
+amount1Actual = uint128(DyDxMath.getDy(_liquidity, priceLower, priceUpper, true))
+    = uint128(_liquidity * (priceUpper - priceLower) // (1 << 96)) # round up
+    = uint128(340282366920938463463374607456141861046)             # exceed the max
+    = 24373649590                                                  # truncated
 ```
 4.  The attacker only pays `24373649590` of `token1` to get `4731732988155153573010127840` of the liquidity, which he could burn to get more `token1`. As a result, the attacker is stealing the funds from the pool and could potentially drain it.
 
@@ -273,10 +267,10 @@ When a user calls `ConcentratedLiquidityPosition.sol#burn()` to burn their liqui
 The `_updatePosition()` function will return `amount0fees` and `amount1fees` of the whole position with the `lower` and `upper` tick and send them to the `recipient` alongside the burned liquidity amounts.
 
 #### Proof of Concept
-1.  Alice minted $10000 worth of liquidity with `lower` and `upper` tick set to 99 and 199;
-2.  Alice accumulated $1000 worth of fee in token0 and token1;
-3.  The attacker can mint a small amount ($1 worth) of liquidity using the same `lower` and `upper` tick;
-4.  The attacker calls `ConcentratedLiquidityPosition.sol#burn()` to steal all the unclaimed yield with the ticks of (99, 199) include the $1000 worth of yield from Alice.
+1.  Alice minted \$10000 worth of liquidity with `lower` and `upper` tick set to 99 and 199;
+2.  Alice accumulated \$1000 worth of fee in token0 and token1;
+3.  The attacker can mint a small amount (\$1 worth) of liquidity using the same `lower` and `upper` tick;
+4.  The attacker calls `ConcentratedLiquidityPosition.sol#burn()` to steal all the unclaimed yield with the ticks of (99, 199) include the \$1000 worth of yield from Alice.
 
 #### Recommended Mitigation Steps
 Consider making `ConcentratedLiquidityPosition.sol#burn()` always use `address(this)` as `recipient` in:
@@ -324,8 +318,8 @@ When a pool cross a tick, it only updates either `feeGrowthOutside0` or `feeGrow
 `RangeFeeGrowth` calculates the fee as follow:
 
 ```solidity
-            feeGrowthInside0 = _feeGrowthGlobal0 - feeGrowthBelow0 - feeGrowthAbove0;
-            feeGrowthInside1 = _feeGrowthGlobal1 - feeGrowthBelow1 - feeGrowthAbove1;
+    feeGrowthInside0 = _feeGrowthGlobal0 - feeGrowthBelow0 - feeGrowthAbove0;
+    feeGrowthInside1 = _feeGrowthGlobal1 - feeGrowthBelow1 - feeGrowthAbove1;
 ```
 
 `feeGrowthBelow + feeGrowthAbove` is not necessary smaller than `_feeGrowthGlobal`. Please see `POC`.
@@ -390,19 +384,19 @@ As a result, many essential features of the contract will malfunction, includes 
 Change:
 
 ```solidity
-        unchecked {
-            reserve0 -= uint128(amount0fees);
-            reserve1 -= uint128(amount1fees);
-        }
+unchecked {
+    reserve0 -= uint128(amount0fees);
+    reserve1 -= uint128(amount1fees);
+}
 
 ```
 
 to:
 ```solidity
-            unchecked {
-                reserve0 -= uint128(amount0);
-                reserve1 -= uint128(amount1);
-            }
+unchecked {
+    reserve0 -= uint128(amount0);
+    reserve1 -= uint128(amount1);
+}
 ```
 
 **[sarangparikh22 (Sushi) confirmed](https://github.com/code-423n4/2021-09-sushitrident-2-findings/issues/24)**
@@ -466,11 +460,11 @@ unchecked {
 }
 
 nearestTick = Ticks.insert(
-            ticks,
-            feeGrowthGlobal0,
-            feeGrowthGlobal1,
-            secondsPerLiquidity, // should calculate and use latest secondsPerLiquidity value
-						...
+ticks,
+feeGrowthGlobal0,
+feeGrowthGlobal1,
+secondsPerLiquidity, // should calculate and use latest secondsPerLiquidity value
+    ...
 );
 
 // insert logic before before these lines in burn()
@@ -857,20 +851,20 @@ In `ConcentratedLiquidityPosition.collect()`, balances of `token0` and `token1` 
 [`ConcentratedLiquidityPosition.sol#L103` L116](https://github.com/sushiswap/trident/blob/c405f3402a1ed336244053f8186742d2da5975e9/contracts/pool/concentrated/ConcentratedLiquidityPosition.sol#L103-L116)
 
 ```solidity
-    uint256 balance0 = bento.balanceOf(token0, address(this));
-    uint256 balance1 = bento.balanceOf(token1, address(this));
-    if (balance0 < token0amount || balance1 < token1amount) {
-        (uint256 amount0fees, uint256 amount1fees) = position.pool.collect(position.lower, position.upper, address(this), false);
+uint256 balance0 = bento.balanceOf(token0, address(this));
+uint256 balance1 = bento.balanceOf(token1, address(this));
+if (balance0 < token0amount || balance1 < token1amount) {
+    (uint256 amount0fees, uint256 amount1fees) = position.pool.collect(position.lower, position.upper, address(this), false);
 
-        uint256 newBalance0 = amount0fees + balance0;
-        uint256 newBalance1 = amount1fees + balance1;
+    uint256 newBalance0 = amount0fees + balance0;
+    uint256 newBalance1 = amount1fees + balance1;
 
-        /// @dev Rounding errors due to frequent claiming of other users in the same position may cost us some raw
-        if (token0amount > newBalance0) token0amount = newBalance0;
-        if (token1amount > newBalance1) token1amount = newBalance1;
-    }
-    _transfer(token0, address(this), recipient, token0amount, unwrapBento);
-    _transfer(token1, address(this), recipient, token1amount, unwrapBento);
+    /// @dev Rounding errors due to frequent claiming of other users in the same position may cost us some raw
+    if (token0amount > newBalance0) token0amount = newBalance0;
+    if (token1amount > newBalance1) token1amount = newBalance1;
+}
+_transfer(token0, address(this), recipient, token0amount, unwrapBento);
+_transfer(token1, address(this), recipient, token1amount, unwrapBento);
 
 ```
 
@@ -880,48 +874,48 @@ As a result, when a user calls `claimReward()`, the contract may not have enough
 
 [`ConcentratedLiquidityPoolManager.sol#L78` L100](https://github.com/sushiswap/trident/blob/c405f3402a1ed336244053f8186742d2da5975e9/contracts/pool/concentrated/ConcentratedLiquidityPoolManager.sol#L78-L100)
 ```solidity
-    function claimReward(
-            uint256 positionId,
-            uint256 incentiveId,
-            address recipient,
-            bool unwrapBento
-        ) public {
-            require(ownerOf[positionId] == msg.sender, "OWNER");
-            Position memory position = positions[positionId];
-            IConcentratedLiquidityPool pool = position.pool;
-            Incentive storage incentive = incentives[position.pool][positionId];
-            Stake storage stake = stakes[positionId][incentiveId];
-            require(stake.initialized, "UNINITIALIZED");
-            uint256 secondsPerLiquidityInside = pool.rangeSecondsInside(position.lower, position.upper) - stake.secondsInsideLast;
-            uint256 secondsInside = secondsPerLiquidityInside * position.liquidity;
-            uint256 maxTime = incentive.endTime < block.timestamp ? block.timestamp : incentive.endTime;
-            uint256 secondsUnclaimed = (maxTime - incentive.startTime) << (128 - incentive.secondsClaimed);
-            uint256 rewards = (incentive.rewardsUnclaimed * secondsInside) / secondsUnclaimed;
-            incentive.rewardsUnclaimed -= rewards;
-            incentive.secondsClaimed += uint160(secondsInside);
-            stake.secondsInsideLast += uint160(secondsPerLiquidityInside);
-            _transfer(incentive.token, address(this), recipient, rewards, unwrapBento);
-            emit ClaimReward(positionId, incentiveId, recipient);
-        }
+function claimReward(
+    uint256 positionId,
+    uint256 incentiveId,
+    address recipient,
+    bool unwrapBento
+) public {
+    require(ownerOf[positionId] == msg.sender, "OWNER");
+    Position memory position = positions[positionId];
+    IConcentratedLiquidityPool pool = position.pool;
+    Incentive storage incentive = incentives[position.pool][positionId];
+    Stake storage stake = stakes[positionId][incentiveId];
+    require(stake.initialized, "UNINITIALIZED");
+    uint256 secondsPerLiquidityInside = pool.rangeSecondsInside(position.lower, position.upper) - stake.secondsInsideLast;
+    uint256 secondsInside = secondsPerLiquidityInside * position.liquidity;
+    uint256 maxTime = incentive.endTime < block.timestamp ? block.timestamp : incentive.endTime;
+    uint256 secondsUnclaimed = (maxTime - incentive.startTime) << (128 - incentive.secondsClaimed);
+    uint256 rewards = (incentive.rewardsUnclaimed * secondsInside) / secondsUnclaimed;
+    incentive.rewardsUnclaimed -= rewards;
+    incentive.secondsClaimed += uint160(secondsInside);
+    stake.secondsInsideLast += uint160(secondsPerLiquidityInside);
+    _transfer(incentive.token, address(this), recipient, rewards, unwrapBento);
+    emit ClaimReward(positionId, incentiveId, recipient);
+}
 ```
 The same issue applies to `reclaimIncentive()` as well.
 [`ConcentratedLiquidityPoolManager.sol` L49 L62](https://github.com/sushiswap/trident/blob/c405f3402a1ed336244053f8186742d2da5975e9/contracts/pool/concentrated/ConcentratedLiquidityPoolManager.sol#L49-L62)
 
 ```solidity
-    function reclaimIncentive(
-        IConcentratedLiquidityPool pool,
-        uint256 incentiveId,
-        uint256 amount,
-        address receiver,
-        bool unwrapBento
-    ) public {
-        Incentive storage incentive = incentives[pool][incentiveId];
-        require(incentive.owner == msg.sender, "NOT_OWNER");
-        require(incentive.expiry < block.timestamp, "EXPIRED");
-        require(incentive.rewardsUnclaimed >= amount, "ALREADY_CLAIMED");
-        _transfer(incentive.token, address(this), receiver, amount, unwrapBento);
-        emit ReclaimIncentive(pool, incentiveId);
-    }
+function reclaimIncentive(
+    IConcentratedLiquidityPool pool,
+    uint256 incentiveId,
+    uint256 amount,
+    address receiver,
+    bool unwrapBento
+) public {
+    Incentive storage incentive = incentives[pool][incentiveId];
+    require(incentive.owner == msg.sender, "NOT_OWNER");
+    require(incentive.expiry < block.timestamp, "EXPIRED");
+    require(incentive.rewardsUnclaimed >= amount, "ALREADY_CLAIMED");
+    _transfer(incentive.token, address(this), receiver, amount, unwrapBento);
+    emit ReclaimIncentive(pool, incentiveId);
+}
 ```
 
 #### Recommendation
@@ -933,12 +927,12 @@ Consider making adding `token0` or `token1` as incentives disallowed, or keep a 
 
 I'm adding this as an issue because I didn't see it mentioned anywhere in the codebase, and I think its a fair point that relates to how the protocol gives out rewards to users. As I understand , the point of staking is to provide users with additional compensation for providing liquidity (and taking on risk) for the good of the protocol. If a large fraction of rewards go to users who don't provide a huge benefit to the protocol, that's a problem.
 
-Consider two different pools: USDC-DAI and USDC-ETH. Suppose a user has $10K worth of tokens and decides to provide liquidity to each of these pools.
+Consider two different pools: USDC-DAI and USDC-ETH. Suppose a user has \$10K worth of tokens and decides to provide liquidity to each of these pools.
 
-In the USDC-DAI pool the user can very safely provide the $10K with a 1% spread between upper and lower tick. The total amount of liquidity he provides is roughly $10K \* (1/0.01) = $1 M dollars of liquidity per second. The impermanent loss here is going to be basically 0 in normal conditions. The liquidity will be in range all the time.
+In the USDC-DAI pool the user can very safely provide the \$10K with a 1% spread between upper and lower tick. The total amount of liquidity he provides is roughly \$10K \* (1/0.01) = \$1 M dollars of liquidity per second. The impermanent loss here is going to be basically 0 in normal conditions. The liquidity will be in range all the time.
 
 The same situation in the USDC-ETH pool on the other hand:
-Suppose a user has $10K worth of USDC+ETH, provides it with a 1% spread between upper and lower ticks at the current price => roughly $1 M dollars of liquidity per second, the same as before. However, now there is a good chance that price ranges by more than 1% meaning he loses all of his more valuable tokens for the cheaper ones due to impermanent loss. The liquidity will be out of range for a much longer percentage of the time.
+Suppose a user has \$10K worth of USDC+ETH, provides it with a 1% spread between upper and lower ticks at the current price => roughly \$1 M dollars of liquidity per second, the same as before. However, now there is a good chance that price ranges by more than 1% meaning he loses all of his more valuable tokens for the cheaper ones due to impermanent loss. The liquidity will be out of range for a much longer percentage of the time.
 
 However, if the incentives for each pool are the same, the staking protocol would value the liquidity per second of each LP situation equally. To make things "fair per unit of risk/liquidity" the incentive on the USDC-ETH should be something like 10x or 20x the incentive on the USDC-DAI pool. The pools with higher volatility should have a *significantly* higher incentive.
 

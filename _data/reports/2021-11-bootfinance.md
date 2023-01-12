@@ -264,7 +264,7 @@ Consider adding `Swap.targetPrice` and changing the `_xp()` at L661 from:
 
 <https://github.com/code-423n4/2021-11-bootfinance/blob/f102ee73eb320532c5a7c1e833f225c479577e39/customswap/contracts/SwapUtils.sol#L661-L667>
 
-```solidity=661
+```solidity
 function _xp(Swap storage self, uint256[] memory balances)
     internal
     view
@@ -276,7 +276,7 @@ function _xp(Swap storage self, uint256[] memory balances)
 
 To:
 
-```solidity=661
+```solidity
 function _xp(Swap storage self, uint256[] memory balances)
     internal
     view
@@ -341,21 +341,23 @@ Note: The function `claim()` prevents this from happening via `assert(airdrop\[m
 
 // <https://github.com/code-423n4/2021-11-bootfinance/blob/7c457b2b5ba6b2c887dafdf7428fd577e405d652/vesting/contracts/AirdropDistribution.sol#L555-L563>
 
-`function claimExact(uint256 \_value) external nonReentrant {
+```solidity
+function claimExact(uint256 \_value) external nonReentrant {
 require(msg.sender != address(0));
 require(airdrop\[msg.sender].amount != 0);`
 
-        uint256 avail = _available_supply();
-        uint256 claimable = avail * airdrop[msg.sender].fraction / 10**18; //
-        if (airdrop[msg.sender].claimed != 0){
-            claimable -= airdrop[msg.sender].claimed;
-        }
+    uint256 avail = _available_supply();
+    uint256 claimable = avail * airdrop[msg.sender].fraction / 10**18; //
+    if (airdrop[msg.sender].claimed != 0){
+        claimable -= airdrop[msg.sender].claimed;
+    }
 
-        require(airdrop[msg.sender].amount >= claimable); // amount can be equal to claimable
-        require(_value <= claimable);                       // _value can be equal to claimable
-        airdrop[msg.sender].amount -= _value;      // amount will be set to 0 with the last claim
-
+    require(airdrop[msg.sender].amount >= claimable); // amount can be equal to claimable
+    require(_value <= claimable);                       // _value can be equal to claimable
+    airdrop[msg.sender].amount -= _value;      // amount will be set to 0 with the last claim
+```
 // <https://github.com/code-423n4/2021-11-bootfinance/blob/7c457b2b5ba6b2c887dafdf7428fd577e405d652/vesting/contracts/AirdropDistribution.sol#L504-L517>
+```solidity
 function validate() external nonReentrant {
 ...
 require(airdrop\[msg.sender].amount == 0, "Already validated.");
@@ -363,6 +365,7 @@ require(airdrop\[msg.sender].amount == 0, "Already validated.");
 Airdrop memory newAirdrop = Airdrop(airdroppable, 0, airdroppable, 10\*\*18 \* airdroppable / airdrop_supply);
 airdrop\[msg.sender] = newAirdrop;
 validated\[msg.sender] = 1;   // this is set, but isn't checked on entry of this function
+```
 
 #### Recommended Mitigation Steps
 
@@ -432,17 +435,17 @@ The current implementation uses `self.balances`
 
 <https://github.com/code-423n4/2021-11-bootfinance/blob/main/customswap/contracts/SwapUtils.sol#L1231-L1236>
 
-```soliditiy
-            for (uint256 i = 0; i < self.pooledTokens.length; i++) {
-                uint256 idealBalance = v.d1.mul(self.balances[i]).div(v.d0);
-                fees[i] = feePerToken
-                    .mul(idealBalance.difference(newBalances[i]))
-                    .div(FEE_DENOMINATOR);
-                self.balances[i] = newBalances[i].sub(
-                    fees[i].mul(self.adminFee).div(FEE_DENOMINATOR)
-                );
-                newBalances[i] = newBalances[i].sub(fees[i]);
-            }
+```js
+for (uint256 i = 0; i < self.pooledTokens.length; i++) {
+    uint256 idealBalance = v.d1.mul(self.balances[i]).div(v.d0);
+    fees[i] = feePerToken
+        .mul(idealBalance.difference(newBalances[i]))
+        .div(FEE_DENOMINATOR);
+    self.balances[i] = newBalances[i].sub(
+        fees[i].mul(self.adminFee).div(FEE_DENOMINATOR)
+    );
+    newBalances[i] = newBalances[i].sub(fees[i]);
+}
 ```
 
 Replaces `self.balances` with `_xp(self, newBalances)` would be a simple fix.
@@ -458,7 +461,7 @@ _Submitted by jonah1005_
 `CustomPrecisionMultipliers` are set in the constructor:
 
 ```solidity
-        customPrecisionMultipliers[0] = targetPriceStorage.originalPrecisionMultipliers[0].mul(_targetPrice).div(10 ** 18);
+customPrecisionMultipliers[0] = targetPriceStorage.originalPrecisionMultipliers[0].mul(_targetPrice).div(10 ** 18);
 ```
 
 `originalPrecisionMultipliers` equal to 1 if the token's decimal = 18. The targe price could only be an integer.
@@ -485,8 +488,8 @@ None
 I recommend providing extra 10\*\*18 in both multipliers.
 
 ```solidity
-        customPrecisionMultipliers[0] = targetPriceStorage.originalPrecisionMultipliers[0].mul(_targetPrice).mul(10**18).div(10 ** 18);
-        customPrecisionMultipliers[1] = targetPriceStorage.originalPrecisionMultipliers[1].mul(10**18);
+customPrecisionMultipliers[0] = targetPriceStorage.originalPrecisionMultipliers[0].mul(_targetPrice).mul(10**18).div(10 ** 18);
+customPrecisionMultipliers[1] = targetPriceStorage.originalPrecisionMultipliers[1].mul(10**18);
 ```
 
 The customswap only supports two tokens in a pool, there's should be enough space. Recommend the devs to go through the trade-off saddle finance has paid to support multiple tokens. The code could be more clean and efficient if the pools' not support multiple tokens.
@@ -626,10 +629,12 @@ Note: with the function `claimExact()` it is possible to claim the last part.
 
 // <https://github.com/code-423n4/2021-11-bootfinance/blob/7c457b2b5ba6b2c887dafdf7428fd577e405d652/vesting/contracts/InvestorDistribution.sol#L113-L128>
 
-function `claim() external nonReentrant {
+```solidity
+function claim() external nonReentrant {
 ...
 require(investors\[msg.sender].amount - claimable != 0);
-investors\[msg.sender].amount -= claimable;`
+investors\[msg.sender].amount -= claimable;
+```
 
 #### Tools Used
 
@@ -718,9 +723,9 @@ The `precisionMultiplier` is set here:
 We can set up a mockSwap with extra `setPrecisionMultiplier` to check the issue.
 
 ```solidity
-    function setPrecisionMultiplier(uint256 multipliers) external {
-        swapStorage.tokenPrecisionMultipliers[0] = multipliers; 
-    }
+function setPrecisionMultiplier(uint256 multipliers) external {
+    swapStorage.tokenPrecisionMultipliers[0] = multipliers; 
+}
 ```
 
 ```python
@@ -792,9 +797,12 @@ _Submitted by pauliax_
 #### Impact
 
 Public sale has a constraint that for the first 4 weeks only NFT holders can access the sale:
-`if (currentEra < firstPublicEra) {
-require(nft.balanceOf(msg.sender) > 0, "You need NFT to participate in the sale.");
-}`
+
+```solidity
+if (currentEra < firstPublicEra) {
+    require(nft.balanceOf(msg.sender) > 0, "You need NFT to participate in the sale.");
+}
+```
 
 However, this check can be easily bypassed with the help of flash loans. You can borrow the NFT, participate in the sale and then return this NFT in one transaction. It takes only 1 NFT that could be flashloaned again and again to give access to the sale for everyone (`burnEtherForMember`).
 
@@ -820,10 +828,12 @@ Note: with the function `claimExact()` it is possible to claim the last part.
 
 // <https://github.com/code-423n4/2021-11-bootfinance/blob/7c457b2b5ba6b2c887dafdf7428fd577e405d652/vesting/contracts/AirdropDistribution.sol#L522-L536>
 
-function `claim() external nonReentrant {
+```solidity
+function claim() external nonReentrant {
 ..
 assert(airdrop\[msg.sender].amount - claimable != 0);
-airdrop\[msg.sender].amount -= claimable;`
+airdrop\[msg.sender].amount -= claimable;
+```
 
 #### Recommended Mitigation Steps
 
@@ -860,14 +870,17 @@ Although `revoke()` is only callable by the owner, this is circumventing the ent
 
 // <https://github.com/code-423n4/2021-11-bootfinance/blob/7c457b2b5ba6b2c887dafdf7428fd577e405d652/vesting/contracts/Vesting.sol#L73-L98>
 
-function `vest(address \_beneficiary, uint256 \_amount, uint256 \_isRevocable) external payable whenNotPaused {
-...
+```solidity
+function vest(address \_beneficiary, uint256 \_amount, uint256 \_isRevocable) external payable whenNotPaused {
+    ...
 if(\_isRevocable == 0){
-benRevocable\[\_beneficiary] = \[false,false];  // just overwrites the value
+    benRevocable\[\_beneficiary] = \[false,false];  // just overwrites the value
 }
 else if(\_isRevocable == 1){
-benRevocable\[\_beneficiary] = \[true,false]; // just overwrites the value
-}`
+    benRevocable\[\_beneficiary] = \[true,false]; // just overwrites the value
+}
+```
+
 
 #### Recommended Mitigation Steps
 

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "gatsby";
 
 import { getDates } from "../utils/time";
@@ -7,7 +7,7 @@ import ClientOnly from "./ClientOnly";
 import Countdown from "./Countdown";
 import SponsorLink from "./SponsorLink";
 
-const ContestTile = ({ contest: { node }, updateContestStatus }) => {
+const ContestTile = ({ contest, updateContestStatus, user }) => {
   const {
     sponsor,
     title,
@@ -19,10 +19,21 @@ const ContestTile = ({ contest: { node }, updateContestStatus }) => {
     findingsRepo,
     repo: contestRepo,
     fields,
-  } = node;
-  const { submissionPath, contestPath } = fields;
-
+    status,
+  } = contest;
   const t = getDates(start_time, end_time);
+
+  const [canViewContest, setCanViewContest] = useState(false);
+
+  useEffect(() => {
+    if (fields.codeAccess === "public") {
+      setCanViewContest(true);
+    } else if (fields.codeAccess === "certified" && user.isCertified) {
+      setCanViewContest(true);
+    } else {
+      setCanViewContest(false);
+    }
+  }, [fields, user]);
 
   return (
     <div className={"wrapper-contest " + t.contestStatus}>
@@ -59,27 +70,34 @@ const ContestTile = ({ contest: { node }, updateContestStatus }) => {
           </p>
         )}
         <ClientOnly>
-          <Link
-            to={contestPath}
+          <a
+            href={fields?.contestPath || "/"}
             className="contest-repo button button-small cta-button primary"
           >
             {`${findingsRepo === "" ? "Preview" : "View"} Contest`}
-          </Link>
-          {(t.contestStatus === "active" && contestRepo) && (
-            <Link to={contestRepo} className="button button-small cta-button secondary">
+          </a>
+          {t.contestStatus === "active" && contestRepo && canViewContest && (
+            <a
+              href={contestRepo}
+              className="button button-small cta-button secondary"
+            >
               View Repo
-            </Link>
+            </a>
           )}
-          {t.contestStatus === "active" && findingsRepo && submissionPath ? (
+           {(t.contestStatus === "active" || status === "Active Contest") &&
+          findingsRepo &&
+          fields.status &&
+          fields.submissionPath &&
+          canViewContest ? (
             <Link
-              to={submissionPath}
+              to={fields.submissionPath}
               className="button button-small cta-button secondary"
             >
               Submit Finding
             </Link>
-          ) : (
-            ""
-          )}
+           ) : (
+              ""
+            )} 
         </ClientOnly>
       </div>
     </div>

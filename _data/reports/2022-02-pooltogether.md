@@ -94,48 +94,49 @@ Furthermore, if an attacker we to call `permitAndMulticall()` before the `_from`
 An attacker may use this as a Denial of Service (DoS) attack by continually front-running `permitAndCall()` using other users signatures.
 
 ### Proof of Concept
+```solidity
+function _multicall(bytes[] calldata _data) internal virtual returns (bytes[] memory results) {
+  results = new bytes[](_data.length);
+  for (uint256 i = 0; i < _data.length; i++) {
+    results[i] = Address.functionDelegateCall(address(this), _data[i]);
+  }
+  return results;
+}
+```
+```solidity
+function _permitAndMulticall(
+  IERC20Permit _permitToken,
+  address _from,
+  uint256 _amount,
+  Signature calldata _permitSignature,
+  bytes[] calldata _data
+) internal {
+  _permitToken.permit(
+    _from,
+    address(this),
+    _amount,
+    _permitSignature.deadline,
+    _permitSignature.v,
+    _permitSignature.r,
+    _permitSignature.s
+  );
 
-      function _multicall(bytes[] calldata _data) internal virtual returns (bytes[] memory results) {
-        results = new bytes[](_data.length);
-        for (uint256 i = 0; i < _data.length; i++) {
-          results[i] = Address.functionDelegateCall(address(this), _data[i]);
-        }
-        return results;
-      }
-
-<!---->
-
-      function _permitAndMulticall(
-        IERC20Permit _permitToken,
-        address _from,
-        uint256 _amount,
-        Signature calldata _permitSignature,
-        bytes[] calldata _data
-      ) internal {
-        _permitToken.permit(
-          _from,
-          address(this),
-          _amount,
-          _permitSignature.deadline,
-          _permitSignature.v,
-          _permitSignature.r,
-          _permitSignature.s
-        );
-
-        _multicall(_data);
-      }
+  _multicall(_data);
+}
+```
 
 ### Recommended Mitigation Steps
 
 Consider updating the `_from` field to be the `msg.sender` in `permitAndMulticall()` (or alternatively do this in `_permitAndMulticall()` to save some gas).
-
-      function permitAndMulticall(
-        uint256 _amount,
-        Signature calldata _permitSignature,
-        bytes[] calldata _data
-      ) external {
-        _permitAndMulticall(IERC20Permit(address(ticket)), msg.sender, _amount, _permitSignature, _data);
-      }
+```solidity
+function permitAndMulticall(
+  uint256 _amount,
+  Signature calldata _permitSignature,
+  bytes[] calldata _data
+) external {
+  _permitAndMulticall(IERC20Permit(address(ticket)), msg.sender, _amount, _permitSignature, _data);
+}
+```
 
 **[PierrickGT (PoolTogether) confirmed and resolved](https://github.com/code-423n4/2022-02-pooltogether-findings/issues/20#issuecomment-1057474934):**
  > PR: https://github.com/pooltogether/v4-twab-delegator/pull/29
@@ -192,13 +193,13 @@ Furthermore, even though in `Delegation.sol#executeCalls()`, `calls[i].value` is
 [Delegation.sol#L39-L46](https://github.com/pooltogether/v4-twab-delegator/blob/21bb53b2ea54a248bbd1d3170dbadd3a0c83d874/contracts/Delegation.sol#L39-L46)
 
 ```solidity
-  function executeCalls(Call[] calldata calls) external onlyOwner returns (bytes[] memory) {
-    bytes[] memory response = new bytes[](calls.length);
-    for (uint256 i = 0; i < calls.length; i++) {
-      response[i] = _executeCall(calls[i].to, calls[i].value, calls[i].data);
-    }
-    return response;
+function executeCalls(Call[] calldata calls) external onlyOwner returns (bytes[] memory) {
+  bytes[] memory response = new bytes[](calls.length);
+  for (uint256 i = 0; i < calls.length; i++) {
+    response[i] = _executeCall(calls[i].to, calls[i].value, calls[i].data);
   }
+  return response;
+}
 ```
 
 While the `ticket` is being delegated through `TWABDelegator`, they won't be able to retrieve the tickets back until the `lockUntil`, without the ability to make arbitrary code execution, the `delegator` may miss some of the potential benefits as a holder of the `ticket` tokens, for example, an airdrop to all holders of the `ticket` tokens, or an NFT made mintable only for certain ticket holders.
@@ -307,7 +308,7 @@ In relation to L03, the `TransferredDelegation` event
     - lacks a description about the `to` indexed parameter.
 
 ### Recommended Mitigation Steps
-```
+```solidity
 /**
  * @notice Emitted when a delegator withdraws an amount of tickets from a delegation to a specified wallet.
  * @param delegator Address of the delegator
@@ -394,7 +395,7 @@ _The following wardens also submitted reports: [Dravee](https://github.com/code-
 
 Loops can be optimized in several ways. Let's take for example the loop in the `executeCalls` function of the `Delegation` contract.
 
-```sol
+```solidity
 function executeCalls(Call[] calldata calls) external onlyOwner returns (bytes[] memory) {
   bytes[] memory response = new bytes[](calls.length);
   for (uint256 i = 0; i < calls.length; i++) {
@@ -413,7 +414,7 @@ To optimize this loop and make it consume less gas, we can do the foloowing thin
 
 So after applying all these changes, the loop will look something like this:
 
-```sol
+```solidity
 function executeCalls(Call[] calldata calls) external onlyOwner returns (bytes[] memory) {
   bytes[] memory response = new bytes[](calls.length);
   uint256 length = calls.length;
@@ -435,49 +436,49 @@ Defining all these little functions cause 2 things:
 
 So in order to save gas, I would recommend to inline these functions.
 
-```sol
-  function _computeAddress(address _delegator, uint256 _slot) internal view returns (address) {
-    return _computeAddress(_computeSalt(_delegator, bytes32(_slot)));
-  }
+```solidity
+function _computeAddress(address _delegator, uint256 _slot) internal view returns (address) {
+  return _computeAddress(_computeSalt(_delegator, bytes32(_slot)));
+}
 
-  function _computeLockUntil(uint96 _lockDuration) internal view returns (uint96) {
-    return uint96(block.timestamp) + _lockDuration;
-  }
+function _computeLockUntil(uint96 _lockDuration) internal view returns (uint96) {
+  return uint96(block.timestamp) + _lockDuration;
+}
 
-  function _requireDelegatorOrRepresentative(address _delegator) internal view {
-    require(
-      _delegator == msg.sender || representatives[_delegator][msg.sender] == true,
-      "TWABDelegator/not-delegator-or-rep"
-    );
-  }
+function _requireDelegatorOrRepresentative(address _delegator) internal view {
+  require(
+    _delegator == msg.sender || representatives[_delegator][msg.sender] == true,
+    "TWABDelegator/not-delegator-or-rep"
+  );
+}
 
-  function _requireDelegateeNotZeroAddress(address _delegatee) internal pure {
-    require(_delegatee != address(0), "TWABDelegator/dlgt-not-zero-adr");
-  }
+function _requireDelegateeNotZeroAddress(address _delegatee) internal pure {
+  require(_delegatee != address(0), "TWABDelegator/dlgt-not-zero-adr");
+}
 
-  function _requireAmountGtZero(uint256 _amount) internal pure {
-    require(_amount > 0, "TWABDelegator/amount-gt-zero");
-  }
+function _requireAmountGtZero(uint256 _amount) internal pure {
+  require(_amount > 0, "TWABDelegator/amount-gt-zero");
+}
 
-  function _requireDelegatorNotZeroAddress(address _delegator) internal pure {
-    require(_delegator != address(0), "TWABDelegator/dlgtr-not-zero-adr");
-  }
+function _requireDelegatorNotZeroAddress(address _delegator) internal pure {
+  require(_delegator != address(0), "TWABDelegator/dlgtr-not-zero-adr");
+}
 
-  function _requireRecipientNotZeroAddress(address _to) internal pure {
-    require(_to != address(0), "TWABDelegator/to-not-zero-addr");
-  }
+function _requireRecipientNotZeroAddress(address _to) internal pure {
+  require(_to != address(0), "TWABDelegator/to-not-zero-addr");
+}
 
-  function _requireDelegationUnlocked(Delegation _delegation) internal view {
-    require(block.timestamp >= _delegation.lockUntil(), "TWABDelegator/delegation-locked");
-  }
+function _requireDelegationUnlocked(Delegation _delegation) internal view {
+  require(block.timestamp >= _delegation.lockUntil(), "TWABDelegator/delegation-locked");
+}
 
-  function _requireContract(address _address) internal view {
-    require(_address.isContract(), "TWABDelegator/not-a-contract");
-  }
+function _requireContract(address _address) internal view {
+  require(_address.isContract(), "TWABDelegator/not-a-contract");
+}
 
-  function _requireLockDuration(uint256 _lockDuration) internal pure {
-    require(_lockDuration <= MAX_LOCK, "TWABDelegator/lock-too-long");
-  }
+function _requireLockDuration(uint256 _lockDuration) internal pure {
+  require(_lockDuration <= MAX_LOCK, "TWABDelegator/lock-too-long");
+}
 ```
 
 **[PierrickGT (PoolTogether) confirmed and commented](https://github.com/code-423n4/2022-02-pooltogether-findings/issues/9#issuecomment-1054644165):**

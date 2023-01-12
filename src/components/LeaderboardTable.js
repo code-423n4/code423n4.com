@@ -7,6 +7,12 @@ const LeaderboardTable = ({ results }) => {
   const columns = React.useMemo(
     () => [
       {
+        Header: "#",
+        Cell: (props) => {
+          return <p>{props.flatRows.indexOf(props.row) + 1}</p>;
+        },
+      },
+      {
         Header: "Competitor",
         Cell: (props) => (
           <LeaderboardHandle
@@ -146,7 +152,7 @@ const LeaderboardTable = ({ results }) => {
       ) : (
         <tbody>
           <tr>
-            <td colSpan="8" className="center">
+            <td colSpan="9" className="center">
               No results to show. Try changing filter criteria
             </td>
           </tr>

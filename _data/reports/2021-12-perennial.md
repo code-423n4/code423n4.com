@@ -80,30 +80,35 @@ Loss of funds: users won't be able to withdraw the correct amount of funds. Some
 
 We can see in the `settleAccount` of `OptimisticLedger` that `self.shortfall` ends up being `self.shortfall+self.shortfall+newShortfall`: [(Code ref)](https://github.com/code-423n4/2021-12-perennial/blob/main/protocol/contracts/collateral/types/OptimisticLedger.sol#L63:#L74)
 
-        function settleAccount(OptimisticLedger storage self, address account, Fixed18 amount)
-        internal returns (UFixed18 shortfall) {
-            Fixed18 newBalance = Fixed18Lib.from(self.balances[account]).add(amount);
+```solidity
+function settleAccount(OptimisticLedger storage self, address account, Fixed18 amount)
+internal returns (UFixed18 shortfall) {
+    Fixed18 newBalance = Fixed18Lib.from(self.balances[account]).add(amount);
 
-            if (newBalance.sign() == -1) {
-                shortfall = self.shortfall.add(newBalance.abs());
-                newBalance = Fixed18Lib.ZERO;
-            }
+    if (newBalance.sign() == -1) {
+        shortfall = self.shortfall.add(newBalance.abs());
+        newBalance = Fixed18Lib.ZERO;
+    }
 
-            self.balances[account] = newBalance.abs();
-            self.shortfall = self.shortfall.add(shortfall);
-        }
+    self.balances[account] = newBalance.abs();
+    self.shortfall = self.shortfall.add(shortfall);
+}
+```
 
 Additionally, you can add the following line to the "shortfall reverts if depleted" test in `Collateral.test.js`, line 190:
 
-    await collateral.connect(productSigner).settleAccount(userB.address, -50)
+```js
+await collateral.connect(productSigner).settleAccount(userB.address, -50)
+```
 
 Previously the test product had 50 shortfall. Now we added 50 more, but the test will print that the actual shortfall is 150, and not 100 as it should be.
 
 #### Recommended Mitigation Steps
 
 Move the setting of `self.shortfall` to inside the if function and change the line to:
-
+```
     self.shortfall = shortfall
+``` 
 
 **[kbrizzle (Perennial) confirmed](https://github.com/code-423n4/2021-12-perennial-findings/issues/18#issuecomment-995416504):**
  > Excellent find 🙏 
@@ -125,37 +130,38 @@ The `maintenanceInvariant` modifier in `Collateral` aims to check if a user meet
 
 <https://github.com/code-423n4/2021-12-perennial/blob/main/protocol/contracts/collateral/Collateral.sol#L67-L76>
 
-    function withdrawTo(address account, IProduct product, UFixed18 amount)
-    notPaused
-    collateralInvariant(msg.sender, product)
-    maintenanceInvariant(msg.sender, product)
-    external {
-        _products[product].debitAccount(msg.sender, amount);
-        token.push(account, amount);
+```solidity
+function withdrawTo(address account, IProduct product, UFixed18 amount)
+notPaused
+collateralInvariant(msg.sender, product)
+maintenanceInvariant(msg.sender, product)
+external {
+    _products[product].debitAccount(msg.sender, amount);
+    token.push(account, amount);
 
-        emit Withdrawal(msg.sender, product, amount);
-    }
-
+    emit Withdrawal(msg.sender, product, amount);
+}
+```
 <https://github.com/code-423n4/2021-12-perennial/blob/main/protocol/contracts/collateral/Collateral.sol#L233-L241>
+```solidity
+modifier maintenanceInvariant(address account, IProduct product) {
+    _;
 
-    modifier maintenanceInvariant(address account, IProduct product) {
-        _;
+    UFixed18 maintenance = product.maintenance(account);
+    UFixed18 maintenanceNext = product.maintenanceNext(account);
 
-        UFixed18 maintenance = product.maintenance(account);
-        UFixed18 maintenanceNext = product.maintenanceNext(account);
-
-        if (UFixed18Lib.max(maintenance, maintenanceNext).gt(collateral(account, product)))
-            revert CollateralInsufficientCollateralError();
-    }
-
+    if (UFixed18Lib.max(maintenance, maintenanceNext).gt(collateral(account, product)))
+        revert CollateralInsufficientCollateralError();
+}
+```
 <https://github.com/code-423n4/2021-12-perennial/blob/main/protocol/contracts/product/types/position/AccountPosition.sol#L71-L75>
-
-        function maintenanceInternal(Position memory position, IProductProvider provider) private view returns (UFixed18) {
-            Fixed18 oraclePrice = provider.priceAtVersion(provider.currentVersion());
-            UFixed18 notionalMax = Fixed18Lib.from(position.max()).mul(oraclePrice).abs();
-            return notionalMax.mul(provider.maintenance());
-        }
-
+```solidity
+function maintenanceInternal(Position memory position, IProductProvider provider) private view returns (UFixed18) {
+    Fixed18 oraclePrice = provider.priceAtVersion(provider.currentVersion());
+    UFixed18 notionalMax = Fixed18Lib.from(position.max()).mul(oraclePrice).abs();
+    return notionalMax.mul(provider.maintenance());
+}
+```
 #### Tools Used
 
 Manual code review.
@@ -296,7 +302,7 @@ _Submitted by WatchPug, also found by cmichel, defsec, and ye0lde_
 
 <https://github.com/code-423n4/2021-12-perennial/blob/fd7c38823833a51ae0c6ae3856a3d93a7309c0e4/protocol/contracts/oracle/ChainlinkOracle.sol#L50-L60>
 
-```solidity=50
+```solidity
 function sync() public {
     (, int256 feedPrice, , uint256 timestamp, ) = feed.latestRoundData();
     Fixed18 price = Fixed18Lib.ratio(feedPrice, SafeCast.toInt256(_decimalOffset));

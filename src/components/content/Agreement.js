@@ -3,7 +3,7 @@ import React from "react";
 const Agreement = () => {
   return (
     <p className="agreement">
-      By submitting this issue, you agree to abide by the C4{" "}
+      By submitting this form, you agree to abide by the C4{" "}
       <a
         href="https://discord.com/channels/810916927919620096/851883682470166558/851891396255940618"
         target="_blank"

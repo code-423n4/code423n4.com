@@ -162,12 +162,13 @@ The `rJoePerSec` does not have any upper or lower bounds. Values that are too la
 #### Proof of Concept
 
 <https://github.com/code-423n4/2022-01-trader-joe/blob/a1579f6453bc4bf9fb0db9c627beaa41135438ed/contracts/RocketJoeStaking.sol#L151>
-
-    function updateEmissionRate(uint256 _rJoePerSec) external onlyOwner {
-            updatePool();
-            rJoePerSec = _rJoePerSec;
-            emit UpdateEmissionRate(msg.sender, _rJoePerSec);
-        }
+```solidity
+function updateEmissionRate(uint256 _rJoePerSec) external onlyOwner {
+    updatePool();
+    rJoePerSec = _rJoePerSec;
+    emit UpdateEmissionRate(msg.sender, _rJoePerSec);
+}
+```
 
 #### Tools Used
 
@@ -330,11 +331,12 @@ This way, transferring tokens to the contract has no influence and depositing th
 _Submitted by harleythedog, also found by sirhashalot_
 
 In `LaunchEvent.sol`, the function `_safeTransferAVAX` is as follows:
-
-    function _safeTransferAVAX(address _to, uint256 _value) internal {
-        (bool success, ) = _to.call{value: _value}(new bytes(0));
-        require(success, "LaunchEvent: avax transfer failed");
-    }
+```solidity
+function _safeTransferAVAX(address _to, uint256 _value) internal {
+    (bool success, ) = _to.call{value: _value}(new bytes(0));
+    require(success, "LaunchEvent: avax transfer failed");
+}
+```
 
 This function is utilized in a few different places in the contract. According to the [Solidity docs](https://docs.soliditylang.org/en/develop/control-structures.html#error-handling-assert-require-revert-and-exceptions)), "The low-level functions `call`, `delegatecall` and `staticcall` return `true` as their first return value if the account called is non-existent, as part of the design of the EVM. Account existence must be checked prior to calling if needed".
 
@@ -496,14 +498,14 @@ The following lines show the reward calculations in variable `pending`. These ca
 Thus if an attacker was able to get control flow during the `rJoe::tranfer()` function they would be able to reenter `deposit()` and the value calculated for `pending`would be the same as the previous iteration hence they would again be transferred `pending` rJoe tokens. During the rJoe transfer the would again gain control of the execution and call `deposit()` again. The process could be repeated until the entire rJoe balance of the contract has been transferred to the attacker.
 
 ```solidity
-        if (user.amount > 0) {
-            uint256 pending = (user.amount * accRJoePerShare) /
-                PRECISION -
-                user.rewardDebt;
-            _safeRJoeTransfer(msg.sender, pending);
-        }
-        user.amount = user.amount + _amount;
-        user.rewardDebt = (user.amount * accRJoePerShare) / PRECISION;
+if (user.amount > 0) {
+    uint256 pending = (user.amount * accRJoePerShare) /
+        PRECISION -
+        user.rewardDebt;
+    _safeRJoeTransfer(msg.sender, pending);
+}
+user.amount = user.amount + _amount;
+user.rewardDebt = (user.amount * accRJoePerShare) / PRECISION;
 ```
 
 #### Recommended Mitigation Steps
