@@ -83,8 +83,7 @@ const plugins = [
         },
         {
           resolve: `gatsby-remark-mathjax`,
-          options: {
-          }
+          options: {},
         },
       ],
     },
@@ -116,7 +115,6 @@ const plugins = [
   },
   `gatsby-plugin-sass`,
 ];
-
 
 module.exports = {
   siteMetadata: {
