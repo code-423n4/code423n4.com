@@ -4,7 +4,7 @@ import useUser from "../hooks/UserContext";
 import DefaultLayout from "../templates/DefaultLayout";
 import Login from "../components/Login/Login";
 
-import * as styles from "../components/form/Form.module.scss";
+import * as styles from "../styles/Main.module.scss";
 
 interface ProtectedPageProps {
   children: JSX.Element;
@@ -27,7 +27,7 @@ export default function ProtectedPage({
         children
       ) : (
         <div className="centered-text">
-          <div className={styles.Form}>
+          <div className={styles.Form__Form}>
             <h1>Please log in</h1>
             <p>{message || "You must be logged in to view this page."}</p>
             <Login displayAsButtons={true} />
