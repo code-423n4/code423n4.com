@@ -19,7 +19,7 @@ export default function SiteIndex({ data }) {
   const updateContestStatus = useCallback(() => {
     updateContestStatusChanges(contestStatusChanges + 1);
     setFilteredContest(sortContests(contests));
-  }, [contests]);
+  }, [contests, contestStatusChanges]);
 
   const sortContests = (contestArray) => {
     let statusObject = {
