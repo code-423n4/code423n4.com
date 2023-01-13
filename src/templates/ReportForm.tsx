@@ -17,9 +17,9 @@ import useUser from "../hooks/UserContext";
 // components
 import ProtectedPage from "../components/ProtectedPage";
 import SubmitFindings from "../components/reporter/SubmitFindings";
-
 // styles
-import * as styles from "../components/form/Form.module.scss";
+import * as styles from "../styles/Main.module.scss";
+
 
 export interface ReportState {
   title: string;
@@ -304,13 +304,13 @@ const ReportForm = ({ data, location }) => {
           </Link>
         </div>
       ) : isClosed ? (
-        <div className={styles.Form}>
-          <h1 className={styles.Heading1}>This finding has been withdrawn</h1>
-          <h3 className={styles.Heading3}>Submitted by:</h3>
+        <div className={styles.Form__Form}>
+          <h1 className={styles.Form__Heading1}>This finding has been withdrawn</h1>
+          <h3 className={styles.Form__Heading3}>Submitted by:</h3>
           <ul>
             <li>{attributedTo}</li>
           </ul>
-          <h3 className={styles.Heading3}>Finding:</h3>
+          <h3 className={styles.Form__Heading3}>Finding:</h3>
           <ul>
             <li>Risk: {state.risk}</li>
             <li>Title: {state.title}</li>
