@@ -1,8 +1,7 @@
 import React, { ReactNode } from "react";
 import { Input } from "./Input";
 
-import * as styles from "./form/Form.module.scss";
-import * as widgetStyles from "./reporter/widgets/Widgets.module.scss";
+import * as styles from "../styles/Main.module.scss";
 
 interface RegistrationFormCommonFieldsProps {
   username: string;
@@ -50,7 +49,7 @@ export default function RegistrationFormCommonFields({
         required={true}
         helpText={
           <>
-            <strong className={styles.Heading4}>
+            <strong className={styles.Form__Heading4}>
               Choose wisely! Your username cannot be changed later.
             </strong>
             <br />
@@ -131,14 +130,14 @@ export default function RegistrationFormCommonFields({
         value={link || ""}
         handleChange={handleChange}
       />
-      <label htmlFor="avatar" className={widgetStyles.Label}>
+      <label htmlFor="avatar" className={styles.Widget__Label}>
         Avatar (Optional)
       </label>
-      <p className={widgetStyles.Help}>
+      <p className={styles.Widget__Help}>
         An avatar displayed next to your name on the leaderboard.
       </p>
       <input
-        className={widgetStyles.Avatar}
+        className={styles.Widget__Avatar}
         type="file"
         id="avatar"
         name="avatar"
