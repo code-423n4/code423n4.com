@@ -20,4 +20,4 @@ Certified Contributors are asked to:
 - not ask others to do work that you explicitly or implicitly take credit for, 
 - and not speak publicly on behalf of a sponsor, the C4 DAO or Foundation, or C4’s agent (outside of general advocacy of C4, and places where it is your role to do so).
 
-The agreement is likely to evolve over time. When it does change, there will be a clear explanation for why, and an announcement of the change in Code4rena channels. You will always be able to track the version history of the changes of [the agreement on GitHub](https://github.com/code-423n4/code423n4.com/blob/main/_content/certified-contributor-terms-and-conditions.md).
+The agreement is likely to evolve over time. When it does change, there will be a clear explanation for why, and an announcement of the change in Code4rena channels. You will always be able to track the version history of the changes of [the agreement on GitHub](https://github.com/code-423n4/code423n4.com/blob/main/_data/pages/certified-contributor-terms-and-conditions.md).
