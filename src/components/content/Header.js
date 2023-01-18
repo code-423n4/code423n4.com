@@ -1,5 +1,11 @@
 import React, { useState } from "react";
 import { Link } from "gatsby";
+import clsx from "clsx";
+
+import useUser from "../../hooks/UserContext";
+
+import Login from "../Login/Login";
+import UserDropdown from "../Login/UserDropdown";
 
 const Hamburger = ({ mobileNavOpen, setMobileNavOpen }) => {
   const ariaLabelContent = mobileNavOpen ? "Close menu" : "Open menu";
@@ -18,25 +24,25 @@ const Hamburger = ({ mobileNavOpen, setMobileNavOpen }) => {
         xmlns="http://www.w3.org/2000/svg"
       >
         <g fill="#d8d8d8" fillRule="evenodd">
-          <rect className="top-bun" height="3" rx="1.5" width="28" />
-          <rect className="patty" height="3" rx="1.5" width="28" y="9" />
-          <rect className="bottom-bun" height="3" rx="1.5" width="28" y="18" />
+          <rect className="top-bun" height="2" rx="1.5" width="22" />
+          <rect className="patty" height="2" rx="1.5" width="22" y="9" />
+          <rect className="bottom-bun" height="2" rx="1.5" width="22" y="18" />
         </g>
       </svg>
     </button>
   );
 };
 
-const Header = () => {
+const Header = ({ hideConnectWalletDropdown = false }) => {
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
-  let navClass = mobileNavOpen ? "open" : null;
+  const { currentUser } = useUser();
 
   return (
-    <header className={navClass}>
+    <header className={clsx(mobileNavOpen && "open")}>
       <a className="visually-hidden focusable skip-link" href="#skip-link">
         Skip Navigation
       </a>
-      <nav className={navClass} role="navigation">
+      <nav className={clsx(mobileNavOpen && "open")} role="navigation">
         <Link className="logo" to="/">
           <img src="/images/c4-logo.svg" alt="Code 423n4" />
         </Link>
@@ -50,6 +56,9 @@ const Header = () => {
           <Link to="/reports">Reports</Link>
           <Link to="/cosmos">Cosmos</Link>
           <a href="https://docs.code4rena.com">Docs</a>
+          <Link to="/help">Help</Link>
+          {!hideConnectWalletDropdown &&
+            (currentUser.isLoggedIn ? <UserDropdown /> : <Login />)}
         </div>
       </nav>
       <span id="skip-link"></span>

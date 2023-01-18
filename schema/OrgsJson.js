@@ -2,9 +2,11 @@ const OrgsJson = `
 type OrgsJson implements Node {
   name:           String
   link:           String
-  description:    String
-  contests:       [ ContestsCsv ] @link(by: "id", from: "contests")
-  findings:       [ FindingsCsv ] @link(by: "id", from: "findings")
+  """ TODO: add @dontInfer
+  image:          ?
+  """
+
+  contests:       [ContestsCsv] @link(by: "sponsor.name", from: "name")
 }`;
 
 export default OrgsJson;

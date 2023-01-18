@@ -37,7 +37,7 @@ footer a:link {
 }
 
 footer a:hover {
-  color: #ff4000 !important;
+  color: var(--light-purple) !important;
   border-bottom: 0px;
 }
 
@@ -54,5 +54,12 @@ footer span:last-of-type::after {
 @media (max-width: 600px) {
   footer span {
     display: none;
+  }
+}
+
+@media only screen and (max-width: 740px),
+  (min-device-width: 768px) and (max-device-width: 1024px) {
+  footer {
+    margin-top: 20px;
   }
 }

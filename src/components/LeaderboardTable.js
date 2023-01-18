@@ -1,60 +1,89 @@
 import React from "react";
-import { map, pick } from "lodash";
 import { useTable, useSortBy } from "react-table";
+
 import LeaderboardHandle from "./LeaderboardHandle";
 
 const LeaderboardTable = ({ results }) => {
   const columns = React.useMemo(
     () => [
-          {
-            Header: "Competitor",
-            accessor: "handle",
-            defaultCanSort: false,
-            Cell: (props) => (
-              <LeaderboardHandle
-                handle={props.row.original.handle}
-                image={props.row.original.image}
-                link={props.row.original.link}
-                members={props.row.original.members}
-              />
-            ),
-          },
-          {
-            Header: "USD",
-            accessor: "awardTotal",
-            sortDescFirst: true,
-            Cell: (props) => {
-              return (
-                <span>
-                  {props.value.toLocaleString("en-US", {
-                    style: "currency",
-                    currency: "USD",
-                  })}
-                </span>
-              );
-            },
-          },
+      {
+        Header: "#",
+        Cell: (props) => {
+          return <p>{props.flatRows.indexOf(props.row) + 1}</p>;
+        },
+      },
+      {
+        Header: "Competitor",
+        Cell: (props) => (
+          <LeaderboardHandle
+            handle={props.row.original.handle}
+            image={props.row.original.image}
+            link={props.row.original.link}
+            members={props.row.original.members}
+          />
+        ),
+      },
+      {
+        Header: "USD",
+        accessor: "awardTotal",
+        sortDescFirst: true,
+        Cell: (props) => {
+          return (
+            <span className="award-amount">
+              {props.value.toLocaleString("en-US", {
+                style: "currency",
+                currency: "USD",
+              })}
+            </span>
+          );
+        },
+      },
+      {
+        Header: "Total",
+        accessor: "allFindings",
+        sortDescFirst: true,
+      },
+      {
+        Header: "High",
+        columns: [
           {
             Header: "All",
-            accessor: "allFindings",
-            sortDescFirst: true,
-          },
-          {
-            Header: "High",
             accessor: "highRisk",
             sortDescFirst: true,
           },
           {
-            Header: "Med",
+            Header: "Solo",
+            accessor: "soloHigh",
+            sortDescFirst: true,
+          },
+        ],
+      },
+      {
+        Header: "Med",
+        columns: [
+          {
+            Header: "All",
             accessor: "medRisk",
             sortDescFirst: true,
           },
           {
-            Header: "Gas",
+            Header: "Solo",
+            accessor: "soloMed",
+            sortDescFirst: true,
+          },
+        ],
+      },
+      {
+        Header: "Gas",
+        columns: [
+          {
+            Header: "All",
             accessor: "gasOptz",
             sortDescFirst: true,
           },
         ],
+      },
+    ],
     []
   );
 
@@ -81,7 +110,7 @@ const LeaderboardTable = ({ results }) => {
   );
 
   return (
-    <table {...getTableProps()}>
+    <table {...getTableProps()} className="leaderboard-table">
       <thead>
         {headerGroups.map((headerGroup) => (
           <tr {...headerGroup.getHeaderGroupProps()}>
@@ -105,18 +134,30 @@ const LeaderboardTable = ({ results }) => {
           </tr>
         ))}
       </thead>
-      <tbody {...getTableBodyProps()}>
-        {rows.map((row) => {
-          prepareRow(row);
-          return (
-            <tr {...row.getRowProps()}>
-              {row.cells.map((cell) => {
-                return <td {...cell.getCellProps()}>{cell.render("Cell")}</td>;
-              })}
-            </tr>
-          );
-        })}
-      </tbody>
+      {rows.length > 0 ? (
+        <tbody {...getTableBodyProps()}>
+          {rows.map((row) => {
+            prepareRow(row);
+            return (
+              <tr {...row.getRowProps()}>
+                {row.cells.map((cell) => {
+                  return (
+                    <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
+                  );
+                })}
+              </tr>
+            );
+          })}
+        </tbody>
+      ) : (
+        <tbody>
+          <tr>
+            <td colSpan="9" className="center">
+              No results to show. Try changing filter criteria
+            </td>
+          </tr>
+        </tbody>
+      )}
     </table>
   );
 };

@@ -22,6 +22,11 @@ textarea {
   border: none;
 }
 
+input[type="text"].input-error,
+.input-error {
+  border: 2px solid var(--hot-pink);
+}
+
 label {
   color: white;
 }
@@ -66,6 +71,77 @@ label {
 
 .thank-you ol li {
   margin-bottom: 20px;
+}
+
+.warning-message {
+  line-height: 140%;
+  font-size: 0.9em;
+  border: 1px solid var(--hot-pink);
+  box-shadow: 0px 0px 3px var(--hot-pink);
+  border-radius: 3px;
+  padding: 10px;
+}
+
+.links-to-code {
+  /* @todo: use variables or mixins for interdependent margin/padding */
+  margin: 0 -45px;
+  padding: 30px 45px;
+  border-top: 2px solid var(--border-lightest-background);
+  border-bottom: 2px solid var(--border-lightest-background);
+}
+
+.input-and-close-button {
+  display: flex;
+  padding: 0;
+}
+
+.add-line-button {
+  cursor: pointer;
+  background: none;
+  border: none;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  display: inline-block;
+  margin-top: 5px;
+}
+
+.add-line-button:hover {
+  text-decoration: underline;
+}
+
+.add-line-button::before {
+  content: "+";
+  border: 2px solid white;
+  border-radius: 50%;
+  width: 24px;
+  font-size: 17px;
+  aspect-ratio: 1/1;
+  margin-right: 10px;
+  display: inline-block;
+  line-height: 130%;
+}
+
+.add-line-button:hover::before {
+  text-decoration: none;
+  background-color: var(--lightest-background-purple);
+}
+
+.input-and-close-button button {
+  font-family: "Roboto Mono", monospace;
+  height: 36px;
+  align-self: center;
+  background: none;
+  border: 2px solid transparent;
+  cursor: pointer;
+  padding: 0 10px;
+  margin-left: 3px;
+  border-radius: 4px;
+}
+
+.input-and-close-button button:hover {
+  background: var(--lightest-background-purple);
+  border: 2px solid white;
 }
 
 /* TODO: finish this battle with flexbox */
@@ -129,4 +205,12 @@ label {
 
 .error-message a {
   text-decoration: underline;
+}
+
+@media (max-width: 600px) {
+  .links-to-code {
+    /* @todo: use variables or mixins for interdependent margin/padding */
+    margin: 0 -15px 15px -15px;
+    padding: 30px 15px;
+  }
 }

@@ -1,9 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { getTimeRemaining, getDates } from "../utils/time";
 
-const Countdown = ({ start, end, isPreview, text, updateContestStatus }) => {
+const Countdown = ({
+  start,
+  end,
+  isPreview,
+  text = undefined,
+  updateContestStatus = undefined,
+}) => {
   const [contestTimer, setContestTimer] = useState(getDates(start, end));
-  const [timeLeft, setTimeLeft] = useState(getTimeRemaining(contestTimer, true));
+  const [timeLeft, setTimeLeft] = useState(
+    getTimeRemaining(contestTimer, true)
+  );
 
   const type = isPreview ? "preview" : "contest";
 
@@ -15,7 +23,9 @@ const Countdown = ({ start, end, isPreview, text, updateContestStatus }) => {
       if (timeLeft.total >= 1000) {
         return;
       } else {
-        updateContestStatus();
+        if (updateContestStatus) {
+          updateContestStatus();
+        }
         setTimeLeft(0);
       }
     }, 1000);

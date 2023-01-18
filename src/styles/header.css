@@ -13,7 +13,7 @@ header {
 }
 
 header {
-  margin: 40px 40px 0;
+  margin: 10px 40px 0;
 }
 
 header nav {
@@ -21,7 +21,7 @@ header nav {
   justify-content: space-between;
   align-items: center;
   text-align: right;
-  padding: 5px 0;
+  max-width: 100vw;
 }
 
 nav a {
@@ -32,6 +32,7 @@ nav a {
   font-weight: 800;
   font-family: "Roboto", sans-serif;
   text-transform: uppercase;
+  text-decoration: none;
 }
 
 .logo {
@@ -50,7 +51,14 @@ header nav {
   transition: all 0.3s ease-out;
 }
 
-@media (max-width: 800px) {
+.nav-links {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+@media (max-width: 970px) {
   header {
     margin: 0;
     padding: 0;
@@ -59,33 +67,37 @@ header nav {
     flex: 1;
     text-align: left;
   }
+
+  .logo img {
+    width: 110px;
+  }
+
   .hamburger {
     display: block;
     cursor: pointer;
-
     background: none;
     border: none;
     justify-self: flex-end;
-
-    margin-right: -15px;
   }
+
   .nav-links {
     width: 100%;
-    /* display: block; */
     top: 50px;
     opacity: 0;
     overflow: hidden;
     max-height: 0;
     transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
+    flex-direction: column;
+    align-items: flex-start;
   }
   header nav {
     display: flex;
     flex-wrap: wrap;
-    padding: 40px 40px 0;
+    padding: 10px 10px 0;
   }
   header nav.open {
     background: var(--secondary-background-purple);
-    padding: 40px;
+    padding: 30px;
   }
   header nav.open .logo {
     text-align: left;
@@ -98,9 +110,10 @@ header nav {
   header nav .nav-links a {
     display: block;
     text-align: left;
-    padding: 10px 0;
-    margin: 15px 0;
+    padding: 20px 0;
+    margin: 0;
     border-bottom: 1px solid #efefef1a;
+    width: 100%;
   }
   header nav.open .hamburger {
     order: 0;
@@ -109,9 +122,9 @@ header nav {
     opacity: 0;
   }
   header nav.open .hamburger .patty {
-    transform: rotate(45deg) translate(0, -50%);
+    transform: rotate(45deg) translate(18%, -45%);
   }
   header nav.open .hamburger .bottom-bun {
-    transform: rotate(-45deg) translate(-50%, -25%);
+    transform: rotate(-45deg) translate(-42%, -17%);
   }
 }
