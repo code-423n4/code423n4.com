@@ -2,7 +2,6 @@ import { Contest } from "../../types/contest";
 import { getApiContestData } from '../../api/getData';
 
 async function getContest(contestId: number): Promise<Contest | undefined> {
-  console.log('get contests');
   const allContests = await getApiContestData();
   let contests: Contest[] = allContests;
   const contest = contests.find((c) => c.contestid == contestId);
