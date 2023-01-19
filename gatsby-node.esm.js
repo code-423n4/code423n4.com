@@ -6,7 +6,7 @@ import fetch from "node-fetch";
 import path from "path";
 import webpack from "webpack";
 import SchemaCustomization from "./schema";
-import { getApiContestData } from "./api/getData.ts";
+import { getApiContestData } from "./netlify/util/getContestsData.ts";
 const { token } = require("./netlify/_config");
 
 const privateContestMessage = dedent`
@@ -125,8 +125,6 @@ exports.createSchemaCustomization = ({ actions }) => {
   }
 };
 
-
-
 exports.onCreateNode = async ({ node, getNode, actions }) => {
   const { createNodeField } = actions;
   if (node.internal.type === `MarkdownRemark`) {
@@ -184,7 +182,7 @@ exports.onCreateNode = async ({ node, getNode, actions }) => {
 exports.sourceNodes = async ({
   actions,
   createContentDigest,
-  createNodeId
+  createNodeId,
 }) => {
   const { createNode } = actions;
   const apiContestsData = await getApiContestData();
@@ -230,7 +228,7 @@ exports.createPages = async ({ graphql, actions }) => {
   });
 };
 
-exports.onCreateWebpackConfig = ({ actions }) => {
+exports.onCreateWebpackConfig = ({ actions, stage, getConfig }) => {
   actions.setWebpackConfig({
     plugins: [
       new webpack.IgnorePlugin({

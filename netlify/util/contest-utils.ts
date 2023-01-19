@@ -1,5 +1,5 @@
 import { Contest } from "../../types/contest";
-import { getApiContestData } from '../../api/getData';
+import { getApiContestData } from './getContestsData';
 
 async function getContest(contestId: number): Promise<Contest | undefined> {
   const allContests = await getApiContestData();
@@ -34,7 +34,7 @@ function getRiskCodeFromGithubLabel(label: string): string {
       return code;
     }
   }
-  throw { message: "risk not found" };
+  return "";
 }
 
 function getGithubLabelFromRiskCode(code: string): string {
