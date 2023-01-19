@@ -1,0 +1,227 @@
+@import 'variables';
+
+.text--copy {
+	font-size:1.2rem;
+	font-family:"Satoshi Variable";
+	font-weight:500;
+	font-style:normal;
+	line-height:154%;
+	text-decoration:none;
+	text-transform:none;
+}
+.text--copy-bold {
+	font-size:1.2rem;
+	font-family:"Satoshi Variable";
+	font-weight:700;
+	font-style:normal;
+	line-height:154%;
+	text-decoration:none;
+	text-transform:none;
+}
+.text--copy-inline-link {
+	font-size:1.2rem;
+	font-family:"Satoshi Variable";
+	font-weight:700;
+	font-style:normal;
+	line-height:154%;
+	text-decoration:underline;
+	text-transform:none;
+}
+.text--copy-inline-code {
+	font-size:1.2rem;
+	font-family:"Satoshi Variable";
+	font-weight:500;
+	font-style:normal;
+	line-height:154%;
+	text-decoration:none;
+	text-transform:none;
+}
+.text--text {
+	font-size:1rem;
+	font-family:"Satoshi Variable";
+	font-weight:500;
+	font-style:normal;
+	line-height:130%;
+	text-decoration:none;
+	text-transform:none;
+}
+.text--text-bold {
+	font-size:1rem;
+	font-family:"Satoshi Variable";
+	font-weight:700;
+	font-style:normal;
+	line-height:130%;
+	text-decoration:none;
+	text-transform:none;
+}
+.text--text-inline-link {
+	font-size:1rem;
+	font-family:"Satoshi Variable";
+	font-weight:700;
+	font-style:normal;
+	line-height:130%;
+	text-decoration:underline;
+	text-transform:none;
+}
+.text--text-inline-code {
+	font-size:1rem;
+	font-family:"Satoshi Variable";
+	font-weight:500;
+	font-style:normal;
+	line-height:130%;
+	text-decoration:none;
+	text-transform:none;
+}
+.text--hero-headline {
+	font-size:4.533rem;
+	font-family:"Satoshi Variable";
+	font-weight:700;
+	font-style:normal;
+	line-height:115%;
+	text-decoration:none;
+	text-transform:none;
+}
+.text--hero-sub {
+	font-size:3.067rem;
+	font-family:"Satoshi Variable";
+	font-weight:500;
+	font-style:normal;
+	line-height:120%;
+	text-decoration:none;
+	text-transform:none;
+}
+.text--xl-headline {
+	font-size:3.467rem;
+	font-family:"Satoshi Variable";
+	font-weight:700;
+	font-style:normal;
+	line-height:115%;
+	text-decoration:none;
+	text-transform:none;
+}
+.text--xl-subline {
+	font-size:2.4rem;
+	font-family:"Satoshi Variable";
+	font-weight:500;
+	font-style:normal;
+	line-height:120%;
+	text-decoration:none;
+	text-transform:none;
+}
+.text--l-headline {
+	font-size:3.067rem;
+	font-family:"Satoshi Variable";
+	font-weight:700;
+	font-style:normal;
+	line-height:115%;
+	text-decoration:none;
+	text-transform:none;
+}
+.text--l-subline {
+	font-size:2rem;
+	font-family:"Satoshi Variable";
+	font-weight:500;
+	font-style:normal;
+	line-height:120%;
+	text-decoration:none;
+	text-transform:none;
+}
+.text--m-headline {
+	font-size:2.533rem;
+	font-family:"Satoshi Variable";
+	font-weight:700;
+	font-style:normal;
+	line-height:120%;
+	text-decoration:none;
+	text-transform:none;
+}
+.text--m-subline {
+	font-size:1.733rem;
+	font-family:"Satoshi Variable";
+	font-weight:500;
+	font-style:normal;
+	line-height:120%;
+	text-decoration:none;
+	text-transform:none;
+}
+.text--s-headline {
+	font-size:1.867rem;
+	font-family:"Satoshi Variable";
+	font-weight:700;
+	font-style:normal;
+	line-height:120%;
+	text-decoration:none;
+	text-transform:none;
+}
+.text--s-subline {
+	font-size:1.467rem;
+	font-family:"Satoshi Variable";
+	font-weight:500;
+	font-style:normal;
+	line-height:120%;
+	text-decoration:none;
+	text-transform:none;
+}
+.text--xs-headline {
+	font-size:1.6rem;
+	font-family:"Satoshi Variable";
+	font-weight:700;
+	font-style:normal;
+	line-height:120%;
+	text-decoration:none;
+	text-transform:none;
+}
+.text--xs-subline {
+	font-size:1.2rem;
+	font-family:"Satoshi Variable";
+	font-weight:500;
+	font-style:normal;
+	line-height:120%;
+	text-decoration:none;
+	text-transform:none;
+}
+.text--xxs-headline {
+	font-size:1.333rem;
+	font-family:"Satoshi Variable";
+	font-weight:700;
+	font-style:normal;
+	line-height:130%;
+	text-decoration:none;
+	text-transform:none;
+}
+.text--xxs-subline {
+	font-size:1.067rem;
+	font-family:"Satoshi Variable";
+	font-weight:500;
+	font-style:normal;
+	line-height:120%;
+	text-decoration:none;
+	text-transform:none;
+}
+.text--small-0 {
+	font-size:0.933rem;
+	font-family:"Satoshi Variable";
+	font-weight:500;
+	font-style:normal;
+	line-height:145%;
+	text-decoration:none;
+	text-transform:none;
+}
+.text--small-bold {
+	font-size:0.933rem;
+	font-family:"Satoshi Variable";
+	font-weight:700;
+	font-style:normal;
+	line-height:145%;
+	text-decoration:none;
+	text-transform:none;
+}
+.text--small-inline-link {
+	font-size:0.933rem;
+	font-family:"Satoshi Variable";
+	font-weight:700;
+	font-style:normal;
+	line-height:145%;
+	text-decoration:none;
+	text-transform:none;
+}

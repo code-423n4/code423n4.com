@@ -1,6 +1,7 @@
 import React from "react";
 import Helmet from "react-helmet";
 import { ToastContainer } from "react-toastify";
+import "../styles/_global.scss"
 
 import Footer from "../components/content/Footer";
 import Header from "../components/content/Header";
@@ -82,10 +83,10 @@ const DefaultLayout = (props) => {
         </title>
         <body className={bodyClass} />
       </Helmet>
-      <Header hideConnectWalletDropdown={hideConnectWalletDropdown} />
-      <ToastContainer />
-      <Modal />
-      <LoginModal />
+      {/* <Header hideConnectWalletDropdown={hideConnectWalletDropdown} /> */}
+      {/* <ToastContainer /> */}
+      {/* <Modal /> */}
+      {/* <LoginModal /> */}
       <main>
         {children}
         <Footer />
