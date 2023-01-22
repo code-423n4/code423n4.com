@@ -1,8 +1,8 @@
 ---
-sponsor: "Non Fungible Trading"
+sponsor: "Blur Exchange"
 slug: "2022-11-non-fungible"
 date: "2022-12-08"
-title: "Non Fungible Trading contest"
+title: "Blur Exchange contest"
 findings: "https://github.com/code-423n4/2022-11-non-fungible-findings/issues"
 contest: 181
 ---
@@ -100,7 +100,7 @@ All of the issues presented here are linked back to their original finding.
 
 # Scope
 
-The code under review can be found within the [C4 Non Fungible Trading contest repository](https://github.com/code-423n4/2022-11-non-fungible), and is composed of 2 smart contracts written in the Solidity programming language and includes 659 lines of Solidity code.
+The code under review can be found within the [C4 Blur Exchange contest repository](https://github.com/code-423n4/2022-11-non-fungible), and is composed of 2 smart contracts written in the Solidity programming language and includes 659 lines of Solidity code.
 
 # Severity Criteria
 
@@ -692,7 +692,7 @@ The status quo regarding significant centralization vectors has always been to a
 
 [Exchange.sol#L378](https://github.com/code-423n4/2022-11-non-fungible/blob/323b7cbf607425dd81da96c0777c8b12e800305d/contracts/Exchange.sol#L378)<br>
 
-The Non Fungible supplied docs state:<br>
+The Blur Exchange supplied docs state:<br>
 
 **Off-chain methods**<br>
 "Oracle cancellations - if the order is signed with an expirationTime of 0, a user can request an oracle to stop producing authorization signatures; without a recent signature, the order will not be able to be matched"
