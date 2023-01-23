@@ -1,16 +1,116 @@
-import path from "path";
-import SchemaCustomization from "./schema";
-import { createFilePath } from "gatsby-source-filesystem";
-import { Octokit } from "@octokit/core";
 import { graphql } from "@octokit/graphql";
 import format from "date-fns/format";
+import dedent from "dedent";
+import { createFilePath } from "gatsby-source-filesystem";
+import fetch from "node-fetch";
+import path from "path";
 import webpack from "webpack";
+import SchemaCustomization from "./schema";
+// Notion
+import { Client } from "@notionhq/client";
+const { token, notionToken, notionContestDb } = require("./netlify/_config");
+const notion = new Client({ auth: notionToken });
+const getContestData = async () => {
+  // @todo: get contest type from notion
+  // if (process.env.NODE_ENV === "development") {
+  //   const testContestData =
+  // }
+  try {
+    const pages = [];
+    let cursor = undefined;
+    //cursor is to handle pagination in notion query
+    while (true) {
+      const { results, next_cursor } = await notion.databases.query({
+        database_id: notionContestDb,
+        start_cursor: cursor,
+        filter: {
+          and: [
+            {
+              property: "ContestID",
+              number: {
+                is_not_empty: true,
+              },
+            },
+            {
+              property: "Status",
+              select: {
+                does_not_equal: "Lost deal",
+              },
+            },
+            {
+              property: "Status",
+              select: {
+                does_not_equal: "Possible",
+              },
+            },
+          ],
+        },
+      });
+      pages.push(...results);
+      if (!next_cursor) {
+        break;
+      }
+      cursor = next_cursor;
+    }
+    const notionContestFields = pages.map((page) => {
+      if (
+        page.properties.Status.select.name !== "Lost deal" ||
+        page.properties.Status.select.name !== "Possible" ||
+        page.properties.Status.select.name ||
+        page.properties.ContestID.number
+      ) {
+        if (page.properties["Classified?"].checkbox === false) {
+          return {
+            contestId: page.properties.ContestID.number || null,
+            status: page.properties.Status.select.name || null,
+            codeAccess: "public",
+            type: page.properties["Audit type"].select.name,
+          };
+        } else if (
+          page.properties["Code access"].select &&
+          page.properties["Code access"].select.name.trim() === "Certified only"
+        ) {
+          return {
+            contestId: page.properties.ContestID.number || null,
+            status: page.properties.Status.select.name || null,
+            codeAccess: "certified",
+            type: page.properties["Audit type"].select.name,
+          };
+        } else if (
+          page.properties["Code access"].select &&
+          page.properties["Code access"].select.name.trim() ===
+            "Public (default)"
+        ) {
+          return {
+            contestId: page.properties.ContestID.number || null,
+            status: page.properties.Status.select.name || null,
+            codeAccess: "public",
+            type: page.properties["Audit type"].select.name,
+          };
+        } else {
+          return {
+            contestId: page.properties.ContestID.number || null,
+            status: page.properties.Status.select.name || null,
+            codeAccess: null,
+            type: page.properties["Audit type"].select.name,
+          };
+        }
+      }
+    });
+    return notionContestFields;
+  } catch (err) {
+    return null;
+  }
+};
 
-const { token } = require("./functions/_config");
+const privateContestMessage = dedent`
+# Contest details are not available. Why not?
 
-const octokit = new Octokit({
-  auth: token,
-});
+The contest is limited to specific participants. Most Code4rena contests are open and public, but some have special requirements. In those cases, the code and contest details remain private (at least for now).
+
+For more information on participating in a private audit, please see this [post](https://mirror.xyz/c4blog.eth/Ww3sILR-e5iWoMYNpZEB9UME_vA8G0Yqa6TYvpSdEM0).
+`;
+
 const graphqlWithAuth = graphql.defaults({
   headers: {
     authorization: `Bearer ${token}`,
@@ -54,21 +154,23 @@ function getRepoName(contestNode) {
 }
 
 async function fetchReadmeMarkdown(contestNode) {
-  const { data } = await octokit.request("GET /repos/{owner}/{repo}/readme", {
-    owner: "code-423n4",
-    repo: `${getRepoName(contestNode)}`,
-    headers: {
-      accept: "application/vnd.github.v3.html+json",
-    },
-  });
-
+  const response = await fetch(
+    `https://raw.githubusercontent.com/${
+      process.env.GITHUB_CONTEST_REPO_OWNER
+    }/${getRepoName(contestNode)}/main/README.md`
+  );
+  if (response.status === 404) {
+    return privateContestMessage;
+  }
+  const data = await response.text();
   return data;
 }
 
 async function fetchSocialImage(contestNode) {
+  // @todo: fetch without auth
   const { repository } = await graphqlWithAuth(
     `query socialImage($repo: String!) {
-    repository(owner: "code-423n4", name: $repo) {
+    repository(owner: "${process.env.GITHUB_CONTEST_REPO_OWNER}", name: $repo) {
       openGraphImageUrl
       usesCustomOpenGraphImage
     }
@@ -99,6 +201,7 @@ const queries = {
             contestPath
             readmeContent
             artPath
+            status
           }
         }
       }
@@ -119,7 +222,6 @@ exports.createSchemaCustomization = ({ actions }) => {
 exports.onCreateNode = async ({ node, getNode, actions }) => {
   const { createNodeField } = actions;
   if (node.internal.type === `MarkdownRemark`) {
-    const value = createFilePath({ node, getNode });
     const parent = getNode(node.parent);
     let slug;
     if (node.frontmatter.slug) {
@@ -171,12 +273,50 @@ exports.onCreateNode = async ({ node, getNode, actions }) => {
   }
 };
 
+exports.sourceNodes = async ({ actions, getNodes }) => {
+  const { createNodeField } = actions;
+  const nodes = await getNodes();
+  const contestStatusData = await getContestData();
+
+  nodes.forEach((node, index) => {
+    if (node.internal.type === `ContestsCsv`) {
+      const dataForCurrentContest = contestStatusData.filter(
+        (element) => element.contestId === node.contestid
+      );
+      createNodeField({
+        node,
+        name: `status`,
+        value:
+          dataForCurrentContest.length > 0
+            ? dataForCurrentContest[0].status
+            : undefined,
+      });
+      createNodeField({
+        node,
+        name: `codeAccess`,
+        value:
+          dataForCurrentContest.length > 0
+            ? dataForCurrentContest[0].codeAccess
+            : undefined,
+      });
+      createNodeField({
+        node,
+        name: `type`,
+        value:
+          dataForCurrentContest.length > 0
+            ? dataForCurrentContest[0].type
+            : undefined,
+      });
+    }
+  });
+};
+
 exports.createPages = async ({ graphql, actions }) => {
   const { createPage } = actions;
 
-  let contests = await graphql(queries.contests);
-  const formTemplate = path.resolve("./src/templates/ReportForm.js");
-  const contestTemplate = path.resolve("./src/templates/ContestLayout.js");
+  const contests = await graphql(queries.contests);
+  const formTemplate = path.resolve("./src/templates/ReportForm.tsx");
+  const contestTemplate = path.resolve("./src/templates/ContestLayout.tsx");
   contests.data.contests.edges.forEach((contest) => {
     if (contest.node.findingsRepo) {
       createPage({
@@ -198,13 +338,28 @@ exports.createPages = async ({ graphql, actions }) => {
   });
 };
 
-exports.onCreateWebpackConfig = ({ actions }) => {
+exports.onCreateWebpackConfig = ({ actions, stage, getConfig }) => {
   actions.setWebpackConfig({
     plugins: [
       new webpack.IgnorePlugin({
         resourceRegExp: /canvas/,
         contextRegExp: /jsdom$/,
       }),
+      new webpack.ProvidePlugin({
+        process: "process/browser",
+        Buffer: [require.resolve("buffer/"), "Buffer"],
+      }),
     ],
+    resolve: {
+      fallback: {
+        assert: require.resolve("assert"),
+        crypto: require.resolve("crypto-browserify"),
+        http: require.resolve("stream-http"),
+        https: require.resolve("https-browserify"),
+        os: require.resolve("os-browserify/browser"),
+        stream: require.resolve("stream-browserify"),
+        url: require.resolve("url"),
+      },
+    },
   });
 };
