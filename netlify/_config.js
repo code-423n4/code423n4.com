@@ -8,6 +8,5 @@ module.exports = {
   notionContestDb: process.env.NOTION_CONTEST_DATABASE_ID,
   moralisServerUrl: process.env.GATSBY_MORALIS_SERVER,
   moralisAppId: process.env.GATSBY_MORALIS_APP_ID,
-  kickboxApiKey: process.env.KICKBOX_API_KEY,
-  apiToken: process.env.C4_API_TOKEN,
+  kickboxApiKey: process.env.KICKBOX_API_KEY
 };

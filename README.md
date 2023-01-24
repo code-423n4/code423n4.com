@@ -22,6 +22,7 @@ To register as a warden, follow the instructions in the [C4 docs](https://docs.c
 
 **Site data** is found in 📁 **data** subfolders:
 
+- 📁 **contests**
 - 📁 **findings**
 - 📁 **handles**
 - 📁 **orgs**
@@ -67,6 +68,8 @@ Fork [code-423n4/code423n4.com](https://github.com/code-423n4/code423n4.com) and
 In order to test applying for a judge role, create a repo named `judges`
 
 If you submit test findings to the default test contest repo, you can find your submissions [here](https://github.com/code-423n4/2022-01-dev-test-repo-findings). Be aware: this is a public repo.
+
+If you would rather create your own test contest and findings repo(s), make sure to add them to `_test-data/contests/contests.csv` and update the `CONTEST_GITHUB_REPO_OWNER` variable.
 
 ## Develop
 
