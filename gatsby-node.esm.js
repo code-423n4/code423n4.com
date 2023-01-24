@@ -1,13 +1,115 @@
 import { graphql } from "@octokit/graphql";
 import format from "date-fns/format";
+import dedent from "dedent";
 import { createFilePath } from "gatsby-source-filesystem";
 import fetch from "node-fetch";
 import path from "path";
 import webpack from "webpack";
-
 import SchemaCustomization from "./schema";
+// Notion
+import { Client } from "@notionhq/client";
+const { token, notionToken, notionContestDb } = require("./netlify/_config");
+const notion = new Client({ auth: notionToken });
+const getContestData = async () => {
+  // @todo: get contest type from notion
+  // if (process.env.NODE_ENV === "development") {
+  //   const testContestData =
+  // }
+  try {
+    const pages = [];
+    let cursor = undefined;
+    //cursor is to handle pagination in notion query
+    while (true) {
+      const { results, next_cursor } = await notion.databases.query({
+        database_id: notionContestDb,
+        start_cursor: cursor,
+        filter: {
+          and: [
+            {
+              property: "ContestID",
+              number: {
+                is_not_empty: true,
+              },
+            },
+            {
+              property: "Status",
+              select: {
+                does_not_equal: "Lost deal",
+              },
+            },
+            {
+              property: "Status",
+              select: {
+                does_not_equal: "Possible",
+              },
+            },
+          ],
+        },
+      });
+      pages.push(...results);
+      if (!next_cursor) {
+        break;
+      }
+      cursor = next_cursor;
+    }
+    const notionContestFields = pages.map((page) => {
+      if (
+        page.properties.Status.select.name !== "Lost deal" ||
+        page.properties.Status.select.name !== "Possible" ||
+        page.properties.Status.select.name ||
+        page.properties.ContestID.number
+      ) {
+        if (page.properties["Classified?"].checkbox === false) {
+          return {
+            contestId: page.properties.ContestID.number || null,
+            status: page.properties.Status.select.name || null,
+            codeAccess: "public",
+            type: page.properties["Audit type"].select.name,
+          };
+        } else if (
+          page.properties["Code access"].select &&
+          page.properties["Code access"].select.name.trim() === "Certified only"
+        ) {
+          return {
+            contestId: page.properties.ContestID.number || null,
+            status: page.properties.Status.select.name || null,
+            codeAccess: "certified",
+            type: page.properties["Audit type"].select.name,
+          };
+        } else if (
+          page.properties["Code access"].select &&
+          page.properties["Code access"].select.name.trim() ===
+            "Public (default)"
+        ) {
+          return {
+            contestId: page.properties.ContestID.number || null,
+            status: page.properties.Status.select.name || null,
+            codeAccess: "public",
+            type: page.properties["Audit type"].select.name,
+          };
+        } else {
+          return {
+            contestId: page.properties.ContestID.number || null,
+            status: page.properties.Status.select.name || null,
+            codeAccess: null,
+            type: page.properties["Audit type"].select.name,
+          };
+        }
+      }
+    });
+    return notionContestFields;
+  } catch (err) {
+    return null;
+  }
+};
 
-const { token } = require("./netlify/_config");
+const privateContestMessage = dedent`
+# Contest details are not available. Why not?
+
+The contest is limited to specific participants. Most Code4rena contests are open and public, but some have special requirements. In those cases, the code and contest details remain private (at least for now).
+
+For more information on participating in a private audit, please see this [post](https://mirror.xyz/c4blog.eth/Ww3sILR-e5iWoMYNpZEB9UME_vA8G0Yqa6TYvpSdEM0).
+`;
 
 const graphqlWithAuth = graphql.defaults({
   headers: {
@@ -57,6 +159,9 @@ async function fetchReadmeMarkdown(contestNode) {
       process.env.GITHUB_CONTEST_REPO_OWNER
     }/${getRepoName(contestNode)}/main/README.md`
   );
+  if (response.status === 404) {
+    return privateContestMessage;
+  }
   const data = await response.text();
   return data;
 }
@@ -96,6 +201,7 @@ const queries = {
             contestPath
             readmeContent
             artPath
+            status
           }
         }
       }
@@ -167,6 +273,44 @@ exports.onCreateNode = async ({ node, getNode, actions }) => {
   }
 };
 
+exports.sourceNodes = async ({ actions, getNodes }) => {
+  const { createNodeField } = actions;
+  const nodes = await getNodes();
+  const contestStatusData = await getContestData();
+
+  nodes.forEach((node, index) => {
+    if (node.internal.type === `ContestsCsv`) {
+      const dataForCurrentContest = contestStatusData.filter(
+        (element) => element.contestId === node.contestid
+      );
+      createNodeField({
+        node,
+        name: `status`,
+        value:
+          dataForCurrentContest.length > 0
+            ? dataForCurrentContest[0].status
+            : undefined,
+      });
+      createNodeField({
+        node,
+        name: `codeAccess`,
+        value:
+          dataForCurrentContest.length > 0
+            ? dataForCurrentContest[0].codeAccess
+            : undefined,
+      });
+      createNodeField({
+        node,
+        name: `type`,
+        value:
+          dataForCurrentContest.length > 0
+            ? dataForCurrentContest[0].type
+            : undefined,
+      });
+    }
+  });
+};
+
 exports.createPages = async ({ graphql, actions }) => {
   const { createPage } = actions;
 
@@ -178,15 +322,6 @@ exports.createPages = async ({ graphql, actions }) => {
       createPage({
         path: contest.node.fields.submissionPath,
         component: formTemplate,
-        context: {
-          contestId: contest.node.contestid,
-        },
-      });
-
-      // XXX: inject old-style reporting form
-      createPage({
-        path: contest.node.fields.submissionPath + "-old",
-        component: path.resolve("./src/templates/OldReportForm.js"),
         context: {
           contestId: contest.node.contestid,
         },
@@ -203,7 +338,7 @@ exports.createPages = async ({ graphql, actions }) => {
   });
 };
 
-exports.onCreateWebpackConfig = ({ actions }) => {
+exports.onCreateWebpackConfig = ({ actions, stage, getConfig }) => {
   actions.setWebpackConfig({
     plugins: [
       new webpack.IgnorePlugin({
@@ -211,6 +346,7 @@ exports.onCreateWebpackConfig = ({ actions }) => {
         contextRegExp: /jsdom$/,
       }),
       new webpack.ProvidePlugin({
+        process: "process/browser",
         Buffer: [require.resolve("buffer/"), "Buffer"],
       }),
     ],
@@ -222,6 +358,7 @@ exports.onCreateWebpackConfig = ({ actions }) => {
         https: require.resolve("https-browserify"),
         os: require.resolve("os-browserify/browser"),
         stream: require.resolve("stream-browserify"),
+        url: require.resolve("url"),
       },
     },
   });

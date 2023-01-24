@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import { graphql, Link } from "gatsby";
-import Moralis from "moralis";
+import Moralis from "moralis-v1";
 import React, { useEffect, useState } from "react";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import rehypeKatex from "rehype-katex";
@@ -16,14 +16,14 @@ import { getDates } from "../utils/time";
 import useUser from "../hooks/UserContext";
 // components
 import ClientOnly from "../components/ClientOnly";
-import ContestResults from "../components/ContestResults";
 import Countdown from "../components/Countdown";
 import DefaultLayout from "./DefaultLayout";
 import FindingsList from "../components/FindingsList";
+import LeaderboardTable from "../components/LeaderboardTable";
 import WardenDetails from "../components/WardenDetails";
 import ReactMarkdown from "react-markdown";
 // styles
-import * as styles from "../components/reporter/widgets/Widgets.module.scss";
+import * as styles from "../styles/Main.module.scss";
 
 enum FindingsStatus {
   Fetching = "fetching",
@@ -42,6 +42,8 @@ const ContestLayout = (props) => {
     FindingsStatus.Fetching
   );
   const [errorMessage, setErrorMessage] = useState<string>("");
+  const [canViewContest, setCanViewContest] = useState<boolean>(false);
+  const [leaderboardResults, setLeaderboardResults] = useState([]);
 
   // hooks
   const { currentUser } = useUser();
@@ -75,6 +77,13 @@ const ContestLayout = (props) => {
 
   useEffect(() => {
     (async () => {
+      if (fields.codeAccess === "public") {
+        setCanViewContest(true);
+      } else if (fields.codeAccess === "certified" && currentUser.isCertified) {
+        setCanViewContest(true);
+      } else {
+        setCanViewContest(false);
+      }
       if (currentUser.isLoggedIn) {
         const user = Moralis.User.current();
         const sessionToken = user?.attributes.sessionToken;
@@ -108,7 +117,26 @@ const ContestLayout = (props) => {
         setFindingsList({ user: [], teams: {} });
       }
     })();
-  }, [currentUser, contestid]);
+  }, [currentUser, contestid, fields]);
+
+  // get contest leaderboard results
+  useEffect(() => {
+    (async () => {
+      const result = await fetch(`/.netlify/functions/leaderboard?contest=${contestid}`, {
+        headers: {
+          "Content-Type": "application/json",
+          // "X-Authorization": `Bearer ${sessionToken}`,
+          // "C4-User": currentUser.username,
+        },
+      });
+      if (result.ok) {
+        setLeaderboardResults(await result.json());
+      } else {
+        // @TODO: what to do here?
+        throw "Unable to fetch leaderboard results.";
+      }
+    })();
+  }, [contestid]);
 
   return (
     <DefaultLayout
@@ -172,33 +200,34 @@ const ContestLayout = (props) => {
             <h1>{title}</h1>
             <p>{details}</p>
             <div className="button-wrapper">
-              {t.contestStatus !== "soon" ? (
+              {t.contestStatus !== "soon" && canViewContest && (
                 <a
                   href={repo}
                   className="button cta-button button-medium primary"
                 >
                   View Repo
                 </a>
-              ) : null}
+              )}
 
               {t.contestStatus === "active" &&
-              findingsRepo &&
-              fields.submissionPath ? (
-                <Link
-                  to={fields.submissionPath}
-                  className="button cta-button button-medium secondary"
-                >
-                  Submit Finding
-                </Link>
-              ) : null}
-              {canViewReport ? (
+                findingsRepo &&
+                fields.submissionPath &&
+                canViewContest && (
+                  <Link
+                    to={fields.submissionPath}
+                    className="button cta-button button-medium secondary"
+                  >
+                    Submit Finding
+                  </Link>
+                )}
+              {canViewReport && (
                 <Link
                   to={reportUrl}
                   className="button cta-button button-medium secondary"
                 >
                   View Report
                 </Link>
-              ) : null}
+              )}
             </div>
           </div>
           <div className="top-section-amount">
@@ -209,17 +238,17 @@ const ContestLayout = (props) => {
         <section>
           <Tabs className="contest-tabs">
             <TabList>
-              {props.data.leaderboardFindings.findings.length > 0 && (
+              {t.contestStatus === "completed" && (
                 <Tab>Results</Tab>
               )}
               <Tab>Details</Tab>
               {t.contestStatus === "active" && <Tab>Findings</Tab>}
             </TabList>
 
-            {props.data.leaderboardFindings.findings.length > 0 && (
+            {t.contestStatus === "completed" && (
               <TabPanel>
                 <div className="contest-wrapper">
-                  <ContestResults results={props.data.leaderboardFindings} />
+                  <LeaderboardTable results={leaderboardResults} />
                 </div>
               </TabPanel>
             )}
@@ -242,7 +271,7 @@ const ContestLayout = (props) => {
                 ) : (
                   <article>
                     <ReactMarkdown
-                      className={clsx(styles.Control, styles.Markdown)}
+                      className={clsx(styles.Widget__Control, styles.Widget__Markdown)}
                       remarkPlugins={[remarkGfm, remarkBreaks, remarkMath]}
                       rehypePlugins={[rehypeKatex]}
                     >
@@ -320,6 +349,8 @@ export const query = graphql`
         readmeContent
         contestPath
         artPath
+        status
+        codeAccess
       }
       hide
       league
@@ -338,37 +369,6 @@ export const query = graphql`
         link
       }
       title
-    }
-    leaderboardFindings: contestsCsv(contestid: { eq: $contestId }) {
-      title
-      findings {
-        finding
-        awardUSD
-        risk
-        split
-        handle {
-          handle
-          image {
-            childImageSharp {
-              resize(width: 40) {
-                src
-              }
-            }
-          }
-          link
-          members {
-            handle
-            image {
-              childImageSharp {
-                resize(width: 40) {
-                  src
-                }
-              }
-            }
-            link
-          }
-        }
-      }
     }
   }
 `;

@@ -11,4 +11,11 @@ export interface Contest {
   findingsRepo: string;
   hide: "True" | "False";
   league: string;
+  fields: {
+    // contestType: "Audit" | "Mitigation Review"
+    submissionPath: string;
+    contestPath: string;
+    artPath: string;
+    status: string;
+  };
 }

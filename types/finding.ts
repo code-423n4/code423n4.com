@@ -11,6 +11,8 @@ export interface Finding {
   updatedAt: string;
   issueNumber: number;
   handle: string;
+  isMitigated?: boolean;
+  mitigationOf?: string;
 }
 
 export interface FindingEditRequest {
@@ -20,7 +22,8 @@ export interface FindingEditRequest {
   attributedTo: {
     newValue: string;
     oldValue: string;
-    address: string;
+    // @todo: remove this once all teams have a saved polygon address
+    address?: string;
   };
   risk: {
     newValue: string;
@@ -28,6 +31,14 @@ export interface FindingEditRequest {
   };
   title?: string;
   body?: string;
+  mitigationOf?: {
+    newValue: string;
+    oldValue: string;
+  };
+  isMitigated?: {
+    newValue: boolean;
+    oldValue: boolean;
+  }
 }
 
 export interface FindingsResponse {
@@ -42,11 +53,13 @@ export interface FindingCreateRequest {
   repo: string;
   emailAddresses: string[];
   attributedTo: string;
-  address: string;
   risk: string;
   title: string;
   body: string;
   labels: string[];
+  address?: string;
+  mitigationOf?: string;
+  isMitigated?: boolean;
 }
 
 export interface FindingDeleteRequest {

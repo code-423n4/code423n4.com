@@ -1,6 +1,7 @@
 @import "react-toastify/dist/ReactToastify.css";
 @import "./helpers.css";
 @import "./base.css";
+@import "./account.css";
 @import "./buttons.css";
 @import "./contest.css";
 @import "./contest-list.css";

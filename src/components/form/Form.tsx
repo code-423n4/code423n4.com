@@ -1,7 +1,6 @@
-import React, { ReactNode, useCallback, useState } from "react";
-import clsx from "clsx";
+import React, { ReactNode, useState } from "react";
 
-import * as styles from "./Form.module.scss";
+import * as styles from "../../styles/Main.module.scss";
 
 enum FormStatus {
   Unsubmitted = "unsubmitted",
@@ -18,7 +17,6 @@ interface FormProps extends JSX.ElementChildrenAttribute {
   resetForm?: () => void;
   validator?: () => boolean;
   submitButtonText?: string;
-  customSubmitComponent?: ReactNode;
 }
 
 const Form = ({
@@ -30,7 +28,6 @@ const Form = ({
   resetForm,
   validator,
   submitButtonText,
-  customSubmitComponent,
 }: FormProps) => {
   // Component State
   const [status, setStatus] = useState<FormStatus>(FormStatus.Unsubmitted);
@@ -61,33 +58,29 @@ const Form = ({
   };
 
   return (
-    <div className={styles.Form}>
-      {title && <h1 className={styles.Heading1}>{title}</h1>}
+    <div className={styles.Form__Form}>
+      {title && <h1 className={styles.Form__Heading1}>{title}</h1>}
       {(status === FormStatus.Unsubmitted ||
         status === FormStatus.Submitting) && (
         <form>
           <>
             {children}
-            {customSubmitComponent ? (
-              customSubmitComponent
-            ) : (
-              <button
-                className="button cta-button centered"
-                type="button"
-                onClick={submit}
-                disabled={status !== FormStatus.Unsubmitted}
-              >
-                {status === FormStatus.Unsubmitted
-                  ? submitButtonText
-                  : "Submitting..."}
-              </button>
-            )}
+            <button
+              className="button cta-button centered"
+              type="button"
+              onClick={submit}
+              disabled={status !== FormStatus.Unsubmitted}
+            >
+              {status === FormStatus.Unsubmitted &&
+                (submitButtonText || "Submit")}
+              {status === FormStatus.Submitting && "Submitting..."}
+            </button>
           </>
         </form>
       )}
       {status === FormStatus.Error && (
-        <div className="centered-text">
-          <h2 className={styles.Heading2}>Whoops!</h2>
+        <>
+          <h2>Whoops!</h2>
           <p>{errorMessage}</p>
           <button
             className="button cta-button"
@@ -96,11 +89,11 @@ const Form = ({
           >
             Try again
           </button>
-        </div>
+        </>
       )}
       {status === FormStatus.Submitted && (
-        <div className="centered-text">
-          <h2 className={styles.Heading2}>Thank you!</h2>
+        <>
+          <h2>Thank you!</h2>
           <p>{successMessage}</p>
           {successButtonText && (
             <button
@@ -111,7 +104,7 @@ const Form = ({
               {successButtonText}
             </button>
           )}
-        </div>
+        </>
       )}
     </div>
   );
