@@ -13,7 +13,7 @@ import * as styles from "../components/form/Form.module.scss";
 
 export default function UserRegistration() {
   const [handles, setHandles] = useState<Set<string>>(new Set<string>());
-  const [wardens, setWardens] = useState<{value: any; image: any; }[]> ([]);
+  const [wardens, setWardens] = useState<{ value: any; image: any }[]>([]);
   const [handleData, setHandleData] = useState<any[]>([]);
   const { isInitialized } = useMoralis();
   const { currentUser } = useUser();
@@ -24,8 +24,7 @@ export default function UserRegistration() {
     }
   }, [currentUser.isLoggedIn]);
 
-
-//do we need this function?? It setting wardens with a filtered set of wardens but then wardens is never used?? What am I missing??
+  //do we need this function?? It setting wardens with a filtered set of wardens but then wardens is never used?? What am I missing??
   useEffect((): void => {
     async function filterWardens(): Promise<void> {
       if (!isInitialized) {
@@ -44,23 +43,24 @@ export default function UserRegistration() {
           }
           return true;
         })
-        .map(( warden ) => ({ value: warden.handle, image: warden.image ?? "" }));
+        .map((warden) => ({ value: warden.handle, image: warden.image ?? "" }));
       setWardens(wardens);
     }
     filterWardens();
   }, [isInitialized, handleData]);
 
-  // this is for getting handles from netlify function. 
+  // this is for getting handles from netlify function.
   useEffect(() => {
     (async () => {
       const result = await fetch(`/.netlify/functions/handles`, {
         headers: {
           "Content-Type": "application/json",
         },
-      }).then((res) => res.json())
-      .then((res) => {
+      })
+        .then((res) => res.json())
+        .then((res) => {
           return res;
-      });
+        });
       if (result) {
         setHandles(new Set(result.map((h) => h.handle)));
         setHandleData(result);
@@ -69,8 +69,6 @@ export default function UserRegistration() {
       }
     })();
   }, [isInitialized]);
-
-  
 
   return (
     <DefaultLayout
@@ -86,4 +84,3 @@ export default function UserRegistration() {
     </DefaultLayout>
   );
 }
-

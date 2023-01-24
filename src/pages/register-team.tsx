@@ -9,11 +9,11 @@ export default function TeamRegistration() {
 
   // XXX: switching from gatsby graph
   const [handles, setHandles] = useState<Set<string>>(new Set<string>());
-  const [wardens, setWardens] = useState<{value: any; image: any; }[]>([]);
+  const [wardens, setWardens] = useState<{ value: any; image: any }[]>([]);
 
   // fetch wardens
   useEffect(() => {
-  //   // fetch handles
+    //   // fetch handles
     (async () => {
       const result = await fetch(`/.netlify/functions/handles`, {
         headers: {
@@ -24,14 +24,14 @@ export default function TeamRegistration() {
       });
       if (result.ok) {
         let users = await result.json();
-        let handles : Set<string> = new Set(users.map((e) => e.handle));
+        let handles: Set<string> = new Set(users.map((e) => e.handle));
         setHandles(handles);
 
-        let wardens : {value: any; image: any; }[] = users.map((e) => { 
+        let wardens: { value: any; image: any }[] = users.map((e) => {
           return {
             value: e.handle,
             image: e.image ?? "",
-          }
+          };
         });
         setWardens(wardens);
       } else {

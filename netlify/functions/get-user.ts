@@ -15,8 +15,7 @@ exports.handler = async (event) => {
     let res;
     if (userHandle === undefined) {
       res = getUsers();
-    }
-    else {
+    } else {
       res = await findUser(userHandle);
     }
 

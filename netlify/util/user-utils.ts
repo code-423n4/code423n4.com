@@ -44,48 +44,58 @@ export async function findUser(userHandle) {
 }
 
 export async function getUsers() {
-  const allHandles : {handle : string, link : string, moralisId: string, image : string}[] = [];
+  const allHandles: {
+    handle: string;
+    link: string;
+    moralisId: string;
+    image: string;
+  }[] = [];
   const data = readdirSync(`./_data/handles`);
   // just return the objects?
   // without members
   data.forEach((file) => {
-    if(file.endsWith('.json')){
-        const buffer = readFileSync(`./_data/handles/${file}`);
-        const wardenFileData = JSON.parse(buffer.toString());
-        if (wardenFileData.image) {
-         const imagePath = wardenFileData.image.slice(2);
-         wardenFileData.imageUrl = `https://raw.githubusercontent.com/${process.env.GITHUB_REPO_OWNER}/${process.env.REPO}/${process.env.BRANCH_NAME}/_data/handles/${imagePath}`;
-       }
-       if(!wardenFileData.members){
-         allHandles.push({...wardenFileData})
-       }
+    if (file.endsWith(".json")) {
+      const buffer = readFileSync(`./_data/handles/${file}`);
+      const wardenFileData = JSON.parse(buffer.toString());
+      if (wardenFileData.image) {
+        const imagePath = wardenFileData.image.slice(2);
+        wardenFileData.imageUrl = `https://raw.githubusercontent.com/${process.env.GITHUB_REPO_OWNER}/${process.env.REPO}/${process.env.BRANCH_NAME}/_data/handles/${imagePath}`;
+      }
+      if (!wardenFileData.members) {
+        allHandles.push({ ...wardenFileData });
+      }
     }
-});
-return allHandles;
+  });
+  return allHandles;
 }
 
 export async function getTeams() {
   // just return the objects?
   // with members
-  const teamHandles : {handle : string, link : string, moralisId: string, image : string}[] = [];
+  const teamHandles: {
+    handle: string;
+    link: string;
+    moralisId: string;
+    image: string;
+  }[] = [];
   const data = readdirSync(`./_data/handles`);
   // just return the objects?
   // without members
   data.forEach((file) => {
-    if(file.endsWith('.json')){
-        const buffer = readFileSync(`./_data/handles/${file}`);
-        const wardenFileData = JSON.parse(buffer.toString());
-        if (wardenFileData.image) {
-         const imagePath = wardenFileData.image.slice(2);
-         wardenFileData.imageUrl = `https://raw.githubusercontent.com/${process.env.GITHUB_REPO_OWNER}/${process.env.REPO}/${process.env.BRANCH_NAME}/_data/handles/${imagePath}`;
-       }
-       if(wardenFileData.members){
-         teamHandles.push({...wardenFileData})
-       }
+    if (file.endsWith(".json")) {
+      const buffer = readFileSync(`./_data/handles/${file}`);
+      const wardenFileData = JSON.parse(buffer.toString());
+      if (wardenFileData.image) {
+        const imagePath = wardenFileData.image.slice(2);
+        wardenFileData.imageUrl = `https://raw.githubusercontent.com/${process.env.GITHUB_REPO_OWNER}/${process.env.REPO}/${process.env.BRANCH_NAME}/_data/handles/${imagePath}`;
+      }
+      if (wardenFileData.members) {
+        teamHandles.push({ ...wardenFileData });
+      }
     }
-});
+  });
 
-return teamHandles;
+  return teamHandles;
 }
 
 export async function getUserTeams(username: string): Promise<string[]> {

@@ -163,16 +163,12 @@ const JudgeApplication = () => {
                 fieldState={state}
               />{" "}
               {status === FormStatus.Error && (
-                <div
-                  className="error-message"
-                  role="alert"
-                  aria-atomic="true"
-                >
+                <div className="error-message" role="alert" aria-atomic="true">
                   <p>
-                    An error occurred; please try again. If you continue
-                    to receive this error, let us know in{" "}
-                    <a href="https://discord.gg/code4rena">Discord</a>.
-                    All fields are required.
+                    An error occurred; please try again. If you continue to
+                    receive this error, let us know in{" "}
+                    <a href="https://discord.gg/code4rena">Discord</a>. All
+                    fields are required.
                   </p>
                 </div>
               )}
@@ -199,26 +195,26 @@ const JudgeApplication = () => {
               <li>
                 Judge applications are reviewed by the C4 judge selection
                 committee, which includes top leaderboard wardens and past
-                judges. The committee will review your application and
-                give you a "yes" or "not yet".
+                judges. The committee will review your application and give you
+                a "yes" or "not yet".
               </li>
               <li>
-                The review process begins after the application window
-                closes, and we expect it to take about a week, depending
-                on the number of applications the committee receives.
+                The review process begins after the application window closes,
+                and we expect it to take about a week, depending on the number
+                of applications the committee receives.
               </li>
               <li>
-                You'll be contacted via DM to let you know if your
-                application has been successful this time around.
+                You'll be contacted via DM to let you know if your application
+                has been successful this time around.
               </li>
               <li>
-                If you're accepted as a judge, an organizer will onboard
-                you and get you set up to judge your first contest!
+                If you're accepted as a judge, an organizer will onboard you and
+                get you set up to judge your first contest!
               </li>
             </ol>
             <p>
-              In the meantime, if you have questions, feel free to reach
-              out to us in the C4 Discord, or have a closer look at the{" "}
+              In the meantime, if you have questions, feel free to reach out to
+              us in the C4 Discord, or have a closer look at the{" "}
               <a href="https://docs.code4rena.com/roles/judges/how-to-judge-a-contest">
                 How to judge a contest
               </a>{" "}

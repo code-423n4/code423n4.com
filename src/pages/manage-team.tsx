@@ -30,37 +30,37 @@ export default function TeamManagement({ location }) {
 
   // XXX: switching from gatsby graph
   const [handles, setHandles] = useState<Set<string>>(new Set<string>());
-  const [wardens, setWardens] = useState<{value: any; image: any; }[]>([]);
+  const [wardens, setWardens] = useState<{ value: any; image: any }[]>([]);
 
   // fetch wardens
   useEffect(() => {
     //   // fetch get-user
-      (async () => {
-        const result = await fetch(`/.netlify/functions/handles`, {
-          headers: {
-            "Content-Type": "application/json",
-            // "X-Authorization": `Bearer ${sessionToken}`,
-            // "C4-User": currentUser.username,
-          },
+    (async () => {
+      const result = await fetch(`/.netlify/functions/handles`, {
+        headers: {
+          "Content-Type": "application/json",
+          // "X-Authorization": `Bearer ${sessionToken}`,
+          // "C4-User": currentUser.username,
+        },
+      });
+      if (result.ok) {
+        let users = await result.json();
+        let handles: Set<string> = new Set(users.map((e) => e.handle));
+        setHandles(handles);
+
+        let wardens: { value: any; image: any }[] = users.map((e) => {
+          return {
+            value: e.handle,
+            image: e.image ?? "",
+          };
         });
-        if (result.ok) {
-          let users = await result.json();
-          let handles : Set<string> = new Set(users.map((e) => e.handle));
-          setHandles(handles);
-  
-          let wardens : {value: any; image: any; }[] = users.map((e) => { 
-            return {
-              value: e.handle,
-              image: e.image ?? "",
-            }
-          });
-          setWardens(wardens);
-        } else {
-          // @TODO: what to do here?
-          throw "Unable to fetch user data.";
-        }
-      })();
-    }, []);
+        setWardens(wardens);
+      } else {
+        // @TODO: what to do here?
+        throw "Unable to fetch user data.";
+      }
+    })();
+  }, []);
 
   useEffect(() => {
     // @todo: show error message when user tries to manage a team they are not on
