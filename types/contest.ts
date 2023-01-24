@@ -1,6 +1,6 @@
-// all values are strings because the source is a CSV file -- changed getting values from api instread of contest.csv
+// all values are strings because the source is a CSV file
 export interface Contest {
-  contestid: number;
+  contestid: string;
   title: string;
   sponsor: string;
   details: string;
@@ -9,7 +9,7 @@ export interface Contest {
   amount: string;
   repo: string;
   findingsRepo: string;
-  hide: boolean;
+  hide: "True" | "False";
   league: string;
   fields: {
     // contestType: "Audit" | "Mitigation Review"
