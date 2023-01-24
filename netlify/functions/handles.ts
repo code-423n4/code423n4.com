@@ -1,28 +1,35 @@
 import fs, { readFileSync, readdirSync } from "fs";
 
-//need to set up the members portion of the handles data (i think the members field is for teams)
-//so my plan is to add a call to get the teams data here
+const readAndParseJSONFile = (filePath: string) => {
+  const buffer = readFileSync(filePath);
+  return JSON.parse(buffer.toString());
+};
+
+const getImageUrl = (fileData: any) => {
+  if (fileData.image) {
+    const imagePath = fileData.image.slice(2);
+    return `https://raw.githubusercontent.com/${process.env.GITHUB_REPO_OWNER}/${process.env.REPO}/${process.env.BRANCH_NAME}/_data/handles/${imagePath}`;
+  }
+  return null;
+};
+
 const getHandles = () => {
   const allHandles: {
     handle: string;
     link: string;
     moralisId: string;
-    image: string;
+    imageUrl: string;
     members: string[];
   }[] = [];
-  const data = readdirSync(`./_data/handles`);
-  data.forEach((file) => {
-    if (file.endsWith(".json")) {
-      const buffer = readFileSync(`./_data/handles/${file}`);
-      const wardenFileData = JSON.parse(buffer.toString());
-      if (wardenFileData.image) {
-        const imagePath = wardenFileData.image.slice(2);
-        wardenFileData.imageUrl = `https://raw.githubusercontent.com/${process.env.GITHUB_REPO_OWNER}/${process.env.REPO}/${process.env.BRANCH_NAME}/_data/handles/${imagePath}`;
-      }
-      allHandles.push({ ...wardenFileData });
-    }
-  });
 
+  const files = readdirSync(`./_data/handles`);
+  for (const file of files) {
+    if (file.endsWith(".json")) {
+      const fileData = readAndParseJSONFile(`./_data/handles/${file}`);
+      const imageUrl = getImageUrl(fileData);
+      allHandles.push({ ...fileData, imageUrl });
+    }
+  }
   return allHandles;
 };
 
