@@ -17,7 +17,7 @@ export default function Contests({ data }) {
     // force react to rehydrate
     updateContestStatusChanges(contestStatusChanges + 1);
     setFilteredContest(sortContests(contests));
-  }, [contests]);
+  }, [contests, contestStatusChanges]);
 
   const sortContests = (contestArray) => {
     let statusObject = {
@@ -191,7 +191,7 @@ export const query = graphql`
             name
             image {
               childImageSharp {
-                resize(width: 160) {
+                resize(width: 80) {
                   src
                 }
               }
