@@ -261,6 +261,22 @@ iframe {
   border: none;
 }
 
+.aside-alert {
+  font-family: var(--font-family);
+  display: flex;
+  justify-content: center;
+  background: rgba(255,255,255,.05);
+  padding: 1.1em;
+  margin: auto calc(var(--page-margin) * -1);
+}
+
+@media only screen and (max-width: 599px) {
+  .aside-alert {
+    padding: 1.1em 1.7em;
+    margin: auto calc(var(--page-margin-mobile) * -1);
+  }
+}
+
 @media (max-width: 600px) {
   body {
     margin: 0;
