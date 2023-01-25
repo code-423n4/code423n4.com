@@ -176,6 +176,22 @@ exports.onCreateNode = async ({ node, getNode, actions }) => {
       name: `artPath`,
       value: socialImageUrl,
     });
+
+    createNodeField({
+      node,
+      name: 'status',
+      value: node.status
+    });
+    createNodeField({
+      node,
+      name: 'codeAccess',
+      value: node.codeAccess
+    })
+    createNodeField({
+      node,
+      name: 'type',
+      value: node.type
+    })
   }
 };
 
@@ -186,9 +202,9 @@ exports.sourceNodes = async ({
 }) => {
   const { createNode } = actions;
   const apiContestsData = await getApiContestData();
-  console.log(apiContestsData.length)
+  console.log(apiContestsData)
   apiContestsData.forEach((contest) => {
-    createNode({
+    const newNode = createNode({
       ...contest,
       id: createNodeId(`ContestsCsv-${contest.contestid}`),
       parent: null,
