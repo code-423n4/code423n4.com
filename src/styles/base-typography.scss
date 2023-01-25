@@ -1,227 +1,216 @@
-@import 'variables';
+@import "variables";
 
-.text--copy {
-	font-size:1.2rem;
-	font-family:"Satoshi Variable";
-	font-weight:500;
-	font-style:normal;
-	line-height:154%;
-	text-decoration:none;
-	text-transform:none;
+// File instructions
+// -----------------
+// This file contains all the type rules for the site. It is imported by
+// `base-layout.scss` and should not be imported anywhere else.
+
+@font-face {
+  font-family: "Satoshi Variable";
+  src: url("./fonts/Satoshi-Variable.woff2") format("woff2"),
+    url("./fonts/Satoshi-Variable.woff") format("woff"),
+    url("./fonts/Satoshi-Variable.ttf") format("truetype");
+  font-weight: 300 900;
+  font-display: swap;
+  font-style: normal;
 }
-.text--copy-bold {
-	font-size:1.2rem;
-	font-family:"Satoshi Variable";
-	font-weight:700;
-	font-style:normal;
-	line-height:154%;
-	text-decoration:none;
-	text-transform:none;
+
+// [Tip] Only set type rules here. For all other things `body`, check `base-layout`.
+body {
+  font-family: $font-family;
+  font-size: 100%; // Set by the user's stylesheet. Assumed to be 16px.
+  line-height: 150%;
 }
-.text--copy-inline-link {
-	font-size:1.2rem;
-	font-family:"Satoshi Variable";
-	font-weight:700;
-	font-style:normal;
-	line-height:154%;
-	text-decoration:underline;
-	text-transform:none;
+
+// Type classes
+// ------------------------------------------------
+
+// Copy
+// -----------------
+// This is the default type style for the site. It is used for most of the copy.
+// Adding a class of `type--copy` to a parent element will apply these styles.
+
+.type--copy {
+  font-size: 1.2rem;
+  font-family: $font-family;
+  font-weight: 500;
+  line-height: 150%;
 }
-.text--copy-inline-code {
-	font-size:1.2rem;
-	font-family:"Satoshi Variable";
-	font-weight:500;
-	font-style:normal;
-	line-height:154%;
-	text-decoration:none;
-	text-transform:none;
+.type--copy-p,
+.type--copy p {
+  margin-bottom: 1.5em;
 }
-.text--text {
-	font-size:1rem;
-	font-family:"Satoshi Variable";
-	font-weight:500;
-	font-style:normal;
-	line-height:130%;
-	text-decoration:none;
-	text-transform:none;
+.type--copy--bold,
+.type--copy strong {
+  font-weight: 700;
 }
-.text--text-bold {
-	font-size:1rem;
-	font-family:"Satoshi Variable";
-	font-weight:700;
-	font-style:normal;
-	line-height:130%;
-	text-decoration:none;
-	text-transform:none;
+.type--copy--inline-link,
+.type--copy a {
+  font-weight: 700;
+  text-decoration: underline;
 }
-.text--text-inline-link {
-	font-size:1rem;
-	font-family:"Satoshi Variable";
-	font-weight:700;
-	font-style:normal;
-	line-height:130%;
-	text-decoration:underline;
-	text-transform:none;
+.type--copy--inline-code,
+.type--copy code {
+  padding: 0.1em 0.3em;
+  border-radius: 0.2em;
+
+  background-color: $color--n-80;
+  color: $color--n-10;
+
+  font-family: $font-family-code;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 1rem;
+  line-height: inherit;
 }
-.text--text-inline-code {
-	font-size:1rem;
-	font-family:"Satoshi Variable";
-	font-weight:500;
-	font-style:normal;
-	line-height:130%;
-	text-decoration:none;
-	text-transform:none;
+
+// Text
+// -----------------
+// This is the type style for the product. It's slightly smaller than the copy.
+// Adding a class of `type--text` to a parent element will apply these styles.
+
+.type--text {
+  font-size: 1rem;
+  font-family: $font-family;
+  font-weight: 500;
+  line-height: 130%;
 }
-.text--hero-headline {
-	font-size:4.533rem;
-	font-family:"Satoshi Variable";
-	font-weight:700;
-	font-style:normal;
-	line-height:115%;
-	text-decoration:none;
-	text-transform:none;
+.type--text-bold,
+.type--text strong {
+  font-weight: 700;
 }
-.text--hero-sub {
-	font-size:3.067rem;
-	font-family:"Satoshi Variable";
-	font-weight:500;
-	font-style:normal;
-	line-height:120%;
-	text-decoration:none;
-	text-transform:none;
+.type--text-inline-link,
+.type--text a {
+  font-weight: 700;
+  text-decoration: underline;
 }
-.text--xl-headline {
-	font-size:3.467rem;
-	font-family:"Satoshi Variable";
-	font-weight:700;
-	font-style:normal;
-	line-height:115%;
-	text-decoration:none;
-	text-transform:none;
+.type--text-inline-code,
+.type--text code {
+  font-family: $font-family-code;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 0.9rem;
+  line-height: inherit;
+  background-color: $color--n-80;
+  color: $color--n-10;
+  padding: 0.1em 0.3em;
+  border-radius: 0.2em;
 }
-.text--xl-subline {
-	font-size:2.4rem;
-	font-family:"Satoshi Variable";
-	font-weight:500;
-	font-style:normal;
-	line-height:120%;
-	text-decoration:none;
-	text-transform:none;
+
+// Small
+// -----------------
+
+.type--small,
+small {
+  font-size: 0.933rem;
+  font-family: $font-family;
+  font-weight: 500;
+  font-style: normal;
+  line-height: 145%;
 }
-.text--l-headline {
-	font-size:3.067rem;
-	font-family:"Satoshi Variable";
-	font-weight:700;
-	font-style:normal;
-	line-height:115%;
-	text-decoration:none;
-	text-transform:none;
+.type--small-bold,
+.type--small strong {
+  font-weight: 700;
 }
-.text--l-subline {
-	font-size:2rem;
-	font-family:"Satoshi Variable";
-	font-weight:500;
-	font-style:normal;
-	line-height:120%;
-	text-decoration:none;
-	text-transform:none;
+.type--small-inline-link,
+.type--small a {
+  font-size: 0.933rem;
+  font-weight: 700;
+  text-decoration: underline;
 }
-.text--m-headline {
-	font-size:2.533rem;
-	font-family:"Satoshi Variable";
-	font-weight:700;
-	font-style:normal;
-	line-height:120%;
-	text-decoration:none;
-	text-transform:none;
+.type--small-inline-code,
+.type--small code {
+  font-size: 0.933rem;
+  font-family: "PT Mono";
+  font-weight: 400;
+  font-style: normal;
+  line-height: 145%;
+  background-color: $color--n-80;
+  color: $color--n-10;
+  padding: 0.1em 0.3em;
+  border-radius: 0.2em;
 }
-.text--m-subline {
-	font-size:1.733rem;
-	font-family:"Satoshi Variable";
-	font-weight:500;
-	font-style:normal;
-	line-height:120%;
-	text-decoration:none;
-	text-transform:none;
+
+// Headings
+// ------------------------------------------------
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: $font-family;
+  font-weight: 700;
+  margin-top: 0.25em;
+  margin-bottom: 0.4em;
 }
-.text--s-headline {
-	font-size:1.867rem;
-	font-family:"Satoshi Variable";
-	font-weight:700;
-	font-style:normal;
-	line-height:120%;
-	text-decoration:none;
-	text-transform:none;
+
+// [Tip] When using headlines, use the `type--` classes instead of the `h` tags.
+.type--xl-headline,
+h1 {
+  font-size: 3.467rem;
+  line-height: 115%;
 }
-.text--s-subline {
-	font-size:1.467rem;
-	font-family:"Satoshi Variable";
-	font-weight:500;
-	font-style:normal;
-	line-height:120%;
-	text-decoration:none;
-	text-transform:none;
+.type--l-headline,
+h2 {
+  font-size: 3.067rem;
+  line-height: 115%;
 }
-.text--xs-headline {
-	font-size:1.6rem;
-	font-family:"Satoshi Variable";
-	font-weight:700;
-	font-style:normal;
-	line-height:120%;
-	text-decoration:none;
-	text-transform:none;
+.type--m-headline,
+h3 {
+  font-size: 2.533rem;
+  line-height: 120%;
 }
-.text--xs-subline {
-	font-size:1.2rem;
-	font-family:"Satoshi Variable";
-	font-weight:500;
-	font-style:normal;
-	line-height:120%;
-	text-decoration:none;
-	text-transform:none;
+.type--s-headline,
+h4 {
+  font-size: 1.867rem;
+  line-height: 120%;
 }
-.text--xxs-headline {
-	font-size:1.333rem;
-	font-family:"Satoshi Variable";
-	font-weight:700;
-	font-style:normal;
-	line-height:130%;
-	text-decoration:none;
-	text-transform:none;
+.type--xs-headline,
+h5 {
+  font-size: 1.6rem;
+  line-height: 120%;
 }
-.text--xxs-subline {
-	font-size:1.067rem;
-	font-family:"Satoshi Variable";
-	font-weight:500;
-	font-style:normal;
-	line-height:120%;
-	text-decoration:none;
-	text-transform:none;
+.type--xxs-headline,
+h6 {
+  font-size: 1.333rem;
+  line-height: 130%;
 }
-.text--small-0 {
-	font-size:0.933rem;
-	font-family:"Satoshi Variable";
-	font-weight:500;
-	font-style:normal;
-	line-height:145%;
-	text-decoration:none;
-	text-transform:none;
+
+// Heroes
+// ------------------------------------------------
+
+.type--hero-headline {
+  font-size: 4.533rem;
+  font-family: $font-family;
+  font-weight: 700;
+  font-style: normal;
+  line-height: 115%;
+  text-decoration: none;
+  text-transform: none;
 }
-.text--small-bold {
-	font-size:0.933rem;
-	font-family:"Satoshi Variable";
-	font-weight:700;
-	font-style:normal;
-	line-height:145%;
-	text-decoration:none;
-	text-transform:none;
+.type--hero-sub {
+  font-size: 3.067rem;
+  font-family: $font-family;
+  font-weight: 500;
+  font-style: normal;
+  line-height: 120%;
+  text-decoration: none;
+  text-transform: none;
 }
-.text--small-inline-link {
-	font-size:0.933rem;
-	font-family:"Satoshi Variable";
-	font-weight:700;
-	font-style:normal;
-	line-height:145%;
-	text-decoration:none;
-	text-transform:none;
+
+// Code
+// ------------------------------------------------
+
+code:has(pre) {
+  font-family: $font-family-code;
+  font-size: 1rem;
+  font-weight: 400;
+  font-style: normal;
+  line-height: 150%;
+  background-color: $color--n-80;
+  color: $color--n-10;
+  padding: 0.1em 0.3em;
+  border-radius: 0.2em;
 }

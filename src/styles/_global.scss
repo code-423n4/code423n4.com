@@ -1,3 +1,30 @@
-@import 'base-reset';
-@import 'base-layout';
-@import 'base-typography';
+@import "base-reset";
+@import "base-layout";
+@import "base-typography";
+@import "base-helper-classes";
+
+// CSS Instructions
+// ------------------------------------------------
+
+// Adding a new file
+// --------------------
+
+// 1. Create a new file in the `src/styles` directory.
+// 2. Import the file in `src/styles/_global.scss` using `@import`.
+//    Note:
+//    - The order of the `@import` list is important.
+//    - They're designed to go from the most general to the most specific.
+//    - New files should be added at the bottom.
+
+// CSS rule order
+// --------------------
+
+// 1. Variables
+// 2. Box model properties
+// 3. Display and position
+// 4. Background
+// 5. Border
+// 6. Box shadow
+// 7. Text
+// 8. Transforms
+// 9. Other
