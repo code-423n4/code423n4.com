@@ -1,5 +1,6 @@
 import { differenceInDays, getYear } from "date-fns";
 import fs, { readFileSync } from "fs";
+import { getApiContestData } from '../util/getContestsData'
 import csv from "csvtojson";
 
 const getWardenInfo = (handle: string) => {
@@ -23,7 +24,7 @@ const getLeaderboardResults = async (
   handle?: string
 ) => {
   // @TODO: also filter by contestId (if provided)
-  const allContests = (await csv().fromFile("_data/contests/contests.csv"))
+  const allContests = (await getApiContestData())
     .filter((contest) => withinTimeframe(contest, contestRange))
     .filter((contest) => !contestId || contestId === contest.contestid);
 
@@ -34,12 +35,21 @@ const getLeaderboardResults = async (
       finding.split = parseInt(finding.split, 10);
       return finding;
     })
-    .filter((finding) => allContests.some((contest) => contest.contestid === finding.contest));
+    .filter((finding) =>
+      allContests.some(
+        (contest) => contest.contestid.toString() === finding.contest
+      )
+    );
 
   // get deduplicated handles from findings
-  const allHandles = Array.from(new Set(allFindings.map((finding) => finding.handle)))
+  const allHandles = Array.from(
+    new Set(allFindings.map((finding) => finding.handle))
+  )
     .map((handle) => getWardenInfo(handle))
-    .filter((handle) => handle.showOnLeaderboard === undefined || !handle.showOnLeaderboard);
+    .filter(
+      (handle) =>
+        handle.showOnLeaderboard === undefined || !handle.showOnLeaderboard
+    );
 
   return computeWardenStats(allHandles, allFindings);
 };
@@ -59,7 +69,7 @@ function withinTimeframe(contest, timeFrame) {
     case "Last 90 days":
       return withinLastNDays(new Date(contest.end_time), 90);
     case "Current Year":
-      const currentYear = new Date().getFullYear()
+      const currentYear = new Date().getFullYear();
       return withinYear(new Date(contest.end_time), currentYear);
     case "2022":
       return withinYear(new Date(contest.end_time), 2022);
@@ -176,7 +186,9 @@ exports.handler = async (event) => {
 
     return {
       statusCode: 200,
-      body: JSON.stringify(await getLeaderboardResults(contestRange, contestId, contestHandle)),
+      body: JSON.stringify(
+        await getLeaderboardResults(contestRange, contestId, contestHandle)
+      ),
     };
   } catch (error) {
     return {
