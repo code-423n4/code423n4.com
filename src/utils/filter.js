@@ -2,7 +2,6 @@ import { getDates } from "./time";
 import { sortByContestStart } from "./sort";
 
 function contestsByState({ contests }) {
-  console.log(contests);
   const filteredContests = {
     active: contests.node.filter(
       (c) => getDates(c.node.start_time, c.node.end_time).contestStatus === "active"
