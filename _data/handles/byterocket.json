@@ -1,5 +1,19 @@
 {
   "image": "./avatars/byterocket.png",
   "handle": "byterocket",
-  "members": ["pseudorandom", "pmerkleplant","marvinkruse"]
+  "members": [
+    "marvinkruse",
+    "Hieser"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xee680e5c2C5251261061F12BA3a5c470D2B6AE83"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0xee680e5c2C5251261061F12BA3a5c470D2B6AE83"
+    }
+  ],
+  "link": "https://byterocket.com"
 }
