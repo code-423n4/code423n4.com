@@ -24,20 +24,6 @@ async function getUniqueHandles() {
   return uniqueHandles;
 }
 
-async function getUniqueContestIds() {
-  const contests = await csv({
-    colParser: {
-      contestid: "number",
-    },
-  }).fromFile("./_data/contests/contests.csv");
-  const uniqueContestIds = new Set();
-  for (const parsedContest of contests) {
-    uniqueContestIds.add(parsedContest.contestid);
-  }
-
-  return uniqueContestIds;
-}
-
 // Validate handles.
 async function validateHandles() {
   const handles = await glob("./_data/handles/*.json");
@@ -167,59 +153,6 @@ async function validateOrganizations() {
   console.log("✅  Organization validation passed!");
 }
 
-async function validateContests() {
-  let passedValidation = true;
-
-  const contests = await csv().fromFile("./_data/contests/contests.csv");
-  const orgs = await glob("./_data/orgs/*.json");
-
-  const registeredOrganizations = new Set();
-  for (const orgFile of orgs) {
-    const blob = await readFile(orgFile);
-    let parsedOrg;
-    try {
-      parsedOrg = JSON.parse(blob);
-    } catch (err) {
-      console.error(`Unable to parse JSON file at ${orgFile}`);
-      passedValidation = false;
-      continue;
-    }
-
-    registeredOrganizations.add(parsedOrg.name);
-  }
-
-  const existingContestIds = new Set();
-  for (const parsedContest of contests) {
-    // Check that contest.sponsor is a registered organization.
-    if (!registeredOrganizations.has(parsedContest.sponsor)) {
-      console.error(
-        `Contest uses unknown organization: ${parsedContest.sponsor}`
-      );
-      passedValidation = false;
-      continue;
-    }
-
-    // Check that contest.contestid is unique.
-    if (existingContestIds.has(parsedContest.contestid)) {
-      console.error(
-        `Contest uses duplicate contestid: ${parsedContest.contestid}`
-      );
-      passedValidation = false;
-      continue;
-    } else {
-      existingContestIds.add(parsedContest.contestid);
-    }
-  }
-
-  if (!passedValidation) {
-    throw new Error(
-      "❌  Contests validation failed. See above log for more information."
-    );
-  }
-
-  console.log("✅  Contest validation passed!");
-}
-
 async function validateFindings() {
   let passedValidation = true;
   let parsedFindings;
@@ -235,19 +168,11 @@ async function validateFindings() {
   }
 
   const uniqueHandles = await getUniqueHandles();
-  const uniqueContestIds = await getUniqueContestIds();
-
   const unknownHandles = new Set();
   const unknownContestIds = new Set();
   for (const finding of parsedFindings) {
     if (!uniqueHandles.has(finding.handle)) {
       unknownHandles.add(finding.handle);
-      passedValidation = false;
-      continue;
-    }
-
-    if (!uniqueContestIds.has(finding.contest)) {
-      unknownContestIds.add(finding.contest);
       passedValidation = false;
       continue;
     }
@@ -277,7 +202,6 @@ async function validateFindings() {
     await validateHandles();
     await validateTeams();
     await validateOrganizations();
-    await validateContests();
     await validateFindings();
     console.log("Validation passed!");
   } catch (err) {
