@@ -28,6 +28,7 @@ const getLeaderboardResults = async (
     .filter((contest) => withinTimeframe(contest, contestRange))
     .filter((contest) => !contestId || Number(contestId) === contest.contestid);
 
+     
   // get findings, filtered by contest
   const allFindings = (await csv().fromFile("_data/findings/findings.csv"))
     .map((finding) => {
