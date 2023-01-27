@@ -1,6 +1,6 @@
 import { differenceInDays, getYear } from "date-fns";
 import fs, { readFileSync } from "fs";
-import { getApiContestData } from '../util/getContestsData'
+import { getApiContestData } from "../util/getContestsData";
 import csv from "csvtojson";
 
 const getWardenInfo = (handle: string) => {
@@ -26,8 +26,9 @@ const getLeaderboardResults = async (
   // @TODO: also filter by contestId (if provided)
   const allContests = (await getApiContestData())
     .filter((contest) => withinTimeframe(contest, contestRange))
-    .filter((contest) => !contestId || contestId === contest.contestid);
+    .filter((contest) => !contestId || Number(contestId) === contest.contestid);
 
+     
   // get findings, filtered by contest
   const allFindings = (await csv().fromFile("_data/findings/findings.csv"))
     .map((finding) => {
