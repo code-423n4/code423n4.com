@@ -24,9 +24,9 @@ const getLeaderboardResults = async (
   handle?: string
 ) => {
   // @TODO: also filter by contestId (if provided)
-  const allContests = (await getApiContestData())
-    .filter((contest) => withinTimeframe(contest, contestRange))
-    .filter((contest) => !contestId || contestId === contest.contestid);
+  let allContests = (await getApiContestData())
+  .filter((contest) => withinTimeframe(contest, contestRange))
+  .filter((contest) => Number(contestId) === contest.contestid);
 
   // get findings, filtered by contest
   const allFindings = (await csv().fromFile("_data/findings/findings.csv"))
