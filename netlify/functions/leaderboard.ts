@@ -78,7 +78,7 @@ function withinTimeframe(contest, timeFrame) {
     case "2021":
       return withinYear(new Date(contest.end_time), 2021);
     case "All time":
-      return withinYear(new Date(contest.end_time), 2021);
+      return true;
     default:
       return false;
   }
