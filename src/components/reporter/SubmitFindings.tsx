@@ -1,5 +1,7 @@
 import clsx from "clsx";
 import { navigate } from "@reach/router";
+import { Link } from "gatsby";
+import Moralis from "moralis-v1";
 import React, { useEffect, useState, useCallback } from "react";
 import { toast } from "react-toastify";
 
@@ -10,13 +12,14 @@ import { FindingCreateRequest } from "../../../types/finding";
 
 // helpers
 import {
-  emailField,
-  addressField,
   titleField,
   riskField,
   linksToCodeField,
   vulnerabilityDetailsField,
   qaGasDetailsField,
+  mitigationField,
+  mitigationRiskField,
+  mitigationOfField,
 } from "./findings/fields";
 import {
   config,
@@ -28,7 +31,7 @@ import {
 
 // hooks
 import useUser from "../../hooks/UserContext";
-import { useModalContext } from "../../hooks/ModalContext";
+import { ModalProps, useModalContext } from "../../hooks/ModalContext";
 
 // components
 import Agreement from "../content/Agreement";
@@ -38,19 +41,20 @@ import WardenDetails from "../WardenDetails";
 import Widget from "./widgets/Widget";
 
 // styles
-import * as styles from "../form/Form.module.scss";
-import * as widgetStyles from "../reporter/widgets/Widgets.module.scss";
+import * as styles from "../../styles/Main.module.scss";
 
 enum FormStatus {
   Unsubmitted = "unsubmitted",
   Submitting = "submitting",
   Submitted = "submitted",
+  Deleting = "deleting",
   Error = "error",
 }
 
 interface SubmitFindingsProps {
   sponsor: string;
   contest: string;
+  contestPath: string;
   repo: string;
   title: string;
   initialState: ReportState;
@@ -61,11 +65,14 @@ interface SubmitFindingsProps {
   successMessage: string;
   successButtonText?: string;
   cancelButtonText?: string;
+  contestType: "Mitigation review" | "Audit";
+  onDelete?: () => Promise<void>;
 }
 
 const SubmitFindings = ({
   sponsor,
   contest,
+  contestPath,
   repo,
   title,
   initialState,
@@ -76,45 +83,26 @@ const SubmitFindings = ({
   successMessage,
   successButtonText,
   cancelButtonText,
+  contestType,
+  onDelete,
 }: SubmitFindingsProps) => {
   // hooks
-  const { currentUser } = useUser();
+  const { currentUser, reFetchUser } = useUser();
   const { showModal } = useModalContext();
-
   // state
   const [status, setStatus] = useState<FormStatus>(FormStatus.Unsubmitted);
   const [hasValidationErrors, setHasValidationErrors] = useState<boolean>(
     false
   );
   const [errorMessage, setErrorMessage] = useState<string>("An error occurred");
-  const [isExpanded, setIsExpanded] = useState<boolean>(false);
   const [state, setState] = useState<ReportState>(initialState);
   const [additionalEmailAddresses, setAdditionalEmailAddresses] = useState<
     string[]
   >([]);
-  const [polygonAddress, setPolygonAddress] = useState<string>("");
   const [newTeamAddress, setNewTeamAddress] = useState<string>("");
   const [attributedTo, setAttributedTo] = useState<string>(initialAttributedTo);
-  const [fieldList, setFieldList] = useState<Field[]>([
-    emailField,
-    addressField,
-    riskField,
-  ]);
-
+  const [fieldList, setFieldList] = useState<Field[]>([riskField]);
   // effects
-  useEffect(() => {
-    if (currentUser.isLoggedIn) {
-      if (attributedTo === currentUser.username) {
-        setPolygonAddress(currentUser.address);
-      } else {
-        const team = currentUser.teams.find(
-          (team) => team.username === attributedTo
-        );
-        setPolygonAddress(team?.address || "");
-      }
-    }
-  }, [currentUser]);
-
   useEffect(() => {
     if (!attributedTo) {
       setAttributedTo(initialAttributedTo);
@@ -127,36 +115,57 @@ const SubmitFindings = ({
   }, [findingId, initialState]);
 
   useEffect(() => {
-    if (attributedTo !== currentUser.username) {
-      const team = currentUser.teams.find((t) => t.username === attributedTo);
-      if (team) {
-        setPolygonAddress(team.address || newTeamAddress);
+    // set which fields are shown based on risk and audit type
+    let fieldList: Field[] = [riskField];
+    if (contestType === "Mitigation review") {
+      fieldList = [mitigationOfField, mitigationField];
+      if (state.isMitigated) {
+        fieldList.push(qaGasDetailsField);
+        setFieldList(fieldList);
+        return;
       }
+      fieldList.push(mitigationRiskField);
+      if (!state.risk) {
+        setFieldList(fieldList);
+        return;
+      }
+      setFieldList(
+        fieldList.concat([
+          titleField,
+          linksToCodeField,
+          vulnerabilityDetailsField,
+        ])
+      );
+      return;
     } else {
-      setPolygonAddress(currentUser.address);
+      if (!state.risk) {
+        setFieldList(fieldList);
+        return;
+      }
+      if (checkQaOrGasFinding(state.risk)) {
+        fieldList.push(qaGasDetailsField);
+        setFieldList(fieldList);
+        return;
+      }
+      setFieldList(
+        fieldList.concat([
+          titleField,
+          linksToCodeField,
+          vulnerabilityDetailsField,
+        ])
+      );
     }
-  }, [attributedTo, currentUser]);
+  }, [state.risk, currentUser, state.isMitigated]);
 
   useEffect(() => {
-    // set which fields are shown based on risk
-    let fieldList: Field[] = [riskField];
-    if (!state.risk) {
-      setFieldList(fieldList);
+    if (!currentUser.isLoggedIn) {
       return;
     }
-    if (checkQaOrGasFinding(state.risk)) {
-      fieldList.push(qaGasDetailsField);
-      setFieldList(fieldList);
-      return;
+    // @todo: make chain dynamic based on contest
+    if (!currentUser.polygonPaymentAddress) {
+      showPaymentAddressModal();
     }
-    setFieldList(
-      fieldList.concat([
-        titleField,
-        linksToCodeField,
-        vulnerabilityDetailsField,
-      ])
-    );
-  }, [state.risk, currentUser]);
+  }, [currentUser]);
 
   // change handlers
   const handleChange = (e) => {
@@ -174,6 +183,16 @@ const SubmitFindings = ({
             const newState = {
               ...prevState,
               [name]: getTitle(value, prevState.risk),
+            };
+            setStateInLocalStorage(findingId, newState);
+            return newState;
+          });
+          break;
+        case "isMitigated":
+          setState((prevState) => {
+            const newState = {
+              ...prevState,
+              [name]: !prevState.isMitigated,
             };
             setStateInLocalStorage(findingId, newState);
             return newState;
@@ -204,7 +223,6 @@ const SubmitFindings = ({
 
   const handleNewAddressChange = (e) => {
     setNewTeamAddress(e.target.value);
-    setPolygonAddress(e.target.value);
   };
 
   const handleReset = () => {
@@ -219,13 +237,116 @@ const SubmitFindings = ({
     setState(initialState);
   };
 
+  const handleDeleteClick = async () => {
+    if (!onDelete) {
+      return;
+    }
+    showModal({
+      title: "Withdraw Finding",
+      body: "Are you sure you want to withdraw this finding?",
+      primaryButtonAction: handleDelete,
+      primaryButtonText: "Withdraw",
+    });
+  };
+
+  const handleDelete = useCallback(async (): Promise<void> => {
+    if (!onDelete) {
+      return;
+    }
+    setStatus(FormStatus.Deleting);
+    try {
+      await onDelete();
+      if (typeof window !== `undefined`) {
+        window.localStorage.removeItem(findingId);
+      }
+      // clear location state
+      navigate("", { state: {} });
+      setStatus(FormStatus.Submitted);
+    } catch (error) {
+      setStatus(FormStatus.Error);
+      setErrorMessage(error);
+    }
+  }, [status]);
+
+  const showPaymentAddressModal = async () => {
+    const modalProps: Partial<ModalProps> = {
+      title: "Please save a payment address",
+      body: (
+        <>
+          It looks like you don't have a payment address saved for your account.
+          Please update your payment information before submitting findings.
+        </>
+      ),
+      primaryButtonAction: async () => {
+        navigate("/account");
+      },
+      primaryButtonText: "Update Payment Info",
+    };
+
+    const user = await Moralis.User.current();
+    const authAddress = await user?.get("ethAddress");
+    if (authAddress) {
+      modalProps.body = (
+        <>Would you like to use {authAddress} for payment on Polygon?</>
+      );
+      modalProps.primaryButtonAction = saveAuthAddressAsPaymentAddress;
+      modalProps.primaryButtonText = "Save Address";
+      modalProps.secondaryButtonText = "Update Payment Information";
+      modalProps.secondaryButtonAction = async () => {
+        navigate("/account");
+      };
+    }
+    showModal(modalProps as ModalProps);
+  };
+
+  const saveAuthAddressAsPaymentAddress = async (): Promise<void> => {
+    try {
+      const user = await Moralis.User.current();
+      const authAddress = await user?.get("ethAddress");
+      await Moralis.Cloud.run("addPaymentAddress", {
+        address: authAddress,
+        chain: "polygon",
+      });
+      await reFetchUser();
+      toast.success(`Your Polygon payment address has been saved`);
+    } catch (error) {
+      toast.error(
+        <>
+          An error occurred and your payment address has not been saved:{" "}
+          {error.message}
+          <br />
+          Go to your <Link to="/account">account management page</Link> to
+          update your payment information
+        </>
+      );
+    }
+  };
+
   const submitFinding = useCallback(async () => {
     const isQaOrGasFinding = checkQaOrGasFinding(state.risk);
-
     const linksToCodeString = state.linksToCode.join("\n");
-    const details = isQaOrGasFinding ? state.qaGasDetails : state.details;
-    const markdownBody = `# Lines of code\n\n${linksToCodeString}\n\n\n# Vulnerability details\n\n${details}`;
-    const formattedBody = isQaOrGasFinding ? details : markdownBody;
+    const markdownBody = `# Lines of code\n\n${linksToCodeString}\n\n\n# Vulnerability details\n\n${state.details}`;
+    let risk = state.risk;
+    let title = getTitle(state.title, state.risk);
+    let body = markdownBody;
+    let labels = [config.labelAll, state.risk];
+
+    let mitigationOf: string | undefined = state.mitigationOf;
+
+    if (isQaOrGasFinding) {
+      body = state.qaGasDetails;
+    }
+
+    if (contestType === "Mitigation review") {
+      mitigationOf = state.mitigationOf;
+      labels = [state.risk];
+      if (state.isMitigated) {
+        body = state.qaGasDetails;
+        title = "";
+        risk = "";
+        labels = [];
+      }
+    }
     const emailAddressList: string[] = additionalEmailAddresses.filter(
       (email) => !!email
     );
@@ -238,12 +359,20 @@ const SubmitFindings = ({
       repo: repo.split("/").pop() || "",
       emailAddresses: emailAddressList,
       attributedTo,
-      address: polygonAddress,
-      risk: state.risk,
-      title: getTitle(state.title, state.risk),
-      body: formattedBody,
-      labels: [config.labelAll, state.risk],
+      risk,
+      title,
+      body,
+      labels,
+      mitigationOf,
+      isMitigated: state.isMitigated,
     };
+    if (attributedTo !== currentUser.username) {
+      const team = currentUser.teams.find(
+        (team) => team.username === attributedTo
+      );
+      data.address = team?.polygonAddress || newTeamAddress;
+    }
+
     setStatus(FormStatus.Submitting);
     try {
       const response = await onSubmit(data);
@@ -264,9 +393,7 @@ const SubmitFindings = ({
           toast.error(error);
         } else {
           setStatus(FormStatus.Error);
-          if (error) {
-            setErrorMessage(error);
-          }
+          setErrorMessage(error);
         }
       }
     } catch (error) {
@@ -280,7 +407,7 @@ const SubmitFindings = ({
     currentUser,
     state,
     additionalEmailAddresses,
-    polygonAddress,
+    newTeamAddress,
     sponsor,
     repo,
     attributedTo,
@@ -292,9 +419,23 @@ const SubmitFindings = ({
     }
     const isQaOrGasFinding = checkQaOrGasFinding(state.risk);
     // extract required fields from field data for validation check
-    const requiredFields = isQaOrGasFinding
-      ? [state.risk, state.qaGasDetails]
-      : [state.risk, state.title, state.details];
+    let requiredFields = [state.risk, state.title, state.details];
+    if (isQaOrGasFinding) {
+      requiredFields = [state.risk, state.qaGasDetails];
+    }
+    if (contestType === "Mitigation review") {
+      if (state.isMitigated) {
+        // if the finding is mitigated, we only need "mitigation of"
+        if (!state.mitigationOf || !state.qaGasDetails) {
+          setHasValidationErrors(true);
+          return true;
+        } else {
+          return false;
+        }
+      } else {
+        requiredFields.push(state.mitigationOf);
+      }
+    }
     const hasErrors = requiredFields.some((field) => {
       return field === "" || field === undefined;
     });
@@ -305,9 +446,18 @@ const SubmitFindings = ({
     }
 
     // @todo: better validation for polygon address
-    if (!polygonAddress || polygonAddress.length !== 42) {
-      setHasValidationErrors(true);
-      return true;
+    // @todo: make chain dynamic based on contest
+    if (attributedTo !== currentUser.username) {
+      const team = currentUser.teams.find(
+        (team) => team.username === attributedTo
+      );
+      if (
+        !team ||
+        (!team.polygonAddress &&
+          (!newTeamAddress || newTeamAddress.length !== 42))
+      ) {
+        return true;
+      }
     }
 
     const linksToCodeRegex = new RegExp("#L[0-9]+(-L[0-9]+)?$");
@@ -322,7 +472,7 @@ const SubmitFindings = ({
 
     setHasValidationErrors(false);
     return false;
-  }, [state, polygonAddress, currentUser]);
+  }, [state, newTeamAddress, currentUser]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -332,10 +482,15 @@ const SubmitFindings = ({
       return;
     }
 
+    if (!currentUser.polygonPaymentAddress) {
+      await showPaymentAddressModal();
+      return;
+    }
+
     const team = currentUser.teams.find(
       (team) => team.username === attributedTo
     );
-    if (team && !team.address) {
+    if (team && !team.polygonAddress) {
       // confirm saving the team's address
       showModal({
         title: `Save address for team ${attributedTo}`,
@@ -346,7 +501,7 @@ const SubmitFindings = ({
               will be saved for your team. Are you sure you entered it
               correctly?
             </p>
-            <p>{polygonAddress}</p>
+            <p>{newTeamAddress}</p>
           </>
         ),
         primaryButtonAction: submitFinding,
@@ -355,44 +510,31 @@ const SubmitFindings = ({
       });
     } else {
       submitFinding();
-      setIsExpanded(false);
     }
   };
 
   return (
-    <div
-      className={
-        !isExpanded ? clsx(styles.Form) : clsx(styles.Form, styles.FormMax)
-      }
-    >
-      <div className={clsx(styles.FormHeader)}>
-        <h1 className={styles.Heading1}>{`${title} finding`}</h1>
-        <button
-          onClick={() => setIsExpanded(!isExpanded)}
-          className={clsx(styles.FormIconButton)}
-        >
-          <img
-            src={isExpanded ? "/images/compress.svg" : "/images/expand.svg"}
-            alt={isExpanded ? "compress form" : "expand form"}
-            className={clsx(styles.FormIcons)}
-          />
-        </button>
-      </div>
+    <div className={styles.Form__Form}>
+      <h1 className={styles.Form__Heading1}>{`${title} finding`}</h1>
       {(status === FormStatus.Unsubmitted ||
+        status === FormStatus.Deleting ||
         status === FormStatus.Submitting) && (
         <form>
-          <fieldset className={widgetStyles.Fields}>
-            <h2 className={styles.Heading2}>User Info</h2>
+          <fieldset className={styles.Widget__Fields}>
+            <h2 className={styles.Form__Heading2}>User Info</h2>
             {currentUser.teams.length > 0 ? (
               <>
-                <h3 className={widgetStyles.Label}>Submitting as</h3>
+                <h3 className={styles.Widget__Label}>Submitting as</h3>
                 <fieldset
-                  className={clsx(widgetStyles.Fields, widgetStyles.RadioGroup)}
+                  className={clsx(
+                    styles.Widget__Fields,
+                    styles.Widget__RadioGroup
+                  )}
                 >
-                  <h4 className={styles.Heading4}>WARDEN</h4>
-                  <label className={widgetStyles.RadioLabel}>
+                  <h4 className={styles.Form__Heading4}>WARDEN</h4>
+                  <label className={styles.Widget__RadioLabel}>
                     <input
-                      className={widgetStyles.Radio}
+                      className={styles.Widget__Radio}
                       type="radio"
                       value={currentUser.username}
                       name="currentUser"
@@ -401,19 +543,18 @@ const SubmitFindings = ({
                     />
                     <WardenDetails
                       username={currentUser.username}
-                      address={currentUser.address}
                       image={currentUser.image}
                     />
                   </label>
-                  <h4 className={styles.Heading4}>TEAM MEMBER</h4>
+                  <h4 className={styles.Form__Heading4}>TEAM MEMBER</h4>
                   {currentUser.teams.map((team, i) => (
                     <>
                       <label
-                        className={widgetStyles.RadioLabel}
+                        className={styles.Widget__RadioLabel}
                         key={team.username}
                       >
                         <input
-                          className={widgetStyles.Radio}
+                          className={styles.Widget__Radio}
                           type="radio"
                           value={i}
                           name="team"
@@ -422,19 +563,19 @@ const SubmitFindings = ({
                         />
                         <WardenDetails
                           username={team.username}
-                          address={team.address}
                           image={team.image}
                         />
                       </label>
-                      {!team.address && attributedTo === team.username && (
+                      {/* @todo: remove this once all teams have saved a payment address */}
+                      {!team.polygonAddress && attributedTo === team.username && (
                         <div style={{ margin: "10px 0 0 40px" }}>
                           <label htmlFor={"newTeamAddress"}>
                             Team Polygon Address *
                           </label>
                           <input
                             className={clsx(
-                              widgetStyles.Control,
-                              widgetStyles.Text,
+                              styles.Widget__Control,
+                              styles.Widget__Text,
                               (!newTeamAddress ||
                                 newTeamAddress.length !== 42) &&
                                 hasValidationErrors &&
@@ -448,12 +589,12 @@ const SubmitFindings = ({
                             maxLength={42}
                           />
                           {!newTeamAddress && hasValidationErrors && (
-                            <p className={widgetStyles.ErrorMessage}>
+                            <p className={styles.Widget__ErrorMessage}>
                               <small>This field is required</small>
                             </p>
                           )}
                           {newTeamAddress.length !== 42 && hasValidationErrors && (
-                            <p className={widgetStyles.ErrorMessage}>
+                            <p className={styles.Widget__ErrorMessage}>
                               <small>
                                 Polygon address must be 42 characters long
                               </small>
@@ -468,9 +609,8 @@ const SubmitFindings = ({
             ) : (
               <WardenDetails
                 username={currentUser.username}
-                address={currentUser.address}
                 image={currentUser.image}
-                className={widgetStyles.Container}
+                className={styles.Widget__Container}
               />
             )}
             <DynamicInputGroup
@@ -478,14 +618,18 @@ const SubmitFindings = ({
               onChange={(emails) => setAdditionalEmailAddresses(emails)}
               fieldName="email address"
             >
-              <label htmlFor="email" className={widgetStyles.Label}>
+              <label htmlFor="email" className={styles.Widget__Label}>
                 Email
               </label>
               <p>{currentUser.emailAddress}</p>
             </DynamicInputGroup>
           </fieldset>
-          <fieldset className={styles.EmphasizedInputGroup}>
-            <h2 className={styles.Heading2}>Finding</h2>
+          <fieldset className={styles.Form__EmphasizedInputGroup}>
+            <h2 className={styles.Form__Heading2}>
+              {contestType === "Mitigation review"
+                ? "Mitigation Review"
+                : "Finding"}
+            </h2>
             {fieldList.map((field, index) => {
               let isInvalid = false;
               if (field.name === "linksToCode") {
@@ -493,7 +637,14 @@ const SubmitFindings = ({
               } else {
                 isInvalid = hasValidationErrors && !state[field.name];
               }
-              return (
+              return field.widget === "checkbox" ? (
+                <Widget
+                  field={field}
+                  onChange={handleChange}
+                  fieldState={state}
+                  isInvalid={false}
+                />
+              ) : (
                 <FormField
                   key={`${field.name} ${index}`}
                   name={field.name}
@@ -513,7 +664,7 @@ const SubmitFindings = ({
             })}
           </fieldset>
           <Agreement />
-          <div className={styles.ButtonsWrapper}>
+          <div className={styles.Form__ButtonsWrapper}>
             {cancelButtonText && (
               <button
                 className="button cta-button secondary"
@@ -523,15 +674,26 @@ const SubmitFindings = ({
                 {cancelButtonText}
               </button>
             )}
+            {onDelete && (
+              <button
+                className="button cta-button danger"
+                type="button"
+                onClick={handleDeleteClick}
+              >
+                {status === FormStatus.Deleting
+                  ? "Withdrawing..."
+                  : "Withdraw finding"}
+              </button>
+            )}
             <button
               className="button cta-button"
               type="button"
               onClick={handleSubmit}
               disabled={status !== FormStatus.Unsubmitted}
             >
-              {status === FormStatus.Unsubmitted
-                ? submitButtonText
-                : "Submitting..."}
+              {status === FormStatus.Submitting
+                ? "Submitting..."
+                : submitButtonText}
             </button>
           </div>
         </form>
@@ -550,17 +712,22 @@ const SubmitFindings = ({
       )}
       {status === FormStatus.Submitted && (
         <div className="centered-text">
-          <h2 className={styles.Heading2}>Thank you!</h2>
+          <h2 className={styles.Form__Heading2}>Thank you!</h2>
           <p>{successMessage}</p>
-          {successButtonText && (
-            <button
-              className="button cta-button"
-              type="button"
-              onClick={handleReset}
-            >
-              Submit another
-            </button>
-          )}
+          <div className={styles.Form__ButtonsWrapper}>
+            <Link to={contestPath} className="button cta-button secondary">
+              Back to contest
+            </Link>
+            {successButtonText && (
+              <button
+                className="button cta-button"
+                type="button"
+                onClick={handleReset}
+              >
+                Submit another
+              </button>
+            )}
+          </div>
         </div>
       )}
     </div>

@@ -1,16 +1,10 @@
-import csv from "csvtojson";
 import { Contest } from "../../types/contest";
+import { getApiContestData } from './getContestsData';
 
 async function getContest(contestId: number): Promise<Contest | undefined> {
-  const allContests = await csv().fromFile("_data/contests/contests.csv");
+  const allContests = await getApiContestData();
   let contests: Contest[] = allContests;
-  if (process.env.NODE_ENV === "development") {
-    const testContests = await csv().fromFile(
-      "_test-data/contests/contests.csv"
-    );
-    contests = contests.concat(testContests);
-  }
-  const contest = contests.find((c) => parseInt(c.contestid) == contestId);
+  const contest = contests.find((c) => c.contestid == contestId);
   return contest;
 }
 
@@ -26,4 +20,34 @@ function isContestActive(contest: Contest): boolean {
   return now >= start && now <= end;
 }
 
-export { getContest, isContestActive };
+// @todo: determine if this is the right place for these functions
+const riskCodeToLabelMap = {
+  "3": "3 (High Risk)",
+  "2": "2 (Med Risk)",
+  Q: "QA (Quality Assurance)",
+  G: "G (Gas Optimization)",
+};
+
+function getRiskCodeFromGithubLabel(label: string): string {
+  for (const code in riskCodeToLabelMap) {
+    if (riskCodeToLabelMap[code] === label) {
+      return code;
+    }
+  }
+  return "";
+}
+
+function getGithubLabelFromRiskCode(code: string): string {
+  const label = riskCodeToLabelMap[code];
+  if (label) {
+    return label;
+  }
+  throw "risk label not found";
+}
+
+export {
+  getContest,
+  isContestActive,
+  getRiskCodeFromGithubLabel,
+  getGithubLabelFromRiskCode,
+};
