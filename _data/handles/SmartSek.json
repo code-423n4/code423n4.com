@@ -1,5 +1,15 @@
 {
-    "image": "./avatars/SmartSek.png",
-    "handle": "SmartSek",
-    "members": ["0xDjango", "hake"]
+  "image": "./avatars/SmartSek.png",
+  "handle": "SmartSek",
+  "members": [
+    "0xDjango",
+    "hake"
+  ],
+  "imageUrl": "https://raw.githubusercontent.com/code-423n4/code423n4.com/main/_data/handles/avatars/SmartSek.png",
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x0058dd50c91d60F0A973fE15Fb40e4430F4DAA08"
+    }
+  ]
 }
