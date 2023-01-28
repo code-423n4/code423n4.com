@@ -1,6 +1,6 @@
 import { differenceInDays, getYear } from "date-fns";
 import fs, { readFileSync } from "fs";
-import { getApiContestData } from '../util/getContestsData'
+import { getApiContestData } from "../util/getContestsData";
 import csv from "csvtojson";
 
 const getWardenInfo = (handle: string) => {
@@ -26,7 +26,7 @@ const getLeaderboardResults = async (
   // @TODO: also filter by contestId (if provided)
   const allContests = (await getApiContestData())
     .filter((contest) => withinTimeframe(contest, contestRange))
-    .filter((contest) => !contestId || contestId === contest.contestid);
+    .filter((contest) => !contestId || Number(contestId) === contest.contestid);
 
   // get findings, filtered by contest
   const allFindings = (await csv().fromFile("_data/findings/findings.csv"))
@@ -71,12 +71,16 @@ function withinTimeframe(contest, timeFrame) {
     case "Current Year":
       const currentYear = new Date().getFullYear();
       return withinYear(new Date(contest.end_time), currentYear);
+    case "2023":
+      return withinYear(new Date(contest.end_time), 2023);
     case "2022":
       return withinYear(new Date(contest.end_time), 2022);
     case "2021":
       return withinYear(new Date(contest.end_time), 2021);
-    default:
+    case "All time":
       return true;
+    default:
+      return false;
   }
 }
 
