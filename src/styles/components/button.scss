@@ -1,0 +1,43 @@
+@import "../variables";
+
+// --------------------------------------------------
+// Button Component
+// --------------------------------------------------
+
+// CSS rule order
+// --------------------
+
+// 1. Variables
+// 2. Box model properties
+// 3. Display and position
+// 4. Background
+// 5. Border
+// 6. Box shadow
+// 7. Text
+// 8. Transforms
+// 9. Other
+
+.button--primary,
+.button {
+  padding: $spacing__s $spacing__l;
+  margin-right: $spacing__s;
+  display: inline-flex;
+  background: $color__c4-button-blurple;
+  border: 2px solid $color__c4-button-blurple;
+  border-radius: $border-radius__m;
+  color: $color__white;
+  text-decoration: none;
+  text-align: center;
+  flex-shrink: 0;
+  cursor: pointer;
+
+  @include accessible-animation {
+    transition: background 0.2s ease-in-out;
+  }
+
+  &:hover {
+    background: $color__c4-logo-blurple;
+    border-color: $color__c4-logo-blurple;
+    color: $color__white;
+  }
+}

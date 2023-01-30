@@ -1,0 +1,36 @@
+@import "../variables";
+
+// CSS rule order
+// --------------------
+
+// 1. Variables
+// 2. Box model properties
+// 3. Display and position
+// 4. Background
+// 5. Border
+// 6. Box shadow
+// 7. Text
+// 8. Transforms
+// 9. Other
+
+// This hides an element visually, but still allows it to be read by screen readers.
+.visually-hidden {
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+
+// Pair .visually-hidden with .focusable to show the element when it's focused.
+.visually-hidden.focusable:focus {
+  clip: auto;
+  clip-path: none;
+  height: auto;
+  overflow: auto;
+  position: static;
+  white-space: normal;
+  width: auto;
+}

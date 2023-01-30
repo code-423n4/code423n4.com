@@ -1,7 +1,12 @@
-@import "base-reset";
-@import "base-layout";
-@import "base-typography";
-@import "base-helper-classes";
+@import "base/reset";
+@import "base/layout";
+@import "base/typography";
+@import "base/helper-classes";
+@import "components/button";
+@import "components/header";
+@import "components/footer";
+@import "components/trust-bar";
+@import "pages/home/hero";
 
 // CSS Instructions
 // ------------------------------------------------
@@ -14,7 +19,7 @@
 //    Note:
 //    - The order of the `@import` list is important.
 //    - They're designed to go from the most general to the most specific.
-//    - New files should be added at the bottom.
+//    - New files should be added to the bottom of their respective sections.
 
 // CSS rule order
 // --------------------

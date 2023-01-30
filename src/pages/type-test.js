@@ -3,11 +3,14 @@ import { graphql } from "gatsby";
 
 import DefaultLayout from "../templates/DefaultLayout";
 
-export default function SiteIndex({ data }) {
+export default function TypeTest(data) {
   return (
     <DefaultLayout bodyClass="landing">
       <div className="type--copy">
-        <h1>In which Pooh and Piglet Go Hunting and Nearly Catch a Woozle</h1>
+        <h1>
+          Type Test - In which Pooh and Piglet Go Hunting and Nearly Catch a
+          Woozle
+        </h1>
         <p>
           The <small>Piglet</small> lived in a <strong>very grand house</strong>{" "}
           in the middle of a <code>beech-tree</code>, and the{" "}
@@ -173,44 +176,44 @@ export default function SiteIndex({ data }) {
   );
 }
 
-export const query = graphql`
-  query {
-    contests: allContestsCsv(
-      filter: { hide: { ne: true } }
-      sort: { fields: start_time, order: ASC }
-    ) {
-      edges {
-        node {
-          id
-          title
-          details
-          hide
-          league
-          start_time
-          end_time
-          amount
-          repo
-          findingsRepo
-          sponsor {
-            name
-            image {
-              childImageSharp {
-                resize(width: 80) {
-                  src
-                }
-              }
-            }
-            link
-          }
-          fields {
-            submissionPath
-            contestPath
-            status
-            codeAccess
-          }
-          contestid
-        }
-      }
-    }
-  }
-`;
+// export const query = graphql`
+//   query {
+//     contests: allContestsCsv(
+//       filter: { hide: { ne: true } }
+//       sort: { fields: start_time, order: ASC }
+//     ) {
+//       edges {
+//         node {
+//           id
+//           title
+//           details
+//           hide
+//           league
+//           start_time
+//           end_time
+//           amount
+//           repo
+//           findingsRepo
+//           sponsor {
+//             name
+//             image {
+//               childImageSharp {
+//                 resize(width: 80) {
+//                   src
+//                 }
+//               }
+//             }
+//             link
+//           }
+//           fields {
+//             submissionPath
+//             contestPath
+//             status
+//             codeAccess
+//           }
+//           contestid
+//         }
+//       }
+//     }
+//   }
+// `;

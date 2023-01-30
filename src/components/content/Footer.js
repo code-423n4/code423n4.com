@@ -2,7 +2,7 @@ import React from "react";
 
 const Footer = () => {
   return (
-    <footer>
+    <footer className="footer">
       <span>An open organization</span>
       <a href="https://twitter.com/code4rena">Twitter</a>
       <a href="https://discord.gg/code4rena">Discord</a>

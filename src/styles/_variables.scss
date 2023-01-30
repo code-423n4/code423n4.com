@@ -1,108 +1,120 @@
 // Typography
 // ------------------------------------------------
 
-$font-family: "Satoshi Variable", sans-serif;
-$font-family-code: "PT Mono", monospace;
+$font__default: "Satoshi Variable", sans-serif;
+$font__code: "PT Mono", monospace;
 
 // Colors
 // ------------------------------------------------
 
 // Brand colors
-$color--c4-button-blurple: rgba(113, 74, 235, 1);
-$color--sponsor-color: rgba(64, 203, 161, 1);
+$color__c4-button-blurple: rgba(113, 74, 235, 1);
+$color__c4-logo-blurple: #855eff;
+$color__sponsor-color: rgba(64, 203, 161, 1);
 
 // Black and white
-$color--white: rgba(255, 255, 255, 1);
-$color--black: rgba(2, 2, 3, 1);
+$color__white: rgba(255, 255, 255, 1);
+$color__black: rgba(2, 2, 3, 1);
 
 // Neutral palette
-$color--n-100: rgba(11, 10, 13, 1);
-$color--n-90: rgba(29, 27, 38, 1);
-$color--n-80: rgba(46, 43, 59, 1);
-$color--n-70: rgba(49, 46, 64, 1);
-$color--n-60: rgba(64, 61, 77, 1);
-$color--n-50: rgba(75, 71, 89, 1);
-$color--n-40: rgba(86, 82, 102, 1);
-$color--n-30: rgba(107, 102, 128, 1);
-$color--n-20: rgba(141, 138, 153, 1);
-$color--n-10: rgba(173, 171, 178, 1);
-$color--n-5: rgba(196, 194, 204, 1);
-$color--n-2: rgba(230, 230, 230, 1);
+$color__n-100: rgba(11, 10, 13, 1);
+$color__n-90: rgba(29, 27, 38, 1);
+$color__n-80: rgba(46, 43, 59, 1);
+$color__n-70: rgba(49, 46, 64, 1);
+$color__n-60: rgba(64, 61, 77, 1);
+$color__n-50: rgba(75, 71, 89, 1);
+$color__n-40: rgba(86, 82, 102, 1);
+$color__n-30: rgba(107, 102, 128, 1);
+$color__n-20: rgba(141, 138, 153, 1);
+$color__n-10: rgba(173, 171, 178, 1);
+$color__n-5: rgba(196, 194, 204, 1);
+$color__n-2: rgba(230, 230, 230, 1);
 
 // Spacing
 // ------------------------------------------------
 
-$spacing--base: 0.5rem; // 8px
+$spacing__base: 0.5rem; // 8px
 
-$spacing--xxs: calc(#{$spacing--base}/ 4); // 2px
-$spacing--xs: calc(#{$spacing--base}/ 2); // 4px
-$spacing--s: $spacing--base; // 8px
-$spacing--m: calc(#{$spacing--base} * 2); // 16px
-$spacing--l: calc(#{$spacing--base} * 3); // 24px
-$spacing--xl: calc(#{$spacing--base} * 4); // 32px
-$spacing--xxl: calc(#{$spacing--base} * 5); // 40px
-$spacing--xxxl: calc(#{$spacing--base} * 6); // 48px
+$spacing__xxs: calc(#{$spacing__base}/ 4); // 2px
+$spacing__xs: calc(#{$spacing__base}/ 2); // 4px
+$spacing__s: $spacing__base; // 8px
+$spacing__m: calc(#{$spacing__base} * 2); // 16px
+$spacing__l: calc(#{$spacing__base} * 3); // 24px
+$spacing__xl: calc(#{$spacing__base} * 4); // 32px
+$spacing__xxl: calc(#{$spacing__base} * 5); // 40px
+$spacing__xxxl: calc(#{$spacing__base} * 6); // 48px
 
 // Breakpoints
 // ------------------------------------------------
 
-$breakpoint--xs: 0;
-$breakpoint--s: 600px;
-$breakpoint--m: 960px;
-$breakpoint--l: 1280px;
-$breakpoint--xl: 1920px;
+$breakpoint__xs: 0;
+$breakpoint__s: 600px;
+$breakpoint__m: 960px;
+$breakpoint__l: 1280px;
+$breakpoint__xl: 1920px;
 
 // Layout
 // ------------------------------------------------
 
-$layout--max-width: 1280px;
+$layout__max-width: 1280px;
 
 // Shadows
 // ------------------------------------------------
 
-$shadow--base: 0 0 0.5rem 0 rgba(0, 0, 0, 0.5);
-$shadow--hover: 0 0 0.5rem 0 rgba(0, 0, 0, 0.75);
+$shadow__base: 0 0 0.5rem 0 rgba(0, 0, 0, 0.5);
+$shadow__hover: 0 0 0.5rem 0 rgba(0, 0, 0, 0.75);
 
 // Transitions
 // ------------------------------------------------
 
-$transition--base: 0.2s ease-in-out;
+$transition__base: 0.2s ease-in-out;
 
 // Border radius
 // ------------------------------------------------
 
-$border-radius--base: 0.2rem; // 4px
-$border-radius--xs: calc(#{$border-radius--base}/ 2); // 2px
+$border-radius__base: 0.2rem; // 4px
+$border-radius__m: $border-radius__base; // 4px
+$border-radius__s: calc(#{$border-radius__base}/ 2); // 2px
 
 // Z-index
 // ------------------------------------------------
 
-$z-index--base: 1;
-$z-index--modal: 1000;
+$z-index__base: 1;
+$z-index__modal: 1000;
 
 // Media queries
 // ------------------------------------------------
 
 @mixin breakpoint($breakpoint) {
   @if $breakpoint == "xs" {
-    @media (min-width: $breakpoint--xs) {
+    @media (min-width: $breakpoint__xs) {
       @content;
     }
   } @else if $breakpoint == "s" {
-    @media (min-width: $breakpoint--s) {
+    @media (min-width: $breakpoint__s) {
       @content;
     }
   } @else if $breakpoint == "m" {
-    @media (min-width: $breakpoint--m) {
+    @media (min-width: $breakpoint__m) {
       @content;
     }
   } @else if $breakpoint == "l" {
-    @media (min-width: $breakpoint--l) {
+    @media (min-width: $breakpoint__l) {
       @content;
     }
   } @else if $breakpoint == "xl" {
-    @media (min-width: $breakpoint--xl) {
+    @media (min-width: $breakpoint__xl) {
       @content;
     }
+  }
+}
+
+// Animations
+// ------------------------------------------------
+
+// Example of using @media to wrap an animation mixin.
+@mixin accessible-animation {
+  @media (prefers-reduced-motion: no-preference) {
+    @content;
   }
 }

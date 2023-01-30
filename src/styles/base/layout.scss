@@ -1,0 +1,57 @@
+@import "../variables";
+
+// CSS rule order
+// --------------------
+
+// 1. Variables
+// 2. Box model properties
+// 3. Display and position
+// 4. Background
+// 5. Border
+// 6. Box shadow
+// 7. Text
+// 8. Transforms
+// 9. Other
+
+// [Tip] For typography applied to `body`, check `base-typography`.
+body {
+  padding: 0 $spacing__l $spacing__m;
+  @include breakpoint("m") {
+    padding: 0 $spacing__l $spacing__l;
+  }
+
+  background: black;
+  color: white !important;
+  min-height: 100%;
+  height: 100%;
+}
+#___gatsby,
+#gatsby-focus-wrapper,
+html {
+  min-height: 100%;
+  height: 100%;
+}
+#gatsby-focus-wrapper {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto 1fr auto;
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
+
+  .header {
+    grid-area: 1 / 1 / 2 / 2;
+    align-self: start;
+  }
+  main {
+    grid-area: 2 / 1 / 3 / 2;
+    align-self: start;
+  }
+  .footer {
+    grid-area: 3 / 1 / 4 / 2;
+    align-self: end;
+  }
+}
+main {
+  max-width: $layout__max-width;
+  margin: $spacing__l auto;
+}

@@ -30,7 +30,7 @@ body {
   -ms-text-size-adjust: none;
   text-size-adjust: none;
   line-height: 1.5;
-  min-height: 100vh;
+  // min-height: 100vh; // vh is a dangerous game with scrollbars -🍔
   width: 100%;
 }
 a,

@@ -7,11 +7,13 @@ const auditorButtonText = "I want to be an auditor";
 const HeroIndex = () => {
   return (
     <div className="hero">
-      <h1>
+      <h1 className="type__xl-headline">
         <span>Top auditors compete to </span>{" "}
         <span>keep high severity bugs</span> <span>out of production.</span>
       </h1>
-      <h5>Start a public or private audit within 48 hours.</h5>
+      <h2 className="type__xs-headline">
+        Start a public or private audit within 48 hours.
+      </h2>
       <div className="hero-buttons">
         <a
           href="https://code4rena.typeform.com/i-want-an-audit"

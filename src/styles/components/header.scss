@@ -1,0 +1,123 @@
+@import "../variables";
+
+// --------------------------------------------------
+// Header Component
+// --------------------------------------------------
+
+// CSS rule order
+// --------------------
+
+// 1. Variables
+// 2. Box model properties
+// 3. Display and position
+// 4. Background
+// 5. Border
+// 6. Box shadow
+// 7. Text
+// 8. Transforms
+// 9. Other
+
+.header {
+  width: 100%;
+  display: flex;
+}
+
+// Nav
+// --------------------------------------------------
+
+.header__nav {
+  width: 100%;
+  padding: $spacing__l 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.header__nav-links {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: $spacing__l $spacing__l $spacing__l 0;
+}
+.header__nav-links {
+  display: none;
+
+  & > a {
+    padding: $spacing__s $spacing__s $spacing__s 0;
+    color: $color__white;
+    display: block;
+    width: 100%;
+    &:hover {
+      color: $color__c4-button-blurple;
+    }
+  }
+}
+.header__nav.open .header__nav-links {
+  display: flex;
+}
+.header__nav-buttons {
+  flex-shrink: 0;
+}
+
+@include breakpoint("m") {
+  .header__nav {
+    flex-wrap: nowrap;
+    justify-content: space-between;
+  }
+  .header__nav-links {
+    padding: 0;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    & > a {
+      padding: $spacing__s;
+      margin: 0 $spacing__s;
+    }
+  }
+}
+
+// Hamburger Menu
+// --------------------------------------------------
+
+@include accessible-animation {
+  .hamburger * {
+    transition: all 0.5s ease-out;
+  }
+}
+
+.hamburger {
+  display: block;
+  cursor: pointer;
+  background: none;
+  border: none;
+  justify-self: flex-end;
+}
+
+.header .header__nav.open .hamburger {
+  order: 0;
+}
+.header .header__nav.open .hamburger .top-bun {
+  opacity: 0;
+}
+.header .header__nav.open .hamburger .patty {
+  transform: rotate(45deg) translate(20%, -48%);
+}
+.header .header__nav.open .hamburger .bottom-bun {
+  transform: rotate(-45deg) translate(-48%, -20%);
+}
+
+@include breakpoint("m") {
+  .hamburger {
+    display: none;
+    height: 25px;
+  }
+}
+
+// Logo
+// --------------------------------------------------
+
+.logo {
+  max-width: 160px;
+  display: flex;
+  align-items: center; // [Tip] always set `align-items` on flex parents with images as direct children to prevent image stretching. We're using an svg so it's not an issue here, but it's good to know.
+}

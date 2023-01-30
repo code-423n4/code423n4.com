@@ -1,4 +1,4 @@
-@import "variables";
+@import "../variables";
 
 // File instructions
 // -----------------
@@ -17,9 +17,20 @@
 
 // [Tip] Only set type rules here. For all other things `body`, check `base-layout`.
 body {
-  font-family: $font-family;
+  font-family: $font__default;
   font-size: 100%; // Set by the user's stylesheet. Assumed to be 16px.
   line-height: 150%;
+}
+
+a {
+  color: $color__c4-button-blurple;
+  @include accessible-animation {
+    transition: color 0.2s ease-in-out;
+  }
+
+  &:hover {
+    color: $color__n-20;
+  }
 }
 
 // Type classes
@@ -28,36 +39,36 @@ body {
 // Copy
 // -----------------
 // This is the default type style for the site. It is used for most of the copy.
-// Adding a class of `type--copy` to a parent element will apply these styles.
+// Adding a class of `type__copy` to a parent element will apply these styles.
 
-.type--copy {
+.type__copy {
   font-size: 1.2rem;
-  font-family: $font-family;
+  font-family: $font__default;
   font-weight: 500;
   line-height: 150%;
 }
-.type--copy-p,
-.type--copy p {
+.type__copy-p,
+.type__copy p {
   margin-bottom: 1.5em;
 }
-.type--copy--bold,
-.type--copy strong {
+.type__copy__bold,
+.type__copy strong {
   font-weight: 700;
 }
-.type--copy--inline-link,
-.type--copy a {
+.type__copy__inline-link,
+.type__copy a {
   font-weight: 700;
   text-decoration: underline;
 }
-.type--copy--inline-code,
-.type--copy code {
+.type__copy__inline-code,
+.type__copy code {
   padding: 0.1em 0.3em;
   border-radius: 0.2em;
 
-  background-color: $color--n-80;
-  color: $color--n-10;
+  background-color: $color__n-80;
+  color: $color__n-10;
 
-  font-family: $font-family-code;
+  font-family: $font__code;
   font-style: normal;
   font-weight: 400;
   font-size: 1rem;
@@ -67,32 +78,32 @@ body {
 // Text
 // -----------------
 // This is the type style for the product. It's slightly smaller than the copy.
-// Adding a class of `type--text` to a parent element will apply these styles.
+// Adding a class of `type__text` to a parent element will apply these styles.
 
-.type--text {
+.type__text {
   font-size: 1rem;
-  font-family: $font-family;
+  font-family: $font__default;
   font-weight: 500;
   line-height: 130%;
 }
-.type--text-bold,
-.type--text strong {
+.type__text-bold,
+.type__text strong {
   font-weight: 700;
 }
-.type--text-inline-link,
-.type--text a {
+.type__text-inline-link,
+.type__text a {
   font-weight: 700;
   text-decoration: underline;
 }
-.type--text-inline-code,
-.type--text code {
-  font-family: $font-family-code;
+.type__text-inline-code,
+.type__text code {
+  font-family: $font__code;
   font-style: normal;
   font-weight: 400;
   font-size: 0.9rem;
   line-height: inherit;
-  background-color: $color--n-80;
-  color: $color--n-10;
+  background-color: $color__n-80;
+  color: $color__n-10;
   padding: 0.1em 0.3em;
   border-radius: 0.2em;
 }
@@ -100,33 +111,33 @@ body {
 // Small
 // -----------------
 
-.type--small,
+.type__small,
 small {
   font-size: 0.933rem;
-  font-family: $font-family;
+  font-family: $font__default;
   font-weight: 500;
   font-style: normal;
   line-height: 145%;
 }
-.type--small-bold,
-.type--small strong {
+.type__small-bold,
+.type__small strong {
   font-weight: 700;
 }
-.type--small-inline-link,
-.type--small a {
+.type__small-inline-link,
+.type__small a {
   font-size: 0.933rem;
   font-weight: 700;
   text-decoration: underline;
 }
-.type--small-inline-code,
-.type--small code {
+.type__small-inline-code,
+.type__small code {
   font-size: 0.933rem;
   font-family: "PT Mono";
   font-weight: 400;
   font-style: normal;
   line-height: 145%;
-  background-color: $color--n-80;
-  color: $color--n-10;
+  background-color: $color__n-80;
+  color: $color__n-10;
   padding: 0.1em 0.3em;
   border-radius: 0.2em;
 }
@@ -140,39 +151,39 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: $font-family;
+  font-family: $font__default;
   font-weight: 700;
   margin-top: 0.25em;
   margin-bottom: 0.4em;
 }
 
-// [Tip] When using headlines, use the `type--` classes instead of the `h` tags.
-.type--xl-headline,
+// [Tip] When using headlines, use the `type__` classes instead of the `h` tags.
+.type__xl-headline,
 h1 {
   font-size: 3.467rem;
   line-height: 115%;
 }
-.type--l-headline,
+.type__l-headline,
 h2 {
   font-size: 3.067rem;
   line-height: 115%;
 }
-.type--m-headline,
+.type__m-headline,
 h3 {
   font-size: 2.533rem;
   line-height: 120%;
 }
-.type--s-headline,
+.type__s-headline,
 h4 {
   font-size: 1.867rem;
   line-height: 120%;
 }
-.type--xs-headline,
+.type__xs-headline,
 h5 {
   font-size: 1.6rem;
   line-height: 120%;
 }
-.type--xxs-headline,
+.type__xxs-headline,
 h6 {
   font-size: 1.333rem;
   line-height: 130%;
@@ -181,18 +192,18 @@ h6 {
 // Heroes
 // ------------------------------------------------
 
-.type--hero-headline {
+.type__hero-headline {
   font-size: 4.533rem;
-  font-family: $font-family;
+  font-family: $font__default;
   font-weight: 700;
   font-style: normal;
   line-height: 115%;
   text-decoration: none;
   text-transform: none;
 }
-.type--hero-sub {
+.type__hero-sub {
   font-size: 3.067rem;
-  font-family: $font-family;
+  font-family: $font__default;
   font-weight: 500;
   font-style: normal;
   line-height: 120%;
@@ -204,13 +215,13 @@ h6 {
 // ------------------------------------------------
 
 code:has(pre) {
-  font-family: $font-family-code;
+  font-family: $font__code;
   font-size: 1rem;
   font-weight: 400;
   font-style: normal;
   line-height: 150%;
-  background-color: $color--n-80;
-  color: $color--n-10;
+  background-color: $color__n-80;
+  color: $color__n-10;
   padding: 0.1em 0.3em;
   border-radius: 0.2em;
 }
