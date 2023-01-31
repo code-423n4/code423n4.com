@@ -25,7 +25,9 @@ const getLeaderboardResults = async (
 ) => {
   // @TODO: also filter by contestId (if provided)
   const allContests = (await getApiContestData())
-    .filter((contest) => withinTimeframe(contest, contestRange))
+    .filter(
+      (contest) => withinTimeframe(contest, contestRange) || !contestRange
+    )
     .filter((contest) => !contestId || Number(contestId) === contest.contestid);
 
   // get findings, filtered by contest
