@@ -1,37 +1,36 @@
 import React from "react";
 import TrustBar from "../TrustBar";
 
-const auditButtonText = "I want an audit";
-const auditorButtonText = "I want to be an auditor";
+const primaryButtonText = "Get started";
+const secondaryButtonText = "View leaderboard";
 
 const HeroIndex = () => {
   return (
-    <div className="hero">
-      <h1 className="type__xl-headline">
-        <span>Top auditors compete to </span>{" "}
-        <span>keep high severity bugs</span> <span>out of production.</span>
-      </h1>
-      <h2 className="type__xs-headline">
-        Start a public or private audit within 48 hours.
-      </h2>
+    <div className="hero type__copy">
+      <h1 className="type__l-headline">Find bugs. Get paid.</h1>
+      <p>
+        Want to get paid for deploying your hacking abilities? You're in the
+        right place. Code4rena competitive audits reward you for finding valid
+        bugs, every time.
+      </p>
       <div className="hero-buttons">
         <a
           href="https://code4rena.typeform.com/i-want-an-audit"
           target="_blank"
           rel="noreferrer"
-          aria-label={auditButtonText + " (Opens in a new window)"}
+          aria-label={primaryButtonText + " (Opens in a new window)"}
           className="button button-small"
         >
-          {auditButtonText}
+          {primaryButtonText}
         </a>
         <a
           href="https://discord.gg/code4rena"
           target="_blank"
           rel="noreferrer"
-          aria-label={auditorButtonText + " (Opens in a new window"}
+          aria-label={secondaryButtonText + " (Opens in a new window"}
           className="button button-small cta-button lowercase secondary"
         >
-          {auditorButtonText}
+          {secondaryButtonText}
         </a>
       </div>
 

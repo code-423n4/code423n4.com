@@ -17,16 +17,18 @@
 // 8. Transforms
 // 9. Other
 
+$button__border-width: 2px;
+
 .button--primary,
 .button {
   padding: $spacing__s $spacing__l;
   margin-right: $spacing__s;
   display: inline-flex;
   background: $color__c4-button-blurple;
-  border: 2px solid $color__c4-button-blurple;
+  border: $button__border-width solid $color__c4-button-blurple;
   border-radius: $border-radius__m;
   color: $color__white;
-  text-decoration: none;
+  text-decoration: none !important;
   text-align: center;
   flex-shrink: 0;
   cursor: pointer;
@@ -38,6 +40,18 @@
   &:hover {
     background: $color__c4-logo-blurple;
     border-color: $color__c4-logo-blurple;
+    color: $color__white;
+  }
+}
+
+.button--secondary {
+  background: transparent;
+  border: 2px solid $color__c4-button-blurple;
+  border-color: $color__c4-button-blurple;
+  color: $color__c4-button-blurple;
+
+  &:hover {
+    background: $color__c4-button-blurple;
     color: $color__white;
   }
 }
