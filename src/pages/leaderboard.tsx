@@ -7,6 +7,7 @@ import LeaderboardTable from "../components/LeaderboardTable";
 export default function Leaderboard({data}) {
   const [timeFrame, setTimeFrame] = useState("Last 60 days");
   const [leaderboardResults, setLeaderboardResults] = useState([]);
+  const [ isLoading, setIsLoading] = useState(true);
   const contests = data.contests.edges;
 
   useEffect(() => {
@@ -26,11 +27,12 @@ export default function Leaderboard({data}) {
         // @TODO: what to do here?
         throw "Unable to fetch leaderboard results.";
       }
-      setIsloading(false);
+      setIsLoading(false);
     })();
   }, [timeFrame]);
 
   const handleChange = (e) => {
+    setIsLoading(true);
     setTimeFrame(e.target.value);
   };
 
