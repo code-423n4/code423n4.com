@@ -4,7 +4,7 @@ import { graphql } from "gatsby";
 import DefaultLayout from "../templates/DefaultLayout";
 import LeaderboardTable from "../components/LeaderboardTable";
 
-export default function Leaderboard({ data }) {
+export default function Leaderboard({data}) {
   const [timeFrame, setTimeFrame] = useState("Last 60 days");
   const [leaderboardResults, setLeaderboardResults] = useState([]);
   const contests = data.contests.edges;
@@ -26,6 +26,7 @@ export default function Leaderboard({ data }) {
         // @TODO: what to do here?
         throw "Unable to fetch leaderboard results.";
       }
+      setIsloading(false);
     })();
   }, [timeFrame]);
 
@@ -56,7 +57,10 @@ export default function Leaderboard({ data }) {
           </select>
         </div>
         <div className="leaderboard-container">
-          <LeaderboardTable results={leaderboardResults} />
+          <LeaderboardTable
+            results={leaderboardResults}
+            isLoading={isLoading}
+          />
         </div>
       </div>
     </DefaultLayout>
