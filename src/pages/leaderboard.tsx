@@ -3,24 +3,30 @@ import React, { useEffect, useState } from "react";
 import DefaultLayout from "../templates/DefaultLayout";
 import LeaderboardTable from "../components/LeaderboardTable";
 
-export default function Leaderboard({ data }) {
+export default function Leaderboard() {
   const [timeFrame, setTimeFrame] = useState("Last 60 days");
   const [leaderboardResults, setLeaderboardResults] = useState([]);
+  const [isLoading, setIsloading] = useState(true);
   useEffect(() => {
     (async () => {
-      const result = await fetch(`/.netlify/functions/leaderboard?range=${timeFrame}`, {
-        headers: {
-          "Content-Type": "application/json",
-          // "X-Authorization": `Bearer ${sessionToken}`,
-          // "C4-User": currentUser.username,
-        },
-      });
+      setIsloading(true);
+      const result = await fetch(
+        `/.netlify/functions/leaderboard?range=${timeFrame}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            // "X-Authorization": `Bearer ${sessionToken}`,
+            // "C4-User": currentUser.username,
+          },
+        }
+      );
       if (result.ok) {
         setLeaderboardResults(await result.json());
       } else {
         // @TODO: what to do here?
         throw "Unable to fetch leaderboard results.";
       }
+      setIsloading(false);
     })();
   }, [timeFrame]);
 
@@ -51,7 +57,10 @@ export default function Leaderboard({ data }) {
           </select>
         </div>
         <div className="leaderboard-container">
-          <LeaderboardTable results={leaderboardResults} />
+          <LeaderboardTable
+            results={leaderboardResults}
+            isLoading={isLoading}
+          />
         </div>
       </div>
     </DefaultLayout>
