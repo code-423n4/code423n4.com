@@ -120,16 +120,12 @@ const SubmitFindings = ({
     if (contestType === "Mitigation review") {
       fieldList = [mitigationOfField, mitigationField];
       if (state.isMitigated) {
+        fieldList.push(qaGasDetailsField);
         setFieldList(fieldList);
         return;
       }
       fieldList.push(mitigationRiskField);
       if (!state.risk) {
-        setFieldList(fieldList);
-        return;
-      }
-      if (checkQaOrGasFinding(state.risk)) {
-        fieldList.push(qaGasDetailsField);
         setFieldList(fieldList);
         return;
       }
@@ -345,7 +341,7 @@ const SubmitFindings = ({
       mitigationOf = state.mitigationOf;
       labels = [state.risk];
       if (state.isMitigated) {
-        body = "";
+        body = state.qaGasDetails;
         title = "";
         risk = "";
         labels = [];
@@ -430,7 +426,7 @@ const SubmitFindings = ({
     if (contestType === "Mitigation review") {
       if (state.isMitigated) {
         // if the finding is mitigated, we only need "mitigation of"
-        if (!state.mitigationOf) {
+        if (!state.mitigationOf || !state.qaGasDetails) {
           setHasValidationErrors(true);
           return true;
         } else {
@@ -530,7 +526,10 @@ const SubmitFindings = ({
               <>
                 <h3 className={styles.Widget__Label}>Submitting as</h3>
                 <fieldset
-                  className={clsx(styles.Widget__Fields, styles.Widget__RadioGroup)}
+                  className={clsx(
+                    styles.Widget__Fields,
+                    styles.Widget__RadioGroup
+                  )}
                 >
                   <h4 className={styles.Form__Heading4}>WARDEN</h4>
                   <label className={styles.Widget__RadioLabel}>
