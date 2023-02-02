@@ -64,7 +64,7 @@ export const query = graphql`
         sponsor {
           image {
             childImageSharp {
-              resize(width: 200) {
+              resize(width: 80) {
                 src
               }
             }

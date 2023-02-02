@@ -82,7 +82,8 @@ label {
   padding: 10px;
 }
 
-.lines-of-code {
+.links-to-code {
+  /* @todo: use variables or mixins for interdependent margin/padding */
   margin: 0 -45px;
   padding: 30px 45px;
   border-top: 2px solid var(--border-lightest-background);
@@ -204,4 +205,12 @@ label {
 
 .error-message a {
   text-decoration: underline;
+}
+
+@media (max-width: 600px) {
+  .links-to-code {
+    /* @todo: use variables or mixins for interdependent margin/padding */
+    margin: 0 -15px 15px -15px;
+    padding: 30px 15px;
+  }
 }

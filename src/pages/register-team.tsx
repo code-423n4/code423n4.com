@@ -1,20 +1,39 @@
 import { graphql } from "gatsby";
-import React from "react";
+import React, { useCallback } from "react";
 
+import useUser from "../hooks/UserContext";
 import ProtectedPage from "../components/ProtectedPage";
-import TeamRegistrationForm from "../components/TeamRegistrationForm";
-
-import * as styles from "../components/form/Form.module.scss";
+import TeamForm from "../components/TeamForm";
 
 export default function TeamRegistration({ data }) {
-  const handles = new Set(data.handles.edges.map((h) => h.node.handle));
+  const { currentUser } = useUser();
+  const handles: Set<string> = new Set(
+    data.handles.edges.map((h) => h.node.handle)
+  );
 
-  let wardens: { value: string; image: string }[] = [];
+  let wardens: { value: string; image: unknown }[] = [];
   data.handles.edges.forEach(({ node }) => {
     if (!node.members) {
       wardens.push({ value: node.handle, image: node.image });
     }
   });
+
+  const onSubmit = useCallback(
+    async (requestBody, user) => {
+      const sessionToken = user.attributes.sessionToken;
+
+      return await fetch("/.netlify/functions/register-team", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Authorization": `Bearer ${sessionToken}`,
+          "C4-User": currentUser.username,
+        },
+        body: JSON.stringify(requestBody),
+      });
+    },
+    [currentUser]
+  );
 
   return (
     <ProtectedPage
@@ -23,10 +42,17 @@ export default function TeamRegistration({ data }) {
     >
       <div className="wrapper-main">
         <h1 className="page-header">Register a Team</h1>
-        <TeamRegistrationForm
-          className={styles.Form}
+        <TeamForm
+          onSubmit={onSubmit}
           handles={handles}
           wardens={wardens}
+          submitButtonText="Register team"
+          successMessage={
+            <>
+              Your registration application has been submitted. Please note: it
+              may take a few business days for your submission to be approved.
+            </>
+          }
         />
       </div>
     </ProtectedPage>
@@ -46,7 +72,7 @@ export const query = graphql`
           }
           image {
             childImageSharp {
-              resize(width: 64, quality: 90) {
+              resize(width: 80) {
                 src
               }
             }
