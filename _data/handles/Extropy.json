@@ -1,0 +1,12 @@
+{
+  "handle": "Extropy",
+  "members": ["Karol", "LaurenceKirk", "tidley", "codemedici", "0xWill"],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xBa7fa4Da9aB96c1fdE1FFD34569Df2E955d2e640"
+    }
+  ],
+  "link": "https://twitter.com/extropy",
+  "image": "./avatars/Extropy.png"
+}
