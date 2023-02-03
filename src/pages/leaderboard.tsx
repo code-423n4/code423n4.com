@@ -1,36 +1,38 @@
 import React, { useEffect, useState } from "react";
+import { graphql } from "gatsby";
 
 import DefaultLayout from "../templates/DefaultLayout";
 import LeaderboardTable from "../components/LeaderboardTable";
 
-export default function Leaderboard() {
+export default function Leaderboard({data}) {
   const [timeFrame, setTimeFrame] = useState("Last 60 days");
   const [leaderboardResults, setLeaderboardResults] = useState([]);
-  const [isLoading, setIsloading] = useState(true);
+  const [ isLoading, setIsLoading] = useState(true);
+  const contests = data.contests.edges;
+
   useEffect(() => {
     (async () => {
-      setIsloading(true);
-      const result = await fetch(
-        `/.netlify/functions/leaderboard?range=${timeFrame}`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            // "X-Authorization": `Bearer ${sessionToken}`,
-            // "C4-User": currentUser.username,
-          },
-        }
-      );
+      const result = await fetch(`/.netlify/functions/leaderboard?range=${timeFrame}`, {
+        method:"POST",
+        headers: {
+          "Content-Type": "application/json",
+          // "X-Authorization": `Bearer ${sessionToken}`,
+          // "C4-User": currentUser.username,
+        },
+        body: JSON.stringify(contests)
+      });
       if (result.ok) {
         setLeaderboardResults(await result.json());
       } else {
         // @TODO: what to do here?
         throw "Unable to fetch leaderboard results.";
       }
-      setIsloading(false);
+      setIsLoading(false);
     })();
   }, [timeFrame]);
 
   const handleChange = (e) => {
+    setIsLoading(true);
     setTimeFrame(e.target.value);
   };
 
@@ -66,3 +68,45 @@ export default function Leaderboard() {
     </DefaultLayout>
   );
 }
+
+export const query = graphql`
+  query {
+    contests: allContestsCsv(
+      filter: { hide: { ne: true } }
+      sort: { fields: end_time, order: ASC }
+    ) {
+      edges {
+        node {
+          id
+          title
+          details
+          hide
+          league
+          start_time
+          end_time
+          amount
+          repo
+          findingsRepo
+          sponsor {
+            name
+            image {
+              childImageSharp {
+                resize(width: 80) {
+                  src
+                }
+              }
+            }
+            link
+          }
+          fields {
+            submissionPath
+            contestPath
+            status
+            codeAccess
+          }
+          contestid
+        }
+      }
+    }
+  }
+`;
