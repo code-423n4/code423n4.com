@@ -119,7 +119,7 @@ const ContestLayout = ({ data }) => {
       }
     })();
   }, [currentUser, contestid, fields]);
-  console.log(data.contestsCsv);
+
   // get contest leaderboard results
   useEffect(() => {
     (async () => {
