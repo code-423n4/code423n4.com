@@ -31,7 +31,7 @@ enum FindingsStatus {
   Success = "success",
 }
 
-const ContestLayout = ({ data }) => {
+const ContestLayout = ({ data }) => {
   // state
   const [artOpen, setArtOpen] = useState(false);
   const [findingsList, setFindingsList] = useState<FindingsResponse>({
@@ -123,15 +123,18 @@ const ContestLayout = ({ data }) => {
   // get contest leaderboard results
   useEffect(() => {
     (async () => {
-      const result = await fetch(`/.netlify/functions/leaderboard?contest=${contestid}`, {
-        method:"POST",
-        headers: {
-          "Content-Type": "application/json",
-          // "X-Authorization": `Bearer ${sessionToken}`,
-          // "C4-User": currentUser.username,
-        },
-        body: JSON.stringify([{node: data.contestsCsv}])
-      });
+      const result = await fetch(
+        `/.netlify/functions/leaderboard?contest=${contestid}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            // "X-Authorization": `Bearer ${sessionToken}`,
+            // "C4-User": currentUser.username,
+          },
+          body: JSON.stringify([{ node: data.contestsCsv }]),
+        }
+      );
       if (result.ok) {
         setLeaderboardResults(await result.json());
       } else {
@@ -242,9 +245,7 @@ const ContestLayout = ({ data }) => {
         <section>
           <Tabs className="contest-tabs">
             <TabList>
-              {t.contestStatus === "completed" && (
-                <Tab>Results</Tab>
-              )}
+              {t.contestStatus === "completed" && <Tab>Results</Tab>}
               <Tab>Details</Tab>
               {t.contestStatus === "active" && <Tab>Findings</Tab>}
             </TabList>
@@ -252,7 +253,10 @@ const ContestLayout = ({ data }) => {
             {t.contestStatus === "completed" && (
               <TabPanel>
                 <div className="contest-wrapper">
-                  <LeaderboardTable results={leaderboardResults} isLoading={isLoading} />
+                  <LeaderboardTable
+                    results={leaderboardResults}
+                    isLoading={isLoading}
+                  />
                 </div>
               </TabPanel>
             )}
@@ -275,7 +279,10 @@ const ContestLayout = ({ data }) => {
                 ) : (
                   <article>
                     <ReactMarkdown
-                      className={clsx(styles.Widget__Control, styles.Widget__Markdown)}
+                      className={clsx(
+                        styles.Widget__Control,
+                        styles.Widget__Markdown
+                      )}
                       remarkPlugins={[remarkGfm, remarkBreaks, remarkMath]}
                       rehypePlugins={[rehypeKatex]}
                     >
