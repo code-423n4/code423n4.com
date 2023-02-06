@@ -227,3 +227,7 @@ label {
   margin-bottom: 10px;
   display: block;
 }
+
+.ap3w-button {
+  height: auto !important;
+}
