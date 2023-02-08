@@ -21,11 +21,21 @@ const getWardenInfo = (handle: string) => {
 const getLeaderboardResults = async (
   contestRange: string,
   contestId?: string,
-  handle?: string
+  handle?: string,
+  allContestsGraphQl?: any
 ) => {
   // @TODO: also filter by contestId (if provided)
-  const allContests = (await getApiContestData())
-    .filter((contest) => withinTimeframe(contest, contestRange))
+  let allContests;
+  if (allContestsGraphQl) {
+    allContests = allContestsGraphQl;
+  } else {
+    allContests = await getApiContestData();
+  }
+
+  const filteredContests = allContests
+    .filter(
+      (contest) => withinTimeframe(contest, contestRange) || !contestRange
+    )
     .filter((contest) => !contestId || Number(contestId) === contest.contestid);
 
   // get findings, filtered by contest
@@ -36,7 +46,7 @@ const getLeaderboardResults = async (
       return finding;
     })
     .filter((finding) =>
-      allContests.some(
+      filteredContests.some(
         (contest) => contest.contestid.toString() === finding.contest
       )
     );
@@ -169,12 +179,13 @@ function computeResults(findings) {
 }
 
 exports.handler = async (event) => {
-  // only allow GET
-  if (event.httpMethod !== "GET") {
+  // only allow POST
+
+  if (event.httpMethod !== "POST") {
     return {
       statusCode: 405,
       body: "Method not allowed",
-      headers: { Allow: "GET" },
+      headers: { Allow: "POST" },
     };
   }
 
@@ -187,11 +198,16 @@ exports.handler = async (event) => {
 
     // range
     const contestRange = event.queryStringParameters.range;
-
+    const contests = JSON.parse(event.body).map((el) => el.node);
     return {
       statusCode: 200,
       body: JSON.stringify(
-        await getLeaderboardResults(contestRange, contestId, contestHandle)
+        await getLeaderboardResults(
+          contestRange,
+          contestId,
+          contestHandle,
+          contests
+        )
       ),
     };
   } catch (error) {
