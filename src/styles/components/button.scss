@@ -28,7 +28,8 @@ $button__border-width: 2px;
   border: $button__border-width solid $color__c4-button-blurple;
   border-radius: $border-radius__m;
   color: $color__white;
-  text-decoration: none !important;
+  font-weight: 500 !important; // These could be inherited from copy/text styles
+  text-decoration: none !important; // These could be inherited from copy/text styles
   text-align: center;
   flex-shrink: 0;
   cursor: pointer;
@@ -48,7 +49,7 @@ $button__border-width: 2px;
   background: transparent;
   border: 2px solid $color__c4-button-blurple;
   border-color: $color__c4-button-blurple;
-  color: $color__c4-button-blurple;
+  color: $color__white;
 
   &:hover {
     background: $color__c4-button-blurple;

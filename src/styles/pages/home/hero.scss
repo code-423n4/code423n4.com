@@ -16,3 +16,23 @@
 // 7. Text
 // 8. Transforms
 // 9. Other
+
+.hero__right-side {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
+  align-items: center;
+  justify-items: center;
+
+  background: $color__n-90;
+  border-radius: $border-radius__m;
+}
+
+.hero__statistic {
+  padding: $spacing__l;
+  p {
+    margin: 0;
+  }
+}

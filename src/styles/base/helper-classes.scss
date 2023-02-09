@@ -25,6 +25,7 @@
 }
 
 // Pair .visually-hidden with .focusable to show the element when it's focused.
+// This is useful for off-screen navigations like the skip link.
 .visually-hidden.focusable:focus {
   clip: auto;
   clip-path: none;

@@ -150,11 +150,18 @@ h2,
 h3,
 h4,
 h5,
-h6 {
-  font-family: $font__default;
-  font-weight: 700;
+h6,
+.type__xl-headline,
+.type__l-headline,
+.type__m-headline,
+.type__s-headline,
+.type__xs-headline,
+.type__xxs-headline {
   margin-top: 0.25em;
   margin-bottom: 0.4em;
+  font-family: $font__default;
+  font-weight: 700;
+  color: $color__headline;
 }
 
 // [Tip] When using headlines, use the `type__` classes instead of the `h` tags.
@@ -193,13 +200,14 @@ h6 {
 // ------------------------------------------------
 
 .type__hero-headline {
-  font-size: 4.533rem;
+  font-size: 4rem;
   font-family: $font__default;
   font-weight: 700;
   font-style: normal;
   line-height: 115%;
   text-decoration: none;
   text-transform: none;
+  margin-bottom: 0.3em;
 }
 .type__hero-sub {
   font-size: 3.067rem;

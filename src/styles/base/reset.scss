@@ -3,6 +3,10 @@
 
 // Modifications:
 // - Removed `color: initial` from `*, :after, :before`
+// - Removed `min-height: 100vh` from `body`
+// - Removed `font-weight: 400` from `*, :after, :before`
+
+// `*` as a selector is really aggressive for what's being set in there.
 
 *,
 :after,
@@ -13,7 +17,7 @@
   box-sizing: border-box;
   font-size: 100%;
   font-style: normal;
-  font-weight: 400;
+  // font-weight: 400;
   margin: 0;
   padding: 0;
   vertical-align: baseline;

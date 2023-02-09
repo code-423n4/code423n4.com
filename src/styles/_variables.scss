@@ -1,15 +1,10 @@
-// Typography
-// ------------------------------------------------
-
-$font__default: "Satoshi Variable", sans-serif;
-$font__code: "PT Mono", monospace;
-
 // Colors
 // ------------------------------------------------
 
 // Brand colors
-$color__c4-button-blurple: rgba(113, 74, 235, 1);
-$color__c4-logo-blurple: #855eff;
+$color__c4-button-blurple: #714aeb;
+$color__c4-logo-blurple: #8963ff;
+$color__blurple-text-light: #a78aff;
 $color__sponsor-color: rgba(64, 203, 161, 1);
 
 // Black and white
@@ -30,19 +25,38 @@ $color__n-10: rgba(173, 171, 178, 1);
 $color__n-5: rgba(196, 194, 204, 1);
 $color__n-2: rgba(230, 230, 230, 1);
 
+// Color Defaults
+// ------------------------------------------------
+
+// Background
+$color__background: $color__n-100;
+
+// Text
+$color__text: $color__n-20;
+$color__headline: $color__white;
+
+// 🍔 TODO add default font sizes and em spacing
+
+// Font Families
+// ------------------------------------------------
+
+$font__default: "Satoshi Variable", sans-serif;
+// 🍔 TODO add DM sans as body copy font
+$font__code: "PT Mono", monospace;
+
 // Spacing
 // ------------------------------------------------
 
 $spacing__base: 0.5rem; // 8px
 
-$spacing__xxs: calc(#{$spacing__base}/ 4); // 2px
-$spacing__xs: calc(#{$spacing__base}/ 2); // 4px
+$spacing__xxs: calc($spacing__base/ 4); // 2px
+$spacing__xs: calc($spacing__base/ 2); // 4px
 $spacing__s: $spacing__base; // 8px
-$spacing__m: calc(#{$spacing__base} * 2); // 16px
-$spacing__l: calc(#{$spacing__base} * 3); // 24px
-$spacing__xl: calc(#{$spacing__base} * 4); // 32px
-$spacing__xxl: calc(#{$spacing__base} * 5); // 40px
-$spacing__xxxl: calc(#{$spacing__base} * 6); // 48px
+$spacing__m: calc($spacing__base * 2); // 16px
+$spacing__l: calc($spacing__base * 3); // 24px
+$spacing__xl: calc($spacing__base * 4); // 32px
+$spacing__xxl: calc($spacing__base * 5); // 40px
+$spacing__xxxl: calc($spacing__base * 6); // 48px
 
 // Breakpoints
 // ------------------------------------------------
@@ -74,7 +88,7 @@ $transition__base: 0.2s ease-in-out;
 
 $border-radius__base: 0.2rem; // 4px
 $border-radius__m: $border-radius__base; // 4px
-$border-radius__s: calc(#{$border-radius__base}/ 2); // 2px
+$border-radius__s: calc($border-radius__base/ 2); // 2px
 
 // Z-index
 // ------------------------------------------------
@@ -86,26 +100,16 @@ $z-index__modal: 1000;
 // ------------------------------------------------
 
 @mixin breakpoint($breakpoint) {
-  @if $breakpoint == "xs" {
-    @media (min-width: $breakpoint__xs) {
-      @content;
-    }
-  } @else if $breakpoint == "s" {
-    @media (min-width: $breakpoint__s) {
-      @content;
-    }
-  } @else if $breakpoint == "m" {
-    @media (min-width: $breakpoint__m) {
-      @content;
-    }
-  } @else if $breakpoint == "l" {
-    @media (min-width: $breakpoint__l) {
-      @content;
-    }
-  } @else if $breakpoint == "xl" {
-    @media (min-width: $breakpoint__xl) {
-      @content;
-    }
+  $breakpoints: (
+    "xs": $breakpoint__xs,
+    "s": $breakpoint__s,
+    "m": $breakpoint__m,
+    "l": $breakpoint__l,
+    "xl": $breakpoint__xl,
+  );
+
+  @media (min-width: map-get($breakpoints, $breakpoint)) {
+    @content;
   }
 }
 
