@@ -42,7 +42,7 @@ a {
 // Adding a class of `type__copy` to a parent element will apply these styles.
 
 .type__copy {
-  font-size: 1.2rem;
+  font-size: $font-size__copy;
   font-family: $font__default;
   font-weight: 500;
   line-height: 150%;
@@ -71,7 +71,7 @@ a {
   font-family: $font__code;
   font-style: normal;
   font-weight: 400;
-  font-size: 1rem;
+  font-size: $font-size__copy__code;
   line-height: inherit;
 }
 
@@ -100,7 +100,7 @@ a {
   font-family: $font__code;
   font-style: normal;
   font-weight: 400;
-  font-size: 0.9rem;
+  font-size: $font-size__text__code;
   line-height: inherit;
   background-color: $color__n-80;
   color: $color__n-10;
@@ -113,7 +113,7 @@ a {
 
 .type__small,
 small {
-  font-size: 0.933rem;
+  font-size: $font-size__small;
   font-family: $font__default;
   font-weight: 500;
   font-style: normal;
@@ -125,13 +125,13 @@ small {
 }
 .type__small-inline-link,
 .type__small a {
-  font-size: 0.933rem;
+  font-size: $font-size__small;
   font-weight: 700;
   text-decoration: underline;
 }
 .type__small-inline-code,
 .type__small code {
-  font-size: 0.933rem;
+  font-size: $font-size__small;
   font-family: "PT Mono";
   font-weight: 400;
   font-style: normal;
@@ -167,64 +167,59 @@ h6,
 // [Tip] When using headlines, use the `type__` classes instead of the `h` tags.
 .type__xl-headline,
 h1 {
-  font-size: 3.067rem;
+  font-size: $header-font-size__l;
   line-height: 115%;
 
   @include breakpoint("m") {
-    font-size: 3.467rem;
+    font-size: $header-font-size__xl;
   }
 }
 .type__l-headline,
 h2 {
-  font-size: 2.533rem;
+  font-size: $header-font-size__m;
   line-height: 115%;
 
   @include breakpoint("m") {
-    font-size: 3.067rem;
+    font-size: $header-font-size__l;
   }
 }
 .type__m-headline,
 h3 {
-  font-size: 1.867rem;
+  font-size: $header-font-size__s;
   line-height: 120%;
 
   @include breakpoint("m") {
-    font-size: 2.533rem;
+    font-size: $header-font-size__m;
   }
 }
 .type__s-headline,
 h4 {
-  font-size: 1.6rem;
+  font-size: $header-font-size__xs;
   line-height: 120%;
 
   @include breakpoint("m") {
-    font-size: 1.867rem;
+    font-size: $header-font-size__s;
   }
 }
 .type__xs-headline,
 h5 {
-  font-size: 1.333rem;
+  font-size: $header-font-size__xxs;
   line-height: 120%;
 
   @include breakpoint("m") {
-    font-size: 1.6rem;
+    font-size: $header-font-size__xs;
   }
 }
 .type__xxs-headline,
 h6 {
-  font-size: 1.1rem;
-  line-height: 130%;
-
-  @include breakpoint("m") {
-    font-size: 1.333rem;
-  }
+  font-size: $header-font-size__xxs;
 }
 
 // Heroes
 // ------------------------------------------------
 
 .type__hero-headline {
-  font-size: 3.067rem;
+  font-size: $header-font-size__l;
   font-family: $font__default;
   font-weight: 700;
   font-style: normal;
@@ -233,11 +228,11 @@ h6 {
   text-transform: none;
   margin-bottom: 0.3em;
   @include breakpoint("m") {
-    font-size: 4rem;
+    font-size: $header-font-size__xxl;
   }
 }
 .type__hero-sub {
-  font-size: 2.533rem;
+  font-size: $header-font-size__m;
   font-family: $font__default;
   font-weight: 500;
   font-style: normal;
@@ -245,7 +240,7 @@ h6 {
   text-decoration: none;
   text-transform: none;
   @include breakpoint("m") {
-    font-size: 3.067rem;
+    font-size: $header-font-size__l;
   }
 }
 
@@ -254,7 +249,7 @@ h6 {
 
 code:has(pre) {
   font-family: $font__code;
-  font-size: 1rem;
+  font-size: $font-size__copy__code;
   font-weight: 400;
   font-style: normal;
   line-height: 150%;

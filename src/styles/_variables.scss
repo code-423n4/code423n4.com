@@ -37,6 +37,23 @@ $color__headline: $color__white;
 
 // 🍔 TODO add default font sizes and em spacing
 
+// Font Sizes
+// ------------------------------------------------
+
+$font-size__copy: 1.2rem;
+$font-size__copy__code: 1rem; // I'm also using this for all code blocks
+$font-size__text: 1rem;
+$font-size__text__code: 0.9rem;
+$font-size__small: 0.933rem;
+
+$header-font-size__xxs: 1.333rem; // H6
+$header-font-size__xs: 1.6rem; // H5
+$header-font-size__s: 1.867rem; // H4
+$header-font-size__m: 2.533rem; // H3
+$header-font-size__l: 3.067rem; // H2
+$header-font-size__xl: 3.467rem; // H1
+$header-font-size__xxl: 4rem; // Hero headline
+
 // Font Families
 // ------------------------------------------------
 
