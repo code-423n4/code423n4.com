@@ -167,40 +167,64 @@ h6,
 // [Tip] When using headlines, use the `type__` classes instead of the `h` tags.
 .type__xl-headline,
 h1 {
-  font-size: 3.467rem;
+  font-size: 3.067rem;
   line-height: 115%;
+
+  @include breakpoint("m") {
+    font-size: 3.467rem;
+  }
 }
 .type__l-headline,
 h2 {
-  font-size: 3.067rem;
+  font-size: 2.533rem;
   line-height: 115%;
+
+  @include breakpoint("m") {
+    font-size: 3.067rem;
+  }
 }
 .type__m-headline,
 h3 {
-  font-size: 2.533rem;
+  font-size: 1.867rem;
   line-height: 120%;
+
+  @include breakpoint("m") {
+    font-size: 2.533rem;
+  }
 }
 .type__s-headline,
 h4 {
-  font-size: 1.867rem;
+  font-size: 1.6rem;
   line-height: 120%;
+
+  @include breakpoint("m") {
+    font-size: 1.867rem;
+  }
 }
 .type__xs-headline,
 h5 {
-  font-size: 1.6rem;
+  font-size: 1.333rem;
   line-height: 120%;
+
+  @include breakpoint("m") {
+    font-size: 1.6rem;
+  }
 }
 .type__xxs-headline,
 h6 {
-  font-size: 1.333rem;
+  font-size: 1.1rem;
   line-height: 130%;
+
+  @include breakpoint("m") {
+    font-size: 1.333rem;
+  }
 }
 
 // Heroes
 // ------------------------------------------------
 
 .type__hero-headline {
-  font-size: 4rem;
+  font-size: 3.067rem;
   font-family: $font__default;
   font-weight: 700;
   font-style: normal;
@@ -208,15 +232,21 @@ h6 {
   text-decoration: none;
   text-transform: none;
   margin-bottom: 0.3em;
+  @include breakpoint("m") {
+    font-size: 4rem;
+  }
 }
 .type__hero-sub {
-  font-size: 3.067rem;
+  font-size: 2.533rem;
   font-family: $font__default;
   font-weight: 500;
   font-style: normal;
   line-height: 120%;
   text-decoration: none;
   text-transform: none;
+  @include breakpoint("m") {
+    font-size: 3.067rem;
+  }
 }
 
 // Code

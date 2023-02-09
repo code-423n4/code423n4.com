@@ -5,7 +5,7 @@ const secondaryButtonText = "View leaderboard";
 
 const HeroIndex = () => {
   return (
-    <div className="hero hero__wardens type__copy grid__one-by-two">
+    <div className="hero hero__wardens type__copy grid__one-by-two--break-s">
       <div className="hero__left-side">
         <h1 className="type__hero-headline">
           <div>Find bugs.</div>
@@ -22,7 +22,7 @@ const HeroIndex = () => {
             target="_blank"
             rel="noreferrer"
             aria-label={primaryButtonText + " (Opens in a new window)"}
-            className="button button-small"
+            className="button button--primary"
           >
             {primaryButtonText}
           </a>

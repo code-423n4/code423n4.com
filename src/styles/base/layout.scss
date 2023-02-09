@@ -17,7 +17,7 @@
 body {
   padding: 0 $spacing__l $spacing__m;
   @include breakpoint("m") {
-    padding: 0 $spacing__l $spacing__l;
+    padding: 0 $spacing__xl $spacing__xl;
   }
 
   background: $color__background;
@@ -71,6 +71,17 @@ main {
   }
 }
 
+.grid__one-by-two--break-s {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto;
+  grid-column-gap: $spacing__l;
+  grid-row-gap: $spacing__l;
+  @include breakpoint("s") {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
 .grid__one-by-three {
   display: grid;
   grid-template-columns: 1fr;
@@ -78,6 +89,17 @@ main {
   grid-column-gap: $spacing__l;
   grid-row-gap: $spacing__l;
   @include breakpoint("m") {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
+
+.grid__one-by-three--break-s {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto;
+  grid-column-gap: $spacing__l;
+  grid-row-gap: $spacing__l;
+  @include breakpoint("s") {
     grid-template-columns: 1fr 1fr 1fr;
   }
 }

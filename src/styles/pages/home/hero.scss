@@ -19,6 +19,19 @@
 
 .hero {
   justify-content: space-between;
+
+  .button--primary,
+  .button--secondary {
+    display: block;
+    margin-bottom: $spacing__s;
+    @include breakpoint("m") {
+      margin-bottom: 0;
+      display: inline-flex;
+    }
+  }
+  @include breakpoint("m") {
+    margin-top: $spacing__l;
+  }
 }
 
 .hero__wardens .hero__left-side {
@@ -26,20 +39,40 @@
 }
 
 .hero__right-side {
+  margin-top: $spacing__m;
+
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-template-rows: repeat(2, 1fr);
-  grid-column-gap: 0px;
-  grid-row-gap: 0px;
+  grid-gap: 2px;
   align-items: center;
   justify-items: center;
 
-  background: $color__n-90;
   border-radius: $border-radius__l;
+  overflow: hidden; // TODO This is for the border radius, but overflow:hidden is inaccessible. Find a better way to do this.
+
+  @include breakpoint("s") {
+    margin-top: $spacing__s;
+    grid-template-columns: repeat(1, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+  }
+
+  @include breakpoint("m") {
+    margin-top: $spacing__l;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+  }
 }
 
 .hero__statistic {
   padding: $spacing__l;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: $color__n-90;
   p {
     margin: 0;
   }

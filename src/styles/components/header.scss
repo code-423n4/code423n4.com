@@ -57,6 +57,9 @@
 }
 .header__nav-buttons {
   flex-shrink: 0;
+  .button--primary {
+    margin-right: 0;
+  }
 }
 
 @include breakpoint("m") {

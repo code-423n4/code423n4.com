@@ -5,7 +5,7 @@
 $color__c4-button-blurple: #714aeb;
 $color__c4-logo-blurple: #8963ff;
 $color__blurple-text-light: #a78aff;
-$color__sponsor-color: rgba(64, 203, 161, 1);
+$color__sponsor-color: rgb(64, 127, 203);
 
 // Black and white
 $color__white: rgba(255, 255, 255, 1);
@@ -61,8 +61,8 @@ $spacing__xxxl: calc($spacing__base * 6); // 48px
 // Breakpoints
 // ------------------------------------------------
 
-$breakpoint__xs: 0;
-$breakpoint__s: 600px;
+$breakpoint__xs: 600px;
+$breakpoint__s: 750px;
 $breakpoint__m: 960px;
 $breakpoint__l: 1280px;
 $breakpoint__xl: 1920px;
@@ -70,7 +70,7 @@ $breakpoint__xl: 1920px;
 // Layout
 // ------------------------------------------------
 
-$layout__max-width: 1280px;
+$layout__max-width: 1100px;
 
 // Shadows
 // ------------------------------------------------
