@@ -17,6 +17,14 @@
 // 8. Transforms
 // 9. Other
 
+.hero {
+  justify-content: space-between;
+}
+
+.hero__wardens .hero__left-side {
+  max-width: 30rem;
+}
+
 .hero__right-side {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -27,7 +35,7 @@
   justify-items: center;
 
   background: $color__n-90;
-  border-radius: $border-radius__m;
+  border-radius: $border-radius__l;
 }
 
 .hero__statistic {

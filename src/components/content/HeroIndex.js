@@ -6,7 +6,7 @@ const secondaryButtonText = "View leaderboard";
 const HeroIndex = () => {
   return (
     <div className="hero hero__wardens type__copy grid__one-by-two">
-      <div>
+      <div className="hero__left-side">
         <h1 className="type__hero-headline">
           <div>Find bugs.</div>
           <div>Get paid.</div>

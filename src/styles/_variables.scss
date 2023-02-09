@@ -87,6 +87,7 @@ $transition__base: 0.2s ease-in-out;
 // ------------------------------------------------
 
 $border-radius__base: 0.2rem; // 4px
+$border-radius__l: calc($border-radius__base * 2); // 8px
 $border-radius__m: $border-radius__base; // 4px
 $border-radius__s: calc($border-radius__base/ 2); // 2px
 
