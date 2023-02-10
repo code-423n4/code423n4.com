@@ -31,6 +31,7 @@ const HeroIndex = () => {
             right place. Code4rena competitive audits reward you for finding
             valid bugs, every time.
           </p>
+          {/* TODO: these links are wrong */}
           <div className="hero__buttons">
             <a
               href="https://code4rena.typeform.com/i-want-an-audit"
@@ -52,6 +53,7 @@ const HeroIndex = () => {
             </a>
           </div>
         </div>
+        {/* TODO: these stats are wrong */}
         <div className="hero__right-side">
           <div className="hero__statistic">
             <p className="type__m-headline">$140m</p>

@@ -5,7 +5,7 @@ import useUser from "../hooks/UserContext";
 
 import ContestList from "../components/ContestList";
 import DefaultLayout from "../templates/DefaultLayout";
-import HeroIndex from "../components/content/HeroIndex";
+import HomepageHero from "../components/content/HomepageHero";
 import Testimonials from "../components/Testimonials";
 
 export default function SiteIndex({ data }) {
@@ -60,10 +60,9 @@ export default function SiteIndex({ data }) {
   return (
     // <DefaultLayout bodyClass="landing" key={"landing" + contestStatusChanges}>
     <DefaultLayout bodyClass="landing">
-      <div className="hero-wrapper">
-        <HeroIndex />
-      </div>
-      {/*<div className="wrapper-main">
+      <HomepageHero />
+      <div className="wrapper">
+        {/*<div className="wrapper-main">
         <section>
           {filteredContests && filteredContests.activeContests.length > 0 ? (
             <section>
@@ -99,6 +98,7 @@ export default function SiteIndex({ data }) {
           </div>
         </section>
       </div> */}
+      </div>
     </DefaultLayout>
   );
 }
