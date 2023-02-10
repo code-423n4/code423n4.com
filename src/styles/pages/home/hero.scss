@@ -78,23 +78,115 @@
   }
 }
 
-.hero__top-auditors {
+.hero__top-auditors__title-area {
   margin-top: $spacing__xxxl;
   padding: $spacing__l;
   background: $color__n-90;
+}
+
+.hero__top-auditors__marquees {
+  padding: $spacing__m 0;
+  background: rgba($color__n-90, 0.5);
   ul {
     margin: 0;
-    padding: 0;
+    padding: $spacing__s 0;
     list-style: none;
     display: flex;
     flex-wrap: wrap;
 
     li {
-      margin-right: $spacing__s;
-      margin-bottom: $spacing__s;
-      &:last-child {
-        margin-right: 0;
-      }
+      font-size: $headline-font-size__xxs;
+      color: $color__n-40;
     }
+  }
+
+  &:hover {
+    ul li {
+      color: $color__n-20;
+    }
+
+    .marquee__content {
+      animation-play-state: paused;
+    }
+  }
+}
+
+// Marquee
+// Written by https://ryanmulligan.dev/blog/css-marquee/ <-- this is a great article
+// Hacked up by 🍔
+// --------------------------------------------------
+
+/* Marquee styles */
+.marquee {
+  --gap: 1rem;
+  position: relative;
+  display: flex;
+  overflow: hidden;
+  user-select: none;
+  gap: var(--gap);
+}
+
+.marquee__content {
+  flex-shrink: 0;
+  display: flex;
+  justify-content: space-around;
+  gap: var(--gap);
+  min-width: 100%;
+}
+
+@keyframes scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(calc(-100% - var(--gap)));
+  }
+}
+
+// TODO: Replace my accessible animation mixin with this. IDK why I wrote mine backwards. - 🍔
+/* Pause animation when reduced-motion is set */
+@media (prefers-reduced-motion: reduce) {
+  .marquee__content {
+    animation-play-state: paused !important;
+  }
+}
+
+.marquee__content {
+  animation: scroll 25s linear infinite;
+}
+
+/* Reverse animation */
+.marquee--reverse .marquee__content {
+  animation-direction: reverse;
+}
+
+/* Pause on hover */
+.marquee--hover-pause:hover .marquee__content {
+  animation-play-state: paused;
+}
+
+/* Attempt to size parent based on content. Keep in mind that the parent width is equal to both content containers that stretch to fill the parent. */
+.marquee--fit-content {
+  max-width: fit-content;
+}
+
+/* A fit-content sizing fix: Absolute position the duplicate container. This will set the size of the parent wrapper to a single child container. Shout out to Olavi's article that had this solution 👏 @link: https://olavihaapala.fi/2021/02/23/modern-marquee.html  */
+.marquee--pos-absolute .marquee__content:last-child {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+/* Enable position absolute animation on the duplicate content (last-child) */
+.enable-animation .marquee--pos-absolute .marquee__content:last-child {
+  animation-name: scroll-abs;
+}
+
+@keyframes scroll-abs {
+  from {
+    transform: translateX(calc(100% + var(--gap)));
+  }
+  to {
+    transform: translateX(0);
   }
 }
