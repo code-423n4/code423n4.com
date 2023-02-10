@@ -151,12 +151,12 @@ h3,
 h4,
 h5,
 h6,
-.type__xl-headline,
-.type__l-headline,
-.type__m-headline,
-.type__s-headline,
-.type__xs-headline,
-.type__xxs-headline {
+.type__headline__xl,
+.type__headline__l,
+.type__headline__m,
+.type__headline__s,
+.type__headline__xs,
+.type__headline__xxs {
   margin-top: 0.25em;
   margin-bottom: 0.4em;
   font-family: $font__default;
@@ -164,62 +164,92 @@ h6,
   color: $color__headline;
 }
 
-// [Tip] When using headlines, use the `type__` classes instead of the `h` tags.
-.type__xl-headline,
+// [Tip] When using headlines, use the `type__` classes instead of the `h` tags. Use the correct `h` tag for the position you're in, and assign it a new class.
+.type__headline__xl,
 h1 {
-  font-size: $header-font-size__l;
+  font-size: $headline-font-size__l;
   line-height: 115%;
 
   @include breakpoint("m") {
-    font-size: $header-font-size__xl;
+    font-size: $headline-font-size__xl;
   }
 }
-.type__l-headline,
+.type__headline__l,
 h2 {
-  font-size: $header-font-size__m;
+  font-size: $headline-font-size__m;
   line-height: 115%;
 
   @include breakpoint("m") {
-    font-size: $header-font-size__l;
+    font-size: $headline-font-size__l;
   }
 }
-.type__m-headline,
+.type__headline__m,
 h3 {
-  font-size: $header-font-size__s;
+  font-size: $headline-font-size__s;
   line-height: 120%;
 
   @include breakpoint("m") {
-    font-size: $header-font-size__m;
+    font-size: $headline-font-size__m;
   }
 }
-.type__s-headline,
+.type__headline__s,
 h4 {
-  font-size: $header-font-size__xs;
+  font-size: $headline-font-size__xs;
   line-height: 120%;
 
   @include breakpoint("m") {
-    font-size: $header-font-size__s;
+    font-size: $headline-font-size__s;
   }
 }
-.type__xs-headline,
+.type__headline__xs,
 h5 {
-  font-size: $header-font-size__xxs;
+  font-size: $headline-font-size__xxs;
   line-height: 120%;
 
   @include breakpoint("m") {
-    font-size: $header-font-size__xs;
+    font-size: $headline-font-size__xs;
   }
 }
-.type__xxs-headline,
+.type__headline__xxs,
 h6 {
-  font-size: $header-font-size__xxs;
+  font-size: $headline-font-size__xxs;
+}
+
+// Sublines
+// ------------------------------------------------
+
+.type__subline__s {
+  font-size: $headline-font-size__xs;
+  font-family: $font__default;
+  font-weight: 500;
+  font-style: normal;
+  line-height: 120%;
+  text-decoration: none;
+  text-transform: none;
+  margin-bottom: 0.3em;
+  @include breakpoint("m") {
+    font-size: $headline-font-size__xxs;
+  }
+}
+.type__subline__m {
+  font-size: $headline-font-size__s;
+  font-family: $font__default;
+  font-weight: 500;
+  font-style: normal;
+  line-height: 120%;
+  text-decoration: none;
+  text-transform: none;
+  margin-bottom: 0.3em;
+  @include breakpoint("m") {
+    font-size: $headline-font-size__xs;
+  }
 }
 
 // Heroes
 // ------------------------------------------------
 
-.type__hero-headline {
-  font-size: $header-font-size__l;
+.type__headline__hero {
+  font-size: $headline-font-size__l;
   font-family: $font__default;
   font-weight: 700;
   font-style: normal;
@@ -228,11 +258,12 @@ h6 {
   text-transform: none;
   margin-bottom: 0.3em;
   @include breakpoint("m") {
-    font-size: $header-font-size__xxl;
+    font-size: $headline-font-size__xxl;
   }
 }
-.type__hero-sub {
-  font-size: $header-font-size__m;
+//TODO this is currently unused
+.type__subline__hero {
+  font-size: $headline-font-size__m;
   font-family: $font__default;
   font-weight: 500;
   font-style: normal;
@@ -240,7 +271,7 @@ h6 {
   text-decoration: none;
   text-transform: none;
   @include breakpoint("m") {
-    font-size: $header-font-size__l;
+    font-size: $headline-font-size__l;
   }
 }
 

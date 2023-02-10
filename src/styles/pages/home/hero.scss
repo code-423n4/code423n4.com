@@ -77,3 +77,24 @@
     margin: 0;
   }
 }
+
+.hero__top-auditors {
+  margin-top: $spacing__xxxl;
+  padding: $spacing__l;
+  background: $color__n-90;
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+
+    li {
+      margin-right: $spacing__s;
+      margin-bottom: $spacing__s;
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+  }
+}

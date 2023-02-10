@@ -15,11 +15,6 @@
 
 // [Tip] For typography applied to `body`, check `base-typography`.
 body {
-  padding: 0 $spacing__l $spacing__m;
-  @include breakpoint("m") {
-    padding: 0 $spacing__xl $spacing__xl;
-  }
-
   background: $color__background;
   color: $color__text;
   min-height: 100%;
@@ -51,25 +46,24 @@ html {
     align-self: end;
   }
 }
+
 main {
   width: 100%;
+}
+
+.full-width {
+  width: 100%;
+  padding: 0 $spacing__l;
+}
+
+.limited-width {
   max-width: $layout__max-width;
-  margin: $spacing__l auto;
+  margin: 0 auto;
+  padding: 0 $spacing__l;
 }
 
 // Reusable Grids
 // --------------------
-
-.grid__one-by-two {
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-template-rows: auto;
-  grid-column-gap: $spacing__l;
-  grid-row-gap: $spacing__l;
-  @include breakpoint("m") {
-    grid-template-columns: 1fr 1fr;
-  }
-}
 
 .grid__one-by-two--break-s {
   display: grid;
@@ -82,14 +76,15 @@ main {
   }
 }
 
-.grid__one-by-three {
+.grid__one-by-two,
+.grid__one-by-two--break-m {
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: auto;
   grid-column-gap: $spacing__l;
   grid-row-gap: $spacing__l;
   @include breakpoint("m") {
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr;
   }
 }
 
@@ -100,6 +95,18 @@ main {
   grid-column-gap: $spacing__l;
   grid-row-gap: $spacing__l;
   @include breakpoint("s") {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
+
+.grid__one-by-three,
+.grid__one-by-three--break-m {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto;
+  grid-column-gap: $spacing__l;
+  grid-row-gap: $spacing__l;
+  @include breakpoint("m") {
     grid-template-columns: 1fr 1fr 1fr;
   }
 }
