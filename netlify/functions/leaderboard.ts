@@ -21,14 +21,23 @@ const getWardenInfo = (handle: string) => {
 const getLeaderboardResults = async (
   contestRange: string,
   contestId?: string,
-  handle?: string
+  handle?: string,
+  allContestsGraphQl?: any
 ) => {
   // @TODO: also filter by contestId (if provided)
-  const allContests = (await getApiContestData())
-    .filter((contest) => withinTimeframe(contest, contestRange))
+  let allContests;
+  if (allContestsGraphQl) {
+    allContests = allContestsGraphQl;
+  } else {
+    allContests = await getApiContestData();
+  }
+
+  const filteredContests = allContests
+    .filter(
+      (contest) => withinTimeframe(contest, contestRange) || !contestRange
+    )
     .filter((contest) => !contestId || Number(contestId) === contest.contestid);
 
-     
   // get findings, filtered by contest
   const allFindings = (await csv().fromFile("_data/findings/findings.csv"))
     .map((finding) => {
@@ -37,7 +46,7 @@ const getLeaderboardResults = async (
       return finding;
     })
     .filter((finding) =>
-      allContests.some(
+      filteredContests.some(
         (contest) => contest.contestid.toString() === finding.contest
       )
     );
@@ -72,12 +81,16 @@ function withinTimeframe(contest, timeFrame) {
     case "Current Year":
       const currentYear = new Date().getFullYear();
       return withinYear(new Date(contest.end_time), currentYear);
+    case "2023":
+      return withinYear(new Date(contest.end_time), 2023);
     case "2022":
       return withinYear(new Date(contest.end_time), 2022);
     case "2021":
       return withinYear(new Date(contest.end_time), 2021);
-    default:
+    case "All time":
       return true;
+    default:
+      return false;
   }
 }
 
@@ -166,12 +179,13 @@ function computeResults(findings) {
 }
 
 exports.handler = async (event) => {
-  // only allow GET
-  if (event.httpMethod !== "GET") {
+  // only allow POST
+
+  if (event.httpMethod !== "POST") {
     return {
       statusCode: 405,
       body: "Method not allowed",
-      headers: { Allow: "GET" },
+      headers: { Allow: "POST" },
     };
   }
 
@@ -184,11 +198,16 @@ exports.handler = async (event) => {
 
     // range
     const contestRange = event.queryStringParameters.range;
-
+    const contests = JSON.parse(event.body).map((el) => el.node);
     return {
       statusCode: 200,
       body: JSON.stringify(
-        await getLeaderboardResults(contestRange, contestId, contestHandle)
+        await getLeaderboardResults(
+          contestRange,
+          contestId,
+          contestHandle,
+          contests
+        )
       ),
     };
   } catch (error) {
