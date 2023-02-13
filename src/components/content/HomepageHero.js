@@ -5,27 +5,15 @@ import SecondaryNavItem from "../SecondaryNavItem";
 const primaryButtonText = "Get started";
 const secondaryButtonText = "View leaderboard";
 
-// Delete this when we have real data
-// The way this is animated, adding more names makes it faster. We can make adjustments as needed once we finalize a number. We're not stuck with this few because that's how I wrote it initially.
-// I made them objects so we can add more data later - 🍔
-
-// const multiplyArray = (arr, length) => Array.from({ length }, () => arr).flat();
-// const names = [
 const topAuditors = [
+  {
+    name: "This section is in progress",
+  },
   {
     name: "TwoReports",
   },
   {
     name: "perfectJo",
-  },
-  {
-    name: "olivecomposer",
-  },
-  {
-    name: "RustLady",
-  },
-  {
-    name: "lunchbreak",
   },
   {
     name: "iParticipated",
@@ -40,9 +28,6 @@ const topAuditors = [
     name: "0xTelemarketing",
   },
 ];
-// const topAuditors = multiplyArray(names, 3);
-
-// End delete
 
 const HeroIndex = () => {
   return (
@@ -113,50 +98,13 @@ const HeroIndex = () => {
           </div>
         </div>
       </div>
-      <div className="hero__top-auditors__title-area full-width">
+      <div className="hero__top-auditors full-width">
         <div className="limited-width">
           <h2 className="type__headline__s">
             Your journey as an auditor begins now
           </h2>
           <p className="type__subline__s">Become one of the best</p>
-        </div>
-      </div>
-
-      <div className="hero__top-auditors__marquees full-width">
-        <div class="marquee marquee--hover-pause">
-          <ul className="hero__top-auditors-list marquee__content">
-            {topAuditors.map((auditor) => (
-              <li key={auditor.name} className="hero__top-auditor">
-                <span className="hero__top-auditor-name">{auditor.name}</span>
-              </li>
-            ))}
-          </ul>
-          {/* the content needs to be repeated for the animation, but we need to hide it from screenreaders. Make sure to keep the aria-hidden during any changes to this component */}
-          <ul
-            aria-hidden="true"
-            className="hero__top-auditors-list marquee__content"
-          >
-            {topAuditors.map((auditor) => (
-              <li key={auditor.name} className="hero__top-auditor">
-                <span className="hero__top-auditor-name">{auditor.name}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        <div class="marquee marquee--reverse marquee--hover-pause">
-          <ul className="hero__top-auditors-list marquee__content">
-            {topAuditors.map((auditor) => (
-              <li key={auditor.name} className="hero__top-auditor">
-                <span className="hero__top-auditor-name">{auditor.name}</span>
-              </li>
-            ))}
-          </ul>
-          {/* the content needs to be repeated for the animation, but we need to hide it from screenreaders. Make sure to keep the aria-hidden during any changes to this component */}
-          <ul
-            aria-hidden="true"
-            className="hero__top-auditors-list marquee__content"
-          >
+          <ul className="hero__top-auditors-list">
             {topAuditors.map((auditor) => (
               <li key={auditor.name} className="hero__top-auditor">
                 <span className="hero__top-auditor-name">{auditor.name}</span>
