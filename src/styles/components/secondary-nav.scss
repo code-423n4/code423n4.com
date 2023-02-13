@@ -20,7 +20,7 @@ a.secondary-nav__item {
   border: 1px solid $color__n-30;
 
   color: $color__text;
-  font-size: $font-size__text;
+  font-size: $font-size__small;
   font-weight: 500;
   line-height: 130%;
   text-decoration: none;
@@ -28,5 +28,9 @@ a.secondary-nav__item {
   &.active {
     color: $color__white;
     background: rgba(255, 255, 255, 0.1);
+  }
+
+  @include breakpoint("m") {
+    font-size: $font-size__text;
   }
 }
