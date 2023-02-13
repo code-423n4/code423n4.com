@@ -7,25 +7,52 @@ const secondaryButtonText = "View leaderboard";
 
 const topAuditors = [
   {
-    name: "This section is in progress",
+    name: "jalapeno",
   },
   {
-    name: "TwoReports",
+    name: "artichoke",
   },
   {
-    name: "perfectJo",
+    name: "tuber",
   },
   {
-    name: "iParticipated",
+    name: "corn_flour",
   },
   {
-    name: "0x0",
+    name: "rye",
   },
   {
-    name: "garfields",
+    name: "orange_peels",
   },
   {
-    name: "0xTelemarketing",
+    name: "pickle",
+  },
+  {
+    name: "remoulade",
+  },
+  {
+    name: "raisin",
+  },
+  {
+    name: "spinach",
+  },
+  {
+    name: "orange_peels",
+  },
+  {
+    name: "pickle",
+  },
+  {
+    name: "spinach",
+  },
+  {
+    name: "tuber",
+  },
+  {
+    name: "corn_flour",
+  },
+  {
+    name: "your name here",
   },
 ];
 

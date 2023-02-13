@@ -39,7 +39,9 @@ const Header = ({ hideConnectWalletDropdown = false }) => {
   const { currentUser } = useUser();
 
   return (
-    <header className={"header full-width " + clsx(mobileNavOpen && "open")}>
+    <header
+      className={"header full-width--padded " + clsx(mobileNavOpen && "open")}
+    >
       <a className="visually-hidden focusable skip-link" href="#skip-link">
         Skip Navigation
       </a>

@@ -80,21 +80,18 @@
 
 .hero__top-auditors {
   margin-top: $spacing__xxxl;
-  padding: $spacing__l;
+  padding: $spacing__l 0;
   background: $color__n-90;
   ul {
-    margin: 0;
+    margin: $spacing__xl 0 0;
     padding: 0;
     list-style: none;
-    display: flex;
-    flex-wrap: wrap;
 
     li {
-      margin-right: $spacing__s;
-      margin-bottom: $spacing__s;
-      &:last-child {
-        margin-right: 0;
-      }
+      font-size: $headline-font-size__xxs;
+      color: $color__n-5;
+      margin: 0 $spacing__xl $spacing__m 0;
+      display: inline-block;
     }
   }
 }

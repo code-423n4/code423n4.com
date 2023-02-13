@@ -53,6 +53,12 @@ main {
 
 .full-width {
   width: 100%;
+  padding: 0;
+}
+
+// use this when you aren't nesting a limited-width container inside. That way you still get the padding you need.
+.full-width--padded {
+  width: 100%;
   padding: 0 $spacing__xl;
 }
 
