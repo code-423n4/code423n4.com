@@ -52,7 +52,7 @@ const topAuditors = [
     name: "corn_flour",
   },
   {
-    name: "your name here",
+    name: "Join them →",
   },
 ];
 

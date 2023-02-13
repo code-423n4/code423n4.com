@@ -88,10 +88,22 @@
     list-style: none;
 
     li {
-      font-size: $headline-font-size__xxs;
+      font-size: $font-size__copy;
       color: $color__n-5;
-      margin: 0 $spacing__xl $spacing__m 0;
+      margin: 0 $spacing__xs $spacing__xs 0;
       display: inline-block;
+      background: $color__n-80;
+      padding: $spacing__s $spacing__m;
+      border-radius: $border-radius__m;
+
+      @include breakpoint("s") {
+        font-size: $headline-font-size__xxs;
+        margin: 0 $spacing__s $spacing__s 0;
+      }
+
+      &:last-of-type {
+        // background: none;
+      }
     }
   }
 }
