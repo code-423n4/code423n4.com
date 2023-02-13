@@ -19,7 +19,9 @@
 
 .hero {
   justify-content: space-between;
+  margin-top: $spacing__s;
 
+  // TODO This is a great opportunity to rewrite with container queries; let the buttons adjust to their container, not the width of the whole screen.
   .button--primary,
   .button--secondary {
     display: block;
@@ -35,7 +37,9 @@
 }
 
 .hero__wardens .hero__left-side {
-  max-width: 30rem;
+  @include breakpoint("l") {
+    max-width: 30rem;
+  }
 }
 
 .hero__right-side {
@@ -79,9 +83,13 @@
 }
 
 .hero__top-auditors {
-  margin-top: $spacing__xxxl;
+  margin-top: $spacing__xl;
   padding: $spacing__l 0;
   background: $color__n-90;
+
+  @include breakpoint("s") {
+    margin-top: $spacing__xxxl;
+  }
   ul {
     margin: $spacing__xl 0 0;
     padding: 0;

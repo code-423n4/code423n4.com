@@ -7,6 +7,9 @@ import ContestList from "../components/ContestList";
 import DefaultLayout from "../templates/DefaultLayout";
 import HomepageHero from "../components/content/HomepageHero";
 import Testimonials from "../components/Testimonials";
+import SecondaryNav from "../components/SecondaryNav";
+import SecondaryNavItem from "../components/SecondaryNavItem";
+import HomepageTopNames from "../components/content/HomepageTopNames";
 
 export default function SiteIndex({ data }) {
   // const { currentUser } = useUser();
@@ -60,9 +63,15 @@ export default function SiteIndex({ data }) {
   return (
     // <DefaultLayout bodyClass="landing" key={"landing" + contestStatusChanges}>
     <DefaultLayout bodyClass="landing">
+      <SecondaryNav>
+        <SecondaryNavItem to="#wardens" active>
+          For Wardens
+        </SecondaryNavItem>
+        <SecondaryNavItem to="#sponsors">For Sponsors</SecondaryNavItem>
+      </SecondaryNav>
       <HomepageHero />
-      <div className="wrapper">
-        {/*<div className="wrapper-main">
+      <HomepageTopNames />
+      {/*<div className="wrapper-main">
         <section>
           {filteredContests && filteredContests.activeContests.length > 0 ? (
             <section>
@@ -98,7 +107,6 @@ export default function SiteIndex({ data }) {
           </div>
         </section>
       </div> */}
-      </div>
     </DefaultLayout>
   );
 }
