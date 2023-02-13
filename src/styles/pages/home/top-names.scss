@@ -1,0 +1,52 @@
+@import "../../variables";
+
+// --------------------------------------------------
+// Homepage Top Names
+// --------------------------------------------------
+
+// CSS rule order
+// --------------------
+
+// 1. Variables
+// 2. Box model properties
+// 3. Display and position
+// 4. Background
+// 5. Border
+// 6. Box shadow
+// 7. Text
+// 8. Transforms
+// 9. Other
+
+.hero__top-auditors {
+  margin-top: $spacing__xl;
+  padding: $spacing__l 0;
+  background: $color__n-90;
+
+  @include breakpoint("s") {
+    margin-top: $spacing__xxxl;
+  }
+  ul {
+    margin: $spacing__xl 0 0;
+    padding: 0;
+    list-style: none;
+
+    li {
+      font-size: $font-size__copy;
+      color: $color__n-5;
+      margin: 0 $spacing__xs $spacing__xs 0;
+      display: inline-block;
+      background: $color__n-80;
+      padding: $spacing__s $spacing__m;
+      border-radius: $border-radius__m;
+
+      @include breakpoint("s") {
+        font-size: $headline-font-size__xxs;
+        margin: 0 $spacing__s $spacing__s 0;
+      }
+
+      &:last-of-type {
+        // background: none;
+      }
+    }
+  }
+}
