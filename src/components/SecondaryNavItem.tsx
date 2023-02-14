@@ -1,22 +1,21 @@
 import React, { ReactNode } from "react";
 import { Link } from "gatsby";
 
-export interface SecondaryNavItem {
+export interface SecondaryNavItem extends React.HTMLProps<HTMLButtonElement> {
   to: string;
   text?: string;
   active?: boolean;
   children?: ReactNode;
 }
 
-export default function SecondaryNavItem({
-  to,
-  text,
-  active,
-  children,
-}: SecondaryNavItem): JSX.Element {
+export default function SecondaryNavItem(props): JSX.Element {
+  const { to, text, active, children } = props;
   return (
-    <Link to={to} className={(active ? "active " : "") + "secondary-nav__item"}>
+    <button
+      {...props}
+      className={(active ? "active " : "") + "secondary-nav__item"}
+    >
       {children ? children : text ? text : "Link"}
-    </Link>
+    </button>
   );
 }

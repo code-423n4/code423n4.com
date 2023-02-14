@@ -17,6 +17,7 @@ export default function SiteIndex({ data }) {
   // @todo: implement global state management instead of props drilling
   const [contestStatusChanges, updateContestStatusChanges] = useState(0);
   const [filteredContests, setFilteredContest] = useState(null);
+  const [viewMode, setViewMode] = useState("warden"); // warden | sponsor
   const contests = data.contests.edges;
 
   const updateContestStatus = useCallback(() => {
@@ -63,16 +64,23 @@ export default function SiteIndex({ data }) {
   return (
     <DefaultLayout bodyClass="home" key={"home" + contestStatusChanges}>
       <SecondaryNav>
-        <SecondaryNavItem to="#wardens" active>
+        <SecondaryNavItem
+          to="#wardens"
+          active={viewMode === "warden"}
+          onClick={() => setViewMode("warden")}
+        >
           For Wardens
         </SecondaryNavItem>
-        <SecondaryNavItem to="#sponsors">For Sponsors</SecondaryNavItem>
+        <SecondaryNavItem
+          to="#sponsors"
+          active={viewMode === "sponsor"}
+          onClick={() => setViewMode("sponsor")}
+        >
+          For Sponsors
+        </SecondaryNavItem>
       </SecondaryNav>
-
-      <HomepageHero />
-
+      <HomepageHero viewMode={viewMode} />
       <HomepageTopNames />
-
       {filteredContests && filteredContests.activeContests.length > 0 ? (
         <section className="home__featured-contests background--blurple">
           <div className="limited-width">
@@ -98,7 +106,6 @@ export default function SiteIndex({ data }) {
             />
           </section>
         ) : null} */}
-
       {/* <section>
           <Testimonials />
         </section>

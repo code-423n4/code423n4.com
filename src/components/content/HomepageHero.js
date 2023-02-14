@@ -3,9 +3,10 @@ import React from "react";
 const primaryButtonText = "Get started";
 const secondaryButtonText = "View leaderboard";
 
-const HeroIndex = () => {
+const HeroIndex = ({ viewMode }) => {
   return (
     <div className="hero">
+      {viewMode === "sponsor" && <p>HELLO SPONSOR!</p>}
       <div className="hero__wardens type__copy grid__one-by-two--break-s limited-width">
         <div className="hero__left-side">
           <h1 className="type__headline__hero">

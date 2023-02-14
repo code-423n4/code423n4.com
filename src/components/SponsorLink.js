@@ -1,4 +1,4 @@
-import React, { useState, useEffect }  from 'react'
+import React, { useState, useEffect } from "react";
 
 const SponsorLink = ({ sponsor }) => {
   // This is a work-around for an issue with React's rehydration function, which
@@ -24,18 +24,15 @@ const SponsorLink = ({ sponsor }) => {
       );
     }
     return (
-      <img
-        src={sponsor.image.childImageSharp.resize.src}
-        alt={sponsor.name}
-      />
+      <img src={sponsor.image.childImageSharp.resize.src} alt={sponsor.name} />
     );
-  }
+  };
 
   return (
-    <div className="wrapper-sponsor">
+    <div className="sponsor-link">
       {isClient ? getSponsorImg() : <div className="placeholder-img"></div>}
     </div>
   );
-}
+};
 
 export default SponsorLink;

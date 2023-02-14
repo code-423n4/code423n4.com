@@ -9,9 +9,8 @@ const SecondaryNav = ({ children }) => {
     <div>
       {/* TODO move this nav stuff into the component */}
       <nav
-        className="secondary-nav type__copy"
+        className="secondary-nav type__copy limited-width"
         aria-labelledby="hero-navigation"
-        className="limited-width"
       >
         {/* This is for screenreaders to announce the secondary navigation */}
         <span id="hero-navigation" className="visually-hidden">
