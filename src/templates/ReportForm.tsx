@@ -2,7 +2,7 @@ import { graphql, Link } from "gatsby";
 import Moralis from "moralis-v1";
 import React, { useCallback, useEffect, useState } from "react";
 import { toast } from "react-toastify";
-
+import { setStateInLocalStorage, getCurrentStateFromStorage } from "../components/reporter/findings/functions";
 // types
 import {
   Finding,
@@ -77,7 +77,32 @@ const ReportForm = ({ data, location }) => {
   const [hasContestEnded, setHasContestEnded] = useState<boolean>(
     Date.now() > new Date(end_time).getTime()
   );
+  const [ipAddress, setIpAddress] = useState(false);
+  useEffect(() => {
+    async function checkIP() {
+      const res = await fetch('https://api.ipify.org?format=json');
+      const data = await res.json();
+      const currentIP = data.ip;
+      setIpAddress(currentIP);
+      if (!getCurrentStateFromStorage("ipHash", {})) {
+        console.log("no ip yet");
+        setStateInLocalStorage("ipHash", {
+          warden: currentUser.username,
+          ipHash: currentIP
+        })
+      } else {
+        const test = getCurrentStateFromStorage("ipHash", {});
+        console.log(test);
+        setStateInLocalStorage("ipHash", {
+          warden: currentUser.username,
+          ipHash: currentIP
+        })
+      }
+    }
+    checkIP();
 
+  }, []);
+  console.log(getCurrentStateFromStorage("ipHash", {}))
   useEffect(() => {
     const timer = setInterval(() => {
       const hasEnded = Date.now() > new Date(end_time).getTime();
@@ -138,7 +163,7 @@ const ReportForm = ({ data, location }) => {
         oldValue: state.isMitigated,
       }
     };
-  
+
     if (state.title !== data.title) {
       requestData.title = data.title;
     }
