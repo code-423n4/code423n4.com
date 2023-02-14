@@ -61,27 +61,34 @@ export default function SiteIndex({ data }) {
   }, [contests]);
 
   return (
-    <DefaultLayout bodyClass="landing" key={"landing" + contestStatusChanges}>
+    <DefaultLayout bodyClass="home" key={"home" + contestStatusChanges}>
       <SecondaryNav>
         <SecondaryNavItem to="#wardens" active>
           For Wardens
         </SecondaryNavItem>
         <SecondaryNavItem to="#sponsors">For Sponsors</SecondaryNavItem>
       </SecondaryNav>
+
       <HomepageHero />
+
       <HomepageTopNames />
-      <section>
-        {filteredContests && filteredContests.activeContests.length > 0 ? (
-          <section>
-            <h1 className="upcoming-header">Active contests</h1>
+
+      {filteredContests && filteredContests.activeContests.length > 0 ? (
+        <section className="home__featured-contests background--blurple">
+          <div className="limited-width">
+            <h1 className="type__headline__m">Active competitive audits</h1>
+            <p className="type__subline__m">
+              Currently finding the highest-severity vulnerabilities for:
+            </p>
             <ContestList
               updateContestStatus={updateContestStatus}
               contests={filteredContests.activeContests}
               user={currentUser}
             />
-          </section>
-        ) : null}
-        {filteredContests && filteredContests.upcomingContests.length > 0 ? (
+          </div>
+        </section>
+      ) : null}
+      {/* {filteredContests && filteredContests.upcomingContests.length > 0 ? (
           <section>
             <h1 className="upcoming-header">Upcoming contests</h1>
             <ContestList
@@ -90,8 +97,7 @@ export default function SiteIndex({ data }) {
               user={currentUser}
             />
           </section>
-        ) : null}
-      </section>
+        ) : null} */}
 
       {/* <section>
           <Testimonials />

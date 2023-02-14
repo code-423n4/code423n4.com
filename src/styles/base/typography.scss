@@ -145,23 +145,65 @@ small {
 // Headings
 // ------------------------------------------------
 
+// TODO: make this a mixin
 h1,
 h2,
 h3,
 h4,
 h5,
 h6,
+.type__headline__hero,
 .type__headline__xl,
 .type__headline__l,
 .type__headline__m,
 .type__headline__s,
 .type__headline__xs,
-.type__headline__xxs {
+.type__headline__xxs,
+.type__subline__hero,
+.type__subline__xl,
+.type__subline__l,
+.type__subline__m,
+.type__subline__s,
+.type__subline__xs,
+.type__subline__xxs {
   margin-top: 0.25em;
   margin-bottom: 0.4em;
   font-family: $font__default;
   font-weight: 700;
   color: $color__headline;
+}
+
+// TODO: make this a mixin
+.background--blurple,
+.background--low-contrast {
+  color: $color__white;
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  .type__headline__hero,
+  .type__headline__xl,
+  .type__headline__l,
+  .type__headline__m,
+  .type__headline__s,
+  .type__headline__xs,
+  .type__headline__xxs,
+  .type__subline__hero,
+  .type__subline__xl,
+  .type__subline__l,
+  .type__subline__m,
+  .type__subline__s,
+  .type__subline__xs,
+  .type__subline__xxs {
+    color: $color__white;
+  }
+  p,
+  span {
+    color: $color__white;
+  }
 }
 
 // [Tip] When using headlines, use the `type__` classes instead of the `h` tags. Use the correct `h` tag for the position you're in, and assign it a new class.

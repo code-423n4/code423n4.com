@@ -19,6 +19,38 @@
 
 $button__border-width: 2px;
 
+// Button primary
+// --------------------
+
+// Mixin for the white button style --white
+// --------------------
+
+@mixin button--white {
+  background: $color__white;
+  border-color: $color__white;
+  color: $color__c4-button-blurple;
+
+  // TODO better hover styling for white buttons
+  &:hover {
+    background: rgba($color__white, 0.8);
+    border-color: $color__white;
+    color: $color__c4-button-blurple;
+  }
+}
+
+@mixin button--secondary--white {
+  background: transparent;
+  border: 2px solid $color__white;
+  color: rgba($color__white, 0.8);
+  border-color: rgba($color__white, 0.8);
+
+  // TODO better hover styling for white buttons
+  &:hover {
+    background: rgba($color__white, 0.2);
+    color: $color__white;
+    border-color: $color__white;
+  }
+}
 .button--primary,
 .button {
   padding: $spacing__s $spacing__l;
@@ -43,7 +75,21 @@ $button__border-width: 2px;
     border-color: $color__c4-logo-blurple;
     color: $color__white;
   }
+
+  &--white {
+    @include button--white;
+  }
 }
+
+.background--blurple,
+.background--low-contrast {
+  .button--primary {
+    @include button--white;
+  }
+}
+
+// Button secondary
+// --------------------
 
 .button--secondary {
   background: transparent;
@@ -54,5 +100,15 @@ $button__border-width: 2px;
   &:hover {
     background: $color__c4-button-blurple;
     color: $color__white;
+  }
+  &--secondary--white {
+    @include button--secondary--white;
+  }
+}
+
+.background--blurple,
+.background--low-contrast {
+  .button--secondary {
+    @include button--secondary--white;
   }
 }
