@@ -98,6 +98,9 @@
     "prettier": "2.2.1",
     "tiny-glob": "^0.2.8"
   },
+  "resolutions": {
+    "source-map": "^0.8.0-beta.0"
+  },
   "license": "MIT",
   "scripts": {
     "build": "gatsby build",
