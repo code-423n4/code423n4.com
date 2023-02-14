@@ -70,8 +70,18 @@ If you submit test findings to the default test contest repo, you can find your 
 
 ## Develop
 
+First time setup:
+
 ```
+nvm install
+npm install -g yarn
 yarn
+```
+
+Then and every subsequent time:
+
+```
+nvm use
 yarn start
 ```
 
