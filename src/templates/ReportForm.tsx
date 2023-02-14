@@ -2,7 +2,7 @@ import { graphql, Link } from "gatsby";
 import Moralis from "moralis-v1";
 import React, { useCallback, useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { setStateInLocalStorage, getCurrentStateFromStorage } from "../components/reporter/findings/functions";
+
 // types
 import {
   Finding,
@@ -19,7 +19,6 @@ import ProtectedPage from "../components/ProtectedPage";
 import SubmitFindings from "../components/reporter/SubmitFindings";
 // styles
 import * as styles from "../styles/Main.module.scss";
-
 
 export interface ReportState {
   title: string;
@@ -77,32 +76,39 @@ const ReportForm = ({ data, location }) => {
   const [hasContestEnded, setHasContestEnded] = useState<boolean>(
     Date.now() > new Date(end_time).getTime()
   );
-  const [ipAddress, setIpAddress] = useState(false);
+  const [ipState, setIpState] = useState<{
+    warden: string;
+    ipHash: string;
+  }>();
   useEffect(() => {
     async function checkIP() {
-      const res = await fetch('https://api.ipify.org?format=json');
+      const res = await fetch("https://api.ipify.org?format=json");
       const data = await res.json();
       const currentIP = data.ip;
-      setIpAddress(currentIP);
-      if (!getCurrentStateFromStorage("ipHash", {})) {
+      const ipObj = window.localStorage.getItem("ipHash");
+      if (!ipObj) {
         console.log("no ip yet");
-        setStateInLocalStorage("ipHash", {
+        window.localStorage.setItem(
+          "ipHash",
+          JSON.stringify({
+            warden: currentUser.username,
+            ipHash: currentIP,
+          })
+        );
+        setIpState({
           warden: currentUser.username,
-          ipHash: currentIP
-        })
+          ipHash: currentIP,
+        });
       } else {
-        const test = getCurrentStateFromStorage("ipHash", {});
-        console.log(test);
-        setStateInLocalStorage("ipHash", {
-          warden: currentUser.username,
-          ipHash: currentIP
-        })
+        const data = ipObj;
+        setIpState(JSON.parse(data));
       }
     }
-    checkIP();
+    if (currentUser.username) {
+      checkIP();
+    }
+  }, [currentUser]);
 
-  }, []);
-  console.log(getCurrentStateFromStorage("ipHash", {}))
   useEffect(() => {
     const timer = setInterval(() => {
       const hasEnded = Date.now() > new Date(end_time).getTime();
@@ -115,7 +121,7 @@ const ReportForm = ({ data, location }) => {
   });
 
   const onSubmit = useCallback(
-    async (data: FindingCreateRequest): Promise<Response> => {
+    async (data: FindingCreateRequest): Promise<Response | undefined> => {
       const endpoint =
         mode === FormMode.Create ? "submit-finding" : "manage-findings";
       let requestData: FindingCreateRequest | FindingEditRequest = data;
@@ -127,15 +133,20 @@ const ReportForm = ({ data, location }) => {
         throw "You must be logged in to submit or edit findings";
       }
       const sessionToken = user.attributes.sessionToken;
-      return fetch(`/.netlify/functions/${endpoint}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-Authorization": `Bearer ${sessionToken}`,
-          "C4-User": currentUser.username,
-        },
-        body: JSON.stringify(requestData),
-      });
+      if (endpoint === "submit-finding" && currentUser.username !== ipState?.warden) {
+        window.Error("Can't submit twice with different username.");
+        return;
+      } else {
+        return fetch(`/.netlify/functions/${endpoint}`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-Authorization": `Bearer ${sessionToken}`,
+            "C4-User": currentUser.username,
+          },
+          body: JSON.stringify(requestData),
+        });
+      }
     },
     // must include dependencies for functions executed by this function too
     [currentUser, mode, issueId, attributedTo, state]
@@ -154,14 +165,17 @@ const ReportForm = ({ data, location }) => {
         newValue: data.attributedTo,
         address: data.address,
       },
-      mitigationOf: data.mitigationOf ? {
-        newValue: data.mitigationOf!,
-        oldValue: state.mitigationOf,
-      } : undefined,
-      isMitigated : { //update these values here from ui update
+      mitigationOf: data.mitigationOf
+        ? {
+            newValue: data.mitigationOf!,
+            oldValue: state.mitigationOf,
+          }
+        : undefined,
+      isMitigated: {
+        //update these values here from ui update
         newValue: data.isMitigated!,
         oldValue: state.isMitigated,
-      }
+      },
     };
 
     if (state.title !== data.title) {
@@ -311,7 +325,6 @@ const ReportForm = ({ data, location }) => {
     return { links: linksToCode, body };
   };
 
-
   return (
     <ProtectedPage pageTitle="Submit finding | Code 423n4">
       {isLoading ? (
@@ -330,7 +343,9 @@ const ReportForm = ({ data, location }) => {
         </div>
       ) : isClosed ? (
         <div className={styles.Form__Form}>
-          <h1 className={styles.Form__Heading1}>This finding has been withdrawn</h1>
+          <h1 className={styles.Form__Heading1}>
+            This finding has been withdrawn
+          </h1>
           <h3 className={styles.Form__Heading3}>Submitted by:</h3>
           <ul>
             <li>{attributedTo}</li>
