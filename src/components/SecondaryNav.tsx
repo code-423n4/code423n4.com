@@ -7,7 +7,7 @@ interface SecondaryNav {
 const SecondaryNav = ({ children }) => {
   return (
     <div>
-      {/* TODO move this nav stuff into the component */}
+      {/* TODO finish this component. Make the nav have a name */}
       <nav
         className="secondary-nav type__copy limited-width"
         aria-labelledby="hero-navigation"

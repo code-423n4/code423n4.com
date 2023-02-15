@@ -18,5 +18,80 @@
 // 9. Other
 
 .contest-tile {
+  margin-bottom: $spacing__m;
   display: flex;
+  flex-direction: column;
+  background: orange;
+  border: 1px solid red;
+  border-radius: $border-radius__m;
+
+  @include breakpoint("s") {
+    flex-direction: row;
+    margin-bottom: $spacing__l;
+  }
+}
+
+.contest-tile__left-side {
+  padding: $spacing__m $spacing__m 0;
+
+  @include breakpoint("s") {
+    flex-shrink: 0;
+    flex-direction: row;
+    padding: 0;
+  }
+}
+
+.contest-tile__right-side {
+  flex: 1;
+  background: blue;
+  border-left: 1px solid red;
+  @include breakpoint("s") {
+    border-left: 1px solid red;
+  }
+}
+
+.contest-tile__right-top {
+  margin: $spacing__s $spacing__m $spacing__m $spacing__m;
+  display: flex;
+  justify-content: space-between;
+  @include breakpoint("s") {
+    margin: $spacing__l;
+    margin: $spacing__m $spacing__l $spacing__l $spacing__l;
+  }
+}
+
+.contest-tile__amount {
+  font-weight: 500;
+  text-align: right;
+}
+
+.contest-tile__time-wrapper {
+  display: flex;
+  background: yellow;
+
+  li {
+    margin-right: $spacing__s;
+    background: pink;
+  }
+}
+
+.contest-tile__title {
+  font-size: $headline-font-size__xxs;
+  font-weight: 500;
+  margin-top: 0;
+
+  @include breakpoint("s") {
+    font-size: $headline-font-size__xs;
+  }
+}
+
+.contest-tile__right-bottom {
+  padding: $spacing__s $spacing__m;
+  display: flex;
+  justify-content: space-between;
+  background: cornflowerblue;
+  border-top: 1px solid red;
+  @include breakpoint("s") {
+    padding: $spacing__s $spacing__l;
+  }
 }

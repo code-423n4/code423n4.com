@@ -35,25 +35,23 @@ const ContestTile = ({ contest, updateContestStatus, user }) => {
     }
   }, [fields, user]);
 
-  if (!canViewContest) {
-    return null;
-  } else {
-    return (
-      <>
-        <article className={"contest-tile " + t.contestStatus}>
+  return (
+    <>
+      <article className={"contest-tile " + t.contestStatus}>
+        <div className="contest-tile__left-side">
           <SponsorLink sponsor={sponsor} />
-          <div className="contest-tile__right-side">
-            <div className="contest-tile__right-top">
-              <hgroup>
-                <h2 className="contest-tile__title">{title}</h2>
-                <p className="contest-tile__details">{details}</p>
-              </hgroup>
-              {amount ? <p>{amount}</p> : null}
-            </div>
-            <div className="contest-tile__right-bottom">
-              <ul>
+        </div>
+        <div className="contest-tile__right-side">
+          <div className="contest-tile__right-top">
+            <div>
+              <h2 className="contest-tile__title">{title}</h2>
+              <p className="contest-tile__details">{details}</p>
+              <ul className="contest-tile__time-wrapper">
+                <li className="contest-tile__days-duration">
+                  {t.daysDuration} day contest
+                </li>
                 {t.contestStatus === "soon" || t.contestStatus === "active" ? (
-                  <li>
+                  <li className="contest-tile__countdown">
                     <Countdown
                       state={t.contestStatus}
                       start={start_time}
@@ -63,72 +61,81 @@ const ContestTile = ({ contest, updateContestStatus, user }) => {
                     />
                   </li>
                 ) : (
-                  <li>
+                  <li className="contest-tile__dates">
                     Contest ran {t.startDay}-{t.endDay}
                   </li>
                 )}
               </ul>
             </div>
+            {amount ? <p className="contest-tile__amount">{amount}</p> : null}
           </div>
-        </article>
-        <article className={"contest-tile " + t.contestStatus}>
-          <SponsorLink sponsor={sponsor} />
-          {league === "cosmos" ? (
-            <Link className="contest-tile__contest-league" to="/cosmos">
-              Cosmos League
-            </Link>
-          ) : null}
-          <h2 className="contest-tile__title">
-            {amount ? amount : ""} {title}
-          </h2>
-          <p>{details}</p>
-          {t.contestStatus !== "active" ? (
-            <p className="contest-tile__days-duration">
-              {t.daysDuration} day contest
-            </p>
-          ) : null}
-          {t.contestStatus === "soon" || t.contestStatus === "active" ? (
-            <Countdown
-              state={t.contestStatus}
-              start={start_time}
-              end={end_time}
-              isPreview={findingsRepo === ""}
-              updateContestStatus={updateContestStatus}
-            />
-          ) : (
-            <p>
-              Contest ran {t.startDay}-{t.endDay}
-            </p>
-          )}
-          <ClientOnly>
-            <a
-              href={fields?.contestPath || "/"}
-              className="button button--primary"
-            >
-              {`${findingsRepo === "" ? "Preview" : "View"} Contest`}
-            </a>
-            {t.contestStatus === "active" && contestRepo && canViewContest && (
-              <a href={contestRepo} className="button button--secondary">
-                View Repo
-              </a>
-            )}
-            {(t.contestStatus === "active" || status === "Active Contest") &&
-            findingsRepo &&
-            fields.status &&
-            fields.submissionPath &&
-            canViewContest ? (
-              <Link
-                to={fields.submissionPath}
-                className="button button--secondary"
-              >
-                Submit Finding
-              </Link>
-            ) : null}
-          </ClientOnly>
-        </article>
-      </>
-    );
-  }
+          <div className="contest-tile__right-bottom">
+            <div className="contest-tile__button-wrapper">
+              <ClientOnly>
+                <a
+                  href={fields?.contestPath || "/"}
+                  className="contest-tile__button"
+                >
+                  {`${findingsRepo === "" ? "Preview" : "View"} Contest`}
+                </a>
+                {t.contestStatus === "active" && contestRepo && canViewContest && (
+                  <a href={contestRepo} className="contest-tile__button">
+                    View Repo
+                  </a>
+                )}
+                {(t.contestStatus === "active" ||
+                  status === "Active Contest") &&
+                findingsRepo &&
+                fields.status &&
+                fields.submissionPath &&
+                canViewContest ? (
+                  <Link
+                    to={fields.submissionPath}
+                    className="contest-tile__button"
+                  >
+                    Submit Finding
+                  </Link>
+                ) : null}
+              </ClientOnly>
+            </div>
+            <div className="contest-tile__status-indicator">
+              <span className="contest-tile__status-indicator-text">Live</span>
+            </div>
+          </div>
+        </div>
+      </article>
+      <article className={"contest-tile " + t.contestStatus}>
+        <SponsorLink sponsor={sponsor} />
+        {league === "cosmos" ? (
+          <Link className="contest-tile__contest-league" to="/cosmos">
+            Cosmos League
+          </Link>
+        ) : null}
+        <h2 className="contest-tile__title">
+          {amount ? amount : ""} {title}
+        </h2>
+        <p>{details}</p>
+        {t.contestStatus !== "active" ? (
+          <span className="contest-tile__days-duration">
+            {t.daysDuration} day contest
+          </span>
+        ) : null}
+        {t.contestStatus === "soon" || t.contestStatus === "active" ? (
+          <Countdown
+            state={t.contestStatus}
+            start={start_time}
+            end={end_time}
+            isPreview={findingsRepo === ""}
+            updateContestStatus={updateContestStatus}
+          />
+        ) : (
+          <p>
+            Contest ran {t.startDay}-{t.endDay}
+          </p>
+        )}
+      </article>
+    </>
+  );
 };
 
 export default ContestTile;
