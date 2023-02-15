@@ -78,30 +78,30 @@ const ReportForm = ({ data, location }) => {
   );
   const [ipState, setIpState] = useState<{
     warden: string;
-    ipHash: string;
+    ipdata: string;
   }>();
+  const [currentIp, setCurrentIp] = useState<string>("");
   useEffect(() => {
     async function checkIP() {
       const res = await fetch("https://api.ipify.org?format=json");
       const data = await res.json();
       const currentIP = data.ip;
-      const ipObj = window.localStorage.getItem("ipHash");
+      setCurrentIp(currentIP);
+      const ipObj = window.localStorage.getItem("ipdata");
       if (!ipObj) {
-        console.log("no ip yet");
         window.localStorage.setItem(
-          "ipHash",
+          "ipdata",
           JSON.stringify({
             warden: currentUser.username,
-            ipHash: currentIP,
+            ipdata: currentIP,
           })
         );
         setIpState({
           warden: currentUser.username,
-          ipHash: currentIP,
+          ipdata: currentIP,
         });
       } else {
-        const data = ipObj;
-        setIpState(JSON.parse(data));
+        setIpState(JSON.parse(ipObj));
       }
     }
     if (currentUser.username) {
@@ -133,7 +133,11 @@ const ReportForm = ({ data, location }) => {
         throw "You must be logged in to submit or edit findings";
       }
       const sessionToken = user.attributes.sessionToken;
-      if (endpoint === "submit-finding" && currentUser.username !== ipState?.warden) {
+      if (
+        endpoint === "submit-finding" &&
+        currentUser.username !== ipState?.warden &&
+        ipState?.ipdata === currentIp
+      ) {
         window.Error("Can't submit twice with different username.");
         return;
       } else {
