@@ -98,6 +98,11 @@ const ContestTile = ({ contest, updateContestStatus, user }) => {
           ) : (
             ""
           )}
+          {!canViewContest && (
+            <div className="private-label">
+              🔒 Private - limited to specific participants
+            </div>
+          )}
         </ClientOnly>
       </div>
     </div>

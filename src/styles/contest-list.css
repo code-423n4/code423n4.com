@@ -145,7 +145,7 @@
   width: 80px;
   height: 80px;
   border-radius: 100%;
-  background: rgba(255,255,255,.1);
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .center {
@@ -177,6 +177,22 @@
   text-align: center;
 
   line-height: 120%;
+}
+
+.private-label {
+  background: rgba(0, 0, 0, 0.3);
+  padding: 9px 20px;
+  margin: 0;
+  border-radius: 50px;
+  font-size: 1rem;
+  font-family: "Roboto", sans-serif;
+  display: inline-block;
+}
+
+@media (min-width: 600px) {
+  .private-label {
+    margin-right: 10px;
+  }
 }
 
 @media (min-width: 600px) {
