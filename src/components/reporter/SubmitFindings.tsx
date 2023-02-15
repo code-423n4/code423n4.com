@@ -58,7 +58,7 @@ interface SubmitFindingsProps {
   repo: string;
   title: string;
   initialState: ReportState;
-  onSubmit: (data: FindingCreateRequest) => Promise<Response>;
+  onSubmit: (data: FindingCreateRequest) => Promise<Response | undefined>;
   findingId: string;
   initialAttributedTo: string;
   submitButtonText: string;
