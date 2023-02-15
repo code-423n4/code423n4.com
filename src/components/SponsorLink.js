@@ -30,7 +30,13 @@ const SponsorLink = ({ sponsor }) => {
 
   return (
     <div className="sponsor-link">
-      {isClient ? getSponsorImg() : <div className="placeholder-img"></div>}
+      {isClient ? (
+        getSponsorImg()
+      ) : (
+        <div className="sponsor-link__placeholder-logo">
+          {sponsor.name.charAt(0)}
+        </div>
+      )}
     </div>
   );
 };

@@ -1,0 +1,41 @@
+@import "../variables";
+@import "./contest-tile";
+
+// --------------------------------------------------
+// Contest Tile Component
+// --------------------------------------------------
+
+// CSS rule order
+// --------------------
+
+// 1. Variables
+// 2. Box model properties
+// 3. Display and position
+// 4. Background
+// 5. Border
+// 6. Box shadow
+// 7. Text
+// 8. Transforms
+// 9. Other
+
+.sponsor-link {
+  img {
+    width: 100%;
+    height: auto;
+    border-radius: 50%;
+  }
+  .sponsor-link__placeholder-logo {
+    min-width: 50px;
+    min-height: 50px;
+    width: 100%;
+    aspect-ratio: 1/1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba($color__black, 0.1);
+    color: $color__white;
+    font-size: 3rem;
+    font-weight: 300;
+    border-radius: $border-radius__m;
+  }
+}

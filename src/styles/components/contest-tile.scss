@@ -17,12 +17,20 @@
 // 8. Transforms
 // 9. Other
 
+$contest-tile__logo-container-width: 100px;
+$contest-tile__border: 1px solid rgba($color__white, 0.4);
+$contest-tile__background: linear-gradient(
+  180deg,
+  rgba($color__white, 0.1) 0%,
+  rgba($color__white, 0.05) 100%
+);
+
 .contest-tile {
   margin-bottom: $spacing__m;
   display: flex;
   flex-direction: column;
-  background: orange;
-  border: 1px solid red;
+  background: $contest-tile__background;
+  border: $contest-tile__border;
   border-radius: $border-radius__m;
 
   @include breakpoint("s") {
@@ -31,6 +39,9 @@
   }
 }
 
+// Logo area
+// --------------------
+
 .contest-tile__left-side {
   padding: $spacing__m $spacing__m 0;
 
@@ -38,15 +49,23 @@
     flex-shrink: 0;
     flex-direction: row;
     padding: 0;
+    width: $contest-tile__logo-container-width;
   }
 }
 
+.contest-tile__left-side .sponsor-link {
+  width: $contest-tile__logo-container-width;
+  padding: $spacing__s;
+}
+
+// Content area
+// --------------------
+
 .contest-tile__right-side {
   flex: 1;
-  background: blue;
-  border-left: 1px solid red;
+  border-left: 0;
   @include breakpoint("s") {
-    border-left: 1px solid red;
+    border-left: $contest-tile__border;
   }
 }
 
@@ -55,25 +74,31 @@
   display: flex;
   justify-content: space-between;
   @include breakpoint("s") {
-    margin: $spacing__l;
     margin: $spacing__m $spacing__l $spacing__l $spacing__l;
   }
 }
+
+// Contest amount
+// --------------------
 
 .contest-tile__amount {
   font-weight: 500;
   text-align: right;
 }
 
+// Contest time
+// --------------------
+
 .contest-tile__time-wrapper {
   display: flex;
-  background: yellow;
 
   li {
     margin-right: $spacing__s;
-    background: pink;
   }
 }
+
+// Contest title
+// --------------------
 
 .contest-tile__title {
   font-size: $headline-font-size__xxs;
@@ -85,12 +110,13 @@
   }
 }
 
+// Contest buttons and live indicator
+
 .contest-tile__right-bottom {
   padding: $spacing__s $spacing__m;
   display: flex;
   justify-content: space-between;
-  background: cornflowerblue;
-  border-top: 1px solid red;
+  border-top: $contest-tile__border;
   @include breakpoint("s") {
     padding: $spacing__s $spacing__l;
   }
