@@ -23,14 +23,14 @@ import {
 } from "../util/contest-utils";
 import {
   getAvailableFindings,
-  getMarkdownReportForUser,
   getRepoName,
   wardenFindingsForContest,
 } from "../util/github-utils";
 import {
   getUserTeams,
-  updateTeamAddress,
+  updateTeamAddresses,
   sendConfirmationEmail,
+  getTeamEmails,
 } from "../util/user-utils";
 
 // config
@@ -95,14 +95,6 @@ async function getFindings(
   contest: Contest,
   includeTeams: boolean = true
 ): Promise<Response> {
-  // first phase:
-  // given active contest id
-  // [x] warden can see own findings
-  // [x] warden can see team findings
-  // [x] can see specific finding
-  // [x] team findings
-  // [x] make team findings optional
-
   const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
 
   const wardenFindings: Finding[] = await wardenFindingsForContest(
@@ -143,14 +135,22 @@ async function handleAttributionChange(
   repoName,
   issueNumber,
   username,
-  attributedTo: { newValue: string; oldValue: string; address: string }
+  attributedTo: { newValue: string; oldValue: string; address?: string }
 ) {
   if (attributedTo.newValue !== username) {
     const team: TeamData = await checkTeamAuth(attributedTo.newValue, username);
-    // @todo: remove this once all teams have saved addresses
-    if (!team.address) {
+    // @todo: remove this once all teams have a saved polygon address
+    const teamPolygonAddress =
+      team.paymentAddresses &&
+      team.paymentAddresses.find((address) => address.chain === "polygon");
+    if (attributedTo.address && !teamPolygonAddress) {
       try {
-        await updateTeamAddress(team, attributedTo.address);
+        const teamPaymentAddresses = team.paymentAddresses || [];
+        teamPaymentAddresses.push({
+          chain: "polygon",
+          address: attributedTo.address,
+        });
+        await updateTeamAddresses(username, team, teamPaymentAddresses);
       } catch (error) {
         // don't throw error if this PR fails - there will likely be duplicates
         // due to the fact that PRs take some time to review and merge and we
@@ -176,7 +176,6 @@ async function handleAttributionChange(
     Buffer.from(oldContents.data.content, "base64").toString()
   );
   newContents.handle = attributedTo.newValue;
-  newContents.address = attributedTo.address;
 
   const newFileResponse = await client.createOrUpdateTextFile({
     owner: process.env.GITHUB_REPO_OWNER!,
@@ -211,16 +210,32 @@ async function editFinding(
 ): Promise<void> {
   const CustOcto = Octokit.plugin(createOrUpdateTextFile);
   const client = new CustOcto({ auth: process.env.GITHUB_TOKEN });
-
+  if(data.mitigationOf?.oldValue !== data.mitigationOf?.newValue){
+    throw {
+      message: `You cannot change the report id ${data.mitigationOf?.oldValue} for this mitigation issue.`,
+    };
+  }
+ 
+  //is user marked issue as mitigation confirmed but then changed their minds remove the mitigation confirmed label and add new risk label and body
+  //mitigation confirmed and no risk label exists
+  let oldRiskCode = '';
+  let newRiskCode = '';
+  if(!data.mitigationOf){
+    oldRiskCode = getRiskCodeFromGithubLabel(data.risk.oldValue);
+    newRiskCode = getRiskCodeFromGithubLabel(data.risk.newValue);
+  }else{
+    oldRiskCode = data.risk.oldValue ? getRiskCodeFromGithubLabel(data.risk.oldValue) : '';
+    newRiskCode = data.risk.newValue ? getRiskCodeFromGithubLabel(data.risk.newValue) : '';
+  }
   // don't allow users to change risk to or from QA or gas
-  const oldRiskCode = getRiskCodeFromGithubLabel(data.risk.oldValue);
-  const newRiskCode = getRiskCodeFromGithubLabel(data.risk.newValue);
+ 
   const isQaOrGasSubmission = Boolean(
     newRiskCode === "Q" ||
       newRiskCode === "G" ||
       oldRiskCode === "Q" ||
       oldRiskCode === "G"
   );
+  
   if (oldRiskCode !== newRiskCode) {
     if (oldRiskCode === "Q" || oldRiskCode === "G") {
       throw {
@@ -251,6 +266,15 @@ async function editFinding(
   }
 
   let edited = false;
+  let teamEmails: string[] = [];
+
+  if (data.attributedTo.newValue !== username) {
+    const team: TeamData = await checkTeamAuth(
+      data.attributedTo.newValue,
+      username
+    );
+    teamEmails = await getTeamEmails(team);
+  }
 
   const owner = process.env.GITHUB_REPO_OWNER!;
   const repoName = getRepoName(contest);
@@ -290,13 +314,17 @@ async function editFinding(
     );
     emailBody =
       `Attribution changed from ${data.attributedTo.oldValue} to ${data.attributedTo.newValue}\n\n` +
-      `Wallet address: ${data.attributedTo.address}\n\n` +
       emailBody;
     edited = true;
   }
-
   // Only handle risk changes between Med and High
-  if (!isQaOrGasSubmission && data.risk.oldValue !== data.risk.newValue) {
+  if (!isQaOrGasSubmission && data.risk.oldValue !== data.risk.newValue && !data.isMitigated?.newValue) {
+    //if a mitigation was originally confirmed
+    let removeMitigationConfirmedLabel = false;
+    if(data.mitigationOf && data.risk.oldValue === ''){
+      removeMitigationConfirmedLabel = true;
+    }
+    const labelNameToBeRemoved = !removeMitigationConfirmedLabel ? data.risk.oldValue : 'mitigation-confirmed'
     try {
       await client.request(
         "DELETE /repos/{owner}/{repo}/issues/{issue_number}/labels/{name}",
@@ -304,7 +332,7 @@ async function editFinding(
           owner: process.env.GITHUB_REPO_OWNER!,
           repo: repoName,
           issue_number: issueNumber,
-          name: data.risk.oldValue,
+          name: labelNameToBeRemoved,
         }
       );
     } catch (error) {
@@ -339,17 +367,54 @@ async function editFinding(
       `Risk changed from ${data.risk.oldValue} to ${data.risk.newValue}\n\n` +
       emailBody;
     edited = true;
+  }else if(!isQaOrGasSubmission && data.isMitigated?.oldValue !== data.isMitigated?.newValue && data.isMitigated?.newValue){
+    try {
+      await client.request(
+        "DELETE /repos/{owner}/{repo}/issues/{issue_number}/labels/{name}",
+        {
+          owner: process.env.GITHUB_REPO_OWNER!,
+          repo: repoName,
+          issue_number: issueNumber,
+          name: data.risk.oldValue,
+        }
+      );
+    } catch (error) {
+      throw {
+        status: error.status || 500,
+        message: `Error removing old risk label: [${data.risk.oldValue}] - ${
+          error.message || "unknown"
+        }`,
+      };
+    }
+
+const migationConfirmedLabe = 'mitigation-confirmed'
+    try {
+      await client.request(
+        "POST /repos/{owner}/{repo}/issues/{issue_number}/labels",
+        {
+          owner: process.env.GITHUB_REPO_OWNER!,
+          repo: repoName,
+          issue_number: issueNumber,
+          labels: [migationConfirmedLabe],
+        }
+      );
+    } catch (error) {
+      throw {
+        status: error.status || 500,
+        message: `Error adding new label: [mitigation-confirmed] - ${
+          error.message || "unknown"
+        }`,
+      };
+    }
   }
 
   // Simple field handling {title, body}
   const simpleFields: { title?: string; body?: string } = {};
-
   if (data.title) {
     simpleFields.title = data.title;
     emailBody = `Title changed: ${data.title}\n\n` + emailBody;
     edited = true;
   }
-
   if (data.body) {
     if (isQaOrGasSubmission) {
       await client.createOrUpdateTextFile({
@@ -362,7 +427,7 @@ async function editFinding(
       // @todo: remove this once we can be sure all reports are saved as md files
       const markdownPath = `https://github.com/${owner}/${repoName}/blob/main/data/${data.attributedTo.newValue}-${newRiskCode}.md`;
       simpleFields.body = `See the markdown file with the details of this report [here](${markdownPath}).`;
-    } else {
+    }else {
       simpleFields.body = data.body;
     }
     emailBody = `Report contents changed: ${data.body}\n\n` + emailBody;
@@ -400,7 +465,11 @@ async function editFinding(
   if (apiKey && domain && process.env.EMAIL_SENDER) {
     const subject = `C4 ${contest.sponsor} finding updated`;
 
-    await sendConfirmationEmail(data.emailAddresses, subject, emailBody);
+    await sendConfirmationEmail(
+      [...data.emailAddresses, ...teamEmails],
+      subject,
+      emailBody
+    );
   }
 }
 
@@ -412,13 +481,6 @@ async function deleteFinding(
   attributedTo: string,
   emailAddresses: string[]
 ) {
-  // @todo:
-  // [x] delete markdown file for QA and Gas reports
-  // [x] close issue
-  // [x] add comment "withdrawn by x"
-  // [x] add "withdrawn by warden" and "Invalid" labels
-  // [x] send confirmation email
-
   const CustOcto = Octokit.plugin(createOrUpdateTextFile);
   const client = new CustOcto({ auth: process.env.GITHUB_TOKEN });
 
@@ -548,6 +610,8 @@ const handler: Handler = async (event: Event): Promise<Response> => {
           risk,
           emailAddresses,
         }: FindingDeleteRequest = JSON.parse(event.body!);
+        let teamEmails: string[] = [];
+
         issueNumber = parseInt(event.queryStringParameters?.issue!);
         if (!issueNumber || !attributedTo || !risk) {
           return {
@@ -559,7 +623,8 @@ const handler: Handler = async (event: Event): Promise<Response> => {
         }
 
         if (attributedTo !== username) {
-          await checkTeamAuth(attributedTo, username);
+          const team: TeamData = await checkTeamAuth(attributedTo, username);
+          teamEmails = await getTeamEmails(team);
         }
         await deleteFinding(
           username,
@@ -567,7 +632,7 @@ const handler: Handler = async (event: Event): Promise<Response> => {
           issueNumber,
           risk,
           attributedTo,
-          emailAddresses
+          [...emailAddresses, ...teamEmails]
         );
         return {
           statusCode: 200,

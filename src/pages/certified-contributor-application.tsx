@@ -9,8 +9,7 @@ import useUser from "../hooks/UserContext";
 import { Input } from "../components/Input";
 import ProtectedPage from "../components/ProtectedPage";
 
-import * as styles from "../components/form/Form.module.scss";
-import * as widgetStyles from "../components/reporter/widgets/Widgets.module.scss";
+import * as styles from "../styles/Main.module.scss";
 
 function ApplyForCertifiedContributor() {
   enum FormStatus {
@@ -98,7 +97,7 @@ function ApplyForCertifiedContributor() {
               )}
               {(status === FormStatus.Unsubmitted ||
                 status === FormStatus.Submitting) && (
-                <form className={clsx(styles.Form, styles.FormSmall)}>
+                <form className={clsx(styles.Form__Form, styles.Form__FormSmall)}>
                   <h1>Certification Application</h1>
                   <Input
                     label="Github Username"
@@ -109,21 +108,21 @@ function ApplyForCertifiedContributor() {
                   />
                   <label
                     htmlFor="acceptAgreeement"
-                    className={widgetStyles.Control}
+                    className={styles.Widget__Control}
                   >
                     <input
                       type="checkbox"
                       id="acceptAgreeement"
                       checked={acceptedAgreement}
                       onChange={handleAgreement}
-                      className={widgetStyles.Checkbox}
+                      className={styles.Widget__Checkbox}
                     />
                     I have read and agree to the terms and conditions (see
                     below)
                     {!acceptedAgreement && (
                       <label
                         htmlFor="acceptAgreeement"
-                        className={widgetStyles.ErrorMessage}
+                        className={styles.Widget__ErrorMessage}
                       >
                         <small>
                           You must accept the terms and conditions to apply.

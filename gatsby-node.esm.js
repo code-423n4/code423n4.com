@@ -1,13 +1,21 @@
 import { graphql } from "@octokit/graphql";
 import format from "date-fns/format";
+import dedent from "dedent";
 import { createFilePath } from "gatsby-source-filesystem";
 import fetch from "node-fetch";
 import path from "path";
 import webpack from "webpack";
-
 import SchemaCustomization from "./schema";
-
+import { getApiContestData } from "./netlify/util/getContestsData.ts";
 const { token } = require("./netlify/_config");
+
+const privateContestMessage = dedent`
+# Contest details are not available. Why not?
+
+The contest is limited to specific participants. Most Code4rena contests are open and public, but some have special requirements. In those cases, the code and contest details remain private (at least for now).
+
+For more information on participating in a private audit, please see this [post](https://mirror.xyz/c4blog.eth/Ww3sILR-e5iWoMYNpZEB9UME_vA8G0Yqa6TYvpSdEM0).
+`;
 
 const graphqlWithAuth = graphql.defaults({
   headers: {
@@ -57,6 +65,9 @@ async function fetchReadmeMarkdown(contestNode) {
       process.env.GITHUB_CONTEST_REPO_OWNER
     }/${getRepoName(contestNode)}/main/README.md`
   );
+  if (response.status === 404) {
+    return privateContestMessage;
+  }
   const data = await response.text();
   return data;
 }
@@ -96,6 +107,7 @@ const queries = {
             contestPath
             readmeContent
             artPath
+            status
           }
         }
       }
@@ -164,12 +176,50 @@ exports.onCreateNode = async ({ node, getNode, actions }) => {
       name: `artPath`,
       value: socialImageUrl,
     });
+
+    createNodeField({
+      node,
+      name: 'status',
+      value: node.status
+    });
+    createNodeField({
+      node,
+      name: 'codeAccess',
+      value: node.codeAccess
+    })
+    createNodeField({
+      node,
+      name: 'type',
+      value: node.type
+    })
   }
+};
+
+exports.sourceNodes = async ({
+  actions,
+  createContentDigest,
+  createNodeId,
+}) => {
+  const { createNode } = actions;
+  const apiContestsData = await getApiContestData();
+
+  apiContestsData.forEach((contest) => {
+    const newNode = createNode({
+      ...contest,
+      id: createNodeId(`ContestsCsv-${contest.contestid}`),
+      parent: null,
+      children: [],
+      internal: {
+        type: "ContestsCsv",
+        contentDigest: createContentDigest(contest),
+      },
+    });
+  });
+  return;
 };
 
 exports.createPages = async ({ graphql, actions }) => {
   const { createPage } = actions;
-
   const contests = await graphql(queries.contests);
   const formTemplate = path.resolve("./src/templates/ReportForm.tsx");
   const contestTemplate = path.resolve("./src/templates/ContestLayout.tsx");
@@ -178,15 +228,6 @@ exports.createPages = async ({ graphql, actions }) => {
       createPage({
         path: contest.node.fields.submissionPath,
         component: formTemplate,
-        context: {
-          contestId: contest.node.contestid,
-        },
-      });
-
-      // XXX: inject old-style reporting form
-      createPage({
-        path: contest.node.fields.submissionPath + "-old",
-        component: path.resolve("./src/templates/OldReportForm.js"),
         context: {
           contestId: contest.node.contestid,
         },
@@ -203,7 +244,7 @@ exports.createPages = async ({ graphql, actions }) => {
   });
 };
 
-exports.onCreateWebpackConfig = ({ actions }) => {
+exports.onCreateWebpackConfig = ({ actions, stage, getConfig }) => {
   actions.setWebpackConfig({
     plugins: [
       new webpack.IgnorePlugin({
@@ -211,6 +252,7 @@ exports.onCreateWebpackConfig = ({ actions }) => {
         contextRegExp: /jsdom$/,
       }),
       new webpack.ProvidePlugin({
+        process: "process/browser",
         Buffer: [require.resolve("buffer/"), "Buffer"],
       }),
     ],
@@ -222,6 +264,7 @@ exports.onCreateWebpackConfig = ({ actions }) => {
         https: require.resolve("https-browserify"),
         os: require.resolve("os-browserify/browser"),
         stream: require.resolve("stream-browserify"),
+        url: require.resolve("url"),
       },
     },
   });
