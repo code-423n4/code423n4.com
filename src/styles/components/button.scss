@@ -28,13 +28,13 @@ $button__border-width: 2px;
 @mixin button--white {
   background: $color__white;
   border-color: $color__white;
-  color: $color__c4-button-blurple;
+  color: $color__button-blurple;
 
   // TODO better hover styling for white buttons
   &:hover {
     background: rgba($color__white, 0.8);
     border-color: $color__white;
-    color: $color__c4-button-blurple;
+    color: $color__button-blurple;
   }
 }
 
@@ -56,8 +56,8 @@ $button__border-width: 2px;
   padding: $spacing__s $spacing__l;
   margin-right: $spacing__s;
   display: inline-flex;
-  background: $color__c4-button-blurple;
-  border: $button__border-width solid $color__c4-button-blurple;
+  background: $color__button-blurple;
+  border: $button__border-width solid $color__button-blurple;
   border-radius: $border-radius__m;
   color: $color__white;
   font-weight: 500 !important; // These could be inherited from copy/text styles
@@ -71,8 +71,8 @@ $button__border-width: 2px;
   }
 
   &:hover {
-    background: $color__c4-logo-blurple;
-    border-color: $color__c4-logo-blurple;
+    background: $color__button-blurple--hover;
+    border-color: $color__button-blurple--hover;
     color: $color__white;
   }
 
@@ -93,12 +93,12 @@ $button__border-width: 2px;
 
 .button--secondary {
   background: transparent;
-  border: 2px solid $color__c4-button-blurple;
-  border-color: $color__c4-button-blurple;
+  border: 2px solid $color__button-blurple;
+  border-color: $color__button-blurple;
   color: $color__white;
 
   &:hover {
-    background: $color__c4-button-blurple;
+    background: $color__button-blurple;
     color: $color__white;
   }
   &--secondary--white {

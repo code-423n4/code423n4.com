@@ -23,7 +23,7 @@ body {
 }
 
 a {
-  color: $color__c4-button-blurple;
+  color: $color__button-blurple;
   @include accessible-animation {
     transition: color 0.2s ease-in-out;
   }
@@ -167,7 +167,7 @@ h6,
 .type__subline__xs,
 .type__subline__xxs {
   margin-top: 0.25em;
-  margin-bottom: 0.4em;
+  margin-bottom: 0.3em;
   font-family: $font__default;
   font-weight: 700;
   color: $color__headline;
@@ -274,7 +274,7 @@ h6 {
   }
 }
 .type__subline__m {
-  font-size: $headline-font-size__s;
+  font-size: $headline-font-size__xxs;
   font-family: $font__default;
   font-weight: 500;
   font-style: normal;
@@ -283,7 +283,7 @@ h6 {
   text-transform: none;
   margin-bottom: 0.3em;
   @include breakpoint("m") {
-    font-size: $headline-font-size__xs;
+    font-size: $headline-font-size__xxs;
   }
 }
 
