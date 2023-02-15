@@ -79,33 +79,33 @@ const ReportForm = ({ data, location }) => {
   );
   const [ipState, setIpState] = useState<{
     warden: string;
-    ipdata: string;
+    hash: string;
   }>();
   const [currentIp, setCurrentIp] = useState<string>("");
-  console.log(process.env.GATSBY_MORALIS_SERVER)
+
   useEffect(() => {
     async function checkIP() {
       const res = await fetch("https://api.ipify.org?format=json");
       const data = await res.json();
       const currentIP = data.ip;
       setCurrentIp(currentIP);
-      const ipObj = window.localStorage.getItem("ipdata");
-      const ip = CryptoJS.AES.encrypt(currentIP, process.env.CRYPTO_ENCRYPTION_KEY!).toString();
+      const ipObj = window.localStorage.getItem("hash");
+      const ip = CryptoJS.AES.encrypt(currentIP, process.env.GATSBY_CRYPTO_ENCRYPTION_KEY!).toString();
       if (!ipObj) {
         window.localStorage.setItem(
-          "ipdata",
+          "hash",
           JSON.stringify({
             warden: currentUser.username,
-            ipdata: ip,
+            hash: ip,
           })
           );
           setIpState({
             warden: currentUser.username,
-            ipdata: ip,
+            hash: ip,
           });
         } else {
           setIpState(JSON.parse(ipObj));
-      }
+        }
     }
     if (currentUser.username) {
       checkIP();
@@ -139,7 +139,7 @@ const ReportForm = ({ data, location }) => {
       if (
         endpoint === "submit-finding" &&
         currentUser.username !== ipState?.warden &&
-        ipState?.ipdata === currentIp
+        ipState?.hash === currentIp
       ) {
         window.Error("Can't submit twice with different username.");
         return;
