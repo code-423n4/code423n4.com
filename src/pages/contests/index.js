@@ -92,10 +92,12 @@ export default function Contests({ data }) {
       bodyClass="contests-page"
       pageDescription="Current, upcoming, and past audit contests"
     >
-      <div className="wrapper-main">
+      <div className="limited-width">
         {filteredContests && filteredContests.activeContests.length > 0 ? (
           <section>
-            <h1>Active contests</h1>
+            <h1 className="spacing-bottom__xl type__headline_l">
+              Active contests
+            </h1>
             <ContestList
               updateContestStatus={updateContestStatus}
               contests={filteredContests.activeContests}
@@ -105,7 +107,9 @@ export default function Contests({ data }) {
         ) : null}
         {filteredContests && filteredContests.upcomingContests.length > 0 ? (
           <section>
-            <h1>Upcoming contests</h1>
+            <h1 className="spacing-bottom__xl type__headline_l">
+              Upcoming contests
+            </h1>
             <ContestList
               updateContestStatus={updateContestStatus}
               contests={filteredContests.upcomingContests}
@@ -115,7 +119,9 @@ export default function Contests({ data }) {
         ) : null}
         {filteredContests && filteredContests.sponsorReview.length > 0 ? (
           <section>
-            <h1>Sponsor review in progress</h1>
+            <h1 className="spacing-bottom__xl type__headline_l">
+              Sponsor review in progress
+            </h1>
             <ContestList
               updateContestStatus={updateContestStatus}
               contests={filteredContests.sponsorReview}
@@ -125,7 +131,9 @@ export default function Contests({ data }) {
         ) : null}
         {filteredContests && filteredContests.judging.length > 0 ? (
           <section>
-            <h1>Judging in progress</h1>
+            <h1 className="spacing-bottom__xl type__headline_l">
+              Judging in progress
+            </h1>
             <ContestList
               updateContestStatus={updateContestStatus}
               contests={filteredContests.judging}
@@ -135,7 +143,11 @@ export default function Contests({ data }) {
         ) : null}
         {filteredContests && filteredContests.awarding.length > 0 ? (
           <section>
-            <h1>Awarding in progress</h1>
+            <h1>
+              {" "}
+              className="spacing-bottom__xl type__headline_l"Awarding in
+              progress
+            </h1>
             <ContestList
               updateContestStatus={updateContestStatus}
               contests={filteredContests.awarding}
@@ -145,7 +157,9 @@ export default function Contests({ data }) {
         ) : null}
         {filteredContests && filteredContests.reporting.length > 0 ? (
           <section>
-            <h1>Reporting in progress</h1>
+            <h1 className="spacing-bottom__xl type__headline_l">
+              Reporting in progress
+            </h1>
             <ContestList
               updateContestStatus={updateContestStatus}
               contests={filteredContests.reporting}
@@ -155,7 +169,9 @@ export default function Contests({ data }) {
         ) : null}
         {filteredContests && filteredContests.completed.length > 0 ? (
           <section>
-            <h1>Completed contests</h1>
+            <h1 className="spacing-bottom__xl type__headline_l">
+              Completed contests
+            </h1>
             <ContestList
               updateContestStatus={updateContestStatus}
               contests={filteredContests.completed.reverse()}

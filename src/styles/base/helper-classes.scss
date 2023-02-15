@@ -44,3 +44,56 @@
 // .background--low-contrast {
 //  // Document me somewhere, but this doesn't need any special treatment. It does the same thing as the blurple background class, only without the blurple. We could use it when the background is busy.
 // }
+
+// Spacing helper classes
+// --------------------
+
+.spacing-bottom__xxs {
+  margin-bottom: $spacing__xxs !important;
+}
+.spacing-bottom__xs {
+  margin-bottom: $spacing__xs !important;
+}
+.spacing-bottom__s {
+  margin-bottom: $spacing__s !important;
+}
+.spacing-bottom__m {
+  margin-bottom: $spacing__m !important;
+}
+.spacing-bottom__l {
+  margin-bottom: $spacing__l !important;
+}
+.spacing-bottom__xl {
+  margin-bottom: $spacing__xl !important;
+}
+.spacing-bottom__xxl {
+  margin-bottom: $spacing__xxl !important;
+}
+.spacing-bottom__xxxl {
+  margin-bottom: $spacing__xxxl !important;
+}
+
+.spacing-top__xxs {
+  margin-top: $spacing__xxs !important;
+}
+.spacing-top__xs {
+  margin-top: $spacing__xs !important;
+}
+.spacing-top__s {
+  margin-top: $spacing__s !important;
+}
+.spacing-top__m {
+  margin-top: $spacing__m !important;
+}
+.spacing-top__l {
+  margin-top: $spacing__l !important;
+}
+.spacing-top__xl {
+  margin-top: $spacing__xl !important;
+}
+.spacing-top__xxl {
+  margin-top: $spacing__xxl !important;
+}
+.spacing-top__xxxl {
+  margin-top: $spacing__xxxl !important;
+}

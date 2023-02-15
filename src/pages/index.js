@@ -85,7 +85,7 @@ export default function SiteIndex({ data }) {
         <section className="home__featured-contests background--blurple">
           <div className="limited-width">
             <h1 className="type__headline__m">Active competitive audits</h1>
-            <p className="type__subline__m">
+            <p className="type__subline__m spacing-bottom__xl">
               Currently finding the highest-severity vulnerabilities for:
             </p>
             <ContestList

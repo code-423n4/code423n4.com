@@ -1,6 +1,6 @@
-import format from 'date-fns/format';
-import isValid from 'date-fns/isValid';
-import differenceInCalendarDays from 'date-fns/differenceInCalendarDays';
+import format from "date-fns/format";
+import isValid from "date-fns/isValid";
+import differenceInCalendarDays from "date-fns/differenceInCalendarDays";
 
 const left = (total) => {
   return {
@@ -12,7 +12,10 @@ const left = (total) => {
 };
 
 const getTimeRemaining = (contestTimer) => {
-  const endTime = contestTimer.contestStatus === 'active' ? contestTimer.end : contestTimer.start;
+  const endTime =
+    contestTimer.contestStatus === "active"
+      ? contestTimer.end
+      : contestTimer.start;
   const total = endTime - Date.now();
   if (total > 0) {
     return {
@@ -47,24 +50,29 @@ const getDates = (start, end) => {
   const endTime = endDate.getTime();
 
   let contestStatus;
-  if (now >= startTime && now <= endTime) {
-    contestStatus = "active";
-  }
-  if (now < startTime) {
-    contestStatus = "soon";
-  }
-  if (now >= endTime) {
-    contestStatus = "completed";
+
+  switch (true) {
+    case now >= startTime && now <= endTime:
+      contestStatus = "active";
+      break;
+    case now < startTime:
+      contestStatus = "soon";
+      break;
+    case now >= endTime:
+      contestStatus = "completed";
+      break;
+    default:
+      contestStatus = "-";
   }
 
-  const daysDuration = differenceInCalendarDays(endDate, startDate)
+  const daysDuration = differenceInCalendarDays(endDate, startDate);
 
   const t = {
     contestStatus,
     start: startTime,
     end: endTime,
-    startDay: isValid(startDate) ? format(startDate, 'd MMMM yyyy') : '',
-    endDay: isValid(endDate) ? format(endDate, 'd MMMM yyyy') : '',
+    startDay: isValid(startDate) ? format(startDate, "d MMMM yyyy") : "",
+    endDay: isValid(endDate) ? format(endDate, "d MMMM yyyy") : "",
     daysDuration,
   };
 

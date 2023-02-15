@@ -24,6 +24,7 @@ const ContestTile = ({ contest, updateContestStatus, user }) => {
   const t = getDates(start_time, end_time);
 
   const [canViewContest, setCanViewContest] = useState(false);
+  const [contestStatusIndicator, setContestStatusIndicator] = useState(status);
 
   useEffect(() => {
     if (fields.codeAccess === "public") {
@@ -35,14 +36,22 @@ const ContestTile = ({ contest, updateContestStatus, user }) => {
     }
   }, [fields, user]);
 
+  let statusText;
+
+  statusText = {
+    active: "Live",
+    soon: "Coming Soon",
+    completed: "Ended",
+  };
+
   return (
     <article className={"contest-tile " + t.contestStatus}>
-      <div className="contest-tile__left-side">
-        <SponsorLink sponsor={sponsor} />
-      </div>
-      <div className="contest-tile__right-side">
-        <div className="contest-tile__right-top">
-          <div>
+      <div className="contest-tile__top">
+        <header class="contest-tile__content">
+          <div className="contest-tile__logo">
+            <SponsorLink sponsor={sponsor} />
+          </div>
+          <div className="contest-tile__details-wrapper">
             <h2 className="contest-tile__title">{title}</h2>
             <p className="contest-tile__details">{details}</p>
             <ul className="contest-tile__time-wrapper">
@@ -66,41 +75,46 @@ const ContestTile = ({ contest, updateContestStatus, user }) => {
               )}
             </ul>
           </div>
-          {amount ? <p className="contest-tile__amount">{amount}</p> : null}
-        </div>
-        <div className="contest-tile__right-bottom">
-          <div className="contest-tile__button-wrapper">
-            <ClientOnly>
-              <a
-                href={fields?.contestPath || "/"}
-                className="contest-tile__button"
-              >
-                {`${findingsRepo === "" ? "Preview" : "View"} Contest`}
-              </a>
-              {t.contestStatus === "active" && contestRepo && canViewContest && (
-                <a href={contestRepo} className="contest-tile__button">
-                  View Repo
-                </a>
-              )}
-              {(t.contestStatus === "active" || status === "Active Contest") &&
-              findingsRepo &&
-              fields.status &&
-              fields.submissionPath &&
-              canViewContest ? (
-                <Link
-                  to={fields.submissionPath}
-                  className="contest-tile__button"
-                >
-                  Submit Finding
-                </Link>
-              ) : null}
-            </ClientOnly>
-          </div>
-          <div className="contest-tile__status-indicator">
-            <span className="contest-tile__status-indicator-text">Live</span>
-          </div>
-        </div>
+        </header>
+        {amount ? <p className="contest-tile__amount">{amount}</p> : null}
       </div>
+      <ClientOnly>
+        <footer className="contest-tile__bottom">
+          <div className="contest-tile__status-indicator">
+            <span
+              className={
+                "contest-tile__status-indicator-text contest-tile__status-indicator-text--" +
+                t.contestStatus
+              }
+            >
+              {statusText[t.contestStatus]}
+            </span>
+          </div>
+
+          <div className="contest-tile__button-wrapper">
+            <a
+              href={fields?.contestPath || "/"}
+              className="contest-tile__button"
+            >
+              {`${findingsRepo === "" ? "Preview" : "View"} Contest`}
+            </a>
+            {t.contestStatus === "active" && contestRepo && canViewContest && (
+              <a href={contestRepo} className="contest-tile__button">
+                View Repo
+              </a>
+            )}
+            {(t.contestStatus === "active" || status === "Active Contest") &&
+            findingsRepo &&
+            fields.status &&
+            fields.submissionPath &&
+            canViewContest ? (
+              <Link to={fields.submissionPath} className="contest-tile__button">
+                Submit Finding
+              </Link>
+            ) : null}
+          </div>
+        </footer>
+      </ClientOnly>
     </article>
   );
 };

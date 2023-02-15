@@ -19,11 +19,29 @@
 // 9. Other
 
 .sponsor-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  a:has(img) {
+    width: 100%;
+  }
+
   img {
     width: 100%;
     height: auto;
     border-radius: 50%;
+    border: $contest-tile__border;
+    aspect-ratio: 1/1;
+
+    // Styles for when images 404
+    line-height: $contest-tile__logo-container-width;
+    text-align: center;
+    background: $color__white;
+    color: $color__black;
   }
+
+  // Styles for when there is no image during the build process
   .sponsor-link__placeholder-logo {
     min-width: 50px;
     min-height: 50px;
