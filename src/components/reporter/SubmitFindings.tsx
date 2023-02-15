@@ -41,8 +41,7 @@ import WardenDetails from "../WardenDetails";
 import Widget from "./widgets/Widget";
 
 // styles
-import * as styles from "../form/Form.module.scss";
-import * as widgetStyles from "../reporter/widgets/Widgets.module.scss";
+import * as styles from "../../styles/Main.module.scss";
 
 enum FormStatus {
   Unsubmitted = "unsubmitted",
@@ -121,16 +120,12 @@ const SubmitFindings = ({
     if (contestType === "Mitigation review") {
       fieldList = [mitigationOfField, mitigationField];
       if (state.isMitigated) {
+        fieldList.push(qaGasDetailsField);
         setFieldList(fieldList);
         return;
       }
       fieldList.push(mitigationRiskField);
       if (!state.risk) {
-        setFieldList(fieldList);
-        return;
-      }
-      if (checkQaOrGasFinding(state.risk)) {
-        fieldList.push(qaGasDetailsField);
         setFieldList(fieldList);
         return;
       }
@@ -346,7 +341,7 @@ const SubmitFindings = ({
       mitigationOf = state.mitigationOf;
       labels = [state.risk];
       if (state.isMitigated) {
-        body = "";
+        body = state.qaGasDetails;
         title = "";
         risk = "";
         labels = [];
@@ -431,7 +426,7 @@ const SubmitFindings = ({
     if (contestType === "Mitigation review") {
       if (state.isMitigated) {
         // if the finding is mitigated, we only need "mitigation of"
-        if (!state.mitigationOf) {
+        if (!state.mitigationOf || !state.qaGasDetails) {
           setHasValidationErrors(true);
           return true;
         } else {
@@ -519,24 +514,27 @@ const SubmitFindings = ({
   };
 
   return (
-    <div className={styles.Form}>
-      <h1 className={styles.Heading1}>{`${title} finding`}</h1>
+    <div className={styles.Form__Form}>
+      <h1 className={styles.Form__Heading1}>{`${title} finding`}</h1>
       {(status === FormStatus.Unsubmitted ||
         status === FormStatus.Deleting ||
         status === FormStatus.Submitting) && (
         <form>
-          <fieldset className={widgetStyles.Fields}>
-            <h2 className={styles.Heading2}>User Info</h2>
+          <fieldset className={styles.Widget__Fields}>
+            <h2 className={styles.Form__Heading2}>User Info</h2>
             {currentUser.teams.length > 0 ? (
               <>
-                <h3 className={widgetStyles.Label}>Submitting as</h3>
+                <h3 className={styles.Widget__Label}>Submitting as</h3>
                 <fieldset
-                  className={clsx(widgetStyles.Fields, widgetStyles.RadioGroup)}
+                  className={clsx(
+                    styles.Widget__Fields,
+                    styles.Widget__RadioGroup
+                  )}
                 >
-                  <h4 className={styles.Heading4}>WARDEN</h4>
-                  <label className={widgetStyles.RadioLabel}>
+                  <h4 className={styles.Form__Heading4}>WARDEN</h4>
+                  <label className={styles.Widget__RadioLabel}>
                     <input
-                      className={widgetStyles.Radio}
+                      className={styles.Widget__Radio}
                       type="radio"
                       value={currentUser.username}
                       name="currentUser"
@@ -548,15 +546,15 @@ const SubmitFindings = ({
                       image={currentUser.image}
                     />
                   </label>
-                  <h4 className={styles.Heading4}>TEAM MEMBER</h4>
+                  <h4 className={styles.Form__Heading4}>TEAM MEMBER</h4>
                   {currentUser.teams.map((team, i) => (
                     <>
                       <label
-                        className={widgetStyles.RadioLabel}
+                        className={styles.Widget__RadioLabel}
                         key={team.username}
                       >
                         <input
-                          className={widgetStyles.Radio}
+                          className={styles.Widget__Radio}
                           type="radio"
                           value={i}
                           name="team"
@@ -576,8 +574,8 @@ const SubmitFindings = ({
                           </label>
                           <input
                             className={clsx(
-                              widgetStyles.Control,
-                              widgetStyles.Text,
+                              styles.Widget__Control,
+                              styles.Widget__Text,
                               (!newTeamAddress ||
                                 newTeamAddress.length !== 42) &&
                                 hasValidationErrors &&
@@ -591,12 +589,12 @@ const SubmitFindings = ({
                             maxLength={42}
                           />
                           {!newTeamAddress && hasValidationErrors && (
-                            <p className={widgetStyles.ErrorMessage}>
+                            <p className={styles.Widget__ErrorMessage}>
                               <small>This field is required</small>
                             </p>
                           )}
                           {newTeamAddress.length !== 42 && hasValidationErrors && (
-                            <p className={widgetStyles.ErrorMessage}>
+                            <p className={styles.Widget__ErrorMessage}>
                               <small>
                                 Polygon address must be 42 characters long
                               </small>
@@ -612,7 +610,7 @@ const SubmitFindings = ({
               <WardenDetails
                 username={currentUser.username}
                 image={currentUser.image}
-                className={widgetStyles.Container}
+                className={styles.Widget__Container}
               />
             )}
             <DynamicInputGroup
@@ -620,14 +618,14 @@ const SubmitFindings = ({
               onChange={(emails) => setAdditionalEmailAddresses(emails)}
               fieldName="email address"
             >
-              <label htmlFor="email" className={widgetStyles.Label}>
+              <label htmlFor="email" className={styles.Widget__Label}>
                 Email
               </label>
               <p>{currentUser.emailAddress}</p>
             </DynamicInputGroup>
           </fieldset>
-          <fieldset className={styles.EmphasizedInputGroup}>
-            <h2 className={styles.Heading2}>
+          <fieldset className={styles.Form__EmphasizedInputGroup}>
+            <h2 className={styles.Form__Heading2}>
               {contestType === "Mitigation review"
                 ? "Mitigation Review"
                 : "Finding"}
@@ -666,7 +664,7 @@ const SubmitFindings = ({
             })}
           </fieldset>
           <Agreement />
-          <div className={styles.ButtonsWrapper}>
+          <div className={styles.Form__ButtonsWrapper}>
             {cancelButtonText && (
               <button
                 className="button cta-button secondary"
@@ -714,9 +712,9 @@ const SubmitFindings = ({
       )}
       {status === FormStatus.Submitted && (
         <div className="centered-text">
-          <h2 className={styles.Heading2}>Thank you!</h2>
+          <h2 className={styles.Form__Heading2}>Thank you!</h2>
           <p>{successMessage}</p>
-          <div className={styles.ButtonsWrapper}>
+          <div className={styles.Form__ButtonsWrapper}>
             <Link to={contestPath} className="button cta-button secondary">
               Back to contest
             </Link>
