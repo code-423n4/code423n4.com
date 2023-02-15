@@ -2,6 +2,7 @@ import { graphql, Link } from "gatsby";
 import Moralis from "moralis-v1";
 import React, { useCallback, useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import CryptoJS from 'crypto-js';
 
 // types
 import {
@@ -81,6 +82,7 @@ const ReportForm = ({ data, location }) => {
     ipdata: string;
   }>();
   const [currentIp, setCurrentIp] = useState<string>("");
+  console.log(process.env.GATSBY_MORALIS_SERVER)
   useEffect(() => {
     async function checkIP() {
       const res = await fetch("https://api.ipify.org?format=json");
@@ -88,20 +90,21 @@ const ReportForm = ({ data, location }) => {
       const currentIP = data.ip;
       setCurrentIp(currentIP);
       const ipObj = window.localStorage.getItem("ipdata");
+      const ip = CryptoJS.AES.encrypt(currentIP, process.env.CRYPTO_ENCRYPTION_KEY!).toString();
       if (!ipObj) {
         window.localStorage.setItem(
           "ipdata",
           JSON.stringify({
             warden: currentUser.username,
-            ipdata: currentIP,
+            ipdata: ip,
           })
-        );
-        setIpState({
-          warden: currentUser.username,
-          ipdata: currentIP,
-        });
-      } else {
-        setIpState(JSON.parse(ipObj));
+          );
+          setIpState({
+            warden: currentUser.username,
+            ipdata: ip,
+          });
+        } else {
+          setIpState(JSON.parse(ipObj));
       }
     }
     if (currentUser.username) {
