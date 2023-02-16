@@ -149,6 +149,22 @@ exports.onCreateNode = async ({ node, getNode, actions }) => {
       value: slug,
     });
   }
+  
+  if (node.internal.type === `ReportsJson`) {
+    let slug;
+    if (node.circa.slug) {
+      // if a slug is defined, use that.
+      slug = "/" + node.circa.slug;
+    } else {
+      // otherwise use the file path
+      slug = createFilePath({ node, getNode });
+    }
+    createNodeField({
+      node,
+      name: `slug`,
+      value: slug,
+    });
+  }
 
   if (node.internal.type === `ContestsCsv`) {
     createNodeField({

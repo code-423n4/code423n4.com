@@ -57,8 +57,8 @@ function ReportPageTemplate({ data }) {
 
 export const query = graphql`
   query($id: String!) {
-    markdownRemark(id: { eq: $id }) {
-      frontmatter {
+    markdownRemark: reportsJson(id: { eq: $id }) {
+      frontmatter: circa {
         title
         date
         sponsor {
@@ -73,7 +73,7 @@ export const query = graphql`
         }
       }
       html
-      tableOfContents(maxDepth: 2)
+      tableOfContents: toc
     }
   }
 `;
