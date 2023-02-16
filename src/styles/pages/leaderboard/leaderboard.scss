@@ -19,6 +19,11 @@
 
 $avatar-size: 25px;
 
+.leaderboard__container {
+  overflow-x: auto;
+  max-width: calc(95vw - 2 * #{$spacing__xl});
+}
+
 // TODO this doesn't look quite right
 .leaderboard__team-avatar--none {
   width: $avatar-size;

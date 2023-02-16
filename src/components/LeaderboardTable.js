@@ -27,6 +27,7 @@ const LeaderboardTable = ({ results, isLoading }) => {
         Header: "USD",
         accessor: "awardTotal",
         sortDescFirst: true,
+        className: "table__cell--number",
         Cell: (props) => {
           return (
             <span className="award-amount">
@@ -42,6 +43,7 @@ const LeaderboardTable = ({ results, isLoading }) => {
         Header: "Total",
         accessor: "allFindings",
         sortDescFirst: true,
+        className: "table__cell--number",
       },
       {
         Header: "High",
@@ -56,6 +58,7 @@ const LeaderboardTable = ({ results, isLoading }) => {
             Header: "Solo",
             accessor: "soloHigh",
             sortDescFirst: true,
+            className: "table__cell--number",
           },
         ],
       },
@@ -66,11 +69,13 @@ const LeaderboardTable = ({ results, isLoading }) => {
             Header: "All",
             accessor: "medRisk",
             sortDescFirst: true,
+            className: "table__cell--number",
           },
           {
             Header: "Solo",
             accessor: "soloMed",
             sortDescFirst: true,
+            className: "table__cell--number",
           },
         ],
       },
@@ -81,6 +86,7 @@ const LeaderboardTable = ({ results, isLoading }) => {
             Header: "All",
             accessor: "gasOptz",
             sortDescFirst: true,
+            className: "table__cell--number",
           },
         ],
       },
@@ -112,6 +118,7 @@ const LeaderboardTable = ({ results, isLoading }) => {
 
   return (
     <table {...getTableProps()} className="leaderboard-table table--zebra">
+      {/* TODO: put className in tableProps properly */}
       <thead>
         {headerGroups.map((headerGroup) => (
           <tr {...headerGroup.getHeaderGroupProps()}>

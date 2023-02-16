@@ -1,11 +1,13 @@
 @import "../variables";
 
 table {
+  width: 100%;
   color: $color__text;
   background: $color__n-90;
   border: 1px solid $color__n-80;
   font-size: 12pt;
   border-collapse: collapse;
+  overflow-x: auto;
 }
 table thead th,
 table tfoot th {
@@ -20,6 +22,7 @@ table th,
 table td {
   padding: 0.5em;
   border: 1px solid $color__n-80;
+  text-align: left;
 }
 
 // Zebra striping
@@ -34,4 +37,5 @@ table td {
 
 .table__cell--number {
   text-align: right;
+  font-family: $font__code;
 }
