@@ -68,9 +68,12 @@ $contest-amount__background: linear-gradient(
   color: $color__white;
   font-weight: 500;
   text-align: right;
+  font-size: $headline-font-size__xxs;
+
   @include breakpoint("s") {
+    font-size: $headline-font-size__xs;
+    padding: $spacing__xs 0 $spacing__m $spacing__m;
     justify-content: flex-start;
-    padding: 0;
     background: none;
     border-bottom: none;
   }
