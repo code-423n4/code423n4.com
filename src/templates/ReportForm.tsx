@@ -90,7 +90,6 @@ const ReportForm = ({ data, location }) => {
       const currentIP = data.ip;
       setCurrentIp(currentIP);
       const ipObj = window.localStorage.getItem("hash");
-      console.log(process.env.GATSBY_CRYPTO_ENCRYPTION_KEY);
       const ip = CryptoJS.AES.encrypt(currentIP, process.env.GATSBY_CRYPTO_ENCRYPTION_KEY!).toString();
       if (!ipObj) {
         window.localStorage.setItem(
@@ -138,7 +137,7 @@ const ReportForm = ({ data, location }) => {
       }
       const sessionToken = user.attributes.sessionToken;
       if (
-        ipState && 
+        ipState &&
         endpoint === "submit-finding" &&
         currentUser.username !== ipState?.warden &&
         CryptoJS.AES.decrypt((ipState.hash), process.env.GATSBY_CRYPTO_ENCRYPTION_KEY!).toString(CryptoJS.enc.Utf8) === currentIp
