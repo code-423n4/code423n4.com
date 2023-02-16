@@ -24,7 +24,7 @@ function ReportPageTemplate({ data }) {
       pageTitle={page.frontmatter.title}
       bodyClass="report-page page"
     >
-      <div className="wrapper-main">
+      <div className="limited-width">
         <article>
           {page.frontmatter.sponsor ? (
             <img

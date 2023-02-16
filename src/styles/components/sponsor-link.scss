@@ -30,15 +30,17 @@
   img {
     width: 100%;
     height: auto;
+    max-width: 100%;
+    max-height: 100%;
     border: $contest-tile__border;
     aspect-ratio: 1/1;
     border-radius: 50%;
 
     // Styles for when images 404
-    line-height: $contest-tile__logo-container-width;
     text-align: center;
     background: $color__white;
     color: $color__black;
+    overflow: hidden;
   }
 
   // Styles for when there is no image during the build process

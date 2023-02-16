@@ -84,7 +84,7 @@ function ApplyForCertifiedContributor() {
             pageDescription="Apply to become a Certified Warden."
             pageTitle="Certified Warden Application | Code 423n4"
           >
-            <div className="wrapper-main">
+            <div className="limited-width">
               <h1 className="page-header">Certified Wardens</h1>
               {status === FormStatus.Unsubmitted && (
                 <article
@@ -97,7 +97,9 @@ function ApplyForCertifiedContributor() {
               )}
               {(status === FormStatus.Unsubmitted ||
                 status === FormStatus.Submitting) && (
-                <form className={clsx(styles.Form__Form, styles.Form__FormSmall)}>
+                <form
+                  className={clsx(styles.Form__Form, styles.Form__FormSmall)}
+                >
                   <h1>Certification Application</h1>
                   <Input
                     label="Github Username"

@@ -40,7 +40,7 @@ export default function TeamRegistration({ data }) {
       pageTitle="Team Registration | Code 423n4"
       message="You need to be a registered warden, currently connected via wallet to register a team."
     >
-      <div className="wrapper-main">
+      <div className="limited-width">
         <h1 className="page-header">Register a Team</h1>
         <TeamForm
           onSubmit={onSubmit}

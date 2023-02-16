@@ -12,7 +12,7 @@ export default function ExternalLink({
   children,
 }: ExternalLinkProps): JSX.Element {
   return (
-    <a href={to} target="_blank">
+    <a href={to} target="_blank" rel="noreferrer">
       {children ? children : alt}
       <span className="visually-hidden">Opens in a new window</span>
     </a>

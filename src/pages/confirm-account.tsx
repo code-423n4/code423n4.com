@@ -237,7 +237,7 @@ export default function ConfirmAccount() {
 
   return (
     <DefaultLayout hideConnectWalletDropdown={true}>
-      <div className="wrapper-main">
+      <div className="limited-width">
         {status === FormStatus.Loading ? (
           // @todo: style a loading state
           <div>LOADING...</div>
@@ -269,7 +269,10 @@ export default function ConfirmAccount() {
             {handles.length > 1 && (
               <>
                 <fieldset
-                  className={clsx(styles.Widget__Fields, styles.Widget__RadioGroup)}
+                  className={clsx(
+                    styles.Widget__Fields,
+                    styles.Widget__RadioGroup
+                  )}
                 >
                   {handles.map((handle) => (
                     <label className={styles.Widget__RadioLabel} key={handle}>
