@@ -2,7 +2,7 @@ import { graphql, Link } from "gatsby";
 import Moralis from "moralis-v1";
 import React, { useCallback, useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import CryptoJS from 'crypto-js';
+import CryptoJS from "crypto-js";
 
 // types
 import {
@@ -83,14 +83,17 @@ const ReportForm = ({ data, location }) => {
   }>();
   const [currentIp, setCurrentIp] = useState<string>("");
 
-  useEffect(() => {
-    async function checkIP() {
+  const checkIP = useCallback(async () => {
+    try {
       const res = await fetch("https://api.ipify.org?format=json");
       const data = await res.json();
       const currentIP = data.ip;
       setCurrentIp(currentIP);
       const ipObj = window.localStorage.getItem("hash");
-      const ip = CryptoJS.AES.encrypt(currentIP, process.env.GATSBY_CRYPTO_ENCRYPTION_KEY!).toString();
+      const ip = CryptoJS.AES.encrypt(
+        currentIP,
+        process.env.GATSBY_CRYPTO_ENCRYPTION_KEY!
+      ).toString();
       if (!ipObj) {
         window.localStorage.setItem(
           "hash",
@@ -98,19 +101,24 @@ const ReportForm = ({ data, location }) => {
             warden: currentUser.username,
             hash: ip,
           })
-          );
-          setIpState({
-            warden: currentUser.username,
-            hash: ip,
-          });
-        } else {
-          setIpState(JSON.parse(ipObj));
-        }
+        );
+        setIpState({
+          warden: currentUser.username,
+          hash: ip,
+        });
+      } else {
+        setIpState(JSON.parse(ipObj));
+      }
+    } catch (err) {
+      console.log(err);
     }
+  }, [currentUser]);
+
+  useEffect(() => {
     if (currentUser.username) {
       checkIP();
     }
-  }, [currentUser]);
+  }, [currentUser, checkIP]);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -140,9 +148,12 @@ const ReportForm = ({ data, location }) => {
         ipState &&
         endpoint === "submit-finding" &&
         currentUser.username !== ipState?.warden &&
-        CryptoJS.AES.decrypt((ipState.hash), process.env.GATSBY_CRYPTO_ENCRYPTION_KEY!).toString(CryptoJS.enc.Utf8) === currentIp
+        CryptoJS.AES.decrypt(
+          ipState.hash,
+          process.env.GATSBY_CRYPTO_ENCRYPTION_KEY!
+        ).toString(CryptoJS.enc.Utf8) === currentIp
       ) {
-        window.Error("Can't submit twice with different username.");
+        window.alert("Can't submit twice with different username.");
         return;
       } else {
         return fetch(`/.netlify/functions/${endpoint}`, {
