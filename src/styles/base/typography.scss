@@ -331,3 +331,21 @@ code:has(pre) {
   padding: 0.1em 0.3em;
   border-radius: 0.2em;
 }
+
+// Summary / Details
+// ------------------------------------------------
+
+summary,
+.summary {
+  display: list-item;
+
+  &::marker {
+    color: $color__n-60;
+  }
+
+  &--right-marker {
+    list-style-position: inside;
+    direction: rtl; // TODO not this (this is how I'm making the arrow show up on the right)
+    text-align: left;
+  }
+}

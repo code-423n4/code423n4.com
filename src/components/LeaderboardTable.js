@@ -50,6 +50,7 @@ const LeaderboardTable = ({ results, isLoading }) => {
             Header: "All",
             accessor: "highRisk",
             sortDescFirst: true,
+            className: "table__cell--number",
           },
           {
             Header: "Solo",
@@ -110,7 +111,7 @@ const LeaderboardTable = ({ results, isLoading }) => {
   );
 
   return (
-    <table {...getTableProps()} className="leaderboard-table">
+    <table {...getTableProps()} className="leaderboard-table table--zebra">
       <thead>
         {headerGroups.map((headerGroup) => (
           <tr {...headerGroup.getHeaderGroupProps()}>
@@ -122,13 +123,13 @@ const LeaderboardTable = ({ results, isLoading }) => {
                     ? column.isSortedDesc
                       ? "sort-desc"
                       : "sort-asc"
-                    : ""
+                    : "" + (column.isNumber ? " table__column--numbers" : "")
                 }
               >
+                {column.render("Header")}
                 <span className="sort-direction">
                   {column.isSorted ? (column.isSortedDesc ? " ▼" : " ▲") : ""}
                 </span>
-                {column.render("Header")}
               </th>
             ))}
           </tr>
@@ -140,20 +141,27 @@ const LeaderboardTable = ({ results, isLoading }) => {
             prepareRow(row);
             return (
               <tr {...row.getRowProps()}>
-                {row.cells.map((cell) => {
-                  return (
-                    <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
-                  );
-                })}
+                {row.cells.map((cell) => (
+                  <td
+                    {...cell.getCellProps([
+                      {
+                        className: cell.column.className,
+                      },
+                    ])}
+                  >
+                    {cell.render("Cell")}
+                  </td>
+                ))}
               </tr>
             );
           })}
         </tbody>
-      ) : isLoading ? (
+      ) : !isLoading ? (
         <tbody>
+          {/* TODO - finish animating this */}
           <tr>
             <td colSpan="9" className="center">
-              <h3>Fetching results...</h3>
+              <h3 className="skeleton-loader">Fetching results...</h3>
             </td>
           </tr>
         </tbody>
