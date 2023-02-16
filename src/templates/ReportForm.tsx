@@ -2,7 +2,7 @@ import { graphql, Link } from "gatsby";
 import Moralis from "moralis-v1";
 import React, { useCallback, useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import CryptoJS from 'crypto-js';
+import CryptoJS from "crypto-js";
 
 // types
 import {
@@ -90,7 +90,10 @@ const ReportForm = ({ data, location }) => {
       const currentIP = data.ip;
       setCurrentIp(currentIP);
       const ipObj = window.localStorage.getItem("hash");
-      const ip = CryptoJS.AES.encrypt(currentIP, process.env.GATSBY_CRYPTO_ENCRYPTION_KEY!).toString();
+      const ip = CryptoJS.AES.encrypt(
+        currentIP,
+        process.env.GATSBY_CRYPTO_ENCRYPTION_KEY!
+      ).toString();
       if (!ipObj) {
         window.localStorage.setItem(
           "hash",
@@ -98,14 +101,14 @@ const ReportForm = ({ data, location }) => {
             warden: currentUser.username,
             hash: ip,
           })
-          );
-          setIpState({
-            warden: currentUser.username,
-            hash: ip,
-          });
-        } else {
-          setIpState(JSON.parse(ipObj));
-        }
+        );
+        setIpState({
+          warden: currentUser.username,
+          hash: ip,
+        });
+      } else {
+        setIpState(JSON.parse(ipObj));
+      }
     }
     if (currentUser.username) {
       checkIP();
