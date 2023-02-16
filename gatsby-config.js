@@ -103,16 +103,6 @@ const plugins = [
   },
   `gatsby-transformer-sharp`,
   `gatsby-plugin-sharp`,
-  {
-    resolve: `gatsby-plugin-mdx`,
-    options: {
-      extensions: [`.mdx`],
-      defaultLayouts: {
-        reports: require.resolve("./src/templates/ReportLayout.js"),
-        default: require.resolve("./src/templates/DefaultLayout.js"),
-      },
-    },
-  },
   `gatsby-plugin-sass`,
 ];
 
