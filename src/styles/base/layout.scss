@@ -116,3 +116,17 @@ main {
     grid-template-columns: 1fr 1fr 1fr;
   }
 }
+
+.grid__one-by-three--break-m-s {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto;
+  grid-column-gap: $spacing__l;
+  grid-row-gap: $spacing__l;
+  @include breakpoint("s") {
+    grid-template-columns: 1fr 1fr;
+  }
+  @include breakpoint("m") {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}

@@ -9,18 +9,16 @@ export default function ReportIndex({ data }) {
 
   return (
     <DefaultLayout pageTitle="Security Audit Reports" bodyClass="report-page">
-      <div className="wrapper-main">
-        <section>
-          <h1 className="page-header">Audit Reports</h1>
-          <div className="wrapper-report">
-            {reports ? (
-              <ReportList reports={reports} />
-            ) : (
-              "No reports yet. You can add one in the `_reports` directory."
-            )}
-          </div>
-        </section>
-      </div>
+      <section className="limited-width">
+        <h1 className="type__headline__page-title">Audit Reports</h1>
+        <div className="grid__one-by-three--break-m-s">
+          {reports ? (
+            <ReportList reports={reports} />
+          ) : (
+            "No reports yet. You can add one in the `_reports` directory."
+          )}
+        </div>
+      </section>
     </DefaultLayout>
   );
 }

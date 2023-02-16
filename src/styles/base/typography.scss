@@ -257,6 +257,19 @@ h6 {
   font-size: $headline-font-size__xxs;
 }
 
+// Special Headlines
+// ------------------------------------------------
+
+.type__headline__page-title {
+  font-size: $headline-font-size__l;
+  line-height: 115%;
+  margin-bottom: $spacing__l;
+  @include breakpoint("m") {
+    font-size: $headline-font-size__xl;
+    margin-bottom: $spacing__xl;
+  }
+}
+
 // Sublines
 // ------------------------------------------------
 

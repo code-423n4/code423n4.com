@@ -1,6 +1,6 @@
 import React from "react";
 
-import Report from "./Report";
+import ReportTile from "./ReportTile";
 
 function sortByContestId(a, b) {
   return (
@@ -13,7 +13,7 @@ const ReportList = ({ reports }) => {
   return (
     <>
       {reports.sort(sortByContestId).map((report) => (
-        <Report report={report.node.frontmatter} key={report.node.id} />
+        <ReportTile report={report.node.frontmatter} key={report.node.id} />
       ))}
     </>
   );
