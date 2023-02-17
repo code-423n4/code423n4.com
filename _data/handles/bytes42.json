@@ -1,0 +1,18 @@
+{
+  "handle": "bytes42",
+  "members": [
+    "Jezus_",
+    "0x1f8b"
+  ],
+  "link": "https://twitter.com/kaustubhthakurr",
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xFAE44D4DaD1a9C4914834fD3f6Ad9dD19b21C7d1"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0xFAE44D4DaD1a9C4914834fD3f6Ad9dD19b21C7d1"
+    }
+  ]
+}

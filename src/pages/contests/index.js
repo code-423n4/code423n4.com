@@ -8,7 +8,6 @@ import DefaultLayout from "../../templates/DefaultLayout";
 
 export default function Contests({ data }) {
   const { currentUser } = useUser();
-
   const [filteredContests, setFilteredContest] = useState(null);
   const [contestStatusChanges, updateContestStatusChanges] = useState(0);
   const contests = data.contests.edges;
