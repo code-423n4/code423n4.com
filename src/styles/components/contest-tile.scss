@@ -30,6 +30,9 @@ $contest-amount__background: linear-gradient(
   rgba($color__white, 0.05) 100%
 );
 
+$contest-tile--solid__border: 1px solid $color__n-60;
+$contest-tile--solid__background: $color__n-90;
+
 .contest-tile {
   margin-bottom: $spacing__m;
   display: flex;
@@ -116,6 +119,7 @@ $contest-amount__background: linear-gradient(
 
 .contest-tile__time-wrapper {
   display: flex;
+  align-items: center;
 
   li {
     margin-right: $spacing__s;
@@ -192,5 +196,27 @@ $contest-amount__background: linear-gradient(
 .contest-tile__status-indicator-text--completed {
   &:before {
     display: none;
+  }
+}
+
+// Theme: Solid
+// --------------------------------------------------
+
+@mixin contest-tile--solid {
+  background: $contest-tile--solid__background;
+  border: $contest-tile--solid__border;
+  .contest-tile__button-wrapper {
+    a {
+      border-left: $contest-tile--solid__border;
+    }
+
+    .contest-tile__amount {
+      background: none;
+      border-bottom: $contest-tile--solid__border;
+    }
+  }
+
+  .contest-tile__bottom {
+    border-top: $contest-tile--solid__border;
   }
 }

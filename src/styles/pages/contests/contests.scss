@@ -1,4 +1,5 @@
 @import "../../variables";
+@import "../../components/contest-tile.scss";
 
 // --------------------------------------------------
 // Contest List Page
@@ -19,4 +20,13 @@
 
 .contests-page section {
   padding: $spacing__l 0;
+}
+
+.contests-page {
+  // background: radial-gradient(50% 50% at 50% 50%, #180d3b 0%, #000000 100%);
+  // background-attachment: fixed;
+}
+
+.contests-page .contest-tile {
+  @include contest-tile--solid;
 }
