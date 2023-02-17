@@ -16,3 +16,10 @@
 // 7. Text
 // 8. Transforms
 // 9. Other
+
+.report-page .limited-width {
+  max-width: $report__max-width;
+  a {
+    word-break: break-all;
+  }
+}

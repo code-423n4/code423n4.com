@@ -2,7 +2,7 @@ import * as React from "react";
 import { graphql } from "gatsby";
 import DOMPurify from "isomorphic-dompurify";
 
-import ReportLayout from "../../templates/ReportLayout";
+import DefaultLayout from "../../templates/DefaultLayout";
 
 function ReportPageTemplate({ data }) {
   const page = data.markdownRemark;
@@ -18,13 +18,13 @@ function ReportPageTemplate({ data }) {
   };
 
   return (
-    <ReportLayout
+    <DefaultLayout
       preview=""
       pageDescription=""
       pageTitle={page.frontmatter.title}
-      bodyClass="report-page page"
+      bodyClass="report-page"
     >
-      <div className="limited-width">
+      <div className="limited-width type__copy">
         <article>
           {page.frontmatter.sponsor ? (
             <img
@@ -61,7 +61,7 @@ function ReportPageTemplate({ data }) {
       <button className="button floating-button" onClick={scrollToTop}>
         Top
       </button>
-    </ReportLayout>
+    </DefaultLayout>
   );
 }
 

@@ -10,7 +10,7 @@ import { getApiContestData } from "./netlify/util/getContestsData.ts";
 const { token } = require("./netlify/_config");
 
 const privateContestMessage = dedent`
-# Contest details are not available. Why not?
+## Contest details are not available. Why not?
 
 The contest is limited to specific participants. Most Code4rena contests are open and public, but some have special requirements. In those cases, the code and contest details remain private (at least for now).
 
@@ -179,19 +179,19 @@ exports.onCreateNode = async ({ node, getNode, actions }) => {
 
     createNodeField({
       node,
-      name: 'status',
-      value: node.status
+      name: "status",
+      value: node.status,
     });
     createNodeField({
       node,
-      name: 'codeAccess',
-      value: node.codeAccess
-    })
+      name: "codeAccess",
+      value: node.codeAccess,
+    });
     createNodeField({
       node,
-      name: 'type',
-      value: node.type
-    })
+      name: "type",
+      value: node.type,
+    });
   }
 };
 

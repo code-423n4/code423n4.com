@@ -83,7 +83,7 @@ a {
 .type__text {
   font-size: 1rem;
   font-family: $font__default;
-  font-weight: 500;
+  font-weight: 400;
   line-height: 130%;
 }
 .type__text-bold,
@@ -269,6 +269,16 @@ h6 {
     margin-bottom: $spacing__xl;
   }
 }
+.type__subline__page-title {
+  font-size: $headline-font-size__xxs;
+  line-height: 115%;
+  margin-bottom: $spacing__l;
+  margin-top: -$spacing__m; // TODO: don't use negative margin
+  @include breakpoint("m") {
+    font-size: $headline-font-size__xxs;
+    margin-bottom: $spacing__xl;
+  }
+}
 
 // Sublines
 // ------------------------------------------------
@@ -333,16 +343,42 @@ h6 {
 // Code
 // ------------------------------------------------
 
-code:has(pre) {
+pre:has(code) {
+  width: calc(96vw - 2 * #{$spacing__xl});
+  margin: $spacing__xl 0;
+  padding: $spacing__s $spacing__m;
+  overflow-x: auto;
+
+  background: $color__n-90 !important;
+
   font-family: $font__code;
   font-size: $font-size__copy__code;
-  font-weight: 400;
-  font-style: normal;
-  line-height: 150%;
-  background-color: $color__n-80;
-  color: $color__n-10;
-  padding: 0.1em 0.3em;
-  border-radius: 0.2em;
+  line-height: 1.45;
+
+  border-radius: $border-radius__m;
+
+  @include breakpoint("m") {
+    width: 100%;
+  }
+
+  code {
+    width: 100%;
+    background-color: $color__n-90 !important;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    height: 10px;
+    background-color: $color__blurple-70;
+  }
+
+  &::-webkit-scrollbar {
+    height: 10px;
+  }
+
+  &::-webkit-scrollbar-track {
+    border: none;
+    background-color: $color__n-90;
+  }
 }
 
 // Summary / Details

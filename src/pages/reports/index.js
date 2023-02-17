@@ -8,7 +8,7 @@ export default function ReportIndex({ data }) {
   const reports = data.reports.edges;
 
   return (
-    <DefaultLayout pageTitle="Security Audit Reports" bodyClass="report-page">
+    <DefaultLayout pageTitle="Security Audit Reports" bodyClass="reports-page">
       <section className="limited-width">
         <h1 className="type__headline__page-title">Audit Reports</h1>
         <div className="grid__one-by-three--break-m-s">

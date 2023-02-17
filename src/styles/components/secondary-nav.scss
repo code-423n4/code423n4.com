@@ -10,7 +10,8 @@
   margin-bottom: $spacing__m;
 }
 
-button.secondary-nav__item {
+button.secondary-nav__item,
+li.secondary-nav__item {
   margin-right: $spacing__s;
   padding: $spacing__s $spacing__m;
 
@@ -25,7 +26,8 @@ button.secondary-nav__item {
   line-height: 130%;
   text-decoration: none;
 
-  &.active {
+  &.active,
+  &.react-tabs__tab--selected {
     color: $color__white;
     background: rgba(255, 255, 255, 0.1);
   }

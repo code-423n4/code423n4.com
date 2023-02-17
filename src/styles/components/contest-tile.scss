@@ -107,6 +107,7 @@ $contest-amount__background: linear-gradient(
   padding: $spacing__m;
   @include breakpoint("s") {
     padding: 0;
+    max-width: 40rem;
   }
 }
 

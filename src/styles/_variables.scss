@@ -55,9 +55,9 @@ $color__headline: $color__white;
 // ------------------------------------------------
 
 $font-size__copy: 1.2rem;
-$font-size__copy__code: 1rem; // I'm also using this for all code blocks
+$font-size__copy__code: 0.9em; // I'm also using this for all code blocks
 $font-size__text: 1rem;
-$font-size__text__code: 0.9rem;
+$font-size__text__code: 0.9em;
 $font-size__small: 0.933rem;
 
 $headline-font-size__xxs: 1.333rem; // H6
@@ -102,6 +102,7 @@ $breakpoint__xl: 1920px;
 // ------------------------------------------------
 
 $layout__max-width: 1100px;
+$report__max-width: 900px;
 
 // Shadows
 // ------------------------------------------------

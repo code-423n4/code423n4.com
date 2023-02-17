@@ -36,9 +36,7 @@ const ContestTile = ({ contest, updateContestStatus, user }) => {
     }
   }, [fields, user]);
 
-  let statusText;
-
-  statusText = {
+  const statusText = {
     active: "Live",
     soon: "Coming Soon",
     completed: "Ended",
@@ -60,6 +58,7 @@ const ContestTile = ({ contest, updateContestStatus, user }) => {
               </li>
               {t.contestStatus === "soon" || t.contestStatus === "active" ? (
                 <li className="contest-tile__countdown">
+                  {t.contestStatus === "soon" ? "Starts" : "Ends"}
                   <Countdown
                     state={t.contestStatus}
                     start={start_time}

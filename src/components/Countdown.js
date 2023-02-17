@@ -41,8 +41,10 @@ const Countdown = ({
         <span className="days">{timeLeft.days}</span> days +{" "}
       </span>
       <span className="wrapper-time">
-        <span className="hours">{timeLeft.hh}</span>{" "}
-        <span className="minutes">{timeLeft.mm}</span>{" "}
+        <span className="hours">{timeLeft.hh}</span>
+        {":"}
+        <span className="minutes">{timeLeft.mm}</span>
+        {":"}
         <span className="seconds">{timeLeft.ss}</span>
       </span>
       {text && timeLeft.total > 0 ? (
