@@ -258,7 +258,7 @@ const ContestLayout = ({ data }) => {
               )}
             </TabList>
 
-            <section className="contest-page__tab-container full-width type__text">
+            <section className="contest-page__tab-container full-width type__copy">
               {t.contestStatus === "completed" && (
                 <TabPanel>
                   <div className="limited-width">
