@@ -21,7 +21,7 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  background: $color__n-80;
+  background: $color__n-85;
   border-radius: $border-radius__m;
 
   @include breakpoint("s") {
@@ -50,18 +50,18 @@
   width: 100%;
   display: flex;
   justify-content: flex-end;
-  border-top: 1px solid $color__n-60;
+  border-top: 1px solid $color__n-70;
 }
 
 .report-tile__report-link {
   padding: $spacing__s $spacing__m;
-  border-left: 1px solid $color__n-60;
+  border-left: 1px solid $color__n-70;
   color: $color__n-10;
   @mixin accessible-animation {
     transition: all $transition__base;
   }
   &:hover {
-    background: $color__n-60;
+    background: $color__n-70;
     color: $color__white;
   }
 }
