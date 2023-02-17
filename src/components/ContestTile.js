@@ -84,7 +84,7 @@ const ContestTile = ({ contest, updateContestStatus, user }) => {
               View Repo
             </a>
           )}
-           {(t.contestStatus === "active" || status === "Active Contest") &&
+          {(t.contestStatus === "active" || status === "Active Contest") &&
           findingsRepo &&
           fields.status &&
           fields.submissionPath &&
@@ -95,9 +95,9 @@ const ContestTile = ({ contest, updateContestStatus, user }) => {
             >
               Submit Finding
             </Link>
-           ) : (
-              ""
-            )} 
+          ) : (
+            ""
+          )}
         </ClientOnly>
       </div>
     </div>
