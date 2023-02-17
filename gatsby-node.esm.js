@@ -148,6 +148,13 @@ exports.onCreateNode = async ({ node, getNode, actions }) => {
       name: `slug`,
       value: slug,
     });
+
+    // we only want _data/pages markdown (not reports!) on top level {MarkdownRemark.fields…} route
+    createNodeField({
+      node,
+      name: `topLevelSlug`,
+      value: (parent.sourceInstanceName === `pages`) ? slug : `c4-nobuild-page-${slug.slice(1)}`,
+    });
   }
 
   if (node.internal.type === `ContestsCsv`) {
@@ -243,6 +250,14 @@ exports.createPages = async ({ graphql, actions }) => {
     });
   });
 };
+
+exports.onCreatePage = ({ page, actions }) => {
+  const { deletePage } = actions;
+  let tlSlug = page.context && page.context.fields__topLevelSlug;
+  if (tlSlug && tlSlug.startsWith(`c4-nobuild-page-`)) {
+    deletePage(page);
+  }
+}
 
 exports.onCreateWebpackConfig = ({ actions, stage, getConfig }) => {
   actions.setWebpackConfig({
