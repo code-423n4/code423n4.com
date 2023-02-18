@@ -49,13 +49,15 @@ const Header = ({ hideConnectWalletDropdown = false }) => {
         className={"header__nav " + clsx(mobileNavOpen && "open")}
         role="navigation"
       >
-        <Link className="logo" to="/">
-          <img src="/images/c4-logo.svg" alt="Code4rena Logo" />
-        </Link>
-        <Hamburger
-          setMobileNavOpen={setMobileNavOpen}
-          mobileNavOpen={mobileNavOpen}
-        />
+        <div className="header__logo-and-burger">
+          <Link className="logo" to="/">
+            <img src="/images/c4-logo.svg" alt="Code4rena Logo" />
+          </Link>
+          <Hamburger
+            setMobileNavOpen={setMobileNavOpen}
+            mobileNavOpen={mobileNavOpen}
+          />
+        </div>
         <div className="header__nav-links">
           <Link to="/leaderboard">Leaderboard</Link>
           <Link to="/contests">Contests</Link>
