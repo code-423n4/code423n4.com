@@ -38,6 +38,9 @@
   flex-direction: column;
   align-items: flex-start;
   padding: $spacing__l $spacing__l $spacing__l 0;
+  a {
+    word-break: normal;
+  }
 }
 .header__nav-links {
   display: none;

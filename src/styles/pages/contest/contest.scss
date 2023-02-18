@@ -17,6 +17,10 @@
 // 8. Transforms
 // 9. Other
 
+.contest-page .limited-width {
+  max-width: $report__max-width;
+}
+
 .contest-page__top {
   margin-bottom: $spacing__xxl;
 }
@@ -153,6 +157,7 @@
 .contest-page__grid-value {
   color: $color__white;
   font-weight: 500;
+  margin-top: $spacing__s;
 }
 // Tabs
 // --------------------

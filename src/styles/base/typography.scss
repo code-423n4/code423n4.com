@@ -33,115 +33,6 @@ a {
   }
 }
 
-// Type classes
-// ------------------------------------------------
-
-// Copy
-// -----------------
-// This is the default type style for the site. It is used for most of the copy.
-// Adding a class of `type__copy` to a parent element will apply these styles.
-
-.type__copy {
-  font-size: $font-size__copy;
-  font-family: $font__default;
-  font-weight: 500;
-  line-height: 150%;
-}
-.type__copy-p,
-.type__copy p {
-  margin-bottom: 1.5em;
-}
-.type__copy__bold,
-.type__copy strong {
-  font-weight: 700;
-}
-.type__copy__inline-link,
-.type__copy a {
-  font-weight: 700;
-  text-decoration: underline;
-}
-.type__copy__inline-code,
-.type__copy code {
-  padding: 0.1em 0.3em;
-  border-radius: 0.2em;
-
-  background-color: $color__n-80;
-  color: $color__n-10;
-
-  font-family: $font__code;
-  font-style: normal;
-  font-weight: 400;
-  font-size: $font-size__copy__code;
-  line-height: inherit;
-}
-
-// Text
-// -----------------
-// This is the type style for the product. It's slightly smaller than the copy.
-// Adding a class of `type__text` to a parent element will apply these styles.
-
-.type__text {
-  font-size: 1rem;
-  font-family: $font__default;
-  font-weight: 400;
-  line-height: 130%;
-}
-.type__text-bold,
-.type__text strong {
-  font-weight: 700;
-}
-.type__text-inline-link,
-.type__text a {
-  font-weight: 700;
-  text-decoration: underline;
-}
-.type__text-inline-code,
-.type__text code {
-  font-family: $font__code;
-  font-style: normal;
-  font-weight: 400;
-  font-size: $font-size__text__code;
-  line-height: inherit;
-  background-color: $color__n-80;
-  color: $color__n-10;
-  padding: 0.1em 0.3em;
-  border-radius: 0.2em;
-}
-
-// Small
-// -----------------
-
-.type__small,
-small {
-  font-size: $font-size__small;
-  font-family: $font__default;
-  font-weight: 500;
-  font-style: normal;
-  line-height: 145%;
-}
-.type__small-bold,
-.type__small strong {
-  font-weight: 700;
-}
-.type__small-inline-link,
-.type__small a {
-  font-size: $font-size__small;
-  font-weight: 700;
-  text-decoration: underline;
-}
-.type__small-inline-code,
-.type__small code {
-  font-size: $font-size__small;
-  font-family: "PT Mono";
-  font-weight: 400;
-  font-style: normal;
-  line-height: 145%;
-  background-color: $color__n-80;
-  color: $color__n-10;
-  padding: 0.1em 0.3em;
-  border-radius: 0.2em;
-}
-
 // Headings
 // ------------------------------------------------
 
@@ -166,11 +57,15 @@ h6,
 .type__subline__s,
 .type__subline__xs,
 .type__subline__xxs {
-  margin-top: 0.25em;
-  margin-bottom: 0.3em;
+  margin-top: 0.3em;
+  margin-bottom: 0.4em;
   font-family: $font__default;
   font-weight: 700;
   color: $color__headline;
+
+  &:first-child {
+    margin-top: 0.3em;
+  }
 }
 
 // TODO: make this a mixin
@@ -343,7 +238,7 @@ h6 {
 // Code
 // ------------------------------------------------
 
-pre:has(code) {
+pre {
   width: calc(96vw - 2 * #{$spacing__xl});
   margin: $spacing__xl 0;
   padding: $spacing__s $spacing__m;
@@ -362,7 +257,6 @@ pre:has(code) {
   }
 
   code {
-    width: 100%;
     background-color: $color__n-90 !important;
   }
 
@@ -397,4 +291,167 @@ summary,
     direction: rtl; // TODO not this (this is how I'm making the arrow show up on the right)
     text-align: left;
   }
+}
+
+// Type classes
+// ------------------------------------------------
+
+// Copy
+// -----------------
+// This is the default type style for the site. It is used for most of the copy.
+// Adding a class of `type__copy` to a parent element will apply these styles.
+
+.type__copy {
+  font-size: $font-size__copy;
+  font-family: $font__default;
+  font-weight: 500;
+  line-height: 150%;
+}
+.type__copy-p,
+.type__copy p {
+  margin-bottom: 1.5em;
+}
+.type__copy__bold,
+.type__copy strong {
+  font-weight: 700;
+}
+.type__copy__inline-link,
+.type__copy a {
+  font-weight: 700;
+  text-decoration: underline;
+}
+.type__copy__inline-code,
+.type__copy p code,
+.type__copy h1 code,
+.type__copy h2 code,
+.type__copy h3 code,
+.type__copy h4 code,
+.type__copy h5 code,
+.type__copy h6 code,
+.type__copy li code,
+.type__copy dt code,
+.type__copy dd code,
+.type__copy td code,
+.type__copy th code {
+  padding: 0.1em 0.3em;
+  border-radius: 0.2em;
+
+  background-color: $color__n-80;
+  color: $color__n-10;
+
+  font-family: $font__code;
+  font-style: normal;
+  font-weight: 400;
+  font-size: $font-size__copy__code;
+  line-height: inherit;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+ul,
+th,
+td,
+a,
+code {
+  word-break: break-word;
+}
+.type__copy__ul,
+.type__copy ul {
+  list-style: disc;
+}
+.type__copy__ol,
+.type__copy ol {
+  list-style: decimal;
+}
+.type__copy__ol,
+.type__copy__ul,
+.type__copy ol,
+.type__copy ul {
+  margin-left: 2em;
+  margin-bottom: 1em;
+}
+.type__copy li {
+  margin-bottom: 0.5em;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin-top: 1em;
+
+  &:first-child {
+    margin-top: 0.25em;
+  }
+}
+
+// Text
+// -----------------
+// This is the type style for the product. It's slightly smaller than the copy.
+// Adding a class of `type__text` to a parent element will apply these styles.
+
+.type__text {
+  font-size: 1rem;
+  font-family: $font__default;
+  font-weight: 400;
+  line-height: 130%;
+}
+.type__text-bold,
+.type__text strong {
+  font-weight: 700;
+}
+.type__text-inline-link,
+.type__text a {
+  font-weight: 700;
+  text-decoration: underline;
+}
+.type__text-inline-code,
+.type__text code {
+  font-family: $font__code;
+  font-style: normal;
+  font-weight: 400;
+  font-size: $font-size__text__code;
+  line-height: inherit;
+  background-color: $color__n-80;
+  color: $color__n-10;
+  padding: 0.1em 0.3em;
+  border-radius: 0.2em;
+}
+
+// Small
+// -----------------
+
+.type__small,
+small {
+  font-size: $font-size__small;
+  font-family: $font__default;
+  font-weight: 500;
+  font-style: normal;
+  line-height: 145%;
+}
+.type__small-bold,
+.type__small strong {
+  font-weight: 700;
+}
+.type__small-inline-link,
+.type__small a {
+  font-size: $font-size__small;
+  font-weight: 700;
+  text-decoration: underline;
+}
+.type__small-inline-code,
+.type__small code {
+  font-size: $font-size__small;
+  font-family: "PT Mono";
+  font-weight: 400;
+  font-style: normal;
+  line-height: 145%;
+  background-color: $color__n-80;
+  color: $color__n-10;
+  padding: 0.1em 0.3em;
+  border-radius: 0.2em;
 }
