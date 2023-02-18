@@ -114,18 +114,6 @@ $contest-tile--solid__background: $color__n-90;
   }
 }
 
-// Contest time
-// --------------------
-
-.contest-tile__time-wrapper {
-  display: flex;
-  align-items: center;
-
-  li {
-    margin-right: $spacing__s;
-  }
-}
-
 // Contest title
 // --------------------
 
@@ -139,30 +127,96 @@ $contest-tile--solid__background: $color__n-90;
   }
 }
 
+// Contest time
+// --------------------
+
+.contest-tile__time-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-top: $spacing__s;
+
+  @include breakpoint("xs") {
+    flex-direction: row;
+    align-items: center;
+  }
+}
+
+.contest-tile__days-duration {
+  margin-right: $spacing__s;
+
+  &::after {
+    content: "";
+    @include breakpoint("xs") {
+      content: "❯";
+      margin-left: $spacing__s;
+    }
+  }
+}
+
+.contest-tile__countdown {
+  display: flex;
+  font-size: $font-size__text;
+  align-items: center;
+  justify-content: center;
+
+  > div {
+    margin-left: $spacing__xs;
+  }
+}
+
 // Contest buttons and live indicator
 // --------------------
 
 .contest-tile__bottom {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: space-between;
   border-top: $contest-tile__border;
-  @include breakpoint("s") {
+  @include breakpoint("xs") {
+    flex-direction: row;
   }
 }
 
 .contest-tile__button-wrapper {
+  width: 100%;
   display: flex;
   justify-content: center;
 
-  a {
-    padding: $spacing__s $spacing__m;
-    border-left: $contest-tile__border;
-    color: $color__white;
+  @include breakpoint("xs") {
+    width: auto;
+    justify-content: center;
+  }
 
+  a {
+    width: 33%;
+    padding: $spacing__s $spacing__m;
+    color: $color__white;
+    text-align: center;
+    border-left: $contest-tile__border;
+
+    @include breakpoint("xs") {
+      width: auto;
+    }
     &:hover {
       background: rgba($color__white, 0.1);
     }
+    &:first-of-type {
+      border-left: 0;
+      @include breakpoint("xs") {
+        border-left: $contest-tile__border;
+      }
+    }
+  }
+}
+
+.contest-tile__status-indicator {
+  width: 100%;
+  border-bottom: $contest-tile__border;
+  @include breakpoint("xs") {
+    width: auto;
+    border-bottom: 0;
   }
 }
 

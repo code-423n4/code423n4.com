@@ -42,7 +42,7 @@
     font-size: 0.93em;
   }
 }
-.contest-tile__countdown {
+.contest-page .contest-tile__countdown {
   display: flex;
   font-size: $font-size__text;
   align-items: center;
@@ -164,4 +164,8 @@
   @include breakpoint("s") {
     padding-top: $spacing__l;
   }
+}
+
+.contest-page__tab-container:has(.tab__content--message) {
+  background: $color__n-90;
 }

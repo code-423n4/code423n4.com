@@ -270,9 +270,9 @@ const ContestLayout = ({ data }) => {
                 </TabPanel>
               )}
               <TabPanel>
-                <div className="limited-width">
+                <div className="limited-width ">
                   {t.contestStatus === "soon" ? (
-                    <div className="coming-soon">
+                    <div className="coming-soon tab__content--message">
                       <h2 className="type__headline__l">
                         Contest details coming soon
                       </h2>
@@ -281,10 +281,6 @@ const ContestLayout = ({ data }) => {
                         start={start_time}
                         end={end_time}
                         isPreview={findingsRepo === ""}
-                      />
-                      <img
-                        src="/images/icon-details.svg"
-                        alt="icon of a piece of paper with lines on it to indicate text"
                       />
                     </div>
                   ) : (
