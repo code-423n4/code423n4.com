@@ -25,8 +25,51 @@
 
   text-align: center;
 
-  * {
-    // TODO: Way less specific here
+  .eth-address {
     word-break: break-all;
+  }
+}
+
+.footer__items {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.footer__item {
+  margin-right: 0 $spacing__s;
+  @include breakpoint("m") {
+    margin-right: 0 $spacing__m;
+  }
+
+  &::after {
+    content: "❯";
+    margin: $spacing__s;
+    color: $color__n-60;
+
+    @include breakpoint("m") {
+      margin: $spacing__m;
+    }
+  }
+
+  &:first-child {
+    margin-right: 0;
+  }
+
+  &:last-child {
+    &::after {
+      content: "";
+    }
+  }
+
+  a {
+    color: $color__blurple__text;
+    text-decoration: none;
+    transition: color 0.2s ease-in-out;
+
+    &:hover {
+      color: $color__n-40;
+    }
   }
 }
