@@ -71,16 +71,16 @@ const plugins = [
             },
           },
         },
-        {
-          resolve: `gatsby-remark-vscode`,
-          options: {
-            theme: "Dark+ (default dark)",
-            languageAliases: {
-              solidity: "js",
-              sol: "js",
-            },
-          },
-        },
+        // {
+        //   resolve: `gatsby-remark-vscode`,
+        //   options: {
+        //     theme: "Dark+ (default dark)",
+        //     languageAliases: {
+        //       solidity: "js",
+        //       sol: "js",
+        //     },
+        //   },
+        // },
         {
           resolve: `gatsby-remark-mathjax`,
           options: {},
