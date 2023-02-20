@@ -168,7 +168,7 @@ const ReportForm = ({ data, location }) => {
       }
     },
     // must include dependencies for functions executed by this function too
-    [currentUser, mode, issueId, attributedTo, state]
+    [currentUser, mode, issueId, attributedTo, state, ipState]
   );
 
   const getUpdatedFindingRequestData = (
