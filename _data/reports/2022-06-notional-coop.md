@@ -613,7 +613,7 @@ _Submitted by jonah1005_
 
 In the `_isWrappedFCash` check, the `notionalTradeModule` check whether the component is a wrappedCash with the following logic.
 
-```soliditiy
+```solidity
         try IWrappedfCash(_fCashPosition).getDecodedID() returns(uint16 _currencyId, uint40 _maturity){
             try wrappedfCashFactory.computeAddress(_currencyId, _maturity) returns(address _computedAddress){
                 return _fCashPosition == _computedAddress;
@@ -630,7 +630,7 @@ The above logic is dangerous when `_fCashPosition` do not revert on `getDecodedI
 [CETH](https://etherscan.io/address/0x4Ddc2D193948926D02f9B1fE9e1daa0718270ED5) is an example.
 There's a fallback function in `ceth`
 
-```soliditiy
+```solidity
     function () external payable {
         requireNoError(mintInternal(msg.value), "mint failed");
     }
@@ -645,7 +645,7 @@ The following contract may fail to redeem setTokens as it consumes too much gas 
 
 [Test.sol](https://gist.github.com/Jonah246/fad9e489fe84a6fb8b4894d7377fd8a2)
 
-```soliditiy
+```solidity
     function test(uint256 _amount) external {
         cToken.approve(address(issueModule), uint256(-1));
         wfCash.approve(address(issueModule), uint256(-1));
@@ -656,7 +656,7 @@ The following contract may fail to redeem setTokens as it consumes too much gas 
 
 Also, we can check how much gas it consumes with the following function.
 
-```soliditiy
+```solidity
     function TestWrappedFCash(address _fCashPosition) public view returns(bool){
         if(!_fCashPosition.isContract()) {
             return false;
@@ -686,7 +686,7 @@ Hardhat
 
 I recommend building a map in the notionalTradeModule and inserting the wrappeCash in the `mintFCashPosition` function.
 
-```soliditiy
+```solidity
 function addWrappedCash(uint16 _currencyId, uint40 _maturity) public {
     address computedAddress = wrappedfCashFactory.computeAddress(_currencyId, _maturity);
     wrappedFCash[computedAddress] = true;
@@ -697,7 +697,7 @@ Or we could replace the try-catch pattern with a low-level function call and che
 
 Something like this might be a fix.
 
-```soliditiy
+```solidity
     (bool success, bytes memory returndata) = target.delegatecall(data);
     if (!success || returndata.length != DECODED_ID_RETURN_LENGTH) {
         return false;
@@ -1013,7 +1013,7 @@ Assume a setToken with `CompoundLeverageModule`, `NotionalTradeModule` and `Basi
 [POC](https://gist.github.com/Jonah246/13e58b59765c0334189c99a9f29c6dab)
 The exploit is quite lengthy. Please check the `Attack.sol` for the main exploit logic.
 
-```soliditiy
+```solidity
     function register() public {
         _ERC1820_REGISTRY.setInterfaceImplementer(address(this), _TOKENS_SENDER_INTERFACE_HASH, address(this));
         _ERC1820_REGISTRY.setInterfaceImplementer(address(this), _TOKENS_SENDER_INTERFACE_HASH, address(this));

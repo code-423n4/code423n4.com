@@ -29,7 +29,7 @@ const Modal = () => {
     hideModal();
   };
 
-  return modalProps ? (
+  return modalProps && modalProps.type !== "login" ? (
     <div className="modal">
       <div className="modal-main">
         <button className="button-div modal-top" onClick={handleClose}>

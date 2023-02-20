@@ -1,5 +1,5 @@
 import { graphql, Link } from "gatsby";
-import Moralis from "moralis";
+import Moralis from "moralis-v1";
 import React, { useCallback, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
@@ -12,15 +12,14 @@ import {
 } from "../../types/finding";
 
 // hooks
-import { useModalContext } from "../hooks/ModalContext";
 import useUser from "../hooks/UserContext";
 
 // components
 import ProtectedPage from "../components/ProtectedPage";
 import SubmitFindings from "../components/reporter/SubmitFindings";
-
 // styles
-import * as styles from "../components/form/Form.module.scss";
+import * as styles from "../styles/Main.module.scss";
+
 
 export interface ReportState {
   title: string;
@@ -28,6 +27,8 @@ export interface ReportState {
   details: string;
   qaGasDetails: string;
   linksToCode: string[];
+  mitigationOf: string;
+  isMitigated: boolean;
 }
 
 enum FormMode {
@@ -40,12 +41,15 @@ const mdTemplate =
   "Proof of Concept\nProvide direct links to all referenced code in GitHub. " +
   "Add screenshots, logs, or any other relevant proof that illustrates the concept." +
   "\n\n## Tools Used\n\n## Recommended Mitigation Steps";
+
 const initialState: ReportState = {
   title: "",
   risk: "",
   details: mdTemplate,
   qaGasDetails: "",
   linksToCode: [""],
+  mitigationOf: "",
+  isMitigated: false,
 };
 
 const ReportForm = ({ data, location }) => {
@@ -60,7 +64,6 @@ const ReportForm = ({ data, location }) => {
   } = data.contestsCsv;
 
   // hooks
-  const { showModal } = useModalContext();
   const { currentUser } = useUser();
 
   // state
@@ -126,7 +129,16 @@ const ReportForm = ({ data, location }) => {
         newValue: data.attributedTo,
         address: data.address,
       },
+      mitigationOf: data.mitigationOf ? {
+        newValue: data.mitigationOf!,
+        oldValue: state.mitigationOf,
+      } : undefined,
+      isMitigated : { //update these values here from ui update
+        newValue: data.isMitigated!,
+        oldValue: state.isMitigated,
+      }
     };
+  
     if (state.title !== data.title) {
       requestData.title = data.title;
     }
@@ -159,7 +171,6 @@ const ReportForm = ({ data, location }) => {
     const body: FindingDeleteRequest = {
       attributedTo,
       risk: state.risk,
-      // @todo: enable adding multiple email addresses
       emailAddresses: [currentUser.emailAddress],
     };
     const response = await fetch(`/.netlify/functions/manage-findings?` + q, {
@@ -193,6 +204,8 @@ const ReportForm = ({ data, location }) => {
       details: body,
       qaGasDetails: normalizedBody,
       linksToCode: links,
+      isMitigated: finding.isMitigated || false,
+      mitigationOf: finding.mitigationOf || "",
     });
     setAttributedTo(finding.handle);
     setFindingId(`${contestid}-${finding.issueNumber}`);
@@ -210,7 +223,6 @@ const ReportForm = ({ data, location }) => {
     (async () => {
       if (currentUser.isLoggedIn) {
         const user = await Moralis.User.current();
-
         if (location.state && location.state.finding) {
           const finding = location.state.finding;
           initializeEditState(finding);
@@ -274,22 +286,9 @@ const ReportForm = ({ data, location }) => {
     return { links: linksToCode, body };
   };
 
+
   return (
-    <ProtectedPage
-      pageTitle="Submit finding | Code 423n4"
-      message={
-        <>
-          You need to be a registered warden currently connected via wallet to
-          see this page.
-          {/* <p> */}
-          If authentication isn't working, you may{" "}
-          <Link to={fields.submissionPath + "-old"}>
-            try the unauthenticated submission form
-          </Link>
-          .{/* </p> */}
-        </>
-      }
-    >
+    <ProtectedPage pageTitle="Submit finding | Code 423n4">
       {isLoading ? (
         // @todo: style a loading state
         <span>Loading...</span>
@@ -305,13 +304,13 @@ const ReportForm = ({ data, location }) => {
           </Link>
         </div>
       ) : isClosed ? (
-        <div className={styles.Form}>
-          <h1 className={styles.Heading1}>This finding has been withdrawn</h1>
-          <h3 className={styles.Heading3}>Submitted by:</h3>
+        <div className={styles.Form__Form}>
+          <h1 className={styles.Form__Heading1}>This finding has been withdrawn</h1>
+          <h3 className={styles.Form__Heading3}>Submitted by:</h3>
           <ul>
             <li>{attributedTo}</li>
           </ul>
-          <h3 className={styles.Heading3}>Finding:</h3>
+          <h3 className={styles.Form__Heading3}>Finding:</h3>
           <ul>
             <li>Risk: {state.risk}</li>
             <li>Title: {state.title}</li>
@@ -322,6 +321,7 @@ const ReportForm = ({ data, location }) => {
         <SubmitFindings
           sponsor={sponsor.name}
           contest={contestid}
+          contestType={fields.type || "Audit"}
           contestPath={fields.contestPath}
           repo={findingsRepo}
           title={title}
@@ -364,6 +364,7 @@ export const pageQuery = graphql`
       fields {
         submissionPath
         contestPath
+        type
       }
     }
   }
