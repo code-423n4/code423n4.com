@@ -95,9 +95,7 @@ export default function Contests({ data }) {
       <div className="limited-width">
         {filteredContests && filteredContests.activeContests.length > 0 ? (
           <section>
-            <h1 className="spacing-bottom__xl type__headline_l">
-              Active contests
-            </h1>
+            <h1 className="type__headline__page-title">Active contests</h1>
             <ContestList
               updateContestStatus={updateContestStatus}
               contests={filteredContests.activeContests}

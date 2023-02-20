@@ -50,7 +50,7 @@ export default function Leaderboard({ data }) {
   return (
     <DefaultLayout pageTitle="Leaderboard" bodyClass="leaderboard">
       <div className="limited-width">
-        <h1>Leaderboard</h1>
+        <h1 className="type__headline__page-title">Leaderboard</h1>
         <div className="leaderboard__dropdown">
           {/* browser-native select in firefox inherits the dropdown background color from the select element */}
           <select onChange={handleChange} className="dropdown">
