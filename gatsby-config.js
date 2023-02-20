@@ -11,6 +11,7 @@ function csvBooleanParser(item) {
 }
 
 const plugins = [
+  `gatsby-plugin-no-sourcemaps`,
   `gatsby-plugin-react-helmet`,
   {
     resolve: `gatsby-source-filesystem`,
