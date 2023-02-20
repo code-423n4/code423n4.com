@@ -102,8 +102,7 @@ h6,
 }
 
 // [Tip] When using headlines, use the `type__` classes instead of the `h` tags. Use the correct `h` tag for the position you're in, and assign it a new class.
-.type__headline__xl,
-h1 {
+.type__headline__xl {
   font-size: $headline-font-size__l;
   line-height: 115%;
 
@@ -111,8 +110,7 @@ h1 {
     font-size: $headline-font-size__xl;
   }
 }
-.type__headline__l,
-h2 {
+.type__headline__l {
   font-size: $headline-font-size__m;
   line-height: 115%;
 
@@ -121,7 +119,7 @@ h2 {
   }
 }
 .type__headline__m,
-h3 {
+h1 {
   font-size: $headline-font-size__s;
   line-height: 120%;
 
@@ -130,7 +128,7 @@ h3 {
   }
 }
 .type__headline__s,
-h4 {
+h2 {
   font-size: $headline-font-size__xs;
   line-height: 120%;
 
@@ -139,7 +137,7 @@ h4 {
   }
 }
 .type__headline__xs,
-h5 {
+h3 {
   font-size: $headline-font-size__xxs;
   line-height: 120%;
 
@@ -148,6 +146,8 @@ h5 {
   }
 }
 .type__headline__xxs,
+h5,
+h5,
 h6 {
   font-size: $headline-font-size__xxs;
 }
