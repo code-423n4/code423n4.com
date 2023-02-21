@@ -102,20 +102,20 @@ const LoginModal = () => {
 
   return modalProps && modalProps.type === "login" ? (
     <div className="modal">
-      <form className="modal-main" onSubmit={handleSubmit}>
+      <form className="modal--main" onSubmit={handleSubmit}>
         <button className="button-div modal-top" onClick={handleClose}>
           <img
             src="/images/x-icon.svg"
             alt="close modal icon"
-            className="closeModal-icon"
+            className="modal--close-modal-icon"
           />
         </button>
-        <div className="modal-main-title">
+        <div className="modal--main-title">
           <h1>{modalProps.title}</h1>
         </div>
         {forgotPassword ? (
           <>
-            <div className="modal-main-content">
+            <div className="modal--main-content">
               <Input
                 name="emailAddress"
                 label="Email Address"
@@ -131,7 +131,7 @@ const LoginModal = () => {
                 Log in
               </a>
             </div>
-            <div className="modal-main-buttons">
+            <div className="modal--main-buttons">
               <button
                 className="button cta-button secondary"
                 type="button"
@@ -150,7 +150,7 @@ const LoginModal = () => {
           </>
         ) : (
           <>
-            <div className="modal-main-content">
+            <div className="modal--main-content">
               <Input
                 name="username"
                 label="Code4rena Username"
@@ -174,7 +174,7 @@ const LoginModal = () => {
                 Forgot password?
               </a>
             </div>
-            <div className="modal-main-buttons">
+            <div className="modal--main-buttons">
               <button
                 className="button cta-button secondary"
                 type="button"
@@ -186,7 +186,7 @@ const LoginModal = () => {
                 {isLoading ? "Submitting..." : "Log in"}
               </button>
             </div>
-            <div className={styles.Login__DividingLine}></div>
+            <div className={styles.login__dividing - line}></div>
             <span>
               Not a warden yet?{" "}
               <Link to="/register" onClick={handleClose}>

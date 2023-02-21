@@ -31,19 +31,19 @@ const Modal = () => {
 
   return modalProps && modalProps.type !== "login" ? (
     <div className="modal">
-      <div className="modal-main">
+      <div className="modal--main">
         <button className="button-div modal-top" onClick={handleClose}>
           <img
             src="/images/x-icon.svg"
             alt="close modal icon"
-            className="closeModal-icon"
+            className="modal--close-modal-icon"
           />
         </button>
-        <div className="modal-main-title">
+        <div className="modal--main-title">
           <h1>{modalProps.title}</h1>
         </div>
-        <div className="modal-main-content">{modalProps.body}</div>
-        <div className="modal-main-buttons">
+        <div className="modal--main-content">{modalProps.body}</div>
+        <div className="modal--main-buttons">
           <button className="button cta-button secondary" onClick={handleClose}>
             {modalProps.secondaryButtonText || "Cancel"}
           </button>

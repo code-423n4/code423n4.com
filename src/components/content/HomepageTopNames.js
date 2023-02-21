@@ -1,7 +1,6 @@
 import React from "react";
 
-// Delete this when we have real data
-// I made them objects so we can add more data later - 🍔
+// TODO: Final data / data source
 const topAuditors = [
   {
     name: "jalapeno",
@@ -79,8 +78,9 @@ const HomepageTopNames = () => {
             </li>
           ))}
           <li>
+            {/* TODO: Final link */}
             <a
-              href="https://www.youtube.com/watch?v=QH2-TGUlwu4"
+              href="https://discord.gg/code4rena"
               target="_blank"
               rel="noreferrer"
               aria-label="Join them (Opens in a new window)"

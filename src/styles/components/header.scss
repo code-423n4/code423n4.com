@@ -157,3 +157,191 @@
   display: flex;
   align-items: center; // [Tip] always set `align-items` on flex parents with images as direct children to prevent image stretching. We're using an svg so it's not an issue here, but it's good to know.
 }
+
+// Login
+// --------------------------------------------------
+.login__button-wrapper {
+  display: inline-block;
+  padding-left: 10px;
+  border-left: 3px solid var(--main-purple);
+  margin-left: 10px;
+}
+
+.login__button {
+  display: flex;
+  align-items: center;
+  text-align: right;
+  margin: 0 10px;
+  color: white;
+  font-weight: 800;
+  font-family: "Roboto", sans-serif;
+  text-transform: uppercase;
+  text-decoration: none;
+  background: transparent;
+  border: none;
+  padding: 0;
+  font-size: 16px;
+
+  &:hover {
+    color: var(--light-purple);
+  }
+}
+
+.login__no-dropdown {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  @media (max-width: 970px) {
+    flex-direction: column;
+  }
+}
+
+.login__button--smaller {
+  display: flex;
+  align-items: center;
+}
+
+// TODO is this used?
+.login__button-margin {
+  @media (max-width: 970px) {
+    margin-bottom: 10px;
+  }
+}
+
+.login__desktop {
+  @media (max-width: 970px) {
+    display: none;
+  }
+}
+
+.login__mobile {
+  border-top: 2px solid var(--main-purple);
+  width: 100%;
+  @media (min-width: 970px) {
+    display: none;
+  }
+}
+
+.login__icon {
+  margin-right: 10px;
+  height: 20px;
+}
+
+.login__link {
+  display: flex !important;
+  align-items: center;
+}
+
+.login__dividing-line {
+  margin: 40px;
+  min-width: 70%;
+  max-width: 100%;
+  height: 0;
+  border-top: 2px solid var(--border-lightest-background);
+  @media (max-width: 970px) {
+    margin: 15px;
+  }
+}
+
+.user-dropdown__user-dropdown-wrapper {
+  display: inline-flex;
+  padding-left: 15px;
+  border-left: 3px solid var(--main-purple);
+  margin-left: 10px;
+  height: 20px;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-family);
+}
+
+.user-dropdown__user-dropdown {
+  display: inline-flex;
+  position: relative;
+  height: 30px;
+  width: 30px;
+  border: none;
+  padding: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.user-dropdown__user-dropdown-list {
+  display: flex;
+  flex-direction: column;
+  border-radius: 5px;
+  width: 180px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  box-sizing: border-box;
+  text-align: left;
+  width: 100%;
+}
+
+.user-dropdown__user-info {
+  margin: 10px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid var(--main-purple);
+  color: white;
+}
+
+.user-dropdown__avatar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.user-dropdown__caret {
+  padding-left: 5px;
+}
+
+.user-dropdown__desktop {
+  @media (max-width: 970px) {
+    display: none;
+  }
+}
+
+.user-dropdown__mobile {
+  @media (min-width: 970px) {
+    display: none;
+  }
+  border-top: 2px solid var(--main-purple);
+  width: 100%;
+}
+
+.user-dropdown__mobile-menu-item {
+  color: white;
+  font-weight: 800;
+  font-family: "Roboto", sans-serif;
+  text-transform: uppercase;
+  text-decoration: none;
+  background: transparent;
+  display: block;
+  text-align: left;
+  padding: 20px 0;
+  margin: 0;
+  border: none;
+  border-bottom: 1px solid #efefef1a;
+  width: 100%;
+}
+
+.user-dropdown__button {
+  font-size: inherit;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+
+  &:hover {
+    color: var(--light-purple);
+  }
+}
+
+.user-dropdown__icon {
+  color: inherit;
+  margin-right: 10px;
+  height: 20px;
+  width: 20px;
+}

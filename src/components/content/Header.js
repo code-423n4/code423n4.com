@@ -65,8 +65,8 @@ const Header = ({ hideConnectWalletDropdown = false }) => {
           <a href="https://docs.code4rena.com">Docs</a>
           <Link to="/help">Help</Link>
           <div className="header__nav-buttons">
-            {/* {!hideConnectWalletDropdown &&
-            (currentUser.isLoggedIn ? <UserDropdown /> : <Login />)} */}
+            {!hideConnectWalletDropdown &&
+              (currentUser.isLoggedIn ? <UserDropdown /> : <Login />)}
             <Button to="/type-test">Type Test</Button>
           </div>
         </div>
