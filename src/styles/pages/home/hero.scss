@@ -46,14 +46,19 @@
   margin-top: $spacing__m;
 
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-template-rows: repeat(2, 1fr);
+  grid-template-columns: repeat(1, 1fr);
+  grid-template-rows: repeat(4, 1fr);
   grid-gap: 2px; // Not basing this off of font size since this is the smallest and the largest it should ever get.
   align-items: center;
   justify-items: center;
 
   border-radius: $border-radius__l;
   overflow: hidden; // TODO This is for the border radius, but overflow:hidden is inaccessible. Find a better way to do this.
+
+  @include breakpoint("xs") {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+  }
 
   @include breakpoint("s") {
     margin-top: $spacing__s;
@@ -70,6 +75,7 @@
 
 .hero__statistic {
   padding: $spacing__l;
+  margin: 0;
   width: 100%;
   height: 100%;
   display: flex;
@@ -77,7 +83,8 @@
   justify-content: center;
   align-items: center;
   background: $color__n-90;
-  p {
+  p,
+  p.type__headline__m {
     margin: 0;
   }
 }
