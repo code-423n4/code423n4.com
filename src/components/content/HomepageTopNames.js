@@ -5,6 +5,7 @@ import React from "react";
 const topAuditors = [
   {
     name: "jalapeno",
+    link: "https://www.youtube.com/watch?v=QH2-TGUlwu4",
   },
   {
     name: "artichoke",
@@ -48,9 +49,6 @@ const topAuditors = [
   {
     name: "corn_flour",
   },
-  {
-    name: "Join them →",
-  },
 ];
 
 const HomepageTopNames = () => {
@@ -64,9 +62,33 @@ const HomepageTopNames = () => {
         <ul className="hero__top-auditors-list">
           {topAuditors.map((auditor) => (
             <li key={auditor.name} className="hero__top-auditor">
-              <span className="hero__top-auditor-name">{auditor.name}</span>
+              {auditor.link ? (
+                <a
+                  href={auditor.link}
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label={auditor.name + " (Opens in a new window)"}
+                  className="hero__top-auditor-name"
+                >
+                  {auditor.name}
+                  <span className="hero__top-auditor-link-arrow">↗</span>
+                </a>
+              ) : (
+                <span className="hero__top-auditor-name">{auditor.name}</span>
+              )}
             </li>
           ))}
+          <li>
+            <a
+              href="https://www.youtube.com/watch?v=QH2-TGUlwu4"
+              target="_blank"
+              rel="noreferrer"
+              aria-label="Join them (Opens in a new window)"
+              className="button--tertiary"
+            >
+              Join them
+            </a>
+          </li>
         </ul>
       </div>
     </div>
