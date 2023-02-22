@@ -27,15 +27,16 @@ const TextArea = ({
         <Tab>Preview</Tab>
       </TabList>
       <TabPanel>
-        <div className={clsx(styles.Widget__TextAreaContainer)}>
+        <div className={clsx("Widget__TextAreaContainer")}>
           <textarea
             className={clsx(
-              styles.Widget__Control,
-              styles.Widget__Text,
-              styles.Widget__Textarea,
+              "Widget__Control",
+              "Widget__Text",
+              "Widget__Textarea",
               isInvalid && "input-error"
             )}
             name={name}
+            aria-describedby={name + "--error"}
             onChange={handleChange}
             required={required}
             value={fieldState}
@@ -43,7 +44,7 @@ const TextArea = ({
           />
 
           {maxSize && fieldState.length > maxSize - 100 ? (
-            <span className={clsx(styles.Widget__TextAreaCounter)}>
+            <span className={clsx("Widget__TextAreaCounter")}>
               {maxSize - fieldState.length} char. remaining
             </span>
           ) : (
@@ -53,7 +54,7 @@ const TextArea = ({
       </TabPanel>
       <TabPanel>
         <ReactMarkdown
-          className={clsx(styles.Widget__Control, styles.Widget__Markdown)}
+          className={clsx("Widget__Control", "Widget__Markdown")}
           remarkPlugins={[remarkGfm, remarkBreaks, remarkMath]}
           rehypePlugins={[rehypeKatex]}
         >

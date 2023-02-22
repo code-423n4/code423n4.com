@@ -1,0 +1,51 @@
+@import "../variables";
+
+// CSS rule order
+// --------------------
+
+// 1. Variables
+// 2. Box model properties
+// 3. Display and position
+// 4. Background
+// 5. Border
+// 6. Box shadow
+// 7. Text
+// 8. Transforms
+// 9. Other
+
+@mixin form-element {
+  display: block;
+  width: 100%;
+  padding: $spacing__s;
+  border: 1px solid $color__n-60;
+  border-radius: $border-radius__m;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: $color__white;
+  background-color: $color__n-60;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+
+  &:focus {
+    border-color: $color__button-blurple;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba($color__button-blurple, 0.25);
+  }
+  &:disabled {
+    background-color: $color__n-70;
+    border-color: $color__n-70;
+    color: $color__n-40;
+  }
+  &::placeholder {
+    color: $color__n-20;
+  }
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="tel"],
+input[type="number"],
+input[type="search"],
+textarea {
+  @include form-element;
+}

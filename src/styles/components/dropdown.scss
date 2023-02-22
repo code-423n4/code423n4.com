@@ -46,7 +46,7 @@
 }
 
 .dropdown__dropdown-list {
-  background: var(--dark-purple);
+  background: $color__n-90;
   border-radius: 6px;
   padding: 10px;
   width: 100%;
@@ -55,9 +55,8 @@
 }
 
 .dropdown__button {
-  @include button;
   color: #fff;
-  background: var(--dark-purple);
+  background: $color__n-90;
   text-align: left;
   margin: 0;
   padding: 10px;
@@ -67,7 +66,7 @@
   text-transform: none;
 
   &:hover {
-    background: var(--main-purple);
+    background: $color__n-90;
     color: white;
   }
 }

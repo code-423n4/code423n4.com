@@ -113,6 +113,7 @@ export function Input({
             isInvalid && styles.Input__InputError
           )}
           name={name}
+          aria-describedby={name + "--error"}
           placeholder={placeholder || ""}
           type={type || "text"}
           value={value}
@@ -157,9 +158,9 @@ export function Input({
       </div>
       {isInvalid &&
         validationErrors.map((validationError) => (
-          <label htmlFor={name} className={styles.Input__ErrorMessage}>
+          <div id={name + "--error"} className={"form-field__error"}>
             {validationError}
-          </label>
+          </div>
         ))}
     </div>
   );

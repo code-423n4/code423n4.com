@@ -62,6 +62,7 @@ export default function RegistrationFormCommonFields({
           </>
         }
         name="username"
+        aria-describedby={"username--error"}
         placeholder="Username"
         value={username}
         handleChange={handleChange}
@@ -73,6 +74,7 @@ export default function RegistrationFormCommonFields({
         label="Discord Username"
         required={true}
         name="discordUsername"
+        aria-describedby={"discordUsername--error"}
         helpText="Used in case we need to contact you about your submissions or winnings."
         placeholder="Warden#1234"
         value={discordUsername}
@@ -85,6 +87,7 @@ export default function RegistrationFormCommonFields({
         required={true}
         helpText="Used for sending confirmation emails for each of your submissions."
         name="emailAddress"
+        aria-describedby={"emailAddress--error"}
         placeholder="warden@email.com"
         value={emailAddress}
         handleChange={handleChange}
@@ -94,6 +97,7 @@ export default function RegistrationFormCommonFields({
         label="Password"
         required={true}
         name="password"
+        aria-describedby={"password--error"}
         placeholder="Password"
         type="password"
         value={password}
@@ -105,6 +109,7 @@ export default function RegistrationFormCommonFields({
         label="Confirm Password"
         required={true}
         name="confirmPassword"
+        aria-describedby={"confirmPassword--error"}
         placeholder="Password"
         type="password"
         value={confirmPassword}
@@ -117,6 +122,7 @@ export default function RegistrationFormCommonFields({
         required={false}
         helpText="Used in case we need to give you access to certain repositories."
         name="gitHubUsername"
+        aria-describedby={"gitHubUsername--error"}
         placeholder="Username"
         value={gitHubUsername}
         handleChange={handleChange}
@@ -126,6 +132,7 @@ export default function RegistrationFormCommonFields({
         required={false}
         helpText="Link your leaderboard entry to a personal website or social media account."
         name="link"
+        aria-describedby={"link--error"}
         placeholder="https://twitter.com/code4rena"
         value={link || ""}
         handleChange={handleChange}
@@ -141,6 +148,7 @@ export default function RegistrationFormCommonFields({
         type="file"
         id="avatar"
         name="avatar"
+        aria-describedby={"avatar--error"}
         accept=".png,.jpg,.jpeg,.webp"
         // @ts-ignore // @todo: fix typescript error
         ref={avatarInputRef}

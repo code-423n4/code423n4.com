@@ -162,29 +162,14 @@
 // --------------------------------------------------
 .login__button-wrapper {
   display: inline-block;
-  padding-left: 10px;
+  padding-left: $spacing__s;
   border-left: 3px solid var(--main-purple);
-  margin-left: 10px;
+  margin-left: $spacing__s;
 }
 
 .login__button {
   display: flex;
   align-items: center;
-  text-align: right;
-  margin: 0 10px;
-  color: white;
-  font-weight: 800;
-  font-family: "Roboto", sans-serif;
-  text-transform: uppercase;
-  text-decoration: none;
-  background: transparent;
-  border: none;
-  padding: 0;
-  font-size: 16px;
-
-  &:hover {
-    color: var(--light-purple);
-  }
 }
 
 .login__no-dropdown {
@@ -195,35 +180,15 @@
   justify-content: center;
   margin-top: 20px;
   margin-bottom: 20px;
-  @media (max-width: 970px) {
-    flex-direction: column;
+  flex-direction: column;
+  @include breakpoint("m") {
+    flex-direction: row;
   }
 }
 
 .login__button--smaller {
   display: flex;
   align-items: center;
-}
-
-// TODO is this used?
-.login__button-margin {
-  @media (max-width: 970px) {
-    margin-bottom: 10px;
-  }
-}
-
-.login__desktop {
-  @media (max-width: 970px) {
-    display: none;
-  }
-}
-
-.login__mobile {
-  border-top: 2px solid var(--main-purple);
-  width: 100%;
-  @media (min-width: 970px) {
-    display: none;
-  }
 }
 
 .login__icon {
@@ -242,9 +207,6 @@
   max-width: 100%;
   height: 0;
   border-top: 2px solid var(--border-lightest-background);
-  @media (max-width: 970px) {
-    margin: 15px;
-  }
 }
 
 .user-dropdown__user-dropdown-wrapper {
@@ -296,20 +258,6 @@
 
 .user-dropdown__caret {
   padding-left: 5px;
-}
-
-.user-dropdown__desktop {
-  @media (max-width: 970px) {
-    display: none;
-  }
-}
-
-.user-dropdown__mobile {
-  @media (min-width: 970px) {
-    display: none;
-  }
-  border-top: 2px solid var(--main-purple);
-  width: 100%;
 }
 
 .user-dropdown__mobile-menu-item {

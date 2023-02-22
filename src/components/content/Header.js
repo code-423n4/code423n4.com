@@ -67,7 +67,6 @@ const Header = ({ hideConnectWalletDropdown = false }) => {
           <div className="header__nav-buttons">
             {!hideConnectWalletDropdown &&
               (currentUser.isLoggedIn ? <UserDropdown /> : <Login />)}
-            <Button to="/type-test">Type Test</Button>
           </div>
         </div>
       </nav>

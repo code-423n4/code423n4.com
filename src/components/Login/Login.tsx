@@ -188,15 +188,14 @@ const Login = ({ displayAsButtons = false }) => {
         <>
           <Dropdown
             wrapperClass={"login__button-wrapper"}
-            triggerButtonClass={"login__button"}
+            triggerButtonClass={"button login__button"}
             triggerButton="Connect"
             openOnHover={true}
-            className={"login__desktop"}
           >
             <button
               type="button"
               onClick={(e) => handleLogin(e)}
-              className={clsx("dropdown__button", "login__desktop")}
+              className={clsx("dropdown__button")}
             >
               <img
                 src="/images/meta-mask-logo.svg"
@@ -208,7 +207,7 @@ const Login = ({ displayAsButtons = false }) => {
             <button
               type="button"
               onClick={(e) => handleLogin(e, "walletConnect")}
-              className={clsx("dropdown__button", "login__desktop")}
+              className={clsx("dropdown__button")}
             >
               <img
                 src="/images/wallet-connect-logo.svg"
@@ -218,7 +217,7 @@ const Login = ({ displayAsButtons = false }) => {
               WalletConnect
             </button>
             <button
-              className={clsx("dropdown__button", "login__desktop")}
+              className={clsx("dropdown__button")}
               type="button"
               onClick={openLoginModal}
             >
@@ -230,42 +229,6 @@ const Login = ({ displayAsButtons = false }) => {
               Log in
             </button>
           </Dropdown>
-          <div className={"login__mobile"}>
-            <a
-              href=""
-              target="_blank"
-              rel="noreferrer"
-              onClick={(e) => handleLogin(e)}
-              className={"login__link"}
-            >
-              <img
-                src="/images/meta-mask-logo.svg"
-                alt="logout icon"
-                className={"login__icon"}
-              />
-              Connect MetaMask
-            </a>
-            <a
-              href=""
-              onClick={(e) => handleLogin(e, "walletConnect")}
-              className={"login__link"}
-            >
-              <img
-                src="/images/wallet-connect-logo.svg"
-                alt="logout icon"
-                className={"login__icon"}
-              />
-              Connect WalletConnect
-            </a>
-            <a href="" className={"login__link"} onClick={openLoginModal}>
-              <img
-                src="/images/sign-out.svg"
-                alt="login icon"
-                className={"login__icon"}
-              />
-              Log in
-            </a>
-          </div>
         </>
       )}
     </>
