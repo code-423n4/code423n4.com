@@ -154,6 +154,7 @@ const ReportForm = ({ data, location }) => {
         ).toString(CryptoJS.enc.Utf8) === currentIp
       ) {
         window.alert("Can't submit twice with different username.");
+        // handle better with code to give to C.A.
         return;
       } else {
         return fetch(`/.netlify/functions/${endpoint}`, {
