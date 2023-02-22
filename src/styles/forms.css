@@ -214,3 +214,20 @@ label {
     padding: 30px 15px;
   }
 }
+
+/* ***************** Newsletter Signup ** */
+
+.newsletter-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.newsletter-form label {
+  margin-bottom: 10px;
+  display: block;
+}
+
+.ap3w-button a {
+  height: auto !important;
+}
