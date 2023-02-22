@@ -19,9 +19,12 @@ footer a::after {
   padding: 0 5px;
 }
 
-footer span::after,
-footer a:nth-child(-n + 3)::after {
+footer > a::after {
   content: " // ";
+}
+
+footer a:last-of-type::after {
+  content: "";
 }
 
 footer span::after {
@@ -61,5 +64,12 @@ footer span:last-of-type::after {
   (min-device-width: 768px) and (max-device-width: 1024px) {
   footer {
     margin-top: 20px;
+  }
+  footer span:last-of-type {
+    padding: 0 20px;
+  }
+  footer span:first-of-type {
+    display: block;
+    margin-bottom: 10px;
   }
 }
