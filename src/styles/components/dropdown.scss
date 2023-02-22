@@ -17,11 +17,11 @@
 // 8. Transforms
 // 9. Other
 
-.Dropdown__Wrapper {
+.dropdown__wrapper {
   position: relative;
 }
 
-.Dropdown__DropdownListContainer {
+.dropdown__dropdown-list-container {
   visibility: hidden;
   position: absolute;
   top: 100%;
@@ -37,7 +37,7 @@
   flex-direction: column;
   align-items: flex-start;
 
-  &.Dropdown__Open {
+  &.dropdown__open {
     visibility: visible;
     opacity: 1;
     z-index: 1;
@@ -45,7 +45,7 @@
   }
 }
 
-.Dropdown__DropdownList {
+.dropdown__dropdown-list {
   background: var(--dark-purple);
   border-radius: 6px;
   padding: 10px;
@@ -72,7 +72,7 @@
   }
 }
 
-.Dropdown__DropdownIcon {
+.dropdown__dropdown-icon {
   stroke: currentColor;
   fill: currentColor;
   display: inline-flex;
@@ -82,7 +82,7 @@
     box-shadow: none;
   }
 
-  &.Dropdown__Open {
+  &.dropdown__open {
     transform: rotate(-180deg);
     transition: transform 150ms ease;
   }

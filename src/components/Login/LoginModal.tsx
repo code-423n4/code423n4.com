@@ -10,9 +10,6 @@ import useUser from "../../hooks/UserContext";
 // components
 import { Input } from "../Input";
 
-// styles
-import * as styles from "../../styles/Main.module.scss";
-
 const LoginModal = () => {
   const { Moralis } = useMoralis();
   const { hideModal, modalProps } = useModalContext();
@@ -186,7 +183,7 @@ const LoginModal = () => {
                 {isLoading ? "Submitting..." : "Log in"}
               </button>
             </div>
-            <div className={styles.login__dividing - line}></div>
+            <div className={"login__dividing-line"}></div>
             <span>
               Not a warden yet?{" "}
               <Link to="/register" onClick={handleClose}>

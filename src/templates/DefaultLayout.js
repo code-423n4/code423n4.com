@@ -28,9 +28,9 @@ const DefaultLayout = (props) => {
         pageTitle={pageTitle}
       >
         <Header hideConnectWalletDropdown={hideConnectWalletDropdown} />
-        {/* <ToastContainer /> */}
-        {/* <Modal /> */}
-        {/* <LoginModal /> */}
+        <ToastContainer />
+        <Modal />
+        <LoginModal />
         <main>{children}</main>
         <Footer />
       </WrapperLayout>
