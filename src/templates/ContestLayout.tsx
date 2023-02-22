@@ -31,7 +31,7 @@ enum FindingsStatus {
   Success = "success",
 }
 
-const ContestLayout = (props) => {
+const ContestLayout = ({ data }) => {
   // state
   const [artOpen, setArtOpen] = useState(false);
   const [findingsList, setFindingsList] = useState<FindingsResponse>({
@@ -44,6 +44,7 @@ const ContestLayout = (props) => {
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [canViewContest, setCanViewContest] = useState<boolean>(false);
   const [leaderboardResults, setLeaderboardResults] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   // hooks
   const { currentUser } = useUser();
@@ -59,9 +60,9 @@ const ContestLayout = (props) => {
     start_time,
     end_time,
     contestid,
-  } = props.data.contestsCsv;
+  } = data.contestsCsv;
 
-  const { markdownRemark } = props.data;
+  const { markdownRemark } = data;
 
   const t = getDates(start_time, end_time);
   const dateDescription = `${amount}\n${t.startDay}—${t.endDay}`;
@@ -72,7 +73,7 @@ const ContestLayout = (props) => {
   if (canViewReport) {
     reportUrl = markdownRemark.frontmatter.altUrl
       ? markdownRemark.frontmatter.altUrl
-      : `/reports/${props.data.markdownRemark.frontmatter.slug}`;
+      : `/reports/${data.markdownRemark.frontmatter.slug}`;
   }
 
   useEffect(() => {
@@ -122,19 +123,25 @@ const ContestLayout = (props) => {
   // get contest leaderboard results
   useEffect(() => {
     (async () => {
-      const result = await fetch(`/.netlify/functions/leaderboard?contest=${contestid}`, {
-        headers: {
-          "Content-Type": "application/json",
-          // "X-Authorization": `Bearer ${sessionToken}`,
-          // "C4-User": currentUser.username,
-        },
-      });
+      const result = await fetch(
+        `/.netlify/functions/leaderboard?contest=${contestid}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            // "X-Authorization": `Bearer ${sessionToken}`,
+            // "C4-User": currentUser.username,
+          },
+          body: JSON.stringify([{ node: data.contestsCsv }]),
+        }
+      );
       if (result.ok) {
         setLeaderboardResults(await result.json());
       } else {
         // @TODO: what to do here?
         throw "Unable to fetch leaderboard results.";
       }
+      setIsLoading(false);
     })();
   }, [contestid]);
 
@@ -238,9 +245,7 @@ const ContestLayout = (props) => {
         <section>
           <Tabs className="contest-tabs">
             <TabList>
-              {t.contestStatus === "completed" && (
-                <Tab>Results</Tab>
-              )}
+              {t.contestStatus === "completed" && <Tab>Results</Tab>}
               <Tab>Details</Tab>
               {t.contestStatus === "active" && <Tab>Findings</Tab>}
             </TabList>
@@ -248,7 +253,10 @@ const ContestLayout = (props) => {
             {t.contestStatus === "completed" && (
               <TabPanel>
                 <div className="contest-wrapper">
-                  <LeaderboardTable results={leaderboardResults} />
+                  <LeaderboardTable
+                    results={leaderboardResults}
+                    isLoading={isLoading}
+                  />
                 </div>
               </TabPanel>
             )}
@@ -271,7 +279,10 @@ const ContestLayout = (props) => {
                 ) : (
                   <article>
                     <ReactMarkdown
-                      className={clsx(styles.Widget__Control, styles.Widget__Markdown)}
+                      className={clsx(
+                        styles.Widget__Control,
+                        styles.Widget__Markdown
+                      )}
                       remarkPlugins={[remarkGfm, remarkBreaks, remarkMath]}
                       rehypePlugins={[rehypeKatex]}
                     >
@@ -330,10 +341,10 @@ export default ContestLayout;
 
 export const query = graphql`
   query contestLayoutQuery($contestId: Int) {
-    markdownRemark(
-      frontmatter: { contest: { contestid: { eq: $contestId } } }
+    markdownRemark: reportsJson(
+      circa: { contest: { contestid: { eq: $contestId } } }
     ) {
-      frontmatter {
+      frontmatter: circa {
         altUrl
         slug
         title
