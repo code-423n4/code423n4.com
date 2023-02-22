@@ -4,18 +4,17 @@ import React, { ReactNode, useCallback, useState } from "react";
 
 import Select from "react-select";
 
-import * as styles from "./WardenField.module.scss";
-import * as inputStyles from "../../Input.module.scss";
+import * as styles from "../../../styles/Main.module.scss";
 
 const WardenOptionLabel = ({ value, image }) => {
   return (
-    <div className={styles.OptionContainer}>
+    <div className={styles.WardenField__OptionContainer}>
       <Avatar
         src={image ? image.childImageSharp.resize.src : ""}
         name={value}
         size="27px"
         round="27px"
-        className={styles.Avatar}
+        className={styles.WardenField__Avatar}
       />
       <span>{value}</span>
     </div>
@@ -96,11 +95,11 @@ const WardenField = ({
   return (
     <div>
       {label && (
-        <label className={inputStyles.Label} htmlFor={name}>
+        <label className={styles.Input__Label} htmlFor={name}>
           {required ? label + " *" : label}
         </label>
       )}
-      {helpText && <p className={inputStyles.Help}>{helpText}</p>}
+      {helpText && <p className={styles.Input__Help}>{helpText}</p>}
       <Select
         name={name}
         required={required}
@@ -112,7 +111,7 @@ const WardenField = ({
         formatOptionLabel={WardenOptionLabel}
         options={options}
         onChange={handleChange}
-        className={clsx(styles.ReactSelect, isInvalid && styles.Invalid)}
+        className={clsx(styles.ReactSelect, isInvalid && styles.WardenField__Invalid)}
         classNamePrefix="react-select"
         isClearable={true}
         isMulti={isMulti}
@@ -120,7 +119,7 @@ const WardenField = ({
       />
       {isInvalid &&
         validationErrors.map((validationError) => (
-          <label htmlFor={name} className={inputStyles.ErrorMessage}>
+          <label htmlFor={name} className={styles.Input__ErrorMessage}>
             {validationError}
           </label>
         ))}

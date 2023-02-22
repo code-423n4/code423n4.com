@@ -8,7 +8,6 @@ import DefaultLayout from "../../templates/DefaultLayout";
 
 export default function Contests({ data }) {
   const { currentUser } = useUser();
-
   const [filteredContests, setFilteredContest] = useState(null);
   const [contestStatusChanges, updateContestStatusChanges] = useState(0);
   const contests = data.contests.edges;
@@ -17,7 +16,7 @@ export default function Contests({ data }) {
     // force react to rehydrate
     updateContestStatusChanges(contestStatusChanges + 1);
     setFilteredContest(sortContests(contests));
-  }, [contests]);
+  }, [contests, contestStatusChanges]);
 
   const sortContests = (contestArray) => {
     let statusObject = {

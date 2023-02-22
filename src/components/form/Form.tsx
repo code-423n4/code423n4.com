@@ -1,6 +1,6 @@
 import React, { ReactNode, useState } from "react";
 
-import * as styles from "./Form.module.scss";
+import * as styles from "../../styles/Main.module.scss";
 
 enum FormStatus {
   Unsubmitted = "unsubmitted",
@@ -58,8 +58,8 @@ const Form = ({
   };
 
   return (
-    <div className={styles.Form}>
-      {title && <h1 className={styles.Heading1}>{title}</h1>}
+    <div className={styles.Form__Form}>
+      {title && <h1 className={styles.Form__Heading1}>{title}</h1>}
       {(status === FormStatus.Unsubmitted ||
         status === FormStatus.Submitting) && (
         <form>

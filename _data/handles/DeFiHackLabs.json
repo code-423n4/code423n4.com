@@ -1,0 +1,32 @@
+{
+  "handle": "DeFiHackLabs",
+  "members": [
+    "SunSec",
+    "gbaleee",
+    "Punishell",
+    "0xAWM",
+    "solenya",
+    "Cache_and_Burn",
+    "xiaohuo",
+    "spark",
+    "secoalba",
+    "0x4non",
+    "SentientX",
+    "Aits",
+    "zuhaibmohd",
+    "Xyymeeth",
+    "sayan",
+    "Ronin"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x4276BF06Aebd8A1F3D89a1fd5BF84bFa1B7D03Ce"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x4276BF06Aebd8A1F3D89a1fd5BF84bFa1B7D03Ce"
+    }
+  ],
+  "image": "./avatars/DeFiHackLabs.png"
+}
