@@ -1,3 +1,4 @@
+import { Link } from "gatsby";
 import React from "react";
 
 const Footer = () => {
@@ -13,6 +14,9 @@ const Footer = () => {
         </li>
         <li className="footer__item">
           <a href="https://github.com/code-423n4/">GitHub</a>
+        </li>
+        <li className="footer__item">
+          <Link to="/newsletter-signup">Newsletter</Link>
         </li>
         <li className="footer__item">
           <span className="eth-address">
