@@ -33,6 +33,9 @@ $color__blurple-40: hsl(255, 52.2%, 26.3%);
 // Green palette
 $color__green: hsl(144, 58%, 59%);
 
+// Red palette
+$color__red: hsl(342, 100%, 63%);
+
 // Brand colors
 $color__button-blurple: $color__blurple-90;
 $color__button-blurple--hover: #8963ff;
@@ -48,6 +51,9 @@ $color__background: $color__n-100;
 // Text
 $color__text: $color__n-20;
 $color__headline: $color__white;
+
+// Forms
+$color__form-error: $color__red;
 
 // 🍔 TODO add default font sizes and em spacing
 
@@ -104,6 +110,7 @@ $breakpoint__xl: 1920px;
 $layout__max-width: 1100px;
 $report__max-width: 900px;
 $contest__max-width: 900px;
+$form__max-width: 900px;
 
 // Shadows
 // ------------------------------------------------

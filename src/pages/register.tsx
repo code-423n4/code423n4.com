@@ -53,9 +53,9 @@ export default function UserRegistration({ data }) {
       pageTitle="Registration | Code 423n4"
       hideConnectWalletDropdown={true}
     >
-      <div className="limited-width">
-        <div className={styles.Form__Form}>
-          <h1 className={styles.Form__Heading1}>Warden Registration</h1>
+      <div className="limited-width register">
+        <div className="Form__Form">
+          <h1>Warden Registration</h1>
           <RegistrationForm handles={handles} />
         </div>
       </div>

@@ -426,14 +426,18 @@ export default function RegistrationForm({ handles }) {
             </a>
           </p>
           <Tabs className="form-tab">
-            <TabList>
-              <Tab onClick={() => setRegistrationType(RegistrationType.Wallet)}>
+            <TabList className="secondary-nav">
+              <Tab
+                onClick={() => setRegistrationType(RegistrationType.Wallet)}
+                className="secondary-nav__item"
+              >
                 Register with Wallet
               </Tab>
               <Tab
                 onClick={() =>
                   setRegistrationType(RegistrationType.UsernameAndPassword)
                 }
+                className="secondary-nav__item"
               >
                 Register with Password
               </Tab>
@@ -464,7 +468,6 @@ export default function RegistrationForm({ handles }) {
                   className={styles.Widget__RadioLabel}
                 >
                   <input
-                    className={styles.Widget__Checkbox}
                     type="checkbox"
                     id="useCustomPaymentAddress"
                     name="useCustomPaymentAddress"
@@ -472,20 +475,20 @@ export default function RegistrationForm({ handles }) {
                     onChange={toggleUseCustomPaymentAddress}
                   />
                   Use my wallet address for payment on Polygon
+                  {state.useCustomPaymentAddress && (
+                    <Input
+                      label="Polygon Address"
+                      helpText="Polygon address where we should send your awards"
+                      required={true}
+                      handleChange={handleChange}
+                      value={state.polygonAddress}
+                      name="polygonAddress"
+                      validator={customPaymentAddressValidator}
+                      forceValidation={status === FormStatus.SubmitAttempted}
+                      maxLength={42}
+                    />
+                  )}
                 </label>
-                {state.useCustomPaymentAddress && (
-                  <Input
-                    label="Polygon Address"
-                    helpText="Polygon address where we should send your awards"
-                    required={true}
-                    handleChange={handleChange}
-                    value={state.polygonAddress}
-                    name="polygonAddress"
-                    validator={customPaymentAddressValidator}
-                    forceValidation={status === FormStatus.SubmitAttempted}
-                    maxLength={42}
-                  />
-                )}
               </form>
             </TabPanel>
             <TabPanel>

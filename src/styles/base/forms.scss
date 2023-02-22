@@ -13,6 +13,7 @@
 // 8. Transforms
 // 9. Other
 
+// TODO: Should this go in variables
 @mixin form-element {
   display: block;
   width: 100%;
@@ -39,7 +40,6 @@
     color: $color__n-20;
   }
 }
-
 input[type="text"],
 input[type="password"],
 input[type="email"],
@@ -49,3 +49,118 @@ input[type="search"],
 textarea {
   @include form-element;
 }
+
+// Default Spacing
+// --------------------
+
+form {
+  p {
+    margin-bottom: $spacing__s;
+  }
+  > div {
+    margin-bottom: $spacing__l;
+  }
+}
+
+// Default Labels
+// --------------------
+
+form {
+  label {
+    padding-bottom: $spacing__s;
+    display: block;
+    color: $color__white;
+    font-weight: 600;
+
+    &:has(~ p) {
+      padding-bottom: 0;
+    }
+
+    ~ p {
+      padding-top: 0;
+      font-size: $font-size__small;
+    }
+  }
+}
+
+// Default Errors
+// --------------------
+
+// TODO: This could be better with more javascript and less reliance on has()
+form > div:has(.form-field__error) {
+  input[type="text"],
+  input[type="password"],
+  input[type="email"],
+  input[type="tel"],
+  input[type="number"],
+  input[type="search"],
+  textarea {
+    border-color: $color__form-error;
+  }
+}
+.form-field__error {
+  margin-top: $spacing__s;
+}
+
+// TODO - Finish this
+
+// Checkboxes
+// --------------------
+// How to use:
+//
+// div.checkbox
+//   input
+//   label
+
+// .checkbox {
+//   margin: $spacing__l 0 $spacing__s 0;
+// }
+
+// .checkbox input[type="checkbox"] {
+//   opacity: 0;
+// }
+
+// .checkbox label {
+//   position: relative;
+//   display: inline-block;
+//   padding-left: $spacing__l;
+// }
+
+// .checkbox label::before,
+// .checkbox label::after {
+//   position: absolute;
+//   content: "";
+//   display: inline-block;
+// }
+
+// // Outer checkbox
+// .checkbox label::before {
+//   height: $spacing__m;
+//   width: $spacing__m;
+
+//   border: 1px solid;
+//   left: 0px;
+//   top: $spacing__xs;
+// }
+
+// .checkbox label::after {
+//   height: 0.3125rem;
+//   width: 0.5625rem;
+//   border-left: $spacing__xxs solid;
+//   border-bottom: $spacing__xxs solid;
+
+//   transform: rotate(-45deg);
+
+//   left: 4px;
+//   top: $spacing__s;
+// }
+
+// .checkbox input[type="checkbox"] + label::after {
+//   content: none;
+// }
+// .checkbox input[type="checkbox"]:checked + label::after {
+//   content: "";
+// }
+// .checkbox input[type="checkbox"]:focus + label::before {
+//   outline: rgb(59, 153, 252) auto 0.3125rem;
+// }
