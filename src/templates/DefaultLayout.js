@@ -1,7 +1,6 @@
 import React from "react";
-import Helmet from "react-helmet";
 import { ToastContainer } from "react-toastify";
-import "../styles/_global.scss";
+import "react-toastify/dist/ReactToastify.css";
 
 import Footer from "../components/content/Footer";
 import Header from "../components/content/Header";

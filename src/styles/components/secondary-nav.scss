@@ -26,6 +26,8 @@ li.secondary-nav__item {
   line-height: 130%;
   text-decoration: none;
 
+  cursor: pointer;
+
   &.active,
   &.react-tabs__tab--selected {
     color: $color__white;

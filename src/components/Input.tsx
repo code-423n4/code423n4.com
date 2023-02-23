@@ -1,8 +1,6 @@
 import clsx from "clsx";
 import React, { ReactNode, useCallback, useEffect, useState } from "react";
 
-import * as styles from "../styles/Main.module.scss";
-
 // @todo: replace TextField widgets with this component
 
 interface InputProps {
@@ -98,19 +96,19 @@ export function Input({
   };
 
   return (
-    <div className={styles.Input__Input}>
+    <div className="input__input">
       {label && (
-        <label className={styles.Input__Label} htmlFor={name}>
+        <label className={"input__label"} htmlFor={name}>
           {required ? label + " *" : label + " (Optional)"}
         </label>
       )}
-      {helpText && <p className={styles.Input__Help}>{helpText}</p>}
-      <div className={styles.Input__InputWrapper}>
+      {helpText && <p className={"input__help"}>{helpText}</p>}
+      <div className={"input__input-wrapper"}>
         <input
           className={clsx(
-            styles.Input__Control,
-            styles.Input__Text,
-            isInvalid && styles.Input__InputError
+            "input__control",
+            "input__text",
+            isInvalid && "input__input-error"
           )}
           name={name}
           aria-describedby={name + "--error"}
@@ -125,7 +123,7 @@ export function Input({
         />
         {canRemove && handleRemoveInputField && (
           <button
-            className={styles.Input__RemoveButton}
+            className={"input__remove-button"}
             type="button"
             onClick={() => handleRemoveInputField(name)}
             aria-label="Remove this field"
@@ -139,8 +137,8 @@ export function Input({
             onClick={handleEditOrSaveClick}
             aria-label="Edit this field"
             className={clsx(
-              styles.Input__SmallButton,
-              isEditing ? styles.Input__SaveButton : styles.Input__EditButton
+              "input__small-button",
+              isEditing ? "input__save-button" : "input__edit-button"
             )}
           >
             {isEditing ? "Save" : "Edit"}
@@ -148,7 +146,7 @@ export function Input({
         )}
         {button && handleButtonClick && (
           <button
-            className={styles.Input__RemoveButton}
+            className={"input__remove-button"}
             type="button"
             onClick={() => handleButtonClick(value)}
           >

@@ -254,7 +254,7 @@ const ContestLayout = ({ data }) => {
               )}
               <Tab className="secondary-nav__item">Details</Tab>
               {t.contestStatus === "active" && (
-                <Tab className="secondary-nav__item">Findings</Tab>
+                <Tab className="secondary-nav__item">Your Findings</Tab>
               )}
             </TabList>
 

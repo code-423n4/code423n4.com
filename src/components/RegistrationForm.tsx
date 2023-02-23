@@ -465,7 +465,7 @@ export default function RegistrationForm({ handles }) {
                 />
                 <label
                   htmlFor="useCustomPaymentAddress"
-                  className={styles.Widget__RadioLabel}
+                  className="Widget__RadioLabel"
                 >
                   <input
                     type="checkbox"
@@ -534,14 +534,14 @@ export default function RegistrationForm({ handles }) {
             />
           </div>
           <Agreement />
-          <div className={styles.Form__ButtonsWrapper}>
+          <div className="Form__ButtonsWrapper">
             {status === FormStatus.Submitting ? (
-              <span className={clsx("button cta-button", styles.Form__Button)}>
+              <span className={clsx("button button--primary")}>
                 Submitting...
               </span>
             ) : registrationType === RegistrationType.UsernameAndPassword ? (
               <button
-                className={clsx("button cta-button", styles.Form__Button)}
+                className={clsx("button button--primary")}
                 type="button"
                 onClick={() => submitRegistration()}
               >
@@ -550,14 +550,14 @@ export default function RegistrationForm({ handles }) {
             ) : (
               <>
                 <button
-                  className={clsx("button cta-button", styles.Form__Button)}
+                  className={clsx("button button--primary")}
                   type="button"
                   onClick={() => submitRegistration("metamask")}
                 >
                   Register with MetaMask
                 </button>
                 <button
-                  className={clsx("button cta-button", styles.Form__Button)}
+                  className={clsx("button button--primary")}
                   type="button"
                   onClick={() => submitRegistration("walletConnect")}
                 >

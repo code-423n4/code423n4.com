@@ -218,7 +218,7 @@ h6 {
   text-transform: none;
   margin-bottom: 0.3em;
   @include breakpoint("m") {
-    font-size: $headline-font-size__xxl;
+    font-size: $headline-font-size__xl;
   }
 }
 //TODO this is currently unused
