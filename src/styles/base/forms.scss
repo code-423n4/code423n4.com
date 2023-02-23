@@ -13,7 +13,7 @@
 // 8. Transforms
 // 9. Other
 
-// TODO: Should this go in variables
+// TODO: Should this go in variables?
 @mixin form-element {
   display: block;
   width: 100%;
@@ -57,7 +57,11 @@ form {
   p {
     margin-bottom: $spacing__s;
   }
+  // TODO: replace these with fieldsets in the html, then remove this
   > div {
+    margin-bottom: $spacing__l;
+  }
+  > fieldset {
     margin-bottom: $spacing__l;
   }
 }
@@ -72,6 +76,7 @@ form {
     color: $color__white;
     font-weight: 600;
 
+    // Firefox doesn't support :has() yet
     &:has(~ p) {
       padding-bottom: 0;
     }
@@ -102,11 +107,17 @@ form > div:has(.form-field__error) {
   margin-top: $spacing__s;
 }
 
-// TODO - Finish this
-
 // Checkboxes
 // --------------------
+
+input[type="checkbox"] {
+  display: inline-block;
+  margin-right: $spacing__s;
+}
+
 // How to use:
+//
+// TODO - Finish this
 //
 // div.checkbox
 //   input

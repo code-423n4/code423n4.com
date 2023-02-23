@@ -49,7 +49,7 @@ export default function RegistrationFormCommonFields({
         required={true}
         helpText={
           <>
-            <strong className={styles.Form__Heading4}>
+            <strong>
               Choose wisely! Your username cannot be changed later.
             </strong>
             <br />
@@ -137,33 +137,35 @@ export default function RegistrationFormCommonFields({
         value={link || ""}
         handleChange={handleChange}
       />
-      <label htmlFor="avatar" className={styles.Widget__Label}>
-        Avatar (Optional)
-      </label>
-      <p className={styles.Widget__Help}>
-        An avatar displayed next to your name on the leaderboard.
-      </p>
-      <input
-        className={styles.Widget__Avatar}
-        type="file"
-        id="avatar"
-        name="avatar"
-        aria-describedby={"avatar--error"}
-        accept=".png,.jpg,.jpeg,.webp"
-        // @ts-ignore // @todo: fix typescript error
-        ref={avatarInputRef}
-        onChange={handleAvatarChange}
-      />
-      {avatar && (
-        <button
-          className="remove-line-button"
-          type="button"
-          onClick={removeAvatar}
-          aria-label="Remove avatar"
-        >
-          &#x2715;
-        </button>
-      )}
+      <fieldset>
+        <label htmlFor="avatar" className={styles.Widget__Label}>
+          Avatar (Optional)
+        </label>
+        <p className={styles.Widget__Help}>
+          An avatar displayed next to your name on the leaderboard.
+        </p>
+        <input
+          className={"Widget__Avatar"}
+          type="file"
+          id="avatar"
+          name="avatar"
+          aria-describedby={"avatar--error"}
+          accept=".png,.jpg,.jpeg,.webp"
+          // @ts-ignore // @todo: fix typescript error
+          ref={avatarInputRef}
+          onChange={handleAvatarChange}
+        />
+        {avatar && (
+          <button
+            className="remove-line-button"
+            type="button"
+            onClick={removeAvatar}
+            aria-label="Remove avatar"
+          >
+            &#x2715;
+          </button>
+        )}
+      </fieldset>
     </>
   );
 }

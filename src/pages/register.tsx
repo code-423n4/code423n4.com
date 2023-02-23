@@ -9,8 +9,6 @@ import useUser from "../hooks/UserContext";
 import DefaultLayout from "../templates/DefaultLayout";
 import RegistrationForm from "../components/RegistrationForm";
 
-import * as styles from "../styles/Main.module.scss";
-
 export default function UserRegistration({ data }) {
   const handles = new Set(data.handles.edges.map((h) => h.node.handle));
   const [wardens, setWardens] = useState([]);
