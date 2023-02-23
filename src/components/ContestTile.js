@@ -59,6 +59,7 @@ const ContestTile = ({ contest, updateContestStatus, user }) => {
               </li>
               {t.contestStatus === "soon" || t.contestStatus === "active" ? (
                 <li className="contest-tile__countdown">
+                  {/* @todo: style these dates */}
                   {t.contestStatus === "active" && (
                     <span>Ends {t.endTime}</span>
                   )}
