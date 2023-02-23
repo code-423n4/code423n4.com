@@ -533,7 +533,9 @@ export default function RegistrationForm({ handles }) {
               onVerify={handleCaptchaVerification}
             />
           </div>
-          <Agreement />
+          <fieldset>
+            <Agreement />
+          </fieldset>
           <div className="Form__ButtonsWrapper">
             {status === FormStatus.Submitting ? (
               <span className={clsx("button button--primary")}>

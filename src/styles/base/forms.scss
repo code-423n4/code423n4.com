@@ -61,11 +61,10 @@ form {
   > div {
     margin-bottom: $spacing__l;
   }
-  > fieldset {
-    margin-bottom: $spacing__l;
-  }
 }
-
+fieldset {
+  margin: $spacing__m 0 $spacing__m;
+}
 // Default Labels
 // --------------------
 
