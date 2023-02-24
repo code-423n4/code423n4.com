@@ -6,10 +6,13 @@ const SponsorLink = ({ sponsor }) => {
   // This approach was suggested here: https://github.com/gatsbyjs/gatsby/discussions/17914
   // And the problem is explained well here: https://www.joshwcomeau.com/react/the-perils-of-rehydration/
   const [isClient, setIsClient] = useState(false);
-  
+
   useEffect(() => setIsClient(true), []);
 
   const getSponsorImg = () => {
+    if (!sponsor) {
+      return;
+    }
     if (sponsor.link) {
       return (
         <a href={sponsor.link}>

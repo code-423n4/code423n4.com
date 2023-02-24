@@ -49,7 +49,7 @@ const LeaderboardHandle = ({ handle, image, link, members }) => {
             {image ? (
               <a href={link ? link : "/"}>
                 <Avatar
-                  src={image && image.childImageSharp.resize.src}
+                  src={image}
                   name={handle}
                   size={mobileView === false ? "27px" : "16px"}
                   round={mobileView === false ? "27px" : "16px"}
@@ -75,9 +75,7 @@ const LeaderboardHandle = ({ handle, image, link, members }) => {
                 <div className="member team-identifier" key={member.handle}>
                   <a href={member.link}>
                     <Avatar
-                      src={
-                        member.image && member.image.childImageSharp.resize.src
-                      }
+                      src={member.image}
                       name={member.handle}
                       size={mobileView === false ? "25px" : "13px"}
                       round={mobileView === false ? "25px" : "8px"}
@@ -91,7 +89,7 @@ const LeaderboardHandle = ({ handle, image, link, members }) => {
       ) : (
         <a href={link}>
           <Avatar
-            src={image && image.childImageSharp.resize.src}
+            src={image}
             name={handle}
             size={mobileView === false ? "27px" : "16px"}
             round={mobileView === false ? "27px" : "16px"}

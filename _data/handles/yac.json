@@ -1,0 +1,20 @@
+{
+  "handle": "yac",
+  "members": [
+    "t4k",
+    "Peep",
+    "thebensams",
+    "devtooligan",
+    "blockdev",
+    "usmannk",
+    "sjkelleyjr",
+    "thraull",
+    "NibblerExpress"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x26CBbd3C29fa85A0C97269a556324bAcfA23d8f4"
+    }
+  ]
+}

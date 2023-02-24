@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import { graphql, navigate } from "gatsby";
-import Moralis from "moralis";
+import Moralis from "moralis-v1";
 import React, { useEffect, useState } from "react";
 import { useMoralis } from "react-moralis";
 
@@ -9,7 +9,7 @@ import useUser from "../hooks/UserContext";
 import DefaultLayout from "../templates/DefaultLayout";
 import RegistrationForm from "../components/RegistrationForm";
 
-import * as styles from "../components/form/Form.module.scss";
+import * as styles from "../styles/Main.module.scss";
 
 export default function UserRegistration({ data }) {
   const handles = new Set(data.handles.edges.map((h) => h.node.handle));
@@ -54,13 +54,9 @@ export default function UserRegistration({ data }) {
       hideConnectWalletDropdown={true}
     >
       <div className="wrapper-main">
-        <h1 className="page-header">Warden Registration</h1>
-        <div>
-          <RegistrationForm
-            className={clsx(styles.Form)}
-            handles={handles}
-            wardens={wardens}
-          />
+        <div className={styles.Form__Form}>
+          <h1 className={styles.Form__Heading1}>Warden Registration</h1>
+          <RegistrationForm handles={handles} />
         </div>
       </div>
     </DefaultLayout>
@@ -80,7 +76,7 @@ export const query = graphql`
           }
           image {
             childImageSharp {
-              resize(width: 64, quality: 90) {
+              resize(width: 80) {
                 src
               }
             }

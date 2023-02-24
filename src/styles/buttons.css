@@ -50,6 +50,10 @@
   background-color: var(--main-purple);
 }
 
+.cta-button.secondary.lowercase {
+  text-transform: none;
+}
+
 .cta-button.danger {
   background-color: transparent;
   color: #fff;
@@ -58,4 +62,21 @@
 
 .cta-button.danger:hover {
   background-color: var(--hot-pink);
+}
+
+@media (max-width: 600px) {
+  .button {
+    padding: 0.8em 1.5em;
+    font-size: 14px;
+  }
+
+  .button-medium {
+    padding: 0.5em 1em;
+    font-size: 14px;
+  }
+
+  .button-small {
+    font-size: 12px;
+    padding: 0.5em 1em;
+  }
 }

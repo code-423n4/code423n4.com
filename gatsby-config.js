@@ -27,20 +27,6 @@ const plugins = [
     },
   },
   {
-    resolve: `gatsby-source-filesystem`,
-    options: {
-      path: `${__dirname}/_data/contests/contests.csv`,
-      name: `contests`,
-    },
-  },
-  {
-    resolve: `gatsby-source-filesystem`,
-    options: {
-      path: `${__dirname}/_data/findings/findings.csv`,
-      name: `findings`,
-    },
-  },
-  {
     resolve: "gatsby-source-filesystem",
     options: {
       path: `${__dirname}/_data/pages`,
@@ -96,9 +82,8 @@ const plugins = [
           },
         },
         {
-          resolve: `gatsby-remark-mathjax-ssr`,
-          options: {
-          }
+          resolve: `gatsby-remark-mathjax`,
+          options: {},
         },
       ],
     },
@@ -116,12 +101,6 @@ const plugins = [
       },
     },
   },
-  {
-    resolve: `gatsby-source-filesystem`,
-    options: {
-      path: `${__dirname}/_data/`,
-    },
-  },
   `gatsby-transformer-sharp`,
   `gatsby-plugin-sharp`,
   {
@@ -136,16 +115,6 @@ const plugins = [
   },
   `gatsby-plugin-sass`,
 ];
-
-if (process.env.NODE_ENV === "development") {
-  plugins.push({
-    resolve: `gatsby-source-filesystem`,
-    options: {
-      path: `${__dirname}/_test-data/contests/contests.csv`,
-      name: `contests`,
-    },
-  });
-}
 
 module.exports = {
   siteMetadata: {

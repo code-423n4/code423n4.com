@@ -1,4 +1,5 @@
 import format from 'date-fns/format';
+import isValid from 'date-fns/isValid';
 import differenceInCalendarDays from 'date-fns/differenceInCalendarDays';
 
 const left = (total) => {
@@ -62,8 +63,8 @@ const getDates = (start, end) => {
     contestStatus,
     start: startTime,
     end: endTime,
-    startDay: format(startDate, 'd MMMM yyyy'),
-    endDay: format(endDate, 'd MMMM yyyy'),
+    startDay: isValid(startDate) ? format(startDate, 'd MMMM yyyy') : '',
+    endDay: isValid(endDate) ? format(endDate, 'd MMMM yyyy') : '',
     daysDuration,
   };
 

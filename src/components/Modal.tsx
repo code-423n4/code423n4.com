@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { toast } from "react-toastify";
 
 import { useModalContext } from "../hooks/ModalContext";
 
@@ -8,20 +9,27 @@ const Modal = () => {
 
   const handlePrimaryButtonClick = async () => {
     setIsLoading(true);
-    await modalProps.primaryButtonAction();
-    setIsLoading(false);
-    hideModal();
+    try {
+      if (modalProps && modalProps.primaryButtonAction) {
+        await modalProps.primaryButtonAction();
+      }
+    } catch (error) {
+      toast.error("Oops...something went wrong: " + error);
+    } finally {
+      setIsLoading(false);
+      hideModal();
+    }
   };
 
   const handleClose = async () => {
-    if (modalProps.secondaryButtonAction) {
+    if (modalProps && modalProps.secondaryButtonAction) {
       await modalProps.secondaryButtonAction();
     }
     setIsLoading(false);
     hideModal();
   };
 
-  return modalProps ? (
+  return modalProps && modalProps.type !== "login" ? (
     <div className="modal">
       <div className="modal-main">
         <button className="button-div modal-top" onClick={handleClose}>

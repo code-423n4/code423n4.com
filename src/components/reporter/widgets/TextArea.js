@@ -6,10 +6,7 @@ import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import clsx from "clsx";
-
-import * as styles from "./Widgets.module.scss";
-
-import 'katex/dist/katex.min.css';
+import * as styles from "../../../styles/Main.module.scss";
 
 const TextArea = ({
   name,
@@ -17,13 +14,11 @@ const TextArea = ({
   fieldState,
   isInvalid,
   onChange,
-  maxSize = 65536,
+  maxSize,
 }) => {
   function handleChange(e) {
     onChange(e);
   }
-
-
 
   return (
     <Tabs className="alternate-tab">
@@ -32,12 +27,12 @@ const TextArea = ({
         <Tab>Preview</Tab>
       </TabList>
       <TabPanel>
-        <div className={clsx(styles.TextAreaContainer)}>
+        <div className={clsx(styles.Widget__TextAreaContainer)}>
           <textarea
             className={clsx(
-              styles.Control,
-              styles.Text,
-              styles.Textarea,
+              styles.Widget__Control,
+              styles.Widget__Text,
+              styles.Widget__Textarea,
               isInvalid && "input-error"
             )}
             name={name}
@@ -47,8 +42,8 @@ const TextArea = ({
             maxLength={maxSize}
           />
 
-          {fieldState.length > maxSize - 100 ? (
-            <span className={clsx(styles.TextAreaCounter)}>
+          {maxSize && fieldState.length > maxSize - 100 ? (
+            <span className={clsx(styles.Widget__TextAreaCounter)}>
               {maxSize - fieldState.length} char. remaining
             </span>
           ) : (
@@ -58,7 +53,7 @@ const TextArea = ({
       </TabPanel>
       <TabPanel>
         <ReactMarkdown
-          className={clsx(styles.Control, styles.Markdown)}
+          className={clsx(styles.Widget__Control, styles.Widget__Markdown)}
           remarkPlugins={[remarkGfm, remarkBreaks, remarkMath]}
           rehypePlugins={[rehypeKatex]}
         >

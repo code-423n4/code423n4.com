@@ -1,8 +1,11 @@
 import React from "react";
 
 import { SelectField, TextArea, TextField } from "./";
-import LinesOfCode from "../LinesOfCodeInput";
+import LinksToCode from "../LinksToCodeInput";
 import WardenField from "./WardenField";
+import ContestWarning from "../findings/ContestWarning";
+
+import * as styles from "../../../styles/Main.module.scss";
 
 const Widget = ({ field, fieldState, isInvalid, onChange }) => {
   const {
@@ -10,7 +13,9 @@ const Widget = ({ field, fieldState, isInvalid, onChange }) => {
     name,
     required,
     options,
-    maxSize = 65536,
+    maxSize,
+    label,
+    placeholder,
   } = field;
 
   function handleChange(e) {
@@ -24,6 +29,7 @@ const Widget = ({ field, fieldState, isInvalid, onChange }) => {
       onChange={handleChange}
       fieldState={fieldState[name]}
       isInvalid={isInvalid}
+      placeholder={placeholder}
     />
   );
 
@@ -39,14 +45,19 @@ const Widget = ({ field, fieldState, isInvalid, onChange }) => {
   );
 
   const selectFieldWidget = (
-    <SelectField
-      name={name}
-      required={required}
-      onChange={handleChange}
-      options={options}
-      fieldState={fieldState[name]}
-      isInvalid={isInvalid}
-    />
+    <>
+      <SelectField
+        name={name}
+        required={required}
+        onChange={handleChange}
+        options={options}
+        fieldState={fieldState[name]}
+        isInvalid={isInvalid}
+      />
+      {(fieldState[name] === "G (Gas Optimization)" ||
+        fieldState === "QA (Quality Assurance)") &&
+        name === "risk" && <ContestWarning />}
+    </>
   );
 
   const wardenFieldWidget = (
@@ -60,13 +71,22 @@ const Widget = ({ field, fieldState, isInvalid, onChange }) => {
     />
   );
 
-  const linesOfCodeWidget = (
-    <LinesOfCode
-      name={name}
-      onChange={handleChange}
-      linesOfCode={fieldState[name]}
-      isInvalid={isInvalid}
-    />
+  const linksToCodeInputGroup = (
+    <LinksToCode onChange={handleChange} linksToCode={fieldState[name]} />
+  );
+
+  const checkboxWidget = (
+    <label htmlFor={name} className={styles.Widget__Container}>
+      <input
+        className={styles.Widget__Checkbox}
+        type="checkbox"
+        id={name}
+        name={name}
+        checked={fieldState[name] === true}
+        onChange={handleChange}
+      />
+      {label}
+    </label>
   );
 
   const widgets = {
@@ -74,7 +94,8 @@ const Widget = ({ field, fieldState, isInvalid, onChange }) => {
     textarea: textAreaWidget,
     select: selectFieldWidget,
     warden: wardenFieldWidget,
-    linesOfCode: linesOfCodeWidget,
+    linksToCode: linksToCodeInputGroup,
+    checkbox: checkboxWidget,
   };
 
   return widgets[widget];
