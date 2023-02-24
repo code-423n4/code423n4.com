@@ -18,9 +18,6 @@ import Agreement from "./content/Agreement";
 import { Input } from "./Input";
 import RegistrationFormCommonFields from "./RegistrationFormCommonFields";
 
-// styles
-import * as styles from "../styles/Main.module.scss";
-
 interface userState {
   username: string;
   discordUsername: string;
@@ -463,32 +460,34 @@ export default function RegistrationForm({ handles }) {
                   confirmPasswordValidator={confirmPasswordValidator}
                   submitted={status === FormStatus.SubmitAttempted}
                 />
-                <label
-                  htmlFor="useCustomPaymentAddress"
-                  className="Widget__RadioLabel"
-                >
-                  <input
-                    type="checkbox"
-                    id="useCustomPaymentAddress"
-                    name="useCustomPaymentAddress"
-                    checked={!state.useCustomPaymentAddress}
-                    onChange={toggleUseCustomPaymentAddress}
-                  />
-                  Use my wallet address for payment on Polygon
-                  {state.useCustomPaymentAddress && (
-                    <Input
-                      label="Polygon Address"
-                      helpText="Polygon address where we should send your awards"
-                      required={true}
-                      handleChange={handleChange}
-                      value={state.polygonAddress}
-                      name="polygonAddress"
-                      validator={customPaymentAddressValidator}
-                      forceValidation={status === FormStatus.SubmitAttempted}
-                      maxLength={42}
+                <fieldset>
+                  <label
+                    htmlFor="useCustomPaymentAddress"
+                    className="Widget__RadioLabel"
+                  >
+                    <input
+                      type="checkbox"
+                      id="useCustomPaymentAddress"
+                      name="useCustomPaymentAddress"
+                      checked={!state.useCustomPaymentAddress}
+                      onChange={toggleUseCustomPaymentAddress}
                     />
-                  )}
-                </label>
+                    Use my wallet address for payment on Polygon
+                    {state.useCustomPaymentAddress && (
+                      <Input
+                        label="Polygon Address"
+                        helpText="Polygon address where we should send your awards"
+                        required={true}
+                        handleChange={handleChange}
+                        value={state.polygonAddress}
+                        name="polygonAddress"
+                        validator={customPaymentAddressValidator}
+                        forceValidation={status === FormStatus.SubmitAttempted}
+                        maxLength={42}
+                      />
+                    )}
+                  </label>
+                </fieldset>
               </form>
             </TabPanel>
             <TabPanel>
@@ -526,7 +525,7 @@ export default function RegistrationForm({ handles }) {
               </form>
             </TabPanel>
           </Tabs>
-          <div className="captcha-container">
+          <div className="register__captcha-container">
             <HCaptcha
               sitekey={process.env.GATSBY_HCAPTCHA_SITE_KEY!}
               theme="dark"

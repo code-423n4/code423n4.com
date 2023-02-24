@@ -1,8 +1,6 @@
 import React, { ReactNode } from "react";
 import { Input } from "./Input";
 
-import * as styles from "../styles/Main.module.scss";
-
 interface RegistrationFormCommonFieldsProps {
   username: string;
   discordUsername: string;
@@ -138,10 +136,10 @@ export default function RegistrationFormCommonFields({
         handleChange={handleChange}
       />
       <fieldset>
-        <label htmlFor="avatar" className={styles.Widget__Label}>
+        <label htmlFor="avatar" className={"widget__label"}>
           Avatar (Optional)
         </label>
-        <p className={styles.Widget__Help}>
+        <p className={"widget__help"}>
           An avatar displayed next to your name on the leaderboard.
         </p>
         <input

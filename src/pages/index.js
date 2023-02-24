@@ -10,6 +10,7 @@ import Testimonials from "../components/Testimonials";
 import SecondaryNav from "../components/SecondaryNav";
 import SecondaryNavItem from "../components/SecondaryNavItem";
 import HomepageTopNames from "../components/content/HomepageTopNames";
+import SkeletonLoader from "../components/SkeletonLoader";
 
 export default function SiteIndex({ data }) {
   const { currentUser } = useUser();
@@ -81,31 +82,37 @@ export default function SiteIndex({ data }) {
       </SecondaryNav>
       <HomepageHero viewMode={viewMode} />
       <HomepageTopNames />
-      {filteredContests && filteredContests.activeContests.length > 0 ? (
-        <section className="home__featured-contests background--blurple">
-          <div className="limited-width">
-            <h1 className="type__headline__m">Active competitive audits</h1>
-            <p className="type__subline__m spacing-bottom__xl">
-              Currently finding the highest-severity vulnerabilities for:
-            </p>
-            <ContestList
-              updateContestStatus={updateContestStatus}
-              contests={filteredContests.activeContests}
-              user={currentUser}
-            />
-          </div>
+      <section className="home__featured-contests background--blurple">
+        <div className="limited-width">
+          {/* TODO: rename this header or put it behind the loader logic */}
+          <h1 className="type__headline__m">Active competitive audits</h1>
+          {!filteredContests ? <SkeletonLoader /> : null}
+          {filteredContests && filteredContests.activeContests.length > 0 ? (
+            <div>
+              <p className="type__subline__m spacing-bottom__xl">
+                Currently finding the highest-severity vulnerabilities for:
+              </p>
+              <ContestList
+                updateContestStatus={updateContestStatus}
+                contests={filteredContests.activeContests}
+                user={currentUser}
+              />
+            </div>
+          ) : null}
+        </div>
+      </section>
+      {filteredContests && filteredContests.upcomingContests.length > 0 ? (
+        <section>
+          <h1 className="upcoming-header">
+            Under construction - Upcoming contests
+          </h1>
+          <ContestList
+            updateContestStatus={updateContestStatus}
+            contests={filteredContests.upcomingContests}
+            user={currentUser}
+          />
         </section>
       ) : null}
-      {/* {filteredContests && filteredContests.upcomingContests.length > 0 ? (
-          <section>
-            <h1 className="upcoming-header">Upcoming contests</h1>
-            <ContestList
-              updateContestStatus={updateContestStatus}
-              contests={filteredContests.upcomingContests}
-              user={currentUser}
-            />
-          </section>
-        ) : null} */}
       {/* <section>
           <Testimonials />
         </section>

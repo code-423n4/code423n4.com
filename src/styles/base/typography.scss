@@ -49,16 +49,9 @@ h6,
 .type__headline__m,
 .type__headline__s,
 .type__headline__xs,
-.type__headline__xxs,
-.type__subline__hero,
-.type__subline__xl,
-.type__subline__l,
-.type__subline__m,
-.type__subline__s,
-.type__subline__xs,
-.type__subline__xxs {
+.type__headline__xxs {
   margin-top: 0.3em;
-  margin-bottom: 0.4em;
+  margin-bottom: 0.3em;
   font-family: $font__default;
   font-weight: 700;
   color: $color__headline;
@@ -68,6 +61,17 @@ h6,
   }
 }
 
+.type__subline__hero,
+.type__subline__xl,
+.type__subline__l,
+.type__subline__m,
+.type__subline__s,
+.type__subline__xs,
+.type__subline__xxs {
+  color: $color__subline;
+  font-weight: 400;
+  margin-bottom: 0.4em;
+}
 // TODO: make this a mixin
 .background--blurple,
 .background--low-contrast {
@@ -85,7 +89,10 @@ h6,
   .type__headline__m,
   .type__headline__s,
   .type__headline__xs,
-  .type__headline__xxs,
+  .type__headline__xxs {
+    color: $color__white;
+  }
+
   .type__subline__hero,
   .type__subline__xl,
   .type__subline__l,
@@ -93,7 +100,7 @@ h6,
   .type__subline__s,
   .type__subline__xs,
   .type__subline__xxs {
-    color: $color__white;
+    color: rgba($color__white, 0.7);
   }
   p,
   span {

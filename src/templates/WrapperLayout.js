@@ -39,22 +39,26 @@ const WrapperLayout = (props) => {
         {preview ? (
           <meta property="og:image" content={preview} />
         ) : (
+          // TODO: Brand update
           <meta
             property="og:image"
             content="https://code4rena.com/images/C4-banner.png"
           />
         )}
+        {/* TODO: Brand update */}
         <link
           rel="apple-touch-icon"
           sizes="180x180"
           href="/images/apple-touch-icon.png"
         />
+        {/* TODO: Brand update */}
         <link
           rel="icon"
           type="image/png"
           sizes="32x32"
           href="/images/favicon-32.png"
         />
+        {/* TODO: Brand update */}
         <link
           rel="icon"
           type="image/png"
