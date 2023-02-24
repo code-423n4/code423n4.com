@@ -6,6 +6,7 @@ import { getDates } from "../utils/time";
 import ClientOnly from "./ClientOnly";
 import Countdown from "./Countdown";
 import SponsorLink from "./SponsorLink";
+import { format } from "date-fns";
 
 const ContestTile = ({ contest, updateContestStatus, user }) => {
   const {
@@ -58,7 +59,13 @@ const ContestTile = ({ contest, updateContestStatus, user }) => {
               </li>
               {t.contestStatus === "soon" || t.contestStatus === "active" ? (
                 <li className="contest-tile__countdown">
-                  {t.contestStatus === "soon" ? "Starts:" : "Ends:"}
+                  {/* @todo: style these dates */}
+                  {t.contestStatus === "active" && (
+                    <span>Ends {t.endTime}</span>
+                  )}
+                  {t.contestStatus === "soon" && (
+                    <span>Starts {t.startTime}</span>
+                  )}
                   <Countdown
                     state={t.contestStatus}
                     start={start_time}
