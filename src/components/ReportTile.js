@@ -1,4 +1,5 @@
 import React from "react";
+import format from "date-fns-tz/format";
 import { Link } from "gatsby";
 import { getDates } from "../utils/time";
 
@@ -21,6 +22,13 @@ const ReportTile = ({ report }) => {
           <p>
             {t.startDay} — {t.endDay}
           </p>
+          {/* @todo: style this */}
+          {report.date && (
+            <p>
+              Report publication date:{" "}
+              {format(new Date(report.date), "d MMMM yyyy")}
+            </p>
+          )}
         </div>
       </div>
       <footer className="report-tile__footer">
