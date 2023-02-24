@@ -83,6 +83,7 @@ label {
 }
 
 .links-to-code {
+  /* @todo: use variables or mixins for interdependent margin/padding */
   margin: 0 -45px;
   padding: 30px 45px;
   border-top: 2px solid var(--border-lightest-background);
@@ -204,4 +205,29 @@ label {
 
 .error-message a {
   text-decoration: underline;
+}
+
+@media (max-width: 600px) {
+  .links-to-code {
+    /* @todo: use variables or mixins for interdependent margin/padding */
+    margin: 0 -15px 15px -15px;
+    padding: 30px 15px;
+  }
+}
+
+/* ***************** Newsletter Signup ** */
+
+.newsletter-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.newsletter-form label {
+  margin-bottom: 10px;
+  display: block;
+}
+
+.ap3w-button a {
+  height: auto !important;
 }

@@ -1,5 +1,6 @@
-import { readFileSync } from "fs";
-import fs from "fs";
+import fs, { readFileSync } from "fs";
+import { TeamData } from "../../types/user";
+import { isDangerousHandle } from "../util/validation-utils";
 
 exports.handler = async (event) => {
   // only allow GET
@@ -9,10 +10,6 @@ exports.handler = async (event) => {
       body: "Method not allowed",
       headers: { Allow: "GET" },
     };
-  }
-
-  function isDangerousHandle(s) {
-    return s.match(/^[0-9a-zA-Z_\-]+$/) === null;
   }
 
   const userHandle = event.queryStringParameters.id;
@@ -29,7 +26,7 @@ exports.handler = async (event) => {
 
   try {
     const usersFiles = fs.readdirSync("./_data/handles");
-    const teams = [];
+    const teams: TeamData[] = [];
     usersFiles.forEach((file) => {
       if (file.endsWith(".json")) {
         const wardenFile = readFileSync(`./_data/handles/${file}`);

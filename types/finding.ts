@@ -6,28 +6,39 @@ export interface Finding {
     color: string;
   }[];
   risk: string;
-  state: string;
+  state: "OPEN" | "CLOSED";
   createdAt: string;
   updatedAt: string;
   issueNumber: number;
   handle: string;
+  isMitigated?: boolean;
+  mitigationOf?: string;
 }
 
 export interface FindingEditRequest {
   issue: number;
   contest: number;
   emailAddresses: string[];
-  attributedTo?: {
+  attributedTo: {
     newValue: string;
     oldValue: string;
-    address: string;
+    // @todo: remove this once all teams have a saved polygon address
+    address?: string;
   };
-  risk?: {
+  risk: {
     newValue: string;
     oldValue: string;
   };
   title?: string;
   body?: string;
+  mitigationOf?: {
+    newValue: string;
+    oldValue: string;
+  };
+  isMitigated?: {
+    newValue: boolean;
+    oldValue: boolean;
+  }
 }
 
 export interface FindingsResponse {
@@ -42,9 +53,17 @@ export interface FindingCreateRequest {
   repo: string;
   emailAddresses: string[];
   attributedTo: string;
-  address: string;
   risk: string;
   title: string;
   body: string;
   labels: string[];
+  address?: string;
+  mitigationOf?: string;
+  isMitigated?: boolean;
+}
+
+export interface FindingDeleteRequest {
+  attributedTo: string;
+  risk: string;
+  emailAddresses: string[];
 }

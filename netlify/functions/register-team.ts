@@ -1,17 +1,16 @@
-const { createPullRequest } = require("octokit-plugin-create-pull-request");
-const fetch = require("node-fetch");
-const { Moralis } = require("moralis/node");
-const { Octokit } = require("@octokit/core");
+import { createPullRequest } from "octokit-plugin-create-pull-request";
+import { File } from "octokit-plugin-create-pull-request/dist-types/types";
 const sharp = require("sharp");
+import { Octokit } from "@octokit/core";
 
-const { token, moralisAppId, moralisServerUrl } = require("../_config");
+import { token } from "../_config";
+import { TeamData } from "../../types/user";
+import { getTeamEmails, sendConfirmationEmail } from "../util/user-utils";
+import { checkAuth } from "../util/auth-utils";
+import { isDangerousHandle } from "../util/validation-utils";
 
 const OctokitClient = Octokit.plugin(createPullRequest);
 const octokit = new OctokitClient({ auth: token });
-
-function isDangerous(s) {
-  return s.match(/^[0-9a-zA-Z_\-]+$/) === null;
-}
 
 exports.handler = async (event) => {
   // only allow POST
@@ -27,7 +26,16 @@ exports.handler = async (event) => {
     }
 
     const data = JSON.parse(event.body);
-    const { teamName, username, image, link, members, address } = data;
+    const {
+      teamName,
+      image,
+      link,
+      members,
+      polygonAddress,
+      ethereumAddress,
+    } = data;
+    const username = event.headers["c4-user"];
+    const authorization = event.headers["x-authorization"];
 
     // ensure we have the data we need
     if (!teamName) {
@@ -48,7 +56,7 @@ exports.handler = async (event) => {
       };
     }
 
-    if (!address) {
+    if (!polygonAddress) {
       return {
         statusCode: 422,
         body: JSON.stringify({
@@ -57,7 +65,7 @@ exports.handler = async (event) => {
       };
     }
 
-    if (isDangerous(teamName)) {
+    if (isDangerousHandle(teamName)) {
       return {
         statusCode: 400,
         body: JSON.stringify({
@@ -85,8 +93,7 @@ exports.handler = async (event) => {
       };
     }
 
-    const authorization = event.headers["x-authorization"];
-    if (!authorization) {
+    if (!(await checkAuth(event))) {
       return {
         statusCode: 401,
         body: JSON.stringify({
@@ -95,55 +102,20 @@ exports.handler = async (event) => {
       };
     }
 
-    await Moralis.start({
-      serverUrl: moralisServerUrl,
-      appId: moralisAppId,
-    });
-
-    const userUrl = `${process.env.URL}/.netlify/functions/get-user?id=${username}`;
-    const userResponse = await fetch(userUrl);
-    if (!userResponse.ok) {
-      return {
-        statusCode: 401,
-        body: JSON.stringify({
-          error: "You must be a registered warden to create a team",
-        }),
-      };
-    }
-
-    const userData = await userResponse.json();
-    if (!userData || !userData.moralisId) {
-      return {
-        statusCode: 401,
-        body: JSON.stringify({
-          error: "You must be a registered warden to create a team",
-        }),
-      };
-    }
-
-    const { moralisId } = userData;
     const sessionToken = authorization.split("Bearer ")[1];
-    const confirmed = await Moralis.Cloud.run("confirmUser", {
-      sessionToken,
-      moralisId,
-      username,
-    });
-    if (!confirmed) {
-      return {
-        statusCode: 401,
-        body: JSON.stringify({
-          error: "Authorization failed",
-        }),
-      };
+
+    const paymentAddresses = [{ chain: "polygon", address: polygonAddress }];
+    if (ethereumAddress) {
+      paymentAddresses.push({ chain: "ethereum", address: ethereumAddress });
     }
 
-    const formattedTeamData: {
-      handle: string;
-      members: string[];
-      address: string;
-      link?: string;
-      image?: string;
-    } = { handle: teamName, members, address, link };
+    const formattedTeamData: TeamData = {
+      handle: teamName,
+      members,
+      link,
+      paymentAddresses,
+    };
+
     let avatarFilename = "";
     let base64Avatar = "";
     if (image) {
@@ -156,7 +128,7 @@ exports.handler = async (event) => {
       formattedTeamData.image = `./avatars/${teamName}.${info.format}`;
     }
 
-    const files: Record<string, unknown> = {
+    const files: { [path: string]: string | File } = {
       [`_data/handles/${teamName}.json`]: JSON.stringify(
         formattedTeamData,
         null,
@@ -175,8 +147,8 @@ exports.handler = async (event) => {
     const branchName = `team/${teamName}`;
     try {
       const res = await octokit.createPullRequest({
-        owner: process.env.GITHUB_REPO_OWNER,
-        repo: process.env.REPO,
+        owner: process.env.GITHUB_REPO_OWNER!,
+        repo: process.env.REPO!,
         title,
         body,
         head: branchName,
@@ -188,6 +160,36 @@ exports.handler = async (event) => {
           },
         ],
       });
+
+      if (!res) {
+        return {
+          statusCode: 400,
+          body: JSON.stringify({ error: "Failed to create pull request." }),
+        };
+      }
+
+      // submit helpdesk ticket
+      await fetch(`${process.env.URL}/.netlify/functions/request-support`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Authorization": `Bearer ${sessionToken}`,
+          "C4-User": username,
+        },
+        body: JSON.stringify({
+          subject: "New team request",
+          request: "team",
+          description: `PR link: ${res.data.html_url}`,
+          discordHandle: username,
+        }),
+      });
+
+      const emails = await getTeamEmails(formattedTeamData);
+      const emailSubject = `Code4rena team "${teamName}" has been created`;
+      const emailBody = `A new Code4rena team (${teamName}) has been created with members: \n\n${members.join(
+        ", "
+      )}. \n\nYou can see the PR here: ${res.data.html_url}`;
+      await sendConfirmationEmail(emails, emailSubject, emailBody);
 
       return {
         statusCode: 201,

@@ -1,5 +1,5 @@
 const dedent = require("dedent");
-const { Moralis } = require("moralis/node");
+const { Moralis } = require("moralis-v1/node");
 const { Octokit } = require("@octokit/core");
 const fetch = require("node-fetch");
 

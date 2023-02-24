@@ -5,7 +5,9 @@
   width: 100%;
   height: 100%;
   background: rgba(24, 31, 36, 0.7);
-  z-index: 999999;
+  z-index: 999;
+  font-family: var(--font-family);
+  color: var(--text-normal);
 }
 
 .modal-main {
@@ -21,7 +23,7 @@
   flex-direction: column;
   align-items: center;
   border-radius: 12px;
-  padding: 30px;
+  padding: 30px 30px 50px 30px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
 }
 
@@ -63,6 +65,6 @@ ul {
     background: #2d1769;
     min-width: 90vw;
     max-width: 90vw;
-    padding: 10px;
+    padding: 10px 10px 20px 10px;
   }
 }
