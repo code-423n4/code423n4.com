@@ -94,6 +94,7 @@ export default function RegistrationFormCommonFields({
       <Input
         label="Password"
         required={true}
+        helpText="Must be at least 18 characters long."
         name="password"
         aria-describedby={"password--error"}
         placeholder="Password"
