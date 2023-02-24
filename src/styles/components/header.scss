@@ -102,7 +102,8 @@
 .header__nav-buttons {
   flex-shrink: 0;
   margin-top: $spacing__l;
-  display: block;
+  display: flex;
+  align-items: center;
   .button--primary {
     margin-right: 0;
   }
@@ -160,6 +161,10 @@
 
 // Login
 // --------------------------------------------------
+
+// TODO: Review this and see if it can be simplified
+// It didn't get a full rewrite in the rebrand, so some of the classes may not be in use anymore
+
 .login__button-wrapper {
   display: inline-block;
   padding-left: $spacing__s;
@@ -209,11 +214,9 @@
   border-top: 2px solid var(--border-lightest-background);
 }
 
-.user-dropdown__user-dropdown-wrapper {
+.user-dropdown {
   display: inline-flex;
   padding-left: 15px;
-  border-left: 3px solid var(--main-purple);
-  margin-left: 10px;
   height: 20px;
   align-items: center;
   justify-content: center;
@@ -256,10 +259,6 @@
   align-items: center;
 }
 
-.user-dropdown__caret {
-  padding-left: 5px;
-}
-
 .user-dropdown__mobile-menu-item {
   color: white;
   font-weight: 800;
@@ -288,8 +287,28 @@
 }
 
 .user-dropdown__icon {
-  color: inherit;
+  color: white;
   margin-right: 10px;
   height: 20px;
   width: 20px;
+}
+// Logged in
+.user-dropdown__caret {
+  color: white;
+}
+
+.user-dropdown__avatar {
+  @include breakpoint("m") {
+    // padding: 0 $spacing__xl 0 0;
+  }
+}
+
+.user-dropdown__trigger {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  svg {
+    fill: $color__white;
+  }
 }
