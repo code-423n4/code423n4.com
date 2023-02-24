@@ -71,6 +71,16 @@ main {
   max-width: $layout__max-width;
   margin: 0 auto;
   padding: 0 $spacing__xl;
+
+  &--centered {
+    text-align: center;
+  }
+
+  &--background {
+    background: $color__n-80;
+    border-radius: $border-radius__m;
+    padding: $spacing__xl;
+  }
 }
 
 // Reusable Grids

@@ -53,7 +53,8 @@ textarea {
 // Default Spacing
 // --------------------
 
-form {
+form,
+.form {
   p {
     margin-bottom: $spacing__s;
   }
@@ -68,7 +69,8 @@ fieldset {
 // Default Labels
 // --------------------
 
-form {
+form,
+.form {
   label {
     padding-bottom: $spacing__s;
     display: block;
@@ -91,6 +93,7 @@ form {
 // --------------------
 
 // TODO: This could be better with more javascript and less reliance on has()
+// Firefox users won't see the error outline color
 form > div:has(.form-field__error) {
   input[type="text"],
   input[type="password"],
