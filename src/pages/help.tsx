@@ -146,7 +146,7 @@ function ContactUs() {
   return (
     <DefaultLayout
       pageDescription="Need help with something? Contact us here."
-      pageTitle="Help | Code 423n4"
+      pageTitle="Help | Code4rena"
     >
       <Form
         title="How can we help?"

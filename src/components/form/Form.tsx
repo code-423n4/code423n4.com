@@ -58,15 +58,15 @@ const Form = ({
   };
 
   return (
-    <div className={styles.Form__Form}>
-      {title && <h1 className={styles.Form__Heading1}>{title}</h1>}
+    <div className="form">
+      {title && <h1 className="type__headline__page-title">{title}</h1>}
       {(status === FormStatus.Unsubmitted ||
         status === FormStatus.Submitting) && (
         <form>
           <>
             {children}
             <button
-              className="button cta-button centered"
+              className="button button--primary"
               type="button"
               onClick={submit}
               disabled={status !== FormStatus.Unsubmitted}
@@ -80,10 +80,12 @@ const Form = ({
       )}
       {status === FormStatus.Error && (
         <>
-          <h2>Whoops!</h2>
+          <h2 className="type__subline__page-title">
+            Sorry, an error has occurred.
+          </h2>
           <p>{errorMessage}</p>
           <button
-            className="button cta-button"
+            className="button button--primary"
             type="button"
             onClick={() => setStatus(FormStatus.Unsubmitted)}
           >
@@ -93,11 +95,11 @@ const Form = ({
       )}
       {status === FormStatus.Submitted && (
         <>
-          <h2>Thank you!</h2>
+          <h2 className="type__subline__page-title">Thank you!</h2>
           <p>{successMessage}</p>
           {successButtonText && (
             <button
-              className="button cta-button"
+              className="button button--primary"
               type="button"
               onClick={handleReset}
             >
