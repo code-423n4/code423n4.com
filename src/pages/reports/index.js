@@ -25,9 +25,7 @@ export default function ReportIndex({ data }) {
 
 export const query = graphql`
   query {
-    reports: allReportsJson(
-      sort: { fields: circa___contest___contestid }
-    ) {
+    reports: allReportsJson(sort: { fields: circa___contest___contestid }) {
       edges {
         node {
           id
@@ -36,6 +34,7 @@ export const query = graphql`
             slug
             findings
             altUrl
+            date
             sponsor {
               id
               image {
