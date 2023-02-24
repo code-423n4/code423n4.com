@@ -1,0 +1,13 @@
+{
+  "handle": "auditutils",
+  "members": [
+    "liobrasil",
+    "user137"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x4946FFEADca699bbEe199Df86CDa5cD75FddD145"
+    }
+  ]
+}
