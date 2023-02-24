@@ -1,0 +1,17 @@
+{
+  "handle": "Explorers",
+  "members": [
+    "N16H7M4R3",
+    "sakshamguruji"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x83ec297eA3f7E51c515Ff85F773502601d7706a3"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x3A3C39B00828ba06808869D99652daA760F3596F"
+    }
+  ]
+}
