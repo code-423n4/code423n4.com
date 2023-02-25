@@ -96,7 +96,7 @@ export function Input({
   };
 
   return (
-    <div className="input__input">
+    <fieldset className="input__input">
       {label && (
         <label className={"input__label"} htmlFor={name}>
           {required ? label + " *" : label + " (Optional)"}
@@ -160,6 +160,6 @@ export function Input({
             {validationError}
           </div>
         ))}
-    </div>
+    </fieldset>
   );
 }

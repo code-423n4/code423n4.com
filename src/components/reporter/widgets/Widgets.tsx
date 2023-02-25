@@ -29,7 +29,7 @@ const Widgets = (props) => {
     props.onChange(e);
   }
   return (
-    <fieldset className={styles.Widget__Fields}>
+    <div className={styles.Widget__Fields}>
       {fields.map((field, index) => {
         const { name, label, helpText, required, placeholder } = field;
         const isInvalid = required && showValidationErrors && !fieldState[name];
@@ -51,7 +51,7 @@ const Widgets = (props) => {
           </FormField>
         );
       })}
-    </fieldset>
+    </div>
   );
 };
 

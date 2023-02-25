@@ -21,8 +21,8 @@ const TextArea = ({
   }
 
   return (
-    <Tabs className="alternate-tab">
-      <TabList>
+    <Tabs>
+      <TabList className="secondary-nav">
         <Tab>Edit</Tab>
         <Tab>Preview</Tab>
       </TabList>

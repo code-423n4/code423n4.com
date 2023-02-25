@@ -120,28 +120,26 @@ const LoginModal = () => {
                 value={emailAddress}
                 handleChange={handleEmailAddressChange}
               />
-              <a
-                href=""
-                className="centered-text"
-                onClick={toggleForgotPassword}
-              >
-                Log in
-              </a>
+              <p>
+                <a href="" onClick={toggleForgotPassword}>
+                  ← Back to log in
+                </a>
+              </p>
             </div>
             <div className="modal--main-buttons">
-              <button
-                className="button cta-button secondary"
-                type="button"
-                onClick={handleClose}
-              >
-                Cancel
-              </button>
               <button
                 className="button cta-button primary"
                 type="button"
                 onClick={handlePasswordReset}
               >
                 {isLoading ? "Submitting..." : "Reset Password"}
+              </button>
+              <button
+                className="button button--secondary"
+                type="button"
+                onClick={handleClose}
+              >
+                Cancel
               </button>
             </div>
           </>
@@ -172,15 +170,15 @@ const LoginModal = () => {
               </a>
             </div>
             <div className="modal--main-buttons">
+              <button className="button cta-button primary" type="submit">
+                {isLoading ? "Submitting..." : "Log in"}
+              </button>
               <button
                 className="button cta-button secondary"
                 type="button"
                 onClick={handleClose}
               >
                 Cancel
-              </button>
-              <button className="button cta-button primary" type="submit">
-                {isLoading ? "Submitting..." : "Log in"}
               </button>
             </div>
             <div className={"login__dividing-line"}></div>

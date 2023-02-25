@@ -11,7 +11,7 @@ function FormField({
   errorMessage = "This field is required",
 }) {
   return (
-    <div className="form-field">
+    <fieldset className="form-field">
       {label && (
         <label className="form-field__label" htmlFor={name}>
           {label}
@@ -30,7 +30,7 @@ function FormField({
           {errorMessage}
         </div>
       )}
-    </div>
+    </fieldset>
   );
 }
 
