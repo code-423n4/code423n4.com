@@ -86,7 +86,7 @@
     color: $color__white;
     display: block;
     &:hover {
-      color: $color__button-blurple;
+      color: $color__blurple__text--light;
     }
 
     @include breakpoint("m") {
@@ -168,7 +168,6 @@
 .login__button-wrapper {
   display: inline-block;
   padding-left: $spacing__s;
-  border-left: 3px solid var(--main-purple);
   margin-left: $spacing__s;
 }
 
@@ -211,7 +210,6 @@
   min-width: 70%;
   max-width: 100%;
   height: 0;
-  border-top: 2px solid var(--border-lightest-background);
 }
 
 .user-dropdown {
@@ -220,7 +218,7 @@
   height: 20px;
   align-items: center;
   justify-content: center;
-  font-family: var(--font-family);
+  font-family: $font__default;
 }
 
 .user-dropdown__user-dropdown {
@@ -249,7 +247,6 @@
 .user-dropdown__user-info {
   margin: 10px;
   padding-bottom: 15px;
-  border-bottom: 1px solid var(--main-purple);
   color: white;
 }
 
@@ -262,7 +259,6 @@
 .user-dropdown__mobile-menu-item {
   color: white;
   font-weight: 800;
-  font-family: "Roboto", sans-serif;
   text-transform: uppercase;
   text-decoration: none;
   background: transparent;
@@ -280,10 +276,6 @@
   cursor: pointer;
   display: flex;
   align-items: center;
-
-  &:hover {
-    color: var(--light-purple);
-  }
 }
 
 .user-dropdown__icon {

@@ -23,13 +23,13 @@ body {
 }
 
 a {
-  color: $color__button-blurple;
+  color: $color__blurple__text;
   @include accessible-animation {
     transition: color 0.2s ease-in-out;
   }
 
   &:hover {
-    color: $color__n-20;
+    color: $color__blurple__text--light;
   }
 }
 

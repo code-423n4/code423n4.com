@@ -25,13 +25,13 @@ $button__border-width: 2px;
 @mixin button--white {
   background: $color__white;
   border-color: $color__white;
-  color: $color__button-blurple;
+  color: $color__blurple__text;
 
   // TODO better hover styling for white buttons
   &:hover {
     background: rgba($color__white, 0.8);
     border-color: $color__white;
-    color: $color__button-blurple;
+    color: $color__blurple__text--light;
   }
 }
 
@@ -169,7 +169,7 @@ $button__border-width: 2px;
   }
 
   &:hover {
-    color: $color__blurple__text-light;
+    color: $color__blurple__text--light;
     background: transparent;
   }
 }
