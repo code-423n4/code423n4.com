@@ -88,3 +88,22 @@
     margin: 0;
   }
 }
+
+.hero__sponsor .button--primary {
+  background-color: $color__sponsor-color !important;
+  border-color: $color__sponsor-color !important;
+
+  &:hover {
+    background-color: $color__sponsor-color--hover !important;
+    border-color: $color__sponsor-color--hover !important;
+  }
+}
+
+.hero__sponsor .button--secondary {
+  border-color: $color__sponsor-color !important;
+
+  &:hover {
+    background: $color__sponsor-color !important;
+    border-color: $color__sponsor-color--hover !important;
+  }
+}

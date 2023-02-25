@@ -30,6 +30,7 @@ export default function SiteIndex({ data }) {
     let statusObject = {
       upcomingContests: [],
       activeContests: [],
+      recentlyEndedContests: [],
     };
 
     contestArray.forEach((element) => {
@@ -41,6 +42,13 @@ export default function SiteIndex({ data }) {
         statusObject.upcomingContests.push(element.node);
       } else if (statusBasedOnDates === "active") {
         statusObject.activeContests.push(element.node);
+      }
+      // status based on dates is "ended", limit to contests that have ended in the last 3 weeks
+      else if (
+        statusBasedOnDates === "completed" &&
+        element.node.end_time < Date.now() - 1814400000
+      ) {
+        statusObject.recentlyEndedContests.push(element.node);
       }
     });
 
@@ -84,8 +92,7 @@ export default function SiteIndex({ data }) {
       <HomepageTopNames />
       <section className="home__featured-contests background--blurple">
         <div className="limited-width">
-          {/* TODO: rename this header or put it behind the loader logic */}
-          <h1 className="type__headline__m">Active competitive audits</h1>
+          <h1 className="type__headline__l">Competitive audits</h1>
           {!filteredContests ? <SkeletonLoader /> : null}
           {filteredContests && filteredContests.activeContests.length > 0 ? (
             <div>
@@ -109,6 +116,18 @@ export default function SiteIndex({ data }) {
           <ContestList
             updateContestStatus={updateContestStatus}
             contests={filteredContests.upcomingContests}
+            user={currentUser}
+          />
+        </section>
+      ) : null}
+      {filteredContests && filteredContests.recentlyEndedContests.length > 0 ? (
+        <section>
+          <h1 className="upcoming-header">
+            Under construction - recently ended contests
+          </h1>
+          <ContestList
+            updateContestStatus={updateContestStatus}
+            contests={filteredContests.recentlyEndedContests}
             user={currentUser}
           />
         </section>

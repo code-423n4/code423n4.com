@@ -39,7 +39,10 @@ $color__red: hsl(342, 100%, 63%);
 // Brand colors
 $color__button-blurple: $color__blurple-90;
 $color__button-blurple--hover: #8963ff;
-$color__sponsor-color: rgb(64, 127, 203);
+$color__sponsor-color: rgb(70, 61, 255);
+// $color__sponsor-color: #007aaa;
+// $color__sponsor-color: #0d67b6;
+$color__sponsor-color--hover: lighten($color__sponsor-color, 5%);
 // $color__sponsor-color: rgba(63,82,238,1);
 
 // Color Defaults

@@ -182,6 +182,7 @@ input[type="checkbox"] {
 // React Select
 // --------------------
 // TODO: see if after we finish the upgrade that we can remove the .limited-width specificity here
+// TODO: Review these styles
 .limited-width {
   .react-select {
     margin: $spacing__m 0;
