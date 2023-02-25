@@ -571,7 +571,7 @@ export default function RegistrationForm({ handles }) {
       )}
       {status === FormStatus.Error && (
         <>
-          <h2>Whoops!</h2>
+          <h2>Sorry, an error has occurred.</h2>
           <p>An error occurred while processing your registration.</p>
           {errorMessage !== "" && (
             <p>

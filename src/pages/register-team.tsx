@@ -41,17 +41,17 @@ export default function TeamRegistration({ data }) {
       message="You need to be a registered warden, currently connected via wallet to register a team."
     >
       <div className="limited-width">
-        <h1 className="page-header">Register a Team</h1>
+        <h1>Register a Team</h1>
         <TeamForm
           onSubmit={onSubmit}
           handles={handles}
           wardens={wardens}
           submitButtonText="Register team"
           successMessage={
-            <>
+            <p>
               Your registration application has been submitted. Please note: it
               may take a few business days for your submission to be approved.
-            </>
+            </p>
           }
         />
       </div>

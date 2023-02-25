@@ -80,9 +80,7 @@ const Form = ({
       )}
       {status === FormStatus.Error && (
         <>
-          <h2 className="type__subline__page-title">
-            Sorry, an error has occurred.
-          </h2>
+          <h2>Sorry, an error has occurred.</h2>
           <p>{errorMessage}</p>
           <button
             className="button button--primary"
@@ -95,7 +93,7 @@ const Form = ({
       )}
       {status === FormStatus.Submitted && (
         <>
-          <h2 className="type__subline__page-title">Thank you!</h2>
+          <h2>Thank you!</h2>
           <p>{successMessage}</p>
           {successButtonText && (
             <button

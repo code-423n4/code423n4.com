@@ -50,19 +50,19 @@ const HeroIndex = ({ viewMode }) => {
             {/* TODO: these stats are wrong */}
             <div className="hero__right-side type__copy">
               <div className="hero__statistic">
-                <p className="type__headline__m">$140m</p>
+                <p className="type__headline__l">$140m</p>
                 <p>Earned on-platform</p>
               </div>
               <div className="hero__statistic">
-                <p className="type__headline__m">$140m</p>
+                <p className="type__headline__l">$140m</p>
                 <p>Earned on-platform</p>
               </div>
               <div className="hero__statistic">
-                <p className="type__headline__m">$140m</p>
+                <p className="type__headline__l">$140m</p>
                 <p>Earned on-platform</p>
               </div>
               <div className="hero__statistic">
-                <p className="type__headline__m">$140m</p>
+                <p className="type__headline__l">$140m</p>
                 <p>Earned on-platform</p>
               </div>
             </div>

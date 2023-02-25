@@ -216,7 +216,7 @@ h6 {
 // ------------------------------------------------
 
 .type__headline__hero {
-  font-size: $headline-font-size__l;
+  font-size: $headline-font-size__xl;
   font-family: $font__default;
   font-weight: 700;
   font-style: normal;
@@ -225,7 +225,7 @@ h6 {
   text-transform: none;
   margin-bottom: 0.3em;
   @include breakpoint("m") {
-    font-size: $headline-font-size__xl;
+    font-size: $headline-font-size__xxl;
   }
 }
 //TODO this is currently unused

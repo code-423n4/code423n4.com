@@ -18,12 +18,12 @@
   display: block;
   width: 100%;
   padding: $spacing__s;
-  border: 1px solid $color__n-60;
+  border: 1px solid $color__n-80;
   border-radius: $border-radius__m;
   font-size: 1rem;
   line-height: 1.5;
   color: $color__white;
-  background-color: $color__n-60;
+  background-color: $color__n-80;
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 
   &:focus {
@@ -82,7 +82,8 @@ form,
       padding-bottom: 0;
     }
 
-    ~ p {
+    ~ p,
+    .form__help-text {
       padding-top: 0;
       font-size: $font-size__small;
     }
@@ -177,3 +178,69 @@ input[type="checkbox"] {
 // .checkbox input[type="checkbox"]:focus + label::before {
 //   outline: rgb(59, 153, 252) auto 0.3125rem;
 // }
+
+// React Select
+// --------------------
+// TODO: see if after we finish the upgrade that we can remove the .limited-width specificity here
+.limited-width {
+  .react-select {
+    margin: $spacing__m 0;
+  }
+  .react-select__control {
+    background-color: $color__n-80;
+    padding: 0;
+    color: white;
+    border: 2px solid transparent;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  .react-select__control--is-focused,
+  .react-select__control--is-focused:focus-within {
+    border: 2px solid $color__n-60;
+  }
+
+  .react-select__indicator-separator {
+    background-color: $color__n-30;
+  }
+
+  .react-select__indicator {
+    color: $color__white;
+    &:focus,
+    &:hover {
+      color: $color__white;
+    }
+  }
+
+  /* inside the select */
+
+  .react-select__menu {
+    background-color: $color__n-80;
+  }
+
+  .react-select__option--is-focused {
+    background-color: $color__n-60;
+    outline: 2px solid $color__n-60;
+  }
+
+  .react-select__placeholder {
+    color: $color__white;
+    opacity: 0.5;
+    font-size: 0.9em;
+  }
+
+  .react-select__input {
+    color: $color__white;
+  }
+
+  .react-select__multi-value {
+    background-color: $color__n-60;
+  }
+
+  .react-select__multi-value__remove:hover {
+    color: var(--hot-pink);
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+}

@@ -144,7 +144,7 @@ export default function RegistrationFormCommonFields({
           An avatar displayed next to your name on the leaderboard.
         </p>
         <input
-          className={"Widget__Avatar"}
+          className={"widget__avatar"}
           type="file"
           id="avatar"
           name="avatar"
@@ -156,7 +156,6 @@ export default function RegistrationFormCommonFields({
         />
         {avatar && (
           <button
-            className="remove-line-button"
             type="button"
             onClick={removeAvatar}
             aria-label="Remove avatar"
