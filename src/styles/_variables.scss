@@ -59,6 +59,10 @@ $color__subline: $color__n-10;
 // Forms
 $color__form-error: $color__red;
 
+// Buttons
+$color__button-danger: $color__red;
+$color__button-danger--hover: lighten($color__button-danger, 5%);
+
 // 🍔 TODO add default font sizes and em spacing
 
 // Font Sizes

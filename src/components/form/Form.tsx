@@ -1,7 +1,5 @@
 import React, { ReactNode, useState } from "react";
 
-import * as styles from "../../styles/Main.module.scss";
-
 enum FormStatus {
   Unsubmitted = "unsubmitted",
   Submitting = "submitting",

@@ -65,6 +65,10 @@ form,
 }
 fieldset {
   margin: $spacing__l 0;
+
+  &:has(fieldset) {
+    margin-bottom: 0;
+  }
 }
 // Default Labels
 // --------------------
@@ -183,6 +187,7 @@ input[type="checkbox"] {
 // --------------------
 // TODO: see if after we finish the upgrade that we can remove the .limited-width specificity here
 // TODO: Review these styles
+// TODO: There's some low contrast
 .limited-width {
   .react-select {
     margin: $spacing__m 0;
@@ -215,10 +220,15 @@ input[type="checkbox"] {
     }
   }
 
+  .react-select__single-value {
+    color: white;
+  }
+
   /* inside the select */
 
   .react-select__menu {
     background-color: $color__n-80;
+    color: $color__white;
   }
 
   .react-select__option--is-focused {
@@ -238,10 +248,141 @@ input[type="checkbox"] {
 
   .react-select__multi-value {
     background-color: $color__n-60;
+    color: $color__white;
   }
 
   .react-select__multi-value__remove:hover {
     color: var(--hot-pink);
     background-color: rgba(255, 255, 255, 0.1);
+  }
+}
+
+// Form info blobs
+// --------------------
+//
+// How to use
+//
+// .form__info-blob
+//   svg (or anything with .icon)
+//   p
+
+.form__info-blob {
+  display: flex;
+  align-items: flex-start;
+  margin: $spacing__s 0;
+  padding: $spacing__m;
+  border-radius: $border-radius__m;
+  background-color: $color__n-90;
+  border: 1px solid $color__n-60;
+  color: $color__white;
+  font-size: $font-size__small;
+  line-height: 1.5;
+  svg,
+  .icon {
+    margin-right: $spacing__s;
+  }
+  p {
+    margin-bottom: 0;
+  }
+}
+
+// Markdown
+// --------------------
+
+.widget__markdown {
+  border: 1px solid $color__n-60;
+  padding: $spacing__m;
+  border-radius: $border-radius__m;
+
+  @include breakpoint($breakpoint__m) {
+    padding: $spacing__l;
+  }
+}
+
+.widget__textarea-container {
+  textarea {
+    min-height: 25rem;
+  }
+}
+
+// TODO - Review this code
+.widget__markdown {
+  overflow: auto;
+
+  h1,
+  h2,
+  h3 {
+    font-weight: 600;
+    text-align: left;
+    color: white;
+    margin-top: 1em;
+    padding-bottom: 8px;
+    border-bottom: 1px solid $color__n-60;
+  }
+  h1 {
+    font-size: 28px;
+  }
+  h2 {
+    font-size: 24px;
+  }
+  h3 {
+    font-size: 20px;
+  }
+
+  pre {
+    padding: 16px;
+    overflow: auto;
+    font-size: 85%;
+    line-height: 1.45;
+    background-color: $color__n-80;
+    border-radius: $border-radius__m;
+
+    &::-webkit-scrollbar {
+      height: 5px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      height: 5px;
+    }
+  }
+
+  code {
+    padding: 0;
+    margin: 0;
+    background-color: $color__n-80;
+    display: inline;
+    overflow: visible;
+    line-height: inherit;
+    word-wrap: normal;
+  }
+
+  table {
+    border-collapse: collapse;
+    margin-bottom: $spacing__m;
+  }
+
+  tbody {
+    tr:nth-child(2n) {
+      background-color: $color__n-90;
+    }
+  }
+
+  td,
+  th {
+    border: 1px solid $color__n-60;
+    padding: 6px 13px;
+  }
+}
+
+// Radio buttons
+// --------------------
+
+// TODO this is too specific
+.form .form__radio {
+  display: flex;
+  align-items: center;
+  margin-bottom: $spacing__s;
+  input {
+    margin-right: $spacing__s;
   }
 }
