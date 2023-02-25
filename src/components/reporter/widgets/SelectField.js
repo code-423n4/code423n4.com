@@ -4,7 +4,7 @@ import Select from "react-select";
 
 const SelectFieldOptionLabel = ({ label }) => {
   return (
-    <div className="WardenField__OptionContainer">
+    <div>
       <span>{label}</span>
     </div>
   );

@@ -4,8 +4,6 @@ import React, { ReactNode, useCallback, useState } from "react";
 
 import Select from "react-select";
 
-import * as styles from "../../../styles/Main.module.scss";
-
 const WardenOptionLabel = ({ value, image }) => {
   return (
     <div className={"warden-field__option-container"}>

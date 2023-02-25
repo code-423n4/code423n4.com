@@ -1,5 +1,4 @@
 import React, { ReactNode } from "react";
-import { Link } from "gatsby";
 
 export interface SecondaryNavItem extends React.HTMLProps<HTMLButtonElement> {
   to: string;
