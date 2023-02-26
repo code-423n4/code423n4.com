@@ -174,3 +174,89 @@
 .contest-page__tab-container:has(.tab__content--message) {
   background: $color__n-90;
 }
+
+// Findings List
+// --------------------
+
+// TODO - Clean these up, some duplicates
+
+.findings-list__details {
+  > * {
+    display: inline-block;
+    margin-right: $spacing__s;
+  }
+}
+
+.findings-list__risk {
+  padding: $spacing__xxs $spacing__s;
+  font-size: $font-size__small;
+  border: 1px solid currentColor;
+  border-radius: 1rem;
+}
+.findings-list__heading {
+  list-style-type: none;
+}
+
+ul.findings-list__list {
+  list-style: none;
+  padding: 0;
+  margin-left: 0;
+}
+
+.findings-list__list-item {
+  display: flex;
+  padding: 10px;
+  align-items: flex-start;
+  justify-content: flex-start;
+
+  &:not(:last-of-type) {
+    border-bottom: 1px solid $color__n-60;
+  }
+  // overriding base style for span inside li
+  span::before {
+    content: "";
+  }
+  span::after {
+    content: "";
+  }
+}
+
+.findings-list__status {
+  fill: currentColor;
+  margin: $spacing__s $spacing__s 0 0;
+  // TODO: move these colors
+  &.findings-list__OPEN {
+    color: #3fb950; // color from GH
+  }
+
+  &.findings-list__CLOSED {
+    color: #a371f7; // color from GH
+  }
+}
+
+.findings-list__title-and-labels {
+  display: flex;
+  align-items: center;
+}
+
+.findings-list__title {
+  &.findings-list__CLOSED {
+    text-decoration: line-through;
+  }
+}
+
+.findings-list__risk {
+  border: 1px solid currentColor;
+  border-radius: 1rem;
+  font-weight: 500;
+  line-height: 12px;
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  background-color: transparent;
+}
+
+.findings-list__details {
+  display: flex;
+  align-items: center;
+}
