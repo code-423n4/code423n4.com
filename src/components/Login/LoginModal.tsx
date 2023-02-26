@@ -170,11 +170,11 @@ const LoginModal = () => {
               </a>
             </div>
             <div className="modal--main-buttons">
-              <button className="button cta-button primary" type="submit">
+              <button className="button button--primary" type="submit">
                 {isLoading ? "Submitting..." : "Log in"}
               </button>
               <button
-                className="button cta-button secondary"
+                className="button button--secondary"
                 type="button"
                 onClick={handleClose}
               >

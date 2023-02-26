@@ -66,6 +66,8 @@
 
 .modal--main-buttons {
   justify-self: flex-end;
+  display: flex;
+  flex-direction: row-reverse;
 }
 
 @media only screen and (max-width: 740px),

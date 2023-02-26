@@ -44,9 +44,6 @@ const Modal = () => {
         </div>
         <div className="modal--main-content">{modalProps.body}</div>
         <div className="modal--main-buttons">
-          <button className="button cta-button secondary" onClick={handleClose}>
-            {modalProps.secondaryButtonText || "Cancel"}
-          </button>
           {modalProps.primaryButtonText && (
             <button
               className="button cta-button primary"
@@ -57,6 +54,9 @@ const Modal = () => {
                 : modalProps.primaryButtonText || "Ok"}
             </button>
           )}
+          <button className="button cta-button secondary" onClick={handleClose}>
+            {modalProps.secondaryButtonText || "Cancel"}
+          </button>
         </div>
       </div>
     </div>
