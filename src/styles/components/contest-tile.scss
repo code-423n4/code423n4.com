@@ -134,12 +134,13 @@ $contest-tile--solid__background: $color__n-90;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  margin-top: $spacing__s;
+  margin: $spacing__xs 0;
+  font-size: $font-size__small;
 
-  @include breakpoint("xs") {
-    flex-direction: row;
-    align-items: center;
-  }
+  // @include breakpoint("xs") {
+  //   flex-direction: row;
+  //   align-items: center;
+  // }
 }
 
 .contest-tile__days-duration {
@@ -155,13 +156,23 @@ $contest-tile--solid__background: $color__n-90;
 }
 
 .contest-tile__countdown {
+  padding-left: $spacing__m;
   display: flex;
-  font-size: $font-size__text;
   align-items: center;
   justify-content: center;
+  border-left: 1px solid rgba($color__white, 0.4);
+  font-size: $font-size__text;
 
-  > div {
-    margin-left: $spacing__xs;
+  .countdown {
+    padding: 1px $spacing__m;
+    margin: 0 $spacing__s;
+    border-radius: 1rem;
+    background: rgba(0, 0, 0, 0.1);
+    font-family: monospace;
+    font-weight: normal;
+  }
+  .countdown-live {
+    display: none;
   }
 }
 
@@ -174,7 +185,7 @@ $contest-tile--solid__background: $color__n-90;
   align-items: center;
   justify-content: space-between;
   border-top: $contest-tile__border;
-  @include breakpoint("xs") {
+  @include breakpoint("m") {
     flex-direction: row;
   }
 }
@@ -184,7 +195,7 @@ $contest-tile--solid__background: $color__n-90;
   display: flex;
   justify-content: center;
 
-  @include breakpoint("xs") {
+  @include breakpoint("m") {
     width: auto;
     justify-content: center;
   }
@@ -196,7 +207,7 @@ $contest-tile--solid__background: $color__n-90;
     text-align: center;
     border-left: $contest-tile__border;
 
-    @include breakpoint("xs") {
+    @include breakpoint("m") {
       width: auto;
     }
     &:hover {
@@ -204,7 +215,7 @@ $contest-tile--solid__background: $color__n-90;
     }
     &:first-of-type {
       border-left: 0;
-      @include breakpoint("xs") {
+      @include breakpoint("m") {
         border-left: $contest-tile__border;
       }
     }
@@ -214,7 +225,8 @@ $contest-tile--solid__background: $color__n-90;
 .contest-tile__status-indicator {
   width: 100%;
   border-bottom: $contest-tile__border;
-  @include breakpoint("xs") {
+  display: flex;
+  @include breakpoint("m") {
     width: auto;
     border-bottom: 0;
   }
@@ -346,17 +358,6 @@ $contest-tile--solid__background: $color__n-90;
 
     &::after {
       content: "";
-    }
-  }
-
-  .contest-tile__countdown {
-    display: flex;
-    font-size: $font-size__text;
-    align-items: center;
-    justify-content: center;
-
-    > div {
-      margin-left: $spacing__xs;
     }
   }
 

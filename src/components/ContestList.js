@@ -5,19 +5,13 @@ import { Navigation, Pagination, Scrollbar, A11y } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css/bundle";
 
-// object of breakpoints and settings
-// $breakpoint__xs: 600px;
-// $breakpoint__s: 750px;
-// $breakpoint__m: 960px;
-// $breakpoint__l: 1280px;
-// $breakpoint__xl: 1920px;
 const breakpoints = {
   750: {
     slidesPerView: 2,
     spaceBetween: 16,
   },
   1024: {
-    slidesPerView: 3,
+    slidesPerView: 2.5,
     spaceBetween: 32,
   },
 };

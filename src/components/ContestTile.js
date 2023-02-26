@@ -39,7 +39,7 @@ const ContestTile = ({ contest, updateContestStatus, user, reduced }) => {
 
   const statusText = {
     active: "Live",
-    soon: "Coming Soon",
+    soon: "Soon",
     completed: "Ended",
   };
 
@@ -51,37 +51,31 @@ const ContestTile = ({ contest, updateContestStatus, user, reduced }) => {
             <SponsorLink sponsor={sponsor} />
           </div>
           <div className="contest-tile__details-wrapper">
-            <h2 className="contest-tile__title">{title}</h2>
-            {reduced !== "reduced" ? (
-              <p className="contest-tile__details">{details}</p>
-            ) : null}
-            <ul className="contest-tile__time-wrapper">
-              <li className="contest-tile__days-duration">
-                {t.daysDuration} day contest
-              </li>
+            <h2 className="contest-tile__title">
+              <Link
+                to={fields?.contestPath || "/"}
+                className="contest-tile__button"
+              >
+                {title}
+              </Link>
+            </h2>
+            {/* <ul className="contest-tile__time-wrapper">
               {t.contestStatus === "soon" || t.contestStatus === "active" ? (
-                <li className="contest-tile__countdown">
-                  {/* @todo: style these dates */}
-                  {t.contestStatus === "active" && (
-                    <span>Ends {t.endTime}</span>
-                  )}
-                  {t.contestStatus === "soon" && (
-                    <span>Starts {t.startTime}</span>
-                  )}
-                  <Countdown
-                    state={t.contestStatus}
-                    start={start_time}
-                    end={end_time}
-                    isPreview={findingsRepo === ""}
-                    updateContestStatus={updateContestStatus}
-                  />
-                </li>
+                <>
+                  <li>
+                    {t.contestStatus === "active" && <span>{t.endTime}</span>}
+                    {t.contestStatus === "soon" && <span>{t.startTime}</span>}
+                  </li>
+                </>
               ) : (
                 <li className="contest-tile__dates">
-                  Contest ran {t.startDay}-{t.endDay}
+                  {format(new Date(t.startDay), "d MMM yyyy")}
+                  {"–"}
+                  {format(new Date(t.endDay), "d MMM yyyy")}
                 </li>
               )}
-            </ul>
+            </ul> */}
+            <p className="contest-tile__details">{details}</p>
           </div>
         </header>
         {amount ? <p className="contest-tile__amount">{amount}</p> : null}
@@ -97,15 +91,28 @@ const ContestTile = ({ contest, updateContestStatus, user, reduced }) => {
             >
               {statusText[t.contestStatus]}
             </span>
+            {t.contestStatus === "soon" || t.contestStatus === "active" ? (
+              <span className="contest-tile__countdown">
+                {t.contestStatus === "active" && <span>Ends in</span>}
+                {t.contestStatus === "soon" && <span>Starts in</span>}
+                <Countdown
+                  state={t.contestStatus}
+                  start={start_time}
+                  end={end_time}
+                  isPreview={findingsRepo === ""}
+                  updateContestStatus={updateContestStatus}
+                />
+              </span>
+            ) : null}
           </div>
 
           <div className="contest-tile__button-wrapper">
-            <a
-              href={fields?.contestPath || "/"}
+            <Link
+              to={fields?.contestPath || "/"}
               className="contest-tile__button"
             >
               {`${findingsRepo === "" ? "Preview" : "View"} Contest`}
-            </a>
+            </Link>
             {t.contestStatus === "active" && contestRepo && canViewContest && (
               <a href={contestRepo} className="contest-tile__button">
                 View Repo

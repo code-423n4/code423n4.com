@@ -40,6 +40,25 @@
   height: auto;
 }
 
+.swiper {
+  .swiper-button-prev,
+  .swiper-button-next {
+    opacity: 0;
+    @include accessible-animation {
+      transition: opacity 0.2s ease-in-out;
+    }
+  }
+  &:hover {
+    .swiper-button-prev,
+    .swiper-button-next {
+      opacity: 1;
+
+      &.swiper-button-disabled {
+        opacity: 0.3;
+      }
+    }
+  }
+}
 .swiper-pagination-bullet-active {
   background: white;
 }
