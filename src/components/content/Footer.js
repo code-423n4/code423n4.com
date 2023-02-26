@@ -7,13 +7,44 @@ const Footer = () => {
       <ul className="footer__items">
         <li className="footer__item">An open organization</li>
         <li className="footer__item">
-          <a href="https://twitter.com/code4rena">Twitter</a>
+          <a
+            href="https://twitter.com/code4rena"
+            target="_blank"
+            rel="noreferrer"
+            aria-label="Twitter (Opens in new Window)"
+          >
+            Twitter
+          </a>
         </li>
         <li className="footer__item">
-          <a href="https://discord.gg/code4rena">Discord</a>
+          <a
+            href="https://discord.gg/code4rena"
+            target="_blank"
+            rel="noreferrer"
+            aria-label="Discord (Opens in new Window)"
+          >
+            Discord
+          </a>
         </li>
         <li className="footer__item">
-          <a href="https://github.com/code-423n4/">GitHub</a>
+          <a
+            href="https://github.com/code-423n4/"
+            target="_blank"
+            rel="noreferrer"
+            aria-label="GitHub (Opens in new Window)"
+          >
+            GitHub
+          </a>
+        </li>
+        <li className="footer__item">
+          <a
+            href="https://medium.com/code4rena"
+            target="_blank"
+            rel="noreferrer"
+            aria-label="Medium (Opens in new Window)"
+          >
+            Medium
+          </a>
         </li>
         <li className="footer__item">
           <Link to="/newsletter-signup">Newsletter</Link>
