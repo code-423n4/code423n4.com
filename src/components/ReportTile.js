@@ -17,21 +17,33 @@ const ReportTile = ({ report }) => {
         <SponsorLink sponsor={sponsor} className="report-tile__sponsor-link" />
         <div className="report-tile__content">
           <h2 className="report-tile__sponsor-name type__headline__xs">
-            {sponsor.name}
+            <Link to={reportUrl}>{sponsor.name} →</Link>
           </h2>
           <p>
-            {t.startDay} — {t.endDay}
+            {format(new Date(t.startDay), "d MMM yyyy")}
+            {" - "}
+            {format(new Date(t.endDay), "d MMM yyyy")}
           </p>
-          {/* @todo: style this */}
-          {report.date && (
-            <p>
-              Report publication date:{" "}
-              {format(new Date(report.date), "d MMMM yyyy")}
-            </p>
-          )}
         </div>
       </div>
       <footer className="report-tile__footer">
+        {report.date && (
+          <p className="report-tile__published">
+            <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+              <g data-name="323-Document" id="_323-Document">
+                <polygon
+                  className="svg"
+                  points="10 1 4 7 4 31 28 31 28 1 10 1"
+                />
+                <polyline class="cls-1" points="10 1 10 7 4 7" />
+                <line class="cls-1" x1="8" x2="24" y1="15" y2="15" />
+                <line class="cls-1" x1="8" x2="24" y1="20" y2="20" />
+                <line class="cls-1" x1="8" x2="24" y1="25" y2="25" />
+              </g>
+            </svg>
+            {format(new Date(report.date), "d MMM yyyy")}
+          </p>
+        )}
         {altUrl ? (
           <a href={altUrl} className="report-tile__report-link" target="_blank">
             View report (external)

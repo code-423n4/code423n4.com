@@ -34,6 +34,15 @@
   margin-top: $spacing__s;
 }
 
+.report-tile__sponsor-name a {
+  color: $color__white;
+
+  &:hover {
+    color: $color__white;
+    text-decoration: underline;
+  }
+}
+
 .report-tile__content-wrapper {
   flex: 1;
   display: flex;
@@ -49,7 +58,7 @@
 .report-tile__footer {
   width: 100%;
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   border-top: 1px solid $color__n-70;
 }
 
@@ -63,5 +72,31 @@
   &:hover {
     background: $color__n-70;
     color: $color__white;
+  }
+}
+
+.report-tile__published {
+  padding: $spacing__s $spacing__m;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  // justify-content: flex-end; // if we move publication dates
+  font-size: $font-size__small;
+
+  svg {
+    margin-right: $spacing__s;
+    width: 1rem;
+    display: inline-block;
+
+    fill: none;
+    stroke: $color__n-10;
+    stroke-linejoin: round;
+    stroke-width: 2px;
+    .svg {
+      fill: none;
+      stroke: $color__n-10;
+      stroke-linejoin: round;
+      stroke-width: 2px;
+    }
   }
 }
