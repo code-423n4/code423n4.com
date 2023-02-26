@@ -17,6 +17,14 @@
 // 8. Transforms
 // 9. Other
 
+.background--warden {
+  background: $color__warden;
+}
+
+.background--sponsor {
+  background: $color__sponsor;
+}
+
 .home__featured-contests {
   padding: $spacing__l 0;
 }

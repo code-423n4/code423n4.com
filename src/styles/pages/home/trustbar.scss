@@ -1,0 +1,32 @@
+@import "../../variables";
+
+.trustbar {
+  margin-top: $spacing__xl;
+  background: $color__n-90;
+  @include breakpoint("s") {
+    margin-top: $spacing__xxxl;
+  }
+
+  .limited-width {
+    padding-top: $spacing__xl;
+    padding-bottom: $spacing__xl;
+  }
+}
+
+.trustbar__logos {
+  margin-top: $spacing__m;
+  margin-bottom: $spacing__s;
+}
+
+.trustbar__logos a {
+  display: inline-block;
+}
+
+.trustbar__logos img {
+  height: 30px;
+  max-width: 100px;
+  padding: 2px;
+  opacity: 0.7;
+  display: inline-block;
+  margin: $spacing__m $spacing__m 0 0;
+}

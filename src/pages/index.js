@@ -7,6 +7,7 @@ import ContestList from "../components/ContestList";
 import DefaultLayout from "../templates/DefaultLayout";
 import HomepageHero from "../components/content/HomepageHero";
 import Testimonials from "../components/Testimonials";
+import TrustBar from "../components/TrustBar";
 import SecondaryNav from "../components/SecondaryNav";
 import SecondaryNavItem from "../components/SecondaryNavItem";
 import HomepageTopNames from "../components/content/HomepageTopNames";
@@ -72,6 +73,7 @@ export default function SiteIndex({ data }) {
 
   return (
     <DefaultLayout bodyClass="home" key={"home" + contestStatusChanges}>
+      {/* Nav switcher */}
       <SecondaryNav>
         <SecondaryNavItem
           to="#wardens"
@@ -88,9 +90,21 @@ export default function SiteIndex({ data }) {
           For Sponsors
         </SecondaryNavItem>
       </SecondaryNav>
+
+      {/* Hero */}
       <HomepageHero viewMode={viewMode} />
-      <HomepageTopNames />
-      <section className="home__featured-contests background--blurple">
+
+      {/* Top names bar under hero */}
+      {!viewMode || (viewMode === "warden" && <HomepageTopNames />)}
+      {viewMode === "sponsor" && <TrustBar />}
+
+      {/* Contests */}
+      <section
+        className={
+          "home__featured-contests background--low-contrast background--" +
+          viewMode
+        }
+      >
         <div className="limited-width">
           <h1 className="type__headline__l">Competitive audits</h1>
           {!filteredContests ? <SkeletonLoader /> : null}
