@@ -12,6 +12,7 @@ import SecondaryNav from "../components/SecondaryNav";
 import SecondaryNavItem from "../components/SecondaryNavItem";
 import HomepageTopNames from "../components/content/HomepageTopNames";
 import SkeletonLoader from "../components/SkeletonLoader";
+import BottomCTA from "../components/BottomCTA";
 
 export default function SiteIndex({ data }) {
   const { currentUser } = useUser();
@@ -156,6 +157,10 @@ export default function SiteIndex({ data }) {
 
       <section className="limited-width">
         <Testimonials viewMode={viewMode} />
+      </section>
+
+      <section>
+        <BottomCTA viewMode={viewMode} />
       </section>
     </DefaultLayout>
   );
