@@ -174,7 +174,6 @@ export default function Contests({ data }) {
               updateContestStatus={updateContestStatus}
               contests={filteredContests.completed.reverse()}
               user={currentUser}
-              swiper={true}
             />
           </section>
         ) : null}
