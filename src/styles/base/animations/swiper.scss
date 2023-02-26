@@ -1,0 +1,45 @@
+@import "../../variables";
+
+// CSS rule order
+// --------------------
+
+// 1. Variables
+// 2. Box model properties
+// 3. Display and position
+// 4. Background
+// 5. Border
+// 6. Box shadow
+// 7. Text
+// 8. Transforms
+// 9. Other
+
+:root {
+  --swiper-theme-color: $color__white;
+}
+
+// TODO: This is a hack to get the swiper to be responsive, do it properly
+.swiper {
+  max-width: calc(90vw - $spacing__l * 2);
+  padding-bottom: $spacing__l;
+
+  @include breakpoint("s") {
+    max-width: calc(91vw - $spacing__l * 2);
+  }
+
+  @include breakpoint("m") {
+    max-width: calc(96vw - $spacing__l * 2);
+  }
+
+  @include breakpoint("l") {
+    max-width: calc($layout__max-width - $spacing__l * 2);
+  }
+}
+
+.swiper-slide {
+  display: flex;
+  height: auto;
+}
+
+.swiper-pagination-bullet-active {
+  background: white;
+}

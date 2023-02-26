@@ -26,5 +26,9 @@
 }
 
 .home__featured-contests {
-  padding: $spacing__l 0;
+  padding-top: $spacing__l;
+
+  .featured-contests__completed {
+    padding: $spacing__l 0;
+  }
 }

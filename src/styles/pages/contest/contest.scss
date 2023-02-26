@@ -163,11 +163,17 @@
 // --------------------
 
 .contest-page__tab-container .limited-width {
-  border-top: 3px solid $color__n-90;
   padding-top: $spacing__m;
+  padding-bottom: $spacing__m;
+  border-top: 3px solid $color__n-90;
 
   @include breakpoint("s") {
     padding-top: $spacing__l;
+    padding-bottom: $spacing__xl;
+  }
+
+  .countdown {
+    display: inline-block;
   }
 }
 

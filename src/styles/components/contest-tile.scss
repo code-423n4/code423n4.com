@@ -278,9 +278,16 @@ $contest-tile--solid__background: $color__n-90;
 // Theme: Reduced
 // --------------------------------------------------
 
+// [Tip] This is needed on the swiper parent container
+//  .swiper-slide
+//    display: flex
+//    height: auto
+
 .reduced {
-  .contest-tile {
+  &.contest-tile {
     margin-bottom: $spacing__m;
+    justify-content: space-between;
+    width: 100%;
   }
   .contest-tile__top {
     display: flex;
@@ -357,37 +364,44 @@ $contest-tile--solid__background: $color__n-90;
   // --------------------
 
   .contest-tile__bottom {
-    flex-direction: column;
+    // flex-direction: column;
+    justify-content: space-between;
   }
 
   .contest-tile__button-wrapper {
     width: 100%;
-    justify-content: center;
+    height: 100%;
+    justify-content: flex-end;
+    align-content: center;
+
+    display: flex;
+    align-items: center;
 
     a {
-      width: 33%;
+      width: auto;
+      height: 100%;
       padding: $spacing__s $spacing__m;
+      display: flex;
+      align-items: center;
+
       color: $color__white;
       text-align: center;
       border-left: $contest-tile__border;
 
-      @include breakpoint("xs") {
-        width: auto;
-      }
       &:hover {
         background: rgba($color__white, 0.1);
       }
       &:first-of-type {
-        border-left: 0;
-        @include breakpoint("xs") {
-          border-left: $contest-tile__border;
-        }
+        border-left: $contest-tile__border;
       }
     }
   }
 
   .contest-tile__status-indicator {
     width: 100%;
-    border-bottom: $contest-tile__border;
+  }
+
+  .contest-tile__status-indicator-text {
+    font-size: $font-size__small;
   }
 }

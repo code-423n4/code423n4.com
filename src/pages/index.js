@@ -42,7 +42,7 @@ export default function SiteIndex({ data }) {
       ).contestStatus;
       const endTime = new Date(element.node.end_time);
       if (statusBasedOnDates === "soon") {
-        statusObject.swiperContests.push(element.node);
+        statusObject.upcomingContests.push(element.node);
       } else if (statusBasedOnDates === "active") {
         statusObject.activeContests.push(element.node);
       }
@@ -109,7 +109,9 @@ export default function SiteIndex({ data }) {
       >
         <div className="limited-width">
           <h1 className="type__headline__l">Competitive audits</h1>
+          {/* Skeleton loader animation */}
           {!filteredContests ? <SkeletonLoader /> : null}
+          {/* Active contests */}
           {filteredContests && filteredContests.activeContests.length > 0 ? (
             <div>
               <p className="type__subline__m spacing-bottom__xl">
@@ -122,18 +124,33 @@ export default function SiteIndex({ data }) {
               />
             </div>
           ) : null}
-        </div>{" "}
+          {/* Upcoming contests */}
+          {filteredContests && filteredContests.upcomingContests.length > 0 ? (
+            <div>
+              <h2 className="type__headline__xs spacing-top__xl spacing-bottom__l">
+                Upcoming audits
+              </h2>
+              <ContestList
+                updateContestStatus={updateContestStatus}
+                contests={filteredContests.upcomingContests}
+                user={currentUser}
+              />
+            </div>
+          ) : null}
+        </div>
         {filteredContests && filteredContests.swiperContests.length > 0 ? (
-          <div>
-            <h1 className="type__headline__l">
-              Under construction - recently ended contests
-            </h1>
-            <ContestList
-              updateContestStatus={updateContestStatus}
-              contests={filteredContests.swiperContests}
-              user={currentUser}
-              swiper={true}
-            />
+          <div div className="background--darker featured-contests__completed">
+            <div className="limited-width">
+              <h2 className="type__headline__xs spacing-bottom__l">
+                Recently completed audits
+              </h2>
+              <ContestList
+                updateContestStatus={updateContestStatus}
+                contests={filteredContests.swiperContests}
+                user={currentUser}
+                swiper={true}
+              />
+            </div>
           </div>
         ) : null}
       </section>
