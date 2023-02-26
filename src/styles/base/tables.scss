@@ -30,6 +30,14 @@ table td {
   text-align: left;
 }
 
+table a {
+  color: $color__blurple__text--light;
+
+  &:hover {
+    color: $color__blurple-20;
+  }
+}
+
 // Zebra striping
 // -----------------
 
