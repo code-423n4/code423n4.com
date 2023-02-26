@@ -42,7 +42,8 @@
 
 .swiper {
   .swiper-button-prev,
-  .swiper-button-next {
+  .swiper-button-next,
+  .swiper-scrollbar {
     opacity: 0;
     @include accessible-animation {
       transition: opacity 0.2s ease-in-out;
@@ -50,7 +51,8 @@
   }
   &:hover {
     .swiper-button-prev,
-    .swiper-button-next {
+    .swiper-button-next,
+    .swiper-scrollbar {
       opacity: 1;
 
       &.swiper-button-disabled {
