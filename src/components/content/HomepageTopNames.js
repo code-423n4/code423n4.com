@@ -13,13 +13,13 @@ const topAuditors = [
     name: "tuber",
   },
   {
-    name: "corn_flour",
+    name: "corn_flour2",
   },
   {
     name: "rye",
   },
   {
-    name: "orange_peels",
+    name: "orange_peel2",
   },
   {
     name: "pickle",
@@ -31,19 +31,19 @@ const topAuditors = [
     name: "raisin",
   },
   {
-    name: "spinach",
+    name: "spinach2",
   },
   {
     name: "orange_peels",
   },
   {
-    name: "pickle",
+    name: "pickle2",
   },
   {
     name: "spinach",
   },
   {
-    name: "tuber",
+    name: "tuber2",
   },
   {
     name: "corn_flour",

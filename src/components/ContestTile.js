@@ -8,7 +8,7 @@ import Countdown from "./Countdown";
 import SponsorLink from "./SponsorLink";
 import { format } from "date-fns";
 
-const ContestTile = ({ contest, updateContestStatus, user }) => {
+const ContestTile = ({ contest, updateContestStatus, user, reduced }) => {
   const {
     sponsor,
     title,
@@ -44,7 +44,7 @@ const ContestTile = ({ contest, updateContestStatus, user }) => {
   };
 
   return (
-    <article className={"contest-tile " + t.contestStatus}>
+    <article className={"contest-tile " + t.contestStatus + " " + reduced}>
       <div className="contest-tile__top">
         <header class="contest-tile__content">
           <div className="contest-tile__logo">
@@ -52,7 +52,9 @@ const ContestTile = ({ contest, updateContestStatus, user }) => {
           </div>
           <div className="contest-tile__details-wrapper">
             <h2 className="contest-tile__title">{title}</h2>
-            <p className="contest-tile__details">{details}</p>
+            {reduced !== "reduced" ? (
+              <p className="contest-tile__details">{details}</p>
+            ) : null}
             <ul className="contest-tile__time-wrapper">
               <li className="contest-tile__days-duration">
                 {t.daysDuration} day contest

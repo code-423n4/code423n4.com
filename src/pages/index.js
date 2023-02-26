@@ -4,6 +4,7 @@ import { getDates } from "../utils/time";
 import useUser from "../hooks/UserContext";
 
 import ContestList from "../components/ContestList";
+import ContestTile from "../components/ContestTile";
 import DefaultLayout from "../templates/DefaultLayout";
 import HomepageHero from "../components/content/HomepageHero";
 import Testimonials from "../components/Testimonials";
@@ -31,7 +32,7 @@ export default function SiteIndex({ data }) {
     let statusObject = {
       upcomingContests: [],
       activeContests: [],
-      recentlyEndedContests: [],
+      swiperContests: [],
     };
 
     contestArray.forEach((element) => {
@@ -39,17 +40,18 @@ export default function SiteIndex({ data }) {
         element.node.start_time,
         element.node.end_time
       ).contestStatus;
+      const endTime = new Date(element.node.end_time);
       if (statusBasedOnDates === "soon") {
-        statusObject.upcomingContests.push(element.node);
+        statusObject.swiperContests.push(element.node);
       } else if (statusBasedOnDates === "active") {
         statusObject.activeContests.push(element.node);
       }
       // status based on dates is "ended", limit to contests that have ended in the last 3 weeks
       else if (
         statusBasedOnDates === "completed" &&
-        element.node.end_time < Date.now() - 1814400000
+        endTime.getTime() > Date.now() - 1814400000
       ) {
-        statusObject.recentlyEndedContests.push(element.node);
+        statusObject.swiperContests.push(element.node);
       }
     });
 
@@ -57,8 +59,8 @@ export default function SiteIndex({ data }) {
       statusObject[keys].sort(function (a, b) {
         let keyA = new Date(a.start_time);
         let keyB = new Date(b.start_time);
-        if (keyA < keyB) return -1;
-        if (keyA > keyB) return 1;
+        if (keyA < keyB) return 1;
+        if (keyA > keyB) return -1;
         return 0;
       });
     }
@@ -120,32 +122,22 @@ export default function SiteIndex({ data }) {
               />
             </div>
           ) : null}
-        </div>
+        </div>{" "}
+        {filteredContests && filteredContests.swiperContests.length > 0 ? (
+          <div>
+            <h1 className="type__headline__l">
+              Under construction - recently ended contests
+            </h1>
+            <ContestList
+              updateContestStatus={updateContestStatus}
+              contests={filteredContests.swiperContests}
+              user={currentUser}
+              swiper={true}
+            />
+          </div>
+        ) : null}
       </section>
-      {filteredContests && filteredContests.upcomingContests.length > 0 ? (
-        <section>
-          <h1 className="upcoming-header">
-            Under construction - Upcoming contests
-          </h1>
-          <ContestList
-            updateContestStatus={updateContestStatus}
-            contests={filteredContests.upcomingContests}
-            user={currentUser}
-          />
-        </section>
-      ) : null}
-      {filteredContests && filteredContests.recentlyEndedContests.length > 0 ? (
-        <section>
-          <h1 className="upcoming-header">
-            Under construction - recently ended contests
-          </h1>
-          <ContestList
-            updateContestStatus={updateContestStatus}
-            contests={filteredContests.recentlyEndedContests}
-            user={currentUser}
-          />
-        </section>
-      ) : null}
+
       {/* <section>
           <Testimonials />
         </section>

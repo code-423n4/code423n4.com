@@ -274,3 +274,120 @@ $contest-tile--solid__background: $color__n-90;
     border-top: $contest-tile--solid__border;
   }
 }
+
+// Theme: Reduced
+// --------------------------------------------------
+
+.reduced {
+  .contest-tile {
+    margin-bottom: $spacing__m;
+  }
+  .contest-tile__top {
+    display: flex;
+    flex-direction: column-reverse;
+    padding: 0;
+  }
+  .contest-tile__amount {
+    padding: $spacing__s $spacing__m;
+    background: $contest-amount__background;
+    border-bottom: $contest-tile__border;
+    color: $color__white;
+    font-weight: 500;
+    text-align: right;
+    font-size: $headline-font-size__xxs;
+  }
+
+  // Logo area
+  // --------------------
+
+  .contest-tile__logo {
+    width: calc($contest-tile__logo-container-width * 0.7);
+    margin-right: $spacing__m;
+  }
+
+  .contest-tile__logo .sponsor-link {
+    width: calc($contest-tile__logo-container-width * 0.7);
+  }
+
+  // Content area
+  // --------------------
+
+  .contest-tile__content {
+    display: flex;
+    padding: $spacing__m;
+  }
+
+  // Contest title
+  // --------------------
+
+  .contest-tile__title {
+    font-size: $headline-font-size__xxs;
+  }
+
+  // Contest time
+  // --------------------
+
+  .contest-tile__time-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-top: $spacing__s;
+  }
+
+  .contest-tile__days-duration {
+    margin-right: $spacing__s;
+
+    &::after {
+      content: "";
+    }
+  }
+
+  .contest-tile__countdown {
+    display: flex;
+    font-size: $font-size__text;
+    align-items: center;
+    justify-content: center;
+
+    > div {
+      margin-left: $spacing__xs;
+    }
+  }
+
+  // Contest buttons and live indicator
+  // --------------------
+
+  .contest-tile__bottom {
+    flex-direction: column;
+  }
+
+  .contest-tile__button-wrapper {
+    width: 100%;
+    justify-content: center;
+
+    a {
+      width: 33%;
+      padding: $spacing__s $spacing__m;
+      color: $color__white;
+      text-align: center;
+      border-left: $contest-tile__border;
+
+      @include breakpoint("xs") {
+        width: auto;
+      }
+      &:hover {
+        background: rgba($color__white, 0.1);
+      }
+      &:first-of-type {
+        border-left: 0;
+        @include breakpoint("xs") {
+          border-left: $contest-tile__border;
+        }
+      }
+    }
+  }
+
+  .contest-tile__status-indicator {
+    width: 100%;
+    border-bottom: $contest-tile__border;
+  }
+}
