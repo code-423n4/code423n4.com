@@ -160,16 +160,17 @@ $contest-tile--solid__background: $color__n-90;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-left: 1px solid rgba($color__white, 0.4);
+  border-left: $contest-tile__border;
   font-size: $font-size__text;
 
   .countdown {
     padding: 1px $spacing__m;
     margin: 0 $spacing__s;
     border-radius: 1rem;
-    background: rgba(0, 0, 0, 0.1);
     font-family: monospace;
     font-weight: normal;
+
+    background: rgba(0, 0, 0, 0.1);
   }
   .countdown-live {
     display: none;
@@ -265,7 +266,7 @@ $contest-tile--solid__background: $color__n-90;
   }
 }
 
-// Theme: Solid
+// Theme: Solid (contest page)
 // --------------------------------------------------
 
 @mixin contest-tile--solid {
@@ -284,6 +285,14 @@ $contest-tile--solid__background: $color__n-90;
 
   .contest-tile__bottom {
     border-top: $contest-tile--solid__border;
+  }
+
+  .contest-tile__countdown {
+    border-left: $contest-tile--solid__border;
+
+    .countdown {
+      background: $color__n-80;
+    }
   }
 }
 
