@@ -4,7 +4,6 @@ import { getDates } from "../utils/time";
 import useUser from "../hooks/UserContext";
 
 import ContestList from "../components/ContestList";
-import ContestTile from "../components/ContestTile";
 import DefaultLayout from "../templates/DefaultLayout";
 import HomepageHero from "../components/content/HomepageHero";
 import Testimonials from "../components/Testimonials";
@@ -108,7 +107,7 @@ export default function SiteIndex({ data }) {
         }
       >
         <div className="limited-width">
-          <h1 className="type__headline__l">Competitive audits</h1>
+          <h1 className="type__headline__l">Active competitive audits</h1>
           {/* Skeleton loader animation */}
           {!filteredContests ? <SkeletonLoader /> : null}
           {/* Active contests */}
@@ -155,17 +154,9 @@ export default function SiteIndex({ data }) {
         ) : null}
       </section>
 
-      {/* <section>
-          <Testimonials />
-        </section>
-        <section className="center">
-          <h5>Want to learn more?</h5>
-          <div className="button-wrapper">
-            <a className="button cta-button" href="https://docs.code4rena.com">
-              <strong>Read the docs</strong>
-            </a>
-          </div>
-        </section> */}
+      <section className="limited-width">
+        <Testimonials viewMode={viewMode} />
+      </section>
     </DefaultLayout>
   );
 }

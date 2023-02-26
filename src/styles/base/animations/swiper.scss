@@ -28,6 +28,7 @@
 
   @include breakpoint("m") {
     max-width: calc(96vw - $spacing__l * 2);
+    padding-bottom: $spacing__xl;
   }
 
   @include breakpoint("l") {
@@ -60,6 +61,9 @@
       }
     }
   }
+}
+.swiper-pagination-bullet {
+  background: rgba($color__white, 0.5);
 }
 .swiper-pagination-bullet-active {
   background: white;
