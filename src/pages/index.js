@@ -13,7 +13,6 @@ import SecondaryNavItem from "../components/SecondaryNavItem";
 import HomepageTopNames from "../components/content/HomepageTopNames";
 import SkeletonLoader from "../components/SkeletonLoader";
 import BottomCTA from "../components/BottomCTA";
-import Pizzazz from "../components/content/Pizzazz";
 
 export default function SiteIndex({ data }) {
   const { currentUser } = useUser();
@@ -96,7 +95,7 @@ export default function SiteIndex({ data }) {
 
       {/* Hero */}
       <HomepageHero viewMode={viewMode} />
-      <Pizzazz />
+
       {/* Top names bar under hero */}
       {!viewMode || (viewMode === "warden" && <HomepageTopNames />)}
       {viewMode === "sponsor" && <TrustBar />}
