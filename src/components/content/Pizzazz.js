@@ -8,7 +8,7 @@ const Pizzazz = () => {
       fov: 75,
       cameraZ: 75,
       xyCoef: 50,
-      zCoef: 10,
+      zCoef: 15,
       lightIntensity: 0.2,
       ambientColor: 0x000000,
       light1Color: 0x7549ff,
@@ -152,12 +152,12 @@ const Pizzazz = () => {
 
     function updateSize() {
       width = window.innerWidth;
-      cx = width / 2;
-      height = 300;
-      cy = height / 2;
+      // cx = width / 2;
+      height = 170;
+      // cy = height / 2;
       if (renderer && camera) {
         renderer.setSize(width, height);
-        camera.aspect = width / height;
+        camera.aspect = width / (height * 2.8);
         camera.updateProjectionMatrix();
         const wsize = getRendererSize();
         wWidth = wsize[0];
