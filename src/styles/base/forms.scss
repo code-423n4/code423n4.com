@@ -50,6 +50,10 @@ textarea {
   @include form-element;
 }
 
+textarea {
+  resize: vertical;
+}
+
 // Default Spacing
 // --------------------
 
@@ -293,6 +297,7 @@ input[type="checkbox"] {
   border: 1px solid $color__n-60;
   padding: $spacing__m;
   border-radius: $border-radius__m;
+  min-height: 25rem;
 
   @include breakpoint($breakpoint__m) {
     padding: $spacing__l;
