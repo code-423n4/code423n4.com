@@ -96,7 +96,7 @@ export function Input({
   };
 
   return (
-    <fieldset className="input__input">
+    <fieldset className="input">
       {label && (
         <label className={"input__label"} htmlFor={name}>
           {required ? label + " *" : label + " (Optional)"}
@@ -123,7 +123,7 @@ export function Input({
         />
         {canRemove && handleRemoveInputField && (
           <button
-            className={"input__remove-button"}
+            className="input__suffix-button button button--secondary"
             type="button"
             onClick={() => handleRemoveInputField(name)}
             aria-label="Remove this field"
@@ -137,8 +137,9 @@ export function Input({
             onClick={handleEditOrSaveClick}
             aria-label="Edit this field"
             className={clsx(
-              "input__small-button",
-              isEditing ? "input__save-button" : "input__edit-button"
+              "input__suffix-button",
+              "button",
+              isEditing ? "button--primary" : "button--secondary"
             )}
           >
             {isEditing ? "Save" : "Edit"}
@@ -146,7 +147,7 @@ export function Input({
         )}
         {button && handleButtonClick && (
           <button
-            className={"input__remove-button"}
+            className="input__suffix-button button button--secondary"
             type="button"
             onClick={() => handleButtonClick(value)}
           >
