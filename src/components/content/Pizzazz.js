@@ -1,6 +1,6 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect } from "react";
 import * as THREE from "three";
-import { createNoise4D } from "simplex-noise";
+import SimplexNoise from 'simplex-noise';
 
 export default function Pizzazz() {
   function App({conf}) {
@@ -25,7 +25,7 @@ export default function Pizzazz() {
     const TMath = THREE.Math;
 
     let plane;
-
+    const simplex = new SimplexNoise();
     const mouse = new THREE.Vector2();
     const mousePlane = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0);
     const mousePosition = new THREE.Vector3();
@@ -119,7 +119,7 @@ export default function Pizzazz() {
     function animate() {
       requestAnimationFrame(animate);
 
-      // animatePlane();
+      animatePlane();
       animateLights();
 
       renderer.render(scene, camera);
@@ -130,7 +130,7 @@ export default function Pizzazz() {
       const time = Date.now() * 0.0002;
       for (let i = 0; i < gArray.length; i += 3) {
         gArray[i + 2] =
-          createNoise4D(
+        simplex.noise4D(
             gArray[i] / conf.xyCoef,
             gArray[i + 1] / conf.xyCoef,
             time,
@@ -156,7 +156,7 @@ export default function Pizzazz() {
     function updateSize() {
       width = window.innerWidth;
       cx = width / 2;
-      height = 300;
+      height = 200;
       cy = height / 2;
       if (renderer && camera) {
         renderer.setSize(width, height);
@@ -181,7 +181,7 @@ export default function Pizzazz() {
   }, [])
   return (
     <div style={{
-      height: "300px"
+      height: "200px"
     }}>
       <canvas id="background"></canvas>
     </div>
