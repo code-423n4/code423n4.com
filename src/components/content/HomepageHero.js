@@ -18,9 +18,8 @@ const HeroIndex = ({ viewMode }) => {
                 <div>Get paid.</div>
               </h1>
               <p>
-                Want to get paid for deploying your hacking abilities? You're in
-                the right place. Code4rena competitive audits reward you for
-                finding valid bugs, every time.
+                Auditors compete for a share of the prize pool. The rarer your
+                findings, the more you get paid.
               </p>
               {/* TODO: these links are wrong */}
               <div className="hero__buttons">

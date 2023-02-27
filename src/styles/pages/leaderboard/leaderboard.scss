@@ -46,3 +46,183 @@ $avatar-size: 25px;
     right: 0;
   }
 }
+
+.leaderboard-page {
+  .leaderboard__dropdown {
+    margin-bottom: $spacing__l;
+    display: flex;
+    justify-content: flex-end;
+  }
+}
+
+// .leaderboard-table-reduced__wrapper {
+//   .leaderboard-table__headers ul {
+//     display: flex;
+//     justify-content: space-between;
+//   }
+//   .leaderboard-table__body ul {
+//     display: flex;
+//     justify-content: space-between;
+//   }
+// }
+
+// Grid only
+// --------------------
+
+// .parent {
+//   display: grid;
+//   grid-template-columns: repeat(12, 1fr);
+//   grid-template-rows: 1fr;
+//   grid-column-gap: 0px;
+//   grid-row-gap: 0px;
+//   }
+
+//   .div1 { grid-area: 1 / 1 / 2 / 2; }
+//   .div2 { grid-area: 1 / 2 / 2 / 6; }
+//   .div3 { grid-area: 1 / 6 / 2 / 9; }
+//   .div4 { grid-area: 1 / 9 / 2 / 10; }
+//   .div5 { grid-area: 1 / 10 / 2 / 11; }
+//   .div6 { grid-area: 1 / 11 / 2 / 12; }
+//   .div7 { grid-area: 1 / 12 / 2 / 13; }
+
+.leaderboard-table-reduced__wrapper {
+  max-width: $layout__max-width;
+  .leaderboard-table__headers ul {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: 1fr;
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+  }
+  .leaderboard-table-reduced__body ul {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: 1fr;
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+
+    align-items: center;
+  }
+  .leaderboard__rank {
+    grid-area: 1 / 1 / 2 / 2;
+  }
+  .leaderboard__competitor {
+    grid-area: 1 / 2 / 2 / 6;
+  }
+  .leaderboard__award-amount {
+    grid-area: 1 / 6 / 2 / 9;
+  }
+  .leaderboard__total {
+    grid-area: 1 / 9 / 2 / 10;
+  }
+  .leaderboard__high {
+    grid-area: 1 / 10 / 2 / 11;
+  }
+  .leaderboard__med {
+    grid-area: 1 / 11 / 2 / 12;
+  }
+  .leaderboard__gas {
+    grid-area: 1 / 12 / 2 / 13;
+  }
+  .leaderboard__error {
+    grid-area: 2 / 1 / 3 / 13;
+  }
+}
+
+// shared spacing so they match
+.leaderboard-table__headers ul,
+.leaderboard-table-reduced__body ul {
+  padding: $spacing__s $spacing__l;
+  border-radius: 1.2rem;
+}
+
+.leaderboard-table-reduced__body ul {
+  margin-bottom: $spacing__m;
+  background: $color__n-90;
+}
+.leaderboard-table__headers.sticky {
+  padding: 0 $spacing__l;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: $color__n-100;
+  z-index: 2;
+  width: 100%;
+  max-width: calc($layout__max-width - 2 * $spacing__xl);
+
+  @media screen and (min-width: $layout__max-width) {
+    right: auto;
+    left: auto;
+    padding: 0;
+  }
+}
+.leaderboard-table__headers ul li {
+  font-family: $font__default;
+}
+
+.leaderboard__error {
+  text-align: center;
+}
+
+.leaderboard-handle,
+.leaderboard-handle a,
+.leaderboard-handle .leaderboard-handle__team {
+  display: flex;
+  align-items: center;
+}
+
+.leaderboard__team-avatar--none {
+  margin-right: $spacing__s;
+}
+
+.leaderboard__team-member {
+  margin: $spacing__s;
+}
+
+.leaderboard-handle__name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 80px;
+  white-space: nowrap;
+  display: inline-block;
+
+  @include breakpoint("s") {
+    max-width: initial;
+  }
+}
+
+// First, second, third place
+// --------------------
+
+.leaderboard-table-reduced__body ul {
+  &:first-of-type {
+    color: $color__white;
+    border: 1px solid $color__n-40;
+    padding: $spacing__m $spacing__l;
+
+    li:first-of-type p::after {
+      content: " 🥇";
+    }
+  }
+  &:nth-of-type(2) {
+    color: rgba($color__white, 0.9);
+    border: 1px solid $color__n-50;
+    padding: $spacing__s $spacing__l;
+
+    li:first-of-type p::after {
+      content: " 🥈";
+    }
+  }
+  &:nth-of-type(3) {
+    color: rgba($color__white, 0.8);
+    border: 1px solid $color__n-70;
+    padding: $spacing__s $spacing__l;
+
+    li:first-of-type p::after {
+      content: " 🥉";
+    }
+  }
+}

@@ -31,8 +31,8 @@ const LeaderboardHandle = ({ handle, image, link, members }) => {
                     <Avatar
                       src={member.image}
                       name={member.handle}
-                      size="25px"
-                      round="25px"
+                      size="30px"
+                      round="30px"
                     />
                     <span>{member.handle}</span>
                   </ExternalLink>
@@ -41,8 +41,8 @@ const LeaderboardHandle = ({ handle, image, link, members }) => {
                     <Avatar
                       src={member.image}
                       name={member.handle}
-                      size="25px"
-                      round="25px"
+                      size="30px"
+                      round="30px"
                     />
                     <span>{member.handle}</span>
                   </>
@@ -54,13 +54,13 @@ const LeaderboardHandle = ({ handle, image, link, members }) => {
       ) : link ? (
         <ExternalLink to={link} alt={handle}>
           <Avatar src={image} name={handle} size="25px" round="25px" />
-          <span>{handle}</span>
+          <span className="leaderboard-handle__name">{handle}</span>
         </ExternalLink>
       ) : (
         <span className="leaderboard-handle__team">
           <Avatar src={image} name={handle} size="25px" round="25px" />
 
-          <span>{handle}</span>
+          <span className="leaderboard-handle__name">{handle}</span>
         </span>
       )}
     </div>

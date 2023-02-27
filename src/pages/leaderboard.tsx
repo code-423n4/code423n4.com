@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import { graphql } from "gatsby";
 
 import DefaultLayout from "../templates/DefaultLayout";
-import LeaderboardTable from "../components/LeaderboardTable";
+import LeaderboardTableReduced from "../components/LeaderboardTableReduced";
+import StickyHeader from "../components/StickyHeader";
 
 export default function Leaderboard({ data }) {
   const [timeFrame, setTimeFrame] = useState("Last 60 days");
@@ -49,7 +50,8 @@ export default function Leaderboard({ data }) {
 
   return (
     <DefaultLayout pageTitle="Leaderboard" bodyClass="leaderboard">
-      <div className="limited-width">
+      <StickyHeader />
+      <div className="limited-width leaderboard-page">
         <h1 className="type__headline__page-title">Leaderboard</h1>
         <div className="leaderboard__dropdown">
           {/* browser-native select in firefox inherits the dropdown background color from the select element */}
@@ -62,9 +64,10 @@ export default function Leaderboard({ data }) {
           </select>
         </div>
         <div className="leaderboard__container">
-          <LeaderboardTable
+          <LeaderboardTableReduced
             results={leaderboardResults}
             isLoading={isLoading}
+            reduced={true}
           />
         </div>
       </div>

@@ -3,7 +3,7 @@ import { useTable, useSortBy } from "react-table";
 
 import LeaderboardHandle from "./LeaderboardHandle";
 
-const LeaderboardTable = ({ results, isLoading }) => {
+const LeaderboardTable = ({ results, isLoading, reduced }) => {
   const columns = React.useMemo(
     () => [
       {
