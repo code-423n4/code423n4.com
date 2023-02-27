@@ -1,11 +1,7 @@
 @import "../../variables";
 
 .trustbar {
-  margin-top: $spacing__xl;
   background: $color__n-90;
-  @include breakpoint("s") {
-    margin-top: $spacing__xxxl;
-  }
 
   .limited-width {
     padding-top: $spacing__xl;

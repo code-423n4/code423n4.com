@@ -18,13 +18,8 @@
 // 9. Other
 
 .hero__top-auditors {
-  margin-top: $spacing__xl;
   padding: $spacing__l 0 $spacing__xl;
   background: $color__n-90;
-
-  @include breakpoint("s") {
-    margin-top: 0px;
-  }
 }
 .hero__top-auditors-list {
   margin: $spacing__xl 0 0;
