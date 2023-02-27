@@ -137,12 +137,8 @@ export default function RegistrationFormCommonFields({
         handleChange={handleChange}
       />
       <fieldset>
-        <label htmlFor="avatar" className={"widget__label"}>
-          Avatar (Optional)
-        </label>
-        <p className={"widget__help"}>
-          An avatar displayed next to your name on the leaderboard.
-        </p>
+        <label htmlFor="avatar">Avatar (Optional)</label>
+        <p>An avatar displayed next to your name on the leaderboard.</p>
         <input
           className={"widget__avatar"}
           type="file"

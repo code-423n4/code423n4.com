@@ -12,13 +12,9 @@ function FormField({
 }) {
   return (
     <fieldset className="form-field">
-      {label && (
-        <label className="form-field__label" htmlFor={name}>
-          {label}
-        </label>
-      )}
+      {label && <label htmlFor={name}>{label}</label>}
       {type !== "markdown" && helpText ? (
-        <p className={"Widget__Help"}>{helpText}</p>
+        <p>{helpText}</p>
       ) : (
         <ReactMarkdown className={"form-field__help-text"}>
           {helpText}

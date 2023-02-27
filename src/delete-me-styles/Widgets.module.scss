@@ -43,21 +43,6 @@
   color: white;
 }
 
-.Widget__Help {
-  color: inherit;
-  font-size: 13px;
-  margin-top: 5px;
-
-  & a {
-    color: inherit;
-    text-decoration: underline;
-
-    &:hover {
-      border-bottom: none;
-    }
-  }
-}
-
 .Widget__ErrorMessage {
   display: flex;
   &::before {

@@ -1,17 +1,5 @@
 @import "./mixins.scss";
 
-.Input__Input {
-  text-align: left;
-  width: 100%;
-}
-
-.Input__InputWrapper {
-  display: flex;
-  padding: 0;
-  font-family: var(--font-family);
-  align-items: center;
-}
-
 .Input__RemoveButton {
   height: 40px;
   white-space: nowrap;
