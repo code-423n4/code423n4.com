@@ -81,9 +81,11 @@
     "remark-parse": "^6.0.0",
     "sass": "^1.32.12",
     "sharp": "0.28.2",
+    "simplex-noise": "^4.0.1",
     "stream-browserify": "^3.0.0",
     "stream-http": "^3.2.0",
     "swiper": "^9.0.5",
+    "three": "^0.150.1",
     "typescript": "^4.4.2",
     "url": "^0.11.0",
     "webpack": "^5.2.0"

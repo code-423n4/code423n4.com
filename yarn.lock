@@ -18187,6 +18187,11 @@ simple-swizzle@^0.2.2:
   dependencies:
     is-arrayish "^0.3.1"
 
+simplex-noise@^4.0.1:
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/simplex-noise/-/simplex-noise-4.0.1.tgz#1573a4eaa46ce488bdf5f1e7ab3a1f798126781f"
+  integrity sha512-zl/+bdSqW7HJOQ0oDbxrNYaF4F5ik0i7M6YOYmEoIJNtg16NpvWaTTM1Y7oV/7T0jFljawLgYPS81Uu2rsfo1A==
+
 single-trailing-newline@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/single-trailing-newline/-/single-trailing-newline-1.0.0.tgz#81f0ad2ad645181945c80952a5c1414992ee9664"
@@ -19240,6 +19245,11 @@ text-table@0.2.0, text-table@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/text-table/-/text-table-0.2.0.tgz#7f5ee823ae805207c00af2df4a84ec3fcfa570b4"
   integrity sha1-f17oI66AUgfACvLfSoTsP8+lcLQ=
+
+three@^0.150.1:
+  version "0.150.1"
+  resolved "https://registry.yarnpkg.com/three/-/three-0.150.1.tgz#870d324a4d2daf1c7d55be97f3f73d83783e28be"
+  integrity sha512-5C1MqKUWaHYo13BX0Q64qcdwImgnnjSOFgBscOzAo8MYCzEtqfQqorEKMcajnA3FHy1yVlIe9AmaMQ0OQracNA==
 
 through2-filter@^3.0.0:
   version "3.0.0"
