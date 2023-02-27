@@ -18,11 +18,10 @@ export default function Pizzazz() {
       ...conf,
     };
 
-    let renderer, scene, camera, cameraCtrl;
-    let width, height, cx, cy, wWidth, wHeight;
+    let renderer, scene, camera;
+    let width, height, wWidth, wHeight;
     let light1, light2, light3, light4;
-    let gArray, chroma;
-    const TMath = THREE.Math;
+    let gArray;
 
     let plane;
     const simplex = new SimplexNoise();
@@ -118,10 +117,8 @@ export default function Pizzazz() {
 
     function animate() {
       requestAnimationFrame(animate);
-
       animatePlane();
       animateLights();
-
       renderer.render(scene, camera);
     }
 
@@ -156,7 +153,7 @@ export default function Pizzazz() {
     function updateSize() {
       width = window.innerWidth;
       cx = width / 2;
-      height = 200;
+      height = 300;
       cy = height / 2;
       if (renderer && camera) {
         renderer.setSize(width, height);
@@ -180,9 +177,7 @@ export default function Pizzazz() {
     App({ conf: "background" });
   }, [])
   return (
-    <div style={{
-      height: "200px"
-    }}>
+    <div id="pizzazz__container">
       <canvas id="background"></canvas>
     </div>
   );

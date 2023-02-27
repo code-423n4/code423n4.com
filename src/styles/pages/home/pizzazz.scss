@@ -1,0 +1,6 @@
+#pizzazz__container {
+  visibility: hidden;
+  @include breakpoint("xs") {
+    visibility: visible;
+  }
+}
