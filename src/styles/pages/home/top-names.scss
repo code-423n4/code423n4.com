@@ -23,7 +23,7 @@
   background: $color__n-90;
 
   @include breakpoint("s") {
-    margin-top: $spacing__xxxl;
+    margin-top: 0px;
   }
 }
 .hero__top-auditors-list {
