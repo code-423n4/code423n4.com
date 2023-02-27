@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
 import * as THREE from "three";
-import SimplexNoise from 'simplex-noise';
+import SimplexNoise from "simplex-noise";
 
-export default function Pizzazz() {
-  function App({conf}) {
+const Pizzazz = () => {
+  function App({ conf }) {
     conf = {
       fov: 75,
       cameraZ: 75,
@@ -19,7 +19,7 @@ export default function Pizzazz() {
     };
 
     let renderer, scene, camera;
-    let width, height, wWidth, wHeight;
+    let width, height, wWidth, wHeight, cx, cy;
     let light1, light2, light3, light4;
     let gArray;
 
@@ -127,7 +127,7 @@ export default function Pizzazz() {
       const time = Date.now() * 0.0002;
       for (let i = 0; i < gArray.length; i += 3) {
         gArray[i + 2] =
-        simplex.noise4D(
+          simplex.noise4D(
             gArray[i] / conf.xyCoef,
             gArray[i + 1] / conf.xyCoef,
             time,
@@ -173,12 +173,18 @@ export default function Pizzazz() {
       return [width, height];
     }
   }
+
   useEffect(() => {
-    App({ conf: "background" });
-  }, [])
+    if (window.innerWidth > 600) {
+      App({ conf: "background" });
+    }
+  }, []);
+
   return (
     <div id="pizzazz__container">
       <canvas id="background"></canvas>
     </div>
   );
-}
+};
+
+export default Pizzazz;
