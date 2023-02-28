@@ -13,14 +13,11 @@
 // 8. Transforms
 // 9. Other
 
-#pizzazz__container {
-  display: none;
-  @include breakpoint("xs") {
-    display: block;
+.newsletter-signup {
+  .limited-width {
+    // max-width: $newsletter-signup__max-width;
   }
-
-  canvas {
-    overflow: hidden;
-    max-width: 100%;
+  input {
+    max-width: 500px;
   }
 }
