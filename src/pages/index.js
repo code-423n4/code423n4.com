@@ -21,8 +21,16 @@ export default function SiteIndex({ data }) {
   // @todo: implement global state management instead of props drilling
   const [contestStatusChanges, updateContestStatusChanges] = useState(0);
   const [filteredContests, setFilteredContest] = useState(null);
-  const [viewMode, setViewMode] = useState("warden"); // warden | sponsor
+  const [viewMode, setViewMode] = useState("sponsor"); // warden | sponsor
   const contests = data.contests.edges;
+  useEffect(() => {
+    if (window.location.href.includes("#warden")) {
+      setViewMode("warden");
+    }
+    if (window.location.href.includes("#sponsor")) {
+      setViewMode("sponsor");
+    }
+  }, [])
 
   const updateContestStatus = useCallback(() => {
     updateContestStatusChanges(contestStatusChanges + 1);

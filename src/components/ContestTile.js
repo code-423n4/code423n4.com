@@ -46,7 +46,7 @@ const ContestTile = ({ contest, updateContestStatus, user, reduced }) => {
   return (
     <article className={"contest-tile " + t.contestStatus + " " + reduced}>
       <div className="contest-tile__top">
-        <header class="contest-tile__content">
+        <header className="contest-tile__content">
           <div className="contest-tile__logo">
             <SponsorLink sponsor={sponsor} />
           </div>

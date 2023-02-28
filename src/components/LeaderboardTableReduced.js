@@ -142,8 +142,8 @@ const LeaderboardTableReduced = ({ results, isLoading, reduced }) => {
               );
             })}
           </div>
-        ) : !isLoading ? (
-          <ul className="leaderboard__error">
+        ) : isLoading ? (
+          <ul className="leaderboard__loading">
             <li>Fetching results...</li>
           </ul>
         ) : (

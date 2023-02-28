@@ -10,7 +10,7 @@ const testimonials = [
   {
     quote:
       "One of the things I enjoy most about competing on @code4rena is getting to read lots of code and see new techniques in the wild.",
-    author: "@eth_call",
+    author: "Horsefacts",
     authorTitle: "",
     authorLink: "https://twitter.com/eth_call/status/1621940992411574284",
     viewMode: "warden",
@@ -18,7 +18,7 @@ const testimonials = [
   {
     quote:
       "After grinding for 14 months I finally reached my goal of being the first to cross 1M$ on the @code4rena leaderboard. Thanks to everyone involved, this has been very fun, lucrative, and I learned a lot by seeing other wardens' vulnerabilities that I missed.",
-    author: "@Cmichelio",
+    author: "Cmichel",
     authorTitle: "",
     authorLink: "https://twitter.com/cmichelio/status/1521241247159140355",
     viewMode: "warden",
@@ -26,7 +26,7 @@ const testimonials = [
   {
     quote:
       "Just went through the latest @code4rena audit report of the @blur_io exchange. This report is a great example of why audits are so important - wardens were able to discover a high risk exploit that would've allowed sellers to steal funds from buyers.",
-    author: "@0xCygaar",
+    author: "cygaar",
     authorTitle: "",
     authorLink: "https://twitter.com/0xCygaar/status/1601065454771924992",
     viewMode: "warden",
@@ -50,9 +50,9 @@ const testimonials = [
   },
   {
     quote: "C4 wardens > any single audit shop IMO",
-    author: "Benjamin Hughes",
+    author: "@_benjaminhughes",
     authorTitle: "",
-    authorLink: "",
+    authorLink: "https://twitter.com/_benjaminhughes",
     viewMode: "sponsor",
   },
   {

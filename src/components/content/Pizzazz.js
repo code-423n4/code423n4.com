@@ -34,9 +34,6 @@ const Pizzazz = () => {
     let plane;
     const simplex = new SimplexNoise();
     const mouse = new THREE.Vector2();
-    const mousePlane = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0);
-    const mousePosition = new THREE.Vector3();
-    const raycaster = new THREE.Raycaster();
     init();
 
     function init() {
@@ -50,16 +47,6 @@ const Pizzazz = () => {
 
       updateSize();
       window.addEventListener("resize", updateSize, false);
-      document.addEventListener("mousemove", (e) => {
-        const v = new THREE.Vector3();
-        camera.getWorldDirection(v);
-        v.normalize();
-        mousePlane.normal = v;
-        mouse.x = (e.clientX / width) * 2 - 1;
-        mouse.y = -(e.clientY / height) * 2 + 1;
-        raycaster.setFromCamera(mouse, camera);
-        raycaster.ray.intersectPlane(mousePlane, mousePosition);
-      });
 
       initScene();
       animate();
@@ -74,7 +61,7 @@ const Pizzazz = () => {
         side: THREE.DoubleSide,
       });
 
-      let geo = new THREE.PlaneBufferGeometry(
+      let geo = new THREE.PlaneGeometry(
         wWidth,
         wHeight,
         wWidth / 2,

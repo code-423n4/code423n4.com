@@ -35,10 +35,10 @@ const ReportTile = ({ report }) => {
                   className="svg"
                   points="10 1 4 7 4 31 28 31 28 1 10 1"
                 />
-                <polyline class="cls-1" points="10 1 10 7 4 7" />
-                <line class="cls-1" x1="8" x2="24" y1="15" y2="15" />
-                <line class="cls-1" x1="8" x2="24" y1="20" y2="20" />
-                <line class="cls-1" x1="8" x2="24" y1="25" y2="25" />
+                <polyline className="cls-1" points="10 1 10 7 4 7" />
+                <line className="cls-1" x1="8" x2="24" y1="15" y2="15" />
+                <line className="cls-1" x1="8" x2="24" y1="20" y2="20" />
+                <line className="cls-1" x1="8" x2="24" y1="25" y2="25" />
               </g>
             </svg>
             {format(new Date(report.date), "d MMM yyyy")}
