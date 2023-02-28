@@ -5,7 +5,7 @@ const Footer = () => {
   return (
     <footer className="footer limited-width">
       <ul className="footer__items">
-        <li className="footer__item">AN OPEN ORGANIZATION</li>
+        <li className="footer__item">An open organization</li>
         <li className="footer__item">
           <a
             href="https://twitter.com/code4rena"
@@ -13,7 +13,7 @@ const Footer = () => {
             rel="noreferrer"
             aria-label="Twitter (Opens in new Window)"
           >
-            TWITTER
+            Twitter
           </a>
         </li>
         <li className="footer__item">
@@ -23,7 +23,7 @@ const Footer = () => {
             rel="noreferrer"
             aria-label="Discord (Opens in new Window)"
           >
-            DISCORD
+            Discord
           </a>
         </li>
         <li className="footer__item">
@@ -33,7 +33,7 @@ const Footer = () => {
             rel="noreferrer"
             aria-label="GitHub (Opens in new Window)"
           >
-            GITHUB
+            GitHub
           </a>
         </li>
         <li className="footer__item">
@@ -43,12 +43,23 @@ const Footer = () => {
             rel="noreferrer"
             aria-label="Medium (Opens in new Window)"
           >
-            MEDIUM
+            Medium
           </a>
         </li>
         <li className="footer__item">
-          <Link to="/newsletter-signup">NEWSLETTER</Link>
+          <Link to="/newsletter-signup">Newsletter</Link>
         </li>
+        <li className="footer__item">
+          <a
+            href="https://github.com/code-423n4/media-kit"
+            target="_blank"
+            rel="noreferrer"
+            aria-label="Media Kit (Opens in new Window)"
+          >
+            Media kit
+          </a>
+        </li>
+
         <li className="footer__item">
           <span className="eth-address">
             <a href="https://etherscan.io/address/0xC2BC2F890067C511215F9463A064221577A53E10">
