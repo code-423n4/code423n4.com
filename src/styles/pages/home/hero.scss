@@ -21,7 +21,7 @@
   margin-top: $spacing__s;
   margin-bottom: $spacing__l;
   justify-content: space-between;
-  min-height: 345px; // TODO: this is to keep the two headers the same size. Find a better way to do this.
+  min-height: 250px; // TODO: this is to keep the two headers the same size. Find a better way to do this.
 
   // TODO This is a great opportunity to rewrite with container queries; let the buttons adjust to their container, not the width of the whole screen.
   .button--primary,
