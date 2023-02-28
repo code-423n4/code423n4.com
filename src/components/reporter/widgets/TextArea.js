@@ -26,7 +26,7 @@ const TextArea = ({
         <Tab className="secondary-nav__item">Preview</Tab>
       </TabList>
       <TabPanel>
-        <div className={clsx("widget__textarea-container")}>
+        <div className="widget__textarea-container">
           <textarea
             className={clsx(
               "Widget__Control",
@@ -43,7 +43,7 @@ const TextArea = ({
           />
 
           {maxSize && fieldState.length > maxSize - 100 ? (
-            <span className={clsx("widget__textarea-counter")}>
+            <span className="widget__textarea-counter">
               {maxSize - fieldState.length} char. remaining
             </span>
           ) : (
@@ -53,7 +53,7 @@ const TextArea = ({
       </TabPanel>
       <TabPanel>
         <ReactMarkdown
-          className={clsx("widget__control", "widget__markdown")}
+          className="widget__control widget__markdown"
           remarkPlugins={[remarkGfm, remarkBreaks, remarkMath]}
           rehypePlugins={[rehypeKatex]}
         >
