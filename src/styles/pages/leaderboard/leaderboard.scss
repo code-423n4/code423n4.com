@@ -94,6 +94,7 @@ $avatar-size: 25px;
     grid-template-rows: 1fr;
     grid-column-gap: 0px;
     grid-row-gap: 0px;
+    list-style: none;
   }
   .leaderboard-table-reduced__body ul {
     width: 100%;
@@ -102,6 +103,7 @@ $avatar-size: 25px;
     grid-template-rows: 1fr;
     grid-column-gap: 0px;
     grid-row-gap: 0px;
+    list-style: none;
 
     align-items: center;
   }
@@ -109,18 +111,24 @@ $avatar-size: 25px;
     grid-area: 1 / 1 / 2 / 2;
   }
   .leaderboard__competitor {
-    grid-area: 1 / 2 / 2 / 6;
+    grid-area: 1 / 2 / 2 / 5;
   }
   .leaderboard__award-amount {
-    grid-area: 1 / 6 / 2 / 9;
+    grid-area: 1 / 5 / 2 / 7;
   }
   .leaderboard__total {
-    grid-area: 1 / 9 / 2 / 10;
+    grid-area: 1 / 7 / 2 / 8;
   }
   .leaderboard__high {
-    grid-area: 1 / 10 / 2 / 11;
+    grid-area: 1 / 8 / 2 / 9;
+  }
+  .leaderboard__high-solo {
+    grid-area: 1 / 9 / 2 / 10;
   }
   .leaderboard__med {
+    grid-area: 1 / 10 / 2 / 11;
+  }
+  .leaderboard__med-solo {
     grid-area: 1 / 11 / 2 / 12;
   }
   .leaderboard__gas {
@@ -171,6 +179,9 @@ $avatar-size: 25px;
   text-align: center;
   font-size: $headline-font-size__s;
   margin-top: $spacing__m;
+  &ul {
+    list-style: none;
+  }
 }
 
 .leaderboard-handle,

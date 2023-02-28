@@ -1,10 +1,25 @@
-import React from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useTable, useSortBy } from "react-table";
 
 import LeaderboardHandle from "./LeaderboardHandle";
 
-const LeaderboardTableReduced = ({ results, isLoading, reduced }) => {
-  const columns = React.useMemo(
+const LeaderboardTableReduced = (props) => {
+  const [results, setResults] = useState(props.results);
+
+  useEffect(() => {
+    // the built-in sortBy function does not sort numbers with decimals accurately
+    // so in order get the correct ranking, multiply the award total by 100 before
+    // sorting and then divide by 100 again before rendering
+    setResults(
+      props.results.map((finding) => ({
+        ...finding,
+        awardTotal: finding.awardTotal * 100,
+      }))
+    );
+  }, [props.results]);
+
+  const { isLoading } = props;
+  const columns = useMemo(
     () => [
       {
         Header: "#",
@@ -58,7 +73,7 @@ const LeaderboardTableReduced = ({ results, isLoading, reduced }) => {
         Cell: (props) => {
           return (
             <span className="award-amount">
-              {props.value.toLocaleString("en-US", {
+              {(props.value / 100).toLocaleString("en-US", {
                 style: "currency",
                 currency: "USD",
               })}
@@ -79,10 +94,22 @@ const LeaderboardTableReduced = ({ results, isLoading, reduced }) => {
         className: "table__cell--number leaderboard__high",
       },
       {
+        Header: "(Solo)",
+        accessor: "soloHigh",
+        sortDescFirst: true,
+        className: "table__cell--number leaderboard__high-solo",
+      },
+      {
         Header: "Med",
         accessor: "medRisk",
         sortDescFirst: true,
         className: "table__cell--number leaderboard__med",
+      },
+      {
+        Header: "(Solo)",
+        accessor: "soloMed",
+        sortDescFirst: true,
+        className: "table__cell--number leaderboard__med-solo",
       },
       {
         Header: "Gas",
@@ -91,7 +118,7 @@ const LeaderboardTableReduced = ({ results, isLoading, reduced }) => {
         className: "table__cell--number leaderboard__gas",
       },
     ],
-    []
+    [results]
   );
 
   const {
@@ -177,70 +204,6 @@ const LeaderboardTableReduced = ({ results, isLoading, reduced }) => {
           </ul>
         )}
       </div>
-
-      {/* <table {...getTableProps()} className="leaderboard-table table--zebra">
-        <thead>
-          {headerGroups.map((headerGroup) => (
-            <tr {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map((column) => (
-                <th
-                  {...column.getHeaderProps(column.getSortByToggleProps())}
-                  className={
-                    column.isSorted
-                      ? column.isSortedDesc
-                        ? "sort-desc"
-                        : "sort-asc"
-                      : "" + (column.isNumber ? " table__column--numbers" : "")
-                  }
-                >
-                  {column.render("Header")}
-                  <span className="sort-direction">
-                    {column.isSorted ? (column.isSortedDesc ? " ▼" : " ▲") : ""}
-                  </span>
-                </th>
-              ))}
-            </tr>
-          ))}
-        </thead>
-        {rows.length > 0 && !isLoading ? (
-          <tbody {...getTableBodyProps()}>
-            {rows.map((row) => {
-              prepareRow(row);
-              return (
-                <tr {...row.getRowProps()}>
-                  {row.cells.map((cell) => (
-                    <td
-                      {...cell.getCellProps([
-                        {
-                          className: cell.column.className,
-                        },
-                      ])}
-                    >
-                      {cell.render("Cell")}
-                    </td>
-                  ))}
-                </tr>
-              );
-            })}
-          </tbody>
-        ) : !isLoading ? (
-          <tbody>
-            <tr>
-              <td colSpan="9" className="center">
-                <h3 className="skeleton-loader">Fetching results...</h3>
-              </td>
-            </tr>
-          </tbody>
-        ) : (
-          <tbody>
-            <tr>
-              <td colSpan="9" className="center">
-                No results to show. Try changing filter criteria
-              </td>
-            </tr>
-          </tbody>
-        )}
-      </table> */}
     </>
   );
 };
