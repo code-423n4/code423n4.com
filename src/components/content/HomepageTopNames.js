@@ -89,7 +89,7 @@ const HomepageTopNames = () => {
     <div className="hero__top-auditors full-width">
       <div className="limited-width">
         <h2 className="type__headline__m">
-          Your journey to the top begins now
+          Your journey to the top begins now.
         </h2>
         <p className="type__subline__s">Become one of the best.</p>
         <ul className="hero__top-auditors-list">

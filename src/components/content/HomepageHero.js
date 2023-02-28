@@ -5,7 +5,7 @@ const primaryButtonText = "Get started";
 const secondaryButtonText = "View leaderboard";
 
 const primaryButtonTextSponsor = "Get started";
-const secondaryButtonTextSponsor = "Join our discord";
+const secondaryButtonTextSponsor = "Join our Discord";
 
 const HeroIndex = ({ viewMode }) => {
   return (
@@ -32,7 +32,6 @@ const HeroIndex = ({ viewMode }) => {
                 </Link>
               </div>
             </div>
-            {/* TODO: need two more stats */}
             <div className="hero__right-side type__copy">
               <div className="hero__statistic">
                 <p className="type__headline__l">$14.5m</p>
@@ -43,12 +42,12 @@ const HeroIndex = ({ viewMode }) => {
                 <p>Unique vulnerabilities discovered</p>
               </div>
               <div className="hero__statistic">
-                <p className="type__headline__l">$14.5m</p>
-                <p>Earned by Wardens</p>
+                <p className="type__headline__l">$9860.77</p>
+                <p>Avg contest payout for top 3 (2023)</p>
               </div>
               <div className="hero__statistic">
-                <p className="type__headline__l">17,340</p>
-                <p>Unique vulnerabilities discovered</p>
+                <p className="type__headline__l">100%</p>
+                <p>Of satisfactory paid out</p>
               </div>
             </div>
           </div>
@@ -91,20 +90,24 @@ const HeroIndex = ({ viewMode }) => {
           </div>
           <div className="hero__right-side type__copy">
             <div className="hero__statistic">
-              <p className="type__headline__l">$5 billion+</p>
-              <p>Assets secured via C4 audits</p>
+              <p className="type__headline__l hero__statistic-number">
+                $5 billion+
+              </p>
+              <p className="hero__unit">
+                Assets secured via <span className="no-break">C4 audits</span>
+              </p>
             </div>
             <div className="hero__statistic">
-              <p className="type__headline__l">217</p>
-              <p>Audits run</p>
+              <p className="type__headline__l hero__statistic-number">217</p>
+              <p className="hero__unit">Audits run</p>
             </div>
             <div className="hero__statistic">
-              <p className="type__headline__l">3,215+</p>
-              <p>Wardens</p>
+              <p className="type__headline__l hero__statistic-number">3,215+</p>
+              <p className="hero__unit">Wardens</p>
             </div>
             <div className="hero__statistic">
-              <p className="type__headline__l">803</p>
-              <p>high-severity vulnerabilities found</p>
+              <p className="type__headline__l hero__statistic-number">803</p>
+              <p className="hero__unit">High-severity vulnerabilities found</p>
             </div>
           </div>
         </div>

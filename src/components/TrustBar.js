@@ -150,7 +150,7 @@ const TrustBar = () => (
   <div className="trustbar">
     <div className="limited-width">
       <h2 className="type__headline__m">
-        Leading crypto projects choose Code4rena
+        Leading crypto projects choose Code4rena.
       </h2>
       <p className="type__subline__s">There's a reason why.</p>
       <div className="trustbar__logos">

@@ -48,6 +48,11 @@
 //  // Document me somewhere, but this doesn't need any special treatment. It does the same thing as the blurple background class, only without the blurple. We could use it when the background is busy.
 // }
 
+// Use this with a span to make text not wrap
+.no-break {
+  white-space: nowrap;
+}
+
 // Spacing helper classes
 // --------------------
 

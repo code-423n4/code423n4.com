@@ -17,6 +17,15 @@ const testimonials = [
   },
   {
     quote:
+      "We greatly enjoyed our @code4rena experience - here's why it is the best value in auditing: quick spin-up time, flexible bounty awards, open nature means more eyes on your code, by our count ~10x more vs traditional audit shops, helpful community of wardens and judges",
+    author: "@_benjaminhughes",
+    authorTitle: "",
+    authorLink:
+      "https://twitter.com/_benjaminhughes/status/1554527455087558658?s=20&t=SxGE6sz2wxxChjUfrCW3dQ",
+    viewMode: "sponsor",
+  },
+  {
+    quote:
       "After grinding for 14 months I finally reached my goal of being the first to cross 1M$ on the @code4rena leaderboard. Thanks to everyone involved, this has been very fun, lucrative, and I learned a lot by seeing other wardens' vulnerabilities that I missed.",
     author: "Cmichel",
     authorTitle: "",
@@ -38,15 +47,6 @@ const testimonials = [
     authorTitle: "",
     authorLink: "https://twitter.com/DeGatchi/status/1624020967281557504",
     viewMode: "warden",
-  },
-  {
-    quote:
-      "We greatly enjoyed our @code4rena experience - here's why it is the best value in auditing: quick spin-up time, flexible bounty awards, open nature means more eyes on your code, by our count ~10x more vs traditional audit shops, helpful community of wardens and judges",
-    author: "@_benjaminhughes",
-    authorTitle: "",
-    authorLink:
-      "https://twitter.com/_benjaminhughes/status/1554527455087558658?s=20&t=SxGE6sz2wxxChjUfrCW3dQ",
-    viewMode: "sponsor",
   },
   {
     quote: "C4 wardens > any single audit shop IMO",
@@ -78,7 +78,7 @@ const breakpoints = {
 
 const Testimonials = ({ viewMode }) => (
   <div className="testimonials">
-    <h2 className="type__headline__l">Don't just take our word for it</h2>
+    <h2 className="type__headline__l">Don't just take our word for it.</h2>
     {/* Warden View */}
     {/* {!viewMode ||
       (viewMode === "warden" && ( */}
