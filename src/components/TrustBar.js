@@ -161,6 +161,7 @@ const TrustBar = () => (
             key={logo.link}
             target="_blank"
             rel="noreferrer"
+            className="trustbar__logo"
           >
             <img src={logo.imgSrc} alt={logo.alt} />
           </a>
