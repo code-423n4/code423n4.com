@@ -34,20 +34,36 @@ const HeroIndex = ({ viewMode }) => {
             </div>
             <div className="hero__right-side type__copy">
               <div className="hero__statistic">
-                <p className="type__headline__l">$14.5m</p>
-                <p>Earned by Wardens</p>
+                <p className="type__headline__l hero__statistic-number">
+                  $14.5m
+                </p>
+                <p className="hero__statistic-unit">earned by wardens</p>
               </div>
               <div className="hero__statistic">
-                <p className="type__headline__l">17,340</p>
-                <p>Unique vulnerabilities discovered</p>
+                <p className="type__headline__l hero__statistic-number">$71k</p>
+                <p className="hero__statistic-unit">
+                  <span>
+                    highest single{" "}
+                    <span className="no-break">payout (2023)</span>
+                  </span>
+                </p>
               </div>
               <div className="hero__statistic">
-                <p className="type__headline__l">$9860.77</p>
-                <p>Avg contest payout for top 3 (2023)</p>
+                <p className="type__headline__l hero__statistic-number">
+                  $9860.77
+                </p>
+                <p className="hero__statistic-unit">
+                  avg payout per contest for top 3 (2023)
+                </p>
               </div>
               <div className="hero__statistic">
-                <p className="type__headline__l">100%</p>
-                <p>Of satisfactory paid out</p>
+                <p className="type__headline__l hero__statistic-number">100%</p>
+                <p className="hero__statistic-unit">
+                  <span>
+                    of satisfactory{" "}
+                    <span className="no-break">findings paid</span> out
+                  </span>
+                </p>
               </div>
             </div>
           </div>
@@ -90,24 +106,28 @@ const HeroIndex = ({ viewMode }) => {
           </div>
           <div className="hero__right-side type__copy">
             <div className="hero__statistic">
-              <p className="type__headline__l hero__statistic-number">
-                $5 billion+
-              </p>
-              <p className="hero__unit">
-                Assets secured via <span className="no-break">C4 audits</span>
+              <p className="type__headline__l hero__statistic-number">17,340</p>
+              <p className="hero__statistic-unit hero__statistic-unit--short">
+                unique findings
               </p>
             </div>
             <div className="hero__statistic">
               <p className="type__headline__l hero__statistic-number">217</p>
-              <p className="hero__unit">Audits run</p>
+              <p className="hero__statistic-unit hero__statistic-unit--short">
+                audits run
+              </p>
             </div>
             <div className="hero__statistic">
               <p className="type__headline__l hero__statistic-number">3,215+</p>
-              <p className="hero__unit">Wardens</p>
+              <p className="hero__statistic-unit hero__statistic-unit--short">
+                wardens
+              </p>
             </div>
             <div className="hero__statistic">
               <p className="type__headline__l hero__statistic-number">803</p>
-              <p className="hero__unit">High-severity vulnerabilities found</p>
+              <p className="hero__statistic-unit">
+                high-severity vulnerabilities
+              </p>
             </div>
           </div>
         </div>

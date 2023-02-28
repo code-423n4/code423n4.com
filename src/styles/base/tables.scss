@@ -2,22 +2,21 @@
 
 table {
   margin-bottom: $spacing__l;
+  border-collapse: collapse;
   width: calc(96vw - 2 * #{$spacing__xl});
   overflow-x: auto;
   color: $color__text;
   background: $color__n-90;
   border: 1px solid $color__n-80;
   font-size: 12pt;
-  border-collapse: collapse;
-  overflow-x: auto;
   @include breakpoint("m") {
     width: 100%;
   }
 }
 table thead th,
 table tfoot th {
-  background: $color__n-80;
   color: $color__white;
+  background: $color__n-80;
   font-weight: 400;
 }
 table caption {
