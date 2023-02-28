@@ -34,9 +34,6 @@ const Pizzazz = () => {
     let plane;
     const simplex = new SimplexNoise();
     const mouse = new THREE.Vector2();
-    const mousePlane = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0);
-    const mousePosition = new THREE.Vector3();
-    const raycaster = new THREE.Raycaster();
     init();
 
     function init() {
@@ -64,7 +61,7 @@ const Pizzazz = () => {
         side: THREE.DoubleSide,
       });
 
-      let geo = new THREE.PlaneBufferGeometry(
+      let geo = new THREE.PlaneGeometry(
         wWidth,
         wHeight,
         wWidth / 2,
