@@ -5,7 +5,7 @@ const Footer = () => {
   return (
     <footer className="footer limited-width">
       <ul className="footer__items">
-        <li className="footer__item">An open organization</li>
+        <li className="footer__item">AN OPEN ORGANIZATION</li>
         <li className="footer__item">
           <a
             href="https://twitter.com/code4rena"
@@ -13,7 +13,7 @@ const Footer = () => {
             rel="noreferrer"
             aria-label="Twitter (Opens in new Window)"
           >
-            Twitter
+            TWITTER
           </a>
         </li>
         <li className="footer__item">
@@ -23,7 +23,7 @@ const Footer = () => {
             rel="noreferrer"
             aria-label="Discord (Opens in new Window)"
           >
-            Discord
+            DISCORD
           </a>
         </li>
         <li className="footer__item">
@@ -33,7 +33,7 @@ const Footer = () => {
             rel="noreferrer"
             aria-label="GitHub (Opens in new Window)"
           >
-            GitHub
+            GITHUB
           </a>
         </li>
         <li className="footer__item">
@@ -43,11 +43,11 @@ const Footer = () => {
             rel="noreferrer"
             aria-label="Medium (Opens in new Window)"
           >
-            Medium
+            MEDIUM
           </a>
         </li>
         <li className="footer__item">
-          <Link to="/newsletter-signup">Newsletter</Link>
+          <Link to="/newsletter-signup">NEWSLETTER</Link>
         </li>
         <li className="footer__item">
           <span className="eth-address">
