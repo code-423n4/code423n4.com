@@ -395,97 +395,36 @@ input[type="checkbox"] {
 // Selects
 // --------------------
 
-select {
-  // A reset of styles, including removing the default dropdown arrow
-  appearance: none;
-  background-color: transparent;
-  border: none;
-  padding: 0 1em 0 0;
-  margin: 0;
+.select {
   width: 100%;
-  font-family: inherit;
-  font-size: inherit;
-  cursor: inherit;
-  line-height: inherit;
+  min-height: 50px; // make sure it looks good in all browsers
+  padding: $spacing__s $spacing__m;
+  display: block;
+  background: url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/PjxzdmcgaGVpZ2h0PSIxNzkyIiB2aWV3Qm94PSIwIDAgMTc5MiAxNzkyIiB3aWR0aD0iMTc5MiIgZmlsbD0iI2ZmZmZmZiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMTY4MyA4MDhsLTc0MiA3NDFxLTE5IDE5LTQ1IDE5dC00NS0xOWwtNzQyLTc0MXEtMTktMTktMTktNDUuNXQxOS00NS41bDE2Ni0xNjVxMTktMTkgNDUtMTl0NDUgMTlsNTMxIDUzMSA1MzEtNTMxcTE5LTE5IDQ1LTE5dDQ1IDE5bDE2NiAxNjVxMTkgMTkgMTkgNDUuNXQtMTkgNDUuNXoiLz48L3N2Zz4=")
+    no-repeat right 1em center/0.8em 0.8em $color__n-80;
+  border: 2px solid transparent;
+  border-radius: $border-radius__m;
+  color: $color__n-5;
+  font-size: $font-size__text;
+  font-weight: bold;
+  // remove defaults
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -ms-appearance: none;
+  -o-appearance: none;
+  appearance: none;
 
-  // Stack above custom arrow
-  z-index: 1;
-
-  // Remove dropdown arrow in IE10 & IE11
-  // @link https://www.filamentgroup.com/lab/select-css.html
+  // remove defaults
   &::-ms-expand {
     display: none;
   }
-
-  // Remove focus outline, will add on alternate element
-  outline: none;
 }
 
-select {
-  display: grid;
-  grid-template-areas: "select";
-  align-items: center;
-  position: relative;
-  color: $color__white;
-
-  select,
+.select-label {
+  display: block;
+  margin-bottom: 0.3em;
   &::after {
-    grid-area: select;
-  }
-
-  min-width: 15ch;
-  max-width: 30ch;
-
-  border: 1px solid $color__n-30;
-  border-radius: 0.25em;
-  padding: 0.25em 0.5em;
-
-  font-size: 1.25rem;
-  cursor: pointer;
-  line-height: 1.1;
-
-  // Optional styles
-  // remove for transparency
-  background-color: $color__n-80;
-
-  // Custom arrow
-  &:not(.select--multiple)::after {
-    content: "";
-    justify-self: end;
-    width: 0.8em;
-    height: 0.5em;
-    background-color: $color__n-30;
-    clip-path: polygon(100% 0%, 0 0%, 50% 100%);
-  }
-}
-
-// Interim solution until :focus-within has better support
-select:focus + .focus {
-  position: absolute;
-  top: -1px;
-  left: -1px;
-  right: -1px;
-  bottom: -1px;
-  border: 2px solid $color__n-70;
-  border-radius: inherit;
-}
-
-select[multiple] {
-  padding-right: 0;
-
-  /*
-   * Safari will not reveal an option
-   * unless the select height has room to 
-   * show all of it
-   * Firefox and Chrome allow showing 
-   * a partial option
-   */
-  height: 6rem;
-
-  option {
-    white-space: normal;
-
-    // Only affects Chrome
-    outline-color: $color__n-30;
+    content: "▼";
+    color: red;
   }
 }

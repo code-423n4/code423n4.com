@@ -55,7 +55,8 @@ export default function Leaderboard({ data }) {
         <h1 className="type__headline__page-title">Leaderboard</h1>
         <div className="leaderboard__dropdown">
           {/* browser-native select in firefox inherits the dropdown background color from the select element */}
-          <select onChange={handleChange} className="dropdown">
+          {/* <label className="select-label">{timeFrame}</label> */}
+          <select onChange={handleChange} className="select">
             {filterOptions.map((option, index) => (
               <option value={option.value} key={`${option.value}-${index}`}>
                 {option.label}
