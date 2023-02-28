@@ -52,7 +52,7 @@ const Footer = () => {
         <li className="footer__item">
           <span className="eth-address">
             <a href="https://etherscan.io/address/0xC2BC2F890067C511215F9463A064221577A53E10">
-              0xC2bc2F890067C511215f9463a064221577a53E10
+              code4rena.eth
             </a>
           </span>
         </li>
