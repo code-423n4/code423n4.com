@@ -39,10 +39,9 @@ const WrapperLayout = (props) => {
         {preview ? (
           <meta property="og:image" content={preview} />
         ) : (
-          // TODO: Brand update
           <meta
             property="og:image"
-            content="https://code4rena.com/images/C4-banner.png"
+            content="https://code4rena.com/images/c4-og-banner.png"
           />
         )}
         {/* TODO: Brand update */}
