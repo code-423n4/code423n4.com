@@ -46,7 +46,7 @@ const Modal = () => {
         <div className="modal--main-buttons">
           {modalProps.primaryButtonText && (
             <button
-              className="button cta-button primary"
+              className="button button--primary"
               onClick={handlePrimaryButtonClick}
             >
               {isLoading
@@ -54,7 +54,7 @@ const Modal = () => {
                 : modalProps.primaryButtonText || "Ok"}
             </button>
           )}
-          <button className="button cta-button secondary" onClick={handleClose}>
+          <button className="button button--secondary" onClick={handleClose}>
             {modalProps.secondaryButtonText || "Cancel"}
           </button>
         </div>

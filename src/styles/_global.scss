@@ -1,3 +1,4 @@
+// base
 @import "base/reset";
 @import "base/forms";
 @import "base/helper-classes";
@@ -6,6 +7,8 @@
 @import "base/typography";
 @import "base/animations/skeleton-loader";
 @import "base/animations/swiper";
+
+// components
 @import "components/button";
 @import "components/bottom-cta";
 @import "components/contest-tile";
@@ -19,6 +22,9 @@
 @import "components/testimonials";
 @import "components/toastify";
 @import "components/warden-field";
+@import "components/input";
+
+// pages
 @import "pages/contest/contest";
 @import "pages/contest/submit-findings";
 @import "pages/contests/contests";
