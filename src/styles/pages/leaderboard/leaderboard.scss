@@ -167,6 +167,12 @@ $avatar-size: 25px;
   text-align: center;
 }
 
+.leaderboard__loading {
+  text-align: center;
+  font-size: $headline-font-size__s;
+  margin-top: $spacing__m;
+}
+
 .leaderboard-handle,
 .leaderboard-handle a,
 .leaderboard-handle .leaderboard-handle__team {

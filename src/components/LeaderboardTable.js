@@ -163,12 +163,12 @@ const LeaderboardTable = ({ results, isLoading, reduced }) => {
             );
           })}
         </tbody>
-      ) : !isLoading ? (
+      ) : isLoading ? (
         <tbody>
           {/* TODO - finish animating this */}
           <tr>
             <td colSpan="9" className="center">
-              <h3 className="skeleton-loader">Fetching results...</h3>
+              <h3 className="leaderboard__loading">Fetching results...</h3>
             </td>
           </tr>
         </tbody>
