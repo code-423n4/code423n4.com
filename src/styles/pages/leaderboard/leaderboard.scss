@@ -202,27 +202,15 @@ $avatar-size: 25px;
     color: $color__white;
     border: 1px solid $color__n-40;
     padding: $spacing__m $spacing__l;
-
-    li:first-of-type p::after {
-      content: " 🥇";
-    }
   }
   &:nth-of-type(2) {
     color: rgba($color__white, 0.9);
     border: 1px solid $color__n-50;
     padding: $spacing__s $spacing__l;
-
-    li:first-of-type p::after {
-      content: " 🥈";
-    }
   }
   &:nth-of-type(3) {
     color: rgba($color__white, 0.8);
     border: 1px solid $color__n-70;
     padding: $spacing__s $spacing__l;
-
-    li:first-of-type p::after {
-      content: " 🥉";
-    }
   }
 }
