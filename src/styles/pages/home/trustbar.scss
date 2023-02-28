@@ -31,6 +31,10 @@
   margin: $spacing__xl 0 0;
   padding: 0;
   list-style: none;
+
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: stretch;
 }
 
 .trustbar__logos a {
@@ -52,14 +56,18 @@
 }
 
 .trustbar__logos img {
-  height: 30px;
-  max-width: 100px;
+  height: 25px;
+  max-width: 62px;
   padding: 2px;
   opacity: 0.7;
   display: inline-block;
+  @include breakpoint("s") {
+    height: 25px;
+    max-width: 100px;
+  }
 }
 .trustbar__logo {
-  padding: calc($spacing__s) calc($spacing__m - 5px);
+  padding: calc($spacing__s) calc($spacing__m + 5px);
   display: inline-flex;
   align-items: center;
   justify-content: center;

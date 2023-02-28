@@ -44,6 +44,12 @@ const logos = [
     alt: "Mechanism Capital",
   },
   {
+    link: "https://tally.cash",
+    title: "Tally Wallet",
+    imgSrc: "/images/logos/tally.svg",
+    alt: "Tally Wallet",
+  },
+  {
     link: "https://nascent.xyz",
     title: "Nascent",
     imgSrc: "/images/logos/nascent.svg",
@@ -90,12 +96,6 @@ const logos = [
     title: "JuiceBox",
     imgSrc: "/images/logos/juicebox.svg",
     alt: "JuiceBox",
-  },
-  {
-    link: "https://tally.cash",
-    title: "Tally Wallet",
-    imgSrc: "/images/logos/tally.svg",
-    alt: "Tally Wallet",
   },
   {
     link: "https://alchemix.fi",
