@@ -1,10 +1,25 @@
-import React from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useTable, useSortBy } from "react-table";
 
 import LeaderboardHandle from "./LeaderboardHandle";
 
-const LeaderboardTableReduced = ({ results, isLoading, reduced }) => {
-  const columns = React.useMemo(
+const LeaderboardTableReduced = (props) => {
+  const [results, setResults] = useState(props.results);
+
+  useEffect(() => {
+    // the built-in sortBy function does not sort numbers with decimals accurately
+    // so in order get the correct ranking, multiply the award total by 100 before
+    // sorting and then divide by 100 again before rendering
+    setResults(
+      props.results.map((finding) => ({
+        ...finding,
+        awardTotal: finding.awardTotal * 100,
+      }))
+    );
+  }, [props.results]);
+
+  const { isLoading } = props;
+  const columns = useMemo(
     () => [
       {
         Header: "#",
@@ -58,7 +73,7 @@ const LeaderboardTableReduced = ({ results, isLoading, reduced }) => {
         Cell: (props) => {
           return (
             <span className="award-amount">
-              {props.value.toLocaleString("en-US", {
+              {(props.value / 100).toLocaleString("en-US", {
                 style: "currency",
                 currency: "USD",
               })}
@@ -103,7 +118,7 @@ const LeaderboardTableReduced = ({ results, isLoading, reduced }) => {
         className: "table__cell--number leaderboard__gas",
       },
     ],
-    []
+    [results]
   );
 
   const {
