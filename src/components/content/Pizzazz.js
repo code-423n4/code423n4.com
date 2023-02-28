@@ -50,16 +50,6 @@ const Pizzazz = () => {
 
       updateSize();
       window.addEventListener("resize", updateSize, false);
-      document.addEventListener("mousemove", (e) => {
-        const v = new THREE.Vector3();
-        camera.getWorldDirection(v);
-        v.normalize();
-        mousePlane.normal = v;
-        mouse.x = (e.clientX / width) * 2 - 1;
-        mouse.y = -(e.clientY / height) * 2 + 1;
-        raycaster.setFromCamera(mouse, camera);
-        raycaster.ray.intersectPlane(mousePlane, mousePosition);
-      });
 
       initScene();
       animate();
