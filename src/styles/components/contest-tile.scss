@@ -273,10 +273,6 @@ $contest-tile--solid__background: $color__n-90;
   background: $contest-tile--solid__background;
   border: $contest-tile--solid__border;
   .contest-tile__button-wrapper {
-    a {
-      border-left: $contest-tile--solid__border;
-    }
-
     .contest-tile__amount {
       background: none;
       border-bottom: $contest-tile--solid__border;
