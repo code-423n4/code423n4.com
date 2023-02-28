@@ -35,11 +35,19 @@
 
 .trustbar__logos a {
   margin: 0 $spacing__xs $spacing__xs 0;
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 
   @include breakpoint("s") {
     font-size: $headline-font-size__xxs;
     margin: 0 $spacing__s $spacing__s 0;
+  }
+
+  &:hover {
+    background-color: $color__sponsor;
+    color: $color__white;
+    border-color: $color__sponsor;
   }
 }
 
