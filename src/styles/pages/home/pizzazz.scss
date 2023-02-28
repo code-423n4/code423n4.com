@@ -3,4 +3,9 @@
   @include breakpoint("xs") {
     display: block;
   }
+
+  canvas {
+    overflow: hidden;
+    max-width: 100%;
+  }
 }
