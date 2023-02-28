@@ -2,16 +2,16 @@
 
 table {
   margin-bottom: $spacing__l;
-  border-collapse: collapse;
+  // border-collapse: collapse;
   width: calc(96vw - 2 * #{$spacing__xl});
   overflow-x: auto;
+  max-width: 100%;
+  display: block;
   color: $color__text;
   background: $color__n-90;
   border: 1px solid $color__n-80;
-  font-size: 12pt;
-  @include breakpoint("m") {
-    width: 100%;
-  }
+  font-size: $font-size__text;
+  line-height: 130%;
 }
 table thead th,
 table tfoot th {

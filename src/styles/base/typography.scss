@@ -373,18 +373,17 @@ summary,
   font-size: $font-size__copy__code;
   line-height: inherit;
 }
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-ul,
-th,
-td,
-a,
-code {
-  word-break: break-word;
+.type__copy {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  a,
+  code {
+    word-break: break-word;
+  }
 }
 .type__copy__ul,
 .type__copy ul {
