@@ -9,7 +9,32 @@ const LeaderboardTableReduced = ({ results, isLoading, reduced }) => {
       {
         Header: "#",
         Cell: (props) => {
-          return <p>{props.flatRows.indexOf(props.row) + 1}</p>;
+          const sortedType = props.allColumns[2].isSorted
+            ? props.allColumns[2].isSortedDesc
+              ? "desc"
+              : "asc"
+            : "none";
+          let rank;
+          switch (sortedType) {
+            case "desc":
+              rank = <p>{props.flatRows.indexOf(props.row) + 1}</p>;
+              break;
+            case "asc":
+              const totalRank = props.flatRows.length;
+              const currentIndex = props.flatRows.indexOf(props.row);
+              const currentRank = totalRank - currentIndex;
+              rank = <p>{currentRank}</p>;
+              break;
+            case "none":
+              const sortedRank = props.flatRows.sort(function (a, b) {
+                return b.values.awardTotal - a.values.awardTotal;
+              });
+              rank = <p>{sortedRank.indexOf(props.row) + 1}</p>;
+              break;
+            default:
+              rank = <p>{props.flatRows.indexOf(props.row) + 1}</p>;
+          }
+          return rank;
         },
         className: "leaderboard__rank",
       },
