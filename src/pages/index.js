@@ -90,7 +90,7 @@ export default function SiteIndex({ data }) {
           active={viewMode === "sponsor"}
           onClick={() => setViewMode("sponsor")}
         >
-          For Sponsors
+          For Projects
         </SecondaryNavItem>
       </SecondaryNav>
       {/* Hero */}

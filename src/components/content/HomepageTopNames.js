@@ -1,52 +1,86 @@
+import { Link } from "gatsby";
 import React from "react";
 
-// TODO: Final data / data source
 const topAuditors = [
   {
-    name: "jalapeno",
-    link: "https://www.youtube.com/watch?v=QH2-TGUlwu4",
+    name: "cmichel",
+    link: "https://twitter.com/cmichelio",
   },
   {
-    name: "artichoke",
+    name: "leastwood",
+    link: "https://twitter.com/0xleastwood",
   },
   {
-    name: "tuber",
+    name: "hyh",
+    link: "https://twitter.com/0xhyh",
   },
   {
-    name: "corn_flour2",
+    name: "gpersoon",
+    link: "https://twitter.com/gpersoon",
   },
   {
-    name: "rye",
+    name: "gzeon",
+    link: "https://twitter.com/gzeon",
   },
   {
-    name: "orange_peel2",
+    name: "hickupph3",
+    link: "https://twitter.com/HickupH",
   },
   {
-    name: "pickle",
+    name: "cccz",
+    link: null,
   },
   {
-    name: "remoulade",
+    name: "Lambda",
+    link: null,
   },
   {
-    name: "raisin",
+    name: "xiaoming90",
+    link: "https://twitter.com/xiaoming9090",
   },
   {
-    name: "spinach2",
+    name: "hansfriese",
+    link: "https://twitter.com/hansfriese",
   },
   {
-    name: "orange_peels",
+    name: "Trust",
+    link: "https://twitter.com/trust__90",
   },
   {
-    name: "pickle2",
+    name: "0xsomeone",
+    link: "https://github.com/alex-ppg",
   },
   {
-    name: "spinach",
+    name: "unforgiven",
+    link: null,
   },
   {
-    name: "tuber2",
+    name: "HollaDieWaldfee",
+    link: null,
   },
   {
-    name: "corn_flour",
+    name: "Jeiwan",
+    link: "https://jeiwan.net/",
+  },
+  {
+    name: "0x52",
+    link: null,
+  },
+  {
+    name: "IllIllI",
+    link: null,
+  },
+  {
+    name: "bin2chen",
+    link: "https://twitter.com/bin2chen",
+  },
+  {
+    name: "0xA5DF",
+    link: null,
+  },
+  {
+    name: "akshaysrivastv",
+    link: "https://twitter.com/akshaysrivastv",
   },
 ];
 
@@ -55,9 +89,9 @@ const HomepageTopNames = () => {
     <div className="hero__top-auditors full-width">
       <div className="limited-width">
         <h2 className="type__headline__m">
-          Your journey as an auditor begins now
+          Your journey to the top begins now
         </h2>
-        <p className="type__subline__s">Become one of the best</p>
+        <p className="type__subline__s">Become one of the best.</p>
         <ul className="hero__top-auditors-list">
           {topAuditors.map((auditor) => (
             <li key={auditor.name} className="hero__top-auditor">
@@ -69,7 +103,9 @@ const HomepageTopNames = () => {
                   aria-label={auditor.name + " (Opens in a new window)"}
                   className="hero__top-auditor-name"
                 >
-                  {auditor.name}
+                  <span className="hero__top-auditor-name--in-link">
+                    {auditor.name}
+                  </span>
                   <span className="hero__top-auditor-link-arrow">↗</span>
                 </a>
               ) : (
@@ -78,16 +114,9 @@ const HomepageTopNames = () => {
             </li>
           ))}
           <li>
-            {/* TODO: Final link */}
-            <a
-              href="https://discord.gg/code4rena"
-              target="_blank"
-              rel="noreferrer"
-              aria-label="Join them (Opens in a new window)"
-              className="button--tertiary"
-            >
+            <Link to={"/register"} className="button button--secondary">
               Join them
-            </a>
+            </Link>
           </li>
         </ul>
       </div>

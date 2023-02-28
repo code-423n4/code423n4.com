@@ -1,10 +1,6 @@
 import React, { ReactNode } from "react";
 import { Link } from "gatsby";
 
-// -----------------
-// 🍔's first typescript component, please scrutinize
-// -----------------
-
 interface ButtonProps {
   to: string;
   buttonType?: string;

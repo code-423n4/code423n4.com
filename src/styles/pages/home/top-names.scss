@@ -28,7 +28,7 @@
 }
 .hero__top-auditor,
 .hero__top-auditors-list li {
-  font-size: $font-size__copy;
+  font-size: $font-size__text;
   color: $color__n-5;
   margin: 0 $spacing__xs $spacing__xs 0;
   display: inline-block;
@@ -43,11 +43,12 @@
   }
 }
 .hero__top-auditor-name {
-  padding: calc($spacing__s + 1px) calc($spacing__m + 1px); // TODO: I mean this does work but it's unpleasant to look at
+  padding: calc($spacing__s) calc($spacing__m - 5px); // TODO: I mean this does work but it's unpleasant to look at
   display: inline-flex;
   align-items: center;
   justify-content: center;
   background: $color__n-80;
+  border: 2px solid transparent;
   border-radius: $border-radius__m;
   color: $color__n-5;
 }
@@ -58,11 +59,19 @@ a.hero__top-auditor-name {
     }
     background: $color__blurple-80;
     color: $color__white;
+
+    .hero__top-auditor-link-arrow {
+      border-color: rgba($color__white, 0.2);
+    }
   }
 }
 
 .hero__top-auditor-link-arrow {
   margin-left: $spacing__s;
+  font-size: 0.8rem;
+  border-left: 1px solid $color__n-60;
+  padding-left: 0.5rem;
+  font-weight: bold;
 }
 
 .hero__top-auditors-list .button--tertiary {
