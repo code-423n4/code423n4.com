@@ -19,7 +19,7 @@ import ClientOnly from "../components/ClientOnly";
 import Countdown from "../components/Countdown";
 import DefaultLayout from "./DefaultLayout";
 import FindingsList from "../components/FindingsList";
-import LeaderboardTable from "../components/LeaderboardTable";
+import LeaderboardTableReduced from "../components/LeaderboardTableReduced";
 import WardenDetails from "../components/WardenDetails";
 import ReactMarkdown from "react-markdown";
 
@@ -258,11 +258,11 @@ const ContestLayout = ({ data }) => {
               )}
             </TabList>
 
-            <section className="contest-page__tab-container full-width type__copy">
+            <section className="contest-page__tab-container full-width">
               {t.contestStatus === "completed" && (
                 <TabPanel>
                   <div className="limited-width">
-                    <LeaderboardTable
+                    <LeaderboardTableReduced
                       results={leaderboardResults}
                       isLoading={isLoading}
                     />
@@ -270,7 +270,7 @@ const ContestLayout = ({ data }) => {
                 </TabPanel>
               )}
               <TabPanel>
-                <div className="limited-width ">
+                <div className="limited-width type__copy">
                   {t.contestStatus === "soon" ? (
                     <div className="coming-soon tab__content--message">
                       <h2 className="type__headline__l">
@@ -298,7 +298,7 @@ const ContestLayout = ({ data }) => {
               </TabPanel>
               {t.contestStatus === "active" && (
                 <TabPanel>
-                  <div className="limited-width">
+                  <div className="limited-width type__copy">
                     {findingsStatus === FindingsStatus.Error ? (
                       <div className="centered-text">
                         <h2>Oops! Something went wrong.</h2>
