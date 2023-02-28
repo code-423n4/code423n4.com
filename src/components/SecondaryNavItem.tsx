@@ -11,7 +11,8 @@ export default function SecondaryNavItem(props): JSX.Element {
   const { to, text, active, children } = props;
   return (
     <button
-      {...props}
+    {...props}
+    active={active ? "true" : "false"}
       className={(active ? "active " : "") + "secondary-nav__item"}
     >
       {children ? children : text ? text : "Link"}
