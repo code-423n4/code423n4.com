@@ -151,7 +151,7 @@ const ContestLayout = ({ data }) => {
     <DefaultLayout
       pageTitle={pageTitle}
       bodyClass="contest-page"
-      preview={fields.artPath} // TODO: Are we still using this?
+      preview={fields.artPath} // TODO: Are we still using this
       pageDescription={dateDescription}
     >
       <div className="">
