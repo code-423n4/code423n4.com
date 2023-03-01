@@ -1,0 +1,17 @@
+{
+  "handle": "UdarTeam",
+  "members": [
+    "ahmedov",
+    "tourist"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x16514b719274484b06D56459f97139b333bd8130"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x16514b719274484b06D56459f97139b333bd8130"
+    }
+  ]
+}
