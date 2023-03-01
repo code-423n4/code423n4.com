@@ -149,6 +149,14 @@ exports.onCreateNode = async ({ node, getNode, actions }) => {
       value: slug,
     });
   }
+  
+  if (node.internal.type === `ReportsJson`) {
+    createNodeField({
+      node,
+      name: `slug`,
+      value: node.circa.slug,
+    });
+  }
 
   if (node.internal.type === `ContestsCsv`) {
     createNodeField({

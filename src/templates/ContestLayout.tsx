@@ -341,10 +341,10 @@ export default ContestLayout;
 
 export const query = graphql`
   query contestLayoutQuery($contestId: Int) {
-    markdownRemark(
-      frontmatter: { contest: { contestid: { eq: $contestId } } }
+    markdownRemark: reportsJson(
+      circa: { contest: { contestid: { eq: $contestId } } }
     ) {
-      frontmatter {
+      frontmatter: circa {
         altUrl
         slug
         title
