@@ -55,7 +55,6 @@
   padding: $spacing__l 0;
 
   margin-bottom: $spacing__l;
-  padding-bottom: $spacing__l;
   border-bottom: 1px solid $color__n-60;
 
   @include breakpoint("m") {
@@ -75,16 +74,14 @@
       margin: 0 $spacing__s;
     }
   }
-  a {
-    word-break: normal;
-  }
   display: none;
 
-  & > a {
+  a {
     width: 100%;
     padding: $spacing__s $spacing__s $spacing__s 0;
     color: $color__white;
     display: block;
+    word-break: normal;
     &:hover {
       color: $color__blurple__text--light;
     }
@@ -104,11 +101,13 @@
   margin-top: $spacing__l;
   display: flex;
   align-items: center;
+  width: 100%;
   .button--primary {
     margin-right: 0;
   }
 
   @include breakpoint("m") {
+    width: auto;
     margin-top: 0;
   }
 }
@@ -210,6 +209,22 @@
   min-width: 70%;
   max-width: 100%;
   height: 0;
+}
+
+.login__desktop {
+  @media (max-width: 970px) {
+    display: none;
+  }
+}
+
+.login__mobile {
+  width: 100%;
+  border-top: 1px solid $color__n-60;
+  padding-top: $spacing__l;
+
+  @media (min-width: 970px) {
+    display: none;
+  }
 }
 
 .user-dropdown {
