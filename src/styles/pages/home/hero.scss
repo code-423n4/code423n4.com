@@ -82,7 +82,7 @@
 .hero__sponsor {
   .hero__right-side {
     &:hover {
-      box-shadow: 0px 0px 25px rgba($color__sponsor, 0.5);
+      box-shadow: 0px 0px 2px rgba($color__sponsor, 1);
       background: rgba($color__sponsor, 0.1);
       .hero__statistic {
         background: rgba(#fff, 0.06);
@@ -93,7 +93,7 @@
 .hero__wardens {
   .hero__right-side {
     &:hover {
-      box-shadow: 0px 0px 25px rgba($color__button-blurple, 0.5);
+      box-shadow: 0px 0px 2px rgba($color__button-blurple, 1);
       background: rgba($color__button-blurple, 0.1);
       .hero__statistic {
         background: rgba(#fff, 0.06);
