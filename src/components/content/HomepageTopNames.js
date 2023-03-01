@@ -115,7 +115,7 @@ const HomepageTopNames = () => {
           ))}
           <li>
             <Link to={"/register"} className="button button--secondary">
-              Join them
+              Join us
             </Link>
           </li>
         </ul>

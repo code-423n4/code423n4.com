@@ -60,7 +60,7 @@ const Header = ({ hideConnectWalletDropdown = false }) => {
         </div>
         <div className="header__nav-links">
           <Link to="/leaderboard">Leaderboard</Link>
-          <Link to="/contests">Contests</Link>
+          <Link to="/contests">Competitions</Link>
           <Link to="/reports">Reports</Link>
           <a href="https://docs.code4rena.com">Docs</a>
           <Link to="/help">Help</Link>

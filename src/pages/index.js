@@ -24,10 +24,10 @@ export default function SiteIndex({ data }) {
   const [viewMode, setViewMode] = useState("project"); // warden | project
   const contests = data.contests.edges;
   useEffect(() => {
-    if (window.location.href.includes("#warden")) {
+    if (window.location.href.includes("#wardens")) {
       setViewMode("warden");
     }
-    if (window.location.href.includes("#project")) {
+    if (window.location.href.includes("#projects")) {
       setViewMode("project");
     }
   }, []);
@@ -117,7 +117,7 @@ export default function SiteIndex({ data }) {
         }
       >
         <div className="limited-width">
-          <h1 className="type__headline__l">Active competitive audits</h1>
+          <h1 className="type__headline__l">Active competitions</h1>
           {/* Skeleton loader animation */}
           {!filteredContests ? <SkeletonLoader /> : null}
           {/* Active contests */}
