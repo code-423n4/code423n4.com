@@ -1,7 +1,6 @@
-import clsx from "clsx";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Moralis from "moralis-v1";
-import { navigate } from "gatsby";
+import { Link, navigate } from "gatsby";
 import { toast } from "react-toastify";
 import { useMoralis } from "react-moralis";
 
@@ -146,11 +145,11 @@ const Login = ({ displayAsButtons = false }) => {
   return (
     <>
       {displayAsButtons ? (
-        <div className={clsx("login__no-dropdown")}>
+        <div className="login__no-dropdown">
           <button
             type="button"
             onClick={(e) => handleLogin(e)}
-            className={clsx("button", "login__button--smaller")}
+            className="button login__button--smaller"
           >
             <img
               src="/images/meta-mask-logo.svg"
@@ -162,7 +161,7 @@ const Login = ({ displayAsButtons = false }) => {
           <button
             type="button"
             onClick={(e) => handleLogin(e, "walletConnect")}
-            className={clsx("button", "login__button--smaller")}
+            className="button login__button--smaller"
           >
             <img
               src="/images/wallet-connect-logo.svg"
@@ -172,7 +171,7 @@ const Login = ({ displayAsButtons = false }) => {
             WalletConnect
           </button>
           <button
-            className={clsx("button", "login__button--smaller")}
+            className="button login__button--smaller"
             type="button"
             onClick={openLoginModal}
           >
@@ -183,11 +182,14 @@ const Login = ({ displayAsButtons = false }) => {
             />
             Log in
           </button>
+          <Link className="button login__button--smaller" to="/register">
+            Register
+          </Link>
         </div>
       ) : (
         <>
           <Dropdown
-            wrapperClass={"login__button-wrapper"}
+            wrapperClass={"login__button-wrapper login__desktop"}
             triggerButtonClass={"button login__button"}
             triggerButton="Connect"
             openOnHover={true}
@@ -195,7 +197,7 @@ const Login = ({ displayAsButtons = false }) => {
             <button
               type="button"
               onClick={(e) => handleLogin(e)}
-              className={clsx("dropdown__button")}
+              className="dropdown__button"
             >
               <img
                 src="/images/meta-mask-logo.svg"
@@ -207,7 +209,7 @@ const Login = ({ displayAsButtons = false }) => {
             <button
               type="button"
               onClick={(e) => handleLogin(e, "walletConnect")}
-              className={clsx("dropdown__button")}
+              className="dropdown__button"
             >
               <img
                 src="/images/wallet-connect-logo.svg"
@@ -217,7 +219,7 @@ const Login = ({ displayAsButtons = false }) => {
               WalletConnect
             </button>
             <button
-              className={clsx("dropdown__button")}
+              className="dropdown__button"
               type="button"
               onClick={openLoginModal}
             >
@@ -228,7 +230,64 @@ const Login = ({ displayAsButtons = false }) => {
               />
               Log in
             </button>
+            {/* using navigate function instead of <Link> for styling purposes */}
+            <button
+              className="dropdown__button"
+              type="button"
+              onClick={() => navigate("/register")}
+            >
+              <img
+                src="/images/register.svg"
+                alt="login icon"
+                className={"login__icon"}
+              />
+              Register
+            </button>
           </Dropdown>
+          <div className={"login__mobile"}>
+            <a
+              href=""
+              target="_blank"
+              rel="noreferrer"
+              onClick={(e) => handleLogin(e)}
+              className={"login__link"}
+            >
+              <img
+                src="/images/meta-mask-logo.svg"
+                alt="logout icon"
+                className={"login__icon"}
+              />
+              Connect MetaMask
+            </a>
+            <a
+              href=""
+              onClick={(e) => handleLogin(e, "walletConnect")}
+              className={"login__link"}
+            >
+              <img
+                src="/images/wallet-connect-logo.svg"
+                alt="logout icon"
+                className={"login__icon"}
+              />
+              Connect WalletConnect
+            </a>
+            <a href="" className={"login__link"} onClick={openLoginModal}>
+              <img
+                src="/images/sign-out.svg"
+                alt="login icon"
+                className={"login__icon"}
+              />
+              Log in
+            </a>
+            <Link className="login__link" to="/register">
+              <img
+                src="/images/register.svg"
+                alt="login icon"
+                className={"login__icon"}
+              />
+              Register
+            </Link>
+          </div>
         </>
       )}
     </>
