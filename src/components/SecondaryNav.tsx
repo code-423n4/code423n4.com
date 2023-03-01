@@ -14,7 +14,7 @@ const SecondaryNav = ({ children }) => {
       >
         {/* This is for screenreaders to announce the secondary navigation */}
         <span id="hero-navigation" className="visually-hidden">
-          Banner navigation
+          Tab navigation
         </span>
         {children && children}
       </nav>

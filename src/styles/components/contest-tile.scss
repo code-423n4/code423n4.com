@@ -95,7 +95,7 @@ $contest-tile--solid__background: $color__n-90;
   }
 }
 
-.contest-tile__logo .sponsor-link {
+.contest-tile__logo .project-link {
   width: calc($contest-tile__logo-container-width * 0.7);
   @include breakpoint("s") {
     width: $contest-tile__logo-container-width;
@@ -329,7 +329,7 @@ $contest-tile--solid__background: $color__n-90;
     margin-right: $spacing__m;
   }
 
-  .contest-tile__logo .sponsor-link {
+  .contest-tile__logo .project-link {
     width: calc($contest-tile__logo-container-width * 0.7);
   }
 

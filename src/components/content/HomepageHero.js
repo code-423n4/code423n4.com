@@ -69,7 +69,7 @@ const HeroIndex = ({ viewMode }) => {
           </div>
         ))}
       {viewMode === "sponsor" && (
-        <div className="hero__sponsor type__copy grid__one-by-two--break-s limited-width">
+        <div className="hero__project type__copy grid__one-by-two--break-s limited-width">
           <div className="hero__left-side">
             <h1 className="type__headline__hero">
               <div>Secure your</div> <div>smart contracts.</div>

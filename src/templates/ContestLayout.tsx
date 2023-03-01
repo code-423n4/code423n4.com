@@ -179,8 +179,8 @@ const ContestLayout = ({ data }) => {
             ) : null}
 
             <div className="contest-page__top-content">
-              <div className="contest-page__sponsor">
-                <div className="contest-page__sponsor-link sponsor-link">
+              <div className="contest-page__project">
+                <div className="contest-page__project-link project-link">
                   <a href={sponsor.link}>
                     <img
                       src={sponsor.image.childImageSharp.resize.src}

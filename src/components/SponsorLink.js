@@ -16,7 +16,7 @@ const SponsorLink = ({ sponsor, className }) => {
     }
     if (sponsor.link) {
       return (
-        <div className="sponsor-link__placeholder-logo">
+        <div className="project-link__placeholder-logo">
           <a href={sponsor.link}>
             <img
               src={sponsor.image.childImageSharp.resize.src}
@@ -32,7 +32,7 @@ const SponsorLink = ({ sponsor, className }) => {
   };
 
   return (
-    <div className={"sponsor-link " + (className ? className : "")}>
+    <div className={"project-link " + (className ? className : "")}>
       {isClient ? getSponsorImg() : <div className="placeholder-img"></div>}
     </div>
   );

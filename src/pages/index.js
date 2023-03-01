@@ -21,14 +21,14 @@ export default function SiteIndex({ data }) {
   // @todo: implement global state management instead of props drilling
   const [contestStatusChanges, updateContestStatusChanges] = useState(0);
   const [filteredContests, setFilteredContest] = useState(null);
-  const [viewMode, setViewMode] = useState("sponsor"); // warden | sponsor
+  const [viewMode, setViewMode] = useState("project"); // warden | project
   const contests = data.contests.edges;
   useEffect(() => {
     if (window.location.href.includes("#warden")) {
       setViewMode("warden");
     }
-    if (window.location.href.includes("#sponsor")) {
-      setViewMode("sponsor");
+    if (window.location.href.includes("#project")) {
+      setViewMode("project");
     }
   }, []);
 
@@ -87,18 +87,18 @@ export default function SiteIndex({ data }) {
       {/* Nav switcher */}
       <SecondaryNav>
         <SecondaryNavItem
+          to="#projects"
+          active={viewMode === "project"}
+          onClick={() => setViewMode("project")}
+        >
+          For Projects
+        </SecondaryNavItem>
+        <SecondaryNavItem
           to="#wardens"
           active={viewMode === "warden"}
           onClick={() => setViewMode("warden")}
         >
           For Wardens
-        </SecondaryNavItem>
-        <SecondaryNavItem
-          to="#sponsors"
-          active={viewMode === "sponsor"}
-          onClick={() => setViewMode("sponsor")}
-        >
-          For Projects
         </SecondaryNavItem>
       </SecondaryNav>
       {/* Hero */}
@@ -107,7 +107,7 @@ export default function SiteIndex({ data }) {
 
       {/* Top names bar under hero */}
       {!viewMode || (viewMode === "warden" && <HomepageTopNames />)}
-      {viewMode === "sponsor" && <TrustBar />}
+      {viewMode === "project" && <TrustBar />}
 
       {/* Contests */}
       <section
@@ -123,7 +123,7 @@ export default function SiteIndex({ data }) {
           {/* Active contests */}
           {filteredContests && filteredContests.activeContests.length > 0 ? (
             <div className="featured-contests__active">
-              <p className="type__subline__m spacing-bottom__l">
+              <p className="type__subline__s spacing-bottom__l">
                 Currently finding the highest-severity vulnerabilities for:
               </p>
               <ContestList

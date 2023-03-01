@@ -19,11 +19,12 @@
 
 // TODO: This is a hack to get the swiper to be responsive, do it properly
 .swiper {
-  max-width: calc(90vw - $spacing__l * 2);
+  max-width: calc(92vw - $spacing__l * 2);
   padding-bottom: $spacing__l;
+  margin: 0;
 
   @include breakpoint("s") {
-    max-width: calc(91vw - $spacing__l * 2);
+    max-width: calc(92vw - $spacing__l * 2);
   }
 
   @include breakpoint("m") {

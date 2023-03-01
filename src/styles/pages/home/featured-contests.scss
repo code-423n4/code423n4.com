@@ -21,7 +21,7 @@
   background: $color__blended-60;
 }
 
-.background--sponsor {
+.background--project {
   background: $color__blended-60;
 }
 
@@ -32,7 +32,16 @@
   }
 
   .featured-contests__completed {
-    padding: $spacing__l 0;
+    padding: $spacing__xl 0;
+    margin-top: calc($spacing__xl + $spacing__m);
     background: rgba(0, 0, 0, 0.2);
+
+    @include breakpoint("s") {
+      margin-top: $spacing__xl 0;
+    }
+  }
+
+  .skeleton-loader {
+    padding-bottom: $spacing__l;
   }
 }

@@ -93,7 +93,7 @@
     flex-direction: row;
   }
 }
-.contest-page__sponsor {
+.contest-page__project {
   display: flex;
   flex-grow: 1;
   align-items: center;
@@ -111,7 +111,7 @@
     line-height: 130%;
   }
 }
-.contest-page__sponsor-link {
+.contest-page__project-link {
   max-width: 90px;
   min-width: 50px;
   margin-right: $spacing__m;

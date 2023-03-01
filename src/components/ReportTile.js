@@ -14,9 +14,9 @@ const ReportTile = ({ report }) => {
   return (
     <div className={"report-tile"}>
       <div className="report-tile__content-wrapper">
-        <SponsorLink sponsor={sponsor} className="report-tile__sponsor-link" />
+        <SponsorLink sponsor={sponsor} className="report-tile__project-link" />
         <div className="report-tile__content">
-          <h2 className="report-tile__sponsor-name type__headline__xs">
+          <h2 className="report-tile__project-name type__headline__xs">
             <Link to={reportUrl}>{sponsor.name} →</Link>
           </h2>
           <p>

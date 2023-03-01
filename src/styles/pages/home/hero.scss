@@ -79,11 +79,11 @@
     grid-template-rows: repeat(2, 1fr);
   }
 }
-.hero__sponsor {
+.hero__project {
   .hero__right-side {
     &:hover {
-      box-shadow: 0px 0px 2px rgba($color__sponsor, 1);
-      background: rgba($color__sponsor, 0.1);
+      box-shadow: 0px 0px 2px rgba($color__project, 1);
+      background: rgba($color__project, 0.1);
       .hero__statistic {
         background: rgba(#fff, 0.06);
       }
@@ -147,21 +147,21 @@
   }
 }
 
-.hero__sponsor .button--primary {
-  background-color: $color__sponsor-color !important;
-  border-color: $color__sponsor-color !important;
+.hero__project .button--primary {
+  background-color: $color__project-color !important;
+  border-color: $color__project-color !important;
 
   &:hover {
-    background-color: $color__sponsor-color--hover !important;
-    border-color: $color__sponsor-color--hover !important;
+    background-color: $color__project-color--hover !important;
+    border-color: $color__project-color--hover !important;
   }
 }
 
-.hero__sponsor .button--secondary {
-  border-color: $color__sponsor-color !important;
+.hero__project .button--secondary {
+  border-color: $color__project-color !important;
 
   &:hover {
-    background: $color__sponsor-color !important;
-    border-color: $color__sponsor-color--hover !important;
+    background: $color__project-color !important;
+    border-color: $color__project-color--hover !important;
   }
 }

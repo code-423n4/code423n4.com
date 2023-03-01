@@ -2,7 +2,7 @@
 @import "./contest-tile";
 
 // --------------------------------------------------
-// Sponsor Link Component
+// Project Link Component
 // --------------------------------------------------
 
 // CSS rule order
@@ -18,7 +18,7 @@
 // 8. Transforms
 // 9. Other
 
-.sponsor-link {
+.project-link {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -44,7 +44,7 @@
   }
 
   // Styles for when there is no image during the build process
-  .sponsor-link__placeholder-logo {
+  .project-link__placeholder-logo {
     min-width: 50px;
     min-height: 50px;
     width: 100%;
