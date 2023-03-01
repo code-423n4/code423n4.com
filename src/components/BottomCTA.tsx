@@ -34,7 +34,7 @@ export default function BottomCTA({ viewMode }: BottomCTAProps): JSX.Element {
             </div>
           </div>
         ))}
-      {viewMode === "sponsor" && (
+      {viewMode === "project" && (
         <div className="bottom-cta">
           <div className="bottom-cta__content limited-width">
             <h1 className="type__headline__m bottom-cta__title">
