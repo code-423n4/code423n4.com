@@ -106,27 +106,27 @@ const HeroIndex = ({ viewMode }) => {
           </div>
           <div className="hero__right-side type__copy">
             <div className="hero__statistic">
+              <p className="type__headline__l hero__statistic-number">803</p>
+              <p className="hero__statistic-unit">
+                unique high-severity vulnerabilities
+              </p>
+            </div>
+            <div className="hero__statistic">
               <p className="type__headline__l hero__statistic-number">17,340</p>
               <p className="hero__statistic-unit hero__statistic-unit--short">
                 unique findings
               </p>
             </div>
             <div className="hero__statistic">
+              <p className="type__headline__l hero__statistic-number">3,215+</p>
+              <p className="hero__statistic-unit hero__statistic-unit--short">
+                registered wardens
+              </p>
+            </div>
+            <div className="hero__statistic">
               <p className="type__headline__l hero__statistic-number">217</p>
               <p className="hero__statistic-unit hero__statistic-unit--short">
                 audits run
-              </p>
-            </div>
-            <div className="hero__statistic">
-              <p className="type__headline__l hero__statistic-number">3,215+</p>
-              <p className="hero__statistic-unit hero__statistic-unit--short">
-                wardens
-              </p>
-            </div>
-            <div className="hero__statistic">
-              <p className="type__headline__l hero__statistic-number">803</p>
-              <p className="hero__statistic-unit">
-                high-severity vulnerabilities
               </p>
             </div>
           </div>
