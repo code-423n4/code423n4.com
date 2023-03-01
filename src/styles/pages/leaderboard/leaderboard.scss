@@ -27,7 +27,7 @@ $avatar-size: 25px;
 
   @include breakpoint("m") {
     max-height: none;
-    overflow-y: visible;
+    overflow: visible;
   }
 
   // Scrollbar
