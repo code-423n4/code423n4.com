@@ -23,7 +23,7 @@ const topAuditors = [
     link: "https://twitter.com/gzeon",
   },
   {
-    name: "hickupph3",
+    name: "hickuphh3",
     link: "https://twitter.com/HickupH",
   },
   {
