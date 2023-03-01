@@ -34,7 +34,7 @@
   .featured-contests__completed {
     padding: $spacing__xl 0;
     margin-top: calc($spacing__xl + $spacing__m);
-    background: rgba(0, 0, 0, 0.2);
+    background: $color__n-90;
 
     @include breakpoint("s") {
       margin-top: $spacing__xl 0;

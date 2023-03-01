@@ -110,19 +110,14 @@ export default function SiteIndex({ data }) {
       {viewMode === "project" && <TrustBar />}
 
       {/* Contests */}
-      <section
-        className={
-          "home__featured-contests background--low-contrast background--" +
-          viewMode
-        }
-      >
+      <section className={"home__featured-contests background--" + viewMode}>
         <div className="limited-width">
           <h1 className="type__headline__l">Active competitions</h1>
           {/* Skeleton loader animation */}
           {!filteredContests ? <SkeletonLoader /> : null}
           {/* Active contests */}
           {filteredContests && filteredContests.activeContests.length > 0 ? (
-            <div className="featured-contests__active">
+            <div className="featured-contests__active background--low-contrast">
               <p className="type__subline__s spacing-bottom__l">
                 Currently finding the highest-severity vulnerabilities for:
               </p>
@@ -135,7 +130,7 @@ export default function SiteIndex({ data }) {
           ) : null}
           {/* Upcoming contests */}
           {filteredContests && filteredContests.upcomingContests.length > 0 ? (
-            <div className="featured-contests__upcoming">
+            <div className="featured-contests__upcoming background--low-contrast">
               <h2 className="type__headline__xs spacing-top__xl spacing-bottom__l">
                 Upcoming audits
               </h2>

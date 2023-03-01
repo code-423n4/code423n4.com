@@ -275,7 +275,10 @@ $contest-tile--solid__background: $color__n-90;
   .contest-tile__button-wrapper {
     .contest-tile__amount {
       background: none;
-      border-bottom: $contest-tile--solid__border;
+      border-bottom: $contest-tile--solid__border !important;
+    }
+    a {
+      border-left: $contest-tile--solid__border !important;
     }
   }
 
@@ -313,8 +316,7 @@ $contest-tile--solid__background: $color__n-90;
   }
   .contest-tile__amount {
     padding: $spacing__s $spacing__m;
-    background: $contest-amount__background;
-    border-bottom: $contest-tile__border;
+    border-bottom: $contest-tile--solid__border;
     color: $color__white;
     font-weight: 500;
     text-align: right;
@@ -405,9 +407,12 @@ $contest-tile--solid__background: $color__n-90;
 
   .contest-tile__status-indicator {
     width: 100%;
+    border-color: $color__n-60 !important;
   }
 
   .contest-tile__status-indicator-text {
     font-size: $font-size__small;
   }
+
+  @include contest-tile--solid;
 }
