@@ -2,7 +2,7 @@ import clsx from "clsx";
 import React, { ReactNode, useCallback } from "react";
 
 import { Input } from "./Input";
-import * as styles from "./DynamicInputGroup.module.scss";
+import * as styles from "../styles/Main.module.scss";
 
 interface DynamicInputGroupProps {
   onChange: (payload: string[]) => void;
@@ -57,7 +57,7 @@ export const DynamicInputGroup = ({
   };
 
   return (
-    <div className={clsx(styles.DynamicInputGroup, className)}>
+    <div className={clsx(styles.DynamicInputGroup__DynamicInputGroup, className)}>
       {children}
       {fields.map((value, i) => (
         <Input
@@ -76,7 +76,7 @@ export const DynamicInputGroup = ({
         />
       ))}
       <button
-        className={styles.AddLineButton}
+        className={styles.DynamicInputGroup__AddLineButton}
         type="button"
         onClick={handleAddInputField}
       >

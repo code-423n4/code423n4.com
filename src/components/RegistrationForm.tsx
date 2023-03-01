@@ -19,8 +19,7 @@ import { Input } from "./Input";
 import RegistrationFormCommonFields from "./RegistrationFormCommonFields";
 
 // styles
-import * as styles from "./form/Form.module.scss";
-import * as widgetStyles from "./reporter/widgets/Widgets.module.scss";
+import * as styles from "../styles/Main.module.scss";
 
 interface userState {
   username: string;
@@ -353,7 +352,11 @@ export default function RegistrationForm({ handles }) {
   const usernameValidator = useCallback(
     (value: string) => {
       const validationErrors: (string | React.ReactNode)[] = [];
-      if (handles.has(value)) {
+      if (
+        Object.keys(handles).find(
+          (handle) => handle.toLowerCase() === value.toLowerCase()
+        )
+      ) {
         validationErrors.push(`${value} is already a registered username.`);
       }
       if (isDangerousUsername) {
@@ -458,10 +461,10 @@ export default function RegistrationForm({ handles }) {
                 />
                 <label
                   htmlFor="useCustomPaymentAddress"
-                  className={widgetStyles.RadioLabel}
+                  className={styles.Widget__RadioLabel}
                 >
                   <input
-                    className={widgetStyles.Checkbox}
+                    className={styles.Widget__Checkbox}
                     type="checkbox"
                     id="useCustomPaymentAddress"
                     name="useCustomPaymentAddress"
@@ -528,14 +531,14 @@ export default function RegistrationForm({ handles }) {
             />
           </div>
           <Agreement />
-          <div className={styles.ButtonsWrapper}>
+          <div className={styles.Form__ButtonsWrapper}>
             {status === FormStatus.Submitting ? (
-              <span className={clsx("button cta-button", styles.Button)}>
+              <span className={clsx("button cta-button", styles.Form__Button)}>
                 Submitting...
               </span>
             ) : registrationType === RegistrationType.UsernameAndPassword ? (
               <button
-                className={clsx("button cta-button", styles.Button)}
+                className={clsx("button cta-button", styles.Form__Button)}
                 type="button"
                 onClick={() => submitRegistration()}
               >
@@ -544,14 +547,14 @@ export default function RegistrationForm({ handles }) {
             ) : (
               <>
                 <button
-                  className={clsx("button cta-button", styles.Button)}
+                  className={clsx("button cta-button", styles.Form__Button)}
                   type="button"
                   onClick={() => submitRegistration("metamask")}
                 >
                   Register with MetaMask
                 </button>
                 <button
-                  className={clsx("button cta-button", styles.Button)}
+                  className={clsx("button cta-button", styles.Form__Button)}
                   type="button"
                   onClick={() => submitRegistration("walletConnect")}
                 >

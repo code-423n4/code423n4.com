@@ -17,7 +17,7 @@ import Form from "../components/form/Form";
 import { Input } from "../components/Input";
 
 // styles
-import * as widgetStyles from "../components/reporter/widgets/Widgets.module.scss";
+import * as styles from "../styles/Main.module.scss";
 
 enum FormStatus {
   Unsubmitted = "unsubmitted",
@@ -269,12 +269,12 @@ export default function ConfirmAccount() {
             {handles.length > 1 && (
               <>
                 <fieldset
-                  className={clsx(widgetStyles.Fields, widgetStyles.RadioGroup)}
+                  className={clsx(styles.Widget__Fields, styles.Widget__RadioGroup)}
                 >
                   {handles.map((handle) => (
-                    <label className={widgetStyles.RadioLabel} key={handle}>
+                    <label className={styles.Widget__RadioLabel} key={handle}>
                       <input
-                        className={widgetStyles.Radio}
+                        className={styles.Widget__Radio}
                         type="radio"
                         value={handle}
                         name="handle"

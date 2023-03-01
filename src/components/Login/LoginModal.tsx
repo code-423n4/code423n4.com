@@ -11,7 +11,7 @@ import useUser from "../../hooks/UserContext";
 import { Input } from "../Input";
 
 // styles
-import * as styles from "./Login.module.scss";
+import * as styles from "../../styles/Main.module.scss";
 
 const LoginModal = () => {
   const { Moralis } = useMoralis();
@@ -186,7 +186,7 @@ const LoginModal = () => {
                 {isLoading ? "Submitting..." : "Log in"}
               </button>
             </div>
-            <div className={styles.DividingLine}></div>
+            <div className={styles.Login__DividingLine}></div>
             <span>
               Not a warden yet?{" "}
               <Link to="/register" onClick={handleClose}>

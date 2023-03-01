@@ -7,6 +7,7 @@
   background: rgba(24, 31, 36, 0.7);
   z-index: 999;
   font-family: var(--font-family);
+  color: var(--text-normal);
 }
 
 .modal-main {

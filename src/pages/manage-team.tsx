@@ -18,7 +18,7 @@ import TeamForm, { TeamState } from "../components/TeamForm";
 import { WardenFieldOption } from "../components/reporter/widgets/WardenField";
 
 // styles
-import * as styles from "../components/form/Form.module.scss";
+import * as styles from "../styles/Main.module.scss";
 
 export default function TeamManagement({ data, location }) {
   const { currentUser } = useUser();
@@ -176,7 +176,7 @@ export default function TeamManagement({ data, location }) {
       <div className="wrapper-main">
         {unauthorized ? (
           <div className="centered-text">
-            <div className={styles.Form}>
+            <div className={styles.Form__Form}>
               <h1>Unauthorized</h1>
               <p>You are not authorized to view or edit this team.</p>
             </div>
@@ -229,7 +229,7 @@ export const query = graphql`
           }
           image {
             childImageSharp {
-              resize(width: 64, quality: 90) {
+              resize(width: 80) {
                 src
               }
             }

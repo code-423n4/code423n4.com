@@ -23,7 +23,7 @@ import { Input } from "./Input";
 import WardenField, { WardenFieldOption } from "./reporter/widgets/WardenField";
 
 // styles
-import * as widgetStyles from "../components/reporter/widgets/Widgets.module.scss";
+import * as styles from "../styles/Main.module.scss";
 
 export interface TeamState {
   teamName: string;
@@ -323,11 +323,11 @@ export default function TeamForm({
           handleChange={handleChange}
         />
 
-        <div className={widgetStyles.Container}>
-          <label htmlFor="avatar" className={widgetStyles.Label}>
+        <div className={styles.Widget__Container}>
+          <label htmlFor="avatar" className={styles.Widget__Label}>
             Avatar (Optional)
           </label>
-          <p className={widgetStyles.Help}>
+          <p className={styles.Widget__Help}>
             An avatar displayed next to your name on the leaderboard.
           </p>
           <Avatar
@@ -337,7 +337,7 @@ export default function TeamForm({
             round="50px"
           />
           <input
-            className={widgetStyles.Avatar}
+            className={styles.Widget__Avatar}
             type="file"
             id="avatar"
             name="avatar"

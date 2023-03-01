@@ -12,7 +12,7 @@ import useUser from "../hooks/UserContext";
 // components
 import Login from "./Login/Login";
 // styles
-import * as styles from "./FindingsList.module.scss";
+import * as styles from "../styles/Main.module.scss";
 
 interface FindingsListProps extends PropsWithChildren {
   submissionPath: string;
@@ -29,15 +29,15 @@ const FindingsList = ({
   const { currentUser } = useUser();
 
   return currentUser.isLoggedIn ? (
-    <ul className={styles.List}>
+    <ul className={styles.FindingsList__List}>
       {children && (
-        <li className={clsx(styles.ListItem, styles.Heading)}>{children}</li>
+        <li className={clsx(styles.FindingsList__ListItem, styles.FindingsList__Heading)}>{children}</li>
       )}
       {isLoading ? (
         // @todo: style loading state
-        <li className={styles.ListItem}>Loading...</li>
+        <li className={styles.FindingsList__ListItem}>Loading...</li>
       ) : findings.length === 0 ? (
-        <li className={styles.ListItem}>
+        <li className={styles.FindingsList__ListItem}>
           No findings submitted for this contest
         </li>
       ) : (
@@ -45,9 +45,9 @@ const FindingsList = ({
           const created = new Date(finding.createdAt);
           const now = new Date();
           return (
-            <li key={finding.issueNumber} className={styles.ListItem}>
+            <li key={finding.issueNumber} className={styles.FindingsList__ListItem}>
               <svg
-                className={clsx(styles[finding.state], styles.Status)}
+                className={clsx(styles[finding.state], styles.FindingsList__Status)}
                 viewBox="0 0 16 16"
                 version="1.1"
                 width="16"
@@ -61,18 +61,18 @@ const FindingsList = ({
                 ></path>
               </svg>
               <div>
-                <div className={styles.Details}>
+                <div className={styles.FindingsList__Details}>
                   <Link
                     to={`${submissionPath}?issue=${finding.issueNumber}`}
                     state={{ finding: finding }}
-                    className={clsx(styles[finding.state], styles.Title)}
+                    className={clsx(styles[finding.state], styles.FindingsList__Title)}
                   >
                     {finding.title}
                   </Link>
                   {finding.labels.map((label) => (
                     <span
                       key={label.name}
-                      className={styles.Risk}
+                      className={styles.FindingsList__Risk}
                       style={{ color: transformColor(label.color, 120) }}
                     >
                       {label.name}
@@ -80,7 +80,7 @@ const FindingsList = ({
                   ))}
                 </div>
                 <div>
-                  <span className={styles.Time}>
+                  <span className={styles.FindingsList__Time}>
                     {"Submitted "}
                     <time dateTime={finding.updatedAt}>
                       {formatDistance(created, now)}

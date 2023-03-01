@@ -27,14 +27,13 @@ export default function ReportIndex({ data }) {
 
 export const query = graphql`
   query {
-    reports: allMarkdownRemark(
-      filter: { fields: { collection: { eq: "reports" } } }
-      sort: { fields: frontmatter___contest___contestid }
+    reports: allReportsJson(
+      sort: { fields: circa___contest___contestid }
     ) {
       edges {
         node {
           id
-          frontmatter {
+          frontmatter: circa {
             title
             slug
             findings
@@ -43,7 +42,7 @@ export const query = graphql`
               id
               image {
                 childImageSharp {
-                  resize(width: 160) {
+                  resize(width: 80) {
                     src
                   }
                 }

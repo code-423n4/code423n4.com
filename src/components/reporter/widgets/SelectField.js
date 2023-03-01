@@ -2,11 +2,11 @@ import clsx from "clsx";
 import React, { useCallback } from "react";
 import Select from "react-select";
 
-import * as formStyles from "./WardenField.module.scss";
+import * as styles from "../../../styles/Main.module.scss";
 
 const SelectFieldOptionLabel = ({ label }) => {
   return (
-    <div className={formStyles.OptionContainer}>
+    <div className={styles.WardenField__OptionContainer}>
       <span>{label}</span>
     </div>
   );
@@ -36,7 +36,7 @@ const SelectField = ({
       formatOptionLabel={SelectFieldOptionLabel}
       options={options}
       onChange={handleChange}
-      className={clsx(formStyles.ReactSelect, isInvalid && formStyles.Invalid)}
+      className={clsx(styles.ReactSelect, isInvalid && styles.WardenField__Invalid)}
       classNamePrefix="react-select"
     />
   );
