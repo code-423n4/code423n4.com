@@ -30,7 +30,7 @@ export default function SiteIndex({ data }) {
     if (window.location.href.includes("#sponsor")) {
       setViewMode("sponsor");
     }
-  }, [])
+  }, []);
 
   const updateContestStatus = useCallback(() => {
     updateContestStatusChanges(contestStatusChanges + 1);
@@ -122,8 +122,8 @@ export default function SiteIndex({ data }) {
           {!filteredContests ? <SkeletonLoader /> : null}
           {/* Active contests */}
           {filteredContests && filteredContests.activeContests.length > 0 ? (
-            <div>
-              <p className="type__subline__m spacing-bottom__xl">
+            <div className="featured-contests__active">
+              <p className="type__subline__m spacing-bottom__l">
                 Currently finding the highest-severity vulnerabilities for:
               </p>
               <ContestList
@@ -135,7 +135,7 @@ export default function SiteIndex({ data }) {
           ) : null}
           {/* Upcoming contests */}
           {filteredContests && filteredContests.upcomingContests.length > 0 ? (
-            <div>
+            <div className="featured-contests__upcoming">
               <h2 className="type__headline__xs spacing-top__xl spacing-bottom__l">
                 Upcoming audits
               </h2>
@@ -148,7 +148,7 @@ export default function SiteIndex({ data }) {
           ) : null}
         </div>
         {filteredContests && filteredContests.swiperContests.length > 0 ? (
-          <div div className="background--darker featured-contests__completed">
+          <div className="featured-contests__completed">
             <div className="limited-width">
               <h2 className="type__headline__xs spacing-bottom__l">
                 Recently completed audits

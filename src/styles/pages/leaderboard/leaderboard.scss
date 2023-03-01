@@ -20,8 +20,38 @@
 $avatar-size: 25px;
 
 .leaderboard__container {
-  overflow-x: auto;
+  overflow: auto;
   max-width: calc(95vw - 2 * #{$spacing__xl});
+
+  max-height: calc(100vh - 20rem);
+
+  @include breakpoint("m") {
+    max-height: none;
+    overflow-y: visible;
+  }
+
+  // Scrollbar
+  /* width */
+  &::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+    background: $color__n-80;
+  }
+
+  /* Track */
+  &::-webkit-scrollbar-track {
+    background: $color__n-80;
+  }
+
+  /* Handle */
+  &::-webkit-scrollbar-thumb {
+    background: $color__button-blurple;
+  }
+
+  /* Handle on hover */
+  &::-webkit-scrollbar-thumb:hover {
+    background: $color__button-blurple--hover;
+  }
 }
 
 // TODO this doesn't look quite right

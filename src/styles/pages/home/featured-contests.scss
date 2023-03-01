@@ -28,7 +28,11 @@
 .home__featured-contests {
   padding-top: $spacing__l;
 
+  .featured-contests__upcoming {
+  }
+
   .featured-contests__completed {
     padding: $spacing__l 0;
+    background: rgba(0, 0, 0, 0.2);
   }
 }
