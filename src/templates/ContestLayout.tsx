@@ -284,7 +284,7 @@ const ContestLayout = ({ data }) => {
                       />
                     </div>
                   ) : (
-                    <article>
+                    <div>
                       <ReactMarkdown
                         className={"markdown-body"}
                         remarkPlugins={[remarkGfm, remarkBreaks, remarkMath]}
@@ -292,7 +292,7 @@ const ContestLayout = ({ data }) => {
                       >
                         {`${fields.readmeContent}`}
                       </ReactMarkdown>
-                    </article>
+                    </div>
                   )}
                 </div>
               </TabPanel>
