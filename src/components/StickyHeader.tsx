@@ -14,6 +14,9 @@ const StickyHeader = () => {
     };
     window.addEventListener("scroll", stickyHeader);
 
+    window.addEventListener("scroll", stickyHeader);
+
+    // cleanup function
     return () => window.removeEventListener("scroll", stickyHeader);
   }, []);
 
