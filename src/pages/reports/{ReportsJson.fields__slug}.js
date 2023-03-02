@@ -25,7 +25,7 @@ function ReportPageTemplate({ data }) {
       bodyClass="report-page"
     >
       <div className="limited-width type__copy">
-        <article>
+        <div className="type__article">
           {page.frontmatter.sponsor ? (
             <img
               className="report-sponsor-logo"
@@ -56,7 +56,7 @@ function ReportPageTemplate({ data }) {
               }}
             />
           </div>
-        </article>
+        </div>
       </div>
       <button className="button floating-button" onClick={scrollToTop}>
         Top
