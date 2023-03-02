@@ -6,7 +6,7 @@ const StickyHeader = () => {
     const headerOffsetTop = header.offsetTop;
 
     const stickyHeader = () => {
-      if (window.pageYOffset > headerOffsetTop) {
+      if (window.pageYOffset > headerOffsetTop && window.innerWidth > 1200) {
         header.classList.add("sticky");
       } else {
         header.classList.remove("sticky");

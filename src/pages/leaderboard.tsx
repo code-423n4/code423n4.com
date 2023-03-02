@@ -50,7 +50,6 @@ export default function Leaderboard({ data }) {
 
   return (
     <DefaultLayout pageTitle="Leaderboard" bodyClass="leaderboard">
-      <StickyHeader />
       <div className="limited-width leaderboard-page">
         <h1 className="type__headline__page-title">Leaderboard</h1>
         <div className="leaderboard__dropdown">
@@ -65,10 +64,10 @@ export default function Leaderboard({ data }) {
           </select>
         </div>
         <div className="leaderboard__container">
+          <StickyHeader />
           <LeaderboardTableReduced
             results={leaderboardResults}
             isLoading={isLoading}
-            reduced={true}
           />
         </div>
       </div>
