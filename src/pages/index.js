@@ -115,7 +115,7 @@ export default function SiteIndex({ data }) {
 
       {/* Contests */}
       <section className={"home__featured-contests background--" + viewMode}>
-        <div className="limited-width">
+        <div className="limited-width" data-nosnippet>
           <h1 className="type__headline__l">Active competitions</h1>
           {/* Skeleton loader animation */}
           {!filteredContests ? <SkeletonLoader /> : null}
