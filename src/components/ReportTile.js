@@ -8,7 +8,7 @@ import SponsorLink from "./SponsorLink";
 const ReportTile = ({ report }) => {
   const { slug, sponsor, contest, altUrl } = report;
   const { start_time, end_time } = contest;
-  if (!start_time || !end_time) {
+  if (!start_time || !end_time || ! slug || !sponsor || !contest || !altUrl) {
     return;
   }
   const t = getDates(start_time, end_time);
