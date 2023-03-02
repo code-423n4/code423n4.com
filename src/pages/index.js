@@ -86,8 +86,12 @@ export default function SiteIndex({ data }) {
     <DefaultLayout
       bodyClass="home"
       key={"home" + contestStatusChanges}
-      pageDescription="Top auditors compete to keep high severity bugs out of production. Start a public or private audit within 48 hours."
+      pageDescription="Code4rena is where top auditors compete to keep high severity bugs out of production. Start a public or private audit within 48 hours."
     >
+      <p className="about-us visually-hidden" id="about-us">
+        An open organization where top auditors compete to keep high severity
+        bugs out of production. Start a public or private audit within 48 hours.
+      </p>
       {/* Nav switcher */}
       <SecondaryNav>
         <SecondaryNavItem
@@ -114,7 +118,10 @@ export default function SiteIndex({ data }) {
       {viewMode === "project" && <TrustBar />}
 
       {/* Contests */}
-      <section className={"home__featured-contests background--" + viewMode}>
+      <section
+        className={"home__featured-contests background--" + viewMode}
+        data-nosnippet
+      >
         <div className="limited-width">
           <h1 className="type__headline__l">Active competitions</h1>
           {/* Skeleton loader animation */}
@@ -163,7 +170,7 @@ export default function SiteIndex({ data }) {
         ) : null}
       </section>
 
-      <section className="limited-width">
+      <section className="limited-width" data-nosnippet>
         <Testimonials viewMode={viewMode} />
       </section>
 
