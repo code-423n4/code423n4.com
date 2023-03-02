@@ -164,12 +164,14 @@
 // --------------------
 
 .contest-page__tab-container .limited-width {
-  padding-top: $spacing__m;
+  margin-top: $spacing__m;
   padding-bottom: $spacing__m;
   border-top: 3px solid $color__n-90;
+  overflow: auto;
+  max-height: calc(100vh - 20rem);
 
   @include breakpoint("s") {
-    padding-top: $spacing__l;
+    margin-top: $spacing__l;
     padding-bottom: $spacing__xl;
   }
 
