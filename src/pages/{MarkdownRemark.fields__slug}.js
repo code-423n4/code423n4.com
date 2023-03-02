@@ -9,7 +9,7 @@ function PageTemplate({ data }) {
 
   return (
     <DefaultLayout title={page.frontmatter.title} bodyClass="page">
-      <div className="wrapper-main">
+      <div className="limited-width type__copy">
         <article>
           <div
             dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(page.html) }}
