@@ -15,6 +15,7 @@ const ReportTile = ({ report }) => {
   if (t.startDay === "" || t.endDay === "") {
     return (<></>);
   }
+  console.log(t, sponsor);
   const reportUrl = `/reports/${slug}`;
 
   return (
