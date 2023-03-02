@@ -111,7 +111,7 @@ const ContestTile = ({ contest, updateContestStatus, user, reduced }) => {
               to={fields?.contestPath || "/"}
               className="contest-tile__button"
             >
-              <p>{`${findingsRepo === "" ? "Preview" : "View"}`} competition</p>
+              {`${findingsRepo === "" ? "Preview" : "View"}`} competition
             </Link>
             {t.contestStatus === "active" && contestRepo && canViewContest && (
               <a href={contestRepo} className="contest-tile__button">
