@@ -6,16 +6,9 @@ import { getDates } from "../utils/time";
 import SponsorLink from "./SponsorLink";
 
 const ReportTile = ({ report }) => {
-console.log('opening component', report.contest);
   const { slug, sponsor, contest, altUrl } = report;
   const { start_time, end_time } = contest;
-  if (!start_time || !end_time || !report.date || report.date === "") {
-    return (<></>);
-  }
   const t = getDates(start_time, end_time);
-  if (t.startDay === "" || t.endDay === ""){
-    return (<></>);
-  }
   const reportUrl = `/reports/${slug}`;
 
   return (
@@ -27,9 +20,9 @@ console.log('opening component', report.contest);
             <Link to={reportUrl}>{sponsor.name} →</Link>
           </h2>
           <p>
-            {format(new Date(t.startDay), "d MMM yyyy")}
+            {t.startDay}
             {" - "}
-            {format(new Date(t.endDay), "d MMM yyyy")}
+            {t.endDay}
           </p>
         </div>
       </div>
@@ -48,7 +41,7 @@ console.log('opening component', report.contest);
                 <line className="cls-1" x1="8" x2="24" y1="25" y2="25" />
               </g>
             </svg>
-            {format(new Date(report.date), "d MMM yyyy")}
+            {report.date}
           </p>
         )}
         {altUrl ? (
