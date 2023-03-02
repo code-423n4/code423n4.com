@@ -8,9 +8,26 @@ import SponsorLink from "./SponsorLink";
 const ReportTile = ({ report }) => {
   const { slug, sponsor, contest, altUrl } = report;
   const { start_time, end_time } = contest;
+  if (!start_time || !end_time || !report.date || report.date === "") {
+    return <></>;
+  }
   const t = getDates(start_time, end_time);
+  if (t.startDay === "" || t.endDay === "") {
+    return <></>;
+  }
   const reportUrl = `/reports/${slug}`;
-
+  console.log("<<<<<>>>>>", sponsor)
+  console.log('data')
+  console.log(t.startDay, t.endDay, report.date)
+  console.log('data with new date')
+  console.log(new Date(t.startDay), new Date(t.endDay), new Date(report.date));
+  console.log('data with new date and format')
+  console.log(
+    format(new Date(t.startDay), "d MMM yyyy"),
+    format(new Date(t.endDay), "d MMM yyyy"),
+    format(new Date(report.date), "d MMM yyyy")
+  );
+  console.log("====================================")
   return (
     <div className={"report-tile"}>
       <div className="report-tile__content-wrapper">
@@ -20,9 +37,9 @@ const ReportTile = ({ report }) => {
             <Link to={reportUrl}>{sponsor.name} →</Link>
           </h2>
           <p>
-            {t.startDay}
+            {format(new Date(t.startDay), "d MMM yyyy")}
             {" - "}
-            {t.endDay}
+            {format(new Date(t.endDay), "d MMM yyyy")}
           </p>
         </div>
       </div>
@@ -41,7 +58,7 @@ const ReportTile = ({ report }) => {
                 <line className="cls-1" x1="8" x2="24" y1="25" y2="25" />
               </g>
             </svg>
-            {report.date}
+            {format(new Date(report.date), "d MMM yyyy")}
           </p>
         )}
         {altUrl ? (
