@@ -6,6 +6,7 @@ import { getDates } from "../utils/time";
 import SponsorLink from "./SponsorLink";
 
 const ReportTile = ({ report }) => {
+console.log('opening component', report.contest);
   const { slug, sponsor, contest, altUrl } = report;
   const { start_time, end_time } = contest;
   if (!start_time || !end_time || !report.date || report.date === "") {
@@ -15,7 +16,6 @@ const ReportTile = ({ report }) => {
   if (t.startDay === "" || t.endDay === ""){
     return (<></>);
   }
-
   const reportUrl = `/reports/${slug}`;
 
   return (
