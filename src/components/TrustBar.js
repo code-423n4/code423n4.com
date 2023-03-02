@@ -147,7 +147,7 @@ const logos = [
   },
 ];
 const TrustBar = () => (
-  <div className="trustbar">
+  <div className="trustbar" data-nosnippet>
     <div className="limited-width">
       <h2 className="type__headline__m">
         Leading crypto projects choose Code4rena.
