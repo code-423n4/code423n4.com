@@ -86,7 +86,7 @@ const topAuditors = [
 
 const HomepageTopNames = () => {
   return (
-    <div className="hero__top-auditors full-width">
+    <div className="hero__top-auditors full-width" data-nosnippet>
       <div className="limited-width">
         <h2 className="type__headline__m">
           Your journey to the top begins now.
