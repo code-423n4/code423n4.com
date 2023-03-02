@@ -86,12 +86,8 @@ export default function SiteIndex({ data }) {
     <DefaultLayout
       bodyClass="home"
       key={"home" + contestStatusChanges}
-      pageDescription="Code4rena is where top auditors compete to keep high severity bugs out of production. Start a public or private audit within 48 hours."
+      pageDescription="An open organization where top auditors compete to keep high severity bugs out of production."
     >
-      <p className="about-us visually-hidden" id="about-us">
-        An open organization where top auditors compete to keep high severity
-        bugs out of production. Start a public or private audit within 48 hours.
-      </p>
       {/* Nav switcher */}
       <SecondaryNav>
         <SecondaryNavItem
