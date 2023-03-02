@@ -164,20 +164,26 @@
 // --------------------
 
 .contest-page__tab-container .limited-width {
+  .countdown {
+    display: inline-block;
+  }
+}
+
+.leaderboard__container--contests {
+
+  margin: 0 auto;
   margin-top: $spacing__m;
   padding-bottom: $spacing__m;
   border-top: 3px solid $color__n-90;
-  overflow: auto;
-  max-height: calc(100vh - 20rem);
 
   @include breakpoint("s") {
     margin-top: $spacing__l;
     padding-bottom: $spacing__xl;
   }
+}
 
-  .countdown {
-    display: inline-block;
-  }
+.leaderboard__container--contests > div {
+  margin: 0 auto;
 }
 
 .contest-page__tab-container:has(.tab__content--message) {
