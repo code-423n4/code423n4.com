@@ -105,7 +105,7 @@ const HeroIndex = ({ viewMode }) => {
               <p className="hero__statistic-unit">earned by wardens</p>
             </div>
             <div className="hero__statistic">
-              <p className="type__headline__l hero__statistic-number">$71k</p>
+              <p className="type__headline__l hero__statistic-number">$71,500</p>
               <p className="hero__statistic-unit">
                 <span>
                   2023 highest single <span className="no-break">payout</span>
@@ -113,7 +113,7 @@ const HeroIndex = ({ viewMode }) => {
               </p>
             </div>
             <div className="hero__statistic">
-              <p className="type__headline__l hero__statistic-number">$9860</p>
+              <p className="type__headline__l hero__statistic-number">$9,860</p>
               <p className="hero__statistic-unit">
                 2023 avg payout per competition for top 3
               </p>
