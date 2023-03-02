@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 
 const StickyHeader = () => {
   useEffect(() => {
-    const header: HTMLElement = document.querySelector(".leaderboard-table__headers")!;
+    const header: HTMLElement = document.querySelector("#column__headers")!;
     const headerOffsetTop = header.offsetTop;
 
     const stickyHeader = () => {

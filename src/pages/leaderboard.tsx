@@ -3,7 +3,6 @@ import { graphql } from "gatsby";
 
 import DefaultLayout from "../templates/DefaultLayout";
 import LeaderboardTableReduced from "../components/LeaderboardTableReduced";
-import StickyHeader from "../components/StickyHeader";
 
 export default function Leaderboard({ data }) {
   const [timeFrame, setTimeFrame] = useState("Last 60 days");
@@ -64,7 +63,6 @@ export default function Leaderboard({ data }) {
           </select>
         </div>
         <div className="leaderboard__container">
-          <StickyHeader />
           <LeaderboardTableReduced
             results={leaderboardResults}
             isLoading={isLoading}
