@@ -86,7 +86,7 @@ export default function SiteIndex({ data }) {
     <DefaultLayout
       bodyClass="home"
       key={"home" + contestStatusChanges}
-      pageDescription="An open organization where top auditors compete to keep high severity bugs out of production."
+      pageDescription="Code4rena is a competitive audit platform that finds more high-severity vulnerabilities, more quickly than any other auditing method."
     >
       {/* Nav switcher */}
       <SecondaryNav>
