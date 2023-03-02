@@ -50,13 +50,13 @@
 }
 
 .UserDropDown__Desktop {
-  @media (max-width: 970px) {
+  @media (max-width: 960px) {
     display: none;
   }
 }
 
 .UserDropDown__Mobile {
-  @media (min-width: 970px) {
+  @media (min-width: 960px) {
     display: none;
   }
   border-top: 2px solid var(--main-purple);

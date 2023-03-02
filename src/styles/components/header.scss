@@ -212,7 +212,7 @@
 }
 
 .login__desktop {
-  @media (max-width: 970px) {
+  @media (max-width: 960px) {
     display: none;
   }
 }
@@ -222,7 +222,7 @@
   border-top: 1px solid $color__n-60;
   padding-top: $spacing__l;
 
-  @media (min-width: 970px) {
+  @media (min-width: 960px) {
     display: none;
   }
 }

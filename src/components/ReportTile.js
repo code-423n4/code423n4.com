@@ -1,5 +1,4 @@
 import React from "react";
-import format from "date-fns-tz/format";
 import { Link } from "gatsby";
 import { getDates } from "../utils/time";
 
