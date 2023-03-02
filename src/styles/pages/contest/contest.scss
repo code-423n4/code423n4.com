@@ -174,7 +174,6 @@
   margin: 0 auto;
   margin-top: $spacing__m;
   padding-bottom: $spacing__m;
-  border-top: 3px solid $color__n-90;
 
   @include breakpoint("s") {
     margin-top: $spacing__l;
@@ -183,6 +182,7 @@
 }
 
 .leaderboard__container--contests > div {
+  border-top: 3px solid $color__n-90;
   margin: 0 auto;
 }
 
