@@ -9,7 +9,7 @@ const secondaryButtonTextProject = "Join our Discord";
 
 const HeroIndex = ({ viewMode }) => {
   return (
-    <div className="hero">
+    <article className="hero">
       {!viewMode ||
         (viewMode === "project" && (
           <div className="hero__project type__copy grid__one-by-two--break-s limited-width">
@@ -105,7 +105,9 @@ const HeroIndex = ({ viewMode }) => {
               <p className="hero__statistic-unit">earned by wardens</p>
             </div>
             <div className="hero__statistic">
-              <p className="type__headline__l hero__statistic-number">$71,500</p>
+              <p className="type__headline__l hero__statistic-number">
+                $71,500
+              </p>
               <p className="hero__statistic-unit">
                 <span>
                   2023 highest single <span className="no-break">payout</span>
@@ -130,7 +132,7 @@ const HeroIndex = ({ viewMode }) => {
           </div>
         </div>
       )}
-    </div>
+    </article>
   );
 };
 
