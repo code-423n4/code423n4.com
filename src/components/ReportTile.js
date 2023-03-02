@@ -21,9 +21,9 @@ const ReportTile = ({ report }) => {
             <Link to={reportUrl}>{sponsor.name} →</Link>
           </h2>
           <p>
-            {format(new Date(t.startDay), "d MMM yyyy")}
+            {t.startDay}
             {" - "}
-            {format(new Date(t.endDay), "d MMM yyyy")}
+            {t.endDay}
           </p>
         </div>
       </div>
@@ -42,7 +42,7 @@ const ReportTile = ({ report }) => {
                 <line className="cls-1" x1="8" x2="24" y1="25" y2="25" />
               </g>
             </svg>
-            {format(new Date(report.date), "d MMM yyyy")}
+            {report.date}
           </p>
         )}
         {altUrl ? (

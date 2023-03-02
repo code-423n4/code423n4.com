@@ -22,7 +22,15 @@ const WrapperLayout = (props) => {
         <meta charset="utf-8" />
         <meta httpEquiv="X-UA-Compatible" content="chrome-1" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta name="description" content={pageDescription} />
+
+        {pageDescription ? (
+          <meta name="description" content={pageDescription} />
+        ) : (
+          <meta
+            name="description"
+            content="Top auditors compete to keep high severity bugs out of production. Start a public or private audit within 48 hours."
+          />
+        )}
         <meta name="keywords" content="" />
         <meta property="og:site_name" content="Code4rena" />
         <meta property="og:title" content={pageTitle} />
@@ -44,20 +52,17 @@ const WrapperLayout = (props) => {
             content="https://code4rena.com/images/c4-og-banner.png"
           />
         )}
-        {/* TODO: Brand update */}
         <link
           rel="apple-touch-icon"
           sizes="180x180"
           href="/images/apple-touch-icon.png"
         />
-        {/* TODO: Brand update */}
         <link
           rel="icon"
           type="image/png"
           sizes="32x32"
           href="/images/favicon-32.png"
         />
-        {/* TODO: Brand update */}
         <link
           rel="icon"
           type="image/png"

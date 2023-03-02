@@ -83,7 +83,11 @@ export default function SiteIndex({ data }) {
   }, [contests]);
 
   return (
-    <DefaultLayout bodyClass="home" key={"home" + contestStatusChanges}>
+    <DefaultLayout
+      bodyClass="home"
+      key={"home" + contestStatusChanges}
+      pageDescription="Top auditors compete to keep high severity bugs out of production. Start a public or private audit within 48 hours."
+    >
       {/* Nav switcher */}
       <SecondaryNav>
         <SecondaryNavItem
