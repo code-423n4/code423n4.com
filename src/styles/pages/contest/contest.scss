@@ -164,18 +164,26 @@
 // --------------------
 
 .contest-page__tab-container .limited-width {
-  padding-top: $spacing__m;
-  padding-bottom: $spacing__m;
-  border-top: 3px solid $color__n-90;
-
-  @include breakpoint("s") {
-    padding-top: $spacing__l;
-    padding-bottom: $spacing__xl;
-  }
-
   .countdown {
     display: inline-block;
   }
+}
+
+.leaderboard__container--contests {
+
+  margin: 0 auto;
+  margin-top: $spacing__m;
+  padding-bottom: $spacing__m;
+
+  @include breakpoint("s") {
+    margin-top: $spacing__l;
+    padding-bottom: $spacing__xl;
+  }
+}
+
+.leaderboard__container--contests > div {
+  border-top: 3px solid $color__n-90;
+  margin: 0 auto;
 }
 
 .contest-page__tab-container:has(.tab__content--message) {
