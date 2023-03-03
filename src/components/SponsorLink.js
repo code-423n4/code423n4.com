@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-const SponsorLink = ({ sponsor, className }) => {
+const SponsorLink = ({ sponsor, className, size }) => {
   // This is a work-around for an issue with React's rehydration function, which
   // does not account for differences in attributes
   // This approach was suggested here: https://github.com/gatsbyjs/gatsby/discussions/17914
@@ -21,6 +21,7 @@ const SponsorLink = ({ sponsor, className }) => {
             <img
               src={sponsor.image.childImageSharp.resize.src}
               alt={sponsor.name}
+              {...(size ? { width: size, height: size } : {})}
             />
           </a>
         </div>

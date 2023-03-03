@@ -261,7 +261,7 @@ const ContestLayout = ({ data }) => {
             <section className="contest-page__tab-container full-width">
               {t.contestStatus === "completed" && (
                 <TabPanel>
-                  <div className="limited-width">
+                  <div className="leaderboard__container leaderboard__container--contests">
                     <LeaderboardTableReduced
                       results={leaderboardResults}
                       isLoading={isLoading}

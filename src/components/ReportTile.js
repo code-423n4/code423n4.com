@@ -1,5 +1,4 @@
 import React from "react";
-import format from "date-fns-tz/format";
 import { Link } from "gatsby";
 import { getDates } from "../utils/time";
 
@@ -9,6 +8,7 @@ const ReportTile = ({ report }) => {
   const { slug, sponsor, contest, altUrl } = report;
   const { start_time, end_time } = contest;
   const t = getDates(start_time, end_time);
+
   const reportUrl = `/reports/${slug}`;
 
   return (
