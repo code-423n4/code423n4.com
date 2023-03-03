@@ -2,29 +2,30 @@ import * as React from "react";
 import { graphql } from "gatsby";
 import DOMPurify from "isomorphic-dompurify";
 
-import ReportLayout from "../../templates/ReportLayout";
+import DefaultLayout from "../../templates/DefaultLayout";
 
 function ReportPageTemplate({ data }) {
   const page = data.markdownRemark;
-  
-  const scrollToTop = () =>{
+
+  // TODO: Style this button
+  const scrollToTop = () => {
     if (typeof window !== undefined) {
       window.scrollTo({
-        top: 0, 
-        behavior: 'smooth'
+        top: 0,
+        behavior: "smooth",
       });
     }
   };
 
   return (
-    <ReportLayout
+    <DefaultLayout
       preview=""
       pageDescription=""
       pageTitle={page.frontmatter.title}
-      bodyClass="report-page page"
+      bodyClass="report-page"
     >
-      <div className="wrapper-main">
-        <article>
+      <div className="limited-width type__copy">
+        <div className="type__article">
           {page.frontmatter.sponsor ? (
             <img
               className="report-sponsor-logo"
@@ -42,16 +43,25 @@ function ReportPageTemplate({ data }) {
           </div>
           <div className="report-container">
             <h2>Table of contents</h2>
-            <div className="report-toc" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(page.tableOfContents) }}/>
+            <div
+              className="report-toc"
+              dangerouslySetInnerHTML={{
+                __html: DOMPurify.sanitize(page.tableOfContents),
+              }}
+            />
             <div
               className="report-contents"
-              dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(page.html) }}
+              dangerouslySetInnerHTML={{
+                __html: DOMPurify.sanitize(page.html),
+              }}
             />
           </div>
-        </article>
+        </div>
       </div>
-      <button className="button floating-button" onClick={scrollToTop}>Top</button>
-    </ReportLayout>
+      <button className="button floating-button" onClick={scrollToTop}>
+        Top
+      </button>
+    </DefaultLayout>
   );
 }
 
