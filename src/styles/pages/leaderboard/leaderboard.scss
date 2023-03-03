@@ -21,11 +21,17 @@ $avatar-size: 25px;
 
 .leaderboard__container {
   overflow: auto;
-  max-width: calc(95vw - 2 * #{$spacing__xl});
+  max-width: calc(97vw - 2 * #{$spacing__xl});
+  position: relative;
 
   max-height: calc(100vh - 20rem);
 
+  @include breakpoint("s") {
+    max-width: calc(98vw - 2 * #{$spacing__xl});
+  }
+
   @include breakpoint("m") {
+    max-width: 100%;
     max-height: none;
     overflow: visible;
   }
@@ -169,6 +175,7 @@ $avatar-size: 25px;
   .leaderboard-table__headers,
   .leaderboard-table-reduced__body {
     min-width: 690px;
+    z-index: 1;
   }
 }
 
