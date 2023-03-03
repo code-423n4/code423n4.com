@@ -21,11 +21,17 @@ $avatar-size: 25px;
 
 .leaderboard__container {
   overflow: auto;
-  max-width: calc(95vw - 2 * #{$spacing__xl});
+  max-width: calc(97vw - 2 * #{$spacing__xl});
+  position: relative;
 
   max-height: calc(100vh - 20rem);
 
+  @include breakpoint("s") {
+    max-width: calc(98vw - 2 * #{$spacing__xl});
+  }
+
   @include breakpoint("m") {
+    max-width: 100%;
     max-height: none;
     overflow: visible;
   }
@@ -169,25 +175,32 @@ $avatar-size: 25px;
   .leaderboard-table__headers,
   .leaderboard-table-reduced__body {
     min-width: 690px;
+    z-index: 1;
   }
 }
 
-.leaderboard-table__headers.sticky {
-  padding: 0 $spacing__l;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  background: $color__n-100;
-  z-index: 2;
-  width: 100%;
-  max-width: calc($layout__max-width - 2 * $spacing__xl);
+// .leaderboard-table__headers.sticky {
+//   padding: 0 $spacing__l;
+//   position: fixed;
+//   top: 0;
+//   left: 0;
+//   right: 0;
+//   background: $color__n-100;
+//   z-index: 2;
+//   width: 100%;
+//   max-width: calc($layout__max-width - 2 * $spacing__xl);
 
-  @media screen and (min-width: $layout__max-width) {
-    right: auto;
-    left: auto;
-    padding: 0;
-  }
+//   @media screen and (min-width: $layout__max-width) {
+//     right: auto;
+//     left: auto;
+//     padding: 0;
+//   }
+// }
+#column__headers {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  background: $color__n-100;
 }
 .leaderboard-table__headers ul li {
   font-family: $font__default;

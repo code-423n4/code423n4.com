@@ -1,4 +1,5 @@
 @import "../../variables";
+@import "../../components/contest-tile/contest-tile";
 
 // --------------------------------------------------
 // Featured Contests
@@ -28,7 +29,11 @@
 .home__featured-contests {
   padding-top: $spacing__l;
 
+  .featured-contests__active,
   .featured-contests__upcoming {
+    .contest-tile {
+      @include contest-tile--transparent;
+    }
   }
 
   .featured-contests__completed {

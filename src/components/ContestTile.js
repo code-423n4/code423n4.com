@@ -48,7 +48,7 @@ const ContestTile = ({ contest, updateContestStatus, user, reduced }) => {
       <div className="contest-tile__top">
         <header className="contest-tile__content">
           <div className="contest-tile__logo">
-            <SponsorLink sponsor={sponsor} />
+            <SponsorLink sponsor={sponsor} size="90" />
           </div>
           <div className="contest-tile__details-wrapper">
             <h2 className="contest-tile__title">
@@ -59,22 +59,6 @@ const ContestTile = ({ contest, updateContestStatus, user, reduced }) => {
                 {title}
               </Link>
             </h2>
-            {/* <ul className="contest-tile__time-wrapper">
-              {t.contestStatus === "soon" || t.contestStatus === "active" ? (
-                <>
-                  <li>
-                    {t.contestStatus === "active" && <span>{t.endTime}</span>}
-                    {t.contestStatus === "soon" && <span>{t.startTime}</span>}
-                  </li>
-                </>
-              ) : (
-                <li className="contest-tile__dates">
-                  {format(new Date(t.startDay), "d MMM yyyy")}
-                  {"–"}
-                  {format(new Date(t.endDay), "d MMM yyyy")}
-                </li>
-              )}
-            </ul> */}
             <p className="contest-tile__details">{details}</p>
           </div>
         </header>
@@ -111,8 +95,7 @@ const ContestTile = ({ contest, updateContestStatus, user, reduced }) => {
               to={fields?.contestPath || "/"}
               className="contest-tile__button"
             >
-              {`${findingsRepo === "" ? "Preview" : "View"}`}
-              <span>&nbsp;competition</span>
+              {`${findingsRepo === "" ? "Preview" : "View"}`} competition
             </Link>
             {t.contestStatus === "active" && contestRepo && canViewContest && (
               <a href={contestRepo} className="contest-tile__button">
