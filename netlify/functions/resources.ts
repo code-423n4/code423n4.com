@@ -27,7 +27,6 @@ const resourcesHandler: Handler = async (event, context) => {
     // assume all public for now
     let publicContests = allContests.filter((contests) => !contests.hide);
 
-    // TODO: fill this in!
     let tableData: string[][] = [
       [
         "contestid",
