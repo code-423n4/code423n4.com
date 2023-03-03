@@ -23,7 +23,7 @@ $contest-tile--transparent__amount-background: linear-gradient(
 
 @mixin contest-tile--solid {
   background: $contest-tile--solid__background;
-  border-color: $contest-tile--solid__border;
+  border-color: $contest-tile--solid__border-color;
   .contest-tile__button-wrapper {
     a {
       border-color: $contest-tile--solid__border-color;
