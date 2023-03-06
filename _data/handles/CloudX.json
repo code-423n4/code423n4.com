@@ -1,0 +1,15 @@
+{
+  "handle": "CloudX",
+  "members": [
+    "Migue",
+    "pabliyo",
+    "marce1993"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x1027f6162225988770124efBEee0001C4aA432bc"
+    }
+  ],
+  "image": "./avatars/CloudX.jpeg"
+}

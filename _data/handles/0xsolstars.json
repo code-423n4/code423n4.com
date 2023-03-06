@@ -1,5 +1,10 @@
 {
-    "image": "",
-    "handle": "0xsolstars",
-    "members": ["Varun_Verma", "masterchief"]
-  }
+  "handle": "0xsolstars",
+  "members": ["Varun_Verma", "masterchief"],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x1DBdFB46085a17C3AdB146561EFE7b0e43a8B785"
+    }
+  ]
+}
