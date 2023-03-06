@@ -2,8 +2,6 @@ import clsx from "clsx";
 import React from "react";
 import Avatar from "react-avatar";
 
-import * as styles from "./WardenDetails.module.scss";
-
 interface WardenDetailsProps {
   username: string;
   image?: string;
@@ -18,9 +16,9 @@ export default function WardenDetails({
   avatarSize,
 }: WardenDetailsProps) {
   return (
-    <div className={clsx(styles.Wrapper, className)}>
-      <div className={styles.Username}>
-        <span className={styles.Icon}>
+    <div className={clsx("warden-details__wrapper", className)}>
+      <div className={"warden-details__username"}>
+        <span className={"warden-details__icon"}>
           <Avatar
             src={image}
             name={username}

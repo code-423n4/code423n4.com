@@ -1,0 +1,17 @@
+{
+  "handle": "win",
+  "members": [
+    "kramm",
+    "almndbtr"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xAC84605E6cEC5DCf5AdD0Be04f2697dcde9D9443"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0xAC84605E6cEC5DCf5AdD0Be04f2697dcde9D9443"
+    }
+  ]
+}
