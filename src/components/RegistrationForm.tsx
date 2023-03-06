@@ -18,10 +18,6 @@ import Agreement from "./content/Agreement";
 import { Input } from "./Input";
 import RegistrationFormCommonFields from "./RegistrationFormCommonFields";
 
-// styles
-import * as styles from "./form/Form.module.scss";
-import * as widgetStyles from "./reporter/widgets/Widgets.module.scss";
-
 interface userState {
   username: string;
   discordUsername: string;
@@ -353,7 +349,11 @@ export default function RegistrationForm({ handles }) {
   const usernameValidator = useCallback(
     (value: string) => {
       const validationErrors: (string | React.ReactNode)[] = [];
-      if (handles.has(value)) {
+      if (
+        Object.keys(handles).find(
+          (handle) => handle.toLowerCase() === value.toLowerCase()
+        )
+      ) {
         validationErrors.push(`${value} is already a registered username.`);
       }
       if (isDangerousUsername) {
@@ -423,14 +423,18 @@ export default function RegistrationForm({ handles }) {
             </a>
           </p>
           <Tabs className="form-tab">
-            <TabList>
-              <Tab onClick={() => setRegistrationType(RegistrationType.Wallet)}>
+            <TabList className="secondary-nav">
+              <Tab
+                onClick={() => setRegistrationType(RegistrationType.Wallet)}
+                className="secondary-nav__item"
+              >
                 Register with Wallet
               </Tab>
               <Tab
                 onClick={() =>
                   setRegistrationType(RegistrationType.UsernameAndPassword)
                 }
+                className="secondary-nav__item"
               >
                 Register with Password
               </Tab>
@@ -456,33 +460,34 @@ export default function RegistrationForm({ handles }) {
                   confirmPasswordValidator={confirmPasswordValidator}
                   submitted={status === FormStatus.SubmitAttempted}
                 />
-                <label
-                  htmlFor="useCustomPaymentAddress"
-                  className={widgetStyles.RadioLabel}
-                >
-                  <input
-                    className={widgetStyles.Checkbox}
-                    type="checkbox"
-                    id="useCustomPaymentAddress"
-                    name="useCustomPaymentAddress"
-                    checked={!state.useCustomPaymentAddress}
-                    onChange={toggleUseCustomPaymentAddress}
-                  />
-                  Use my wallet address for payment on Polygon
-                </label>
-                {state.useCustomPaymentAddress && (
-                  <Input
-                    label="Polygon Address"
-                    helpText="Polygon address where we should send your awards"
-                    required={true}
-                    handleChange={handleChange}
-                    value={state.polygonAddress}
-                    name="polygonAddress"
-                    validator={customPaymentAddressValidator}
-                    forceValidation={status === FormStatus.SubmitAttempted}
-                    maxLength={42}
-                  />
-                )}
+                <fieldset>
+                  <label
+                    htmlFor="useCustomPaymentAddress"
+                    className="Widget__RadioLabel"
+                  >
+                    <input
+                      type="checkbox"
+                      id="useCustomPaymentAddress"
+                      name="useCustomPaymentAddress"
+                      checked={!state.useCustomPaymentAddress}
+                      onChange={toggleUseCustomPaymentAddress}
+                    />
+                    Use my wallet address for payment on Polygon
+                    {state.useCustomPaymentAddress && (
+                      <Input
+                        label="Polygon Address"
+                        helpText="Polygon address where we should send your awards"
+                        required={true}
+                        handleChange={handleChange}
+                        value={state.polygonAddress}
+                        name="polygonAddress"
+                        validator={customPaymentAddressValidator}
+                        forceValidation={status === FormStatus.SubmitAttempted}
+                        maxLength={42}
+                      />
+                    )}
+                  </label>
+                </fieldset>
               </form>
             </TabPanel>
             <TabPanel>
@@ -520,22 +525,24 @@ export default function RegistrationForm({ handles }) {
               </form>
             </TabPanel>
           </Tabs>
-          <div className="captcha-container">
+          <div className="register__captcha-container">
             <HCaptcha
               sitekey={process.env.GATSBY_HCAPTCHA_SITE_KEY!}
               theme="dark"
               onVerify={handleCaptchaVerification}
             />
           </div>
-          <Agreement />
-          <div className={styles.ButtonsWrapper}>
+          <fieldset>
+            <Agreement />
+          </fieldset>
+          <div className="Form__ButtonsWrapper">
             {status === FormStatus.Submitting ? (
-              <span className={clsx("button cta-button", styles.Button)}>
+              <span className={clsx("button button--primary")}>
                 Submitting...
               </span>
             ) : registrationType === RegistrationType.UsernameAndPassword ? (
               <button
-                className={clsx("button cta-button", styles.Button)}
+                className={clsx("button button--primary")}
                 type="button"
                 onClick={() => submitRegistration()}
               >
@@ -544,14 +551,14 @@ export default function RegistrationForm({ handles }) {
             ) : (
               <>
                 <button
-                  className={clsx("button cta-button", styles.Button)}
+                  className={clsx("button button--primary")}
                   type="button"
                   onClick={() => submitRegistration("metamask")}
                 >
                   Register with MetaMask
                 </button>
                 <button
-                  className={clsx("button cta-button", styles.Button)}
+                  className={clsx("button button--primary")}
                   type="button"
                   onClick={() => submitRegistration("walletConnect")}
                 >
@@ -564,7 +571,7 @@ export default function RegistrationForm({ handles }) {
       )}
       {status === FormStatus.Error && (
         <>
-          <h2>Whoops!</h2>
+          <h2>Sorry, an error has occurred.</h2>
           <p>An error occurred while processing your registration.</p>
           {errorMessage !== "" && (
             <p>
