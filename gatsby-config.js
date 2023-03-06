@@ -27,13 +27,6 @@ const plugins = [
     },
   },
   {
-    resolve: `gatsby-source-filesystem`,
-    options: {
-      path: `${__dirname}/_data/contests/contests.csv`,
-      name: `contests`,
-    },
-  },
-  {
     resolve: "gatsby-source-filesystem",
     options: {
       path: `${__dirname}/_data/pages`,
@@ -90,8 +83,7 @@ const plugins = [
         },
         {
           resolve: `gatsby-remark-mathjax`,
-          options: {
-          }
+          options: {},
         },
       ],
     },
@@ -116,23 +108,13 @@ const plugins = [
     options: {
       extensions: [`.mdx`],
       defaultLayouts: {
-        reports: require.resolve("./src/templates/ReportLayout.js"),
+        reports: require.resolve("./src/templates/DefaultLayout.js"),
         default: require.resolve("./src/templates/DefaultLayout.js"),
       },
     },
   },
   `gatsby-plugin-sass`,
 ];
-
-if (process.env.NODE_ENV === "development") {
-  plugins.push({
-    resolve: `gatsby-source-filesystem`,
-    options: {
-      path: `${__dirname}/_test-data/contests/contests.csv`,
-      name: `contests`,
-    },
-  });
-}
 
 module.exports = {
   siteMetadata: {
