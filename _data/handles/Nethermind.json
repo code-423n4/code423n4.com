@@ -1,17 +1,22 @@
 {
-    "handle": "Nethermind",
-    "image": "./avatars/nethermind.png",
-    "link": "https://nethermind.io/",
-    "members": [
-        "mauricio1802",
-        "dic0de",
-        "dxdv", 
-        "CryptoMartian", 
-        "Vishvesh_R", 
-        "thomaspanf", 
-        "kaliberpoziomka", 
-        "CalabashSquash",
-        "Parth",
-        "Destroyersrt"
-    ]
+  "handle": "Nethermind",
+  "members": [
+    "mauricio1802",
+    "dic0de",
+    "Vishvesh_R",
+    "thomaspanf",
+    "kaliberpoziomka",
+    "CalabashSquash",
+    "Parth",
+    "Destroyersrt"
+  ],
+  "link": "https://nethermind.io/",
+  "image": "./avatars/nethermind.png",
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xBc11295936Aa79d594139de1B2e12629414F3BDB"
+    }
+  ],
+  "showOnLeaderboard": false
 }

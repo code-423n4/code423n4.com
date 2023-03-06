@@ -7,23 +7,18 @@ import useUser from "../../hooks/UserContext";
 
 import Dropdown from "../Dropdown";
 
-import * as styles from "./UserDropdown.module.scss";
-import * as dropdownStyles from "../Dropdown.module.scss";
-
 export default function UserDropdown() {
   const { currentUser, logUserOut } = useUser();
 
   const avatar = () => (
-    <div className={styles.Avatar}>
+    <div className={"user-dropdown__avatar"}>
       <Avatar
         src={currentUser.image}
         name={currentUser.username}
         size="30px"
         round="30px"
       />
-      <span className={styles.Caret} aria-hidden>
-        ▾
-      </span>
+      <span className={"user-dropdown__caret"} aria-hidden></span>
     </div>
   );
 
@@ -31,59 +26,28 @@ export default function UserDropdown() {
     <>
       <Dropdown
         triggerButton={avatar()}
-        wrapperClass={styles.UserDropdownWrapper}
-        triggerButtonClass={styles.UserDropdown}
+        wrapperClass={"user-dropdown "}
+        triggerButtonClass={"user-dropdown__trigger"}
         openOnHover={true}
-        className={styles.Desktop}
       >
-        <div className={styles.UserDropdownList}>
-          <span className={styles.UserInfo}>
-            Address:{" "}
-            {currentUser.address.slice(0, 5) +
-              "..." +
-              currentUser.address.slice(-4)}
+        <div className={"user-dropdown__user-dropdown-list"}>
+          <span className={"user-dropdown__user-info"}>
+            {currentUser.username}
           </span>
-          <Link to="/account" className={dropdownStyles.Button}>
+          <Link to="/account" className={"dropdown__button"}>
             Manage Account
           </Link>
-          <button onClick={logUserOut} className={dropdownStyles.Button}>
+          <button onClick={logUserOut} className={"dropdown__button"}>
             <img
               src="/images/sign-out.svg"
               alt="logout icon"
-              className={styles.Icon}
+              className={"user-dropdown__icon"}
               style={{ transform: "rotateY(180deg)" }}
             />
             Logout
           </button>
         </div>
       </Dropdown>
-      <div className={styles.Mobile}>
-        <span className={styles.MobileMenuItem}>
-          <span className={styles.Icon}>
-            <Avatar
-              src={currentUser.image}
-              name={currentUser.username}
-              size="30px"
-              round="30px"
-            />
-          </span>
-          {currentUser.address.slice(0, 5) +
-            "..." +
-            currentUser.address.slice(-4)}
-        </span>
-        <button
-          onClick={logUserOut}
-          className={clsx(styles.Button, styles.MobileMenuItem)}
-        >
-          <img
-            src="/images/sign-out.svg"
-            alt="logout icon"
-            className={styles.Icon}
-            style={{ transform: "rotateY(180deg)" }}
-          />
-          Logout
-        </button>
-      </div>
     </>
   );
 }

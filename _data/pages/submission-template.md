@@ -4,24 +4,12 @@ title: "Submission template"
 
 # Submission template
 
-Please submit a report for all bugs you have encountered according to the following template.
-
-If you have found multiple bugs, title them numerically.
+Please submit an individual report for each medium or high severity bug you have encountered according to the following template. See our [Submission Policy](https://docs.code4rena.com/roles/wardens/submission-policy) for additional details.
 
 ```markdown
-**Handle:** The handle you would like to compete under.  
-**Team:**(optional) The name of your team, if you are a member of a team.  
-**Ethereum Address:** The ethereum address you would like your prize to go to (and retroactive token reward should c4 be tokenized later).
-
-# BUG 1
-
 ## Summary
 
 Summarize your findings for the first bug or vulnerability.
-
-## Risk Rating
-
-Provide the numerical value for the risk this bug presents, with 1 being low and 4 being critical.
 
 ## Vulnerability Details
 
