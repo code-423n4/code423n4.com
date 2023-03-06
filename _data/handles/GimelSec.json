@@ -1,5 +1,15 @@
 {
-    "image": "",
-    "handle": "GimelSec",
-    "members": ["rayn", "sces60107"]
+  "image": "",
+  "handle": "GimelSec",
+  "members": [
+    "rayn",
+    "sces60107"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x8595B7e8F4d3287248DB45AcA4Ba4EaCFe4Ab78e"
+    }
+  ],
+  "link": "https://mobile.twitter.com/GimelSec"
 }
