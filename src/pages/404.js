@@ -10,15 +10,17 @@ export default function ErrorPage() {
   }, []);
 
   return (
-    <DefaultLayout bodyClass="landing" key={"404 page"}>
-      <div className="container-404">
+    <DefaultLayout bodyClass="four-oh-four-page" key={"404 page"}>
+      <section className="limited-width">
         <h1>Page not found 🐺</h1>
-        <img
-          src="/images/c4-404-meme.png"
-          alt="404 meme"
-          className="placeholder"
-        />
-      </div>
+        <div className="four-oh-four-page__image">
+          <img
+            src="/images/c4-404-meme.png"
+            alt="404 meme"
+            className="placeholder"
+          />
+        </div>
+      </section>
     </DefaultLayout>
   );
 }

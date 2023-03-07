@@ -9,8 +9,6 @@ import useUser from "../hooks/UserContext";
 import DefaultLayout from "../templates/DefaultLayout";
 import RegistrationForm from "../components/RegistrationForm";
 
-import * as styles from "../styles/Main.module.scss";
-
 export default function UserRegistration({ data }) {
   const handles = new Set(data.handles.edges.map((h) => h.node.handle));
   const [wardens, setWardens] = useState([]);
@@ -53,9 +51,9 @@ export default function UserRegistration({ data }) {
       pageTitle="Registration | Code 423n4"
       hideConnectWalletDropdown={true}
     >
-      <div className="wrapper-main">
-        <div className={styles.Form__Form}>
-          <h1 className={styles.Form__Heading1}>Warden Registration</h1>
+      <div className="limited-width register">
+        <div className="Form__Form">
+          <h1>Warden Registration</h1>
           <RegistrationForm handles={handles} />
         </div>
       </div>

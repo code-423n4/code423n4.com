@@ -10,9 +10,6 @@ import useUser from "../../hooks/UserContext";
 // components
 import { Input } from "../Input";
 
-// styles
-import * as styles from "../../styles/Main.module.scss";
-
 const LoginModal = () => {
   const { Moralis } = useMoralis();
   const { hideModal, modalProps } = useModalContext();
@@ -102,20 +99,20 @@ const LoginModal = () => {
 
   return modalProps && modalProps.type === "login" ? (
     <div className="modal">
-      <form className="modal-main" onSubmit={handleSubmit}>
+      <form className="modal--main" onSubmit={handleSubmit}>
         <button className="button-div modal-top" onClick={handleClose}>
           <img
             src="/images/x-icon.svg"
             alt="close modal icon"
-            className="closeModal-icon"
+            className="modal--close-modal-icon"
           />
         </button>
-        <div className="modal-main-title">
+        <div className="modal--main-title">
           <h1>{modalProps.title}</h1>
         </div>
         {forgotPassword ? (
           <>
-            <div className="modal-main-content">
+            <div className="modal--main-content">
               <Input
                 name="emailAddress"
                 label="Email Address"
@@ -123,22 +120,13 @@ const LoginModal = () => {
                 value={emailAddress}
                 handleChange={handleEmailAddressChange}
               />
-              <a
-                href=""
-                className="centered-text"
-                onClick={toggleForgotPassword}
-              >
-                Log in
-              </a>
+              <p>
+                <a href="" onClick={toggleForgotPassword}>
+                  ← Back to log in
+                </a>
+              </p>
             </div>
-            <div className="modal-main-buttons">
-              <button
-                className="button cta-button secondary"
-                type="button"
-                onClick={handleClose}
-              >
-                Cancel
-              </button>
+            <div className="modal--main-buttons">
               <button
                 className="button cta-button primary"
                 type="button"
@@ -146,11 +134,18 @@ const LoginModal = () => {
               >
                 {isLoading ? "Submitting..." : "Reset Password"}
               </button>
+              <button
+                className="button button--secondary"
+                type="button"
+                onClick={handleClose}
+              >
+                Cancel
+              </button>
             </div>
           </>
         ) : (
           <>
-            <div className="modal-main-content">
+            <div className="modal--main-content">
               <Input
                 name="username"
                 label="Code4rena Username"
@@ -174,19 +169,19 @@ const LoginModal = () => {
                 Forgot password?
               </a>
             </div>
-            <div className="modal-main-buttons">
+            <div className="modal--main-buttons">
+              <button className="button button--primary" type="submit">
+                {isLoading ? "Submitting..." : "Log in"}
+              </button>
               <button
-                className="button cta-button secondary"
+                className="button button--secondary"
                 type="button"
                 onClick={handleClose}
               >
                 Cancel
               </button>
-              <button className="button cta-button primary" type="submit">
-                {isLoading ? "Submitting..." : "Log in"}
-              </button>
             </div>
-            <div className={styles.Login__DividingLine}></div>
+            <div className={"login__dividing-line"}></div>
             <span>
               Not a warden yet?{" "}
               <Link to="/register" onClick={handleClose}>
