@@ -229,7 +229,7 @@ async function getAvailableFindings(
   return submission_files;
 }
 
-async function wardenFindingsForContest(
+async function getWardenFindingsForContest(
   client: Octokit,
   handle,
   contest
@@ -353,7 +353,7 @@ export {
   getAllIssues,
   getAvailableFindings,
   getSubmittedFindingsFromFolder,
-  wardenFindingsForContest,
+  getWardenFindingsForContest,
   getRepoName,
   getMarkdownReportForUser,
 };
