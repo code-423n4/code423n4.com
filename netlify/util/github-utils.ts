@@ -195,10 +195,11 @@ async function getSubmittedFindingsFromFolder(
           })
           .map((f) => {
             const [key, ext] = f.name.split(".");
-            const [handle, issueNumber] = key.split("-");
+            const splitFileName = key.split("-");
+            const issueNumber = splitFileName.pop();
 
             return {
-              handle: handle as string,
+              handle: splitFileName.join("-"),
               issueNumber: parseInt(issueNumber),
             };
           })
