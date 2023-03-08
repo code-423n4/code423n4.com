@@ -108,7 +108,7 @@ const plugins = [
     options: {
       extensions: [`.mdx`],
       defaultLayouts: {
-        reports: require.resolve("./src/templates/ReportLayout.js"),
+        reports: require.resolve("./src/templates/DefaultLayout.js"),
         default: require.resolve("./src/templates/DefaultLayout.js"),
       },
     },
