@@ -385,8 +385,10 @@ const SubmitFindings = ({
         if (res.startsWith("Timeout")) {
           setStatus(FormStatus.Error);
           setErrorMessage(
-            "Your request timed out. If you don't see your submission " +
-              "in the findings tab on the contest page, then please try again."
+            "Your request timed out. However, this does not necessarily " +
+              "mean your finding was not submitted. Please check the findings " +
+              "tab on the contest page. If you don't see your submission there, " +
+              "then please try again."
           );
         } else {
           const { error } = JSON.parse(res);
