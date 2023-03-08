@@ -1,0 +1,41 @@
+@import "../variables";
+
+// --------------------------------------------------
+// Testimonials Component
+// --------------------------------------------------
+
+// CSS rule order
+// --------------------
+
+// 1. Variables
+// 2. Box model properties
+// 3. Display and position
+// 4. Background
+// 5. Border
+// 6. Box shadow
+// 7. Text
+// 8. Transforms
+// 9. Other
+
+.testimonials {
+  padding: $spacing__xl 0;
+  height: 100%;
+
+  h2 {
+    margin-bottom: $spacing__l;
+  }
+  .testimonials__quote {
+    padding: $spacing__l;
+    border: 1px solid $color__n-80;
+    border-radius: $border-radius__m;
+    font-size: $font-size__copy;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    // TODO: remove this margin and make it part of swiper
+    margin-bottom: $spacing__m;
+  }
+  .testimonials__quote-text {
+    margin-bottom: $spacing__m;
+  }
+}
