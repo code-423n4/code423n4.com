@@ -1,0 +1,20 @@
+{
+  "handle": "Cyfrin",
+  "members": [
+    "PatrickAlphaC",
+    "giovannidisiena",
+    "hansfriese"
+  ],
+  "link": "https://www.cyfrin.io/",
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xa5D0084A766203b463b3164DFc49D91509C12daB"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0xa5D0084A766203b463b3164DFc49D91509C12daB"
+    }
+  ],
+  "image": "./avatars/Cyfrin.png"
+}
