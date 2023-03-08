@@ -32,9 +32,9 @@
     box-shadow: 0 0 0 0.2rem rgba($color__button-blurple, 0.25);
   }
   &:disabled {
-    background-color: $color__n-70;
-    border-color: $color__n-70;
-    color: $color__n-40;
+    background-color: $color__n-90;
+    border-color: $color__n-90;
+    color: $color__n-30;
   }
   &::placeholder {
     color: $color__n-20;
@@ -111,11 +111,44 @@ form > div:has(.form-field__error) {
   input[type="number"],
   input[type="search"],
   textarea {
-    border-color: $color__form-error;
+    border: 2px solid $color__form-error;
   }
 }
 .form-field__error {
   margin-top: $spacing__s;
+  color: $color__form-error;
+
+  &:before {
+    content: "⚠ ";
+  }
+}
+
+.input__input-error {
+  border: 2px solid $color__form-error !important;
+}
+
+// TODO: This could be better with more javascript and less reliance on has()
+form:has(.form-field__error) {
+  .form__submit-button-holder {
+    &:before {
+      content: "There appear to be errors present in the form. You will need to fix these to proceed. For any questions, please raise a Help Desk ticket.";
+      margin-bottom: $spacing__s;
+      max-width: 50rem;
+      display: block;
+      color: $color__form-error;
+    }
+  }
+  .form__submit-button {
+    background-color: $color__n-80;
+    border-color: $color__n-80;
+    color: $color__n-30;
+    // TODO: This will make the button actually unclickable but I'm afraid to do this until we know it's ok across the board
+    // pointer-events: none;
+
+    &:before {
+      content: "⚠\00a0";
+    }
+  }
 }
 
 // Checkboxes
