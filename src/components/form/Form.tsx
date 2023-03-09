@@ -63,16 +63,18 @@ const Form = ({
         <form>
           <>
             {children}
-            <button
-              className="button button--primary"
-              type="button"
-              onClick={submit}
-              disabled={status !== FormStatus.Unsubmitted}
-            >
-              {status === FormStatus.Unsubmitted &&
-                (submitButtonText || "Submit")}
-              {status === FormStatus.Submitting && "Submitting..."}
-            </button>
+            <div className="form__submit-button-holder">
+              <button
+                className="button button--primary form__submit-button"
+                type="button"
+                onClick={submit}
+                disabled={status !== FormStatus.Unsubmitted}
+              >
+                {status === FormStatus.Unsubmitted &&
+                  (submitButtonText || "Submit")}
+                {status === FormStatus.Submitting && "Submitting..."}
+              </button>
+            </div>
           </>
         </form>
       )}
@@ -81,7 +83,7 @@ const Form = ({
           <h2>Sorry, an error has occurred.</h2>
           <p>{errorMessage}</p>
           <button
-            className="button button--primary"
+            className="button button--primary form__submit-button"
             type="button"
             onClick={() => setStatus(FormStatus.Unsubmitted)}
           >
@@ -95,7 +97,7 @@ const Form = ({
           <p>{successMessage}</p>
           {successButtonText && (
             <button
-              className="button button--primary"
+              className="button button--primary form__submit-button"
               type="button"
               onClick={handleReset}
             >
