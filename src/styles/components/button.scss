@@ -19,8 +19,10 @@
 
 $button__border-width: 2px;
 
-// Mixins for the white button styles
+// Mixins
 // --------------------
+
+// White button
 
 @mixin button--white {
   background: $color__white;
@@ -45,6 +47,19 @@ $button__border-width: 2px;
     background: rgba($color__white, 0.2);
     color: $color__white;
     border-color: $color__white;
+  }
+}
+
+// Disabled button
+@mixin button--primary--disabled {
+  background: $color__n-90;
+  border-color: $color__n-90;
+  color: $color__n-30;
+
+  cursor: not-allowed;
+
+  &:before {
+    content: "⚠\00a0";
   }
 }
 

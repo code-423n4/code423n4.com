@@ -37,7 +37,7 @@ export default function TeamRegistration({ data }) {
 
   return (
     <ProtectedPage
-      pageTitle="Team Registration | Code 423n4"
+      pageTitle="Team Registration | Code4rena"
       message="You need to be a registered warden, currently connected via wallet to register a team."
     >
       <div className="limited-width">
