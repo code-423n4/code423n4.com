@@ -38,12 +38,19 @@ export interface FindingEditRequest {
   isMitigated?: {
     newValue: boolean;
     oldValue: boolean;
-  }
+  };
 }
 
-export interface FindingsResponse {
+export interface WardenFindingsForContest {
   user: Finding[];
-  teams: Record<string, Finding[]>;
+  teams: {
+    [teamName: string]: Finding[];
+  };
+}
+
+export interface TeamFindings {
+  findings: Finding[];
+  teamName: string;
 }
 
 export interface FindingCreateRequest {
