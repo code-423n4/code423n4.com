@@ -1,6 +1,6 @@
 {
   "handle": "MidnightTeaParty",
-  "members": ["Tutturu", "phaze"],
+  "members": ["Tutturu","phaze"],
   "paymentAddresses": [
     {
       "chain": "polygon",
