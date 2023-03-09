@@ -180,7 +180,7 @@ const Login = ({ displayAsButtons = false }) => {
               alt="login icon"
               className={"login__icon"}
             />
-            Log in with email
+            Log in with password
           </button>
           <div className="login__not-registered">
             <p>Not a warden yet?</p>
