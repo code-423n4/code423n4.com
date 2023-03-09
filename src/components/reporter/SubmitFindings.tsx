@@ -648,7 +648,7 @@ const SubmitFindings = ({
             })}
           </fieldset>
           <Agreement />
-          <div>
+          <div className="form__submit-button-holder">
             {cancelButtonText && (
               <button
                 className="button button--secondary"
@@ -670,7 +670,7 @@ const SubmitFindings = ({
               </button>
             )}
             <button
-              className="button button--primary"
+              className="button button--primary form__submit-button"
               type="button"
               onClick={handleSubmit}
               disabled={status !== FormStatus.Unsubmitted}
@@ -686,7 +686,7 @@ const SubmitFindings = ({
         <div className="spacing-top__xl">
           <p>{errorMessage}</p>
           <button
-            className="button button--primary"
+            className="button button--primary form__submit-button"
             type="button"
             onClick={() => setStatus(FormStatus.Unsubmitted)}
           >
