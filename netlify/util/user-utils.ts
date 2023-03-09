@@ -107,13 +107,13 @@ export async function getTeamEmails(team: TeamData): Promise<string[]> {
   const { members } = team;
   const emails = members.map(async (member) => {
     const query = new Moralis.Query("_User");
-    query.equalTo("c4Username", member);
-    query.select("emailAddress");
+    query.equalTo("username", member);
+    query.select("email");
     const results = await query.find({ useMasterKey: true });
     if (results.length === 0) {
       return "";
     }
-    const email = results[0].attributes.emailAddress;
+    const email = results[0].attributes.email;
     return email || "";
   });
 
