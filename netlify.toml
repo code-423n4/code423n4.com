@@ -22,5 +22,5 @@
   environment = { GATSBY_STAGING = "true" }
 
 [functions]
-  directory = "functions/"
-  included_files = ["_data/contests/*", "_data/handles/*.json"]
+  directory = "netlify/functions/"
+  included_files = ["_data/findings/*", "_data/handles/*.json"]

@@ -1,13 +1,13 @@
 import React from "react";
 import useUser from "../hooks/UserContext";
-import * as styles from "./Banner.module.scss";
 
 export default function Banner() {
   const { currentUser } = useUser();
 
+  // TODO: This is unstyled
   return !currentUser.isLoggedIn ? (
-    <div className={styles.MessageBar}>
-      <p className={styles.Message}>
+    <div>
+      <p>
         🐺 <strong>Hey, wardens!</strong> Wallet auth is here! 🎉{" "}
         <strong>Connect now »</strong>
       </p>

@@ -1,5 +1,9 @@
-import format from 'date-fns/format';
-import differenceInCalendarDays from 'date-fns/differenceInCalendarDays';
+import format from "date-fns-tz/format";
+import utcToZonedTime from "date-fns-tz/utcToZonedTime";
+import isValid from "date-fns/isValid";
+import parseISO from "date-fns/parseISO";
+
+import differenceInCalendarDays from "date-fns/differenceInCalendarDays";
 
 const left = (total) => {
   return {
@@ -11,7 +15,10 @@ const left = (total) => {
 };
 
 const getTimeRemaining = (contestTimer) => {
-  const endTime = contestTimer.contestStatus === 'active' ? contestTimer.end : contestTimer.start;
+  const endTime =
+    contestTimer.contestStatus === "active"
+      ? contestTimer.end
+      : contestTimer.start;
   const total = endTime - Date.now();
   if (total > 0) {
     return {
@@ -46,24 +53,49 @@ const getDates = (start, end) => {
   const endTime = endDate.getTime();
 
   let contestStatus;
-  if (now >= startTime && now <= endTime) {
-    contestStatus = "active";
-  }
-  if (now < startTime) {
-    contestStatus = "soon";
-  }
-  if (now >= endTime) {
-    contestStatus = "completed";
+
+  switch (true) {
+    case now >= startTime && now <= endTime:
+      contestStatus = "active";
+      break;
+    case now < startTime:
+      contestStatus = "soon";
+      break;
+    case now >= endTime:
+      contestStatus = "completed";
+      break;
+    default:
+      contestStatus = "-";
   }
 
-  const daysDuration = differenceInCalendarDays(endDate, startDate)
+  const daysDuration = differenceInCalendarDays(endDate, startDate);
+  const parsedEndTime = parseISO(end);
+  const parsedStartTime = parseISO(start);
+  const endUtc = format(
+    utcToZonedTime(parsedEndTime, "UTC"),
+    "d MMMM - h:mm a zzz",
+    {
+      timeZone: "UTC",
+    }
+  );
+  const startUtc = format(
+    utcToZonedTime(parsedStartTime, "UTC"),
+    "d MMMM - h:mm a zzz",
+    {
+      timeZone: "UTC",
+    }
+  );
+  const endLocal = format(endDate, "(d MMMM - h:mm a zzz)");
+  const startLocal = format(startDate, "(d MMMM - h:mm a zzz)");
 
   const t = {
     contestStatus,
     start: startTime,
     end: endTime,
-    startDay: format(startDate, 'd MMMM yyyy'),
-    endDay: format(endDate, 'd MMMM yyyy'),
+    startDay: isValid(startDate) ? format(startDate, "d MMMM yyyy") : "",
+    endDay: isValid(endDate) ? format(endDate, "d MMMM yyyy") : "",
+    startTime: isValid(startDate) ? startUtc + " " + startLocal : "",
+    endTime: isValid(endDate) ? endUtc + " " + endLocal : "",
     daysDuration,
   };
 
