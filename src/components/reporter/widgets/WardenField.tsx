@@ -114,7 +114,7 @@ const WardenField = ({
       />
       {isInvalid &&
         validationErrors.map((validationError) => (
-          <p id={name} className={"input__error-message"}>
+          <p id={name} className={"input__error-message form-field__error"}>
             {validationError}
           </p>
         ))}
