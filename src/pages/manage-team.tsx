@@ -18,7 +18,7 @@ import TeamForm, { TeamState } from "../components/TeamForm";
 import { WardenFieldOption } from "../components/reporter/widgets/WardenField";
 
 // styles
-import * as styles from "../components/form/Form.module.scss";
+import * as styles from "../styles/Main.module.scss";
 
 export default function TeamManagement({ data, location }) {
   const { currentUser } = useUser();
@@ -173,10 +173,10 @@ export default function TeamManagement({ data, location }) {
       pageTitle="Manage Team | Code 423n4"
       message="You need to be a registered warden, currently connected via wallet to manage a team."
     >
-      <div className="wrapper-main">
+      <div className="limited-width">
         {unauthorized ? (
           <div className="centered-text">
-            <div className={styles.Form}>
+            <div className={styles.Form__Form}>
               <h1>Unauthorized</h1>
               <p>You are not authorized to view or edit this team.</p>
             </div>

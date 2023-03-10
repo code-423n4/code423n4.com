@@ -4,8 +4,6 @@ import useUser from "../hooks/UserContext";
 import DefaultLayout from "../templates/DefaultLayout";
 import Login from "../components/Login/Login";
 
-import * as styles from "../components/form/Form.module.scss";
-
 interface ProtectedPageProps {
   children: JSX.Element;
   pageTitle: string;
@@ -26,13 +24,13 @@ export default function ProtectedPage({
       {currentUser.isLoggedIn ? (
         children
       ) : (
-        <div className="centered-text">
-          <div className={styles.Form}>
+        <section className="limited-width limited-width--centered limited-width--background">
+          <div>
             <h1>Please log in</h1>
             <p>{message || "You must be logged in to view this page."}</p>
             <Login displayAsButtons={true} />
           </div>
-        </div>
+        </section>
       )}
     </DefaultLayout>
   );
