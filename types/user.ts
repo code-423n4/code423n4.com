@@ -32,6 +32,14 @@ export interface TeamCreateRequest {
   image?: string;
 }
 
+export interface BotCreateRequest {
+  botName: string;
+  owner: string;
+  description: string;
+  submission: string;
+  image?: string;
+}
+
 export interface TeamUpdateRequest {
   teamName: string;
   members: {

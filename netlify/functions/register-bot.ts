@@ -6,7 +6,7 @@ import dedent from "dedent";
 import { readFileSync } from "fs";
 
 import { moralisAppId, moralisServerUrl, token } from "../_config";
-import { UserFileData } from "../../types/user";
+import { BotCreateRequest, UserFileData } from "../../types/user";
 import { sendConfirmationEmail, getUserTeams } from "../util/user-utils";
 import { checkAuth } from "../util/auth-utils";
 import { isDangerousHandle } from "../util/validation-utils";
@@ -44,7 +44,7 @@ exports.handler = async (event) => {
       };
     }
 
-    const data = JSON.parse(event.body);
+    const data: BotCreateRequest = JSON.parse(event.body);
     const { botName, image, owner, description, submission } = data;
     const username = event.headers["c4-user"];
 

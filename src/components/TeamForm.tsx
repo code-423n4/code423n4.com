@@ -1,5 +1,5 @@
 import { navigate } from "gatsby";
-import Moralis from "moralis/types";
+import Moralis from "moralis-v1/types";
 import React, {
   useCallback,
   useState,
@@ -103,7 +103,6 @@ export default function TeamForm({
       };
       fileReader.onerror = (err) => reject(err);
     });
-    return;
   };
 
   const handleAvatarChange = async (
@@ -192,7 +191,7 @@ export default function TeamForm({
     };
 
     if (state.avatarFile && state.teamImage) {
-      requestBody.image = state.teamImage.substr(
+      requestBody.image = state.teamImage.substring(
         state.teamImage.indexOf(",") + 1
       );
     }

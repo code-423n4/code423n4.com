@@ -13,7 +13,7 @@ const TextArea = ({
   fieldState,
   isInvalid,
   onChange,
-  maxSize,
+  maxSize = undefined,
 }) => {
   function handleChange(e) {
     onChange(e);
