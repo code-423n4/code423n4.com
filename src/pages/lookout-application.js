@@ -262,7 +262,7 @@ const LookoutApplication = () => {
                     <li>
                       The review process begins after the application window
                       closes, and we expect it to take about a week, depending
-                      on the number of applications the committee receives.
+                      on the number of applications.
                     </li>
                     <li>
                       You'll be contacted via DM to let you know if your
