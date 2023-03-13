@@ -1,4 +1,5 @@
 @import "../variables";
+@import "../components/button";
 
 // CSS rule order
 // --------------------
@@ -32,9 +33,9 @@
     box-shadow: 0 0 0 0.2rem rgba($color__button-blurple, 0.25);
   }
   &:disabled {
-    background-color: $color__n-70;
-    border-color: $color__n-70;
-    color: $color__n-40;
+    background-color: $color__n-90;
+    border-color: $color__n-90;
+    color: $color__n-30;
   }
   &::placeholder {
     color: $color__n-20;
@@ -101,21 +102,34 @@ form,
 // Default Errors
 // --------------------
 
-// TODO: This could be better with more javascript and less reliance on has()
-// Firefox users won't see the error outline color
-form > div:has(.form-field__error) {
-  input[type="text"],
-  input[type="password"],
-  input[type="email"],
-  input[type="tel"],
-  input[type="number"],
-  input[type="search"],
-  textarea {
-    border-color: $color__form-error;
-  }
-}
 .form-field__error {
   margin-top: $spacing__s;
+  color: $color__form-error;
+
+  &:before {
+    content: "⚠ ";
+  }
+}
+
+// TODO: When all this gets cleaned up eventually, this should live with its component, if that still exists
+.input__input-error {
+  border: 2px solid $color__form-error !important;
+}
+
+// TODO: This could be better with more javascript and less reliance on has()
+form:has(.form-field__error) {
+  .form__submit-button-holder {
+    &:before {
+      content: "There appear to be errors present in the form. You will need to fix these to proceed. For any questions, please reach out to the C4 team in our Discord.";
+      margin-bottom: $spacing__s;
+      max-width: 50rem;
+      display: block;
+      color: $color__form-error;
+    }
+  }
+  .form__submit-button {
+    @include button--primary--disabled;
+  }
 }
 
 // Checkboxes
