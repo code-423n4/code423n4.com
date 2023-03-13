@@ -136,6 +136,7 @@ const LookoutApplication = () => {
   const [state, setState] = useState(initialState);
   const [status, setStatus] = useState("unsubmitted");
   const [errorMessage, setErrorMessage] = useState("");
+  const [hasValidationErrors, setHasValidationErrors] = useState(false);
   const { currentUser } = useUser();
   const { user, isInitialized } = useMoralis();
 
@@ -170,12 +171,19 @@ const LookoutApplication = () => {
   };
 
   const handleSubmit = () => {
+    if (!isInitialized || !user || !currentUser.isLoggedIn) {
+      return;
+    }
     if (
-      !isInitialized ||
-      !user ||
-      !currentUser.isLoggedIn ||
-      !Object.values(state).every((val) => !!val)
+      !state.bio ||
+      !state.details1 ||
+      !state.details2 ||
+      !state.details3 ||
+      !state.link1 ||
+      !state.link2 ||
+      !state.link3
     ) {
+      setHasValidationErrors(true);
       return;
     }
     const handle = currentUser.username;
@@ -216,21 +224,8 @@ const LookoutApplication = () => {
                       fields={fields}
                       onChange={handleChange}
                       fieldState={state}
-                    />{" "}
-                    {status === FormStatus.Error && (
-                      <div
-                        className="error-message"
-                        role="alert"
-                        aria-atomic="true"
-                      >
-                        <p>
-                          An error occurred; please try again. If you continue
-                          to receive this error, let us know in{" "}
-                          <a href="https://discord.gg/code4rena">Discord</a>.
-                          All fields are required.
-                        </p>
-                      </div>
-                    )}
+                      showValidationErrors={hasValidationErrors}
+                    />
                     <div className="form__submit-button-holder">
                       <button
                         className="button form__submit-button"
@@ -282,8 +277,12 @@ const LookoutApplication = () => {
               {status === FormStatus.Error && (
                 <div className="centered-text">
                   <h1>Whoops!</h1>
-                  <p>An error occurred while processing your application.</p>
-                  {errorMessage && <p>{errorMessage}</p>}
+                  <p>
+                    An error occurred; please try again. If you continue to
+                    receive this error, let us know in{" "}
+                    <a href="https://discord.gg/code4rena">Discord</a>.
+                  </p>
+                  {errorMessage && <p>"{errorMessage}"</p>}
                   <div className="form__submit-button-holder">
                     <button
                       className="button form__submit-button"
