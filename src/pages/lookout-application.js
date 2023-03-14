@@ -44,7 +44,7 @@ const config = {
       name: "link1",
       label: "First Code4rena finding link",
       helpText:
-        "Link to a valid, high-severity finding you submitted to a Code4rena contest",
+        "Link to a valid finding you submitted to a Code4rena contest",
       widget: "text",
       required: true,
     },
@@ -60,7 +60,7 @@ const config = {
       name: "link2",
       label: "Second Code4rena finding link",
       helpText:
-        "Link to a valid, high-severity finding you submitted to a Code4rena contest",
+        "Link to a valid finding you submitted to a Code4rena contest",
       widget: "text",
       required: true,
     },
@@ -76,7 +76,7 @@ const config = {
       name: "link3",
       label: "Third Code4rena finding link",
       helpText:
-        "Link to a valid, high-severity finding you submitted to a Code4rena contest",
+        "Link to a valid finding you submitted to a Code4rena contest",
       widget: "text",
       required: true,
     },
