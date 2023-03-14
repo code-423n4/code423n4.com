@@ -187,9 +187,7 @@ const LookoutApplication = () => {
       setHasValidationErrors(true);
       return;
     }
-    const handle = currentUser.username;
     const formData = {
-      handle,
       bio: state.bio,
       link1: state.link1,
       details1: state.details1,
