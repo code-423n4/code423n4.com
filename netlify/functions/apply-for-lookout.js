@@ -118,15 +118,15 @@ exports.handler = async (event) => {
     ## Questions
     ${questions ? questions : "No questions provided."}
 
-    ## High severity Code4rena submission 1
+    ## Code4rena submission 1
     ${link1}
     ${details1}
 
-    ## High severity Code4rena submission 2
+    ## Code4rena submission 2
     ${link2}
     ${details2}
 
-    ## High severity Code4rena submission 3
+    ## Code4rena submission 3
     ${link3}
     ${details3}
 
