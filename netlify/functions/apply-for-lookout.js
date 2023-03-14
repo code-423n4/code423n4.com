@@ -20,7 +20,6 @@ exports.handler = async (event) => {
 
     const data = JSON.parse(event.body);
     const {
-      handle,
       bio,
       link1,
       details1,
@@ -31,10 +30,11 @@ exports.handler = async (event) => {
       experience,
       questions,
     } = data;
+    
+    const handle = event.headers["c4-user"]
 
     // ensure we have the data we need
     if (
-      !handle ||
       !bio ||
       !link1 ||
       !details1 ||
