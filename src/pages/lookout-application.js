@@ -30,7 +30,7 @@ const config = {
       label: "What questions do you have about the Lookout Guidelines?",
       helpText: (
         <a
-          href="https://www.notion.so/Pre-sort-Lookout-Guidelines-bead139f7ec9469197c7d46f759d89d5"
+          href="https://code4rena.notion.site/Pre-sort-Lookout-Guidelines-bead139f7ec9469197c7d46f759d89d5"
           target="_blank"
           rel="norefferrer"
         >
@@ -43,8 +43,7 @@ const config = {
     {
       name: "link1",
       label: "First Code4rena finding link",
-      helpText:
-        "Link to a valid finding you submitted to a Code4rena contest",
+      helpText: "Link to a valid finding you submitted to a Code4rena contest",
       widget: "text",
       required: true,
     },
@@ -59,8 +58,7 @@ const config = {
     {
       name: "link2",
       label: "Second Code4rena finding link",
-      helpText:
-        "Link to a valid finding you submitted to a Code4rena contest",
+      helpText: "Link to a valid finding you submitted to a Code4rena contest",
       widget: "text",
       required: true,
     },
@@ -75,8 +73,7 @@ const config = {
     {
       name: "link3",
       label: "Third Code4rena finding link",
-      helpText:
-        "Link to a valid finding you submitted to a Code4rena contest",
+      helpText: "Link to a valid finding you submitted to a Code4rena contest",
       widget: "text",
       required: true,
     },
@@ -158,7 +155,7 @@ const LookoutApplication = () => {
       headers: {
         "Content-Type": "application/json",
         "X-Authorization": `Bearer ${sessionToken}`,
-        "C4-User": currentUser.username
+        "C4-User": currentUser.username,
       },
       body: JSON.stringify(data),
     });
@@ -241,11 +238,9 @@ const LookoutApplication = () => {
               )}
 
               {status === FormStatus.Submitted && (
-                <div className="thank-you">
+                <div className="lookout-application__thank-you">
                   <h1>Thanks for applying!</h1>
-                  <p>
-                    <strong>Here's what happens next:</strong>
-                  </p>
+                  <h2>Here's what happens next:</h2>
                   <ol>
                     <li>
                       Lookout applications are reviewed by the C4 lookout
@@ -268,8 +263,10 @@ const LookoutApplication = () => {
                     </li>
                   </ol>
                   <p>
-                    In the meantime, if you have questions, feel free to reach
-                    out to us in the C4 Discord.
+                    <strong>
+                      In the meantime, if you have questions, feel free to reach
+                      out to us in the C4 Discord.
+                    </strong>
                   </p>
                 </div>
               )}

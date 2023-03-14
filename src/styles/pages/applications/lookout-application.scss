@@ -20,7 +20,7 @@
 .lookout-application {
   fieldset {
     margin-bottom: $spacing__l;
-    padding: $spacing__xl;
+    padding: $spacing__xl 0;
     border-bottom: 1px solid $color__n-90;
 
     &:last-of-type {
@@ -43,6 +43,17 @@
 
     .form__submit-button-holder {
       margin-top: $spacing__l;
+    }
+  }
+}
+
+.lookout-application__thank-you {
+  ol {
+    list-style: decimal;
+    margin: $spacing__l 0 $spacing__l $spacing__l;
+
+    li {
+      margin-bottom: $spacing__s;
     }
   }
 }
