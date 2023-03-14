@@ -158,6 +158,7 @@ const LookoutApplication = () => {
       headers: {
         "Content-Type": "application/json",
         "X-Authorization": `Bearer ${sessionToken}`,
+        "C4-User": currentUser.username
       },
       body: JSON.stringify(data),
     });
