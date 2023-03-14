@@ -6,7 +6,7 @@ import fetch from "node-fetch";
 import path from "path";
 import webpack from "webpack";
 import SchemaCustomization from "./schema";
-import { getApiContestData } from "./netlify/util/getContestsData.ts";
+import { getApiContestData } from "./netlify/util/getContestsData";
 const { token } = require("./netlify/_config");
 
 const privateContestMessage = dedent`

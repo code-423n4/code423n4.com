@@ -343,7 +343,6 @@ export default function TeamForm({
           />
           {state.avatarFile && (
             <button
-              className="remove-line-button"
               type="button"
               onClick={removeAvatar}
               aria-label="Remove avatar"
