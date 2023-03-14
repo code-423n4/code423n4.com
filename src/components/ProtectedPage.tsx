@@ -26,7 +26,7 @@ export default function ProtectedPage({
       ) : (
         <section className="limited-width limited-width--centered limited-width--background">
           <div>
-            <h1 className="type__headline__page-title">Please log in</h1>
+            <h1>Please log in</h1>
             <p>{message || "You must be logged in to view this page."}</p>
             <Login displayAsButtons={true} />
           </div>
