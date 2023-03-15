@@ -44,7 +44,7 @@ const resourcesHandler: Handler = async (event, context) => {
 
       ...publicContests.map((contest) => {
         return [
-          contest.contestid,
+          "" + contest.contestid,
           contest.title,
           contest.sponsor,
           contest.details,
@@ -53,7 +53,7 @@ const resourcesHandler: Handler = async (event, context) => {
           contest.amount,
           contest.repo,
           contest.findingsRepo,
-          contest.hide,
+          (contest.hide) ? "True" : "False",
           contest.league,
         ];
       }),
