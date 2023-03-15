@@ -6,9 +6,10 @@ import BotRegistrationForm from "../../components/BotRegistrationForm";
 import { WardenFieldOption } from "../../components/reporter/widgets/WardenField";
 
 export default function TeamRegistration({ data }) {
-  const handles: Set<string> = new Set(
-    data.handles.edges.map((h) => h.node.handle)
-  );
+  const handles: Set<string> = new Set([
+    ...data.handles.edges.map((h) => h.node.handle),
+    ...data.bots.edges.map((b) => b.node.handle),
+  ]);
 
   let wardens: WardenFieldOption[] = [];
   data.handles.edges.forEach(({ node }) => {
