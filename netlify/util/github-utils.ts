@@ -195,10 +195,12 @@ async function getSubmittedFindingsFromFolder(
           })
           .map((f) => {
             const [key, ext] = f.name.split(".");
-            const [handle, issueNumber] = key.split("-");
+            const _splitFileName = key.split("-");
+            const issueNumber = _splitFileName.pop();
+            const handle = _splitFileName.join("-");
 
             return {
-              handle: handle as string,
+              handle,
               issueNumber: parseInt(issueNumber),
             };
           })
@@ -229,7 +231,7 @@ async function getAvailableFindings(
   return submission_files;
 }
 
-async function wardenFindingsForContest(
+async function getWardenFindingsForContest(
   client: Octokit,
   handle,
   contest
@@ -353,7 +355,7 @@ export {
   getAllIssues,
   getAvailableFindings,
   getSubmittedFindingsFromFolder,
-  wardenFindingsForContest,
+  getWardenFindingsForContest,
   getRepoName,
   getMarkdownReportForUser,
 };
