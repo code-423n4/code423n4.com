@@ -20,6 +20,12 @@
   status = 200
   force = true
 
+[[redirects]]
+  from = "/community-resources/findings.csv"
+  to = "/.netlify/functions/resources"
+  status = 200
+  force = true
+
 [context.deploy-preview]
   ignore = "bash ./netlify-ignore-branch.sh"
   environment = { GATSBY_STAGING = "true" }
