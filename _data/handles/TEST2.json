@@ -1,0 +1,13 @@
+{
+  "handle": "TEST2",
+  "maintainers": [
+    "CaptainMango",
+    "liveactionllama"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x0000000000000000000000000000000000000000"
+    }
+  ]
+}
