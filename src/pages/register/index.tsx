@@ -1,13 +1,12 @@
-import clsx from "clsx";
 import { graphql, navigate } from "gatsby";
 import Moralis from "moralis-v1";
 import React, { useEffect, useState } from "react";
 import { useMoralis } from "react-moralis";
 
-import useUser from "../hooks/UserContext";
+import useUser from "../../hooks/UserContext";
 
-import DefaultLayout from "../templates/DefaultLayout";
-import RegistrationForm from "../components/RegistrationForm";
+import DefaultLayout from "../../templates/DefaultLayout";
+import RegistrationForm from "../../components/RegistrationForm";
 
 export default function UserRegistration({ data }) {
   const handles = new Set(data.handles.edges.map((h) => h.node.handle));
