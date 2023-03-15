@@ -14,7 +14,7 @@
   to = "/register"
   status = 200
 
-  [[redirects]]
+[[redirects]]
   from = "/community-resources/contests.csv"
   to = "/.netlify/functions/resources"
   status = 200
