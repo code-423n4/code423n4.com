@@ -194,7 +194,9 @@ export default function BotRegistrationForm({
         );
       }
       if (handles.has(botName)) {
-        errors.push(`${botName} is already registered as a bot or warden.`);
+        errors.push(
+          `${botName} is already registered as a team, bot, or warden.`
+        );
       }
       return errors;
     },

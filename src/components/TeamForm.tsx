@@ -227,7 +227,9 @@ export default function TeamForm({
         );
       }
       if (!initialState && handles.has(teamName)) {
-        errors.push(`${teamName} is already registered as a team or warden.`);
+        errors.push(
+          `${teamName} is already registered as a team, bot, or warden.`
+        );
       }
       return errors;
     },

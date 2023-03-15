@@ -37,18 +37,6 @@ export const query = graphql`
       edges {
         node {
           handle
-          link
-          moralisId
-          members {
-            handle
-          }
-          image {
-            childImageSharp {
-              resize(width: 80) {
-                src
-              }
-            }
-          }
         }
       }
     }
