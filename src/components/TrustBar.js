@@ -2,14 +2,39 @@ import React from "react";
 
 const logos = [
   {
+    title: "ENS",
+    imgSrc: "/images/logos/ens-logo-full.svg",
+    alt: "ENS",
+  },
+  {
     title: "OpenSea",
     imgSrc: "/images/logos/opensea.svg",
     alt: "OpenSea",
   },
   {
-    title: "ENS",
-    imgSrc: "/images/logos/ens.svg",
-    alt: "ENS",
+    title: "NounsDAO",
+    imgSrc: "/images/logos/nouns-logo-full.svg",
+    alt: "NounsDAO",
+  },
+  {
+    title: "The Graph",
+    imgSrc: "/images/logos/the-graph-logo-full.svg",
+    alt: "The Graph",
+  },
+  {
+    title: "Blur",
+    imgSrc: "/images/logos/blur-logo-full.svg",
+    alt: "Blur",
+  },
+  {
+    title: "Chainlink",
+    imgSrc: "/images/logos/chainlink-logo-full.svg",
+    alt: "Chainlink",
+  },
+  {
+    title: "ZkSync",
+    imgSrc: "/images/logos/zksync-logo-full.svg",
+    alt: "ZKSync",
   },
   {
     title: "Aave",
@@ -17,24 +42,14 @@ const logos = [
     alt: "Aave",
   },
   {
+    title: "Trader Joe",
+    imgSrc: "/images/logos/trader-joe-plaintext-logo.svg",
+    alt: "Trader Joe",
+  },
+  {
     title: "PoolTogether",
     imgSrc: "/images/logos/pooltogether.svg",
     alt: "PoolTogether",
-  },
-  {
-    title: "Sushi",
-    imgSrc: "/images/logos/sushi.svg",
-    alt: "Sushi",
-  },
-  {
-    title: "Slingshot",
-    imgSrc: "/images/logos/slingshot.svg",
-    alt: "Slingshot",
-  },
-  {
-    title: "Mechanism Capital",
-    imgSrc: "/images/logos/mechanism.png",
-    alt: "Mechanism Capital",
   },
   {
     title: "Tally Wallet",
@@ -42,84 +57,29 @@ const logos = [
     alt: "Tally Wallet",
   },
   {
-    title: "Nascent",
-    imgSrc: "/images/logos/nascent.svg",
-    alt: "Nascent",
+    title: "Sushi",
+    imgSrc: "/images/logos/sushi-logo-full.svg",
+    alt: "Sushi",
   },
   {
-    title: "1kx",
-    imgSrc: "/images/logos/1kx.svg",
-    alt: "1kx",
+    title: "JuiceBox",
+    imgSrc: "/images/logos/juicebox-logo-full.svg",
+    alt: "JuiceBox",
   },
   {
-    title: "Connext",
-    imgSrc: "/images/logos/connext.svg",
-    alt: "Connext",
+    title: "Tessera",
+    imgSrc: "/images/logos/tessera-logo-full.svg",
+    alt: "Tessera",
   },
   {
-    title: "MetaCartel Venture DAO",
-    imgSrc: "/images/logos/metacartel.svg",
-    alt: "MetaCartel Venture DAO",
+    title: "Yield",
+    imgSrc: "/images/logos/yield-protocol-logo-full.svg",
+    alt: "Yield",
   },
   {
     title: "Foundation",
     imgSrc: "/images/logos/foundation.svg",
     alt: "Foundation",
-  },
-  {
-    title: "NounsDAO",
-    imgSrc: "/images/logos/nounsdao.svg",
-    alt: "NounsDAO",
-  },
-  {
-    title: "OlympusDAO",
-    imgSrc: "/images/logos/olympusdao.svg",
-    alt: "OlympusDAO",
-  },
-  {
-    title: "JuiceBox",
-    imgSrc: "/images/logos/juicebox.svg",
-    alt: "JuiceBox",
-  },
-  {
-    title: "Alchemix",
-    imgSrc: "/images/logos/alchemix.svg",
-    alt: "Alchemix",
-  },
-  {
-    title: "Frax Finance",
-    imgSrc: "/images/logos/fraxfinance.svg",
-    alt: "Frax Finance",
-  },
-  {
-    title: "Unlock Protocol",
-    imgSrc: "/images/logos/unlock.svg",
-    alt: "Unlock",
-  },
-  {
-    title: "Maple Finance",
-    imgSrc: "/images/logos/maple.svg",
-    alt: "Maple Finance",
-  },
-  {
-    title: "Elastic Swap",
-    imgSrc: "/images/logos/elasticswap.svg",
-    alt: "Elastic Swap",
-  },
-  {
-    title: "Gravity Bridge",
-    imgSrc: "/images/logos/gravity-bridge.svg",
-    alt: "Gravity Bridge",
-  },
-  {
-    title: "Yield",
-    imgSrc: "/images/logos/yield.svg",
-    alt: "Yield",
-  },
-  {
-    title: "Forgotten Runes",
-    imgSrc: "/images/logos/forgotten-runes.svg",
-    alt: "Forgotten Runes",
   },
 ];
 const TrustBar = () => (
@@ -131,16 +91,11 @@ const TrustBar = () => (
       <p className="type__subline__s">There's a reason why.</p>
       <div className="trustbar__logos">
         {logos.map((logo) => (
-          <a
-            href={logo.link}
-            title={logo.title}
-            key={logo.link}
-            target="_blank"
-            rel="noreferrer"
+          <img
+            src={logo.imgSrc}
+            alt={logo.alt + " logo"}
             className="trustbar__logo"
-          >
-            <img src={logo.imgSrc} alt={logo.alt} />
-          </a>
+          />
         ))}
       </div>
     </div>
