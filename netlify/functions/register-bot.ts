@@ -1,6 +1,6 @@
 import dedent from "dedent";
 import { readFileSync } from "fs";
-import Moralis from "moralis-v1";
+import Moralis from "moralis-v1/node";
 import { Octokit } from "@octokit/core";
 import { createPullRequest } from "octokit-plugin-create-pull-request";
 import { File } from "octokit-plugin-create-pull-request/dist-types/types";
@@ -182,7 +182,7 @@ exports.handler = async (event) => {
     const user = await userQuery.find({ useMasterKey: true });
     const gitHubUsername = user[0].attributes["gitHubUsername"];
 
-    const branchName = `test/${botName}`;
+    const branchName = `bot/${botName}`;
     const title = `Register bot ${botName}`;
     const body = dedent`
     Registration for bot ${botName} submitted by ${username}.
@@ -242,7 +242,7 @@ exports.handler = async (event) => {
 
     const fileData = {
       handle: botName,
-      owner: process.env.GITHUB_REPO_OWNER!,
+      owners: owners,
       issueId,
       issueUrl,
     };
