@@ -9,6 +9,16 @@ export interface UserData extends UserFileData {
   imageUrl?: string;
 }
 
+export interface BotFileData extends UserFileData {
+  maintainers: string[];
+  paymentAddresses: {
+    chain: string;
+    address: string;
+  }[];
+}
+
+export interface BotData extends UserData, BotFileData {}
+
 export interface TeamData extends UserData {
   members: string[];
   paymentAddresses: {
@@ -34,9 +44,11 @@ export interface TeamCreateRequest {
 
 export interface BotCreateRequest {
   botName: string;
-  owner: string;
+  owners: string[];
   description: string;
   submission: string;
+  polygonAddress: string;
+  ethereumAddress?: string;
   image?: string;
 }
 

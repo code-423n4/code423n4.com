@@ -91,23 +91,22 @@ export async function updateTeamAddresses(
       },
     ],
   });
-  const teamEmails = await getTeamEmails(team);
+  const teamEmails = await getGroupEmails(team.members);
   const emailSubject = `Payment addresses updated for ${team.handle}`;
   const emailBody = `This update was made by ${username}. You can see the pull request here: ${res.data.html_url}.`;
   await sendConfirmationEmail(teamEmails, emailSubject, emailBody);
 }
 
-export async function getTeamEmails(team: TeamData): Promise<string[]> {
+export async function getGroupEmails(handles: string[]): Promise<string[]> {
   await Moralis.start({
     serverUrl: moralisServerUrl,
     appId: moralisAppId,
     masterKey: process.env.MORALIS_MASTER_KEY,
   });
 
-  const { members } = team;
-  const emails = members.map(async (member) => {
+  const emails = handles.map(async (handle) => {
     const query = new Moralis.Query("_User");
-    query.equalTo("username", member);
+    query.equalTo("username", handle);
     query.select("email");
     const results = await query.find({ useMasterKey: true });
     if (results.length === 0) {

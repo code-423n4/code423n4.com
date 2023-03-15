@@ -14,13 +14,14 @@ import Form from "./form/Form";
 import { Input } from "./Input";
 import { TextArea } from "./reporter/widgets";
 import FormField from "./reporter/widgets/FormField";
-import WardenDetails from "./WardenDetails";
+import WardenField, { WardenFieldOption } from "./reporter/widgets/WardenField";
 
 export interface BotState {
   botName: string;
   description: string;
   submission: string;
-  owner: string;
+  polygonAddress: string;
+  ethereumAddress: string;
   avatarFile?: File | undefined;
   botImage?: string;
 }
@@ -29,20 +30,29 @@ const initialState: BotState = {
   botName: "",
   description: "",
   submission: "",
-  owner: "",
+  polygonAddress: "",
+  ethereumAddress: "",
   avatarFile: undefined,
   botImage: "",
 };
 
-export default function BotForm({ handles }) {
+interface BotRegistrationProps {
+  handles: Set<string>; // includes teams, wardens, and other bots
+  wardens: WardenFieldOption[]; // only contains individual wardens; not teams or bots
+}
+
+export default function BotRegistrationForm({
+  handles,
+  wardens,
+}: BotRegistrationProps) {
   const { currentUser } = useUser();
   const { user, isInitialized } = useMoralis();
 
   const [fileReader] = useState<FileReader>(new FileReader());
-  const [state, setState] = useState({
-    ...initialState,
-    owner: currentUser.username,
-  });
+  const [state, setState] = useState(initialState);
+  const [owners, setOwners] = useState<WardenFieldOption[]>([
+    wardens.find((warden) => warden.value === currentUser.username)!,
+  ]);
   const [submitted, setSubmitted] = useState(false);
 
   const avatarInputRef = useRef<HTMLInputElement>();
@@ -120,12 +130,17 @@ export default function BotForm({ handles }) {
 
   const validator = useCallback(() => {
     setSubmitted(true);
+    const ownerValidationErrors = validateOwners(owners);
+    const polygonAddressErrors = validateAddress(state.polygonAddress);
+    const botNameErrors = validateBotName(state.botName);
     if (
       !state.botName ||
       !state.description ||
       !state.submission ||
-      handles.has(state.botName) ||
-      state.botName.match(/^[0-9a-zA-Z_\-]+$/) === null
+      !state.polygonAddress ||
+      polygonAddressErrors.length ||
+      ownerValidationErrors.length ||
+      botNameErrors.length
     ) {
       return true;
     }
@@ -149,8 +164,45 @@ export default function BotForm({ handles }) {
     [currentUser]
   );
 
+  const validateOwners = useCallback(
+    (owners): (string | ReactNode)[] => {
+      const errors: (string | ReactNode)[] = [];
+      if (!owners.find((owner) => owner.value === currentUser.username)) {
+        errors.push(
+          "You must be listed as a maintainer of any bot you register"
+        );
+      }
+      return errors;
+    },
+    [currentUser]
+  );
+
+  const validateAddress = (address: string): (string | ReactNode)[] => {
+    const errors: (string | ReactNode)[] = [];
+    if (address && address.length !== 42) {
+      errors.push("Wallet address must be 42 characters long.");
+    }
+    return errors;
+  };
+
+  const validateBotName = useCallback(
+    (botName: string): (string | ReactNode)[] => {
+      const errors: (string | ReactNode)[] = [];
+      if (botName.match(/^[0-9a-zA-Z_\-]+$/) === null) {
+        errors.push(
+          "Supports alphanumeric characters, underscores, and hyphens"
+        );
+      }
+      if (handles.has(botName)) {
+        errors.push(`${botName} is already registered as a bot or warden.`);
+      }
+      return errors;
+    },
+    [handles, initialState]
+  );
+
   const submit = useCallback(async (): Promise<void> => {
-    if (!currentUser.isLoggedIn || !user || !isInitialized) {
+    if (!currentUser.isLoggedIn || !isInitialized) {
       navigate("/");
       return;
     }
@@ -159,7 +211,9 @@ export default function BotForm({ handles }) {
       botName: state.botName,
       description: state.description,
       submission: state.submission,
-      owner: state.owner,
+      owners: owners.map((owner) => owner.value),
+      polygonAddress: state.polygonAddress,
+      ethereumAddress: state.ethereumAddress,
     };
 
     if (state.avatarFile && state.botImage) {
@@ -178,34 +232,12 @@ export default function BotForm({ handles }) {
   }, [
     avatarInputRef,
     state,
+    owners,
     currentUser,
     handles,
-    user,
     isInitialized,
     onSubmit,
   ]);
-
-  const validateBotName = useCallback(
-    (botName: string): (string | ReactNode)[] => {
-      const errors: (string | ReactNode)[] = [];
-      if (botName.match(/^[0-9a-zA-Z_\-]+$/) === null) {
-        errors.push(
-          "Supports alphanumeric characters, underscores, and hyphens"
-        );
-      }
-      if (handles.has(botName)) {
-        errors.push(`${botName} is already registered as a bot or warden.`);
-      }
-      return errors;
-    },
-    [handles, initialState]
-  );
-
-  function handleOwnerChange(owner) {
-    setState((prevState) => {
-      return { ...prevState, owner };
-    });
-  }
 
   return (
     <Form
@@ -214,41 +246,6 @@ export default function BotForm({ handles }) {
       submitButtonText="Register Bot"
       validator={validator}
     >
-      {currentUser.teams.length > 0 && (
-        <>
-          <h3>Bot Owner</h3>
-          <p>Will this bot be run by you or your team?</p>
-          <fieldset className="submit-findings__submitting-as">
-            <h4>Warden</h4>
-            <label className="form__radio">
-              <input
-                type="radio"
-                value={currentUser.username}
-                name="currentUser"
-                checked={state.owner === currentUser.username}
-                onChange={handleOwnerChange}
-              />
-              <WardenDetails
-                username={currentUser.username}
-                image={currentUser.image}
-              />
-            </label>
-            <h4>Team</h4>
-            {currentUser.teams.map((team, i) => (
-              <label key={team.username} className="form__radio">
-                <input
-                  type="radio"
-                  value={i}
-                  name="team"
-                  checked={state.owner === team.username}
-                  onChange={handleOwnerChange}
-                />
-                <WardenDetails username={team.username} image={team.image} />
-              </label>
-            ))}
-          </fieldset>
-        </>
-      )}
       <Input
         forceValidation={submitted === true}
         name="botName"
@@ -260,11 +257,47 @@ export default function BotForm({ handles }) {
         handleChange={handleChange}
         validator={validateBotName}
       />
+      <WardenField
+        name="teamMembers"
+        required={true}
+        options={wardens}
+        onChange={(e) => {
+          setOwners((e.target.value as WardenFieldOption[]) || []);
+        }}
+        fieldState={owners}
+        isMulti={true}
+        validator={validateOwners}
+        label="Bot Maintainers"
+      />
+      <Input
+        forceValidation={submitted === true}
+        name="polygonAddress"
+        placeholder="0x00000..."
+        value={state.polygonAddress}
+        required={true}
+        label="Polygon Address"
+        helpText="Address where your bot's prize should go. If you use a smart contract wallet, please contact one of our organizers in Discord in addition to adding the address here."
+        handleChange={handleChange}
+        validator={validateAddress}
+        maxLength={42}
+      />
+      <Input
+        forceValidation={submitted === true}
+        name="ethereumAddress"
+        placeholder="0x00000..."
+        value={state.ethereumAddress}
+        label="Ethereum Address"
+        helpText="Address where we can send ethereum for contests that are awarded in eth"
+        handleChange={handleChange}
+        validator={validateAddress}
+        maxLength={42}
+      />
       <FormField
         name="description"
         label="Description"
         helpText="Describe your bot. Cite any open source tools that you use."
         isInvalid={submitted && !state.description}
+        required={true}
       >
         <TextArea
           name="description"
@@ -279,6 +312,7 @@ export default function BotForm({ handles }) {
         label="Submission"
         helpText="Enter the output from your bot."
         isInvalid={submitted && !state.submission}
+        required={true}
       >
         <TextArea
           name="submission"

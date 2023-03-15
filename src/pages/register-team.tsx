@@ -4,6 +4,7 @@ import React, { useCallback } from "react";
 import useUser from "../hooks/UserContext";
 import ProtectedPage from "../components/ProtectedPage";
 import TeamForm from "../components/TeamForm";
+import { WardenFieldOption } from "../components/reporter/widgets/WardenField";
 
 export default function TeamRegistration({ data }) {
   const { currentUser } = useUser();
@@ -11,7 +12,7 @@ export default function TeamRegistration({ data }) {
     data.handles.edges.map((h) => h.node.handle)
   );
 
-  let wardens: { value: string; image: unknown }[] = [];
+  let wardens: WardenFieldOption[] = [];
   data.handles.edges.forEach(({ node }) => {
     if (!node.members) {
       wardens.push({ value: node.handle, image: node.image });
