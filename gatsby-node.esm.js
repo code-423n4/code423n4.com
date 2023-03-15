@@ -149,7 +149,7 @@ exports.onCreateNode = async ({ node, getNode, actions }) => {
       value: slug,
     });
   }
-  
+
   if (node.internal.type === `ReportsJson`) {
     createNodeField({
       node,
@@ -210,11 +210,12 @@ exports.sourceNodes = async ({
 }) => {
   const { createNode } = actions;
   const apiContestsData = await getApiContestData();
-
   apiContestsData.forEach((contest) => {
     const newNode = createNode({
       ...contest,
-      id: createNodeId(`ContestsCsv-${contest.contestid}`),
+      contestId: contest.contest_id,
+      findingsRepo: contest.findings_repo,
+      id: createNodeId(`ContestsCsv-${contest.contest_id}`),
       parent: null,
       children: [],
       internal: {
@@ -237,7 +238,7 @@ exports.createPages = async ({ graphql, actions }) => {
         path: contest.node.fields.submissionPath,
         component: formTemplate,
         context: {
-          contestId: contest.node.contestid,
+          contestId: contest.node.contest_id,
         },
       });
     }
@@ -246,7 +247,7 @@ exports.createPages = async ({ graphql, actions }) => {
       path: contest.node.fields.contestPath,
       component: contestTemplate,
       context: {
-        contestId: contest.node.contestid,
+        contestId: contest.node.contest_id,
       },
     });
   });
