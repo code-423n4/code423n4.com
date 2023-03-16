@@ -105,13 +105,16 @@ export default function SiteIndex({ data }) {
           For Wardens
         </SecondaryNavItem>
       </SecondaryNav>
+
       {/* Hero */}
       <HomepageHero viewMode={viewMode} />
+
+      {/* Pizzazz */}
       <Pizzazz />
 
       {/* Top names bar under hero */}
-      {!viewMode || (viewMode === "warden" && <HomepageTopNames />)}
-      {viewMode === "project" && <TrustBar />}
+      {!viewMode || (viewMode === "project" && <TrustBar />)}
+      {viewMode === "warden" && <HomepageTopNames />}
 
       {/* Contests */}
       <section
@@ -149,6 +152,7 @@ export default function SiteIndex({ data }) {
             </div>
           ) : null}
         </div>
+        {/* Completed contests */}
         {filteredContests && filteredContests.swiperContests.length > 0 ? (
           <div className="featured-contests__completed">
             <div className="limited-width">
