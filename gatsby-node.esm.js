@@ -215,6 +215,7 @@ exports.sourceNodes = async ({
       ...contest,
       contestid: contest.contest_id,
       findingsRepo: contest.findings_repo,
+      amount: contest.total_award_pool,
       id: createNodeId(`ContestsCsv-${contest.contest_id}`),
       parent: null,
       children: [],
@@ -238,7 +239,7 @@ exports.createPages = async ({ graphql, actions }) => {
         path: contest.node.fields.submissionPath,
         component: formTemplate,
         context: {
-          contestId: contest.node.contest_id,
+          contestId: contest.node.contestid,
         },
       });
     }
@@ -247,7 +248,7 @@ exports.createPages = async ({ graphql, actions }) => {
       path: contest.node.fields.contestPath,
       component: contestTemplate,
       context: {
-        contestId: contest.node.contest_id,
+        contestId: contest.node.contestid,
       },
     });
   });
