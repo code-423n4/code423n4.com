@@ -116,6 +116,11 @@
     "validate": "node bin/validate.js",
     "prepare": "husky install"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "prettier --write \"*/**/*.{js,jsx,ts,tsx,json,css,scss}\""
+    }
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/code-423n4/code423n4.com"
