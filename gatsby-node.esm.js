@@ -213,7 +213,7 @@ exports.sourceNodes = async ({
   apiContestsData.forEach((contest) => {
     const newNode = createNode({
       ...contest,
-      contestId: contest.contest_id,
+      contestid: contest.contest_id,
       findingsRepo: contest.findings_repo,
       id: createNodeId(`ContestsCsv-${contest.contest_id}`),
       parent: null,
