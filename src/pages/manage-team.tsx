@@ -173,7 +173,7 @@ export default function TeamManagement({ data, location }) {
       pageTitle="Manage Team | Code 423n4"
       message="You need to be a registered warden, currently connected via wallet to manage a team."
     >
-      <div className="wrapper-main">
+      <div className="limited-width">
         {unauthorized ? (
           <div className="centered-text">
             <div className={styles.Form__Form}>
