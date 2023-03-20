@@ -1,5 +1,6 @@
 import { builder, Handler } from "@netlify/functions";
 import { getApiContestData } from "../util/getContestsData";
+import { readFile } from "node:fs/promises";
 
 export function tableToCsv(rows: string[][]): string {
   function escape(str) {
@@ -44,7 +45,7 @@ const resourcesHandler: Handler = async (event, context) => {
 
       ...publicContests.map((contest) => {
         return [
-          contest.contestid,
+          "" + contest.contestid,
           contest.title,
           contest.sponsor,
           contest.details,
@@ -53,7 +54,7 @@ const resourcesHandler: Handler = async (event, context) => {
           contest.amount,
           contest.repo,
           contest.findingsRepo,
-          contest.hide,
+          (contest.hide) ? "True" : "False",
           contest.league,
         ];
       }),
@@ -66,11 +67,21 @@ const resourcesHandler: Handler = async (event, context) => {
       },
       body: tableToCsv(tableData),
     };
-  } else
+  } else if (resourceFilename === "findings.csv") {
+    const rawData = await readFile("./_data/findings/findings.csv", "utf8");
+    return {
+      statusCode: 200,
+      headers: {
+        "Content-Type": "text/csv",
+      },
+      body: rawData,
+    };
+  } else {
     return {
       statusCode: 404,
       body: "Not Found",
     };
+  }
 };
 
 export const handler = builder(resourcesHandler);
