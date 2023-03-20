@@ -7,6 +7,7 @@ export interface Contest {
   start_time: string;
   end_time: string;
   amount: string;
+  award_coin: string;
   repo: string;
   findingsRepo: string;
   hide: boolean;

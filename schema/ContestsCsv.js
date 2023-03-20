@@ -7,6 +7,7 @@ type ContestsCsv implements Node @dontInfer {
   start_time:     Date @dateformat
   end_time:       Date @dateformat
   amount:         String
+  award_coin:     String
   repo:           String
   findingsRepo:   String
   hide:           Boolean

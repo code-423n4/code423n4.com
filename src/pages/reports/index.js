@@ -54,6 +54,7 @@ export const query = graphql`
               title
               repo
               amount
+              award_coin
               details
             }
           }

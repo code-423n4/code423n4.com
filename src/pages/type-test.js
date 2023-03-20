@@ -192,6 +192,7 @@ export default function TypeTest(data) {
 //           start_time
 //           end_time
 //           amount
+//           award_coin
 //           repo
 //           findingsRepo
 //           sponsor {

@@ -14,6 +14,7 @@ const ContestTile = ({ contest, updateContestStatus, user, reduced }) => {
     title,
     league,
     amount,
+    award_coin,
     details,
     start_time,
     end_time,
@@ -23,7 +24,7 @@ const ContestTile = ({ contest, updateContestStatus, user, reduced }) => {
     status,
   } = contest;
   const t = getDates(start_time, end_time);
-
+  const usdcSign = award_coin === "USDC" ? "$" : "";
   const [canViewContest, setCanViewContest] = useState(false);
   const [contestStatusIndicator, setContestStatusIndicator] = useState(status);
 
@@ -62,7 +63,9 @@ const ContestTile = ({ contest, updateContestStatus, user, reduced }) => {
             <p className="contest-tile__details">{details}</p>
           </div>
         </header>
-        {amount ? <p className="contest-tile__amount">{amount}</p> : null}
+        {amount ? (
+          <p className="contest-tile__amount">{`${usdcSign}${amount} ${award_coin}`}</p>
+        ) : null}
       </div>
       <ClientOnly>
         <footer className="contest-tile__bottom">
