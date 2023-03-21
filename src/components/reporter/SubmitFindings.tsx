@@ -381,16 +381,27 @@ const SubmitFindings = ({
         // clear location state
         navigate("", { state: {} });
       } else {
-        const { error } = await response.json();
-        if (error.startsWith("Failed to send confirmation email")) {
-          setStatus(FormStatus.Submitted);
-          if (typeof window !== `undefined`) {
-            window.localStorage.removeItem(findingId);
-          }
-          toast.error(error);
-        } else {
+        const res = await response.text();
+        if (res.startsWith("Timeout")) {
           setStatus(FormStatus.Error);
-          setErrorMessage(error);
+          setErrorMessage(
+            "Your request timed out. However, this does not necessarily " +
+              "mean your finding was not submitted. Please check the findings " +
+              "tab on the contest page. If you don't see your submission there, " +
+              "then please try again."
+          );
+        } else {
+          const { error } = JSON.parse(res);
+          if (error.startsWith("Failed to send confirmation email")) {
+            setStatus(FormStatus.Submitted);
+            if (typeof window !== `undefined`) {
+              window.localStorage.removeItem(findingId);
+            }
+            toast.error(error);
+          } else {
+            setStatus(FormStatus.Error);
+            setErrorMessage(error);
+          }
         }
       }
     } catch (error) {
@@ -648,7 +659,7 @@ const SubmitFindings = ({
             })}
           </fieldset>
           <Agreement />
-          <div>
+          <div className="form__submit-button-holder">
             {cancelButtonText && (
               <button
                 className="button button--secondary"
@@ -670,7 +681,7 @@ const SubmitFindings = ({
               </button>
             )}
             <button
-              className="button button--primary"
+              className="button button--primary form__submit-button"
               type="button"
               onClick={handleSubmit}
               disabled={status !== FormStatus.Unsubmitted}
@@ -686,7 +697,7 @@ const SubmitFindings = ({
         <div className="spacing-top__xl">
           <p>{errorMessage}</p>
           <button
-            className="button button--primary"
+            className="button button--primary form__submit-button"
             type="button"
             onClick={() => setStatus(FormStatus.Unsubmitted)}
           >
