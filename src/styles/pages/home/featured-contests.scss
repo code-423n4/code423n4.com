@@ -27,8 +27,6 @@
 }
 
 .home__featured-contests {
-  padding-top: $spacing__l;
-
   .featured-contests__active,
   .featured-contests__upcoming {
     .contest-tile {
@@ -38,7 +36,6 @@
 
   .featured-contests__completed {
     padding: $spacing__xl 0;
-    margin-top: calc($spacing__xl + $spacing__m);
     background: $color__n-90;
 
     @include breakpoint("s") {
@@ -49,4 +46,10 @@
   .skeleton-loader {
     padding-bottom: $spacing__l;
   }
+}
+
+.home__featured-contests-blurple-area {
+  background: $color__blended-60;
+  padding-top: $spacing__l;
+  padding-bottom: calc($spacing__xl + $spacing__m);
 }
