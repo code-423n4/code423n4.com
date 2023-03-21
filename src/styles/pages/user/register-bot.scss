@@ -16,3 +16,59 @@
 // 7. Text
 // 8. Transforms
 // 9. Other
+
+.register-bot__top-text-container {
+  display: flex;
+  flex-direction: column;
+
+  @include breakpoint("m") {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+}
+
+.register-bot__top-text {
+  margin-bottom: $spacing__m;
+
+  @include breakpoint("m") {
+    margin-bottom: 0;
+  }
+}
+
+.register-bot__top-image {
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+
+  @include breakpoint("m") {
+    margin: 0;
+  }
+}
+
+.register-bot__stage-container {
+  display: flex;
+  flex-direction: column;
+  margin: 0 0 $spacing__m;
+
+  @include breakpoint("m") {
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 0;
+  }
+
+  h2 {
+    margin-bottom: $spacing__l;
+  }
+
+  h3 {
+    font-size: $font-size__m;
+  }
+}
+
+.register-bot__stage-one-text {
+  margin-right: 0;
+
+  @include breakpoint("m") {
+    margin-right: $spacing__m;
+  }
+}
