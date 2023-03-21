@@ -51,8 +51,9 @@ export default function UserRegistration({ data }) {
           </section>
           <section className="register-bot__stage-container">
             <div className="register-bot__stage-one-text">
-              <h2>Stage 1: Bot Qualifier Race</h2>
-              <h3>Datetime</h3>
+              <h2>
+                <div>Stage 1 </div>Bot Qualifier Race
+              </h2>
               <ul>
                 <li>
                   Bot Crews race to have their bots deliver the highest quality
@@ -68,7 +69,6 @@ export default function UserRegistration({ data }) {
             </div>
             <div className="register-bot__stage-two-text">
               <h2>Stage 2: Bot Race</h2>
-              <h3>Datetime</h3>
               <ul>
                 <li>
                   The first hour of each audit competition will be dedicated to

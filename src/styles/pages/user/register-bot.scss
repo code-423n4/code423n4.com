@@ -18,6 +18,7 @@
 // 9. Other
 
 .register-bot__top-text-container {
+  margin-bottom: $spacing__xl;
   display: flex;
   flex-direction: column;
 
@@ -46,13 +47,9 @@
 }
 
 .register-bot__stage-container {
-  display: flex;
-  flex-direction: column;
   margin: 0 0 $spacing__m;
 
   @include breakpoint("m") {
-    flex-direction: row;
-    justify-content: space-between;
     margin: 0;
   }
 
@@ -61,14 +58,33 @@
   }
 
   h3 {
-    font-size: $font-size__m;
+    font-size: $headline-font-size__xxs;
   }
 }
 
 .register-bot__stage-one-text {
   margin-right: 0;
-
   @include breakpoint("m") {
     margin-right: $spacing__m;
   }
+}
+
+.register-bot__stage-one-text,
+.register-bot__stage-two-text {
+  display: flex;
+  flex-direction: column;
+
+  @include breakpoint("m") {
+    flex-direction: row;
+
+    h2 {
+      min-width: 20rem;
+    }
+  }
+}
+
+.register-bot__coming-soon {
+  width: max-content;
+  padding: $spacing__xxs $spacing__s;
+  border: 1px solid $color__n-60;
 }
