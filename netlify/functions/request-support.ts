@@ -1,8 +1,10 @@
 const { Client } = require("@notionhq/client");
 const { verify } = require("hcaptcha");
 
-const notionKey = process.env.NOTION_KEY;
-const helpdeskId = process.env.NOTION_HELPDESK_DATABASE_ID;
+import { checkAuth } from "../util/auth-utils";
+
+const notionKey = process.env.NOTION_KEY!;
+const helpdeskId = process.env.NOTION_HELPDESK_DATABASE_ID!;
 
 const notion = new Client({ auth: notionKey });
 
@@ -34,6 +36,10 @@ const ticketTags = {
   suggestion: {
     name: "Process improvement 🔁",
     color: "orange",
+  },
+  team: {
+    name: "Team request 👏",
+    color: "blue",
   },
 };
 
@@ -103,19 +109,39 @@ async function handler(event) {
   }
 
   const { authorization } = event.headers;
-  if (!authorization) {
+  const xAuthorization = event.headers["x-authorization"];
+  const username = event.headers["c4-user"];
+
+  if (!authorization && (!username || !xAuthorization)) {
     return {
       statusCode: 401,
       body: JSON.stringify({ error: "Authorization failed" }),
     };
   }
 
-  const { success } = await verify(process.env.HCAPTCHA_SECRET, authorization);
-  if (!success) {
-    return {
-      statusCode: 401,
-      body: JSON.stringify({ error: "Authorization failed" }),
-    };
+  const isAuthenticated = await checkAuth(event);
+
+  // must have valid username and session or captcha verification
+  if (authorization) {
+    const { success } = await verify(
+      process.env.HCAPTCHA_SECRET,
+      authorization
+    );
+    if (!success) {
+      return {
+        statusCode: 401,
+        body: JSON.stringify({ error: "Authorization failed" }),
+      };
+    }
+  } else {
+    if (!isAuthenticated) {
+      return {
+        statusCode: 401,
+        body: JSON.stringify({
+          error: "Unauthorized",
+        }),
+      };
+    }
   }
 
   const ticket = JSON.parse(event.body);
@@ -164,6 +190,23 @@ async function handler(event) {
         },
       ],
     };
+
+    if (isAuthenticated) {
+      body.properties["Authenticated User"] = {
+        type: "checkbox",
+        checkbox: true,
+      };
+      body.properties["Submitted By"] = {
+        rich_text: [
+          {
+            type: "text",
+            text: {
+              content: username,
+            },
+          },
+        ],
+      };
+    }
 
     if (ticketTags[ticket.request]) {
       body.properties.Tags = {

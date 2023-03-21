@@ -1,5 +1,18 @@
 {
-    "image": "",
-    "handle": "p4st13r4",
-    "members": ["0x69e8", "0xb4bb4"]
+  "image": "",
+  "handle": "p4st13r4",
+  "members": [
+    "0x69e8",
+    "0xb4bb4"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xEFAD0017ee6bcD0F38a8e559761493aA5C433FEA"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0xEFAD0017ee6bcD0F38a8e559761493aA5C433FEA"
+    }
+  ]
 }

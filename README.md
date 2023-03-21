@@ -22,7 +22,6 @@ To register as a warden, follow the instructions in the [C4 docs](https://docs.c
 
 **Site data** is found in 📁 **data** subfolders:
 
-- 📁 **contests**
 - 📁 **findings**
 - 📁 **handles**
 - 📁 **orgs**
@@ -48,9 +47,9 @@ Fork [code-423n4/code423n4.com](https://github.com/code-423n4/code423n4.com) and
 
 #### Required
 
-- Generate GitHub [personal access token] with(https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token) with "full control of private repositories" scope and set `GITHUB_TOKEN`
+- Generate GitHub [personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token) with "full control of private repositories" scope and set `GITHUB_TOKEN`
 - Use your GitHub username for `GITHUB_REPO_OWNER`
-- Set `CONTEST_GITHUB_REPO_OWNER` to `code-423n4`
+- Set `GITHUB_CONTEST_REPO_OWNER` to `code-423n4`
 - Set `NODE_ENV` to `development`
 - Use `BRANCH_NAME` from `.env.sample` OR optionally set it to whichever branch you are developing
 - Use `REPO` from `.env.sample` OR optionally name your repo something else and update it here
@@ -69,12 +68,20 @@ In order to test applying for a judge role, create a repo named `judges`
 
 If you submit test findings to the default test contest repo, you can find your submissions [here](https://github.com/code-423n4/2022-01-dev-test-repo-findings). Be aware: this is a public repo.
 
-If you would rather create your own test contest and findings repo(s), make sure to add them to `_test-data/contests/contests.csv` and update the `CONTEST_GITHUB_REPO_OWNER` variable.
-
 ## Develop
 
+First time setup:
+
 ```
+nvm install
+npm install -g yarn
 yarn
+```
+
+Then and every subsequent time:
+
+```
+nvm use
 yarn start
 ```
 

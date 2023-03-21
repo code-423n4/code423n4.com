@@ -2,7 +2,7 @@ const { Client } = require("@notionhq/client");
 const dedent = require("dedent");
 const formData = require("form-data");
 const Mailgun = require("mailgun.js");
-const { Moralis } = require("moralis/node");
+const { Moralis } = require("moralis-v1/node");
 
 const {
   apiKey,
