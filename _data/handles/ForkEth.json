@@ -1,0 +1,13 @@
+{
+  "handle": "ForkEth",
+  "members": [
+    "NullbutC00L",
+    "filipaze"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x4929141a48B6E7024ECDCf109ED20d629efC921C"
+    }
+  ]
+}

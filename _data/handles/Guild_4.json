@@ -1,0 +1,16 @@
+{
+  "handle": "Guild_4",
+  "members": [
+    "David_",
+    "Jesserc",
+    "OdionOseiwe",
+    "CodeBlooded"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x56bC3bCEFF1988f4C6bB951022893e02C366C46C"
+    }
+  ],
+  "image": "./avatars/Guild_4.jpeg"
+}
