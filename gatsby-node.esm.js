@@ -54,9 +54,6 @@ function getRepoName(contestNode) {
   const regex = "([^/]+$)";
   const url = contestNode.repo;
   const result = url.match(regex);
-  if (url === "https://github.com/code-423n4/2023-03-polynomial/") {
-    console.log(result);
-  }
   const repoName = result[0];
   return repoName;
 }
