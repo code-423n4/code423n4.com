@@ -118,16 +118,19 @@ export default function SiteIndex({ data }) {
 
       {/* Contests */}
       <section className={"home__featured-contests"} data-nosnippet>
+        {/* Skeleton loader animation */}
+        {!filteredContests ? (
+          <SkeletonLoader layout={"background--" + viewMode} limitedWidth />
+        ) : null}
+        {/* Blurple background area */}
         {filteredContests && filteredContests.activeContests.length > 0 ? (
           <div className={"background--" + viewMode}>
             <div className="limited-width home__featured-contests-blurple-area">
-              <h1 className="type__headline__l">Active competitions</h1>
-              {/* Skeleton loader animation. TODO: this won't show now that we're waiting to find out if we have active contests to display the purple area */}
-              {!filteredContests ? <SkeletonLoader /> : null}
               {/* Active contests */}
               {filteredContests &&
               filteredContests.activeContests.length > 0 ? (
                 <div className="featured-contests__active background--low-contrast">
+                  <h1 className="type__headline__l">Active competitions</h1>
                   <p className="type__subline__s spacing-bottom__l">
                     Currently finding the highest-severity vulnerabilities for:
                   </p>
@@ -138,6 +141,7 @@ export default function SiteIndex({ data }) {
                   />
                 </div>
               ) : null}
+
               {/* Upcoming contests */}
               {filteredContests &&
               filteredContests.upcomingContests.length > 0 ? (

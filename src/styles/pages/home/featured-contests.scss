@@ -18,14 +18,10 @@
 // 8. Transforms
 // 9. Other
 
-.background--warden {
-  background: $color__blended-60;
-}
-
+.background--warden,
 .background--project {
   background: $color__blended-60;
 }
-
 .home__featured-contests {
   .featured-contests__active,
   .featured-contests__upcoming {
