@@ -47,14 +47,18 @@
 }
 
 .register-bot__stage-container {
-  margin: 0 0 $spacing__m;
+  margin: $spacing__m 0;
+  border: 1px solid $color__n-60;
+  border-radius: $border-radius__m;
 
   @include breakpoint("m") {
-    margin: 0;
+    margin: $spacing__xxl 0;
   }
 
   h2 {
-    margin-bottom: $spacing__l;
+    div {
+      font-size: $headline-font-size__xxs;
+    }
   }
 
   h3 {
@@ -64,6 +68,7 @@
 
 .register-bot__stage-one-text {
   margin-right: 0;
+  border-bottom: 1px solid $color__n-60;
   @include breakpoint("m") {
     margin-right: $spacing__m;
   }
@@ -71,6 +76,8 @@
 
 .register-bot__stage-one-text,
 .register-bot__stage-two-text {
+  width: 100%;
+  padding: $spacing__l $spacing__l 0;
   display: flex;
   flex-direction: column;
 
@@ -78,13 +85,30 @@
     flex-direction: row;
 
     h2 {
-      min-width: 20rem;
+      min-width: 21rem;
+    }
+  }
+
+  ul {
+    list-style: none;
+
+    li:before {
+      content: "\2022"; /* Add content: \2022 is the CSS Code/unicode for a bullet */
+      color: $color__blurple-60; /* Change the color */
+      font-weight: bold; /* If you want it to be bold */
+      display: inline-block; /* Needed to add space between the bullet and the text */
+      width: 1em; /* Also needed for space (tweak if needed) */
+      margin-left: -1em; /* Also needed for space (tweak if needed) */
     }
   }
 }
 
 .register-bot__coming-soon {
-  width: max-content;
-  padding: $spacing__xxs $spacing__s;
-  border: 1px solid $color__n-60;
+  // width: max-content;
+  margin: $spacing__l auto;
+  padding: $spacing__l $spacing__l;
+  font-weight: bold;
+  color: $color__n-5;
+  background: $color__n-80;
+  border-radius: $border-radius__m;
 }

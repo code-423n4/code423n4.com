@@ -68,7 +68,9 @@ export default function UserRegistration({ data }) {
               </ul>
             </div>
             <div className="register-bot__stage-two-text">
-              <h2>Stage 2: Bot Race</h2>
+              <h2>
+                <div>Stage 2</div> Bot Race
+              </h2>
               <ul>
                 <li>
                   The first hour of each audit competition will be dedicated to
@@ -90,13 +92,17 @@ export default function UserRegistration({ data }) {
               </ul>
             </div>
           </section>
-          <h2>Is your Crew ready to race your bot?</h2>
-
+        </div>
+      </div>
+      <div className="bottom-cta">
+        <div className="bottom-cta__content limited-width type__copy">
+          <h2 className="type__headline__m bottom-cta__title">
+            Is your Crew ready to race your bot?
+          </h2>
           <p>Be sure to give it a winning name!</p>
-
-          <section className="register-bot__coming-soon">
-            Guess what it's really soon
-          </section>
+          <p className="register-bot__coming-soon">
+            Upcoming Bot Qualifier Race: XXpm XXth - XXpm XXth PDT
+          </p>
         </div>
       </div>
     </DefaultLayout>
