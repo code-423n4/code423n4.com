@@ -214,7 +214,7 @@ exports.sourceNodes = async ({
       ...contest,
       contestid: contest.contest_id,
       findingsRepo: contest.findings_repo,
-      amount: contest.total_award_pool,
+      amount: contest.formatted_amount,
       id: createNodeId(`ContestsCsv-${contest.contest_id}`),
       parent: null,
       children: [],

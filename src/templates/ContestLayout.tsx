@@ -52,7 +52,6 @@ const ContestLayout = ({ data }) => {
     sponsor,
     details,
     amount,
-    award_coin,
     repo,
     findingsRepo,
     fields,
@@ -64,8 +63,7 @@ const ContestLayout = ({ data }) => {
   const { markdownRemark } = data;
 
   const t = getDates(start_time, end_time);
-  const usdcSign = award_coin === "USDC" ? "$" : "";
-  const dateDescription = `${usdcSign}${amount} ${award_coin}\n${t.startDay}—${t.endDay}`;
+  const dateDescription = `${amount}\n${t.startDay}—${t.endDay}`;
   const pageTitle = `Code4rena ${title}`;
 
   const canViewReport = Boolean(markdownRemark && markdownRemark.frontmatter);
@@ -238,7 +236,7 @@ const ContestLayout = ({ data }) => {
               <li className="contest-page__amount">
                 <span className="contest-page__grid-label">Total Awards</span>
                 <span className="contest-page__grid-value type__headline__xs">
-                  {`${usdcSign}${amount} ${award_coin}`}
+                  {amount}
                 </span>
               </li>
               <li className="contest-page__duration">
@@ -361,7 +359,6 @@ export const query = graphql`
     }
     contestsCsv(contestid: { eq: $contestId }) {
       amount
-      award_coin
       contestid
       details
       end_time

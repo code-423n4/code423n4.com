@@ -182,7 +182,6 @@ export const query = graphql`
           start_time
           end_time
           amount
-          award_coin
           repo
           sponsor {
             name
