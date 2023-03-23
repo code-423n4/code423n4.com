@@ -1,5 +1,5 @@
 {
-"name": "Asymmetry", (mandatory field; case sensitive)
-"link": "https://twitter.com/@asymmetryfin", (optional field)
-"image": "./avatars/Asymmetry" (mandatory field)
+"name": "Asymmetry",
+"link": "https://twitter.com/@asymmetryfin",
+"image": "./avatars/Asymmetry"
 }
