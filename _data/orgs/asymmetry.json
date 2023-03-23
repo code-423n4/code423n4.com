@@ -1,0 +1,5 @@
+{
+"name": "Asymmetry", (mandatory field; case sensitive)
+"link": "https://twitter.com/@asymmetryfin", (optional field)
+"image": "./avatars/Asymmetry" (mandatory field)
+}
