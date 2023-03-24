@@ -61,13 +61,13 @@ const WrapperLayout = (props) => {
           rel="icon"
           type="image/png"
           sizes="32x32"
-          href="/images/favicon-32.png"
+          href="/images/c4-favicon-32.png"
         />
         <link
           rel="icon"
           type="image/png"
           sizes="16x16"
-          href="/images/favicon-16.png"
+          href="/images/c4-favicon-16.png"
         />
         <title>
           {pageTitle ? `${pageTitle} — ` : ""}
