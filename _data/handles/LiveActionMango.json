@@ -1,0 +1,13 @@
+{
+  "handle": "LiveActionMango",
+  "members": [
+    "CaptainMango",
+    "liveactionllama"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x0000000000000000000000000000000000000000"
+    }
+  ]
+}
