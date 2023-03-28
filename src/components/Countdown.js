@@ -34,26 +34,26 @@ const Countdown = ({
 
   return (
     <div className="countdown">
-      <h5>
-        <span className="wrapper-time">
-          {contestTimer.contestStatus === "active" ? (
-            <span className="countdown-live"></span>
-          ) : null}
-          <span className="days">{timeLeft.days}</span> days +{" "}
-        </span>
-        <span className="wrapper-time">
-          <span className="hours">{timeLeft.hh}</span>{" "}
-          <span className="minutes">{timeLeft.mm}</span>{" "}
-          <span className="seconds">{timeLeft.ss}</span>
-        </span>
-        {text && timeLeft.total > 0 ? (
-          <span className="wrapper-time end-cap">
-            {contestTimer.contestStatus === "soon"
-              ? ` until ${type} starts`
-              : ` until ${type} ends`}
-          </span>
+      <span className="wrapper-time">
+        {contestTimer.contestStatus === "active" ? (
+          <span className="countdown-live"></span>
         ) : null}
-      </h5>
+        <span className="days">{timeLeft.days}</span> days +{" "}
+      </span>
+      <span className="wrapper-time">
+        <span className="hours">{timeLeft.hh}</span>
+        {":"}
+        <span className="minutes">{timeLeft.mm}</span>
+        {":"}
+        <span className="seconds">{timeLeft.ss}</span>
+      </span>
+      {text && timeLeft.total > 0 ? (
+        <span className="wrapper-time end-cap">
+          {contestTimer.contestStatus === "soon"
+            ? ` until ${type} starts`
+            : ` until ${type} ends`}
+        </span>
+      ) : null}
     </div>
   );
 };
