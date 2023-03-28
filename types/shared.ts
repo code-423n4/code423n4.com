@@ -1,0 +1,11 @@
+type AbsoluteURL = string;
+type RelativeURL = string;
+type Slug = string;
+type WalletAddress = string;
+type UserId = string;
+type Username = string;
+type SupportedChain = "polygon" | "ethereum";
+type IssueState = "OPEN" | "CLOSED";
+type DateString = string;
+type ReportId = string;
+type FindingBody = string;

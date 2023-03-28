@@ -7,7 +7,12 @@ import { File } from "octokit-plugin-create-pull-request/dist-types/types";
 const sharp = require("sharp");
 
 import { moralisAppId, moralisServerUrl, token } from "../_config";
-import { BotCreateRequest, BotFileData, UserFileData } from "../../types/user";
+import {
+  BotCreateRequest,
+  BotFileData,
+  PaymentAddress,
+  UserFileData,
+} from "../../types/user";
 import { sendConfirmationEmail, getGroupEmails } from "../util/user-utils";
 import { checkAuth } from "../util/auth-utils";
 import { isDangerousHandle } from "../util/validation-utils";
@@ -16,6 +21,15 @@ const OctokitClient = Octokit.plugin(createPullRequest);
 const octokit = new OctokitClient({ auth: token });
 
 exports.handler = async (event) => {
+  if (!(await checkAuth(event))) {
+    return {
+      statusCode: 401,
+      body: JSON.stringify({
+        error: "Unauthorized",
+      }),
+    };
+  }
+
   // only allow POST
   try {
     if (event.httpMethod !== "POST") {
@@ -128,16 +142,9 @@ exports.handler = async (event) => {
       // do nothing - if this error is caught, then the bot name is valid
     }
 
-    if (!(await checkAuth(event))) {
-      return {
-        statusCode: 401,
-        body: JSON.stringify({
-          error: "Unauthorized",
-        }),
-      };
-    }
-
-    const paymentAddresses = [{ chain: "polygon", address: polygonAddress }];
+    const paymentAddresses: PaymentAddress[] = [
+      { chain: "polygon", address: polygonAddress },
+    ];
     if (ethereumAddress) {
       paymentAddresses.push({ chain: "ethereum", address: ethereumAddress });
     }
@@ -279,11 +286,11 @@ exports.handler = async (event) => {
     };
   } catch (error) {
     return {
-      statusCode: error.status || error.response.status || 500,
+      statusCode: error?.status || error?.response?.status || 500,
       body: JSON.stringify({
         error:
-          error.message ||
-          error.response?.data?.message?.toString() ||
+          error?.message ||
+          error?.response?.data?.message ||
           "Internal server error.",
       }),
     };

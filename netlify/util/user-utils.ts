@@ -7,7 +7,12 @@ const { createPullRequest } = require("octokit-plugin-create-pull-request");
 const formData = require("form-data");
 const Mailgun = require("mailgun.js");
 
-import { TeamData, UserData, UserFileData } from "../../types/user";
+import {
+  PaymentAddress,
+  TeamData,
+  UserData,
+  UserFileData,
+} from "../../types/user";
 
 const {
   token,
@@ -60,10 +65,7 @@ export async function getUserTeams(username: string): Promise<string[]> {
 export async function updateTeamAddresses(
   username: string,
   team: TeamData,
-  addresses: {
-    chain: string;
-    address: string;
-  }[]
+  addresses: PaymentAddress[]
 ): Promise<void> {
   const teamData: TeamData = {
     ...team,
@@ -120,20 +122,19 @@ export async function getGroupEmails(handles: string[]): Promise<string[]> {
 }
 
 export async function sendConfirmationEmail(
-  emailAddresses: string[],
+  bccRecipients: string[],
   subject: string,
   body: string
 ) {
   const mailgun = new Mailgun(formData);
   const mg = mailgun.client({ username: "api", key: apiKey });
 
-  const recipients = `${uniq(emailAddresses).join(", ")}, ${
-    process.env.EMAIL_SENDER
-  }`;
+  const bcc = uniq(bccRecipients).join(", ");
 
   const emailData = {
     from: process.env.EMAIL_SENDER,
-    to: recipients,
+    to: process.env.EMAIL_SENDER,
+    bcc,
     subject,
     text: body,
   };
