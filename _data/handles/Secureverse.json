@@ -1,10 +1,6 @@
 {
   "handle": "Secureverse",
-  "members": [
-    "imkapadia",
-    "Nsecv",
-    "leosathya"
-  ],
+  "members": [],
   "paymentAddresses": [
     {
       "chain": "polygon",
@@ -16,4 +12,5 @@
     }
   ],
   "image": "./avatars/Secureverse.png"
+  "showOnLeaderboard": false
 }
