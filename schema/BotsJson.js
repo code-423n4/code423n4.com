@@ -6,7 +6,7 @@ type BotsJson implements Node @dontInfer {
   """
   showOnLeaderboard: Boolean
 
-  maintainers:       [HandlesJson] @link(by: "handle", from: "maintainers")
+  crew:       [HandlesJson] @link(by: "handle", from: "crew")
 }`;
 
 export default BotsJson;

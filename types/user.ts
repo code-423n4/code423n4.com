@@ -20,7 +20,7 @@ export interface UserData extends UserFileData {
 }
 
 export interface BotFileData extends UserFileData {
-  maintainers: Username[];
+  crew: Username[];
   paymentAddresses: {
     chain: SupportedChain;
     address: WalletAddress;
@@ -53,7 +53,7 @@ export interface TeamCreateRequest {
 
 export interface BotCreateRequest {
   botName: string;
-  owners: Username[];
+  crewMembers: Username[];
   description: string;
   submission: FindingBody;
   polygonAddress: WalletAddress;

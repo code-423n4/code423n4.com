@@ -50,7 +50,7 @@ export default function BotRegistrationForm({
 
   const [fileReader] = useState<FileReader>(new FileReader());
   const [state, setState] = useState(initialState);
-  const [owners, setOwners] = useState<WardenFieldOption[]>([
+  const [crew, setCrew] = useState<WardenFieldOption[]>([
     wardens.find((warden) => warden.value === currentUser.username)!,
   ]);
   const [submitted, setSubmitted] = useState(false);
@@ -130,7 +130,7 @@ export default function BotRegistrationForm({
 
   const validator = useCallback(() => {
     setSubmitted(true);
-    const ownerValidationErrors = validateOwners(owners);
+    const crewValidationErrors = validateCrew(crew);
     const polygonAddressErrors = validateAddress(state.polygonAddress);
     const botNameErrors = validateBotName(state.botName);
     if (
@@ -139,7 +139,7 @@ export default function BotRegistrationForm({
       !state.submission ||
       !state.polygonAddress ||
       polygonAddressErrors.length ||
-      ownerValidationErrors.length ||
+      crewValidationErrors.length ||
       botNameErrors.length
     ) {
       return true;
@@ -164,13 +164,13 @@ export default function BotRegistrationForm({
     [currentUser]
   );
 
-  const validateOwners = useCallback(
-    (owners): (string | ReactNode)[] => {
+  const validateCrew = useCallback(
+    (crewMembers): (string | ReactNode)[] => {
       const errors: (string | ReactNode)[] = [];
-      if (!owners.find((owner) => owner.value === currentUser.username)) {
-        errors.push(
-          "You must be listed as a maintainer of any bot you register"
-        );
+      if (
+        !crewMembers.find((member) => member.value === currentUser.username)
+      ) {
+        errors.push("You must be listed on the crew for any bot you register");
       }
       return errors;
     },
@@ -213,7 +213,7 @@ export default function BotRegistrationForm({
       botName: state.botName,
       description: state.description,
       submission: state.submission,
-      owners: owners.map((owner) => owner.value),
+      crewMembers: crew.map((member) => member.value),
       polygonAddress: state.polygonAddress,
       ethereumAddress: state.ethereumAddress,
     };
@@ -234,7 +234,7 @@ export default function BotRegistrationForm({
   }, [
     avatarInputRef,
     state,
-    owners,
+    crew,
     currentUser,
     handles,
     isInitialized,
@@ -260,16 +260,17 @@ export default function BotRegistrationForm({
         validator={validateBotName}
       />
       <WardenField
-        name="teamMembers"
+        name="crew"
         required={true}
         options={wardens}
         onChange={(e) => {
-          setOwners((e.target.value as WardenFieldOption[]) || []);
+          setCrew((e.target.value as WardenFieldOption[]) || []);
         }}
-        fieldState={owners}
+        fieldState={crew}
         isMulti={true}
-        validator={validateOwners}
-        label="Bot Maintainers"
+        validator={validateCrew}
+        label="Bot Crew"
+        helpText="The warden(s) who control and maintain the bot"
       />
       <Input
         forceValidation={submitted === true}

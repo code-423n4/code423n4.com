@@ -62,7 +62,7 @@ exports.handler = async (event) => {
     const {
       botName,
       image,
-      owners,
+      crewMembers,
       description,
       submission,
       polygonAddress,
@@ -89,11 +89,11 @@ exports.handler = async (event) => {
       };
     }
 
-    if (!owners || !owners.includes(username)) {
+    if (!crewMembers || !crewMembers.includes(username)) {
       return {
         statusCode: 422,
         body: JSON.stringify({
-          error: "You must be listed as a maintainer of any bot you register.",
+          error: "You must be listed on the crew for any bot you register.",
         }),
       };
     }
@@ -151,7 +151,7 @@ exports.handler = async (event) => {
 
     const formattedBotData: BotFileData = {
       handle: botName,
-      maintainers: owners,
+      crew: crewMembers,
       paymentAddresses,
     };
 
@@ -249,7 +249,7 @@ exports.handler = async (event) => {
 
     const fileData = {
       handle: botName,
-      owners: owners,
+      crew: crewMembers,
       issueId,
       issueUrl,
     };
@@ -267,10 +267,10 @@ exports.handler = async (event) => {
       content,
     });
 
-    const emails = await getGroupEmails(owners);
+    const emails = await getGroupEmails(crewMembers);
     const emailSubject = `Application to register bot "${botName}" has been submitted`;
     const emailBody = dedent`
-    An application to register a new bot (${botName}) has been received with the following maintainer(s): ${owners.join(
+    An application to register a new bot (${botName}) has been received with the following crew: ${crewMembers.join(
       ", "
     )}
     
