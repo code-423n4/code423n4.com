@@ -1,3 +1,13 @@
+import {
+  AbsoluteURL,
+  FindingBody,
+  RelativeURL,
+  SupportedChain,
+  UserId,
+  Username,
+  WalletAddress,
+} from "./shared";
+
 export interface UserFileData {
   handle: string;
   moralisId?: UserId;

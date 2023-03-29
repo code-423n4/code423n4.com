@@ -1,3 +1,5 @@
+import { DateString, RelativeURL } from "./shared";
+
 // all values are strings because the source is a CSV file -- changed getting values from api instread of contest.csv
 export interface Contest {
   contestid: number;

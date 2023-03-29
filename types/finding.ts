@@ -1,3 +1,12 @@
+import {
+  DateString,
+  FindingBody,
+  IssueState,
+  ReportId,
+  Username,
+  WalletAddress,
+} from "./shared";
+
 export interface Finding {
   title: string;
   body: FindingBody;
