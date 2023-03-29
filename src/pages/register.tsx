@@ -48,7 +48,7 @@ export default function UserRegistration({ data }) {
 
   return (
     <DefaultLayout
-      pageTitle="Registration | Code 423n4"
+      pageTitle="Registration | Code4rena"
       hideConnectWalletDropdown={true}
     >
       <div className="limited-width register">

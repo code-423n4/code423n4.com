@@ -1,11 +1,28 @@
 import React from "react";
 import { Link } from "gatsby";
 
-const primaryButtonText = "Get started";
-const secondaryButtonText = "View leaderboard";
-
-const primaryButtonTextProject = "Get started";
-const secondaryButtonTextProject = "Join our Discord";
+const heroCTAButtons = {
+  wardens: {
+    primary: {
+      text: "Become a Warden",
+      link: "/register",
+    },
+    secondary: {
+      text: "View leaderboard",
+      link: "/leaderboard",
+    },
+  },
+  projects: {
+    primary: {
+      text: "Get your project audited",
+      link: "https://code4rena.typeform.com/i-want-an-audit",
+    },
+    secondary: {
+      text: "See past reports",
+      link: "/reports",
+    },
+  },
+};
 
 const HeroIndex = ({ viewMode }) => {
   return (
@@ -23,27 +40,23 @@ const HeroIndex = ({ viewMode }) => {
               </p>
               <div className="hero__buttons">
                 <a
-                  href="https://code4rena.typeform.com/i-want-an-audit"
+                  href={heroCTAButtons.projects.primary.link}
                   target="_blank"
                   rel="noreferrer"
                   aria-label={
-                    primaryButtonTextProject + " (Opens in a new window)"
+                    heroCTAButtons.projects.primary.text +
+                    " (Opens in a new window)"
                   }
                   className="button button--primary"
                 >
-                  {primaryButtonTextProject}
+                  {heroCTAButtons.projects.primary.text}
                 </a>
-                <a
-                  href="https://discord.gg/code4rena"
-                  target="_blank"
-                  rel="noreferrer"
-                  aria-label={
-                    secondaryButtonTextProject + " (Opens in a new window)"
-                  }
+                <Link
+                  to={heroCTAButtons.projects.secondary.link}
                   className="button button--secondary"
                 >
-                  {secondaryButtonTextProject}
-                </a>
+                  {heroCTAButtons.projects.secondary.text}
+                </Link>
               </div>
             </div>
             <div className="hero__right-side type__copy">
@@ -90,12 +103,18 @@ const HeroIndex = ({ viewMode }) => {
               findings, the more you get paid.
             </p>
             <div className="hero__buttons">
-              <Link to={"/register"} className="button button--primary">
-                {primaryButtonText}
+              <Link
+                to={heroCTAButtons.wardens.primary.link}
+                className="button button--primary"
+              >
+                {heroCTAButtons.wardens.primary.text}
               </Link>
 
-              <Link to={"/leaderboard"} className="button button--secondary">
-                {secondaryButtonText}
+              <Link
+                to={heroCTAButtons.wardens.secondary.link}
+                className="button button--secondary"
+              >
+                {heroCTAButtons.wardens.secondary.text}
               </Link>
             </div>
           </div>

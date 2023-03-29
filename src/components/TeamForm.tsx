@@ -1,5 +1,5 @@
 import { navigate } from "gatsby";
-import Moralis from "moralis/types";
+import Moralis from "moralis-v1/types";
 import React, {
   useCallback,
   useState,
@@ -343,7 +343,6 @@ export default function TeamForm({
           />
           {state.avatarFile && (
             <button
-              className="remove-line-button"
               type="button"
               onClick={removeAvatar}
               aria-label="Remove avatar"
