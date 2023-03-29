@@ -1,5 +1,5 @@
 import { navigate } from "gatsby";
-import Moralis from "moralis/types";
+import Moralis from "moralis-v1/types";
 import React, {
   useCallback,
   useState,
