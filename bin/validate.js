@@ -3,7 +3,7 @@
 const { readFile, stat } = require("fs/promises");
 const path = require("path");
 const glob = require("tiny-glob");
-const csv = require("csvtojson");
+import { getApiFindingsData } from "../netlify/util/getFindingsData";
 
 async function getUniqueHandles() {
   const handles = await glob("./_data/handles/*.json");
@@ -157,11 +157,7 @@ async function validateFindings() {
   let passedValidation = true;
   let parsedFindings;
   try {
-    parsedFindings = await csv({
-      colParser: {
-        contest: "number",
-      },
-    }).fromFile("./_data/findings/findings.csv");
+    parsedFindings = await getApiFindingsData();
   } catch (err) {
     console.error(`Unable to parse JSON file at ${findingsFile}`);
     passedValidation = false;
