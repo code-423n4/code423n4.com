@@ -1,4 +1,5 @@
-import { Octokit } from "@octokit/core";
+import { Octokit } from "@octokit/rest";
+import jszip from "jszip";
 
 import { Contest } from "../../types/contest";
 import { Finding } from "../../types/finding";
@@ -177,37 +178,37 @@ async function getSubmittedFindingsFromFolder(
   client: Octokit,
   repo: string
 ): Promise<{ handle: string; issueNumber: number }[]> {
-  // returns handle/issueNumber from ./data/{handle}-{issue}.json files
+  const repoZip = await getRepoZip(client, "code-423n4", repo);
+  const files = repoZip.file(new RegExp(`\/data\/.*.json`));
+  const wardens: any[] = [];
+  for (const f of files) {
+    const fileContents = await f.async("text");
+    wardens.push(JSON.parse(fileContents));
+  }
 
-  const submitted_findings = await client
-    .request("GET /repos/{owner}/{repo}/contents/{path}", {
-      owner: process.env.GITHUB_CONTEST_REPO_OWNER!,
-      repo: repo,
-      path: "data",
+  const result = wardens.map((issue) => ({
+    handle: issue.handle as string,
+    issueNumber: issue.issueId as number,
+  }));
+  return result;
+}
+
+export async function getRepoZip(
+  octokit: Octokit,
+  owner: string,
+  repo: string
+): Promise<jszip> {
+  const res = await octokit.rest.repos
+    .downloadZipballArchive({
+      owner,
+      repo,
+      ref: "main",
     })
     .then((res) => {
-      return (
-        Object.values(res.data)
-          // filter out .md files
-          .filter((f) => {
-            const [key, ext] = f.name.split(".");
-            return ext === "json";
-          })
-          .map((f) => {
-            const [key, ext] = f.name.split(".");
-            const _splitFileName = key.split("-");
-            const issueNumber = _splitFileName.pop();
-            const handle = _splitFileName.join("-");
-
-            return {
-              handle,
-              issueNumber: parseInt(issueNumber),
-            };
-          })
-      );
+      return jszip.loadAsync(res.data as Buffer);
     });
 
-  return submitted_findings;
+  return res;
 }
 
 async function getAvailableFindings(
