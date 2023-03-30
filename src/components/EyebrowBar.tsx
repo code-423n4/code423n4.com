@@ -1,11 +1,15 @@
 import React from "react";
-import useUser from "../hooks/UserContext";
+import { Link } from "gatsby";
 
 export default function EyebrowBar() {
-  <div className="eyebrow-bar">
-    <p>
-      🐺 <strong>Hey, wardens!</strong> Wallet auth is here! 🎉{" "}
-      <strong>Connect now »</strong>
-    </p>
-  </div>;
+  return (
+    <div className="eyebrow-bar">
+      <p className="eyebrow-bar__content limited-width">
+        Bots bots bots bots bots bots bots bots bots bots bots bots{" "}
+        <Link to="/register/bot" className="eyebrow-bar__button">
+          bots bots →
+        </Link>
+      </p>
+    </div>
+  );
 }
