@@ -1,0 +1,24 @@
+{
+  "handle": "ArbitraryExecution",
+  "members": [
+    "cr0",
+    "arbitrary-wanaks",
+    "tridearm",
+    "CodeBeholder",
+    "WGMIApe",
+    "pbwaffles",
+    "yowl"
+  ],
+  "link": "https://www.arbitraryexecution.com/",
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x84184E0f0c980469EdD3e2cb96e23BEb8E60FCe6"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x84184E0f0c980469EdD3e2cb96e23BEb8E60FCe6"
+    }
+  ],
+  "image": "./avatars/ArbitraryExecution.png"
+}

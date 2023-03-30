@@ -1,0 +1,19 @@
+{
+  "handle": "BadMaths",
+  "members": [
+    "Deivitto",
+    "nicobevi"
+  ],
+  "link": "https://twitter.com/nicobevi_eth",
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xe7292962e48c18e04bd26ab2acca00ef794e8171"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0xe7292962e48c18e04bd26ab2acca00ef794e8171"
+    }
+  ],
+  "image": "./avatars/BadMaths.png"
+}
