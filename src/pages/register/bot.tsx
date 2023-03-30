@@ -1,59 +1,87 @@
-import React, { useEffect, useState } from "react";
-import { useMoralis } from "react-moralis";
-
-import useUser from "../../hooks/UserContext";
+import React from "react";
 
 import DefaultLayout from "../../templates/DefaultLayout";
 
-import botPup from "../../../static/images/bot-pup.svg";
-
-export default function UserRegistration({ data }) {
-  const [wardens, setWardens] = useState([]);
-  const { isInitialized } = useMoralis();
-  const { currentUser } = useUser();
-
+export default function BotRegistration() {
   return (
     <DefaultLayout
       pageTitle="Code4rena Bot Races | Code4rena"
       hideConnectWalletDropdown={true}
     >
-      <div className="limited-width register-bot type__copy">
-        <div className="Form__Form">
-          <h1 className="type__headline__page-title">Code4rena Bot Races</h1>
-          <section className="register-bot__top-text-container">
-            <div className="register-bot__top-text">
-              <p>
-                Bot Races make AI and automated tools part of the competitive
-                audit. Bot Crews compete to see whose bot can create the highest
-                quality and most thorough audit report.
-              </p>
-
-              <p>
-                10% of each contest pool will be dedicated to Bot Race prizes.
-              </p>
-
-              <p>
-                <a
-                  href="#"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="button button--secondary"
-                >
-                  More details here ↗
-                </a>
-              </p>
-            </div>
+      <div className="register-bot type__copy">
+        {/* Hero */}
+        <section className="register-bot__hero">
+          <div className="register-bot__hero-content limited-width">
+            <h1 className="type__headline__page-title">
+              Gentlefrens, start your engines
+            </h1>
+            <h2 className="type__subline__page-title">
+              Coordinating AI and human efforts to provide the most
+              comprehensive vulnerability reports for{" "}
+              <span className="no-break">web3 projects</span>.
+            </h2>
+          </div>
+          <div className="waves-wrapper">
             <img
-              src={botPup}
-              alt="An illustration of a small, cute robot that has wolf-like features like a snout and ears."
-              className="register-bot__top-image"
+              src="/images/br-hero-waves.svg"
+              className="waves"
+              alt="Vector illustration of a series of playful robots racing"
             />
-          </section>
-          <section className="register-bot__stage-container">
-            <div className="register-bot__stage-one-text">
-              <h2>
-                <div>Stage 1 </div>Bot Qualifier Race
-              </h2>
+          </div>
+          <div className="register-bot__hero-ground"></div>
+          <div className="register-bot__hero-countdown">
+            Bot Qualifier Race starts in early April
+          </div>
+        </section>
+
+        {/* What's a bot race */}
+        <section className="register-bot__top-text-container limited-width">
+          <h2 className="register-bot__sub-header type__headline__xl">
+            What's a bot race?
+          </h2>
+          <div className="register-bot__top-text grid__one-by-two--break-m">
+            <p>
+              <img
+                src="/images/br-icon-bot.svg"
+                alt="Icon of a round, floating robot"
+              />
+              <strong>Bot Races</strong> make AI and automated tools part of the
+              competitive audit.
+            </p>
+            <p>
+              <img
+                src="/images/br-icon-report.svg"
+                alt="Icon of a wolf-like robot head printing a report out of its mouth"
+              />
+              <strong>Bot Crews</strong> compete to see whose bot can create the
+              highest quality and most thorough audit report.
+            </p>
+
+            <p>
+              <img
+                src="/images/br-icon-coins.svg"
+                alt="Icon of two stacks of coins that are shining"
+              />
+              <strong>10%</strong> of each contest pool will be dedicated to Bot
+              Race prizes.
+            </p>
+          </div>
+        </section>
+
+        {/* Stages / Timeline */}
+        <section className="register-bot__stage-container limited-width">
+          <h2 className="register-bot__sub-header type__headline__xl">
+            How do Bot Races work?
+          </h2>
+          <div className="register-bot__stage-one">
+            <h3>
+              <div className="register-bot__header-stage-number">Stage 1 </div>
+              <div className="register-bot__header-stage-name">
+                Bot Qualifier Race
+              </div>
+            </h3>
+            <div className="register-bot__text">
+              <p className="register-bot__timeline-time">Early April</p>
               <ul>
                 <li>
                   Bot Crews race to have their bots deliver the highest quality
@@ -67,10 +95,17 @@ export default function UserRegistration({ data }) {
                 <li>We will periodically run new Bot Qualifiers.</li>
               </ul>
             </div>
-            <div className="register-bot__stage-two-text">
-              <h2>
-                <div>Stage 2</div> Bot Race
-              </h2>
+          </div>
+
+          <div className="register-bot__stage-two">
+            <h3>
+              <div className="register-bot__header-stage-number">Stage 2</div>
+              <div className="register-bot__header-stage-name">Bot Race</div>
+            </h3>
+            <div className="register-bot__text">
+              <p className="register-bot__timeline-time">
+                Date to be announced
+              </p>
               <ul>
                 <li>
                   The first hour of each audit competition will be dedicated to
@@ -91,19 +126,29 @@ export default function UserRegistration({ data }) {
                 </li>
               </ul>
             </div>
-          </section>
-        </div>
-      </div>
-      <div className="bottom-cta">
-        <div className="bottom-cta__content limited-width type__copy">
-          <h2 className="type__headline__m bottom-cta__title">
-            Is your Crew ready to race your bot?
-          </h2>
-          <p>Be sure to give it a winning name!</p>
-          <p className="register-bot__coming-soon">
-            Upcoming Bot Qualifier Race: XXpm XXth - XXpm XXth PDT
-          </p>
-        </div>
+          </div>
+        </section>
+
+        {/* Bottom CTA */}
+        <section className="register-bot__bottom-cta">
+          <div className="limited-width">
+            <img
+              src="/images/bot-pup.svg"
+              alt="An illustration of a small, cute robot that has wolf-like features like a snout and ears."
+              className="register-bot__bot-image"
+            />
+            <h2 className="register-bot__sub-header type__headline__xl">
+              Is your Crew ready to race{" "}
+              <span className="no-break">your bot?</span>
+            </h2>
+            <h3 className="type__headline__m">
+              Be sure to give it a winning name!
+            </h3>
+            <p className="register-bot__coming-soon">
+              Bot Qualifier Race coming in early April
+            </p>
+          </div>
+        </section>
       </div>
     </DefaultLayout>
   );

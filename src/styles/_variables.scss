@@ -51,6 +51,8 @@ $color__warden: $color__button-blurple;
 // Blended colors
 $color__blended-60: #4d22c7;
 
+$color__blended-80: #2c0e83;
+
 // Color Defaults
 // ------------------------------------------------
 
@@ -85,6 +87,7 @@ $headline-font-size__xs: 1.3rem; // H5
 $headline-font-size__s: 1.3rem; // H4
 $headline-font-size__m: 1.6rem; // H3
 $headline-font-size__l: 1.8rem; // H2
+$headline-font-size__ll: 2.1rem; // H2
 $headline-font-size__xl: 2.533rem; // H1
 $headline-font-size__xxl: 3.2rem; // Hero headline
 
@@ -112,6 +115,7 @@ $spacing__xxxl: calc($spacing__base * 10); // 80px
 // Breakpoints
 // ------------------------------------------------
 
+$breakpoint__xxs: 450px;
 $breakpoint__xs: 600px;
 $breakpoint__s: 750px;
 $breakpoint__m: 960px;
@@ -152,6 +156,7 @@ $z-index__modal: 1000;
 
 @mixin breakpoint($breakpoint) {
   $breakpoints: (
+    "xxs": $breakpoint__xxs,
     "xs": $breakpoint__xs,
     "s": $breakpoint__s,
     "m": $breakpoint__m,
