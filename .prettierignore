@@ -1,0 +1,9 @@
+# Ignore artifacts:
+.netlify
+_data
+node_modules
+_test-data
+.cache
+.github
+documentation
+public
