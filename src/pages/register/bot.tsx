@@ -92,7 +92,6 @@ export default function BotRegistration() {
                 <li>
                   Judges choose the Top 20 Bots for upcoming competitions.
                 </li>
-                <li>We will periodically run new Bot Qualifiers.</li>
               </ul>
             </div>
           </div>
