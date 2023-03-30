@@ -1,5 +1,6 @@
 import { builder, Handler } from "@netlify/functions";
 import { getApiContestData } from "../util/getContestsData";
+import { getApiFindingsData } from "../util/getFindingsData";
 import { readFile } from "node:fs/promises";
 
 export function tableToCsv(rows: string[][]): string {
@@ -54,7 +55,7 @@ const resourcesHandler: Handler = async (event, context) => {
           contest.amount,
           contest.repo,
           contest.findingsRepo,
-          (contest.hide) ? "True" : "False",
+          contest.hide ? "True" : "False",
           contest.league,
         ];
       }),
@@ -68,13 +69,45 @@ const resourcesHandler: Handler = async (event, context) => {
       body: tableToCsv(tableData),
     };
   } else if (resourceFilename === "findings.csv") {
-    const rawData = await readFile("./_data/findings/findings.csv", "utf8");
+    const findingsData = await getApiFindingsData();
+    let tableData: string[][] = [
+      [
+        "contest",
+        "handle",
+        "finding",
+        "risk",
+        "score",
+        "pie",
+        "split",
+        "slice",
+        "award",
+        "awardCoin",
+        "awardUSD",
+      ],
+      //contest,handle,finding,risk,score,pie,split,slice,award,awardCoin,awardUSD
+      ...findingsData.map((finding) => {
+        return [
+          "" + finding.contest,
+          finding.handle,
+          finding.finding,
+          finding.risk,
+          "" + finding.score,
+          "" + finding.pie,
+          "" + finding.split,
+          "" + finding.slice,
+          "" + finding.award,
+          finding.awardCoin,
+          "" + finding.awardUSD,
+        ];
+      }),
+    ];
+
     return {
       statusCode: 200,
       headers: {
         "Content-Type": "text/csv",
       },
-      body: rawData,
+      body: tableToCsv(tableData),
     };
   } else {
     return {

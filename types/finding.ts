@@ -74,3 +74,17 @@ export interface FindingDeleteRequest {
   risk: string;
   emailAddresses: string[];
 }
+
+export interface AwardFinding {
+  contest: number;
+  handle: string;
+  finding: string;
+  risk: string;
+  score: number;
+  pie: number;
+  split: number;
+  slice: number;
+  award: number;
+  awardCoin: string;
+  awardUSD: number;
+}
