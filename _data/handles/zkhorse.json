@@ -1,5 +1,10 @@
 {
-  "image": "",
   "handle": "zkhorse",
-  "members": ["karmacoma", "horsefacts"]
+  "members": ["karmacoma", "horsefacts"],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xA1c57d5B50f99E8455c8a1Bc167fA68572e5ACbA"
+    }
+  ]
 }
