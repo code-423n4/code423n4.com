@@ -56,10 +56,7 @@ const getLeaderboardResults = async (
     new Set(allFindings.map((finding) => finding.handle))
   )
     .map((handle) => getWardenInfo(handle))
-    .filter(
-      (handle) =>
-        handle.showOnLeaderboard === undefined || !handle.showOnLeaderboard
-    );
+    .filter((handle) => handle.showOnLeaderboard !== false);
 
   return computeWardenStats(allHandles, allFindings);
 };
