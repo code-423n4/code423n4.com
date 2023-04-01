@@ -1,0 +1,15 @@
+{
+  "handle": "Pangolin",
+  "members": [
+    "shung",
+    "sergen"
+  ],
+  "link": "https://twitter.com/pangolindex",
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xC1EFD4ABe85327183092A77844d522333d191Fb3"
+    }
+  ],
+  "image": "./avatars/Pangolin.png"
+}
