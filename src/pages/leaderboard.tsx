@@ -2,25 +2,28 @@ import React, { useEffect, useState } from "react";
 import { graphql } from "gatsby";
 
 import DefaultLayout from "../templates/DefaultLayout";
-import LeaderboardTable from "../components/LeaderboardTable";
+import LeaderboardTableReduced from "../components/LeaderboardTableReduced";
 
-export default function Leaderboard({data}) {
+export default function Leaderboard({ data }) {
   const [timeFrame, setTimeFrame] = useState("Last 60 days");
   const [leaderboardResults, setLeaderboardResults] = useState([]);
-  const [ isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const contests = data.contests.edges;
 
   useEffect(() => {
     (async () => {
-      const result = await fetch(`/.netlify/functions/leaderboard?range=${timeFrame}`, {
-        method:"POST",
-        headers: {
-          "Content-Type": "application/json",
-          // "X-Authorization": `Bearer ${sessionToken}`,
-          // "C4-User": currentUser.username,
-        },
-        body: JSON.stringify(contests)
-      });
+      const result = await fetch(
+        `/.netlify/functions/leaderboard?range=${timeFrame}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            // "X-Authorization": `Bearer ${sessionToken}`,
+            // "C4-User": currentUser.username,
+          },
+          body: JSON.stringify(contests),
+        }
+      );
       if (result.ok) {
         setLeaderboardResults(await result.json());
       } else {
@@ -46,11 +49,12 @@ export default function Leaderboard({data}) {
 
   return (
     <DefaultLayout pageTitle="Leaderboard" bodyClass="leaderboard">
-      <div className="wrapper-main">
-        <h1 className="page-header">Leaderboard</h1>
-        <div className="dropdown-container">
+      <div className="limited-width leaderboard-page">
+        <h1 className="type__headline__page-title">Leaderboard</h1>
+        <div className="leaderboard__dropdown">
           {/* browser-native select in firefox inherits the dropdown background color from the select element */}
-          <select onChange={handleChange} className="dropdown">
+          {/* <label className="select-label">{timeFrame}</label> */}
+          <select onChange={handleChange} className="select">
             {filterOptions.map((option, index) => (
               <option value={option.value} key={`${option.value}-${index}`}>
                 {option.label}
@@ -58,8 +62,8 @@ export default function Leaderboard({data}) {
             ))}
           </select>
         </div>
-        <div className="leaderboard-container">
-          <LeaderboardTable
+        <div className="leaderboard__container">
+          <LeaderboardTableReduced
             results={leaderboardResults}
             isLoading={isLoading}
           />

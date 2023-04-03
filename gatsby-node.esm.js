@@ -6,11 +6,11 @@ import fetch from "node-fetch";
 import path from "path";
 import webpack from "webpack";
 import SchemaCustomization from "./schema";
-import { getApiContestData } from "./netlify/util/getContestsData.ts";
+import { getApiContestData } from "./netlify/util/getContestsData";
 const { token } = require("./netlify/_config");
 
 const privateContestMessage = dedent`
-# Contest details are not available. Why not?
+## Contest details are not available. Why not?
 
 The contest is limited to specific participants. Most Code4rena contests are open and public, but some have special requirements. In those cases, the code and contest details remain private (at least for now).
 
@@ -53,7 +53,6 @@ function contestSubmissionPermalink(contestNode) {
 function getRepoName(contestNode) {
   const regex = "([^/]+$)";
   const url = contestNode.repo;
-
   const result = url.match(regex);
   const repoName = result[0];
   return repoName;
@@ -150,6 +149,14 @@ exports.onCreateNode = async ({ node, getNode, actions }) => {
     });
   }
 
+  if (node.internal.type === `ReportsJson`) {
+    createNodeField({
+      node,
+      name: `slug`,
+      value: node.circa.slug,
+    });
+  }
+
   if (node.internal.type === `ContestsCsv`) {
     createNodeField({
       node,
@@ -179,19 +186,19 @@ exports.onCreateNode = async ({ node, getNode, actions }) => {
 
     createNodeField({
       node,
-      name: 'status',
-      value: node.status
+      name: "status",
+      value: node.status,
     });
     createNodeField({
       node,
-      name: 'codeAccess',
-      value: node.codeAccess
-    })
+      name: "codeAccess",
+      value: node.codeAccess,
+    });
     createNodeField({
       node,
-      name: 'type',
-      value: node.type
-    })
+      name: "type",
+      value: node.type,
+    });
   }
 };
 
@@ -202,11 +209,13 @@ exports.sourceNodes = async ({
 }) => {
   const { createNode } = actions;
   const apiContestsData = await getApiContestData();
-
   apiContestsData.forEach((contest) => {
     const newNode = createNode({
       ...contest,
-      id: createNodeId(`ContestsCsv-${contest.contestid}`),
+      contestid: contest.contest_id,
+      findingsRepo: contest.findings_repo,
+      amount: contest.formatted_amount,
+      id: createNodeId(`ContestsCsv-${contest.contest_id}`),
       parent: null,
       children: [],
       internal: {

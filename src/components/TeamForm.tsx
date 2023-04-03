@@ -1,5 +1,5 @@
 import { navigate } from "gatsby";
-import Moralis from "moralis/types";
+import Moralis from "moralis-v1/types";
 import React, {
   useCallback,
   useState,
@@ -21,9 +21,6 @@ import useUser from "../hooks/UserContext";
 import Form from "./form/Form";
 import { Input } from "./Input";
 import WardenField, { WardenFieldOption } from "./reporter/widgets/WardenField";
-
-// styles
-import * as styles from "../styles/Main.module.scss";
 
 export interface TeamState {
   teamName: string;
@@ -323,11 +320,9 @@ export default function TeamForm({
           handleChange={handleChange}
         />
 
-        <div className={styles.Widget__Container}>
-          <label htmlFor="avatar" className={styles.Widget__Label}>
-            Avatar (Optional)
-          </label>
-          <p className={styles.Widget__Help}>
+        <div className="widget__container">
+          <label htmlFor="avatar">Avatar (Optional)</label>
+          <p className="form__help-text">
             An avatar displayed next to your name on the leaderboard.
           </p>
           <Avatar
@@ -337,7 +332,7 @@ export default function TeamForm({
             round="50px"
           />
           <input
-            className={styles.Widget__Avatar}
+            className="widget__avatar"
             type="file"
             id="avatar"
             name="avatar"
@@ -348,7 +343,6 @@ export default function TeamForm({
           />
           {state.avatarFile && (
             <button
-              className="remove-line-button"
               type="button"
               onClick={removeAvatar}
               aria-label="Remove avatar"
