@@ -214,7 +214,7 @@ export default function TeamRegistration({ data }) {
           </p>
         </section>
         <div className="limited-width register-bot__register-wrapper">
-          {registrationWindowStatus === Status.closed && (
+          {registrationWindowStatus === Status.open && (
             <section className="register-bot__register register-bot__register--open">
               <ProtectedSection message="To register a bot for Bot Races, you need to be a registered warden, currently connected via wallet.">
                 <>
