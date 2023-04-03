@@ -30,7 +30,7 @@ import {
   getUserTeams,
   updateTeamAddresses,
   sendConfirmationEmail,
-  getTeamEmails,
+  getGroupEmails,
 } from "../util/user-utils";
 
 // config
@@ -318,7 +318,7 @@ async function editFinding(
       data.attributedTo.newValue,
       username
     );
-    teamEmails = await getTeamEmails(team);
+    teamEmails = await getGroupEmails(team.members);
   }
 
   const owner = process.env.GITHUB_REPO_OWNER!;
@@ -679,7 +679,7 @@ const handler: Handler = async (event: Event): Promise<Response> => {
 
         if (attributedTo !== username) {
           const team: TeamData = await checkTeamAuth(attributedTo, username);
-          teamEmails = await getTeamEmails(team);
+          teamEmails = await getGroupEmails(team.members);
         }
         await deleteFinding(
           username,

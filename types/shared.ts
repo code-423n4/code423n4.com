@@ -1,0 +1,11 @@
+export type AbsoluteURL = string;
+export type RelativeURL = string;
+export type Slug = string;
+export type WalletAddress = string;
+export type UserId = string;
+export type Username = string;
+export type SupportedChain = "polygon" | "ethereum";
+export type IssueState = "OPEN" | "CLOSED";
+export type DateString = string;
+export type ReportId = string;
+export type FindingBody = string;

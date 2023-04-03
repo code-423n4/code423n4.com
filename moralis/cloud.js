@@ -101,14 +101,6 @@ Moralis.Cloud.define("checkHandleAgainstPreviousSubmissions", async (req) => {
   }
 });
 
-Moralis.Cloud.define("getWardensWithSubmissions", async (req) => {
-  const query = new Moralis.Query("AddressesFromPreviousSubmissions");
-  query.limit(1000);
-  query.select("handle");
-  const allUsers = await query.find({ useMasterKey: true });
-  return allUsers.map((user) => user.attributes.handle);
-});
-
 Moralis.Cloud.define("confirmUser", async (req) => {
   const { sessionToken, username, moralisId } = req.params;
 

@@ -7,6 +7,15 @@ import rehypeKatex from "rehype-katex";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import clsx from "clsx";
 
+interface TextAreaProps {
+  name: string;
+  required: boolean;
+  fieldState: string;
+  isInvalid: boolean;
+  onChange: React.ChangeEventHandler;
+  maxSize?: number;
+}
+
 const TextArea = ({
   name,
   required,
@@ -14,7 +23,7 @@ const TextArea = ({
   isInvalid,
   onChange,
   maxSize,
-}) => {
+}: TextAreaProps) => {
   function handleChange(e) {
     onChange(e);
   }
