@@ -1,12 +1,12 @@
 import { graphql } from "gatsby";
 import React, { useEffect, useState } from "react";
 
-import ProtectedPage from "../../components/ProtectedPage";
 import DefaultLayout from "../../templates/DefaultLayout";
 
 import BotRegistrationForm from "../../components/BotRegistrationForm";
 import { WardenFieldOption } from "../../components/reporter/widgets/WardenField";
 import { format, isAfter, isBefore } from "date-fns";
+import ProtectedSection from "../../components/ProtectedSection";
 
 // @todo: replace with correct start and end times
 const START = new Date("2023-03-16T20:43:00.000Z");
@@ -64,9 +64,9 @@ export default function TeamRegistration({ data }) {
       pageTitle="Code4rena Bot Races | Code4rena"
       hideConnectWalletDropdown={true}
     >
-      <div className="register-bot type__copy">
+      <div className="register-bot">
         {/* Hero */}
-        <section className="register-bot__hero">
+        <section className="register-bot__hero type__copy">
           <div className="register-bot__hero-content limited-width">
             <h1 className="type__headline__page-title">
               Gentlefrens, start your engines
@@ -91,7 +91,7 @@ export default function TeamRegistration({ data }) {
         </section>
 
         {/* What's a bot race */}
-        <section className="register-bot__top-text-container limited-width">
+        <section className="register-bot__top-text-container limited-width type__copy">
           <h2 className="register-bot__sub-header type__headline__xl">
             What's a Bot Race?
           </h2>
@@ -125,7 +125,7 @@ export default function TeamRegistration({ data }) {
         </section>
 
         {/* Stages / Timeline */}
-        <section className="register-bot__stage-container limited-width">
+        <section className="register-bot__stage-container limited-width type__copy">
           <h2 className="register-bot__sub-header type__headline__xl">
             How do Bot Races work?
           </h2>
@@ -196,65 +196,63 @@ export default function TeamRegistration({ data }) {
         </section>
 
         {/* Bottom CTA */}
-        <section className="register-bot__bottom-cta">
-          <div className="limited-width">
-            <img
-              src="/images/bot-pup.svg"
-              alt="An illustration of a small, cute robot that has wolf-like features like a snout and ears."
-              className="register-bot__bot-image"
-            />
-            <h2 className="register-bot__sub-header type__headline__xl">
-              Is your Crew ready to race{" "}
-              <span className="no-break">your bot?</span>
-            </h2>
-            <h3 className="type__headline__m">
-              Be sure to give it a winning name!
-            </h3>
-            <p className="register-bot__coming-soon">
-              Qualifier Race coming in early April
-            </p>
-          </div>
+        <section className="register-bot__bottom-cta type__copy limited-width">
+          <img
+            src="/images/bot-pup.svg"
+            alt="An illustration of a small, cute robot that has wolf-like features like a snout and ears."
+            className="register-bot__bot-image"
+          />
+          <h2 className="register-bot__sub-header type__headline__xl">
+            Is your Crew ready to race{" "}
+            <span className="no-break">your bot?</span>
+          </h2>
+          <h3 className="type__headline__m">
+            Be sure to give it a winning name!
+          </h3>
+          <p className="register-bot__coming-soon">
+            Qualifier Race coming in early April
+          </p>
         </section>
-        <ProtectedPage
-          pageTitle="Bot Application | Code4rena"
-          message="You need to be a registered warden, currently connected via wallet to register a bot."
-        >
-          <div className="limited-width">
-            {registrationWindowStatus === Status.open && (
-              <>
-                <h1>Register a Bot</h1>
-                <BotRegistrationForm handles={handles} wardens={wardens} />
-              </>
-            )}
-            {registrationWindowStatus === Status.closed && (
-              <>
-                <h1>Bot Registration is Closed</h1>
-                <p>
-                  The first registration window for Bot Races has now closed.
-                  Keep your eye on our{" "}
-                  <a
-                    href=""
-                    rel="noreferrer"
-                    aria-label="Discord announcements channel (Opens in a new window)"
-                  >
-                    announcements channel in Discord
-                  </a>{" "}
-                  to learn when the next one will be.
-                </p>
-              </>
-            )}
-            {registrationWindowStatus === Status.soon && (
-              <>
-                <h1>Bot Registration Coming Soon...</h1>
-                <p>
-                  The first registration window for Bot Races will open for one
-                  hour on {format(START, "d MMMM")} from {format(START, "h:mm")}{" "}
-                  to {format(END, "h:mm a")}
-                </p>
-              </>
-            )}
-          </div>
-        </ProtectedPage>
+        <div className="limited-width register-bot__register-wrapper">
+          {registrationWindowStatus === Status.closed && (
+            <section className="register-bot__register register-bot__register--open">
+              <ProtectedSection message="To register a bot for Bot Races, you need to be a registered warden, currently connected via wallet.">
+                <>
+                  <h1>Register a Bot</h1>
+                  <BotRegistrationForm handles={handles} wardens={wardens} />
+                </>
+              </ProtectedSection>
+            </section>
+          )}
+          {/* {registrationWindowStatus === Status.closed && (
+            <section className="register-bot__register register-bot__register--closed type__copy">
+              <h1 className="spacing-bottom__l">Bot Registration is Closed</h1>
+              <p>
+                The first registration window for Bot Races has now closed.{" "}
+                <br />
+                Keep your eye on our{" "}
+                <a
+                  href=""
+                  rel="noreferrer"
+                  aria-label="Discord announcements channel (Opens in a new window)"
+                >
+                  announcements channel in Discord
+                </a>{" "}
+                to learn when the next one will be.
+              </p>
+            </section>
+          )} */}
+          {registrationWindowStatus === Status.soon && (
+            <section className="register-bot__register register-bot__register--soon type__copy">
+              <h1>Bot Registration Coming Soon...</h1>
+              <p>
+                The first registration window for Bot Races will open for one
+                hour on {format(START, "d MMMM")} from {format(START, "h:mm")}{" "}
+                to {format(END, "h:mm a")}
+              </p>
+            </section>
+          )}
+        </div>
       </div>
     </DefaultLayout>
   );

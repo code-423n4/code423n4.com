@@ -308,3 +308,25 @@ p.register-bot__timeline-time {
     margin: 0 auto;
   }
 }
+
+// --------------------------------------------------
+// Registration Form
+// --------------------------------------------------
+
+.register-bot__register {
+  margin-top: $spacing__xl;
+  padding-top: $spacing__l;
+  padding-bottom: $spacing__l;
+  border-top: 1px solid $color__n-60;
+
+  @include breakpoint("m") {
+    margin-top: $spacing__xxxl;
+    padding-top: $spacing__xxl;
+    padding-bottom: $spacing__xxl;
+  }
+
+  &.register-bot__register--soon,
+  &.register-bot__register--closed {
+    text-align: center;
+  }
+}
