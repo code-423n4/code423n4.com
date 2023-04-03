@@ -30,14 +30,14 @@ export default function BotRegistration() {
           </div>
           <div className="register-bot__hero-ground"></div>
           <div className="register-bot__hero-countdown">
-            Bot Qualifier Race starts in early April
+            The first Qualifier Race will be held in early April
           </div>
         </section>
 
         {/* What's a bot race */}
         <section className="register-bot__top-text-container limited-width">
           <h2 className="register-bot__sub-header type__headline__xl">
-            What's a bot race?
+            What's a Bot Race?
           </h2>
           <div className="register-bot__top-text grid__one-by-two--break-m">
             <p>
@@ -77,7 +77,7 @@ export default function BotRegistration() {
             <h3>
               <div className="register-bot__header-stage-number">Stage 1 </div>
               <div className="register-bot__header-stage-name">
-                Bot Qualifier Race
+                Qualifier Race
               </div>
             </h3>
             <div className="register-bot__text">
@@ -88,7 +88,7 @@ export default function BotRegistration() {
                   and most thorough report based on a repo provided at start
                   time.
                 </li>
-                <li>Bot Qualifier Races are open for one hour.</li>
+                <li>Qualifier Races are open for one hour.</li>
                 <li>
                   Judges choose the Top 20 Bots for upcoming competitions.
                 </li>
@@ -116,7 +116,7 @@ export default function BotRegistration() {
                   validity, and thoroughness.
                 </li>
                 <li>
-                  The best Bot Race report will gain a bonus award of 30%.
+                  The best Bot Race report will receive a 30% share bonus.
                 </li>
                 <li>
                   The top report will be shared in the competition’s channel and
@@ -125,6 +125,17 @@ export default function BotRegistration() {
                 </li>
               </ul>
             </div>
+          </div>
+
+          <div className="register-bot__learn-more center--flex">
+            <a
+              href="#"
+              target="_blank"
+              rel="noreferrer"
+              className="button button--primary"
+            >
+              Learn more about Bot Races
+            </a>
           </div>
         </section>
 
@@ -144,7 +155,7 @@ export default function BotRegistration() {
               Be sure to give it a winning name!
             </h3>
             <p className="register-bot__coming-soon">
-              Bot Qualifier Race coming in early April
+              Qualifier Race coming in early April
             </p>
           </div>
         </section>

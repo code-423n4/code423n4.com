@@ -257,11 +257,25 @@ p.register-bot__timeline-time {
   }
 }
 
+.register-bot__learn-more {
+  margin: 0 auto $spacing__xxl auto;
+  text-align: center;
+
+  @include breakpoint("m") {
+    margin: 0 auto $spacing__xxxl auto;
+  }
+}
+
 // --------------------------------------------------
 // Coming Soon
 // --------------------------------------------------
 
 .register-bot__bottom-cta {
+  margin: $spacing__xl auto;
+
+  @include breakpoint("m") {
+    margin: $spacing__xxl auto;
+  }
   h2 {
     margin-bottom: $spacing__m;
   }
@@ -274,16 +288,20 @@ p.register-bot__timeline-time {
 
 .register-bot__coming-soon {
   max-width: 500px;
-  text-align: center;
   margin: $spacing__l auto;
+  text-align: center;
   padding: $spacing__l $spacing__l;
   border: 1px solid $color__n-60;
   border-radius: $border-radius__m;
+
+  @include breakpoint("m") {
+    margin: $spacing__xl auto;
+  }
 }
 
 .register-bot__bot-image {
   width: 100%;
-  max-width: 500px;
+  max-width: 450px;
   margin: 0 auto;
 
   @include breakpoint("m") {
