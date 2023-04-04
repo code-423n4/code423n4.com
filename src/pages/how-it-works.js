@@ -1,12 +1,15 @@
 import React from "react";
 
 import DefaultLayout from "../templates/DefaultLayout";
+import { Link } from "gatsby";
 
 export default function HowItWorks(data) {
   return (
     <DefaultLayout bodyClass="landing">
       <div className="type__copy limited-width how-it-works">
         <h1 className="spacing-bottom__xxl">How it works</h1>
+
+        {/* Roles */}
         <h2 className="spacing-bottom__xl">Roles</h2>
         <section className="how-it-works__section">
           <h3 className="type__headline__s">Warden</h3>
@@ -40,6 +43,8 @@ export default function HowItWorks(data) {
             team’s workload, and preparing the repo for judging.
           </p>
         </section>
+
+        {/* Competition Types */}
         <h2 className="spacing-top__xxl spacing-bottom__xl">
           Competition Types
         </h2>
@@ -49,6 +54,14 @@ export default function HowItWorks(data) {
             This is the standard competitive audit format on Code4rena where
             everyone is allowed to participate and all information is open and
             public.
+          </p>
+          <p>
+            <a
+              href="https://medium.com/code-423n4/a-look-at-code4rena-audits-open-1a8e74e558c8"
+              className="button button--text-link"
+            >
+              Learn more about open competitions
+            </a>
           </p>
         </section>
         <section className="how-it-works__section">
@@ -63,6 +76,14 @@ export default function HowItWorks(data) {
             Code4rena can now offer you an audit that is as stealthy as you
             would like.
           </p>
+          <p>
+            <a
+              href="https://medium.com/code4rena/a-look-at-code4rena-audits-classified-3ee3cbe87617"
+              className="button button--text-link"
+            >
+              Learn more about Classified competitions
+            </a>
+          </p>
         </section>
         <section className="how-it-works__section">
           <h3 className="type__headline__s">Versus</h3>
@@ -72,6 +93,14 @@ export default function HowItWorks(data) {
             Versus competition is announced, a limited number of the
             highest-ranking Wardens who RSVP within a 48-hour window can
             participate in the audit.
+          </p>
+          <p>
+            <a
+              href="https://medium.com/code4rena/a-look-at-code4rena-audits-versus-6c55d57939ef"
+              className="button button--text-link"
+            >
+              Learn more about Versus competitions
+            </a>
           </p>
         </section>
         <section className="how-it-works__section">
@@ -84,6 +113,14 @@ export default function HowItWorks(data) {
             another round of auditing to ensure the vulnerabilities have been
             mitigated.
           </p>
+          <p>
+            <a
+              href="https://medium.com/code4rena/a-look-at-code4rena-audits-mitigation-review-3e05f8b7acb7"
+              className="button button--text-link"
+            >
+              Learn more about Mitigation reviews
+            </a>
+          </p>
         </section>
         <section className="how-it-works__section">
           <h3 className="type__headline__s">Bot Races</h3>
@@ -94,6 +131,11 @@ export default function HowItWorks(data) {
             submit findings that can be automatically detected within a
             project’s repo, with the winning report forming the basis for
             out-of-scope submissions for their competition.
+          </p>
+          <p>
+            <Link className="button button--text-link">
+              Learn more about Bot Races
+            </Link>
           </p>
         </section>
       </div>
