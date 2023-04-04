@@ -3,3 +3,9 @@ node_modules
 public
 .cache
 .nova
+.env
+.env.*
+!.env.sample
+.netlify
+yarn-error.log
+cloud

@@ -1,17 +1,9 @@
-const monthNames = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
-];
+import format from "date-fns-tz/format";
+import utcToZonedTime from "date-fns-tz/utcToZonedTime";
+import isValid from "date-fns/isValid";
+import parseISO from "date-fns/parseISO";
+
+import differenceInCalendarDays from "date-fns/differenceInCalendarDays";
 
 const left = (total) => {
   return {
@@ -22,8 +14,12 @@ const left = (total) => {
   };
 };
 
-const getTimeRemaining = (endtime) => {
-  const total = Date.parse(endtime) - Date.parse(new Date());
+const getTimeRemaining = (contestTimer) => {
+  const endTime =
+    contestTimer.contestStatus === "active"
+      ? contestTimer.end
+      : contestTimer.start;
+  const total = endTime - Date.now();
   if (total > 0) {
     return {
       total: total,
@@ -49,60 +45,61 @@ const getTimeRemaining = (endtime) => {
   }
 };
 
-const getDates = (starttime, endtime) => {
-  const now = new Date().getTime();
-  const start = new Date(starttime).getTime();
-  const end = new Date(endtime).getTime();
+const getDates = (start, end) => {
+  const now = Date.now();
+  const startDate = new Date(start);
+  const endDate = new Date(end);
+  const startTime = startDate.getTime();
+  const endTime = endDate.getTime();
 
-  let state;
-  if (now < start) {
-    state = "soon";
-  }
-  if (now >= start && now <= end) {
-    state = "active";
-  }
-  if (now > end) {
-    state = "completed";
+  let contestStatus;
+
+  switch (true) {
+    case now >= startTime && now <= endTime:
+      contestStatus = "active";
+      break;
+    case now < startTime:
+      contestStatus = "soon";
+      break;
+    case now >= endTime:
+      contestStatus = "completed";
+      break;
+    default:
+      contestStatus = "-";
   }
 
-  const startMonth = monthNames[new Date(starttime).getMonth()];
-  const startYear = new Date(starttime).getFullYear();
-  const startDate = new Date(starttime).getDate();
-  const endMonth = monthNames[new Date(endtime).getMonth()];
-  const endYear = new Date(endtime).getFullYear();
-  const endDate = new Date(endtime).getDate();
-  const daysDuration = Math.round((end - start) * 1/1000 * 1/60 * 1/60 * 1/24);
+  const daysDuration = differenceInCalendarDays(endDate, startDate);
+  const parsedEndTime = parseISO(end);
+  const parsedStartTime = parseISO(start);
+  const endUtc = format(
+    utcToZonedTime(parsedEndTime, "UTC"),
+    "d MMMM - h:mm a zzz",
+    {
+      timeZone: "UTC",
+    }
+  );
+  const startUtc = format(
+    utcToZonedTime(parsedStartTime, "UTC"),
+    "d MMMM - h:mm a zzz",
+    {
+      timeZone: "UTC",
+    }
+  );
+  const endLocal = format(endDate, "(d MMMM - h:mm a zzz)");
+  const startLocal = format(startDate, "(d MMMM - h:mm a zzz)");
 
   const t = {
-    state,
-    now,
-    start,
-    end,
-    startMonth,
-    startDate,
-    endMonth,
-    endDate,
-    startDay: `${startMonth} ${startDate}`,
-    endDay: `${endMonth} ${endDate}`,
-    startYear,
-    endYear,
+    contestStatus,
+    start: startTime,
+    end: endTime,
+    startDay: isValid(startDate) ? format(startDate, "d MMMM yyyy") : "",
+    endDay: isValid(endDate) ? format(endDate, "d MMMM yyyy") : "",
+    startTime: isValid(startDate) ? startUtc + " " + startLocal : "",
+    endTime: isValid(endDate) ? endUtc + " " + endLocal : "",
     daysDuration,
   };
 
   return t;
 };
-
-// const getTimeState = (t) => {
-//   let timeState;
-//   if (t.now < t.start) {
-//     return "soon";
-//   }
-//   if (t.now >= t.start && t.now <= t.end) {
-//     return "active";
-//   }
-//   if (t.now > t.end) {
-//     return "completed";
-//   }
-// };
 
 export { getTimeRemaining, getDates };

@@ -1,25 +1,66 @@
 import React from "react";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import remarkBreaks from "remark-breaks";
+import remarkMath from "remark-math";
+import rehypeKatex from "rehype-katex";
+import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import clsx from "clsx";
-import * as styles from "./Widgets.module.scss";
 
-const TextArea = (props) => {
-  const { name, label, helptext, required, fieldState } = props;
-
+const TextArea = ({
+  name,
+  required,
+  fieldState,
+  isInvalid,
+  onChange,
+  maxSize,
+}) => {
   function handleChange(e) {
-    props.onChange(e);
+    onChange(e);
   }
+
   return (
-    <div className={styles.Container}>
-      <label className={styles.Label}>{label}</label>
-      <p className={styles.Help}>{helptext}</p>
-      <textarea
-        className={clsx(styles.Control, styles.Text, styles.Textarea)}
-        name={name}
-        onChange={handleChange}
-        required={required}
-        value={fieldState}
-      />
-    </div>
+    <Tabs>
+      <TabList className="secondary-nav">
+        <Tab className="secondary-nav__item">Edit</Tab>
+        <Tab className="secondary-nav__item">Preview</Tab>
+      </TabList>
+      <TabPanel>
+        <div className="widget__textarea-container">
+          <textarea
+            className={clsx(
+              "Widget__Control",
+              "Widget__Text",
+              "Widget__Textarea",
+              isInvalid && "input-error"
+            )}
+            name={name}
+            aria-describedby={name + "--error"}
+            onChange={handleChange}
+            required={required}
+            value={fieldState}
+            maxLength={maxSize}
+          />
+
+          {maxSize && fieldState.length > maxSize - 100 ? (
+            <span className="widget__textarea-counter">
+              {maxSize - fieldState.length} char. remaining
+            </span>
+          ) : (
+            ""
+          )}
+        </div>
+      </TabPanel>
+      <TabPanel>
+        <ReactMarkdown
+          className="widget__control widget__markdown"
+          remarkPlugins={[remarkGfm, remarkBreaks, remarkMath]}
+          rehypePlugins={[rehypeKatex]}
+        >
+          {fieldState}
+        </ReactMarkdown>
+      </TabPanel>
+    </Tabs>
   );
 };
 

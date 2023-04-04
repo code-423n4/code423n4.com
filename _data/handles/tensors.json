@@ -1,5 +1,6 @@
 {
   "handle": "tensors",
-  "image": "./avatars/pfp.jpg",
-  "link": "https://twitter.com/Tensors8"
+  "image": "./avatars/tensors.jpg",
+  "link": "https://twitter.com/Tensors8",
+  "showOnLeaderboard": false
 }

@@ -1,57 +1,90 @@
 import React from "react";
-import { TextField, TextArea, SelectField } from "./";
-import WardenField from "./WardenField";
 
-const Widget = (props) => {
-  const { field, fieldState } = props;
-  const { widget, name, label, helptext, required, options } = field;
+import { SelectField, TextArea, TextField } from "./";
+import LinksToCode from "../LinksToCodeInput";
+import WardenField from "./WardenField";
+import ContestWarning from "../findings/ContestWarning";
+
+const Widget = ({ field, fieldState, isInvalid, onChange }) => {
+  const {
+    widget,
+    name,
+    required,
+    options,
+    maxSize,
+    label,
+    placeholder,
+  } = field;
 
   function handleChange(e) {
-    props.onChange(e);
+    onChange(e);
   }
 
   const textFieldWidget = (
     <TextField
       name={name}
-      label={label}
-      helptext={helptext}
       required={required}
       onChange={handleChange}
       fieldState={fieldState[name]}
+      isInvalid={isInvalid}
+      placeholder={placeholder}
     />
   );
 
   const textAreaWidget = (
     <TextArea
       name={name}
-      label={label}
-      helptext={helptext}
       required={required}
       onChange={handleChange}
       fieldState={fieldState[name]}
+      isInvalid={isInvalid}
+      maxSize={maxSize}
     />
   );
 
   const selectFieldWidget = (
-    <SelectField
-      name={name}
-      label={label}
-      helptext={helptext}
-      required={required}
-      onChange={handleChange}
-      options={options}
-      fieldState={fieldState[name]}
-    />
+    <>
+      <SelectField
+        name={name}
+        required={required}
+        onChange={handleChange}
+        options={options}
+        fieldState={fieldState[name]}
+        isInvalid={isInvalid}
+      />
+      {(fieldState[name] === "G (Gas Optimization)" ||
+        fieldState === "QA (Quality Assurance)") &&
+        name === "risk" && <ContestWarning />}
+    </>
   );
 
   const wardenFieldWidget = (
     <WardenField
-      label={label}
-      helptext={helptext}
+      name={name}
+      required={required}
       onChange={handleChange}
       options={options}
       fieldState={fieldState[name]}
+      isInvalid={isInvalid}
     />
+  );
+
+  const linksToCodeInputGroup = (
+    <LinksToCode onChange={handleChange} linksToCode={fieldState[name]} />
+  );
+
+  const checkboxWidget = (
+    <label htmlFor={name} className={"widget__container"}>
+      <input
+        className={"widget__checkbox"}
+        type="checkbox"
+        id={name}
+        name={name}
+        checked={fieldState[name] === true}
+        onChange={handleChange}
+      />
+      {label}
+    </label>
   );
 
   const widgets = {
@@ -59,6 +92,8 @@ const Widget = (props) => {
     textarea: textAreaWidget,
     select: selectFieldWidget,
     warden: wardenFieldWidget,
+    linksToCode: linksToCodeInputGroup,
+    checkbox: checkboxWidget,
   };
 
   return widgets[widget];

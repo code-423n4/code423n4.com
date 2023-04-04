@@ -5,15 +5,18 @@ const Definitions = () => {
     <div className="definitions">
       <div>
         <h3>Wardens</h3>
-        <p>Hunt exploits in the smart contracts of decentralized protocols.</p>
+        <p>Protect the DeFi ecosystem from threats by auditing code.</p>
       </div>
       <div>
         <h3>Sponsors</h3>
-        <p>Create bounty pools to attract wardens to audit your project.</p>
+        <p>Create prize pools to attract wardens to audit their project.</p>
       </div>
       <div>
         <h3>Judges</h3>
-        <p>Allocate bounty pools to wardens based on performance.</p>
+        <p>
+          Decide severity and validity of wardens’ findings and rate their
+          performance.
+        </p>
       </div>
     </div>
   );
