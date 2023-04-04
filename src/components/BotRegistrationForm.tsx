@@ -279,7 +279,7 @@ export default function BotRegistrationForm({
         value={state.polygonAddress}
         required={true}
         label="Polygon Address"
-        helpText="Address where your bot's prize should go. If you use a smart contract wallet, please contact one of our organizers in Discord in addition to adding the address here."
+        helpText="Address where your bot's prize should go."
         handleChange={handleChange}
         validator={validateAddress}
         maxLength={42}
