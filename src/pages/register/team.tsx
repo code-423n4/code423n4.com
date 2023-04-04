@@ -1,17 +1,19 @@
 import { graphql } from "gatsby";
 import React, { useCallback } from "react";
 
-import useUser from "../hooks/UserContext";
-import ProtectedPage from "../components/ProtectedPage";
-import TeamForm from "../components/TeamForm";
+import useUser from "../../hooks/UserContext";
+import ProtectedPage from "../../components/ProtectedPage";
+import TeamForm from "../../components/TeamForm";
+import { WardenFieldOption } from "../../components/reporter/widgets/WardenField";
 
 export default function TeamRegistration({ data }) {
   const { currentUser } = useUser();
-  const handles: Set<string> = new Set(
-    data.handles.edges.map((h) => h.node.handle)
-  );
+  const handles: Set<string> = new Set([
+    ...data.handles.edges.map((h) => h.node.handle),
+    ...data.bots.edges.map((b) => b.node.handle),
+  ]);
 
-  let wardens: { value: string; image: unknown }[] = [];
+  let wardens: WardenFieldOption[] = [];
   data.handles.edges.forEach(({ node }) => {
     if (!node.members) {
       wardens.push({ value: node.handle, image: node.image });
@@ -65,18 +67,13 @@ export const query = graphql`
       edges {
         node {
           handle
-          link
-          moralisId
-          members {
-            handle
-          }
-          image {
-            childImageSharp {
-              resize(width: 80) {
-                src
-              }
-            }
-          }
+        }
+      }
+    }
+    bots: allBotsJson(sort: { fields: handle, order: ASC }) {
+      edges {
+        node {
+          handle
         }
       }
     }
