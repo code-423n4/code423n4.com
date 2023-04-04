@@ -185,7 +185,7 @@ export default function TeamRegistration({ data }) {
 
           <div className="register-bot__learn-more center--flex">
             <a
-              href="#"
+              href="https://medium.com/code4rena/new-to-code4rena-bot-races-91b8f4ca0b18"
               target="_blank"
               rel="noreferrer"
               className="button button--primary"
