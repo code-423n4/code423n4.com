@@ -52,7 +52,7 @@ export default function HowItWorks(data) {
           <h3 className="type__headline__s">Open</h3>
           <p>
             This is the standard competitive audit format on Code4rena where
-            everyone is allowed to participate and all information is open and
+            everyone is invited to participate and all information is open and
             public.
           </p>
           <p>
@@ -72,9 +72,9 @@ export default function HowItWorks(data) {
             <a href="https://docs.code4rena.com/roles/certified-contributors">
               Certified Contributor
             </a>{" "}
-            program. With customizations available for your privacy needs,
-            Code4rena can now offer you an audit that is as stealthy as you
-            would like.
+            program, which includes a Non-Disclosure Agreement. With
+            customizations available for your privacy needs, Code4rena can offer
+            you an audit that is as stealthy as you would like.
           </p>
           <p>
             <a
@@ -110,8 +110,8 @@ export default function HowItWorks(data) {
             highest-performing Wardens who found the initial vulnerabilities are
             invited to participate in a Mitigation review. Insertions, deletions
             and changes are considered in scope, with these Wardens doing
-            another round of auditing to ensure the vulnerabilities have been
-            mitigated.
+            another pass to confirm these amendments and suitable and/or find
+            any newly introduced vulnerabilities.
           </p>
           <p>
             <a
@@ -125,12 +125,11 @@ export default function HowItWorks(data) {
         <section className="how-it-works__section">
           <h3 className="type__headline__s">Bot Races</h3>
           <p>
-            A Bot Race is Code4rena’s solution to bring AI and automatic
-            detection into the fold, enabling these tools to be a part of the
-            overarching security solution. Bots are registered and used to
-            submit findings that can be automatically detected within a
-            project’s repo, with the winning report forming the basis for
-            out-of-scope submissions for their competition.
+            Bot Races make AI and automated tools part of the competitive audit.
+            Bots are registered and used to submit findings that can be
+            automatically detected in a project’s code, with the winning report
+            serving as a resource for all auditors and forming the basis for
+            known issues for the audit competition.
           </p>
           <p>
             <Link className="button button--text-link">
