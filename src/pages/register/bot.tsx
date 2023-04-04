@@ -69,7 +69,7 @@ export default function TeamRegistration({ data }) {
         <section className="register-bot__hero type__copy">
           <div className="register-bot__hero-content limited-width">
             <h1 className="type__headline__page-title">
-              Gentlefrens, start your engines
+              Gentlefrens, start your engines.
             </h1>
             <h2 className="type__subline__page-title">
               Coordinating AI and human efforts to provide the most
@@ -86,7 +86,7 @@ export default function TeamRegistration({ data }) {
           </div>
           <div className="register-bot__hero-ground"></div>
           <div className="register-bot__hero-countdown">
-            The first Qualifier Race will be held in early April
+            The first Qualifier Race will be held in early April.
           </div>
         </section>
 
@@ -101,8 +101,8 @@ export default function TeamRegistration({ data }) {
                 src="/images/br-icon-bot.svg"
                 alt="Icon of a round, floating robot"
               />
-              <strong>Bot Races</strong> make AI and automated tools part of the
-              competitive audit.
+              <strong>Bot Races</strong> make AI and automated tools the first
+              phase of the competitive audit.
             </p>
             <p>
               <img

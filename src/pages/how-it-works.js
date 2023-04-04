@@ -132,7 +132,7 @@ export default function HowItWorks(data) {
             known issues for the audit competition.
           </p>
           <p>
-            <Link className="button button--text-link">
+            <Link to="/register/bot" className="button button--text-link">
               Learn more about Bot Races
             </Link>
           </p>
