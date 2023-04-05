@@ -1,56 +1,85 @@
+import {
+  AbsoluteURL,
+  FindingBody,
+  RelativeURL,
+  SupportedChain,
+  UserId,
+  Username,
+  WalletAddress,
+} from "./shared";
+
 export interface UserFileData {
   handle: string;
-  moralisId?: string;
-  link?: string;
-  image?: string;
+  moralisId?: UserId;
+  link?: AbsoluteURL;
+  image?: RelativeURL;
 }
 
 export interface UserData extends UserFileData {
-  imageUrl?: string;
+  imageUrl?: AbsoluteURL;
 }
 
-export interface TeamData extends UserData {
-  members: string[];
+export interface BotFileData extends UserFileData {
+  crew: Username[];
   paymentAddresses: {
-    chain: string;
-    address: string;
+    chain: SupportedChain;
+    address: WalletAddress;
+  }[];
+}
+
+export interface BotData extends UserData, BotFileData {}
+
+export interface TeamData extends UserData {
+  members: Username[];
+  paymentAddresses: {
+    chain: SupportedChain;
+    address: WalletAddress;
   }[];
 }
 
 export interface PaymentAddress {
-  address: string;
-  chain: string;
-  id: string;
+  address: WalletAddress;
+  chain: SupportedChain;
 }
 
 export interface TeamCreateRequest {
   teamName: string;
-  members: string[];
-  polygonAddress: string;
-  ethereumAddress?: string;
-  link?: string;
-  image?: string;
+  members: Username[];
+  polygonAddress: WalletAddress;
+  ethereumAddress?: WalletAddress;
+  link?: AbsoluteURL;
+  image?: RelativeURL;
+}
+
+export interface BotCreateRequest {
+  botName: string;
+  crewMembers: Username[];
+  description: string;
+  submission: FindingBody;
+  polygonAddress: WalletAddress;
+  ethereumAddress?: WalletAddress;
+  image?: RelativeURL;
 }
 
 export interface TeamUpdateRequest {
   teamName: string;
   members: {
-    oldValue: string[];
-    newValue: string[];
+    oldValue: Username[];
+    newValue: Username[];
   };
   polygonAddress: {
-    oldValue: string;
-    newValue: string;
+    oldValue: WalletAddress;
+    newValue: WalletAddress;
   };
   ethereumAddress?: {
-    oldValue: string;
-    newValue: string;
+    oldValue: WalletAddress;
+    newValue: WalletAddress;
   };
   link?: {
-    oldValue: string;
-    newValue: string;
+    oldValue: AbsoluteURL;
+    newValue: AbsoluteURL;
   };
-  image?: string;
+  image?: RelativeURL;
 }
 
 export interface TeamDeleteRequest {
