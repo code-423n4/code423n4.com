@@ -18,9 +18,6 @@ import useUser from "../hooks/UserContext";
 import ProtectedPage from "../components/ProtectedPage";
 import SubmitFindings from "../components/reporter/SubmitFindings";
 
-// styles
-import * as styles from "../components/form/Form.module.scss";
-
 export interface ReportState {
   title: string;
   risk: string;
@@ -129,16 +126,19 @@ const ReportForm = ({ data, location }) => {
         newValue: data.attributedTo,
         address: data.address,
       },
-      mitigationOf: data.mitigationOf ? {
-        newValue: data.mitigationOf!,
-        oldValue: state.mitigationOf,
-      } : undefined,
-      isMitigated : { //update these values here from ui update
+      mitigationOf: data.mitigationOf
+        ? {
+            newValue: data.mitigationOf!,
+            oldValue: state.mitigationOf,
+          }
+        : undefined,
+      isMitigated: {
+        //update these values here from ui update
         newValue: data.isMitigated!,
         oldValue: state.isMitigated,
-      }
+      },
     };
-  
+
     if (state.title !== data.title) {
       requestData.title = data.title;
     }
@@ -286,31 +286,27 @@ const ReportForm = ({ data, location }) => {
     return { links: linksToCode, body };
   };
 
-
   return (
-    <ProtectedPage pageTitle="Submit finding | Code 423n4">
+    <ProtectedPage pageTitle="Submit finding | Code4rena">
       {isLoading ? (
         // @todo: style a loading state
         <span>Loading...</span>
       ) : hasContestEnded ? (
-        <div className="center">
+        <div>
           <h1>This contest has ended.</h1>
           <p>You can no longer submit findings for this contest.</p>
-          <Link
-            to="/contests"
-            className="contest-repo button cta-button primary"
-          >
+          <Link to="/contests" className="button button--primary">
             View active contests
           </Link>
         </div>
       ) : isClosed ? (
-        <div className={styles.Form}>
-          <h1 className={styles.Heading1}>This finding has been withdrawn</h1>
-          <h3 className={styles.Heading3}>Submitted by:</h3>
+        <div className={"form__form"}>
+          <h1>This finding has been withdrawn</h1>
+          <h3>Submitted by:</h3>
           <ul>
             <li>{attributedTo}</li>
           </ul>
-          <h3 className={styles.Heading3}>Finding:</h3>
+          <h3>Finding:</h3>
           <ul>
             <li>Risk: {state.risk}</li>
             <li>Title: {state.title}</li>

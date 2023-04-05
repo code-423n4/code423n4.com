@@ -1,0 +1,27 @@
+@import "../../variables";
+
+// --------------------------------------------------
+// Contest List Page
+// --------------------------------------------------
+
+// CSS rule order
+// --------------------
+
+// 1. Variables
+// 2. Box model properties
+// 3. Display and position
+// 4. Background
+// 5. Border
+// 6. Box shadow
+// 7. Text
+// 8. Transforms
+// 9. Other
+
+.contests-page section:not(:first-child) {
+  padding: $spacing__l 0;
+}
+
+.contests-page {
+  // background: radial-gradient(50% 50% at 50% 50%, #180d3b 0%, #000000 100%);
+  // background-attachment: fixed;
+}

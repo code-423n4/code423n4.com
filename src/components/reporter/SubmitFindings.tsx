@@ -40,10 +40,6 @@ import FormField from "./widgets/FormField";
 import WardenDetails from "../WardenDetails";
 import Widget from "./widgets/Widget";
 
-// styles
-import * as styles from "../form/Form.module.scss";
-import * as widgetStyles from "../reporter/widgets/Widgets.module.scss";
-
 enum FormStatus {
   Unsubmitted = "unsubmitted",
   Submitting = "submitting",
@@ -121,16 +117,12 @@ const SubmitFindings = ({
     if (contestType === "Mitigation review") {
       fieldList = [mitigationOfField, mitigationField];
       if (state.isMitigated) {
+        fieldList.push(qaGasDetailsField);
         setFieldList(fieldList);
         return;
       }
       fieldList.push(mitigationRiskField);
       if (!state.risk) {
-        setFieldList(fieldList);
-        return;
-      }
-      if (checkQaOrGasFinding(state.risk)) {
-        fieldList.push(qaGasDetailsField);
         setFieldList(fieldList);
         return;
       }
@@ -346,7 +338,7 @@ const SubmitFindings = ({
       mitigationOf = state.mitigationOf;
       labels = [state.risk];
       if (state.isMitigated) {
-        body = "";
+        body = state.qaGasDetails;
         title = "";
         risk = "";
         labels = [];
@@ -369,7 +361,7 @@ const SubmitFindings = ({
       body,
       labels,
       mitigationOf,
-      isMitigated : state.isMitigated,
+      isMitigated: state.isMitigated,
     };
     if (attributedTo !== currentUser.username) {
       const team = currentUser.teams.find(
@@ -389,16 +381,27 @@ const SubmitFindings = ({
         // clear location state
         navigate("", { state: {} });
       } else {
-        const { error } = await response.json();
-        if (error.startsWith("Failed to send confirmation email")) {
-          setStatus(FormStatus.Submitted);
-          if (typeof window !== `undefined`) {
-            window.localStorage.removeItem(findingId);
-          }
-          toast.error(error);
-        } else {
+        const res = await response.text();
+        if (res.startsWith("Timeout")) {
           setStatus(FormStatus.Error);
-          setErrorMessage(error);
+          setErrorMessage(
+            "Your request timed out. However, this does not necessarily " +
+              "mean your finding was not submitted. Please check the findings " +
+              "tab on the contest page. If you don't see your submission there, " +
+              "then please try again."
+          );
+        } else {
+          const { error } = JSON.parse(res);
+          if (error.startsWith("Failed to send confirmation email")) {
+            setStatus(FormStatus.Submitted);
+            if (typeof window !== `undefined`) {
+              window.localStorage.removeItem(findingId);
+            }
+            toast.error(error);
+          } else {
+            setStatus(FormStatus.Error);
+            setErrorMessage(error);
+          }
         }
       }
     } catch (error) {
@@ -431,7 +434,7 @@ const SubmitFindings = ({
     if (contestType === "Mitigation review") {
       if (state.isMitigated) {
         // if the finding is mitigated, we only need "mitigation of"
-        if (!state.mitigationOf) {
+        if (!state.mitigationOf || !state.qaGasDetails) {
           setHasValidationErrors(true);
           return true;
         } else {
@@ -519,24 +522,21 @@ const SubmitFindings = ({
   };
 
   return (
-    <div className={styles.Form}>
-      <h1 className={styles.Heading1}>{`${title} finding`}</h1>
+    <div className="limited-width form submit-findings">
+      <h1>{`${title} finding`}</h1>
       {(status === FormStatus.Unsubmitted ||
         status === FormStatus.Deleting ||
         status === FormStatus.Submitting) && (
         <form>
-          <fieldset className={widgetStyles.Fields}>
-            <h2 className={styles.Heading2}>User Info</h2>
+          <div className="submit-findings__user-info">
+            <h2>User Info</h2>
             {currentUser.teams.length > 0 ? (
               <>
-                <h3 className={widgetStyles.Label}>Submitting as</h3>
-                <fieldset
-                  className={clsx(widgetStyles.Fields, widgetStyles.RadioGroup)}
-                >
-                  <h4 className={styles.Heading4}>WARDEN</h4>
-                  <label className={widgetStyles.RadioLabel}>
+                <h3>Submitting as</h3>
+                <fieldset className="submit-findings__submitting-as">
+                  <h4>Warden</h4>
+                  <label className="form__radio">
                     <input
-                      className={widgetStyles.Radio}
                       type="radio"
                       value={currentUser.username}
                       name="currentUser"
@@ -548,15 +548,11 @@ const SubmitFindings = ({
                       image={currentUser.image}
                     />
                   </label>
-                  <h4 className={styles.Heading4}>TEAM MEMBER</h4>
+                  <h4>Team Member</h4>
                   {currentUser.teams.map((team, i) => (
                     <>
-                      <label
-                        className={widgetStyles.RadioLabel}
-                        key={team.username}
-                      >
+                      <label key={team.username} className="form__radio">
                         <input
-                          className={widgetStyles.Radio}
                           type="radio"
                           value={i}
                           name="team"
@@ -576,8 +572,6 @@ const SubmitFindings = ({
                           </label>
                           <input
                             className={clsx(
-                              widgetStyles.Control,
-                              widgetStyles.Text,
                               (!newTeamAddress ||
                                 newTeamAddress.length !== 42) &&
                                 hasValidationErrors &&
@@ -591,12 +585,12 @@ const SubmitFindings = ({
                             maxLength={42}
                           />
                           {!newTeamAddress && hasValidationErrors && (
-                            <p className={widgetStyles.ErrorMessage}>
+                            <p>
                               <small>This field is required</small>
                             </p>
                           )}
                           {newTeamAddress.length !== 42 && hasValidationErrors && (
-                            <p className={widgetStyles.ErrorMessage}>
+                            <p>
                               <small>
                                 Polygon address must be 42 characters long
                               </small>
@@ -612,22 +606,21 @@ const SubmitFindings = ({
               <WardenDetails
                 username={currentUser.username}
                 image={currentUser.image}
-                className={widgetStyles.Container}
               />
             )}
-            <DynamicInputGroup
-              fields={additionalEmailAddresses}
-              onChange={(emails) => setAdditionalEmailAddresses(emails)}
-              fieldName="email address"
-            >
-              <label htmlFor="email" className={widgetStyles.Label}>
-                Email
-              </label>
-              <p>{currentUser.emailAddress}</p>
-            </DynamicInputGroup>
-          </fieldset>
-          <fieldset className={styles.EmphasizedInputGroup}>
-            <h2 className={styles.Heading2}>
+            <fieldset>
+              <DynamicInputGroup
+                fields={additionalEmailAddresses}
+                onChange={(emails) => setAdditionalEmailAddresses(emails)}
+                fieldName="email address"
+              >
+                <label htmlFor="email">Email</label>
+                <p>{currentUser.emailAddress}</p>
+              </DynamicInputGroup>
+            </fieldset>
+          </div>
+          <fieldset>
+            <h2>
               {contestType === "Mitigation review"
                 ? "Mitigation Review"
                 : "Finding"}
@@ -666,10 +659,10 @@ const SubmitFindings = ({
             })}
           </fieldset>
           <Agreement />
-          <div className={styles.ButtonsWrapper}>
+          <div className="form__submit-button-holder">
             {cancelButtonText && (
               <button
-                className="button cta-button secondary"
+                className="button button--secondary"
                 type="button"
                 onClick={handleCancel}
               >
@@ -678,7 +671,7 @@ const SubmitFindings = ({
             )}
             {onDelete && (
               <button
-                className="button cta-button danger"
+                className="button button--danger"
                 type="button"
                 onClick={handleDeleteClick}
               >
@@ -688,7 +681,7 @@ const SubmitFindings = ({
               </button>
             )}
             <button
-              className="button cta-button"
+              className="button button--primary form__submit-button"
               type="button"
               onClick={handleSubmit}
               disabled={status !== FormStatus.Unsubmitted}
@@ -701,10 +694,10 @@ const SubmitFindings = ({
         </form>
       )}
       {status === FormStatus.Error && (
-        <div className="centered-text">
+        <div className="spacing-top__xl">
           <p>{errorMessage}</p>
           <button
-            className="button cta-button"
+            className="button button--primary form__submit-button"
             type="button"
             onClick={() => setStatus(FormStatus.Unsubmitted)}
           >
@@ -713,16 +706,16 @@ const SubmitFindings = ({
         </div>
       )}
       {status === FormStatus.Submitted && (
-        <div className="centered-text">
-          <h2 className={styles.Heading2}>Thank you!</h2>
-          <p>{successMessage}</p>
-          <div className={styles.ButtonsWrapper}>
-            <Link to={contestPath} className="button cta-button secondary">
+        <div className="spacing-top__xl">
+          <h2>Thank you!</h2>
+          <p className="spacing-bottom__m">{successMessage}</p>
+          <div>
+            <Link to={contestPath} className="button button--secondary">
               Back to contest
             </Link>
             {successButtonText && (
               <button
-                className="button cta-button"
+                className="button button--primary"
                 type="button"
                 onClick={handleReset}
               >

@@ -1,16 +1,10 @@
-import csv from "csvtojson";
 import { Contest } from "../../types/contest";
+import { getApiContestData } from "./getContestsData";
 
 async function getContest(contestId: number): Promise<Contest | undefined> {
-  const allContests = await csv().fromFile("_data/contests/contests.csv");
+  const allContests = await getApiContestData();
   let contests: Contest[] = allContests;
-  if (process.env.NODE_ENV === "development") {
-    const testContests = await csv().fromFile(
-      "_test-data/contests/contests.csv"
-    );
-    contests = contests.concat(testContests);
-  }
-  const contest = contests.find((c) => parseInt(c.contestid) == contestId);
+  const contest = contests.find((c) => c.contestid == contestId);
   return contest;
 }
 
@@ -40,7 +34,7 @@ function getRiskCodeFromGithubLabel(label: string): string {
       return code;
     }
   }
-  throw { message: "risk not found" };
+  return "";
 }
 
 function getGithubLabelFromRiskCode(code: string): string {

@@ -1,5 +1,3 @@
-import { riskField } from "./fields";
-
 export const config = {
   labelAll: "bug",
 };
