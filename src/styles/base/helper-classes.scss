@@ -53,6 +53,35 @@
   white-space: nowrap;
 }
 
+// Centering helper classes
+// ------------------------
+
+.center--text {
+  text-align: center;
+}
+
+.center--margin {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.center--flex,
+.center--flex--both {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.center--flex--vertical {
+  display: flex;
+  align-items: center;
+}
+
+.center--flex--horizontal {
+  display: flex;
+  justify-content: center;
+}
+
 // Spacing helper classes
 // --------------------
 
