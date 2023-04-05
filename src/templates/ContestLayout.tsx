@@ -9,7 +9,7 @@ import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
 
 // types
-import { FindingsResponse } from "../../types/finding";
+import { WardenFindingsForContest } from "../../types/finding";
 // helpers
 import { getDates } from "../utils/time";
 // hooks
@@ -32,7 +32,7 @@ enum FindingsStatus {
 const ContestLayout = ({ data }) => {
   // state
   const [artOpen, setArtOpen] = useState(false);
-  const [findingsList, setFindingsList] = useState<FindingsResponse>({
+  const [findingsList, setFindingsList] = useState<WardenFindingsForContest>({
     user: [],
     teams: {},
   });
@@ -111,7 +111,7 @@ const ContestLayout = ({ data }) => {
             setErrorMessage(error);
             return;
           }
-          const resultData: FindingsResponse = await response.json();
+          const resultData: WardenFindingsForContest = await response.json();
 
           setFindingsList(resultData);
           setFindingsStatus(FindingsStatus.Success);
