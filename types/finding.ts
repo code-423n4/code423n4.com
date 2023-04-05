@@ -13,8 +13,8 @@ export interface Finding {
 }
 
 export interface Label {
-  name?: string;
-  color?: string;
+  name: string;
+  color: string;
 }
 
 export interface FindingEditRequest {
@@ -48,11 +48,6 @@ export interface WardenFindingsForContest {
   teams: {
     [teamName: string]: Finding[];
   };
-}
-
-export interface TeamFindings {
-  findings: Finding[];
-  teamName: string;
 }
 
 export interface FindingCreateRequest {

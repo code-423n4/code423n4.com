@@ -7,141 +7,92 @@ import { Finding, OctokitIssuePaginationResponse } from "../../types/finding";
 import { getRiskCodeFromGithubLabel } from "./contest-utils";
 import { getUserTeams } from "./user-utils";
 
-const firstPageQuery = `
-query ($name: String!, $owner: String!) {
-    repository(name: $name, owner: $owner) {
-      issues(first: 100) {
-        nodes {
-          id
-          title
-          state
-          labels(first: 10) {
-            nodes {
-              name
-              color
-            }
-          }
-          number
-          body
-          createdAt
-          updatedAt
-        }
-        pageInfo {
-          endCursor
-          hasNextPage
-        }
-      }
-    }
-    rateLimit {
-      cost
-      limit
-      remaining
-    }
-  }  
-`;
+/**
+ * Shapes an issue response from octokit.paginate into a Finding
+ * @param issue // response from octokit.paginate
+ * @param wardenName
+ * @returns
+ */
+function shapeOctokitPaginateResponseIntoFinding(
+  issue: OctokitIssuePaginationResponse,
+  wardenName: string | undefined
+): Finding {
+  const riskLabels = [
+    "3 (High Risk)",
+    "2 (Med Risk)",
+    "QA (Quality Assurance)",
+    "G (Gas Optimization)",
+  ];
 
-const nthPageQuery = `
-query ($name: String!, $owner: String!, $after: String!) {
-    repository(name: $name, owner: $owner) {
-      issues(first: 100, after: $after) {
-        nodes {
-          id
-          title
-          state
-          labels(first: 10) {
-            nodes {
-              name
-              color
-            }
-          }
-          number
-          body
-          createdAt
-          updatedAt
-        }
-        pageInfo {
-          endCursor
-          hasNextPage
-        }
-      }
-    }
-    rateLimit {
-      cost
-      limit
-      remaining
-    }
-  }  
-`;
-
-interface QueryResponse {
-  repository: {
-    issues: {
-      nodes: {
-        id: string;
-        title: string;
-        state: "OPEN" | "CLOSED";
-        labels: {
-          nodes: {
-            name: string;
-            color: string;
-          }[];
-        };
-        number: number;
-      }[];
-      pageInfo: {
-        endCursor: string;
-        hasNextPage: boolean;
-      };
+  const risk = issue.labels.find((label) => riskLabels.includes(label.name!));
+  const labels = issue.labels.map((label) => {
+    return {
+      color: label.color!,
+      name: label.name!,
     };
-  };
-  rateLimit: {
-    cost: number;
-    limit: number;
-    remaining: number;
-  };
-}
-
-async function getFirstPage(
-  client: Octokit,
-  name: string,
-  owner: string
-): Promise<QueryResponse> {
-  const response = await client.graphql<QueryResponse>(firstPageQuery, {
-    name,
-    owner,
   });
-  return response;
+
+  return {
+    body: issue.body || "",
+    labels,
+    title: issue.title,
+    issueNumber: issue.number,
+    risk: risk?.name || "",
+    handle: wardenName || "",
+    state: issue.state === "closed" ? "CLOSED" : "OPEN",
+    createdAt: issue.created_at,
+    updatedAt: issue.updated_at,
+  };
 }
 
-async function getNthPage(
-  client: Octokit,
-  name: string,
-  owner: string,
-  after: string
-): Promise<QueryResponse> {
-  const response = await client.graphql<QueryResponse>(nthPageQuery, {
-    name,
-    owner,
-    after,
-  });
-  return response;
-}
-
-async function getAllIssues(
-  client: Octokit,
+/**
+ * @param octokit
+ * @param repoName
+ * @param owner
+ * @returns array of all Findings in the given repo
+ */
+async function getAllFindings(
+  octokit: Octokit,
   repoName: string,
   owner: string
-): Promise<OctokitIssuePaginationResponse[]> {
-  const issuesResponse = await client.paginate(
-    "GET /repos/{owner}/{repo}/issues",
-    {
+): Promise<Finding[]> {
+  const [issuesResponse, wardenNames] = await Promise.all([
+    octokit.paginate("GET /repos/{owner}/{repo}/issues", {
       owner,
       repo: repoName,
       state: "all",
       per_page: 100,
-    }
-  );
-  return issuesResponse as OctokitIssuePaginationResponse[];
+    }),
+    mapWardenNameToIssueNumber(octokit, repoName),
+  ]);
+
+  return (issuesResponse as OctokitIssuePaginationResponse[])
+    .map((issue) => {
+      return shapeOctokitPaginateResponseIntoFinding(
+        issue,
+        wardenNames[issue.number]
+      );
+    })
+    .filter((issue) => !issue.title.startsWith("Agreements & Disclosures"));
+}
+
+async function mapWardenNameToIssueNumber(
+  client: Octokit,
+  repo: string
+): Promise<{ [issueNumber: number]: string }> {
+  const repoZip = await getRepoZip(client, "code-423n4", repo);
+  const files = repoZip.file(new RegExp(`\/data\/.*.json`));
+  const wardens: any[] = [];
+  for (const f of files) {
+    const fileContents = await f.async("text");
+    wardens.push(JSON.parse(fileContents));
+  }
+
+  const result = wardens.reduce((acc, issue) => {
+    acc[issue.issueId.toString()] = issue.handle;
+    return acc;
+  }, {});
+  return result;
 }
 
 async function getMarkdownReportForUser(
@@ -223,34 +174,22 @@ async function getAvailableFindings(
   return submission_files;
 }
 
+/**
+ * Filters all findings by given warden and reshapes the data to
+ * include the content from report markdown and information relevant
+ * to mitigation reviews
+ * @param octokit
+ * @param allFindings
+ * @param repoName
+ * @param handle
+ * @returns Findings by handle
+ */
 async function getWardenFindingsForContest(
-  client: Octokit,
-  handle: string,
-  repoName: string
+  octokit: Octokit,
+  allFindings: Finding[],
+  repoName: string,
+  handle: string
 ): Promise<Finding[]> {
-  // get the handle-id mapping from './data'
-  const submission_files = (
-    await getSubmittedFindingsFromFolder(client, repoName)
-  ).filter((item) => {
-    return item.handle === handle;
-  });
-
-  // todo: stitch submissions and issues
-  const github_issues = (
-    await getAllIssues(client, repoName, process.env.GITHUB_CONTEST_REPO_OWNER!)
-  )
-    .filter((issue) => {
-      return (
-        submission_files.find((submission_file) => {
-          return submission_file.issueNumber === issue.number;
-        }) !== undefined
-      );
-    })
-    .reduce((issues, issue) => {
-      issues[issue.number] = issue;
-      return issues;
-    }, {});
-
   const riskLabels = [
     "3 (High Risk)",
     "2 (Med Risk)",
@@ -265,74 +204,64 @@ async function getWardenFindingsForContest(
     "mitigation-confirmed",
   ];
 
-  const submissions = submission_files.map(
-    async (item): Promise<Finding> => {
-      const labels: { name: string; color: string }[] = github_issues[
-        item.issueNumber
-      ].labels.filter((label) => {
-        return (
-          label.name.startsWith("MR-") ||
-          labelsToDisplay.indexOf(label.name) >= 0
-        );
-      });
+  return await Promise.all(
+    allFindings
+      .filter((finding) => {
+        return finding.handle === handle;
+      })
+      .map(async (finding) => {
+        let body = finding.body;
+        const riskLabel = finding.labels.find((label) => {
+          return riskLabels.includes(label.name);
+        });
 
-      let body = github_issues[item.issueNumber].body;
-
-      const riskLabel = labels.find((label) => {
-        return riskLabels.includes(label.name);
-      });
-
-      const riskLabelName = riskLabel?.name;
-
-      if (riskLabelName) {
-        const riskCode = getRiskCodeFromGithubLabel(riskLabelName);
-        if (
-          (riskCode === "Q" || riskCode === "G") &&
-          // @todo: remove this condition once we can be sure all reports are saved as md files
-          body.startsWith(
-            "See the markdown file with the details of this report"
-          )
-        ) {
-          const reportBody = await getMarkdownReportForUser(
-            client,
-            repoName,
-            handle,
-            riskCode
-          );
-          if (reportBody) {
-            body = reportBody;
+        const riskLabelName = riskLabel?.name;
+        if (riskLabelName) {
+          const riskCode = getRiskCodeFromGithubLabel(riskLabelName);
+          if (
+            (riskCode === "Q" || riskCode === "G") &&
+            // @todo: remove this condition once we can be sure all reports are saved as md files
+            body.startsWith(
+              "See the markdown file with the details of this report"
+            )
+          ) {
+            const reportBody = await getMarkdownReportForUser(
+              octokit,
+              repoName,
+              handle,
+              riskCode
+            );
+            if (reportBody) {
+              body = reportBody;
+            }
           }
         }
-      }
 
-      const isMitigated = !!labels.find((label) => {
-        return label.name === "mitigation-confirmed";
-      });
+        const isMitigated = !!finding.labels.find((label) => {
+          return label.name === "mitigation-confirmed";
+        });
 
-      const mitigationOfLabel = labels.find((label) => {
-        return label.name.startsWith("MR-");
-      });
+        const mitigationOfLabel = finding.labels.find((label) => {
+          return label.name.startsWith("MR-");
+        });
 
-      const mitigationOf = mitigationOfLabel
-        ? mitigationOfLabel.name.slice(3)
-        : undefined;
-
-      return {
-        ...item,
-        title: github_issues[item.issueNumber].title,
-        body,
-        labels,
-        risk: riskLabelName || "",
-        state: github_issues[item.issueNumber].state.toUpperCase(),
-        createdAt: github_issues[item.issueNumber].created_at,
-        updatedAt: github_issues[item.issueNumber].updated_at,
-        isMitigated,
-        mitigationOf,
-      };
-    }
+        const mitigationOf = mitigationOfLabel
+          ? mitigationOfLabel.name.slice(3)
+          : undefined;
+        return {
+          ...finding,
+          labels: finding.labels.filter(async (label) => {
+            return (
+              label.name.startsWith("MR-") ||
+              labelsToDisplay.indexOf(label.name) >= 0
+            );
+          }),
+          body,
+          isMitigated,
+          mitigationOf,
+        };
+      })
   );
-
-  return Promise.all(submissions);
 }
 
 // @todo: should this be in contest utils?
@@ -341,10 +270,8 @@ function getRepoName(contest: Contest) {
 }
 
 export {
-  QueryResponse,
-  getAllIssues,
+  getAllFindings,
   getAvailableFindings,
-  getSubmittedFindingsFromFolder,
   getWardenFindingsForContest,
   getRepoName,
   getMarkdownReportForUser,

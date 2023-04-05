@@ -9,7 +9,6 @@ import { Contest } from "../../types/contest";
 import {
   FindingDeleteRequest,
   FindingEditRequest,
-  TeamFindings,
   WardenFindingsForContest,
 } from "../../types/finding";
 import { TeamData } from "../../types/user";
@@ -22,6 +21,7 @@ import {
   isContestActive,
 } from "../util/contest-utils";
 import {
+  getAllFindings,
   getAvailableFindings,
   getRepoName,
   getWardenFindingsForContest,
@@ -43,32 +43,24 @@ async function getFinding(
 ): Promise<Response> {
   const client = new Octokit({ auth: process.env.GITHUB_TOKEN });
 
-  const submission_files = (
-    await getAvailableFindings(client, username, repoName)
+  const allFindings = await getAllFindings(
+    client,
+    repoName,
+    process.env.GITHUB_CONTEST_REPO_OWNER!
+  );
+
+  // todo: don't rely on full listing
+  let finding;
+  const findingsByHandle = (
+    await getWardenFindingsForContest(client, allFindings, repoName, username)
   ).filter((item) => {
     if (item.issueNumber === issueId) {
       return item;
     }
   });
 
-  // todo: don't rely on full listing
-  let finding;
-  if (submission_files.length === 1) {
-    const findings = (
-      await getWardenFindingsForContest(
-        client,
-        submission_files[0].handle,
-        repoName
-      )
-    ).filter((item) => {
-      if (item.issueNumber === issueId) {
-        return item;
-      }
-    });
-
-    if (findings.length === 1) {
-      finding = findings[0];
-    }
+  if (findingsByHandle.length === 1) {
+    finding = findingsByHandle[0];
   }
 
   if (finding) {
@@ -90,41 +82,6 @@ async function getFinding(
   };
 }
 
-async function getTeamsFindings(
-  teamNames: string[],
-  octokit: Octokit,
-  repoName: string,
-  wardenFindingsForContest: WardenFindingsForContest
-): Promise<void[]> {
-  const promises: Promise<void>[] = [];
-  for (const teamName of teamNames) {
-    promises.push(
-      getSingleTeamFindings(teamName, octokit, repoName).then(
-        (teamFindings) => {
-          wardenFindingsForContest.teams[teamFindings.teamName] =
-            teamFindings.findings;
-        }
-      )
-    );
-  }
-  return await Promise.all(promises);
-}
-
-async function getSingleTeamFindings(
-  teamName: string,
-  octokit: Octokit,
-  repoName: string
-): Promise<TeamFindings> {
-  return getWardenFindingsForContest(octokit, teamName, repoName).then(
-    (teamFindings) => {
-      return {
-        teamName: teamName,
-        findings: teamFindings,
-      };
-    }
-  );
-}
-
 async function getFindings(
   username: string,
   repoName: string,
@@ -137,22 +94,36 @@ async function getFindings(
     teams: {},
   };
 
-  const promises: Promise<void | void[]>[] = [];
+  const allFindings = await getAllFindings(
+    octokit,
+    repoName,
+    process.env.GITHUB_CONTEST_REPO_OWNER!
+  );
+
+  const wardenAndTeamFindingRequests: Promise<void | void[]>[] = [];
   if (includeTeams) {
     const teamNames = await getUserTeams(username);
-    promises.push(
-      getTeamsFindings(teamNames, octokit, repoName, wardenFindingsForContest)
-    );
+    for (const team of teamNames) {
+      wardenAndTeamFindingRequests.push(
+        getWardenFindingsForContest(octokit, allFindings, repoName, team).then(
+          (teamFindings) => {
+            wardenFindingsForContest.teams[team] = teamFindings;
+          }
+        )
+      );
+    }
   }
-  promises.push(
-    getWardenFindingsForContest(octokit, username, repoName).then(
+
+  wardenAndTeamFindingRequests.push(
+    getWardenFindingsForContest(octokit, allFindings, repoName, username).then(
       (wardenFindings) => {
         wardenFindingsForContest.user = wardenFindings;
       }
     )
   );
+
   try {
-    await Promise.all(promises);
+    await Promise.all(wardenAndTeamFindingRequests);
     return {
       statusCode: 200,
       headers: {
