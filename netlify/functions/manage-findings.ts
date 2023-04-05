@@ -38,13 +38,13 @@ import { apiKey, domain } from "../_config";
 
 async function getFinding(
   username: string,
-  contest: Contest,
+  repoName: string,
   issueId: number
 ): Promise<Response> {
   const client = new Octokit({ auth: process.env.GITHUB_TOKEN });
 
   const submission_files = (
-    await getAvailableFindings(client, username, contest)
+    await getAvailableFindings(client, username, repoName)
   ).filter((item) => {
     if (item.issueNumber === issueId) {
       return item;
@@ -58,7 +58,7 @@ async function getFinding(
       await getWardenFindingsForContest(
         client,
         submission_files[0].handle,
-        contest
+        repoName
       )
     ).filter((item) => {
       if (item.issueNumber === issueId) {
@@ -93,16 +93,18 @@ async function getFinding(
 async function getTeamsFindings(
   teamNames: string[],
   octokit: Octokit,
-  contest: Contest,
+  repoName: string,
   wardenFindingsForContest: WardenFindingsForContest
 ): Promise<void[]> {
   const promises: Promise<void>[] = [];
   for (const teamName of teamNames) {
     promises.push(
-      getSingleTeamFindings(teamName, octokit, contest).then((teamFindings) => {
-        wardenFindingsForContest.teams[teamFindings.teamName] =
-          teamFindings.findings;
-      })
+      getSingleTeamFindings(teamName, octokit, repoName).then(
+        (teamFindings) => {
+          wardenFindingsForContest.teams[teamFindings.teamName] =
+            teamFindings.findings;
+        }
+      )
     );
   }
   return await Promise.all(promises);
@@ -111,9 +113,9 @@ async function getTeamsFindings(
 async function getSingleTeamFindings(
   teamName: string,
   octokit: Octokit,
-  contest: Contest
+  repoName: string
 ): Promise<TeamFindings> {
-  return getWardenFindingsForContest(octokit, teamName, contest).then(
+  return getWardenFindingsForContest(octokit, teamName, repoName).then(
     (teamFindings) => {
       return {
         teamName: teamName,
@@ -125,7 +127,7 @@ async function getSingleTeamFindings(
 
 async function getFindings(
   username: string,
-  contest: Contest,
+  repoName: string,
   includeTeams: boolean = true
 ): Promise<Response> {
   const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
@@ -139,11 +141,11 @@ async function getFindings(
   if (includeTeams) {
     const teamNames = await getUserTeams(username);
     promises.push(
-      getTeamsFindings(teamNames, octokit, contest, wardenFindingsForContest)
+      getTeamsFindings(teamNames, octokit, repoName, wardenFindingsForContest)
     );
   }
   promises.push(
-    getWardenFindingsForContest(octokit, username, contest).then(
+    getWardenFindingsForContest(octokit, username, repoName).then(
       (wardenFindings) => {
         wardenFindingsForContest.user = wardenFindings;
       }
@@ -327,7 +329,7 @@ async function editFinding(
   const available_findings = await getAvailableFindings(
     client,
     username,
-    contest
+    repoName
   );
 
   const canAccess =
@@ -638,10 +640,12 @@ const handler: Handler = async (event: Event): Promise<Response> => {
         // includeTeams = req.queryStringParameters?.includeTeams)
         // }
 
+        const repoName = getRepoName(contest);
+
         if (issueNumber !== undefined) {
-          return await getFinding(username, contest, issueNumber);
+          return await getFinding(username, repoName, issueNumber);
         } else {
-          return await getFindings(username, contest, includeTeams);
+          return await getFindings(username, repoName, includeTeams);
         }
       case "POST":
         const data: FindingEditRequest = JSON.parse(event.body!);

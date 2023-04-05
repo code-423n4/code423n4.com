@@ -1,10 +1,7 @@
 export interface Finding {
   title: string;
   body: string;
-  labels: {
-    name: string;
-    color: string;
-  }[];
+  labels: Label[];
   risk: string;
   state: "OPEN" | "CLOSED";
   createdAt: string;
@@ -13,6 +10,11 @@ export interface Finding {
   handle: string;
   isMitigated?: boolean;
   mitigationOf?: string;
+}
+
+export interface Label {
+  name?: string;
+  color?: string;
 }
 
 export interface FindingEditRequest {
@@ -73,4 +75,14 @@ export interface FindingDeleteRequest {
   attributedTo: string;
   risk: string;
   emailAddresses: string[];
+}
+
+export interface OctokitIssuePaginationResponse {
+  title: string;
+  number: number;
+  labels: Label[];
+  state: "open" | "closed";
+  body: string;
+  created_at: string;
+  updated_at: string;
 }

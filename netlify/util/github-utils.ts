@@ -2,7 +2,7 @@ import { Octokit } from "@octokit/rest";
 import jszip from "jszip";
 
 import { Contest } from "../../types/contest";
-import { Finding } from "../../types/finding";
+import { Finding, OctokitIssuePaginationResponse } from "../../types/finding";
 
 import { getRiskCodeFromGithubLabel } from "./contest-utils";
 import { getUserTeams } from "./user-utils";
@@ -129,26 +129,19 @@ async function getNthPage(
 
 async function getAllIssues(
   client: Octokit,
-  name: string,
+  repoName: string,
   owner: string
-): Promise<QueryResponse["repository"]["issues"]["nodes"]> {
-  const issues: QueryResponse["repository"]["issues"]["nodes"] = [];
-
-  let previousPage = await getFirstPage(client, name, owner);
-  issues.push(...previousPage.repository.issues.nodes);
-
-  let hasNextPage = previousPage.repository.issues.pageInfo.hasNextPage;
-  while (hasNextPage) {
-    const after = previousPage.repository.issues.pageInfo.endCursor;
-    let nextPage = await getNthPage(client, name, owner, after);
-    issues.push(...nextPage.repository.issues.nodes);
-    hasNextPage = nextPage.repository.issues.pageInfo.hasNextPage;
-    if (hasNextPage) {
-      previousPage = nextPage;
+): Promise<OctokitIssuePaginationResponse[]> {
+  const issuesResponse = await client.paginate(
+    "GET /repos/{owner}/{repo}/issues",
+    {
+      owner,
+      repo: repoName,
+      state: "all",
+      per_page: 100,
     }
-  }
-
-  return issues;
+  );
+  return issuesResponse as OctokitIssuePaginationResponse[];
 }
 
 async function getMarkdownReportForUser(
@@ -214,10 +207,8 @@ export async function getRepoZip(
 async function getAvailableFindings(
   client: Octokit,
   username: string,
-  contest
+  repoName: string
 ) {
-  const repoName = contest.findingsRepo.split("/").slice(-1)[0];
-
   const teamHandles = await getUserTeams(username);
 
   // get list of submissions, filtering for access / match
@@ -234,11 +225,9 @@ async function getAvailableFindings(
 
 async function getWardenFindingsForContest(
   client: Octokit,
-  handle,
-  contest
+  handle: string,
+  repoName: string
 ): Promise<Finding[]> {
-  const repoName = contest.findingsRepo.split("/").slice(-1)[0];
-
   // get the handle-id mapping from './data'
   const submission_files = (
     await getSubmittedFindingsFromFolder(client, repoName)
@@ -280,7 +269,7 @@ async function getWardenFindingsForContest(
     async (item): Promise<Finding> => {
       const labels: { name: string; color: string }[] = github_issues[
         item.issueNumber
-      ].labels.nodes.filter((label) => {
+      ].labels.filter((label) => {
         return (
           label.name.startsWith("MR-") ||
           labelsToDisplay.indexOf(label.name) >= 0
@@ -334,9 +323,9 @@ async function getWardenFindingsForContest(
         body,
         labels,
         risk: riskLabelName || "",
-        state: github_issues[item.issueNumber].state,
-        createdAt: github_issues[item.issueNumber].createdAt,
-        updatedAt: github_issues[item.issueNumber].updatedAt,
+        state: github_issues[item.issueNumber].state.toUpperCase(),
+        createdAt: github_issues[item.issueNumber].created_at,
+        updatedAt: github_issues[item.issueNumber].updated_at,
         isMitigated,
         mitigationOf,
       };
