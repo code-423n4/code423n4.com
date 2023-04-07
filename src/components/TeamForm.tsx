@@ -103,7 +103,6 @@ export default function TeamForm({
       };
       fileReader.onerror = (err) => reject(err);
     });
-    return;
   };
 
   const handleAvatarChange = async (
@@ -192,7 +191,7 @@ export default function TeamForm({
     };
 
     if (state.avatarFile && state.teamImage) {
-      requestBody.image = state.teamImage.substr(
+      requestBody.image = state.teamImage.substring(
         state.teamImage.indexOf(",") + 1
       );
     }
@@ -228,7 +227,9 @@ export default function TeamForm({
         );
       }
       if (!initialState && handles.has(teamName)) {
-        errors.push(`${teamName} is already registered as a team or warden.`);
+        errors.push(
+          `${teamName} is already registered as a team, bot, or warden.`
+        );
       }
       return errors;
     },
@@ -294,7 +295,7 @@ export default function TeamForm({
           value={state.polygonAddress}
           required={true}
           label="Polygon Address"
-          helpText="Address where your team's prize should go. If you use a smart contract wallet, please contact one of our organizers in Discord in addition to adding the address here."
+          helpText="Address where your team's prize should go."
           handleChange={handleChange}
           validator={validateAddress}
           maxLength={42}

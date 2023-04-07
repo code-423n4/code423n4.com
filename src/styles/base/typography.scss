@@ -193,10 +193,12 @@ h6 {
   }
 }
 .type__subline__page-title {
-  font-size: $headline-font-size__xxs;
-  line-height: 115%;
   margin-bottom: $spacing__l;
   margin-top: -$spacing__m; // TODO: don't use negative margin
+  font-size: $headline-font-size__xxs;
+  font-weight: 500;
+  line-height: 115%;
+
   @include breakpoint("m") {
     font-size: $headline-font-size__xxs;
     margin-bottom: $spacing__xl;
@@ -207,6 +209,7 @@ h6 {
 // ------------------------------------------------
 
 .type__subline__s {
+  margin-bottom: 0.3em;
   font-size: $headline-font-size__xxs;
   font-family: $font__default;
   font-weight: 500;
@@ -214,11 +217,11 @@ h6 {
   line-height: 120%;
   text-decoration: none;
   text-transform: none;
-  margin-bottom: 0.3em;
   @include breakpoint("m") {
     font-size: $headline-font-size__xxs;
   }
 }
+
 .type__subline__m {
   font-size: $headline-font-size__xxs;
   font-family: $font__default;
