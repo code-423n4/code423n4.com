@@ -4,7 +4,6 @@ import jwt from "jsonwebtoken";
 
 import { QueryResponse, getAllIssues } from "../util/github-utils";
 
-
 function getRiskFromLabels(
   labels: QueryResponse["repository"]["issues"]["nodes"][number]["labels"]["nodes"]
 ): string {
@@ -92,20 +91,20 @@ async function createUpgradedIssue(repo, issue) {
       labels: [
         "bug",
         "upgraded by judge",
-        {"H": "3 (High Risk)", "M": "2 (Med Risk)"}[issue.risk],
+        { H: "3 (High Risk)", M: "2 (Med Risk)" }[issue.risk],
       ],
     }
   );
 
   const issueId = issueResult.data.number;
   const issueUrl = issueResult.data.html_url;
-  
+
   // create submission file
   const fileData = {
     contest: issue.contest,
     handle: issue.handle,
     address: issue.address,
-    risk: {"H": "3", "M": "2"}[issue.risk],
+    risk: { H: "3", M: "2" }[issue.risk],
     title: issue.title,
     issueId: issueId,
     issueUrl: issueUrl,
@@ -116,15 +115,13 @@ async function createUpgradedIssue(repo, issue) {
     repo,
     path: `data/${issue.handle}-${issueId}.json`,
     message: `Upgrade for ${issue.handle} issue #${issueId}`,
-    content: Buffer.from(JSON.stringify(fileData, null, 2)).toString(
-      "base64"
-    ),
+    content: Buffer.from(JSON.stringify(fileData, null, 2)).toString("base64"),
   });
 
   return {
     statusCode: 200,
     body: JSON.stringify(issueId),
-  }
+  };
 }
 
 async function doUpdateFromGitHub(repo) {
