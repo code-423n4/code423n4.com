@@ -1,0 +1,15 @@
+{
+  "handle": "tjtykgyujg",
+  "members": [
+    "say-cheese",
+    "CaptainMango"
+  ],
+  "link": "dd",
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xec90823624573B008b782047314d7c18075963E2"
+    }
+  ],
+  "image": "./avatars/tjtykgyujg.png"
+}
