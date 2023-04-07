@@ -1,0 +1,13 @@
+{
+  "handle": "llamatea",
+  "members": [
+    "llamatest",
+    "raspberrytea"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x1234123412341234123412341234123412341234"
+    }
+  ]
+}
