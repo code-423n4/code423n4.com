@@ -7,6 +7,7 @@ import Header from "../components/content/Header";
 import LoginModal from "../components/Login/LoginModal";
 import Modal from "../components/Modal";
 import WrapperLayout from "./WrapperLayout";
+import EyebrowBar from "../components/EyebrowBar";
 
 const DefaultLayout = (props) => {
   const {
