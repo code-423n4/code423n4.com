@@ -9,7 +9,7 @@ import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
 
 // types
-import { FindingsResponse } from "../../types/finding";
+import { WardenFindingsForContest } from "../../types/finding";
 // helpers
 import { getDates } from "../utils/time";
 // hooks
@@ -19,11 +19,9 @@ import ClientOnly from "../components/ClientOnly";
 import Countdown from "../components/Countdown";
 import DefaultLayout from "./DefaultLayout";
 import FindingsList from "../components/FindingsList";
-import LeaderboardTable from "../components/LeaderboardTable";
+import LeaderboardTableReduced from "../components/LeaderboardTableReduced";
 import WardenDetails from "../components/WardenDetails";
 import ReactMarkdown from "react-markdown";
-// styles
-import * as styles from "../styles/Main.module.scss";
 
 enum FindingsStatus {
   Fetching = "fetching",
@@ -34,7 +32,7 @@ enum FindingsStatus {
 const ContestLayout = ({ data }) => {
   // state
   const [artOpen, setArtOpen] = useState(false);
-  const [findingsList, setFindingsList] = useState<FindingsResponse>({
+  const [findingsList, setFindingsList] = useState<WardenFindingsForContest>({
     user: [],
     teams: {},
   });
@@ -76,6 +74,12 @@ const ContestLayout = ({ data }) => {
       : `/reports/${data.markdownRemark.frontmatter.slug}`;
   }
 
+  const statusText = {
+    active: "Live",
+    soon: "Coming Soon",
+    completed: "Ended",
+  };
+
   useEffect(() => {
     (async () => {
       if (fields.codeAccess === "public") {
@@ -107,7 +111,7 @@ const ContestLayout = ({ data }) => {
             setErrorMessage(error);
             return;
           }
-          const resultData: FindingsResponse = await response.json();
+          const resultData: WardenFindingsForContest = await response.json();
 
           setFindingsList(resultData);
           setFindingsStatus(FindingsStatus.Success);
@@ -129,8 +133,6 @@ const ContestLayout = ({ data }) => {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            // "X-Authorization": `Bearer ${sessionToken}`,
-            // "C4-User": currentUser.username,
           },
           body: JSON.stringify([{ node: data.contestsCsv }]),
         }
@@ -149,191 +151,196 @@ const ContestLayout = ({ data }) => {
     <DefaultLayout
       pageTitle={pageTitle}
       bodyClass="contest-page"
-      preview={fields.artPath}
+      preview={fields.artPath} // TODO: Are we still using this
       pageDescription={dateDescription}
     >
-      <ClientOnly>
-        <div className="contest-wrapper contest-artwork-wrapper">
-          <div className="contest-tippy-top">
+      <div className="">
+        <ClientOnly>
+          <section className="contest-page__top limited-width">
             {t.contestStatus === "soon" || t.contestStatus === "active" ? (
-              <Countdown
-                start={start_time}
-                end={end_time}
-                isPreview={findingsRepo === ""}
-              />
-            ) : (
-              <p>
-                Contest ran {t.startDay}—{t.endDay}
-              </p>
-            )}
-            <p className="days-duration">{t.daysDuration} day contest</p>
-          </div>
-          {fields.artPath !== null ? (
-            <img
-              src={fields.artPath}
-              onClick={() => setArtOpen((isOpen) => !isOpen)}
-              className={clsx(
-                { open: artOpen },
-                "contest-artwork background-pattern",
-                "button-div"
-              )}
-              aria-label={`${title} artwork. Expands on click.`}
-            />
-          ) : (
-            <button
-              onClick={() => setArtOpen((isOpen) => !isOpen)}
-              className={clsx(
-                { open: artOpen },
-                "contest-artwork background-pattern ",
-                "button-div",
-                "contest-artwork-default"
-              )}
-              aria-label={`${title} artwork. Expands on click.`}
-            />
-          )}
-        </div>
-        <section className="top-section contest-wrapper">
-          <div className="sponsor-image">
-            <a href={sponsor.link}>
-              <img
-                src={sponsor.image.childImageSharp.resize.src}
-                alt={sponsor.name}
-                width="90px"
-                height="90px"
-              />
-            </a>
-          </div>
-          <div className="top-section-text">
-            <h1>{title}</h1>
-            <p>{details}</p>
-            <div className="button-wrapper">
-              {t.contestStatus !== "soon" && canViewContest && (
-                <a
-                  href={repo}
-                  className="button cta-button button-medium primary"
+              <div className="contest-page__top-bar">
+                <span
+                  className={
+                    "contest-tile__status-indicator-text contest-tile__status-indicator-text--" +
+                    t.contestStatus
+                  }
                 >
-                  View Repo
-                </a>
-              )}
+                  {statusText[t.contestStatus]}
+                </span>
+                <span className="contest-tile__countdown">
+                  {t.contestStatus === "soon" ? "Starts in:" : "Ends in:"}
+                  <Countdown
+                    start={start_time}
+                    end={end_time}
+                    isPreview={findingsRepo === ""}
+                  />
+                </span>
+              </div>
+            ) : null}
 
-              {t.contestStatus === "active" &&
-                findingsRepo &&
-                fields.submissionPath &&
-                canViewContest && (
-                  <Link
-                    to={fields.submissionPath}
-                    className="button cta-button button-medium secondary"
-                  >
-                    Submit Finding
+            <div className="contest-page__top-content">
+              <div className="contest-page__project">
+                <div className="contest-page__project-link project-link">
+                  <a href={sponsor.link}>
+                    <img
+                      src={sponsor.image.childImageSharp.resize.src}
+                      alt={sponsor.name}
+                      width="90px"
+                      height="90px"
+                    />
+                  </a>
+                </div>
+                <div>
+                  <h1 className="type__headline__xs">{title}</h1>
+                  <p>{details}</p>
+                </div>
+              </div>
+              <div className="contest-page__button-wrapper">
+                {t.contestStatus !== "soon" && canViewContest && (
+                  <a href={repo} className="button button--primary">
+                    View Repo
+                  </a>
+                )}
+
+                {t.contestStatus === "active" &&
+                  findingsRepo &&
+                  fields.submissionPath &&
+                  canViewContest && (
+                    <Link
+                      to={fields.submissionPath}
+                      className="button button--secondary"
+                    >
+                      Submit Finding
+                    </Link>
+                  )}
+                {canViewReport && (
+                  <Link to={reportUrl} className="button button--secondary">
+                    View Report
                   </Link>
                 )}
-              {canViewReport && (
-                <Link
-                  to={reportUrl}
-                  className="button cta-button button-medium secondary"
-                >
-                  View Report
-                </Link>
-              )}
+              </div>
             </div>
-          </div>
-          <div className="top-section-amount">
-            <p>{amount}</p>
-            <p>Total Awards</p>
-          </div>
-        </section>
-        <section>
-          <Tabs className="contest-tabs">
-            <TabList>
-              {t.contestStatus === "completed" && <Tab>Results</Tab>}
-              <Tab>Details</Tab>
-              {t.contestStatus === "active" && <Tab>Findings</Tab>}
+            <ul className="contest-page__details-grid">
+              <li className="contest-page__start-date">
+                <span className="contest-page__grid-label">Start Date</span>
+                <span className="contest-page__grid-value type__headline__xs">
+                  {t.startDay}
+                </span>
+              </li>
+              <li className="contest-page__end-date">
+                <span className="contest-page__grid-label">End Date</span>
+                <span className="contest-page__grid-value type__headline__xs">
+                  {t.endDay}
+                </span>
+              </li>
+              <li className="contest-page__amount">
+                <span className="contest-page__grid-label">Total Awards</span>
+                <span className="contest-page__grid-value type__headline__xs">
+                  {amount}
+                </span>
+              </li>
+              <li className="contest-page__duration">
+                <span className="contest-page__grid-label">Duration</span>
+                <span className="contest-page__grid-value type__headline__xs">
+                  {t.daysDuration} days
+                </span>
+              </li>
+            </ul>
+          </section>
+          <Tabs className="contest-page__tabs">
+            <TabList className="limited-width secondary-nav">
+              {t.contestStatus === "completed" && (
+                <Tab className="secondary-nav__item">Results</Tab>
+              )}
+              <Tab className="secondary-nav__item">Details</Tab>
+              {t.contestStatus === "active" && (
+                <Tab className="secondary-nav__item">Your Findings</Tab>
+              )}
             </TabList>
 
-            {t.contestStatus === "completed" && (
-              <TabPanel>
-                <div className="contest-wrapper">
-                  <LeaderboardTable
-                    results={leaderboardResults}
-                    isLoading={isLoading}
-                  />
-                </div>
-              </TabPanel>
-            )}
-            <TabPanel>
-              <div className="contest-wrapper">
-                {t.contestStatus === "soon" ? (
-                  <div className="coming-soon">
-                    <h1>Contest details coming soon</h1>
-                    <p>Check back when this contest launches in:</p>
-                    <Countdown
-                      start={start_time}
-                      end={end_time}
-                      isPreview={findingsRepo === ""}
-                    />
-                    <img
-                      src="/images/icon-details.svg"
-                      alt="icon of a piece of paper with lines on it to indicate text"
+            <section className="contest-page__tab-container full-width">
+              {t.contestStatus === "completed" && (
+                <TabPanel>
+                  <div className="leaderboard__container leaderboard__container--contests">
+                    <LeaderboardTableReduced
+                      results={leaderboardResults}
+                      isLoading={isLoading}
                     />
                   </div>
-                ) : (
-                  <article>
-                    <ReactMarkdown
-                      className={clsx(
-                        styles.Widget__Control,
-                        styles.Widget__Markdown
-                      )}
-                      remarkPlugins={[remarkGfm, remarkBreaks, remarkMath]}
-                      rehypePlugins={[rehypeKatex]}
-                    >
-                      {`${fields.readmeContent}`}
-                    </ReactMarkdown>
-                  </article>
-                )}
-              </div>
-            </TabPanel>
-            {t.contestStatus === "active" && (
+                </TabPanel>
+              )}
               <TabPanel>
-                <div className="contest-wrapper">
-                  {findingsStatus === FindingsStatus.Error ? (
-                    <div className="centered-text">
-                      <h3>Oops! Something went wrong.</h3>
-                      <p>{errorMessage}</p>
+                <div className="limited-width type__copy">
+                  {t.contestStatus === "soon" ? (
+                    <div className="coming-soon tab__content--message">
+                      <h2 className="type__headline__l">
+                        Contest details coming soon
+                      </h2>
+                      <p>Check back when this contest launches in:</p>
+                      <Countdown
+                        start={start_time}
+                        end={end_time}
+                        isPreview={findingsRepo === ""}
+                      />
                     </div>
                   ) : (
-                    <>
-                      <FindingsList
-                        key={currentUser.username}
-                        findings={findingsList.user}
-                        submissionPath={fields.submissionPath}
-                        isLoading={findingsStatus === FindingsStatus.Fetching}
+                    <div>
+                      <ReactMarkdown
+                        className={"markdown-body"}
+                        remarkPlugins={[remarkGfm, remarkBreaks, remarkMath]}
+                        rehypePlugins={[rehypeKatex]}
                       >
-                        <WardenDetails
-                          image={currentUser.image}
-                          username={currentUser.username}
-                        />
-                      </FindingsList>
-                      {currentUser.teams.map((team) => (
+                        {`${fields.readmeContent}`}
+                      </ReactMarkdown>
+                    </div>
+                  )}
+                </div>
+              </TabPanel>
+              {t.contestStatus === "active" && (
+                <TabPanel>
+                  <div className="limited-width type__copy">
+                    {findingsStatus === FindingsStatus.Error ? (
+                      <div className="centered-text">
+                        <h2>Oops! Something went wrong.</h2>
+                        <p>{errorMessage}</p>
+                      </div>
+                    ) : (
+                      <>
                         <FindingsList
-                          key={team.username}
-                          findings={findingsList.teams[team.username] || []}
+                          key={currentUser.username}
+                          findings={findingsList.user}
                           submissionPath={fields.submissionPath}
                           isLoading={findingsStatus === FindingsStatus.Fetching}
                         >
                           <WardenDetails
-                            image={team.image}
-                            username={team.username}
+                            image={currentUser.image}
+                            username={currentUser.username}
                           />
                         </FindingsList>
-                      ))}
-                    </>
-                  )}
-                </div>
-              </TabPanel>
-            )}
+                        {currentUser.teams.map((team) => (
+                          <FindingsList
+                            key={team.username}
+                            findings={findingsList.teams[team.username] || []}
+                            submissionPath={fields.submissionPath}
+                            isLoading={
+                              findingsStatus === FindingsStatus.Fetching
+                            }
+                          >
+                            <WardenDetails
+                              image={team.image}
+                              username={team.username}
+                            />
+                          </FindingsList>
+                        ))}
+                      </>
+                    )}
+                  </div>
+                </TabPanel>
+              )}
+            </section>
           </Tabs>
-        </section>
-      </ClientOnly>
+        </ClientOnly>
+      </div>
     </DefaultLayout>
   );
 };

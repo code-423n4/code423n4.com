@@ -3,8 +3,6 @@ import React from "react";
 import FormField from "./FormField";
 import Widget from "./Widget";
 
-import * as styles from "../../../styles/Main.module.scss";
-
 export interface Field {
   name: string;
   label: string;
@@ -29,7 +27,7 @@ const Widgets = (props) => {
     props.onChange(e);
   }
   return (
-    <fieldset className={styles.Widget__Fields}>
+    <div className="widget__fields">
       {fields.map((field, index) => {
         const { name, label, helpText, required, placeholder } = field;
         const isInvalid = required && showValidationErrors && !fieldState[name];
@@ -41,6 +39,7 @@ const Widgets = (props) => {
             label={label}
             helpText={helpText}
             isInvalid={isInvalid}
+            required={required}
           >
             <Widget
               field={field}
@@ -51,7 +50,7 @@ const Widgets = (props) => {
           </FormField>
         );
       })}
-    </fieldset>
+    </div>
   );
 };
 
