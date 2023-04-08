@@ -416,7 +416,7 @@ export default function AccountManagementPage() {
             )}
             <div>
               <Link
-                to="/register-team"
+                to="/register/team"
                 className="button cta-button centered secondary"
               >
                 Create a new team
