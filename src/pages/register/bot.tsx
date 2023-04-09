@@ -86,7 +86,7 @@ export default function TeamRegistration({ data }) {
           </div>
           <div className="register-bot__hero-ground"></div>
           <div className="register-bot__hero-countdown">
-            The first Qualifier Race will be held in early April.
+            The first Qualifier Race will be held April 12.
           </div>
         </section>
 
@@ -210,7 +210,7 @@ export default function TeamRegistration({ data }) {
             Be sure to give it a winning name!
           </h3>
           <p className="register-bot__coming-soon">
-            Qualifier Race coming in early April
+            Qualifier Race coming April 12
           </p>
         </section>
         <div className="limited-width register-bot__register-wrapper">
