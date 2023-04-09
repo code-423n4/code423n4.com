@@ -1,8 +1,10 @@
 import {
   DateString,
   FindingBody,
+  IssueNumber,
   IssueState,
   ReportId,
+  RiskLabelName,
   Username,
   WalletAddress,
 } from "./shared";
@@ -11,7 +13,7 @@ export interface Finding {
   title: string;
   body: FindingBody;
   labels: Label[];
-  risk: string; // @todo add enum for risk
+  risk: RiskLabelName | "";
   state: IssueState;
   createdAt: DateString;
   updatedAt: DateString;
@@ -37,8 +39,8 @@ export interface FindingEditRequest {
     address?: WalletAddress;
   };
   risk: {
-    newValue: string;
-    oldValue: string;
+    newValue: RiskLabelName | "";
+    oldValue: RiskLabelName | "";
   };
   title?: string;
   body?: FindingBody;
@@ -66,7 +68,7 @@ export interface FindingCreateRequest {
   repo: string;
   emailAddresses: string[];
   attributedTo: Username;
-  risk: string;
+  risk: RiskLabelName | "";
   title: string;
   body: FindingBody;
   labels: string[];
@@ -77,13 +79,13 @@ export interface FindingCreateRequest {
 
 export interface FindingDeleteRequest {
   attributedTo: Username;
-  risk: string;
+  risk: RiskLabelName | "";
   emailAddresses: string[];
 }
 
 export interface OctokitIssuePaginationResponse {
   title: string;
-  number: number;
+  number: IssueNumber;
   labels: Label[];
   state: "open" | "closed";
   body: string;

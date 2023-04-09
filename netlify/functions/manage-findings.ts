@@ -5,6 +5,13 @@ import { Octokit } from "@octokit/rest";
 import { createOrUpdateTextFile } from "@octokit/plugin-create-or-update-text-file";
 
 // types
+import {
+  ContestFindingsRepoName,
+  IssueNumber,
+  RiskLabelName,
+  Username,
+  WalletAddress,
+} from "../../types/shared";
 import { Contest } from "../../types/contest";
 import {
   FindingDeleteRequest,
@@ -37,9 +44,9 @@ import {
 import { apiKey, domain } from "../_config";
 
 async function getFinding(
-  username: string,
-  repoName: string,
-  issueId: number
+  username: Username,
+  repoName: ContestFindingsRepoName,
+  issueNumber: IssueNumber
 ): Promise<Response> {
   const client = new Octokit({ auth: process.env.GITHUB_TOKEN });
 
@@ -54,7 +61,7 @@ async function getFinding(
   const findingsByHandle = (
     await getWardenFindingsForContest(client, allFindings, repoName, username)
   ).filter((item) => {
-    if (item.issueNumber === issueId) {
+    if (item.issueNumber === issueNumber) {
       return item;
     }
   });
@@ -83,8 +90,8 @@ async function getFinding(
 }
 
 async function getFindings(
-  username: string,
-  repoName: string,
+  username: Username,
+  repoName: ContestFindingsRepoName,
   includeTeams: boolean = true
 ): Promise<Response> {
   const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
@@ -145,11 +152,15 @@ async function getFindings(
 }
 
 async function handleAttributionChange(
-  client,
-  repoName,
-  issueNumber,
-  username,
-  attributedTo: { newValue: string; oldValue: string; address?: string }
+  client: Octokit & { createOrUpdateTextFile },
+  repoName: ContestFindingsRepoName,
+  issueNumber: IssueNumber,
+  username: Username,
+  attributedTo: {
+    newValue: Username;
+    oldValue: Username;
+    address?: WalletAddress;
+  }
 ) {
   if (attributedTo.newValue !== username) {
     const team: TeamData = await checkTeamAuth(attributedTo.newValue, username);
@@ -217,9 +228,9 @@ async function handleAttributionChange(
 }
 
 async function editFinding(
-  username: string,
+  username: Username,
   contest: Contest,
-  issueNumber: number,
+  issueNumber: IssueNumber,
   data: FindingEditRequest
 ): Promise<void> {
   const CustOcto = Octokit.plugin(createOrUpdateTextFile);
@@ -502,11 +513,11 @@ async function editFinding(
 }
 
 async function deleteFinding(
-  username: string,
+  username: Username,
   contest: Contest,
-  issueNumber: number,
-  risk: string,
-  attributedTo: string,
+  issueNumber: IssueNumber,
+  risk: RiskLabelName,
+  attributedTo: Username,
   emailAddresses: string[]
 ) {
   const CustOcto = Octokit.plugin(createOrUpdateTextFile);
@@ -660,7 +671,7 @@ const handler: Handler = async (event: Event): Promise<Response> => {
           username,
           contest,
           issueNumber,
-          risk,
+          risk as RiskLabelName,
           attributedTo,
           [...emailAddresses, ...teamEmails]
         );

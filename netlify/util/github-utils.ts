@@ -3,6 +3,12 @@ import jszip from "jszip";
 
 import { Contest } from "../../types/contest";
 import { Finding, OctokitIssuePaginationResponse } from "../../types/finding";
+import {
+  ContestFindingsRepoName,
+  IssueNumber,
+  RiskLabelName,
+  Username,
+} from "../../types/shared";
 
 import { getRiskCodeFromGithubLabel } from "./contest-utils";
 import { getUserTeams } from "./user-utils";
@@ -15,7 +21,7 @@ import { getUserTeams } from "./user-utils";
  */
 function shapeOctokitPaginateResponseIntoFinding(
   issue: OctokitIssuePaginationResponse,
-  wardenName: string | undefined
+  wardenName: Username | undefined
 ): Finding {
   const riskLabels = [
     "3 (High Risk)",
@@ -37,7 +43,7 @@ function shapeOctokitPaginateResponseIntoFinding(
     labels,
     title: issue.title,
     issueNumber: issue.number,
-    risk: risk?.name || "",
+    risk: (risk?.name as RiskLabelName) || "",
     handle: wardenName || "",
     state: issue.state === "closed" ? "CLOSED" : "OPEN",
     createdAt: issue.created_at,
@@ -53,7 +59,7 @@ function shapeOctokitPaginateResponseIntoFinding(
  */
 async function getAllFindings(
   octokit: Octokit,
-  repoName: string,
+  repoName: ContestFindingsRepoName,
   owner: string
 ): Promise<Finding[]> {
   const [issuesResponse, wardenNames] = await Promise.all([
@@ -78,8 +84,8 @@ async function getAllFindings(
 
 async function mapWardenNameToIssueNumber(
   client: Octokit,
-  repo: string
-): Promise<{ [issueNumber: number]: string }> {
+  repo: ContestFindingsRepoName
+): Promise<{ [issueNumber: IssueNumber]: Username }> {
   const repoZip = await getRepoZip(client, "code-423n4", repo);
   const files = repoZip.file(new RegExp(`\/data\/.*.json`));
   const wardens: any[] = [];
@@ -97,8 +103,8 @@ async function mapWardenNameToIssueNumber(
 
 async function getMarkdownReportForUser(
   client: Octokit,
-  repo: string,
-  username: string,
+  repo: ContestFindingsRepoName,
+  username: Username,
   reportType: "G" | "Q"
 ): Promise<string> {
   const reportPath = `data/${username}-${reportType}.md`;
@@ -120,8 +126,8 @@ async function getMarkdownReportForUser(
 
 async function getSubmittedFindingsFromFolder(
   client: Octokit,
-  repo: string
-): Promise<{ handle: string; issueNumber: number }[]> {
+  repo: ContestFindingsRepoName
+): Promise<{ handle: Username; issueNumber: IssueNumber }[]> {
   const repoZip = await getRepoZip(client, "code-423n4", repo);
   const files = repoZip.file(new RegExp(`\/data\/.*.json`));
   const wardens: any[] = [];
@@ -131,8 +137,8 @@ async function getSubmittedFindingsFromFolder(
   }
 
   const result = wardens.map((issue) => ({
-    handle: issue.handle as string,
-    issueNumber: issue.issueId as number,
+    handle: issue.handle as Username,
+    issueNumber: issue.issueId as IssueNumber,
   }));
   return result;
 }
@@ -140,7 +146,7 @@ async function getSubmittedFindingsFromFolder(
 export async function getRepoZip(
   octokit: Octokit,
   owner: string,
-  repo: string
+  repo: ContestFindingsRepoName
 ): Promise<jszip> {
   const res = await octokit.rest.repos
     .downloadZipballArchive({
@@ -157,9 +163,9 @@ export async function getRepoZip(
 
 async function getAvailableFindings(
   client: Octokit,
-  username: string,
-  repoName: string
-) {
+  username: Username,
+  repoName: ContestFindingsRepoName
+): Promise<{ handle: Username; issueNumber: IssueNumber }[]> {
   const teamHandles = await getUserTeams(username);
 
   // get list of submissions, filtering for access / match
@@ -187,8 +193,8 @@ async function getAvailableFindings(
 async function getWardenFindingsForContest(
   octokit: Octokit,
   allFindings: Finding[],
-  repoName: string,
-  handle: string
+  repoName: ContestFindingsRepoName,
+  handle: Username
 ): Promise<Finding[]> {
   const riskLabels = [
     "3 (High Risk)",
@@ -215,7 +221,7 @@ async function getWardenFindingsForContest(
           return riskLabels.includes(label.name);
         });
 
-        const riskLabelName = riskLabel?.name;
+        const riskLabelName = riskLabel?.name as RiskLabelName;
         if (riskLabelName) {
           const riskCode = getRiskCodeFromGithubLabel(riskLabelName);
           if (
