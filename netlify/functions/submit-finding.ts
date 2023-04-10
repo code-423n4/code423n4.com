@@ -24,7 +24,7 @@ import { getMarkdownReportForUser } from "../util/github-utils";
 import {
   updateTeamAddresses,
   sendConfirmationEmail,
-  getTeamEmails,
+  getGroupEmails,
 } from "../util/user-utils";
 import { isDangerousHandle } from "../util/validation-utils";
 
@@ -164,7 +164,7 @@ exports.handler = async (event) => {
 
     if (attributedTo !== user) {
       const team: TeamData = await checkTeamAuth(attributedTo, user);
-      const teamEmailAddresses = await getTeamEmails(team);
+      const teamEmailAddresses = await getGroupEmails(team.members);
       emailAddresses = emailAddresses.concat(teamEmailAddresses);
       const teamPolygonAddress =
         team.paymentAddresses &&
