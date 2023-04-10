@@ -223,19 +223,20 @@ export default function TeamRegistration({ data }) {
           )}
           {registrationWindowStatus === Status.closed && (
             <section className="register-bot__register register-bot__register--closed type__copy">
-              <h1 className="spacing-bottom__l">Bot Registration is Closed</h1>
+              <h1 className="spacing-bottom__l">Bot Registration is closed.</h1>
               <p>
                 The first registration window for Bot Races has now closed.{" "}
                 <br />
-                Keep your eye on our{" "}
+                The first Qualifier Race has ended. Keep your eye on our
+                Announcements channel in{" "}
                 <a
                   href="https://discord.gg/code4rena"
                   rel="noreferrer"
                   aria-label="Discord announcements channel (Opens in a new window)"
                 >
-                  announcements channel in Discord
+                  Discord
                 </a>{" "}
-                to learn when the next one will be.
+                to find out when the next one will be.
               </p>
             </section>
           )}
