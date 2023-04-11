@@ -8,9 +8,10 @@ import { WardenFieldOption } from "../../components/reporter/widgets/WardenField
 import { format, isAfter, isBefore } from "date-fns";
 import ProtectedSection from "../../components/ProtectedSection";
 
-// @todo: replace with correct start and end times
-const START = new Date("2023-04-12T20:00:00.000Z");
+// @todo: replace with real contest data
+const START = new Date("2023-04-10T20:00:00.000Z");
 const END = new Date("2023-04-12T21:00:00.000Z");
+const repo = "https://github.com/code-423n4/2023-04-frankencoin";
 
 enum Status {
   soon,
@@ -216,6 +217,20 @@ export default function TeamRegistration({ data }) {
               <ProtectedSection message="To register a bot for Bot Races, you need to be a registered warden, currently connected via wallet.">
                 <>
                   <h1>Register a Bot</h1>
+                  <div className="register-bot__repo-link">
+                    <h2 className="type__headline__xxs">
+                      Run your bot on this codebase:{" "}
+                    </h2>
+                    <a
+                      href={repo}
+                      target="_blank"
+                      rel="noreferrer"
+                      aria-label="Link to the 2023-04-frankencoin repo (Opens in a new window)"
+                    >
+                      2023-04-frankencoin
+                    </a>
+                  </div>
+
                   <BotRegistrationForm handles={handles} wardens={wardens} />
                 </>
               </ProtectedSection>

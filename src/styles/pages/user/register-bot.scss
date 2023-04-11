@@ -313,6 +313,13 @@ p.register-bot__timeline-time {
 // Registration Form
 // --------------------------------------------------
 
+.register-bot__repo-link {
+  margin: $spacing__l auto;
+  padding: $spacing__l $spacing__l;
+  border: 1px solid $color__n-60;
+  border-radius: $border-radius__m;
+}
+
 .register-bot__register {
   margin-top: $spacing__xl;
   padding-top: $spacing__l;
