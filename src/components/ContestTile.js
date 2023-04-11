@@ -23,7 +23,6 @@ const ContestTile = ({ contest, updateContestStatus, user, reduced }) => {
     status,
   } = contest;
   const t = getDates(start_time, end_time);
-
   const [canViewContest, setCanViewContest] = useState(false);
   const [contestStatusIndicator, setContestStatusIndicator] = useState(status);
 
