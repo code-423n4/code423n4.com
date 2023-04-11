@@ -1,0 +1,12 @@
+{
+  "handle": "TEST",
+  "crew": [
+    "CaptainMango"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0X0000000000000000000000000000000000000000"
+    }
+  ]
+}
