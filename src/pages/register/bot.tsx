@@ -216,7 +216,7 @@ export default function TeamRegistration({ data }) {
             <section className="register-bot__register register-bot__register--open">
               <ProtectedSection message="To register a bot for Bot Races, you need to be a registered warden, currently connected via wallet.">
                 <>
-                  <h1>Register a Bot</h1>
+                  <h1>Register your Bot</h1>
                   <div className="register-bot__repo-link">
                     <h2 className="type__headline__xxs">
                       Run your bot on this codebase:{" "}
