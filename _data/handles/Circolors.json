@@ -1,0 +1,19 @@
+{
+  "handle": "Circolors",
+  "members": [
+    "irreverent",
+    "McToady"
+  ],
+  "link": "https://twitter.com/CircolorsDAO",
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x4533d1F65906368ebfd61259dAee561DF3f3559D"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x4533d1F65906368ebfd61259dAee561DF3f3559D"
+    }
+  ],
+  "image": "./avatars/Circolors.jpeg"
+}
