@@ -9,7 +9,7 @@ import { format, isAfter, isBefore } from "date-fns";
 import ProtectedSection from "../../components/ProtectedSection";
 
 // @todo: replace with real contest data
-const START = new Date("2023-04-10T20:00:00.000Z");
+const START = new Date("2023-04-12T20:00:00.000Z");
 const END = new Date("2023-04-12T21:00:00.000Z");
 const repo = "https://github.com/code-423n4/2023-04-frankencoin";
 
