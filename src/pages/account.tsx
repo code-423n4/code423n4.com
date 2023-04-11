@@ -16,9 +16,6 @@ import { Input } from "../components/Input";
 import ProtectedPage from "../components/ProtectedPage";
 import WardenDetails from "../components/WardenDetails";
 
-// styles
-import * as styles from "../styles/Main.module.scss";
-
 const initialState = {
   discordUsername: "",
   gitHubUsername: "",
@@ -262,15 +259,15 @@ export default function AccountManagementPage() {
   };
 
   return (
-    <ProtectedPage pageTitle="My Account | Code 423n4">
+    <ProtectedPage pageTitle="My Account | Code4rena">
       {isInitializing ? (
         // @todo: style a loading state
         <div>LOADING...</div>
       ) : (
-        <div className="wrapper-main">
+        <div className="limited-width">
           <h1 className="page-header">Manage Account</h1>
-          <form className={styles.Form__Form}>
-            <h2 className={styles.Form__Heading2}>Payment Information</h2>
+          <form>
+            <h2>Payment Information</h2>
             <Input
               label="Polygon Address"
               required={true}
@@ -292,12 +289,12 @@ export default function AccountManagementPage() {
               handleSaveInputValue={handleSavePaymentAddress}
               maxLength={42}
             />
-            <div className={styles.Form__DividingLine}></div>
-            <h2 className={styles.Form__Heading2}>User Information</h2>
+            <hr />
+            <h2>User Information</h2>
             {authAddresses.length > 0 && (
               <>
-                <span className={styles.Input__Label}>Login Addresses</span>
-                <ul className={styles.Form__List}>
+                <span>Login Addresses</span>
+                <ul>
                   {authAddresses.map((address) => (
                     <li>{address}</li>
                   ))}
@@ -331,7 +328,7 @@ export default function AccountManagementPage() {
               toggleEdit={true}
               handleSaveInputValue={handleSaveUserInfo}
             />
-            <div className={styles.Form__ButtonsWrapper}>
+            <div>
               <button
                 type="button"
                 className="button cta-button"
@@ -340,10 +337,10 @@ export default function AccountManagementPage() {
                 Reset Password
               </button>
             </div>
-            <div className={styles.Form__DividingLine}></div>
-            <h2 className={styles.Form__Heading2}>Team Information</h2>
+            <hr />
+            <h2>Team Information</h2>
             {(currentUser.teams || []).length === 0 ? (
-              "You are not a member of any teams"
+              <p>You are not a member of any teams</p>
             ) : (
               <>
                 <p>
@@ -361,7 +358,6 @@ export default function AccountManagementPage() {
                           username={team.username}
                           image={team.image}
                           avatarSize="40px"
-                          className={styles.Input__Label}
                         />
                       }
                       buttons={
@@ -369,13 +365,11 @@ export default function AccountManagementPage() {
                           <Link
                             to={`/manage-team?team=${team.username}`}
                             state={team}
-                            className={styles.Input__IconButton}
                           >
                             <img src="/images/pencil.png" alt="edit" />
                           </Link>
                           <button
                             type="button"
-                            className={styles.Input__IconButton}
                             onClick={() => handleDelete(team)}
                           >
                             <img src="/images/trash-can.png" alt="delete" />
@@ -384,8 +378,8 @@ export default function AccountManagementPage() {
                       }
                     >
                       <>
-                        <span className={styles.Input__Label}>Members:</span>
-                        <ul className={styles.Form__List}>
+                        <h3>Members:</h3>
+                        <ul>
                           {team.members.map((member) => (
                             <li>{member}</li>
                           ))}
@@ -393,10 +387,8 @@ export default function AccountManagementPage() {
                         {team.ethereumAddress ||
                           (team.polygonAddress && (
                             <>
-                              <span className={styles.Input__Label}>
-                                Payment addresses:
-                              </span>
-                              <ul className={styles.Form__List}>
+                              <h3>Payment addresses:</h3>
+                              <ul>
                                 {team.polygonAddress && (
                                   <li>
                                     polygon:{" "}
@@ -422,9 +414,9 @@ export default function AccountManagementPage() {
                 </div>
               </>
             )}
-            <div className={styles.Form__ButtonsWrapper}>
+            <div>
               <Link
-                to="/register-team"
+                to="/register/team"
                 className="button cta-button centered secondary"
               >
                 Create a new team

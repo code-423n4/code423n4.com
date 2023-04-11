@@ -8,6 +8,7 @@ export default function NewsletterSignup({ data, location }) {
     <DefaultLayout
       pageDescription="Our newsletter is a great way to stay up to date on the latest news from the Code4rena community."
       pageTitle="Newsletter"
+      bodyClass="newsletter-signup"
     >
       <Helmet>
         <script type="text/javascript">
@@ -30,7 +31,7 @@ export default function NewsletterSignup({ data, location }) {
       </Helmet>
       <div
         id="63d9bc64372e7aca6cfb8b75"
-        className={styles.Form__Form + " newsletter-form"}
+        className={styles.Form__Form + " newsletter-form limited-width"}
       >
         <div
           id="63d9bc64372e7aca6cfb8b75-form"

@@ -1,18 +1,27 @@
+import {
+  DateString,
+  FindingBody,
+  IssueState,
+  ReportId,
+  Username,
+  WalletAddress,
+} from "./shared";
+
 export interface Finding {
   title: string;
-  body: string;
+  body: FindingBody;
   labels: {
     name: string;
     color: string;
   }[];
-  risk: string;
-  state: "OPEN" | "CLOSED";
-  createdAt: string;
-  updatedAt: string;
+  risk: string; // @todo add enum for risk
+  state: IssueState;
+  createdAt: DateString;
+  updatedAt: DateString;
   issueNumber: number;
   handle: string;
   isMitigated?: boolean;
-  mitigationOf?: string;
+  mitigationOf?: ReportId;
 }
 
 export interface FindingEditRequest {
@@ -20,50 +29,57 @@ export interface FindingEditRequest {
   contest: number;
   emailAddresses: string[];
   attributedTo: {
-    newValue: string;
-    oldValue: string;
+    newValue: Username;
+    oldValue: Username;
     // @todo: remove this once all teams have a saved polygon address
-    address?: string;
+    address?: WalletAddress;
   };
   risk: {
     newValue: string;
     oldValue: string;
   };
   title?: string;
-  body?: string;
+  body?: FindingBody;
   mitigationOf?: {
-    newValue: string;
-    oldValue: string;
+    newValue: ReportId;
+    oldValue: ReportId;
   };
   isMitigated?: {
     newValue: boolean;
     oldValue: boolean;
-  }
+  };
 }
 
-export interface FindingsResponse {
+export interface WardenFindingsForContest {
   user: Finding[];
-  teams: Record<string, Finding[]>;
+  teams: {
+    [teamName: string]: Finding[];
+  };
+}
+
+export interface TeamFindings {
+  findings: Finding[];
+  teamName: string;
 }
 
 export interface FindingCreateRequest {
-  user: string;
+  user: Username;
   contest: string;
   sponsor: string;
   repo: string;
   emailAddresses: string[];
-  attributedTo: string;
+  attributedTo: Username;
   risk: string;
   title: string;
-  body: string;
+  body: FindingBody;
   labels: string[];
-  address?: string;
-  mitigationOf?: string;
+  address?: WalletAddress;
+  mitigationOf?: ReportId;
   isMitigated?: boolean;
 }
 
 export interface FindingDeleteRequest {
-  attributedTo: string;
+  attributedTo: Username;
   risk: string;
   emailAddresses: string[];
 }

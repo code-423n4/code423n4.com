@@ -7,10 +7,10 @@ import { createOrUpdateTextFile } from "@octokit/plugin-create-or-update-text-fi
 // types
 import { Contest } from "../../types/contest";
 import {
-  Finding,
   FindingDeleteRequest,
   FindingEditRequest,
-  FindingsResponse,
+  TeamFindings,
+  WardenFindingsForContest,
 } from "../../types/finding";
 import { TeamData } from "../../types/user";
 
@@ -24,13 +24,13 @@ import {
 import {
   getAvailableFindings,
   getRepoName,
-  wardenFindingsForContest,
+  getWardenFindingsForContest,
 } from "../util/github-utils";
 import {
   getUserTeams,
   updateTeamAddresses,
   sendConfirmationEmail,
-  getTeamEmails,
+  getGroupEmails,
 } from "../util/user-utils";
 
 // config
@@ -55,7 +55,7 @@ async function getFinding(
   let finding;
   if (submission_files.length === 1) {
     const findings = (
-      await wardenFindingsForContest(
+      await getWardenFindingsForContest(
         client,
         submission_files[0].handle,
         contest
@@ -90,6 +90,39 @@ async function getFinding(
   };
 }
 
+async function getTeamsFindings(
+  teamNames: string[],
+  octokit: Octokit,
+  contest: Contest,
+  wardenFindingsForContest: WardenFindingsForContest
+): Promise<void[]> {
+  const promises: Promise<void>[] = [];
+  for (const teamName of teamNames) {
+    promises.push(
+      getSingleTeamFindings(teamName, octokit, contest).then((teamFindings) => {
+        wardenFindingsForContest.teams[teamFindings.teamName] =
+          teamFindings.findings;
+      })
+    );
+  }
+  return await Promise.all(promises);
+}
+
+async function getSingleTeamFindings(
+  teamName: string,
+  octokit: Octokit,
+  contest: Contest
+): Promise<TeamFindings> {
+  return getWardenFindingsForContest(octokit, teamName, contest).then(
+    (teamFindings) => {
+      return {
+        teamName: teamName,
+        findings: teamFindings,
+      };
+    }
+  );
+}
+
 async function getFindings(
   username: string,
   contest: Contest,
@@ -97,37 +130,45 @@ async function getFindings(
 ): Promise<Response> {
   const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
 
-  const wardenFindings: Finding[] = await wardenFindingsForContest(
-    octokit,
-    username,
-    contest
-  );
-
-  const res: FindingsResponse = {
-    user: wardenFindings,
+  const wardenFindingsForContest: WardenFindingsForContest = {
+    user: [],
     teams: {},
   };
 
+  const promises: Promise<void | void[]>[] = [];
   if (includeTeams) {
-    const teamHandles = await getUserTeams(username);
-
-    for (const teamHandle of teamHandles) {
-      const teamFindings: Finding[] = await wardenFindingsForContest(
-        octokit,
-        teamHandle,
-        contest
-      );
-      res.teams[teamHandle] = teamFindings;
-    }
+    const teamNames = await getUserTeams(username);
+    promises.push(
+      getTeamsFindings(teamNames, octokit, contest, wardenFindingsForContest)
+    );
   }
-
-  return {
-    statusCode: 200,
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(res),
-  };
+  promises.push(
+    getWardenFindingsForContest(octokit, username, contest).then(
+      (wardenFindings) => {
+        wardenFindingsForContest.user = wardenFindings;
+      }
+    )
+  );
+  try {
+    await Promise.all(promises);
+    return {
+      statusCode: 200,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(wardenFindingsForContest),
+    };
+  } catch (error) {
+    return {
+      statusCode: error.status || 500,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        error: error.message || "Failed to fetch findings",
+      }),
+    };
+  }
 }
 
 async function handleAttributionChange(
@@ -210,32 +251,36 @@ async function editFinding(
 ): Promise<void> {
   const CustOcto = Octokit.plugin(createOrUpdateTextFile);
   const client = new CustOcto({ auth: process.env.GITHUB_TOKEN });
-  if(data.mitigationOf?.oldValue !== data.mitigationOf?.newValue){
+  if (data.mitigationOf?.oldValue !== data.mitigationOf?.newValue) {
     throw {
       message: `You cannot change the report id ${data.mitigationOf?.oldValue} for this mitigation issue.`,
     };
   }
- 
+
   //is user marked issue as mitigation confirmed but then changed their minds remove the mitigation confirmed label and add new risk label and body
   //mitigation confirmed and no risk label exists
-  let oldRiskCode = '';
-  let newRiskCode = '';
-  if(!data.mitigationOf){
+  let oldRiskCode = "";
+  let newRiskCode = "";
+  if (!data.mitigationOf) {
     oldRiskCode = getRiskCodeFromGithubLabel(data.risk.oldValue);
     newRiskCode = getRiskCodeFromGithubLabel(data.risk.newValue);
-  }else{
-    oldRiskCode = data.risk.oldValue ? getRiskCodeFromGithubLabel(data.risk.oldValue) : '';
-    newRiskCode = data.risk.newValue ? getRiskCodeFromGithubLabel(data.risk.newValue) : '';
+  } else {
+    oldRiskCode = data.risk.oldValue
+      ? getRiskCodeFromGithubLabel(data.risk.oldValue)
+      : "";
+    newRiskCode = data.risk.newValue
+      ? getRiskCodeFromGithubLabel(data.risk.newValue)
+      : "";
   }
   // don't allow users to change risk to or from QA or gas
- 
+
   const isQaOrGasSubmission = Boolean(
     newRiskCode === "Q" ||
       newRiskCode === "G" ||
       oldRiskCode === "Q" ||
       oldRiskCode === "G"
   );
-  
+
   if (oldRiskCode !== newRiskCode) {
     if (oldRiskCode === "Q" || oldRiskCode === "G") {
       throw {
@@ -273,7 +318,7 @@ async function editFinding(
       data.attributedTo.newValue,
       username
     );
-    teamEmails = await getTeamEmails(team);
+    teamEmails = await getGroupEmails(team.members);
   }
 
   const owner = process.env.GITHUB_REPO_OWNER!;
@@ -318,13 +363,19 @@ async function editFinding(
     edited = true;
   }
   // Only handle risk changes between Med and High
-  if (!isQaOrGasSubmission && data.risk.oldValue !== data.risk.newValue && !data.isMitigated?.newValue) {
+  if (
+    !isQaOrGasSubmission &&
+    data.risk.oldValue !== data.risk.newValue &&
+    !data.isMitigated?.newValue
+  ) {
     //if a mitigation was originally confirmed
     let removeMitigationConfirmedLabel = false;
-    if(data.mitigationOf && data.risk.oldValue === ''){
+    if (data.mitigationOf && data.risk.oldValue === "") {
       removeMitigationConfirmedLabel = true;
     }
-    const labelNameToBeRemoved = !removeMitigationConfirmedLabel ? data.risk.oldValue : 'mitigation-confirmed'
+    const labelNameToBeRemoved = !removeMitigationConfirmedLabel
+      ? data.risk.oldValue
+      : "mitigation-confirmed";
     try {
       await client.request(
         "DELETE /repos/{owner}/{repo}/issues/{issue_number}/labels/{name}",
@@ -367,7 +418,11 @@ async function editFinding(
       `Risk changed from ${data.risk.oldValue} to ${data.risk.newValue}\n\n` +
       emailBody;
     edited = true;
-  }else if(!isQaOrGasSubmission && data.isMitigated?.oldValue !== data.isMitigated?.newValue && data.isMitigated?.newValue){
+  } else if (
+    !isQaOrGasSubmission &&
+    data.isMitigated?.oldValue !== data.isMitigated?.newValue &&
+    data.isMitigated?.newValue
+  ) {
     try {
       await client.request(
         "DELETE /repos/{owner}/{repo}/issues/{issue_number}/labels/{name}",
@@ -387,7 +442,7 @@ async function editFinding(
       };
     }
 
-const migationConfirmedLabe = 'mitigation-confirmed'
+    const migationConfirmedLabe = "mitigation-confirmed";
     try {
       await client.request(
         "POST /repos/{owner}/{repo}/issues/{issue_number}/labels",
@@ -427,7 +482,7 @@ const migationConfirmedLabe = 'mitigation-confirmed'
       // @todo: remove this once we can be sure all reports are saved as md files
       const markdownPath = `https://github.com/${owner}/${repoName}/blob/main/data/${data.attributedTo.newValue}-${newRiskCode}.md`;
       simpleFields.body = `See the markdown file with the details of this report [here](${markdownPath}).`;
-    }else {
+    } else {
       simpleFields.body = data.body;
     }
     emailBody = `Report contents changed: ${data.body}\n\n` + emailBody;
@@ -624,7 +679,7 @@ const handler: Handler = async (event: Event): Promise<Response> => {
 
         if (attributedTo !== username) {
           const team: TeamData = await checkTeamAuth(attributedTo, username);
-          teamEmails = await getTeamEmails(team);
+          teamEmails = await getGroupEmails(team.members);
         }
         await deleteFinding(
           username,
