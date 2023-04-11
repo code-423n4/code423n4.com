@@ -6,7 +6,6 @@ import FormField from "../components/reporter/widgets/FormField";
 import Form from "../components/form/Form";
 import Widgets from "../components/reporter/widgets/Widgets";
 
-import * as widgetStyles from "../components/reporter/widgets/Widgets.module.scss";
 import useUser from "../hooks/UserContext";
 import { useMoralis } from "react-moralis";
 import { Input } from "../components/Input";
@@ -146,18 +145,18 @@ function ContactUs() {
   return (
     <DefaultLayout
       pageDescription="Need help with something? Contact us here."
-      pageTitle="Help | Code 423n4"
+      pageTitle="Help | Code4rena"
     >
-      <Form
-        title="How can we help?"
-        successMessage="Your request has been submitted."
-        submitButtonText="Submit"
-        onSubmit={handleSubmit}
-        successButtonText="Get help with something else"
-        resetForm={handleReset}
-        validator={validateFields}
-      >
-        <fieldset className={widgetStyles.Fields}>
+      <section className="limited-width form">
+        <Form
+          title="How can we help?"
+          successMessage="Your request has been submitted."
+          submitButtonText="Submit"
+          onSubmit={handleSubmit}
+          successButtonText="Get help with something else"
+          resetForm={handleReset}
+          validator={validateFields}
+        >
           {!currentUser.isLoggedIn && (
             <FormField
               name="contactInfo"
@@ -191,17 +190,17 @@ function ContactUs() {
             fieldState={fieldState}
             showValidationErrors={hasValidationErrors}
           />
-        </fieldset>
-        {!currentUser.isLoggedIn && (
-          <div className="captcha-container">
-            <HCaptcha
-              sitekey={process.env.GATSBY_HCAPTCHA_SITE_KEY!}
-              theme="dark"
-              onVerify={handleCaptchaVerification}
-            />
-          </div>
-        )}
-      </Form>
+          {!currentUser.isLoggedIn && (
+            <div className="captcha-container">
+              <HCaptcha
+                sitekey={process.env.GATSBY_HCAPTCHA_SITE_KEY!}
+                theme="dark"
+                onVerify={handleCaptchaVerification}
+              />
+            </div>
+          )}
+        </Form>
+      </section>
     </DefaultLayout>
   );
 }

@@ -6,97 +6,11 @@ import fetch from "node-fetch";
 import path from "path";
 import webpack from "webpack";
 import SchemaCustomization from "./schema";
-// Notion
-import { Client } from "@notionhq/client";
-const { token, notionToken, notionContestDb } = require("./netlify/_config");
-const notion = new Client({ auth: notionToken });
-const getContestData = async () => {
-  try {
-    const pages = [];
-    let cursor = undefined;
-    //cursor is to handle pagination in notion query
-    while (true) {
-      const { results, next_cursor } = await notion.databases.query({
-        database_id: notionContestDb,
-        start_cursor: cursor,
-        filter: {
-          and: [
-            {
-              property: "ContestID",
-              number: {
-                is_not_empty: true,
-              },
-            },
-            {
-              property: "Status",
-              select: {
-                does_not_equal: "Lost deal",
-              },
-            },
-            {
-              property: "Status",
-              select: {
-                does_not_equal: "Possible",
-              },
-            },
-          ],
-        },
-      });
-      pages.push(...results);
-      if (!next_cursor) {
-        break;
-      }
-      cursor = next_cursor;
-    }
-    const statusObject = pages.map((page) => {
-      if (
-        page.properties.Status.select.name !== "Lost deal" ||
-        page.properties.Status.select.name !== "Possible" ||
-        page.properties.Status.select.name ||
-        page.properties.ContestID.number
-      ) {
-        if (page.properties["Classified?"].checkbox === false) {
-          return {
-            contestId: page.properties.ContestID.number || null,
-            status: page.properties.Status.select.name || null,
-            codeAccess: "public",
-          };
-        } else if (
-          page.properties["Code access"].select &&
-          page.properties["Code access"].select.name.trim() === "Certified only"
-        ) {
-          return {
-            contestId: page.properties.ContestID.number || null,
-            status: page.properties.Status.select.name || null,
-            codeAccess: "certified",
-          };
-        } else if (
-          page.properties["Code access"].select &&
-          page.properties["Code access"].select.name.trim() ===
-            "Public (default)"
-        ) {
-          return {
-            contestId: page.properties.ContestID.number || null,
-            status: page.properties.Status.select.name || null,
-            codeAccess: "public",
-          };
-        } else {
-          return {
-            contestId: page.properties.ContestID.number || null,
-            status: page.properties.Status.select.name || null,
-            codeAccess: null,
-          };
-        }
-      }
-    });
-    return statusObject;
-  } catch (err) {
-    return null;
-  }
-};
+import { getApiContestData } from "./netlify/util/getContestsData";
+const { token } = require("./netlify/_config");
 
 const privateContestMessage = dedent`
-# Contest details are not available. Why not?
+## Contest details are not available. Why not?
 
 The contest is limited to specific participants. Most Code4rena contests are open and public, but some have special requirements. In those cases, the code and contest details remain private (at least for now).
 
@@ -139,7 +53,6 @@ function contestSubmissionPermalink(contestNode) {
 function getRepoName(contestNode) {
   const regex = "([^/]+$)";
   const url = contestNode.repo;
-
   const result = url.match(regex);
   const repoName = result[0];
   return repoName;
@@ -236,6 +149,14 @@ exports.onCreateNode = async ({ node, getNode, actions }) => {
     });
   }
 
+  if (node.internal.type === `ReportsJson`) {
+    createNodeField({
+      node,
+      name: `slug`,
+      value: node.circa.slug,
+    });
+  }
+
   if (node.internal.type === `ContestsCsv`) {
     createNodeField({
       node,
@@ -262,42 +183,52 @@ exports.onCreateNode = async ({ node, getNode, actions }) => {
       name: `artPath`,
       value: socialImageUrl,
     });
+
+    createNodeField({
+      node,
+      name: "status",
+      value: node.status,
+    });
+    createNodeField({
+      node,
+      name: "codeAccess",
+      value: node.codeAccess,
+    });
+    createNodeField({
+      node,
+      name: "type",
+      value: node.type,
+    });
   }
 };
 
-exports.sourceNodes = async ({ actions, getNodes }) => {
-  const { createNodeField } = actions;
-  const nodes = await getNodes();
-  const contestStatusData = await getContestData();
-
-  nodes.forEach((node, index) => {
-    if (node.internal.type === `ContestsCsv`) {
-      const dataForCurrentContest = contestStatusData.filter(
-        (element) => element.contestId === node.contestid
-      );
-      createNodeField({
-        node,
-        name: `status`,
-        value:
-          dataForCurrentContest.length > 0
-            ? dataForCurrentContest[0].status
-            : undefined,
-      });
-      createNodeField({
-        node,
-        name: `codeAccess`,
-        value:
-          dataForCurrentContest.length > 0
-            ? dataForCurrentContest[0].codeAccess
-            : undefined,
-      });
-    }
+exports.sourceNodes = async ({
+  actions,
+  createContentDigest,
+  createNodeId,
+}) => {
+  const { createNode } = actions;
+  const apiContestsData = await getApiContestData();
+  apiContestsData.forEach((contest) => {
+    const newNode = createNode({
+      ...contest,
+      contestid: contest.contest_id,
+      findingsRepo: contest.findings_repo,
+      amount: contest.formatted_amount,
+      id: createNodeId(`ContestsCsv-${contest.contest_id}`),
+      parent: null,
+      children: [],
+      internal: {
+        type: "ContestsCsv",
+        contentDigest: createContentDigest(contest),
+      },
+    });
   });
+  return;
 };
 
 exports.createPages = async ({ graphql, actions }) => {
   const { createPage } = actions;
-
   const contests = await graphql(queries.contests);
   const formTemplate = path.resolve("./src/templates/ReportForm.tsx");
   const contestTemplate = path.resolve("./src/templates/ContestLayout.tsx");
@@ -322,7 +253,7 @@ exports.createPages = async ({ graphql, actions }) => {
   });
 };
 
-exports.onCreateWebpackConfig = ({ actions }) => {
+exports.onCreateWebpackConfig = ({ actions, stage, getConfig }) => {
   actions.setWebpackConfig({
     plugins: [
       new webpack.IgnorePlugin({
