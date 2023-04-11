@@ -1,0 +1,14 @@
+{
+  "handle": "dddd",
+  "members": [
+    "say-cheese",
+    "MangoBurger"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x0000000000000000000000000000000000000000"
+    }
+  ],
+  "image": "./avatars/dddd.png"
+}
