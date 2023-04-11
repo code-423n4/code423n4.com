@@ -8,9 +8,10 @@ import { WardenFieldOption } from "../../components/reporter/widgets/WardenField
 import { format, isAfter, isBefore } from "date-fns";
 import ProtectedSection from "../../components/ProtectedSection";
 
-// @todo: replace with correct start and end times
-const START = new Date("2023-03-16T20:43:00.000Z");
-const END = new Date("2023-03-16T20:44:30.000Z");
+// @todo: replace with real contest data
+const START = new Date("2023-04-12T20:00:00.000Z");
+const END = new Date("2023-04-12T21:00:00.000Z");
+const repo = "https://github.com/code-423n4/2023-04-frankencoin";
 
 enum Status {
   soon,
@@ -209,46 +210,58 @@ export default function TeamRegistration({ data }) {
           <h3 className="type__headline__m">
             Be sure to give it a winning name!
           </h3>
-          <p className="register-bot__coming-soon">
-            Qualifier Race coming April 12
-          </p>
         </section>
         <div className="limited-width register-bot__register-wrapper">
           {registrationWindowStatus === Status.open && (
             <section className="register-bot__register register-bot__register--open">
               <ProtectedSection message="To register a bot for Bot Races, you need to be a registered warden, currently connected via wallet.">
                 <>
-                  <h1>Register a Bot</h1>
+                  <h1>Register your Bot</h1>
+                  <div className="register-bot__repo-link">
+                    <h2 className="type__headline__xxs">
+                      Run your bot on this codebase:{" "}
+                    </h2>
+                    <a
+                      href={repo}
+                      target="_blank"
+                      rel="noreferrer"
+                      aria-label="Link to the 2023-04-frankencoin repo (Opens in a new window)"
+                    >
+                      2023-04-frankencoin
+                    </a>
+                  </div>
+
                   <BotRegistrationForm handles={handles} wardens={wardens} />
                 </>
               </ProtectedSection>
             </section>
           )}
-          {/* {registrationWindowStatus === Status.closed && (
+          {registrationWindowStatus === Status.closed && (
             <section className="register-bot__register register-bot__register--closed type__copy">
-              <h1 className="spacing-bottom__l">Bot Registration is Closed</h1>
+              <h1 className="spacing-bottom__l">Bot Registration is closed.</h1>
               <p>
                 The first registration window for Bot Races has now closed.{" "}
                 <br />
-                Keep your eye on our{" "}
+                The first Qualifier Race has ended. Keep your eye on our
+                Announcements channel in{" "}
                 <a
-                  href=""
+                  href="https://discord.gg/code4rena"
                   rel="noreferrer"
                   aria-label="Discord announcements channel (Opens in a new window)"
                 >
-                  announcements channel in Discord
+                  Discord
                 </a>{" "}
-                to learn when the next one will be.
+                to find out when the next one will be.
               </p>
             </section>
-          )} */}
+          )}
           {registrationWindowStatus === Status.soon && (
             <section className="register-bot__register register-bot__register--soon type__copy">
               <h1>Bot Registration Coming Soon...</h1>
               <p>
                 The first registration window for Bot Races will open for one
-                hour on {format(START, "d MMMM")} from {format(START, "h:mm")}{" "}
-                to {format(END, "h:mm a")}
+                hour on {format(START, "d MMMM")} from {format(START, "h:mm a")}{" "}
+                to {format(END, "h:mm a O")}
               </p>
             </section>
           )}
