@@ -9,7 +9,7 @@ import { format, isAfter, isBefore } from "date-fns";
 import ProtectedSection from "../../components/ProtectedSection";
 
 // @todo: automate this based on contest data for future bot races
-const START = new Date("2023-04-12T20:00:00.000Z");
+const START = new Date("2023-04-10T20:00:00.000Z");
 const END = new Date("2023-04-12T21:00:00.000Z");
 const REPO = "https://github.com/code-423n4/2023-04-frankencoin";
 
@@ -217,7 +217,7 @@ export default function TeamRegistration({ data }) {
                   <div className="register-bot__repo-link-wrapper">
                     <img
                       src="/images/br-icon-report.svg"
-                      alt="Icon of a round, floating robot"
+                      alt="Icon of a wolf-like robot head being fed lots of paper"
                     />
                     <div className="register-bot__repo-link">
                       <h2 className="type__headline__xxs">
