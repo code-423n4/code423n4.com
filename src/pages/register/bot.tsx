@@ -8,10 +8,10 @@ import { WardenFieldOption } from "../../components/reporter/widgets/WardenField
 import { format, isAfter, isBefore } from "date-fns";
 import ProtectedSection from "../../components/ProtectedSection";
 
-// @todo: replace with real contest data
+// @todo: automate this based on contest data for future bot races
 const START = new Date("2023-04-12T20:00:00.000Z");
 const END = new Date("2023-04-12T21:00:00.000Z");
-const repo = "https://github.com/code-423n4/2023-04-frankencoin";
+const REPO = "https://github.com/code-423n4/2023-04-frankencoin";
 
 enum Status {
   soon,
@@ -61,10 +61,7 @@ export default function TeamRegistration({ data }) {
   });
 
   return (
-    <DefaultLayout
-      pageTitle="Code4rena Bot Races | Code4rena"
-      hideConnectWalletDropdown={true}
-    >
+    <DefaultLayout pageTitle="Code4rena Bot Races | Code4rena">
       <div className="register-bot">
         {/* Hero */}
         <section className="register-bot__hero type__copy">
@@ -217,18 +214,24 @@ export default function TeamRegistration({ data }) {
               <ProtectedSection message="To register a bot for Bot Races, you need to be a registered warden, currently connected via wallet.">
                 <>
                   <h1>Register your Bot</h1>
-                  <div className="register-bot__repo-link">
-                    <h2 className="type__headline__xxs">
-                      Run your bot on this codebase:{" "}
-                    </h2>
-                    <a
-                      href={repo}
-                      target="_blank"
-                      rel="noreferrer"
-                      aria-label="Link to the 2023-04-frankencoin repo (Opens in a new window)"
-                    >
-                      2023-04-frankencoin
-                    </a>
+                  <div className="register-bot__repo-link-wrapper">
+                    <img
+                      src="/images/br-icon-report.svg"
+                      alt="Icon of a round, floating robot"
+                    />
+                    <div className="register-bot__repo-link">
+                      <h2 className="type__headline__xxs">
+                        Feed this codebase to your bot:{" "}
+                      </h2>
+                      <a
+                        href={REPO}
+                        target="_blank"
+                        rel="noreferrer"
+                        aria-label="Link to the 2023-04-frankencoin repo (Opens in a new window)"
+                      >
+                        2023-04-frankencoin
+                      </a>
+                    </div>
                   </div>
 
                   <BotRegistrationForm handles={handles} wardens={wardens} />
@@ -277,6 +280,13 @@ export const query = graphql`
       edges {
         node {
           handle
+          image {
+            childImageSharp {
+              resize(width: 80) {
+                src
+              }
+            }
+          }
         }
       }
     }
