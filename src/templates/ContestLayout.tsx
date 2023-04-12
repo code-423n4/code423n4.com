@@ -193,6 +193,19 @@ const ContestLayout = ({ data }) => {
                 <div>
                   <h1 className="type__headline__xs">{title}</h1>
                   <p>{details}</p>
+                  {contestid === 231 && (
+                    <p>
+                      <span className="competition-tag--blurple">
+                        Bot Race Qualifier
+                      </span>
+                      <Link
+                        to="/register/bot"
+                        className="button button--text-link"
+                      >
+                        Register your bot
+                      </Link>
+                    </p>
+                  )}
                 </div>
               </div>
               <div className="contest-page__button-wrapper">
