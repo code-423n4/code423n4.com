@@ -1,26 +1,58 @@
-Moralis.Cloud.beforeSave(Moralis.User, async (req) => {
-  const c4Username = await req.object.get("c4Username");
-  if (!req.original) {
-    // expect username to be undefined when user is first created
-    if (c4Username !== undefined) {
-      throw "users must register through the code4rena website";
-    }
-  } else {
-    const previousUsername = await req.original.get("c4Username");
-    // if updated username is not different from previous username, skip validation
-    if (previousUsername !== c4Username) {
-      if (previousUsername && !c4Username) {
-        throw "You cannot delete your username";
-      }
+const logger = Moralis.Cloud.getLogger();
 
-      const query = new Moralis.Query("_User");
-      query.equalTo("c4Username", c4Username);
-      const result = await query.find({ useMasterKey: true });
+Moralis.Cloud.beforeDelete(Moralis.User, async (req) => {
+  const r = await req;
 
-      if (result.length > 0) {
-        throw `There is already a registered user with the username ${c4Username}`;
-      }
-    }
+  const ethAddressQuery = new Moralis.Query("_EthAddress");
+  ethAddressQuery.equalTo("user", r.object);
+  const addresses = await ethAddressQuery.find({ useMasterKey: true });
+
+  for (let addr of addresses) {
+    await addr
+      .destroy({ useMasterKey: true })
+      .then((res) => {
+        logger.info("Deleted user _EthAddress: " + JSON.stringify(res));
+      })
+      .catch((error) => {
+        logger.error(
+          "Error deleting user _EthAddress: " + JSON.stringify(error)
+        );
+        throw error;
+      });
+  }
+
+  const sessionQuery = new Moralis.Query("_Session");
+  sessionQuery.equalTo("user", r.object);
+  const sessions = await sessionQuery.find({ useMasterKey: true });
+
+  for (let sess of sessions) {
+    await sess
+      .destroy({ useMasterKey: true })
+      .then((res) => {
+        logger.info("Deleted user _Session: " + JSON.stringify(res));
+      })
+      .catch((error) => {
+        logger.error("Error deleting user _Session: " + JSON.stringify(error));
+        throw error;
+      });
+  }
+
+  const paymentAddressQuery = new Moralis.Query("PaymentAddress");
+  paymentAddressQuery.equalTo("user", r.object);
+  const payments = await paymentAddressQuery.find({ useMasterKey: true });
+
+  for (let payment of payments) {
+    await payment
+      .destroy({ useMasterKey: true })
+      .then((res) => {
+        logger.info("Deleted user PaymentAddress: " + JSON.stringify(res));
+      })
+      .catch((error) => {
+        logger.error(
+          "Error deleting user PaymentAddress: " + JSON.stringify(error)
+        );
+        throw error;
+      });
   }
 });
 
@@ -69,14 +101,6 @@ Moralis.Cloud.define("checkHandleAgainstPreviousSubmissions", async (req) => {
   }
 });
 
-Moralis.Cloud.define("getWardensWithSubmissions", async (req) => {
-  const query = new Moralis.Query("AddressesFromPreviousSubmissions");
-  query.limit(1000);
-  query.select("handle");
-  const allUsers = await query.find({ useMasterKey: true });
-  return allUsers.map((user) => user.attributes.handle);
-});
-
 Moralis.Cloud.define("confirmUser", async (req) => {
   const { sessionToken, username, moralisId } = req.params;
 
@@ -84,7 +108,7 @@ Moralis.Cloud.define("confirmUser", async (req) => {
   sessionQuery.equalTo("sessionToken", sessionToken);
 
   const userQuery = new Moralis.Query("_User");
-  userQuery.equalTo("c4Username", username);
+  userQuery.equalTo("username", username);
   userQuery.equalTo("objectId", moralisId);
 
   sessionQuery.matchesQuery("user", userQuery);
@@ -92,18 +116,40 @@ Moralis.Cloud.define("confirmUser", async (req) => {
   return result.length > 0;
 });
 
-Moralis.Cloud.define("markUserConfirmed", async (req) => {
-  const address = req.user.attributes.ethAddress;
-  const handle = req.params.handle;
-  const query = new Moralis.Query("AddressesFromPreviousSubmissions");
-  query.equalTo("address", address);
-  query.equalTo("handle", handle);
-
-  const user = await query.find({ useMasterKey: true });
-  if (!user) {
-    throw "Handle and address do not match";
+Moralis.Cloud.define("resetPassword", async (req) => {
+  const { email } = req.user.attributes;
+  if (!email) {
+    throw "You must have an email address saved to reset your password";
   }
+  Moralis.User.requestPasswordReset(email);
+});
 
-  user.set("confirmed", true);
-  user.save(null, { useMasterKey: true });
+Moralis.Cloud.define("addPaymentAddress", async (req) => {
+  const chain = req.params.chain;
+  const address = req.params.address;
+  const PaymentAddress = Moralis.Object.extend("PaymentAddress");
+  const newAddress = new PaymentAddress();
+  newAddress.setACL(new Moralis.ACL(req.user));
+  await newAddress.save(
+    { chain, address, user: req.user },
+    { useMasterKey: true }
+  );
+  return newAddress;
+});
+
+// Ensure each user only has one payment address for each chain
+Moralis.Cloud.beforeSave("PaymentAddress", async (req) => {
+  if (!req.original) {
+    const user = req.object.get("user");
+    const chain = await req.object.get("chain");
+
+    const query = new Moralis.Query("PaymentAddress");
+    query.equalTo("chain", chain);
+    query.equalTo("user", user);
+    const results = await query.find({ useMasterKey: true });
+
+    if (results.length > 0) {
+      throw `User already has a ${chain} payment address saved`;
+    }
+  }
 });

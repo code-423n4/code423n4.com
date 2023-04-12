@@ -195,10 +195,12 @@ async function getSubmittedFindingsFromFolder(
           })
           .map((f) => {
             const [key, ext] = f.name.split(".");
-            const [handle, issueNumber] = key.split("-");
+            const _splitFileName = key.split("-");
+            const issueNumber = _splitFileName.pop();
+            const handle = _splitFileName.join("-");
 
             return {
-              handle: handle as string,
+              handle,
               issueNumber: parseInt(issueNumber),
             };
           })
@@ -229,7 +231,7 @@ async function getAvailableFindings(
   return submission_files;
 }
 
-async function wardenFindingsForContest(
+async function getWardenFindingsForContest(
   client: Octokit,
   handle,
   contest
@@ -270,6 +272,7 @@ async function wardenFindingsForContest(
     ...riskLabels,
     "edited-by-warden",
     "withdrawn by warden",
+    "mitigation-confirmed",
   ];
 
   const submissions = submission_files.map(
@@ -277,7 +280,10 @@ async function wardenFindingsForContest(
       const labels: { name: string; color: string }[] = github_issues[
         item.issueNumber
       ].labels.nodes.filter((label) => {
-        return labelsToDisplay.indexOf(label.name) >= 0;
+        return (
+          label.name.startsWith("MR-") ||
+          labelsToDisplay.indexOf(label.name) >= 0
+        );
       });
 
       let body = github_issues[item.issueNumber].body;
@@ -286,33 +292,52 @@ async function wardenFindingsForContest(
         return riskLabels.includes(label.name);
       });
 
-      const risk = riskLabel!.name;
-      const riskCode = getRiskCodeFromGithubLabel(risk);
-      if (
-        (riskCode === "Q" || riskCode === "G") &&
-        // @todo: remove this condition once we can be sure all reports are saved as md files
-        body.startsWith("See the markdown file with the details of this report")
-      ) {
-        const reportBody = await getMarkdownReportForUser(
-          client,
-          repoName,
-          handle,
-          riskCode
-        );
-        if (reportBody) {
-          body = reportBody;
+      const riskLabelName = riskLabel?.name;
+
+      if (riskLabelName) {
+        const riskCode = getRiskCodeFromGithubLabel(riskLabelName);
+        if (
+          (riskCode === "Q" || riskCode === "G") &&
+          // @todo: remove this condition once we can be sure all reports are saved as md files
+          body.startsWith(
+            "See the markdown file with the details of this report"
+          )
+        ) {
+          const reportBody = await getMarkdownReportForUser(
+            client,
+            repoName,
+            handle,
+            riskCode
+          );
+          if (reportBody) {
+            body = reportBody;
+          }
         }
       }
+
+      const isMitigated = !!labels.find((label) => {
+        return label.name === "mitigation-confirmed";
+      });
+
+      const mitigationOfLabel = labels.find((label) => {
+        return label.name.startsWith("MR-");
+      });
+
+      const mitigationOf = mitigationOfLabel
+        ? mitigationOfLabel.name.slice(3)
+        : undefined;
 
       return {
         ...item,
         title: github_issues[item.issueNumber].title,
         body,
         labels,
-        risk,
+        risk: riskLabelName || "",
         state: github_issues[item.issueNumber].state,
         createdAt: github_issues[item.issueNumber].createdAt,
         updatedAt: github_issues[item.issueNumber].updatedAt,
+        isMitigated,
+        mitigationOf,
       };
     }
   );
@@ -330,7 +355,7 @@ export {
   getAllIssues,
   getAvailableFindings,
   getSubmittedFindingsFromFolder,
-  wardenFindingsForContest,
+  getWardenFindingsForContest,
   getRepoName,
   getMarkdownReportForUser,
 };
