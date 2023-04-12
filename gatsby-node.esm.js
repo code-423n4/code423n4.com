@@ -53,7 +53,6 @@ function contestSubmissionPermalink(contestNode) {
 function getRepoName(contestNode) {
   const regex = "([^/]+$)";
   const url = contestNode.repo;
-
   const result = url.match(regex);
   const repoName = result[0];
   return repoName;
@@ -149,7 +148,7 @@ exports.onCreateNode = async ({ node, getNode, actions }) => {
       value: slug,
     });
   }
-  
+
   if (node.internal.type === `ReportsJson`) {
     createNodeField({
       node,
@@ -210,11 +209,13 @@ exports.sourceNodes = async ({
 }) => {
   const { createNode } = actions;
   const apiContestsData = await getApiContestData();
-
   apiContestsData.forEach((contest) => {
     const newNode = createNode({
       ...contest,
-      id: createNodeId(`ContestsCsv-${contest.contestid}`),
+      contestid: contest.contest_id,
+      findingsRepo: contest.findings_repo,
+      amount: contest.formatted_amount,
+      id: createNodeId(`ContestsCsv-${contest.contest_id}`),
       parent: null,
       children: [],
       internal: {
