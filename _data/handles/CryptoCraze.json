@@ -3,7 +3,8 @@
   "members": [
     "jekapi",
     "Yarpo",
-    "0xDACA"
+    "0xDACA",
+    "tash"
   ],
   "paymentAddresses": [
     {
