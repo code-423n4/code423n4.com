@@ -1,0 +1,17 @@
+{
+  "handle": "zz_plus_ultra",
+  "crew": [
+    "Dravee"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x319DCd0306908Ce08Ffa6F5e5b6B6a4ff8CCB9DE"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x319DCd0306908Ce08Ffa6F5e5b6B6a4ff8CCB9DE"
+    }
+  ],
+  "image": "./avatars/zz_plus_ultra.jpeg"
+}
