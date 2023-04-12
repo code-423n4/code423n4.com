@@ -1,44 +1,67 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Avatar from "react-avatar";
+import ExternalLink from "./ExternalLink";
 
 const LeaderboardHandle = ({ handle, image, link, members }) => {
+  // TODO: clean up repeated code
   return (
-    <div className="wrapper-competitor" key={handle}>
+    <div className="leaderboard-handle" key={handle}>
       {members ? (
-        <div className="wrapper-members">
-          <span className="teamname">{handle}</span>
-          {members.map((member) => (
-            <div className="member" key={member.handle}>
-              <a href={member.link}>
-                {member.image ? (
-                  <Avatar
-                    src={member.image.childImageSharp.resize.src}
-                    name={handle}
-                    size="20px"
-                    round="20px"
-                  />
+        <div className="leaderboard-handle__team">
+          <details className="team-wrapper">
+            <summary className="team-name summary--right-marker">
+              {image ? (
+                <>
+                  <span>{handle}</span>
+                  <Avatar src={image} name={handle} size="25px" round="25px" />
+                </>
+              ) : (
+                <>
+                  <span>{handle}</span>
+                  <span className="leaderboard__team-avatar--none">
+                    {handle.substring(0, 1)}
+                  </span>
+                </>
+              )}
+            </summary>
+            {members.map((member) => (
+              <div className="leaderboard__team-member" key={member.handle}>
+                {member.link.length > 0 ? (
+                  <ExternalLink to={member.link} alt={member.handle}>
+                    <Avatar
+                      src={member.image}
+                      name={member.handle}
+                      size="30px"
+                      round="30px"
+                    />
+                    <span>{member.handle}</span>
+                  </ExternalLink>
                 ) : (
-                  ""
+                  <>
+                    <Avatar
+                      src={member.image}
+                      name={member.handle}
+                      size="30px"
+                      round="30px"
+                    />
+                    <span>{member.handle}</span>
+                  </>
                 )}
-                <span>{member.handle}</span>
-              </a>
-            </div>
-          ))}
+              </div>
+            ))}
+          </details>
         </div>
+      ) : link ? (
+        <ExternalLink to={link} alt={handle}>
+          <Avatar src={image} name={handle} size="25px" round="25px" />
+          <span className="leaderboard-handle__name">{handle}</span>
+        </ExternalLink>
       ) : (
-        <a href={link}>
-          {image ? (
-            <Avatar
-              src={image.childImageSharp.resize.src}
-              name={handle}
-              size="20px"
-              round="20px"
-            />
-          ) : (
-            ""
-          )}
-          <span>{handle}</span>
-        </a>
+        <span className="leaderboard-handle__team">
+          <Avatar src={image} name={handle} size="25px" round="25px" />
+
+          <span className="leaderboard-handle__name">{handle}</span>
+        </span>
       )}
     </div>
   );
