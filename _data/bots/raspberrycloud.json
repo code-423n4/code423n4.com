@@ -1,0 +1,13 @@
+{
+  "handle": "raspberrycloud",
+  "crew": [
+    "raspberrytea",
+    "CloudEllie"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x64B33B693E36C842eEd81b2d9C11d64fECdBf498"
+    }
+  ]
+}
