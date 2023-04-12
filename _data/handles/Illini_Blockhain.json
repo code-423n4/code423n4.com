@@ -1,0 +1,19 @@
+{
+  "handle": "Illini_Blockhain",
+  "members": [
+    "Tony-Tiger",
+    "auditking"
+  ],
+  "link": "https://twitter.com/ILL_Blockchain",
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xF2A1eDB8A423a374Ab13F667BeB4EbaB9e6e9307"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0xF2A1eDB8A423a374Ab13F667BeB4EbaB9e6e9307"
+    }
+  ],
+  "image": "./avatars/Illini_Blockhain.png"
+}
