@@ -1,0 +1,13 @@
+{
+  "handle": "CryptoCraze",
+  "members": [
+    "jekapi",
+    "Yarpo"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xccd972602abddd88277917e685ce548a233464fe"
+    }
+  ]
+}
