@@ -11,7 +11,6 @@ import { useModalContext } from "../hooks/ModalContext";
 import useUser, { TeamInfo } from "../hooks/UserContext";
 
 // components
-import Card from "../components/Card";
 import { Input } from "../components/Input";
 import ProtectedPage from "../components/ProtectedPage";
 import WardenDetails from "../components/WardenDetails";
@@ -24,7 +23,7 @@ const initialState = {
   ethereumAddress: "",
 };
 
-const initialPaymentAddressesState = {
+const initialPaymentAddressesState: Record<string, PaymentAddress> = {
   polygonAddress: { address: "", id: "", chain: "polygon" },
   ethereumAddress: { address: "", id: "", chain: "ethereum" },
 };
