@@ -1,9 +1,14 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "gatsby";
-import Countdown from "./Countdown";
+
 import { getDates } from "../utils/time";
 
-const ContestTile = ({ contest: { node } }) => {
+import ClientOnly from "./ClientOnly";
+import Countdown from "./Countdown";
+import SponsorLink from "./SponsorLink";
+import { format } from "date-fns";
+
+const ContestTile = ({ contest, updateContestStatus, user, reduced }) => {
   const {
     sponsor,
     title,
@@ -12,71 +17,102 @@ const ContestTile = ({ contest: { node } }) => {
     details,
     start_time,
     end_time,
-    repo,
     findingsRepo,
+    repo: contestRepo,
     fields,
-  } = node;
-  const { submissionPath, contestPath } = fields;
-
+    status,
+  } = contest;
   const t = getDates(start_time, end_time);
+  const [canViewContest, setCanViewContest] = useState(false);
+  const [contestStatusIndicator, setContestStatusIndicator] = useState(status);
+
+  useEffect(() => {
+    if (fields.codeAccess === "public") {
+      setCanViewContest(true);
+    } else if (fields.codeAccess === "certified" && user.isCertified) {
+      setCanViewContest(true);
+    } else {
+      setCanViewContest(false);
+    }
+  }, [fields, user]);
+
+  const statusText = {
+    active: "Live",
+    soon: "Soon",
+    completed: "Ended",
+  };
 
   return (
-    <div className={"wrapper-contest " + t.state}>
-      <div className="wrapper-sponsor">
-        <a href={sponsor.link}>
-          <img
-            src={sponsor.image.childImageSharp.resize.src}
-            alt={sponsor.name}
-          />
-        </a>
+    <div className={"contest-tile " + t.contestStatus + " " + reduced}>
+      <div className="contest-tile__top">
+        <header className="contest-tile__content">
+          <div className="contest-tile__logo">
+            <SponsorLink sponsor={sponsor} size="90" />
+          </div>
+          <div className="contest-tile__details-wrapper">
+            <h2 className="contest-tile__title">
+              <Link
+                to={fields?.contestPath || "/"}
+                className="contest-tile__button"
+              >
+                {title}
+              </Link>
+            </h2>
+            <p className="contest-tile__details">{details}</p>
+          </div>
+        </header>
+        {amount ? <p className="contest-tile__amount">{amount}</p> : null}
       </div>
-      <div className="wrapper-contest-content">
-        {league === "cosmos" ? (
-          <Link to="/cosmos">
-            <div class="contest-league">
-              <img src="/images/cosmos-icon.svg" alt="Cosmos Logo" />
-              Cosmos League
-            </div>
-          </Link>
-        ) : (
-          ""
-        )}
-        <h4>
-          {amount ? amount : ""} {title}
-        </h4>
-        <p>{details}</p>
-        {t.state !== "active" ? (
-          <p className="days-duration">{t.daysDuration} day contest</p>
-        ) : null}
-        {t.state === "soon" || t.state === "active" ? (
-          <Countdown
-            state={t.state}
-            start={start_time}
-            end={end_time}
-            isPreview={findingsRepo === ""}
-          />
-        ) : (
-          <p>
-            Contest ran {t.startDay}—{t.endDay}
-          </p>
-        )}
-        <Link
-          to={contestPath}
-          className="contest-repo button button-small cta-button primary"
-        >
-          {`${findingsRepo === "" ? "Preview" : "View"} Contest`}
-        </Link>
-        {t.state === "active" && findingsRepo && submissionPath ? (
-          <Link
-            to={submissionPath}
-            className="button button-small cta-button secondary"
-          >
-            Submit Finding
-          </Link>
-        ) : (
-          ""
-        )}
-      </div>
+      <ClientOnly>
+        <footer className="contest-tile__bottom">
+          <div className="contest-tile__status-indicator">
+            <span
+              className={
+                "contest-tile__status-indicator-text contest-tile__status-indicator-text--" +
+                t.contestStatus
+              }
+            >
+              {statusText[t.contestStatus]}
+            </span>
+            {t.contestStatus === "soon" || t.contestStatus === "active" ? (
+              <span className="contest-tile__countdown">
+                {t.contestStatus === "active" && <span>Ends in</span>}
+                {t.contestStatus === "soon" && <span>Starts in</span>}
+                <Countdown
+                  state={t.contestStatus}
+                  start={start_time}
+                  end={end_time}
+                  isPreview={findingsRepo === ""}
+                  updateContestStatus={updateContestStatus}
+                />
+              </span>
+            ) : null}
+          </div>
+
+          <div className="contest-tile__button-wrapper">
+            <Link
+              to={fields?.contestPath || "/"}
+              className="contest-tile__button"
+            >
+              {`${findingsRepo === "" ? "Preview" : "View"}`} competition
+            </Link>
+            {t.contestStatus === "active" && contestRepo && canViewContest && (
+              <a href={contestRepo} className="contest-tile__button">
+                View repo
+              </a>
+            )}
+            {(t.contestStatus === "active" || status === "Active Contest") &&
+            findingsRepo &&
+            fields.status &&
+            fields.submissionPath &&
+            canViewContest ? (
+              <Link to={fields.submissionPath} className="contest-tile__button">
+                Submit finding
+              </Link>
+            ) : null}
+          </div>
+        </footer>
+      </ClientOnly>
     </div>
   );
 };
