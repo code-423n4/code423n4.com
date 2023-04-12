@@ -1,8 +1,6 @@
 import React from "react";
 import ReactMarkdown from "react-markdown";
 
-import * as styles from "./Widgets.module.scss";
-
 function FormField({
   name,
   label,
@@ -10,27 +8,30 @@ function FormField({
   type = "",
   isInvalid,
   children,
+  required = false,
   errorMessage = "This field is required",
 }) {
   return (
-    <div className={styles.Container}>
+    <fieldset className="form-field">
       {label && (
-        <label className={styles.Label} htmlFor={name}>
-          {label}
+        <label htmlFor={name}>
+          {label + ` ${required ? "*" : "(Optional)"}`}
         </label>
       )}
       {type !== "markdown" && helpText ? (
-        <p className={styles.Help}>{helpText}</p>
+        <p>{helpText}</p>
       ) : (
-        <ReactMarkdown className={styles.Help}>{helpText}</ReactMarkdown>
+        <ReactMarkdown className={"form-field__help-text"}>
+          {helpText}
+        </ReactMarkdown>
       )}
       {children}
       {isInvalid && name !== "linksToCode" && (
-        <label htmlFor={name} className={styles.ErrorMessage}>
+        <div id={name + "--error"} className={"form-field__error"}>
           {errorMessage}
-        </label>
+        </div>
       )}
-    </div>
+    </fieldset>
   );
 }
 
