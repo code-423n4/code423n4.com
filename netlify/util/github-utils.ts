@@ -254,14 +254,15 @@ async function getWardenFindingsForContest(
         const mitigationOf = mitigationOfLabel
           ? mitigationOfLabel.name.slice(3)
           : undefined;
+
+        const labels = finding.labels.filter((label) => {
+          return (
+            label.name.startsWith("MR-") || labelsToDisplay.includes(label.name)
+          );
+        });
         return {
           ...finding,
-          labels: finding.labels.filter(async (label) => {
-            return (
-              label.name.startsWith("MR-") ||
-              labelsToDisplay.indexOf(label.name) >= 0
-            );
-          }),
+          labels,
           body,
           isMitigated,
           mitigationOf,
