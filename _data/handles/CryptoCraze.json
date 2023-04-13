@@ -2,12 +2,15 @@
   "handle": "CryptoCraze",
   "members": [
     "jekapi",
-    "Yarpo"
+    "Yarpo",
+    "0xDACA",
+    "tash"
   ],
   "paymentAddresses": [
     {
       "chain": "polygon",
       "address": "0xccd972602abddd88277917e685ce548a233464fe"
     }
-  ]
+  ],
+  "image": "./avatars/CryptoCraze.png"
 }
