@@ -641,6 +641,7 @@ const SubmitFindings = ({
                 />
               ) : (
                 <FormField
+                  required={field.required}
                   key={`${field.name} ${index}`}
                   name={field.name}
                   label={field.label}
