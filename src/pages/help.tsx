@@ -50,13 +50,13 @@ function ContactUs() {
     },
     {
       name: "subject",
-      label: "Subject *",
+      label: "Subject",
       widget: "text",
       required: true,
     },
     {
       name: "description",
-      label: "Description *",
+      label: "Description",
       widget: "textarea",
       maxSize: 2000,
       required: true,
