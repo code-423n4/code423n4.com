@@ -2,7 +2,7 @@
 
 export const titleField = {
   name: "title",
-  label: "Title *",
+  label: "Title",
   helpText:
     "Summarize your findings for the bug or vulnerability. (This will be the issue title.)",
   widget: "text",
@@ -12,7 +12,7 @@ export const titleField = {
 export const wardenField = (wardens) => {
   return {
     name: "handle",
-    label: "Handle *",
+    label: "Handle",
     helpText: "Handle you're competing under (individual or team name)",
     widget: "warden",
     required: true,
@@ -30,7 +30,7 @@ export const linksToCodeField = {
 
 export const mitigationRiskField = {
   name: "risk",
-  label: "Risk rating *",
+  label: "Risk rating",
   widget: "select",
   required: true,
   options: [
@@ -47,7 +47,7 @@ export const mitigationRiskField = {
 
 export const riskField = {
   name: "risk",
-  label: "Risk rating *",
+  label: "Risk rating",
   widget: "select",
   required: true,
   options: [
@@ -72,7 +72,7 @@ export const riskField = {
 
 export const vulnerabilityDetailsField = {
   name: "details",
-  label: "Vulnerability details *",
+  label: "Vulnerability details",
   helpText:
     "Link to all referenced sections of code in GitHub. \n You can use " +
     "[markdown](https://www.markdownguide.org/basic-syntax/) including " +
@@ -85,7 +85,7 @@ export const vulnerabilityDetailsField = {
 
 export const qaGasDetailsField = {
   name: "qaGasDetails",
-  label: "Report contents *",
+  label: "Report contents",
   helpText:
     "Link to all referenced sections of code in GitHub. \n You can use " +
     "[markdown](https://www.markdownguide.org/basic-syntax/) including " +
@@ -105,7 +105,7 @@ export const mitigationField = {
 
 export const mitigationOfField = {
   name: "mitigationOf",
-  label: "Report ID of original finding *",
+  label: "Report ID of original finding",
   helpText: `For new findings, please enter "NEW"`,
   placeholder: "H-01",
   widget: "text",
