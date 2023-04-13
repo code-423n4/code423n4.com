@@ -56,7 +56,7 @@ async function getFinding(
     process.env.GITHUB_CONTEST_REPO_OWNER!
   );
 
-  // todo: don't rely on full listing
+  // todo: don't rely on full listing; just fetch the individual issue
   let finding;
   const findingsByHandle = (
     await getWardenFindingsForContest(client, allFindings, repoName, username)
