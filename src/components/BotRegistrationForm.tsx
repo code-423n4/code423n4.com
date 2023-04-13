@@ -188,12 +188,16 @@ export default function BotRegistrationForm({
   const validateBotName = useCallback(
     (botName: string): (string | ReactNode)[] => {
       const errors: (string | ReactNode)[] = [];
+      const handleNames: string[] = Array.from(handles.values());
+      const existingHandle = handleNames.find((handle) => {
+        return handle.toLowerCase() === botName.toLowerCase();
+      });
       if (botName.match(/^[0-9a-zA-Z_\-]+$/) === null) {
         errors.push(
           "Supports alphanumeric characters, underscores, and hyphens"
         );
       }
-      if (handles.has(botName)) {
+      if (existingHandle) {
         errors.push(
           `${botName} is already registered as a team, bot, or warden.`
         );
@@ -279,7 +283,7 @@ export default function BotRegistrationForm({
         value={state.polygonAddress}
         required={true}
         label="Polygon Address"
-        helpText="Address where your bot's prize should go."
+        helpText="Address where your bot's prize should go"
         handleChange={handleChange}
         validator={validateAddress}
         maxLength={42}
@@ -352,6 +356,19 @@ export default function BotRegistrationForm({
             &#x2715;
           </button>
         )}
+      </div>
+      <div className="register-bot__agreement">
+        By submitting this form, you agree to:
+        <ul>
+          <li>
+            only use APIs that do not retain sponsor code as part of public data
+            sets
+          </li>
+          <li>
+            refrain from sharing your report with non-crew members until reports
+            are made public
+          </li>
+        </ul>
       </div>
     </Form>
   );

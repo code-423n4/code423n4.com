@@ -11,7 +11,6 @@ import { useModalContext } from "../hooks/ModalContext";
 import useUser, { TeamInfo } from "../hooks/UserContext";
 
 // components
-import Card from "../components/Card";
 import { Input } from "../components/Input";
 import ProtectedPage from "../components/ProtectedPage";
 import WardenDetails from "../components/WardenDetails";
@@ -24,7 +23,7 @@ const initialState = {
   ethereumAddress: "",
 };
 
-const initialPaymentAddressesState = {
+const initialPaymentAddressesState: Record<string, PaymentAddress> = {
   polygonAddress: { address: "", id: "", chain: "polygon" },
   ethereumAddress: { address: "", id: "", chain: "ethereum" },
 };
@@ -264,8 +263,8 @@ export default function AccountManagementPage() {
         // @todo: style a loading state
         <div>LOADING...</div>
       ) : (
-        <div className="limited-width">
-          <h1 className="page-header">Manage Account</h1>
+        <div className="account limited-width">
+          <h1 className="type__headline__page-title">Manage Account</h1>
           <form>
             <h2>Payment Information</h2>
             <Input
@@ -337,7 +336,9 @@ export default function AccountManagementPage() {
                 Reset Password
               </button>
             </div>
+
             <hr />
+
             <h2>Team Information</h2>
             {(currentUser.teams || []).length === 0 ? (
               <p>You are not a member of any teams</p>
@@ -348,70 +349,66 @@ export default function AccountManagementPage() {
                   not immediately effective. It may take a few business days for
                   your changes to be reviewed and completed.
                 </p>
-                <div
-                  className={currentUser.teams.length > 1 ? "card-wrapper" : ""}
-                >
-                  {currentUser.teams.map((team) => (
-                    <Card
-                      title={
+                {currentUser.teams.map((team) => (
+                  <section className="account__team type__text--lists">
+                    <div className="account__team-info">
+                      <h3>
                         <WardenDetails
                           username={team.username}
                           image={team.image}
                           avatarSize="40px"
                         />
-                      }
-                      buttons={
-                        <>
-                          <Link
-                            to={`/manage-team?team=${team.username}`}
-                            state={team}
-                          >
-                            <img src="/images/pencil.png" alt="edit" />
-                          </Link>
-                          <button
-                            type="button"
-                            onClick={() => handleDelete(team)}
-                          >
-                            <img src="/images/trash-can.png" alt="delete" />
-                          </button>
-                        </>
-                      }
-                    >
-                      <>
-                        <h3>Members:</h3>
-                        <ul>
-                          {team.members.map((member) => (
-                            <li>{member}</li>
-                          ))}
-                        </ul>
-                        {team.ethereumAddress ||
-                          (team.polygonAddress && (
-                            <>
-                              <h3>Payment addresses:</h3>
-                              <ul>
-                                {team.polygonAddress && (
-                                  <li>
-                                    polygon:{" "}
-                                    {team.polygonAddress.slice(0, 5) +
-                                      "..." +
-                                      team.polygonAddress.slice(-4)}
-                                  </li>
-                                )}
-                                {team.ethereumAddress && (
-                                  <li>
-                                    ethereum:{" "}
-                                    {team.ethereumAddress.slice(0, 5) +
-                                      "..." +
-                                      team.ethereumAddress.slice(-4)}
-                                  </li>
-                                )}
-                              </ul>
-                            </>
-                          ))}
-                      </>
-                    </Card>
-                  ))}
-                </div>
+                      </h3>
+                      <h4>Members:</h4>
+                      <ul>
+                        {team.members.map((member) => (
+                          <li>{member}</li>
+                        ))}
+                      </ul>
+                      {team.ethereumAddress ||
+                        (team.polygonAddress && (
+                          <>
+                            <h4>Payment addresses:</h4>
+                            <ul>
+                              {team.polygonAddress && (
+                                <li>
+                                  polygon:{" "}
+                                  {team.polygonAddress.slice(0, 5) +
+                                    "..." +
+                                    team.polygonAddress.slice(-4)}
+                                </li>
+                              )}
+                              {team.ethereumAddress && (
+                                <li>
+                                  ethereum:{" "}
+                                  {team.ethereumAddress.slice(0, 5) +
+                                    "..." +
+                                    team.ethereumAddress.slice(-4)}
+                                </li>
+                              )}
+                            </ul>
+                          </>
+                        ))}
+                    </div>
+                    <div className="account__team-management-buttons">
+                      <Link
+                        to={`/manage-team?team=${team.username}`}
+                        state={team}
+                        className="account__team-management-button"
+                      >
+                        <img src="/images/icon/edit/16.svg" alt="edit" /> Edit
+                      </Link>
+                      <button
+                        type="button"
+                        className="account__team-management-button"
+                        onClick={() => handleDelete(team)}
+                      >
+                        <img src="/images/icon/delete/16.svg" alt="delete" />{" "}
+                        Delete
+                      </button>
+                    </div>
+                  </section>
+                ))}
               </>
             )}
             <div>
