@@ -17,14 +17,15 @@ import useUser from "../hooks/UserContext";
 // components
 import ProtectedPage from "../components/ProtectedPage";
 import SubmitFindings from "../components/reporter/SubmitFindings";
+import { ReportId, RiskLabelName } from "../../types/shared";
 
 export interface ReportState {
   title: string;
-  risk: string;
+  risk: RiskLabelName | "";
   details: string;
   qaGasDetails: string;
   linksToCode: string[];
-  mitigationOf: string;
+  mitigationOf: ReportId;
   isMitigated: boolean;
 }
 
