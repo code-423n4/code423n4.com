@@ -105,7 +105,7 @@ form,
 
 .form-field__error {
   margin-top: $spacing__s;
-  color: $color__form-error;
+  color: $color__form-error !important;
 
   &:before {
     content: "⚠ ";

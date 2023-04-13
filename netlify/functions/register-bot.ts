@@ -16,6 +16,10 @@ import {
 import { sendConfirmationEmail, getGroupEmails } from "../util/user-utils";
 import { checkAuth } from "../util/auth-utils";
 import { isDangerousHandle } from "../util/validation-utils";
+import { isAfter, isBefore } from "date-fns";
+
+const START = new Date("2023-04-12T20:00:00.000Z");
+const END = new Date("2023-04-12T21:00:00.000Z");
 
 const OctokitClient = Octokit.plugin(createPullRequest);
 const octokit = new OctokitClient({ auth: token });
@@ -44,11 +48,8 @@ exports.handler = async (event) => {
 
     // check that application was submitted within the application window
     const now = Date.now();
-    // @todo: replace with correct start and end times
-    const start = new Date("2022-01-17T00:00:00.000Z").getTime();
-    const end = new Date("2022-01-17T00:00:00.000Z").getTime();
 
-    if (now < start || now > end) {
+    if (isBefore(now, START) || isAfter(now, END)) {
       return {
         statusCode: 400,
         body: JSON.stringify({
@@ -239,6 +240,7 @@ exports.handler = async (event) => {
         repo: "bot-applications",
         title: `${botName} Bot Application`,
         body: submissionBody,
+        labels: ["QA (Quality Assurance"],
       }
     );
 
