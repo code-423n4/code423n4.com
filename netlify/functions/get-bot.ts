@@ -4,6 +4,7 @@ import { isDangerousHandle } from "../util/validation-utils";
 
 // find any bots where the given user is on the crew
 exports.handler = async (event) => {
+  console.log("getting bot");
   // only allow GET
   if (event.httpMethod !== "GET") {
     return {
@@ -27,7 +28,7 @@ exports.handler = async (event) => {
 
   try {
     const botsFiles = fs.readdirSync("./_data/bots");
-    botsFiles.forEach((file) => {
+    for (const file of botsFiles) {
       if (file.endsWith(".json")) {
         const botFile = readFileSync(`./_data/bots/${file}`);
         const bot: BotData = JSON.parse(botFile.toString());
@@ -42,7 +43,7 @@ exports.handler = async (event) => {
           };
         }
       }
-    });
+    }
     return {
       statusCode: 204,
     };

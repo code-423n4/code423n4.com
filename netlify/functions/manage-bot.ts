@@ -7,39 +7,40 @@ import { Response } from "@netlify/functions/src/function/response";
 import { Event } from "@netlify/functions/src/function/event";
 import { Octokit } from "@octokit/core";
 import { createOrUpdateTextFile } from "@octokit/plugin-create-or-update-text-file";
+import fetch from "node-fetch";
 
 import { token } from "../_config";
 import {
-  TeamData,
-  TeamDeleteRequest,
-  TeamUpdateRequest,
+  BotData,
+  BotDeleteRequest,
+  BotUpdateRequest,
+  PaymentAddress,
 } from "../../types/user";
-import { checkAuth, checkTeamAuth } from "../util/auth-utils";
+import { checkAuth, checkBotAuth } from "../util/auth-utils";
 import { getGroupEmails, sendConfirmationEmail } from "../util/user-utils";
-import fetch from "node-fetch";
 
 const OctokitClient = Octokit.plugin(createPullRequest, createOrUpdateTextFile);
 const octokit = new OctokitClient({ auth: token });
 
-async function editTeam(
-  data: TeamUpdateRequest,
+async function editBot(
+  data: BotUpdateRequest,
   username: string,
   sessionToken: string
 ): Promise<Response> {
   const {
-    teamName,
+    botName,
     image,
-    link,
-    members,
+    crew,
     polygonAddress,
     ethereumAddress,
-  }: TeamUpdateRequest = data;
+    relegated,
+  }: BotUpdateRequest = data;
 
-  if (!teamName) {
+  if (!botName) {
     return {
       statusCode: 422,
       body: JSON.stringify({
-        error: "Team name is required",
+        error: "Bot name is required",
       }),
     };
   }
@@ -53,19 +54,19 @@ async function editTeam(
     };
   }
 
-  if (!members || !members.newValue || members.newValue.length < 2) {
+  if (!crew || !crew.newValue || crew.newValue.length < 1) {
     return {
       statusCode: 422,
       body: JSON.stringify({
-        error: "Teams must have at least 2 members",
+        error: "Bot crew must have at least 1 member",
       }),
     };
   }
 
-  let oldTeamData;
+  let oldBotData: BotData;
   try {
-    oldTeamData = await checkTeamAuth(teamName, username);
-    delete oldTeamData.imageUrl;
+    oldBotData = await checkBotAuth(botName, username);
+    delete oldBotData.imageUrl;
   } catch (error) {
     return {
       statusCode: error.status,
@@ -73,7 +74,7 @@ async function editTeam(
     };
   }
 
-  const paymentAddresses = [
+  const paymentAddresses: PaymentAddress[] = [
     { chain: "polygon", address: polygonAddress.newValue },
   ];
   if (ethereumAddress && ethereumAddress.newValue) {
@@ -83,17 +84,11 @@ async function editTeam(
     });
   }
 
-  const newTeamData: TeamData = {
-    ...oldTeamData,
-    members: members.newValue,
+  const newBotData: BotData = {
+    ...oldBotData,
+    crew: crew.newValue,
     paymentAddresses,
   };
-
-  if (link && link.newValue) {
-    newTeamData.link = link.newValue;
-  } else {
-    delete newTeamData.link;
-  }
 
   let avatarFilename = "";
   let base64Avatar = "";
@@ -103,12 +98,16 @@ async function editTeam(
       .resize({ width: 512 })
       .toBuffer({ resolveWithObject: true });
     base64Avatar = data.toString("base64");
-    avatarFilename = `${teamName}.${info.format}`;
-    newTeamData.image = `./avatars/${teamName}.${info.format}`;
+    avatarFilename = `${botName}.${info.format}`;
+    newBotData.image = `./avatars/${botName}.${info.format}`;
+  }
+
+  if (relegated?.newValue !== undefined) {
+    newBotData.relegated = relegated.newValue;
   }
 
   // Don't create a PR if the json content and image have not changed
-  if (isEqual(newTeamData, oldTeamData) && !image) {
+  if (isEqual(newBotData, oldBotData) && !image) {
     return {
       statusCode: 422,
       body: JSON.stringify({ error: "Nothing changed" }),
@@ -116,22 +115,22 @@ async function editTeam(
   }
 
   const files: { [path: string]: string | File } = {
-    [`_data/handles/${teamName}.json`]: JSON.stringify(newTeamData, null, 2),
+    [`_data/bots/${botName}.json`]: JSON.stringify(newBotData, null, 2),
   };
   if (image) {
-    files[`_data/handles/avatars/${avatarFilename}`] = {
+    files[`_data/bots/avatars/${avatarFilename}`] = {
       content: base64Avatar,
       encoding: "base64",
     };
   }
 
-  const title = `Edit team ${teamName}`;
+  const title = `Edit bot ${botName}`;
   const body = dedent`
-  This auto-generated PR modifies the team ${teamName}
+  This auto-generated PR modifies the bot ${botName}
 
   The request was made by ${username}
   `;
-  const branchName = `team/${teamName}`;
+  const branchName = `bot/${botName}`;
 
   try {
     const res = await octokit.createPullRequest({
@@ -165,21 +164,21 @@ async function editTeam(
         "C4-User": username,
       },
       body: JSON.stringify({
-        subject: "Team Update",
+        subject: "Bot Update",
         request: "team",
         description: `PR link: ${res.data.html_url}`,
         discordHandle: username,
       }),
     });
 
-    const newMemberEmails = await getGroupEmails(newTeamData.members);
-    const oldMemberEmails = await getGroupEmails(oldTeamData.members);
-    const emailSubject = `Code4rena team "${teamName}" has been modified`;
+    const newMemberEmails = await getGroupEmails(newBotData.crew);
+    const oldMemberEmails = await getGroupEmails(oldBotData.crew);
+    const emailSubject = `Code4rena team "${botName}" has been modified`;
 
     const emailBody = dedent`
-      Changes to the team ${teamName} have been requested.
+      Changes to the team ${botName} have been requested.
 
-      Members: ${members.newValue.join(", ")}
+      Members: ${crew.newValue.join(", ")}
 
       Polygon address: ${polygonAddress.newValue}
       ${
@@ -187,9 +186,6 @@ async function editTeam(
         (ethereumAddress.newValue || ethereumAddress.oldValue)
           ? "Ethereum address: " + ethereumAddress.newValue
           : ""
-      }
-      ${
-        link && (link.newValue || link.oldValue) ? "Link: " + link.newValue : ""
       }
 
       You can see the PR here: ${res.data.html_url}
@@ -212,25 +208,25 @@ async function editTeam(
   }
 }
 
-async function deleteTeam(
-  data: TeamDeleteRequest,
+async function deleteBot(
+  data: BotDeleteRequest,
   username: string,
   sessionToken: string
 ): Promise<Response> {
-  const { name } = data;
-  if (!name) {
+  const { name: botName } = data;
+  if (!botName) {
     return {
       statusCode: 422,
       body: JSON.stringify({
-        error: "Team name is required",
+        error: "Bot name is required",
       }),
     };
   }
-  const team = await checkTeamAuth(name, username);
+  const bot: BotData = await checkBotAuth(botName, username);
 
-  const title = `Delete team ${name}`;
-  const body = `This auto-generated PR removes the team ${name}`;
-  const branchName = `team/${name}`;
+  const title = `Delete bot ${botName}`;
+  const body = `This auto-generated PR removes the bot ${botName}`;
+  const branchName = `bot/${botName}`;
 
   const res = await octokit.createPullRequest({
     owner: process.env.GITHUB_REPO_OWNER!,
@@ -255,7 +251,7 @@ async function deleteTeam(
   const removedFile = await octokit.createOrUpdateTextFile({
     owner: process.env.GITHUB_REPO_OWNER!,
     repo: process.env.REPO!,
-    path: `_data/handles/${name}.json`,
+    path: `_data/bots/${botName}.json`,
     content: null,
     message: `File deleted by ${username}`,
     branch: branchName,
@@ -268,11 +264,11 @@ async function deleteTeam(
     };
   }
 
-  if (team.image) {
+  if (bot.image) {
     await octokit.createOrUpdateTextFile({
       owner: process.env.GITHUB_REPO_OWNER!,
       repo: process.env.REPO!,
-      path: `_data/handles${team.image.slice(1)}`,
+      path: `_data/bots${bot.image.slice(1)}`,
       content: null,
       message: `File deleted by ${username}`,
       branch: branchName,
@@ -288,17 +284,17 @@ async function deleteTeam(
       "C4-User": username,
     },
     body: JSON.stringify({
-      subject: "Delete Team",
+      subject: "Delete Bot",
       request: "team",
       description: `PR link: ${res.data.html_url}`,
       discordHandle: username,
     }),
   });
 
-  const teamEmails = await getGroupEmails(team.members);
-  const emailSubject = `Code4rena team "${name}" has been deleted`;
+  const teamEmails = await getGroupEmails(bot.crew);
+  const emailSubject = `Code4rena bot "${botName}" has been deleted`;
   const emailBody = dedent`
-  Team ${name} deleted by ${username}
+  Bot ${botName} deleted by ${username}
 
   You can see the PR here: ${res.data.html_url}
   `;
@@ -345,14 +341,14 @@ exports.handler = async (event: Event): Promise<Response> => {
   try {
     switch (event.httpMethod) {
       case "POST":
-        return await editTeam(data, username, sessionToken);
+        return await editBot(data, username, sessionToken);
       case "DELETE":
-        return await deleteTeam(data, username, sessionToken);
+        return await deleteBot(data, username, sessionToken);
       default:
         return {
           statusCode: 405,
           body: JSON.stringify({
-            error: "You can only edit or delete a team from this endpoint",
+            error: "You can only edit or delete a bot from this endpoint",
           }),
         };
     }

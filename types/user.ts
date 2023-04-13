@@ -103,5 +103,9 @@ export interface BotUpdateRequest {
 }
 
 export interface TeamDeleteRequest {
-  teamName: string;
+  name: string;
+}
+
+export interface BotDeleteRequest {
+  name: string;
 }
