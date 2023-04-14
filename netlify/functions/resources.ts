@@ -1,7 +1,6 @@
 import { builder, Handler } from "@netlify/functions";
 import { getApiContestData } from "../util/getContestsData";
 import { getApiFindingsData } from "../util/getFindingsData";
-import { readFile } from "node:fs/promises";
 
 export function tableToCsv(rows: string[][]): string {
   function escape(str) {

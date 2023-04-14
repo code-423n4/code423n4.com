@@ -1,8 +1,13 @@
 import fetch from "node-fetch";
-import { AwardFinding } from "../../types/finding";
+
+/**
+ * @typedef {import('../../types/finding').AwardFinding} AwardFinding
+ */
 
 /**
  * @async
+ * This function fetches data from our API and returns a Promise containing
+ * an array of AwardFinding objects.
  * @returns {Promise<[AwardFinding]>}
  * @throws Various errors if data cannot be fetched or processed.
  */
@@ -12,8 +17,7 @@ const getApiFindingsData = async () => {
     body: JSON.stringify({ token: process.env.C4_API_TOKEN }),
   });
   if (res.status !== 200) {
-    console.log(await res.text());
-    throw Error("Bad response from API server");
+    throw Error(`Bad response from API server: ${await res.text()}`);
   }
 
   return await res.json();

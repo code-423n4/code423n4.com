@@ -48,7 +48,7 @@ const getLeaderboardResults = async (
   const allHandles = Array.from(
     new Set(allFindings.map((finding: AwardFinding) => finding.handle))
   )
-    .map((handle: any) => getWardenInfo(handle))
+    .map((handle: string) => getWardenInfo(handle))
     .filter(
       (handle) =>
         handle.showOnLeaderboard === undefined || !handle.showOnLeaderboard
