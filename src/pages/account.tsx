@@ -8,12 +8,11 @@ import { PaymentAddress, TeamDeleteRequest } from "../../types/user";
 
 // hooks
 import { useModalContext } from "../hooks/ModalContext";
-import useUser, { BotInfo, TeamInfo } from "../hooks/UserContext";
+import useUser from "../hooks/UserContext";
 
 // components
 import { Input } from "../components/Input";
 import ProtectedPage from "../components/ProtectedPage";
-import WardenDetails from "../components/WardenDetails";
 import TeamBotTile from "../components/TeamBotTile";
 import { Username } from "../../types/shared";
 
