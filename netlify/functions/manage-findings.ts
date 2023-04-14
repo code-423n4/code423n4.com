@@ -48,7 +48,7 @@ async function getFinding(
   repoName: ContestFindingsRepoName,
   issueNumber: IssueNumber
 ): Promise<Response> {
-  const client = new Octokit({ auth: process.env.GITHUB_TOKEN });
+  const client = new Octokit({ auth: process.env.GITHUB_TOKEN_FETCH });
 
   const allFindings = await getAllFindings(
     client,
@@ -94,7 +94,7 @@ async function getFindings(
   repoName: ContestFindingsRepoName,
   includeTeams: boolean = true
 ): Promise<Response> {
-  const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
+  const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN_FETCH });
 
   const wardenFindingsForContest: WardenFindingsForContest = {
     user: [],
@@ -426,7 +426,7 @@ async function editFinding(
       };
     }
 
-    const migationConfirmedLabe = "mitigation-confirmed";
+    const mitigationConfirmedLabel = "mitigation-confirmed";
     try {
       await client.request(
         "POST /repos/{owner}/{repo}/issues/{issue_number}/labels",
@@ -434,7 +434,7 @@ async function editFinding(
           owner: process.env.GITHUB_REPO_OWNER!,
           repo: repoName,
           issue_number: issueNumber,
-          labels: [migationConfirmedLabe],
+          labels: [mitigationConfirmedLabel],
         }
       );
     } catch (error) {

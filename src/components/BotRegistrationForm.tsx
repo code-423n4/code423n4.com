@@ -188,12 +188,16 @@ export default function BotRegistrationForm({
   const validateBotName = useCallback(
     (botName: string): (string | ReactNode)[] => {
       const errors: (string | ReactNode)[] = [];
+      const handleNames: string[] = Array.from(handles.values());
+      const existingHandle = handleNames.find((handle) => {
+        return handle.toLowerCase() === botName.toLowerCase();
+      });
       if (botName.match(/^[0-9a-zA-Z_\-]+$/) === null) {
         errors.push(
           "Supports alphanumeric characters, underscores, and hyphens"
         );
       }
-      if (handles.has(botName)) {
+      if (existingHandle) {
         errors.push(
           `${botName} is already registered as a team, bot, or warden.`
         );
