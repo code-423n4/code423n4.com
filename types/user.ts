@@ -51,7 +51,7 @@ export interface TeamCreateRequest {
 }
 
 export interface BotCreateRequest {
-  botName: string;
+  botName: Username;
   crewMembers: Username[];
   description: string;
   submission: FindingBody;
@@ -60,8 +60,13 @@ export interface BotCreateRequest {
   image?: RelativeURL;
 }
 
+export interface BotPromotionRequest {
+  botName: Username;
+  submission: FindingBody;
+}
+
 export interface TeamUpdateRequest {
-  teamName: string;
+  teamName: Username;
   members: {
     oldValue: Username[];
     newValue: Username[];
@@ -82,7 +87,7 @@ export interface TeamUpdateRequest {
 }
 
 export interface BotUpdateRequest {
-  botName: string;
+  botName: Username;
   crew: {
     oldValue: Username[];
     newValue: Username[];
@@ -103,9 +108,9 @@ export interface BotUpdateRequest {
 }
 
 export interface TeamDeleteRequest {
-  name: string;
+  name: Username;
 }
 
 export interface BotDeleteRequest {
-  name: string;
+  name: Username;
 }

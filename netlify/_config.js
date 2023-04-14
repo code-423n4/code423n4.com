@@ -10,4 +10,9 @@ module.exports = {
   moralisAppId: process.env.GATSBY_MORALIS_APP_ID,
   kickboxApiKey: process.env.KICKBOX_API_KEY,
   apiToken: process.env.C4_API_TOKEN,
+  // keep in sync with START and END in register/bot.tsx
+  nextBotQualifier: {
+    start: "2023-04-12T20:00:00.000Z",
+    end: "2023-04-12T21:00:00.000Z",
+  },
 };

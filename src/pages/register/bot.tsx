@@ -9,6 +9,7 @@ import { format, isAfter, isBefore } from "date-fns";
 import ProtectedSection from "../../components/ProtectedSection";
 
 // @todo: automate this based on contest data for future bot races
+// keep in sync with nextBotQualifier from config file
 const START = new Date("2023-04-12T20:00:00.000Z");
 const END = new Date("2023-04-12T21:00:00.000Z");
 const REPO = "https://github.com/code-423n4/2023-04-frankencoin";
@@ -30,7 +31,7 @@ function getRegistrationWindowStatus(): Status {
   }
 }
 
-export default function TeamRegistration({ data }) {
+export default function BotRegistration({ data }) {
   const [
     registrationWindowStatus,
     setRegistrationWindowStatus,
