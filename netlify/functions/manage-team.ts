@@ -15,7 +15,7 @@ import {
   TeamUpdateRequest,
 } from "../../types/user";
 import { checkAuth, checkTeamAuth } from "../util/auth-utils";
-import { getTeamEmails, sendConfirmationEmail } from "../util/user-utils";
+import { getGroupEmails, sendConfirmationEmail } from "../util/user-utils";
 import fetch from "node-fetch";
 
 const OctokitClient = Octokit.plugin(createPullRequest, createOrUpdateTextFile);
@@ -172,8 +172,8 @@ async function editTeam(
       }),
     });
 
-    const newMemberEmails = await getTeamEmails(newTeamData);
-    const oldMemberEmails = await getTeamEmails(oldTeamData);
+    const newMemberEmails = await getGroupEmails(newTeamData.members);
+    const oldMemberEmails = await getGroupEmails(oldTeamData.members);
     const emailSubject = `Code4rena team "${teamName}" has been modified`;
 
     const emailBody = dedent`
@@ -295,7 +295,7 @@ async function deleteTeam(
     }),
   });
 
-  const teamEmails = await getTeamEmails(team);
+  const teamEmails = await getGroupEmails(team.members);
   const emailSubject = `Code4rena team "${teamName}" has been deleted`;
   const emailBody = dedent`
   Team ${teamName} deleted by ${username}
