@@ -309,10 +309,8 @@ export default function BotManagement({ data, location }) {
           </div>
         ) : (
           <>
-            <h1 className="page-header">
-              Manage Team {botState && `"${botState?.botName}"`}
-            </h1>
             <Form
+              title={`Manage Bot "${botState.botName}"`}
               onSubmit={submit}
               submitButtonText="Save bot"
               validator={validator}
