@@ -31,15 +31,13 @@ export interface BotData extends UserData, BotFileData {}
 
 export interface TeamData extends UserData {
   members: Username[];
-  paymentAddresses: {
-    chain: SupportedChain;
-    address: WalletAddress;
-  }[];
+  paymentAddresses: PaymentAddress[];
 }
 
 export interface PaymentAddress {
   address: WalletAddress;
   chain: SupportedChain;
+  id?: string;
 }
 
 export interface TeamCreateRequest {
