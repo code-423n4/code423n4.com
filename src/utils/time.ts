@@ -4,6 +4,8 @@ import isValid from "date-fns/isValid";
 import parseISO from "date-fns/parseISO";
 
 import differenceInCalendarDays from "date-fns/differenceInCalendarDays";
+import { DateString } from "../../types/shared";
+import { addHours, isAfter, isBefore } from "date-fns";
 
 const left = (total) => {
   return {
@@ -45,27 +47,27 @@ const getTimeRemaining = (contestTimer) => {
   }
 };
 
-const getDates = (start, end) => {
+const getDates = (start, end): ContestSchedule => {
   const now = Date.now();
   const startDate = new Date(start);
   const endDate = new Date(end);
   const startTime = startDate.getTime();
   const endTime = endDate.getTime();
 
-  let contestStatus;
+  let contestStatus: ContestStatus;
 
   switch (true) {
     case now >= startTime && now <= endTime:
-      contestStatus = "active";
+      contestStatus = ContestStatus.Live;
       break;
     case now < startTime:
-      contestStatus = "soon";
+      contestStatus = ContestStatus.Soon;
       break;
     case now >= endTime:
-      contestStatus = "completed";
+      contestStatus = ContestStatus.Done;
       break;
     default:
-      contestStatus = "-";
+      contestStatus = ContestStatus.Undefined;
   }
 
   const daysDuration = differenceInCalendarDays(endDate, startDate);
@@ -88,8 +90,26 @@ const getDates = (start, end) => {
   const endLocal = format(endDate, "(d MMMM - h:mm a zzz)");
   const startLocal = format(startDate, "(d MMMM - h:mm a zzz)");
 
-  const t = {
+  const botRaceEnd = addHours(new Date(startDate), 1);
+  let botRaceStatus: ContestStatus;
+  switch (true) {
+    case isBefore(new Date(Date.now()), botRaceEnd) &&
+      isAfter(new Date(Date.now()), startDate):
+      botRaceStatus = ContestStatus.Live;
+      break;
+    case isBefore(new Date(Date.now()), startDate):
+      botRaceStatus = ContestStatus.Soon;
+      break;
+    case isAfter(new Date(Date.now()), botRaceEnd):
+      botRaceStatus = ContestStatus.Done;
+      break;
+    default:
+      botRaceStatus = ContestStatus.Undefined;
+  }
+
+  const t: ContestSchedule = {
     contestStatus,
+    botRaceStatus,
     start: startTime,
     end: endTime,
     startDay: isValid(startDate) ? format(startDate, "d MMMM yyyy") : "",
@@ -97,9 +117,30 @@ const getDates = (start, end) => {
     startTime: isValid(startDate) ? startUtc + " " + startLocal : "",
     endTime: isValid(endDate) ? endUtc + " " + endLocal : "",
     daysDuration,
+    botRaceEnd,
   };
 
   return t;
 };
 
-export { getTimeRemaining, getDates };
+enum ContestStatus {
+  Live = "active",
+  Soon = "soon",
+  Done = "completed",
+  Undefined = "-",
+}
+
+interface ContestSchedule {
+  contestStatus: ContestStatus;
+  botRaceStatus: ContestStatus;
+  start: number;
+  end: number;
+  startDay: DateString;
+  endDay: DateString;
+  startTime: DateString;
+  endTime: DateString;
+  daysDuration: number;
+  botRaceEnd: Date;
+}
+
+export { getTimeRemaining, getDates, ContestSchedule };
