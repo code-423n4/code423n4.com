@@ -1,4 +1,3 @@
-import clsx from "clsx";
 import { graphql, Link } from "gatsby";
 import Moralis from "moralis-v1";
 import React, { useEffect, useState } from "react";
@@ -7,8 +6,9 @@ import rehypeKatex from "rehype-katex";
 import remarkBreaks from "remark-breaks";
 import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
+import ReactMarkdown from "react-markdown";
 
-//data
+// data
 import botRaceQualifier from "../../_data/bot-race-qualifier.json";
 // types
 import { WardenFindingsForContest } from "../../types/finding";
@@ -17,13 +17,12 @@ import { ContestStatus, getDates } from "../utils/time";
 // hooks
 import useUser from "../hooks/UserContext";
 // components
+import DefaultLayout from "./DefaultLayout";
 import ClientOnly from "../components/ClientOnly";
 import Countdown from "../components/Countdown";
-import DefaultLayout from "./DefaultLayout";
 import FindingsList from "../components/FindingsList";
 import LeaderboardTableReduced from "../components/LeaderboardTableReduced";
 import WardenDetails from "../components/WardenDetails";
-import ReactMarkdown from "react-markdown";
 
 enum FindingsStatus {
   Fetching = "fetching",
@@ -33,7 +32,7 @@ enum FindingsStatus {
 
 const ContestLayout = ({ data }) => {
   // state
-  const [artOpen, setArtOpen] = useState(false);
+  // const [artOpen, setArtOpen] = useState(false);
   const [findingsList, setFindingsList] = useState<WardenFindingsForContest>({
     user: [],
     teams: {},
@@ -197,7 +196,7 @@ const ContestLayout = ({ data }) => {
                   <p>{details}</p>
                   {contestid === botRaceQualifier.contest &&
                     t.botRaceStatus === ContestStatus.Live &&
-                    !currentUser.bot && (
+                    (!currentUser.bot || currentUser.bot.relegated) && (
                       <p>
                         <span className="competition-tag--blurple">
                           Bot Race Qualifier
@@ -206,7 +205,9 @@ const ContestLayout = ({ data }) => {
                           to="/register/bot"
                           className="button button--text-link"
                         >
-                          Register your bot
+                          {!currentUser.bot && "Register your bot"}
+                          {currentUser.bot.relegated &&
+                            "Your bot has been relegated - apply for promotion"}
                         </Link>
                       </p>
                     )}
