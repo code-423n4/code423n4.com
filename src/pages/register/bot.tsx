@@ -1,18 +1,20 @@
 import { graphql } from "gatsby";
 import React, { useEffect, useState } from "react";
+import { addHours } from "date-fns/esm";
+import { format, isAfter, isBefore } from "date-fns";
+
+import botRaceQualifier from "../../../_data/bot-race-qualifier.json";
 
 import DefaultLayout from "../../templates/DefaultLayout";
-
 import BotRegistrationForm from "../../components/BotRegistrationForm";
 import { WardenFieldOption } from "../../components/reporter/widgets/WardenField";
-import { format, isAfter, isBefore } from "date-fns";
 import ProtectedSection from "../../components/ProtectedSection";
 
 // @todo: automate this based on contest data for future bot races
 // keep in sync with nextBotQualifier from config file
-const START = new Date("2023-04-12T20:00:00.000Z");
-const END = new Date("2023-04-12T21:00:00.000Z");
-const REPO = "https://github.com/code-423n4/2023-04-frankencoin";
+const START = new Date(botRaceQualifier.start);
+const END = addHours(START, 1);
+const REPO = botRaceQualifier.repo;
 
 enum Status {
   soon,

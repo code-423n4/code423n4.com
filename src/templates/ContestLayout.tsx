@@ -8,10 +8,12 @@ import remarkBreaks from "remark-breaks";
 import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
 
+//data
+import botRaceQualifier from "../../_data/bot-race-qualifier.json";
 // types
 import { WardenFindingsForContest } from "../../types/finding";
 // helpers
-import { getDates } from "../utils/time";
+import { ContestStatus, getDates } from "../utils/time";
 // hooks
 import useUser from "../hooks/UserContext";
 // components
@@ -193,19 +195,21 @@ const ContestLayout = ({ data }) => {
                 <div>
                   <h1 className="type__headline__xs">{title}</h1>
                   <p>{details}</p>
-                  {contestid === 231 && (
-                    <p>
-                      <span className="competition-tag--blurple">
-                        Bot Race Qualifier
-                      </span>
-                      <Link
-                        to="/register/bot"
-                        className="button button--text-link"
-                      >
-                        Register your bot
-                      </Link>
-                    </p>
-                  )}
+                  {contestid === botRaceQualifier.contest &&
+                    t.botRaceStatus === ContestStatus.Live &&
+                    !currentUser.bot && (
+                      <p>
+                        <span className="competition-tag--blurple">
+                          Bot Race Qualifier
+                        </span>
+                        <Link
+                          to="/register/bot"
+                          className="button button--text-link"
+                        >
+                          Register your bot
+                        </Link>
+                      </p>
+                    )}
                 </div>
               </div>
               <div className="contest-page__button-wrapper">
