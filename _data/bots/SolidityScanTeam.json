@@ -1,0 +1,17 @@
+{
+  "handle": "SolidityScanTeam",
+  "crew": [
+    "cyberboy"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xB5E576E33a7A06cB96F08B1ef2e712b9Cdb22D58"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0xB5E576E33a7A06cB96F08B1ef2e712b9Cdb22D58"
+    }
+  ],
+  "image": "./avatars/SolidityScanTeam.jpeg"
+}
