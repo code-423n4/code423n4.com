@@ -49,7 +49,12 @@ export default function SubmitBotFinding({
   return (
     <Form
       onSubmit={submit}
-      title={`${currentUser!.bot!.username}'s Bot Race Report`}
+      title={
+        <div className="bot-race__form-title">
+          <img src="/images/icon/wolf-bot/32.svg" className="icon" />
+          {`${currentUser!.bot!.username}'s Bot Race Report`}
+        </div>
+      }
       subtitle={`${title} - Audit competition`}
       successMessage={
         <>

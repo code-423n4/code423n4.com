@@ -6,6 +6,7 @@ import { addHours } from "date-fns/esm";
 // components
 import ProtectedPage from "../components/ProtectedPage";
 import SubmitBotFinding from "../components/reporter/SubmitBotFinding";
+import useUser from "../hooks/UserContext";
 
 const ReportForm = ({ data }) => {
   const {
@@ -15,6 +16,8 @@ const ReportForm = ({ data }) => {
     fields,
     contestid,
   } = data.contestsCsv;
+
+  const { currentUser } = useUser();
   const [hasBotRaceEnded, setHasBotRaceEnded] = useState<boolean>(
     isAfter(new Date(Date.now()), addHours(new Date(start_time), 1))
   );
@@ -35,16 +38,29 @@ const ReportForm = ({ data }) => {
 
   return (
     <ProtectedPage pageTitle="Submit finding | Code4rena">
-      <div className="limited-width">
+      <div className="limited-width bot-race">
         {hasBotRaceEnded ? (
           <>
-            <h1>The Bot Race window has ended.</h1>
+            <h1>The Bot Race window has ended</h1>
             <p>
               You can no longer submit bot race reports for this competition.
             </p>
             <Link to={fields.contestPath} className="button button--back-link">
               Back to {title} competition page
             </Link>
+          </>
+        ) : !currentUser.bot ? (
+          <>
+            <Link to={fields.contestPath} className="button button--back-link">
+              Back to {title} competition page
+            </Link>
+            <h1>Please register a bot</h1>
+            <p>
+              You must have a registered bot to compete in Bot Races.{" "}
+              <Link to="/register/bot" className="button button--text-link">
+                Learn more.
+              </Link>
+            </p>
           </>
         ) : (
           <>
