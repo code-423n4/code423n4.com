@@ -137,6 +137,16 @@ exports.handler = async (event) => {
       };
     }
 
+    await octokit.request(
+      "POST /repos/{owner}/{repo}/issues/{issue_number}/labels",
+      {
+        owner: process.env.GITHUB_REPO_OWNER!,
+        repo: process.env.REPO!,
+        issue_number: promotionResponse!.data.number,
+        labels: ["bot-promotion"],
+      }
+    );
+
     // submit application entry
     const submissionBody = dedent`
     Bot registration PR: ${promotionResponse.data.html_url}
