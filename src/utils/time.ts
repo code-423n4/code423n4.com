@@ -143,4 +143,4 @@ interface ContestSchedule {
   botRaceEnd: Date;
 }
 
-export { getTimeRemaining, getDates, ContestSchedule };
+export { getTimeRemaining, getDates, ContestSchedule, ContestStatus };
