@@ -1,0 +1,16 @@
+{
+  "handle": "spearbot",
+  "crew": [
+    "hrkrshnn"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xB6B9E9e56AB5a4AF927faa802ac93786352f3af9"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0xB6B9E9e56AB5a4AF927faa802ac93786352f3af9"
+    }
+  ]
+}

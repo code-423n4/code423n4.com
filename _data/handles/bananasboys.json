@@ -1,0 +1,17 @@
+{
+  "handle": "bananasboys",
+  "members": [
+    "miguelmtzinf",
+    "zer0dot"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x9FF30Aa7D3868aC782C1d217Ed438DF0F317446C"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x9FF30Aa7D3868aC782C1d217Ed438DF0F317446C"
+    }
+  ]
+}

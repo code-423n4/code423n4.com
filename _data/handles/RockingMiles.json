@@ -1,0 +1,11 @@
+{
+  "handle": "RockingMiles",
+  "members": ["robee", "pants"],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x88c5B7cce0401471D392D4A43AA08c02d8d883c2"
+    }
+  ],
+  "link": ""
+}
