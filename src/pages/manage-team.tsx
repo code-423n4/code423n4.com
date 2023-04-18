@@ -99,7 +99,7 @@ export default function TeamManagement({ data, location }) {
     data.handles.edges.map((h) => h.node.handle)
   );
 
-  let wardens: { value: string; image: unknown }[] = [];
+  let wardens: WardenFieldOption[] = [];
   data.handles.edges.forEach(({ node }) => {
     if (!node.members) {
       wardens.push({ value: node.handle, image: node.image });

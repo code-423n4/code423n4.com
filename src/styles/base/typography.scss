@@ -15,6 +15,21 @@
   font-style: normal;
 }
 
+// Mixins
+// ------------------------------------------------
+
+@mixin word-wrap() {
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  -ms-word-break: break-all;
+  word-break: break-all;
+  word-break: break-word;
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+
 // [Tip] Only set type rules here. For all other things `body`, check `base-layout`.
 body {
   font-family: $font__default;
@@ -193,10 +208,12 @@ h6 {
   }
 }
 .type__subline__page-title {
-  font-size: $headline-font-size__xxs;
-  line-height: 115%;
   margin-bottom: $spacing__l;
   margin-top: -$spacing__m; // TODO: don't use negative margin
+  font-size: $headline-font-size__xxs;
+  font-weight: 500;
+  line-height: 115%;
+
   @include breakpoint("m") {
     font-size: $headline-font-size__xxs;
     margin-bottom: $spacing__xl;
@@ -207,6 +224,7 @@ h6 {
 // ------------------------------------------------
 
 .type__subline__s {
+  margin-bottom: 0.3em;
   font-size: $headline-font-size__xxs;
   font-family: $font__default;
   font-weight: 500;
@@ -214,11 +232,11 @@ h6 {
   line-height: 120%;
   text-decoration: none;
   text-transform: none;
-  margin-bottom: 0.3em;
   @include breakpoint("m") {
     font-size: $headline-font-size__xxs;
   }
 }
+
 .type__subline__m {
   font-size: $headline-font-size__xxs;
   font-family: $font__default;
@@ -422,10 +440,28 @@ h6 {
 // Adding a class of `type__text` to a parent element will apply these styles.
 
 .type__text {
-  font-size: 1rem;
-  font-family: $font__default;
-  font-weight: 400;
-  line-height: 130%;
+  @mixin type__text {
+    font-size: $font-size__text;
+    font-family: $font__default;
+    font-weight: 400;
+    line-height: 130%;
+    @include word-wrap;
+  }
+
+  @include type__text;
+
+  &--lists {
+    @include type__text;
+
+    ul {
+      margin-left: 1.5em;
+    }
+
+    li {
+      margin-bottom: 0.3em;
+      list-style-type: disc;
+    }
+  }
 }
 .type__text-bold,
 .type__text strong {

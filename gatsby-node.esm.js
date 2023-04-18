@@ -7,7 +7,6 @@ import path from "path";
 import webpack from "webpack";
 import SchemaCustomization from "./schema";
 import { getApiContestData } from "./netlify/util/getContestsData";
-const { token } = require("./netlify/_config");
 
 const privateContestMessage = dedent`
 ## Contest details are not available. Why not?
@@ -19,7 +18,7 @@ For more information on participating in a private audit, please see this [post]
 
 const graphqlWithAuth = graphql.defaults({
   headers: {
-    authorization: `Bearer ${token}`,
+    authorization: `Bearer ${process.env.GITHUB_TOKEN_FETCH}`,
   },
 });
 
