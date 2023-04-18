@@ -1,0 +1,16 @@
+{
+  "handle": "jatGPT",
+  "crew": [
+    "jat"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x4f5F14AF7E1999fa09dD0CEa786B82B4Fc4B9910"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x4f5F14AF7E1999fa09dD0CEa786B82B4Fc4B9910"
+    }
+  ]
+}

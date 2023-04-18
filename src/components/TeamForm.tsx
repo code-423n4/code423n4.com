@@ -221,12 +221,16 @@ export default function TeamForm({
   const validateTeamName = useCallback(
     (teamName: string): (string | ReactNode)[] => {
       const errors: (string | ReactNode)[] = [];
+      const handleNames: string[] = Array.from(handles.values());
+      const existingHandle = handleNames.find((handle) => {
+        return handle.toLowerCase() === teamName.toLowerCase();
+      });
       if (teamName.match(/^[0-9a-zA-Z_\-]+$/) === null) {
         errors.push(
           "Supports alphanumeric characters, underscores, and hyphens"
         );
       }
-      if (!initialState && handles.has(teamName)) {
+      if (!initialState && existingHandle) {
         errors.push(
           `${teamName} is already registered as a team, bot, or warden.`
         );
