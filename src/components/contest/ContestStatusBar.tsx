@@ -39,36 +39,42 @@ export default function ContestStatusBar({
 }: ContestTimelineBarProps) {
   const { currentUser } = useUser();
 
+  const isQualifierLive = contestNumber === botRaceQualifier.contest;
+  const hasEligibleBot = currentUser.bot && !currentUser.bot.relegated;
+
+  let linkText = "Submit your bot race report";
+  let linkTo = botRacePath;
+  let botRaceMessage = "Bot Race is live!";
+  if (isQualifierLive) {
+    if (!hasEligibleBot) {
+      botRaceMessage = "Bot Race Qualifier is live!";
+      linkTo = "/register/bot";
+    }
+    if (!currentUser.bot) {
+      linkText = "Register your bot";
+    } else if (currentUser.bot.relegated) {
+      linkText = "Apply for promotion";
+    }
+  }
+
   return (
-    <div>
-      {contestTimelineObject.botRaceStatus === ContestStatus.Live &&
-        (contestNumber === botRaceQualifier.contest &&
-        (!currentUser.bot || currentUser.bot.relegated) ? (
-          <>
-            <span className="competition-tag--blurple">Bot Race Qualifier</span>
-            <Link to="/register/bot" className="button button--text-link">
-              {!currentUser.bot
-                ? "Register your bot"
-                : currentUser.bot.relegated
-                ? "Your bot has been relegated - apply for promotion"
-                : ""}
-            </Link>
-          </>
-        ) : (
-          <>
-            <span>
-              <img src="/images/icon/wolf-bot/16.svg" />{" "}
-              <strong>Bot race live!</strong> Ends in{" "}
-              {formatDistance(
-                new Date(Date.now()),
-                contestTimelineObject.botRaceEnd
-              )}
-            </span>
-            <Link to={botRacePath} className="button button--text-link">
-              Submit your bot race report
-            </Link>
-          </>
-        ))}
+    <div className="contest-page__status-bar">
+      {contestTimelineObject.botRaceStatus === ContestStatus.Live && (
+        <div className="contest-page__bot-race-status-bar">
+          <span className="contest-page__bot-race-status-text">
+            <img src="/images/icon/wolf-bot/16.svg" className="icon" />
+            <strong>{botRaceMessage}</strong>
+            &nbsp; Ends in{" "}
+            {formatDistance(
+              new Date(Date.now()),
+              contestTimelineObject.botRaceEnd
+            )}
+          </span>
+          <Link to={linkTo} className="button button--text-link">
+            {linkText}
+          </Link>
+        </div>
+      )}
       <div className="contest-page__top-bar">
         <span
           className={
