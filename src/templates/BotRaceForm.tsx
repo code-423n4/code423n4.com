@@ -39,21 +39,18 @@ const BotRaceForm = ({ data }) => {
   return (
     <ProtectedPage pageTitle="Submit finding | Code4rena">
       <div className="limited-width bot-race">
+        <Link to={fields.contestPath} className="button button--back-link">
+          Back to {title} competition page
+        </Link>
         {hasBotRaceEnded ? (
           <>
             <h1>The Bot Race window has ended</h1>
             <p>
               You can no longer submit bot race reports for this competition.
             </p>
-            <Link to={fields.contestPath} className="button button--back-link">
-              Back to {title} competition page
-            </Link>
           </>
         ) : !currentUser.bot ? (
           <>
-            <Link to={fields.contestPath} className="button button--back-link">
-              Back to {title} competition page
-            </Link>
             <h1>Please register a bot</h1>
             <p>
               You must have a registered bot to compete in Bot Races.{" "}
@@ -62,11 +59,18 @@ const BotRaceForm = ({ data }) => {
               </Link>
             </p>
           </>
+        ) : currentUser.bot.relegated ? (
+          <>
+            <h1>Your Bot is relegated</h1>
+            <p>
+              You can apply for promotion during the next qualifier race.{" "}
+              <Link to="/register/bot" className="button button--text-link">
+                Learn more.
+              </Link>
+            </p>
+          </>
         ) : (
           <>
-            <Link to={fields.contestPath} className="button button--back-link">
-              Back to {title} competition page
-            </Link>
             <SubmitBotFinding
               title={title}
               contestPath={fields.contestPath}
