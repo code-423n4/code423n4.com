@@ -134,7 +134,6 @@ const ContestLayout = ({ data }) => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify([{ node: data.contestsCsv }]),
         }
       );
       if (result.ok) {

@@ -21,16 +21,10 @@ const getWardenInfo = (handle: string) => {
 const getLeaderboardResults = async (
   contestRange: string,
   contestId?: string,
-  handle?: string,
-  allContestsGraphQl?: any
+  handle?: string
 ) => {
   // @TODO: also filter by contestId (if provided)
-  let allContests;
-  if (allContestsGraphQl) {
-    allContests = allContestsGraphQl;
-  } else {
-    allContests = await getApiContestData();
-  }
+  const allContests = await getApiContestData();
 
   const filteredContests = allContests
     .filter(
@@ -195,16 +189,10 @@ exports.handler = async (event) => {
 
     // range
     const contestRange = event.queryStringParameters.range;
-    const contests = JSON.parse(event.body).map((el) => el.node);
     return {
       statusCode: 200,
       body: JSON.stringify(
-        await getLeaderboardResults(
-          contestRange,
-          contestId,
-          contestHandle,
-          contests
-        )
+        await getLeaderboardResults(contestRange, contestId, contestHandle)
       ),
     };
   } catch (error) {
