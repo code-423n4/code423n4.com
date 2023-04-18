@@ -14,7 +14,6 @@ export default function Leaderboard() {
       const result = await fetch(
         `/.netlify/functions/leaderboard?range=${timeFrame}`,
         {
-          method: "POST",
           headers: {
             "Content-Type": "application/json",
             // "X-Authorization": `Bearer ${sessionToken}`,

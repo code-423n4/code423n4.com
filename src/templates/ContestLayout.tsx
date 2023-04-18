@@ -130,7 +130,6 @@ const ContestLayout = ({ data }) => {
       const result = await fetch(
         `/.netlify/functions/leaderboard?contest=${contestid}`,
         {
-          method: "POST",
           headers: {
             "Content-Type": "application/json",
           },

@@ -170,13 +170,13 @@ function computeResults(findings) {
 }
 
 exports.handler = async (event) => {
-  // only allow POST
+  // only allow GET
 
-  if (event.httpMethod !== "POST") {
+  if (event.httpMethod !== "GET") {
     return {
       statusCode: 405,
       body: "Method not allowed",
-      headers: { Allow: "POST" },
+      headers: { Allow: "GET" },
     };
   }
 
