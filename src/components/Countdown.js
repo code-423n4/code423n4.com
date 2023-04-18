@@ -20,7 +20,10 @@ const Countdown = ({
       const newTimer = getDates(start, end);
       setTimeLeft(getTimeRemaining(contestTimer));
 
-      if (contestTimer.contestStatus !== newTimer.contestStatus) {
+      if (
+        contestTimer.contestStatus !== newTimer.contestStatus ||
+        contestTimer.botRaceStatus !== newTimer.botRaceStatus
+      ) {
         setContestTimer(newTimer);
         if (updateContestStatus) {
           updateContestStatus();
