@@ -1,9 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { getTimeRemaining, getDates } from "../utils/time";
 
-const Countdown = ({ start, end, isPreview, text, updateContestStatus }) => {
+const Countdown = ({
+  start,
+  end,
+  isPreview,
+  text = undefined,
+  updateContestStatus = undefined,
+}) => {
   const [contestTimer, setContestTimer] = useState(getDates(start, end));
-  const [timeLeft, setTimeLeft] = useState(getTimeRemaining(contestTimer, true));
+  const [timeLeft, setTimeLeft] = useState(
+    getTimeRemaining(contestTimer, true)
+  );
 
   const type = isPreview ? "preview" : "contest";
 
@@ -15,7 +23,9 @@ const Countdown = ({ start, end, isPreview, text, updateContestStatus }) => {
       if (timeLeft.total >= 1000) {
         return;
       } else {
-        updateContestStatus();
+        if (updateContestStatus) {
+          updateContestStatus();
+        }
         setTimeLeft(0);
       }
     }, 1000);
@@ -24,26 +34,26 @@ const Countdown = ({ start, end, isPreview, text, updateContestStatus }) => {
 
   return (
     <div className="countdown">
-      <h5>
-        <span className="wrapper-time">
-          {contestTimer.contestStatus === "active" ? (
-            <span className="countdown-live"></span>
-          ) : null}
-          <span className="days">{timeLeft.days}</span> days +{" "}
-        </span>
-        <span className="wrapper-time">
-          <span className="hours">{timeLeft.hh}</span>{" "}
-          <span className="minutes">{timeLeft.mm}</span>{" "}
-          <span className="seconds">{timeLeft.ss}</span>
-        </span>
-        {text !== false && timeLeft.total > 0 ? (
-          <span className="wrapper-time end-cap">
-            {contestTimer.contestStatus === "soon"
-              ? ` until ${type} starts`
-              : ` until ${type} ends`}
-          </span>
+      <span className="wrapper-time">
+        {contestTimer.contestStatus === "active" ? (
+          <span className="countdown-live"></span>
         ) : null}
-      </h5>
+        <span className="days">{timeLeft.days}</span> days +{" "}
+      </span>
+      <span className="wrapper-time">
+        <span className="hours">{timeLeft.hh}</span>
+        {":"}
+        <span className="minutes">{timeLeft.mm}</span>
+        {":"}
+        <span className="seconds">{timeLeft.ss}</span>
+      </span>
+      {text && timeLeft.total > 0 ? (
+        <span className="wrapper-time end-cap">
+          {contestTimer.contestStatus === "soon"
+            ? ` until ${type} starts`
+            : ` until ${type} ends`}
+        </span>
+      ) : null}
     </div>
   );
 };

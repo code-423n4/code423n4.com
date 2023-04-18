@@ -1,6 +1,19 @@
 {
-  "image": "./avatars/certorainc.jpg",
-  "link": "https://twitter.com/CertoraInc",
   "handle": "CertoraInc",
-  "members": ["certora", "egjlmn1", "OriDabush", "ItayG", "shakedwinder"]  
+  "members": [
+    "certora",
+    "egjlmn1",
+    "OriDabush",
+    "ItayG",
+    "shakedwinder",
+    "RoiEvenHaim"
+  ],
+  "link": "https://twitter.com/CertoraInc",
+  "image": "./avatars/certorainc.jpg",
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x09A9af114843218a7446929b1183eBec373B2827"
+    }
+  ]
 }

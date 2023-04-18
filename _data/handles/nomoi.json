@@ -1,0 +1,19 @@
+{
+  "handle": "nomoi",
+  "members": [
+    "vdrg",
+    "gnkz"
+  ],
+  "link": "https://nomoi.xyz",
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x33CC9d39D44861C3d774FB2327943F58516746dB"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x33CC9d39D44861C3d774FB2327943F58516746dB"
+    }
+  ],
+  "image": "./avatars/nomoi.jpeg"
+}
