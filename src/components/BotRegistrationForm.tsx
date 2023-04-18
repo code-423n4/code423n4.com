@@ -1,5 +1,11 @@
 import { navigate } from "gatsby";
-import React, { useCallback, useState, useRef, ReactNode } from "react";
+import React, {
+  useCallback,
+  useState,
+  useRef,
+  ReactNode,
+  PropsWithChildren,
+} from "react";
 import Avatar from "react-avatar";
 import { useMoralis } from "react-moralis";
 
@@ -36,7 +42,7 @@ const initialState: BotState = {
   botImage: "",
 };
 
-interface BotRegistrationProps {
+interface BotRegistrationProps extends PropsWithChildren {
   handles: Set<string>; // includes teams, wardens, and other bots
   wardens: WardenFieldOption[]; // only contains individual wardens; not teams or bots
 }
@@ -44,6 +50,7 @@ interface BotRegistrationProps {
 export default function BotRegistrationForm({
   handles,
   wardens,
+  children,
 }: BotRegistrationProps) {
   const { currentUser } = useUser();
   const { user, isInitialized } = useMoralis();
@@ -275,9 +282,19 @@ export default function BotRegistrationForm({
     <Form
       successMessage="Your bot registration application has been submitted."
       onSubmit={submit}
-      submitButtonText="Register Bot"
+      submitButtonText={
+        !currentUser.bot || currentUser.bot.relegated
+          ? "Submit"
+          : "Register Bot"
+      }
       validator={validator}
+      title={
+        !currentUser.bot || currentUser.bot.relegated
+          ? "Apply for promotion"
+          : "Register your Bot"
+      }
     >
+      {children}
       {!currentUser.bot && (
         <>
           <Input

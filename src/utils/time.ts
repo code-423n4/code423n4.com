@@ -16,7 +16,7 @@ const left = (total) => {
   };
 };
 
-const getTimeRemaining = (contestTimer) => {
+const getTimeRemaining = (contestTimer: ContestSchedule) => {
   const endTime =
     contestTimer.contestStatus === "active"
       ? contestTimer.end

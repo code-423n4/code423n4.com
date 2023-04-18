@@ -79,7 +79,6 @@ const ContestTile = ({ contest, updateContestStatus, user, reduced }) => {
                 {t.contestStatus === "active" && <span>Ends in</span>}
                 {t.contestStatus === "soon" && <span>Starts in</span>}
                 <Countdown
-                  state={t.contestStatus}
                   start={start_time}
                   end={end_time}
                   isPreview={findingsRepo === ""}

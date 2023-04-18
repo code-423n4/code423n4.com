@@ -215,8 +215,7 @@ export default function BotRegistration({ data }) {
           {registrationWindowStatus === Status.open && (
             <section className="register-bot__register register-bot__register--open">
               <ProtectedSection message="To register a bot for Bot Races, you need to be a registered warden, currently connected via wallet.">
-                <>
-                  <h1>Register your Bot</h1>
+                <BotRegistrationForm handles={handles} wardens={wardens}>
                   <div className="register-bot__repo-link-wrapper">
                     <img
                       src="/images/br-icon-report.svg"
@@ -236,9 +235,7 @@ export default function BotRegistration({ data }) {
                       </a>
                     </div>
                   </div>
-
-                  <BotRegistrationForm handles={handles} wardens={wardens} />
-                </>
+                </BotRegistrationForm>
               </ProtectedSection>
             </section>
           )}

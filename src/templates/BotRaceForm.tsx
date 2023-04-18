@@ -8,7 +8,7 @@ import ProtectedPage from "../components/ProtectedPage";
 import SubmitBotFinding from "../components/reporter/SubmitBotFinding";
 import useUser from "../hooks/UserContext";
 
-const ReportForm = ({ data }) => {
+const BotRaceForm = ({ data }) => {
   const {
     findingsRepo,
     title,
@@ -34,7 +34,7 @@ const ReportForm = ({ data }) => {
       setHasBotRaceEnded(hasEnded);
     }, 1000);
     return () => clearInterval(timer);
-  });
+  }, [start_time]);
 
   return (
     <ProtectedPage pageTitle="Submit finding | Code4rena">
@@ -84,7 +84,7 @@ const ReportForm = ({ data }) => {
   );
 };
 
-export default ReportForm;
+export default BotRaceForm;
 
 export const pageQuery = graphql`
   query BotContestsById($contestId: Int) {
