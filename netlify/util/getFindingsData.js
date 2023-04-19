@@ -20,7 +20,22 @@ const getApiFindingsData = async () => {
     throw Error(`Bad response from API server: ${await res.text()}`);
   }
 
-  return await res.json();
+  const smolData = await res.json();
+  return smolData.map(
+    ({
+      c: contest,
+      s: score,
+      h: handle,
+      f: finding,
+      r: risk,
+      p: pie,
+      sp: split,
+      sl: slice,
+      a: award,
+      aw: awardCoin,
+      awa: awardUSD,
+    }) => ({ contest, score, handle, finding, risk, pie, split, slice, award, awardCoin, awardUSD })
+  );
 };
 
 export { getApiFindingsData };
