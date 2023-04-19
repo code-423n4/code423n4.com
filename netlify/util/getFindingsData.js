@@ -34,7 +34,19 @@ const getApiFindingsData = async () => {
       a: award,
       aw: awardCoin,
       awa: awardUSD,
-    }) => ({ contest, score, handle, finding, risk, pie, split, slice, award, awardCoin, awardUSD })
+    }) => ({
+      contest,
+      score,
+      handle,
+      finding,
+      risk,
+      pie,
+      split,
+      slice,
+      award,
+      awardCoin,
+      awardUSD,
+    })
   );
 };
 
