@@ -3,6 +3,7 @@ import fs, { readFileSync } from "fs";
 import { AwardFinding } from "../../types/finding";
 import { getApiContestData } from "../util/getContestsData";
 import { getApiFindingsData } from "../util/getFindingsData";
+import { DBContest } from "../../types/contest";
 
 const getWardenInfo = (handle: string) => {
   const wardenFile = readFileSync(`./_data/handles/${handle}.json`);
@@ -35,7 +36,8 @@ const getLeaderboardResults = async (
 
   const filteredContests = allContests
     .filter(
-      (contest) => withinTimeframe(contest, contestRange) || !contestRange
+      (contest: DBContest) =>
+        withinTimeframe(contest, contestRange) || !contestRange
     )
     .filter((contest) => !contestId || Number(contestId) === contest.contestid);
 

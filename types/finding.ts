@@ -88,7 +88,7 @@ export interface AwardFinding {
   handle: string;
   finding: string;
   risk: string;
-  score: number;
+  score: number | null;
   pie: number;
   split: number;
   slice: number;

@@ -90,7 +90,7 @@ const resourcesHandler: Handler = async (event, context) => {
           finding.handle,
           finding.finding,
           finding.risk,
-          "" + finding.score,
+          finding.score === null ? "" : "" + finding.score,
           "" + finding.pie,
           "" + finding.split,
           "" + finding.slice,
