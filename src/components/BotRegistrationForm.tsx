@@ -280,16 +280,18 @@ export default function BotRegistrationForm({
 
   return (
     <Form
-      successMessage="Your bot registration application has been submitted."
+      successMessage={
+        currentUser.bot && currentUser.bot.relegated
+          ? "Your submission was received."
+          : "Your bot registration application has been submitted."
+      }
       onSubmit={submit}
       submitButtonText={
-        !currentUser.bot || currentUser.bot.relegated
-          ? "Submit"
-          : "Register Bot"
+        currentUser.bot && currentUser.bot.relegated ? "Submit" : "Register Bot"
       }
       validator={validator}
       title={
-        !currentUser.bot || currentUser.bot.relegated
+        currentUser.bot && currentUser.bot.relegated
           ? "Apply for promotion"
           : "Register your Bot"
       }

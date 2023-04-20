@@ -1,43 +1,34 @@
-import { graphql } from "gatsby";
-import React, { useEffect, useState } from "react";
-import { addHours } from "date-fns/esm";
-import { format, isAfter, isBefore } from "date-fns";
+import { graphql, Link } from "gatsby";
+import React, { useCallback, useState } from "react";
+import { format } from "date-fns";
 
 import botRaceQualifier from "../../../_data/bot-race-qualifier.json";
+import useUser from "../../hooks/UserContext";
+import { ContestStatus, getDates } from "../../utils/time";
 
 import DefaultLayout from "../../templates/DefaultLayout";
 import BotRegistrationForm from "../../components/BotRegistrationForm";
 import { WardenFieldOption } from "../../components/reporter/widgets/WardenField";
 import ProtectedSection from "../../components/ProtectedSection";
+import Countdown from "../../components/Countdown";
 
 // @todo: automate this based on contest data for future bot races
 // keep in sync with nextBotQualifier from config file
-const START = new Date(botRaceQualifier.start);
-const END = addHours(START, 1);
+const START = botRaceQualifier.start;
+const END = botRaceQualifier.end;
 const REPO = botRaceQualifier.repo;
 
-enum Status {
-  soon,
-  open,
-  closed,
-}
-
-function getRegistrationWindowStatus(): Status {
-  const now = Date.now();
-  if (isAfter(now, END)) {
-    return Status.closed;
-  } else if (isBefore(now, END) && isAfter(now, START)) {
-    return Status.open;
-  } else {
-    return Status.soon;
-  }
+function getRegistrationWindowStatus(): ContestStatus {
+  const contestTimeline = getDates(START, END);
+  return contestTimeline.botRaceStatus;
 }
 
 export default function BotRegistration({ data }) {
+  const { currentUser } = useUser();
   const [
     registrationWindowStatus,
     setRegistrationWindowStatus,
-  ] = useState<Status>(getRegistrationWindowStatus());
+  ] = useState<ContestStatus>(getRegistrationWindowStatus());
 
   const handles: Set<string> = new Set([
     ...data.handles.edges.map((h) => h.node.handle),
@@ -51,17 +42,9 @@ export default function BotRegistration({ data }) {
     }
   });
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      const currentStatus = getRegistrationWindowStatus();
-
-      if (currentStatus === Status.closed) {
-        clearInterval(timer);
-      }
-      setRegistrationWindowStatus(currentStatus);
-    }, 1000);
-    return () => clearInterval(timer);
-  });
+  const updateContestStatus = useCallback(() => {
+    setRegistrationWindowStatus(getRegistrationWindowStatus());
+  }, [registrationWindowStatus]);
 
   return (
     <DefaultLayout pageTitle="Code4rena Bot Races | Code4rena">
@@ -212,41 +195,55 @@ export default function BotRegistration({ data }) {
           </h3>
         </section>
         <div className="limited-width register-bot__register-wrapper">
-          {registrationWindowStatus === Status.open && (
+          {registrationWindowStatus === ContestStatus.Live && (
             <section className="register-bot__register register-bot__register--open">
               <ProtectedSection message="To register a bot for Bot Races, you need to be a registered warden, currently connected via wallet.">
-                <BotRegistrationForm handles={handles} wardens={wardens}>
-                  <div className="register-bot__repo-link-wrapper">
-                    <img
-                      src="/images/br-icon-report.svg"
-                      alt="Icon of a wolf-like robot head being fed lots of paper"
-                    />
-                    <div className="register-bot__repo-link">
-                      <h2 className="type__headline__xxs">
-                        Feed this codebase to your bot:{" "}
-                      </h2>
-                      <a
-                        href={REPO}
-                        target="_blank"
-                        rel="noreferrer"
-                        aria-label="Link to the 2023-04-frankencoin repo (Opens in a new window)"
-                      >
-                        2023-04-frankencoin
-                      </a>
+                {!currentUser.bot || currentUser.bot.relegated ? (
+                  <BotRegistrationForm handles={handles} wardens={wardens}>
+                    <div className="register-bot__repo-link-wrapper">
+                      <img
+                        src="/images/br-icon-report.svg"
+                        alt="Icon of a wolf-like robot head being fed lots of paper"
+                      />
+                      <div className="register-bot__repo-link">
+                        <h2 className="type__headline__xxs">
+                          Feed this codebase to your bot:{" "}
+                        </h2>
+                        <a
+                          href={REPO}
+                          target="_blank"
+                          rel="noreferrer"
+                          aria-label="Link to the 2023-04-frankencoin repo (Opens in a new window)"
+                        >
+                          2023-04-frankencoin
+                        </a>
+                      </div>
                     </div>
-                  </div>
-                </BotRegistrationForm>
+                    <Countdown
+                      text="Ends in: "
+                      start={START}
+                      end={END}
+                      isPreview={false}
+                      updateContestStatus={updateContestStatus}
+                    />
+                  </BotRegistrationForm>
+                ) : (
+                  <p className="type__copy">
+                    Your bot, {currentUser.bot.username}, is registered! Check
+                    the <Link to="/contests">Competitions page</Link> for
+                    contests with bot races.
+                  </p>
+                )}
               </ProtectedSection>
             </section>
           )}
-          {registrationWindowStatus === Status.closed && (
+          {registrationWindowStatus === ContestStatus.Done && (
             <section className="register-bot__register register-bot__register--closed type__copy">
-              <h1 className="spacing-bottom__l">Bot Registration is closed.</h1>
+              <h1 className="spacing-bottom__l">Bot Registration is closed</h1>
               <p>
-                The first registration window for Bot Races has now closed.{" "}
+                The Bot Race qualifier window is currently closed.
                 <br />
-                The first Qualifier Race has ended. Keep your eye on our
-                Announcements channel in{" "}
+                Keep your eye on our Announcements channel in{" "}
                 <a
                   href="https://discord.gg/code4rena"
                   rel="noreferrer"
@@ -258,13 +255,21 @@ export default function BotRegistration({ data }) {
               </p>
             </section>
           )}
-          {registrationWindowStatus === Status.soon && (
+          {registrationWindowStatus === ContestStatus.Soon && (
             <section className="register-bot__register register-bot__register--soon type__copy">
-              <h1>Bot Registration Coming Soon...</h1>
+              <h1>Next Qualifier Coming Soon...</h1>
+              <Countdown
+                text="Starts in: "
+                start={START}
+                end={END}
+                isPreview={false}
+                updateContestStatus={updateContestStatus}
+              />
               <p>
-                The first registration window for Bot Races will open for one
-                hour on {format(START, "d MMMM")} from {format(START, "h:mm a")}{" "}
-                to {format(END, "h:mm a O")}
+                The next qualifier for Bot Races will open for one hour on{" "}
+                {format(new Date(START), "d MMMM")} from{" "}
+                {format(new Date(START), "h:mm a")} to{" "}
+                {format(new Date(END), "h:mm a O")}
               </p>
             </section>
           )}

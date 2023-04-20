@@ -1,27 +1,27 @@
-import { Link } from "gatsby";
 import Moralis from "moralis-v1";
 import React, { useCallback, useState } from "react";
+
 import { BotReportCreateRequest } from "../../../types/finding";
 import useUser from "../../hooks/UserContext";
+
 import Form from "../form/Form";
 import { TextArea } from "./widgets";
 import FormField from "./widgets/FormField";
 
-export default function SubmitBotFinding({
-  title,
-  contestPath,
-  contestNumber,
-  botFindingsRepo,
-}) {
+export default function SubmitBotFinding({ title, contestNumber }) {
   const { currentUser } = useUser();
   const [botSubmission, setBotSubmission] = useState<string>("");
   const [submitted, setSubmitted] = useState<boolean>(false);
 
-  const submit = useCallback(async () => {
+  const validator = useCallback(() => {
     setSubmitted(true);
-    if (!botSubmission || !currentUser.bot) {
-      return;
+    if (!botSubmission) {
+      return true;
     }
+    return false;
+  }, [botSubmission]);
+
+  const submit = useCallback(async () => {
     const user = await Moralis.User.current();
     if (!user) {
       throw "You must be logged in to submit or edit findings";
@@ -29,13 +29,12 @@ export default function SubmitBotFinding({
 
     const requestData: BotReportCreateRequest = {
       contest: contestNumber,
-      repo: botFindingsRepo,
       botName: currentUser.bot.username,
       body: botSubmission,
     };
 
     const sessionToken = user.attributes.sessionToken;
-    await fetch(`/.netlify/functions/submit-bot-report`, {
+    const response = await fetch(`/.netlify/functions/submit-bot-report`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -44,7 +43,11 @@ export default function SubmitBotFinding({
       },
       body: JSON.stringify(requestData),
     });
-  }, []);
+    if (response.status !== 201) {
+      const { error } = await response.json();
+      throw error;
+    }
+  }, [botSubmission, currentUser]);
 
   return (
     <Form
@@ -56,14 +59,8 @@ export default function SubmitBotFinding({
         </div>
       }
       subtitle={`${title} - Audit competition`}
-      successMessage={
-        <>
-          Your report has been submitted.
-          <Link to={contestPath} className="button button--secondary">
-            Back to contest
-          </Link>
-        </>
-      }
+      successMessage="Your report has been submitted."
+      validator={validator}
     >
       <FormField
         label="Your bot race report"

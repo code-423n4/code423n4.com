@@ -22,7 +22,7 @@ exports.handler = async (event) => {
   }
 
   const data: BotReportCreateRequest = JSON.parse(event.body);
-  const { botName, contest, repo, body } = data;
+  const { botName, contest, body } = data;
   const username = event.headers["c4-user"];
 
   let bot: BotData;
@@ -46,6 +46,14 @@ exports.handler = async (event) => {
       }),
     };
   }
+
+  // @todo: add bot findings repo to contest data
+  const repo =
+    currentContest.findingsRepo
+      .replace("-findings", "-bot-findings")
+      .split("/")
+      .pop() || "";
+
   // make sure finding was submitted within the bot race window
   if (!isBotRaceActive(currentContest)) {
     return {
@@ -60,68 +68,77 @@ exports.handler = async (event) => {
   const octokit = new OctokitClient({ auth: token });
   const owner = process.env.GITHUB_REPO_OWNER!;
 
-  const issueResult = await octokit.request(
-    "POST /repos/{owner}/{repo}/issues",
-    {
+  try {
+    const issueResult = await octokit.request(
+      "POST /repos/{owner}/{repo}/issues",
+      {
+        owner,
+        repo,
+        title: `${botName} Bot Race submission`,
+        body:
+          `See the markdown file with the details of this report ` +
+          `[here](https://github.com/${owner}/${repo}/blob/main/data/${botName}-report.md).`,
+        labels: ["QA (Quality Assurance"],
+      }
+    );
+
+    const issueId = issueResult.data.number;
+    const issueUrl = issueResult.data.html_url;
+    const message = `${botName} issue #${issueId}`;
+    const path = `data/${botName}-${issueId}.json`;
+
+    const fileData = {
+      handle: botName,
+      crew: bot.crew,
+      issueId,
+      issueUrl,
+    };
+
+    const content = Buffer.from(JSON.stringify(fileData, null, 2)).toString(
+      "base64"
+    );
+
+    // add data file for application entry
+    await octokit.request("PUT /repos/{owner}/{repo}/contents/{path}", {
       owner,
       repo,
-      title: `${botName} Bot Race submission`,
-      body:
-        `See the markdown file with the details of this report ` +
-        `[here](https://github.com/${owner}/${repo}/blob/main/data/${botName}-report.md).`,
-      labels: ["QA (Quality Assurance"],
-    }
-  );
+      path,
+      message,
+      content,
+    });
 
-  const issueId = issueResult.data.number;
-  const issueUrl = issueResult.data.html_url;
-  const message = `${botName} issue #${issueId}`;
-  const path = `data/${botName}-${issueId}.json`;
+    // add markdown file for submission
+    await octokit.request("PUT /repos/{owner}/{repo}/contents/{path}", {
+      owner,
+      repo,
+      path: `data/${botName}-report.md`,
+      message: `${botName} data for issue #${issueId}`,
+      content: Buffer.from(body).toString("base64"),
+    });
 
-  const fileData = {
-    handle: botName,
-    crew: bot.crew,
-    issueId,
-    issueUrl,
-  };
+    const emails = await getGroupEmails(bot.crew);
+    const emailSubject =
+      `${botName} Bot Race report for ${currentContest.title} ` +
+      `competition has been submitted`;
+    const emailBody = dedent`
+      ${botName} Bot Race Report:
+  
+      ${body}
+    `;
+    await sendConfirmationEmail(emails, emailSubject, emailBody);
 
-  const content = Buffer.from(JSON.stringify(fileData, null, 2)).toString(
-    "base64"
-  );
-
-  // add data file for application entry
-  await octokit.request("PUT /repos/{owner}/{repo}/contents/{path}", {
-    owner,
-    repo: "bot-applications",
-    path,
-    message,
-    content,
-  });
-
-  // add markdown file for submission
-  await octokit.request("PUT /repos/{owner}/{repo}/contents/{path}", {
-    owner,
-    repo,
-    path: `data/${botName}-report.md`,
-    message: `${botName} data for issue #${issueId}`,
-    content: Buffer.from(body).toString("base64"),
-  });
-
-  const emails = await getGroupEmails(bot.crew);
-  const emailSubject =
-    `${botName} Bot Race report for ${currentContest.title} ` +
-    `competition has been submitted`;
-  const emailBody = dedent`
-    ${botName} Bot Race Report:
-
-    ${body}
-  `;
-  await sendConfirmationEmail(emails, emailSubject, emailBody);
-
-  return {
-    statusCode: 201,
-    body: JSON.stringify({
-      message: "Issue posted successfully and confirmation email sent.",
-    }),
-  };
+    return {
+      statusCode: 201,
+      body: JSON.stringify({
+        message: "Issue posted successfully and confirmation email sent.",
+      }),
+    };
+  } catch (error) {
+    return {
+      statusCode: error.status || 500,
+      body: JSON.stringify({
+        error: error?.message || "Something went wrong",
+      }),
+    };
+  }
 };

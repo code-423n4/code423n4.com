@@ -51,11 +51,13 @@ const BotRaceForm = ({ data }) => {
           </>
         ) : !currentUser.bot ? (
           <>
-            <h1>Please register a bot</h1>
+            <h1>Register your bot</h1>
             <p>
-              You must have a registered bot to compete in Bot Races.{" "}
+              To compete in a Bot Race, you'll need to have a registered bot.
+              <br />
+              Learn more on how to apply{" "}
               <Link to="/register/bot" className="button button--text-link">
-                Learn more.
+                here.
               </Link>
             </p>
           </>
@@ -73,13 +75,7 @@ const BotRaceForm = ({ data }) => {
           <>
             <SubmitBotFinding
               title={title}
-              contestPath={fields.contestPath}
               contestNumber={parseInt(contestid)}
-              // @todo: add bot findings repo to contest data
-              botFindingsRepo={findingsRepo.replace(
-                "-findings",
-                "-bot-findings"
-              )}
             />
           </>
         )}

@@ -81,7 +81,6 @@ export interface FindingCreateRequest {
 
 export interface BotReportCreateRequest {
   contest: ContestNumber;
-  repo: AbsoluteURL;
   botName: Username;
   body: FindingBody;
 }
