@@ -22,7 +22,9 @@ const getApiFindingsData = async () => {
       }
     );
     if (res.status !== 200) {
-      throw Error(`Bad response from API server: ${await res.text()}`);
+      throw Error(
+        `Bad ${splitPart} response from API server: ${await res.text()}`
+      );
     }
     const partialData = await res.json();
     data.push(...partialData);
