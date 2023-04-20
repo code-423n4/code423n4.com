@@ -83,6 +83,20 @@ export interface FindingDeleteRequest {
   emailAddresses: string[];
 }
 
+export interface AwardFinding {
+  contest: number;
+  handle: string;
+  finding: string;
+  risk: string;
+  score: number | null;
+  pie: number;
+  split: number;
+  slice: number;
+  award: number;
+  awardCoin: string;
+  awardUSD: number;
+}
+
 export interface OctokitIssuePaginationResponse {
   title: string;
   number: IssueNumber;
