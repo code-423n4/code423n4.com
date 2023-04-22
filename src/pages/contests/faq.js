@@ -4,7 +4,7 @@ const ContestFAQ = (props) => {
   return (
     <div className="faq-tab-content">
       <h1 className="header-context" id="faq-tab-content-for-website">
-        C4 Contest FAQ
+        C4 Competition FAQ
       </h1>
       <p>
         All links sourced from:{" "}

@@ -1,8 +1,6 @@
 import React, { ReactNode } from "react";
 import { Input } from "./Input";
 
-import * as styles from "../styles/Main.module.scss";
-
 interface RegistrationFormCommonFieldsProps {
   username: string;
   discordUsername: string;
@@ -49,7 +47,7 @@ export default function RegistrationFormCommonFields({
         required={true}
         helpText={
           <>
-            <strong className={styles.Form__Heading4}>
+            <strong>
               Choose wisely! Your username cannot be changed later.
             </strong>
             <br />
@@ -62,6 +60,7 @@ export default function RegistrationFormCommonFields({
           </>
         }
         name="username"
+        aria-describedby={"username--error"}
         placeholder="Username"
         value={username}
         handleChange={handleChange}
@@ -73,6 +72,7 @@ export default function RegistrationFormCommonFields({
         label="Discord Username"
         required={true}
         name="discordUsername"
+        aria-describedby={"discordUsername--error"}
         helpText="Used in case we need to contact you about your submissions or winnings."
         placeholder="Warden#1234"
         value={discordUsername}
@@ -85,6 +85,7 @@ export default function RegistrationFormCommonFields({
         required={true}
         helpText="Used for sending confirmation emails for each of your submissions."
         name="emailAddress"
+        aria-describedby={"emailAddress--error"}
         placeholder="warden@email.com"
         value={emailAddress}
         handleChange={handleChange}
@@ -93,7 +94,9 @@ export default function RegistrationFormCommonFields({
       <Input
         label="Password"
         required={true}
+        helpText="Must be at least 18 characters long."
         name="password"
+        aria-describedby={"password--error"}
         placeholder="Password"
         type="password"
         value={password}
@@ -105,6 +108,7 @@ export default function RegistrationFormCommonFields({
         label="Confirm Password"
         required={true}
         name="confirmPassword"
+        aria-describedby={"confirmPassword--error"}
         placeholder="Password"
         type="password"
         value={confirmPassword}
@@ -117,6 +121,7 @@ export default function RegistrationFormCommonFields({
         required={false}
         helpText="Used in case we need to give you access to certain repositories."
         name="gitHubUsername"
+        aria-describedby={"gitHubUsername--error"}
         placeholder="Username"
         value={gitHubUsername}
         handleChange={handleChange}
@@ -126,36 +131,35 @@ export default function RegistrationFormCommonFields({
         required={false}
         helpText="Link your leaderboard entry to a personal website or social media account."
         name="link"
+        aria-describedby={"link--error"}
         placeholder="https://twitter.com/code4rena"
         value={link || ""}
         handleChange={handleChange}
       />
-      <label htmlFor="avatar" className={styles.Widget__Label}>
-        Avatar (Optional)
-      </label>
-      <p className={styles.Widget__Help}>
-        An avatar displayed next to your name on the leaderboard.
-      </p>
-      <input
-        className={styles.Widget__Avatar}
-        type="file"
-        id="avatar"
-        name="avatar"
-        accept=".png,.jpg,.jpeg,.webp"
-        // @ts-ignore // @todo: fix typescript error
-        ref={avatarInputRef}
-        onChange={handleAvatarChange}
-      />
-      {avatar && (
-        <button
-          className="remove-line-button"
-          type="button"
-          onClick={removeAvatar}
-          aria-label="Remove avatar"
-        >
-          &#x2715;
-        </button>
-      )}
+      <fieldset>
+        <label htmlFor="avatar">Avatar (Optional)</label>
+        <p>An avatar displayed next to your name on the leaderboard.</p>
+        <input
+          className={"widget__avatar"}
+          type="file"
+          id="avatar"
+          name="avatar"
+          aria-describedby={"avatar--error"}
+          accept=".png,.jpg,.jpeg,.webp"
+          // @ts-ignore // @todo: fix typescript error
+          ref={avatarInputRef}
+          onChange={handleAvatarChange}
+        />
+        {avatar && (
+          <button
+            type="button"
+            onClick={removeAvatar}
+            aria-label="Remove avatar"
+          >
+            &#x2715;
+          </button>
+        )}
+      </fieldset>
     </>
   );
 }

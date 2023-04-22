@@ -1,5 +1,5 @@
 import { Contest } from "../../types/contest";
-import { getApiContestData } from './getContestsData';
+import { getApiContestData } from "./getContestsData";
 
 async function getContest(contestId: number): Promise<Contest | undefined> {
   const allContests = await getApiContestData();
