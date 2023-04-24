@@ -44,6 +44,7 @@ interface UserState extends UserBasicInfo {
   moralisId: string;
   teams: TeamInfo[];
   isLoggedIn: boolean;
+  isCertified: boolean;
 }
 
 interface User {
@@ -63,6 +64,7 @@ const DEFAULT_STATE: UserState = {
   isLoggedIn: false,
   image: undefined,
   link: undefined,
+  isCertified: false,
 };
 
 const UserContext = createContext<User>({
@@ -165,6 +167,16 @@ const UserProvider = ({ children }) => {
       gitHubUsername,
       email,
     } = user.attributes;
+    let isCertified = false;
+
+    // check if user has certified role
+    const certifiedRoleQuery = new Moralis.Query("_Role");
+    certifiedRoleQuery.equalTo("name", "certified");
+    const certifiedRole = await certifiedRoleQuery.find();
+    if (certifiedRole.length > 0) {
+      isCertified = true;
+    }
+
     const userResponse = await fetch(
       `/.netlify/functions/get-user?id=${username}`
     );
@@ -235,6 +247,7 @@ const UserProvider = ({ children }) => {
       image,
       teams,
       isLoggedIn: true,
+      isCertified,
     });
   };
 
