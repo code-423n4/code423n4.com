@@ -4,7 +4,6 @@ import { isDangerousHandle } from "../util/validation-utils";
 
 // find any bots where the given user is on the crew
 exports.handler = async (event) => {
-  console.log("getting bot");
   // only allow GET
   if (event.httpMethod !== "GET") {
     return {
