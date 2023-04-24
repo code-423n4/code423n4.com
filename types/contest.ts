@@ -1,7 +1,7 @@
 import { DateString, RelativeURL } from "./shared";
 
 // all values are strings because the source is a CSV file -- changed getting values from api instread of contest.csv
-export interface Contest {
+export interface DBContest {
   contestid: number;
   title: string;
   sponsor: string;
@@ -13,6 +13,9 @@ export interface Contest {
   findingsRepo: RelativeURL;
   hide: boolean;
   league: string;
+}
+//seperated thes two here so that I can reuse the above data without having copy a the above to create a new type.
+export interface Contest extends DBContest {
   fields: {
     // contestType: "Audit" | "Mitigation Review"
     submissionPath: RelativeURL;

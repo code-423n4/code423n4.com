@@ -30,7 +30,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: $color__n-90;
+  border: 1px solid $color__n-60;
   border-radius: $border-radius__m;
 
   .contest-tile__status-indicator-text {
@@ -44,8 +44,10 @@
     margin-top: $spacing__xxs;
     font-family: $font__code;
     font-size: 0.93em;
+    border: 1px solid $color__n-60;
   }
 }
+
 .contest-page .contest-tile__countdown {
   display: flex;
   font-size: $font-size__text;
@@ -54,6 +56,7 @@
   padding: $spacing__m;
   border-left: 1px solid $color__n-60;
 }
+
 .contest-page__top-content {
   width: 100%;
   display: flex;
@@ -62,8 +65,10 @@
   @include breakpoint("s") {
     flex-direction: row;
     justify-content: space-between;
+    align-items: center;
   }
 }
+
 .contest-page__button-wrapper {
   margin-top: $spacing__l;
   display: flex;
@@ -93,6 +98,7 @@
     flex-direction: row;
   }
 }
+
 .contest-page__project {
   display: flex;
   flex-grow: 1;
@@ -186,7 +192,18 @@
 }
 
 .contest-page__tab-container:has(.tab__content--message) {
+  padding-top: $spacing__l;
+  padding-bottom: $spacing__l;
   background: $color__n-90;
+
+  .countdown {
+    padding: $spacing__m $spacing__l;
+    font-family: $font__code;
+    font-size: 1.1em;
+    border: 1px solid $color__n-60;
+    border-radius: $border-radius__m;
+    color: $color__white;
+  }
 }
 
 // Findings List
