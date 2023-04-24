@@ -31,7 +31,7 @@ exports.handler = async (event) => {
       if (file.endsWith(".json")) {
         const botFile = readFileSync(`./_data/bots/${file}`);
         const bot: BotData = JSON.parse(botFile.toString());
-        if (bot && bot.crew && bot.crew.includes(userHandle)) {
+        if (bot?.crew?.includes(userHandle)) {
           if (bot.image) {
             const imagePath = bot.image.slice(2);
             bot.imageUrl = `https://raw.githubusercontent.com/${process.env.GITHUB_REPO_OWNER}/${process.env.REPO}/${process.env.BRANCH_NAME}/_data/bots/${imagePath}`;
