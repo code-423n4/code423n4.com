@@ -43,6 +43,10 @@ function ContactUs() {
           value: "bug",
         },
         {
+          label: "Sensitive disclosure",
+          value: "sensitiveDisclosure",
+        },
+        {
           label: "Other",
           value: "other",
         },
