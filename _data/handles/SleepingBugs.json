@@ -1,0 +1,18 @@
+{
+  "handle": "SleepingBugs",
+  "members": [
+    "Deivitto",
+    "0xLovesleep"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xfce1978e81cbF38B9c45fF4b90Ca54d772Ee5087"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0xfce1978e81cbF38B9c45fF4b90Ca54d772Ee5087"
+    }
+  ],
+  "image": "./avatars/SleepingBugs.jpeg"
+}
