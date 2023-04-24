@@ -2,7 +2,7 @@ import fs, { readFileSync } from "fs";
 import { BotData } from "../../types/user";
 import { isDangerousHandle } from "../util/validation-utils";
 
-// find any bots where the given user is on the crew
+// find first bot where the given user is on the crew
 exports.handler = async (event) => {
   // only allow GET
   if (event.httpMethod !== "GET") {
