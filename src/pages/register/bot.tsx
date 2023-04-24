@@ -157,7 +157,7 @@ export default function TeamRegistration({ data }) {
             </h3>
             <div className="register-bot__text">
               <p className="register-bot__timeline-time">
-                Date to be announced
+                17 April 2024
               </p>
               <ul>
                 <li>
