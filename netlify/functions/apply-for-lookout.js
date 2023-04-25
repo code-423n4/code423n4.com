@@ -30,8 +30,8 @@ exports.handler = async (event) => {
       experience,
       questions,
     } = data;
-    
-    const handle = event.headers["c4-user"]
+
+    const handle = event.headers["c4-user"];
 
     // ensure we have the data we need
     if (

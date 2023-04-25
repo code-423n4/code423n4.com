@@ -7,7 +7,6 @@ import path from "path";
 import webpack from "webpack";
 import SchemaCustomization from "./schema";
 import { getApiContestData } from "./netlify/util/getContestsData";
-const { token } = require("./netlify/_config");
 
 const privateContestMessage = dedent`
 ## Contest details are not available. Why not?
@@ -19,7 +18,7 @@ For more information on participating in a private audit, please see this [post]
 
 const graphqlWithAuth = graphql.defaults({
   headers: {
-    authorization: `Bearer ${token}`,
+    authorization: `Bearer ${process.env.GITHUB_TOKEN_FETCH}`,
   },
 });
 
@@ -53,7 +52,6 @@ function contestSubmissionPermalink(contestNode) {
 function getRepoName(contestNode) {
   const regex = "([^/]+$)";
   const url = contestNode.repo;
-
   const result = url.match(regex);
   const repoName = result[0];
   return repoName;
@@ -149,7 +147,7 @@ exports.onCreateNode = async ({ node, getNode, actions }) => {
       value: slug,
     });
   }
-  
+
   if (node.internal.type === `ReportsJson`) {
     createNodeField({
       node,
@@ -210,11 +208,13 @@ exports.sourceNodes = async ({
 }) => {
   const { createNode } = actions;
   const apiContestsData = await getApiContestData();
-
   apiContestsData.forEach((contest) => {
     const newNode = createNode({
       ...contest,
-      id: createNodeId(`ContestsCsv-${contest.contestid}`),
+      contestid: contest.contest_id,
+      findingsRepo: contest.findings_repo,
+      amount: contest.formatted_amount,
+      id: createNodeId(`ContestsCsv-${contest.contest_id}`),
       parent: null,
       children: [],
       internal: {

@@ -6,17 +6,18 @@
     "DeStinE21",
     "mimic_f",
     "Rugsurely",
-    "ErbaZZ"
+    "ErbaZZ",
+    "rxnnxchxi"
   ],
   "link": "https://twitter.com/InspexCo",
   "paymentAddresses": [
     {
       "chain": "polygon",
-      "address": "0xBd23e38E81CCb481c64897c7dFE186C5Aa111111"
+      "address": "0x66113C6c4dDE1451C43A47564C99097156f18e1b"
     },
     {
       "chain": "ethereum",
-      "address": "0xBd23e38E81CCb481c64897c7dFE186C5Aa111111"
+      "address": "0x66113C6c4dDE1451C43A47564C99097156f18e1b"
     }
   ],
   "image": "./avatars/Inspex.png"
