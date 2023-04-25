@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 
 // types
 import { Field } from "./widgets/Widgets";
+import { ContestNumber } from "../../../types/shared";
 import { ReportState } from "../../templates/ReportForm";
 import { FindingCreateRequest } from "../../../types/finding";
 
@@ -50,7 +51,7 @@ enum FormStatus {
 
 interface SubmitFindingsProps {
   sponsor: string;
-  contest: string;
+  contest: ContestNumber;
   contestPath: string;
   repo: string;
   title: string;
