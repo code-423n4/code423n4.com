@@ -354,98 +354,102 @@ const SubmitFindings = ({
       );
     }
   };
-
+  console.log(state);
   const submitFinding = useCallback(async () => {
     const isQaOrGasFinding = checkQaOrGasFinding(state.risk);
     const linksToCodeString = state.linksToCode.join("\n");
-    const markdownBody = `# Lines of code\n\n${linksToCodeString}\n\n\n# Vulnerability details\n\n${state.details}`;
+    const markdownBody = `# Lines of code\n\n${linksToCodeString}\n\n\n# Vulnerability details\n\n${
+      state.details
+    }${
+      !isQaOrGasFinding ? `\n\n\n## Assessed type\n\n${state.issueType} ` : ""
+    }`;
     let risk = state.risk;
     let title = getTitle(state.title, state.risk);
     let body = markdownBody;
     let labels = [config.labelAll, state.risk];
+    console.log("markdownBody", markdownBody);
+    // let mitigationOf: string | undefined = state.mitigationOf;
 
-    let mitigationOf: string | undefined = state.mitigationOf;
+    // if (isQaOrGasFinding) {
+    //   body = state.qaGasDetails;
+    // }
 
-    if (isQaOrGasFinding) {
-      body = state.qaGasDetails;
-    }
+    // if (contestType === "Mitigation review") {
+    //   mitigationOf = state.mitigationOf;
+    //   labels = [state.risk];
+    //   if (state.isMitigated) {
+    //     body = state.qaGasDetails;
+    //     title = "";
+    //     risk = "";
+    //     labels = [];
+    //   }
+    // }
+    // const emailAddressList: string[] = additionalEmailAddresses.filter(
+    //   (email) => !!email
+    // );
+    // emailAddressList.push(currentUser.emailAddress);
 
-    if (contestType === "Mitigation review") {
-      mitigationOf = state.mitigationOf;
-      labels = [state.risk];
-      if (state.isMitigated) {
-        body = state.qaGasDetails;
-        title = "";
-        risk = "";
-        labels = [];
-      }
-    }
-    const emailAddressList: string[] = additionalEmailAddresses.filter(
-      (email) => !!email
-    );
-    emailAddressList.push(currentUser.emailAddress);
+    // const data: FindingCreateRequest = {
+    //   user: currentUser.username,
+    //   contest,
+    //   sponsor,
+    //   repo: repo.split("/").pop() || "",
+    //   emailAddresses: emailAddressList,
+    //   attributedTo,
+    //   risk,
+    //   title,
+    //   body,
+    //   labels,
+    //   mitigationOf,
+    //   isMitigated: state.isMitigated,
+    // };
+    // if (attributedTo !== currentUser.username) {
+    //   const team = currentUser.teams.find(
+    //     (team) => team.username === attributedTo
+    //   );
+    //   data.address = team?.polygonAddress || newTeamAddress;
+    // }
 
-    const data: FindingCreateRequest = {
-      user: currentUser.username,
-      contest,
-      sponsor,
-      repo: repo.split("/").pop() || "",
-      emailAddresses: emailAddressList,
-      attributedTo,
-      risk,
-      title,
-      body,
-      labels,
-      mitigationOf,
-      isMitigated: state.isMitigated,
-    };
-    if (attributedTo !== currentUser.username) {
-      const team = currentUser.teams.find(
-        (team) => team.username === attributedTo
-      );
-      data.address = team?.polygonAddress || newTeamAddress;
-    }
-
-    setStatus(FormStatus.Submitting);
-    try {
-      const response = await onSubmit(data);
-      if (response.ok) {
-        setStatus(FormStatus.Submitted);
-        if (typeof window !== `undefined`) {
-          window.localStorage.removeItem(findingId);
-        }
-        // clear location state
-        navigate("", { state: {} });
-      } else {
-        const res = await response.text();
-        if (res.startsWith("Timeout")) {
-          setStatus(FormStatus.Error);
-          setErrorMessage(
-            "Your request timed out. However, this does not necessarily " +
-              "mean your finding was not submitted. Please check the findings " +
-              "tab on the contest page. If you don't see your submission there, " +
-              "then please try again."
-          );
-        } else {
-          const { error } = JSON.parse(res);
-          if (error.startsWith("Failed to send confirmation email")) {
-            setStatus(FormStatus.Submitted);
-            if (typeof window !== `undefined`) {
-              window.localStorage.removeItem(findingId);
-            }
-            toast.error(error);
-          } else {
-            setStatus(FormStatus.Error);
-            setErrorMessage(error);
-          }
-        }
-      }
-    } catch (error) {
-      setStatus(FormStatus.Error);
-      if (typeof error === "string") {
-        setErrorMessage(error);
-      }
-    }
+    // setStatus(FormStatus.Submitting);
+    // try {
+    //   const response = await onSubmit(data);
+    //   if (response.ok) {
+    //     setStatus(FormStatus.Submitted);
+    //     if (typeof window !== `undefined`) {
+    //       window.localStorage.removeItem(findingId);
+    //     }
+    //     // clear location state
+    //     navigate("", { state: {} });
+    //   } else {
+    //     const res = await response.text();
+    //     if (res.startsWith("Timeout")) {
+    //       setStatus(FormStatus.Error);
+    //       setErrorMessage(
+    //         "Your request timed out. However, this does not necessarily " +
+    //           "mean your finding was not submitted. Please check the findings " +
+    //           "tab on the contest page. If you don't see your submission there, " +
+    //           "then please try again."
+    //       );
+    //     } else {
+    //       const { error } = JSON.parse(res);
+    //       if (error.startsWith("Failed to send confirmation email")) {
+    //         setStatus(FormStatus.Submitted);
+    //         if (typeof window !== `undefined`) {
+    //           window.localStorage.removeItem(findingId);
+    //         }
+    //         toast.error(error);
+    //       } else {
+    //         setStatus(FormStatus.Error);
+    //         setErrorMessage(error);
+    //       }
+    //     }
+    //   }
+    // } catch (error) {
+    //   setStatus(FormStatus.Error);
+    //   if (typeof error === "string") {
+    //     setErrorMessage(error);
+    //   }
+    // }
   }, [
     contest,
     currentUser,
