@@ -164,6 +164,24 @@ const SubmitFindings = ({
     }
   }, [currentUser]);
 
+  const getIssueList = async (): Promise<{ issueTypes: any[] }> => {
+    const res = await fetch(`http://localhost:8888/api/v0/getIssueTypes`, {
+      method: "POST",
+      body: JSON.stringify({ token: process.env.C4_API_TOKEN }),
+    });
+    if (res.status !== 200) {
+      console.log(await res.text());
+      throw Error("Bad response from API server");
+    }
+    return await res.json();
+  };
+
+  useEffect(() => {
+    getIssueList().then((res) => {
+      console.log(res.issueTypes);
+    });
+  }, []);
+
   // change handlers
   const handleChange = (e) => {
     if (Array.isArray(e)) {
