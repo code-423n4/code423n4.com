@@ -111,3 +111,13 @@ export const mitigationOfField = {
   widget: "text",
   required: true,
 };
+
+export const issueTypeListField = (typeList) => {
+  return {
+    name: "issueType",
+    label: "Issue type",
+    widget: "select",
+    required: true,
+    options: typeList,
+  };
+};

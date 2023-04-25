@@ -20,6 +20,7 @@ import {
   mitigationField,
   mitigationRiskField,
   mitigationOfField,
+  issueTypeListField,
 } from "./findings/fields";
 import {
   config,
@@ -99,6 +100,23 @@ const SubmitFindings = ({
   const [newTeamAddress, setNewTeamAddress] = useState<string>("");
   const [attributedTo, setAttributedTo] = useState<string>(initialAttributedTo);
   const [fieldList, setFieldList] = useState<Field[]>([riskField]);
+  const [issueTypesList, setIssueTypeList] = useState(issueTypeListField([]));
+
+  useEffect(() => {
+    getIssueTypes().then((res) => {
+      setIssueTypeList(
+        issueTypeListField(
+          res.issueTypes.map((type) => {
+            return {
+              label: type.name,
+              value: type.name,
+            };
+          })
+        )
+      );
+    });
+  }, []);
+
   // effects
   useEffect(() => {
     if (!attributedTo) {
@@ -112,6 +130,7 @@ const SubmitFindings = ({
   }, [findingId, initialState]);
 
   useEffect(() => {
+    console.log(issueTypesList);
     // set which fields are shown based on risk and audit type
     let fieldList: Field[] = [riskField];
     if (contestType === "Mitigation review") {
@@ -144,6 +163,9 @@ const SubmitFindings = ({
         setFieldList(fieldList);
         return;
       }
+      if (!checkQaOrGasFinding(state.risk)) {
+        fieldList.push(issueTypesList);
+      }
       setFieldList(
         fieldList.concat([
           titleField,
@@ -152,7 +174,7 @@ const SubmitFindings = ({
         ])
       );
     }
-  }, [state.risk, currentUser, state.isMitigated]);
+  }, [state.risk, currentUser, state.isMitigated, issueTypesList]);
 
   useEffect(() => {
     if (!currentUser.isLoggedIn) {
@@ -164,7 +186,7 @@ const SubmitFindings = ({
     }
   }, [currentUser]);
 
-  const getIssueList = async (): Promise<{ issueTypes: any[] }> => {
+  const getIssueTypes = async (): Promise<{ issueTypes: any[] }> => {
     const res = await fetch(`http://localhost:8888/api/v0/getIssueTypes`, {
       method: "POST",
       body: JSON.stringify({ token: process.env.C4_API_TOKEN }),
@@ -175,12 +197,6 @@ const SubmitFindings = ({
     }
     return await res.json();
   };
-
-  useEffect(() => {
-    getIssueList().then((res) => {
-      console.log(res.issueTypes);
-    });
-  }, []);
 
   // change handlers
   const handleChange = (e) => {
