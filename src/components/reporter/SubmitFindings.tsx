@@ -104,16 +104,15 @@ const SubmitFindings = ({
 
   useEffect(() => {
     getIssueTypes().then((res) => {
-      setIssueTypeList(
-        issueTypeListField(
-          res.issueTypes.map((type) => {
-            return {
-              label: type.name,
-              value: type.name,
-            };
-          })
-        )
-      );
+      const list = res.issueTypes
+        .map((type) => {
+          return {
+            label: type.name,
+            value: type.name,
+          };
+        })
+        .sort((a, b) => a.label.localeCompare(b.label));
+      setIssueTypeList(issueTypeListField(list));
     });
   }, []);
 
@@ -130,7 +129,6 @@ const SubmitFindings = ({
   }, [findingId, initialState]);
 
   useEffect(() => {
-    console.log(issueTypesList);
     // set which fields are shown based on risk and audit type
     let fieldList: Field[] = [riskField];
     if (contestType === "Mitigation review") {

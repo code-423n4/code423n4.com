@@ -27,6 +27,7 @@ export interface ReportState {
   linksToCode: string[];
   mitigationOf: ReportId;
   isMitigated: boolean;
+  issueType?: string;
 }
 
 enum FormMode {
