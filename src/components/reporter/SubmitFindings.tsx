@@ -185,6 +185,8 @@ const SubmitFindings = ({
   }, [currentUser]);
 
   const getIssueTypes = async (): Promise<{ issueTypes: any[] }> => {
+    // TODO
+    // Change URL
     const res = await fetch(`http://localhost:8888/api/v0/getIssueTypes`, {
       method: "POST",
       body: JSON.stringify({ token: process.env.C4_API_TOKEN }),
@@ -194,6 +196,8 @@ const SubmitFindings = ({
       throw Error("Bad response from API server");
     }
     return await res.json();
+    //TODO
+    // Define how to add the issue types to the submission
   };
 
   // change handlers
