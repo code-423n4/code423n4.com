@@ -106,6 +106,7 @@ const queries = {
             readmeContent
             artPath
             status
+            codeAccess
           }
         }
       }
@@ -188,11 +189,21 @@ exports.onCreateNode = async ({ node, getNode, actions }) => {
       name: "status",
       value: node.status,
     });
+
     createNodeField({
       node,
       name: "codeAccess",
       value: node.codeAccess,
     });
+
+    if (node.codeAccess === "public") {
+      createNodeField({
+        node,
+        name: `botSubmissionPath`,
+        value: contestSubmissionPermalink(node) + "/bot",
+      });
+    }
+
     createNodeField({
       node,
       name: "type",
@@ -230,12 +241,22 @@ exports.createPages = async ({ graphql, actions }) => {
   const { createPage } = actions;
   const contests = await graphql(queries.contests);
   const formTemplate = path.resolve("./src/templates/ReportForm.tsx");
+  const botRaceFormTemplate = path.resolve("./src/templates/BotRaceForm.tsx");
   const contestTemplate = path.resolve("./src/templates/ContestLayout.tsx");
   contests.data.contests.edges.forEach((contest) => {
     if (contest.node.findingsRepo) {
       createPage({
         path: contest.node.fields.submissionPath,
         component: formTemplate,
+        context: {
+          contestId: contest.node.contestid,
+        },
+      });
+    }
+    if (contest.node.fields.codeAccess === "public") {
+      createPage({
+        path: contest.node.fields.submissionPath + "/bot",
+        component: botRaceFormTemplate,
         context: {
           contestId: contest.node.contestid,
         },
