@@ -18,11 +18,34 @@
 // 9. Other
 
 .contest-page .limited-width {
-  max-width: $report__max-width;
+  max-width: $contest__max-width;
 }
 
 .contest-page__top {
   margin-bottom: $spacing__xxl;
+}
+
+.contest-page__bot-race-status-bar {
+  background-color: $color__blurple-80;
+  border-radius: $border-radius__m $border-radius__m 0px 0px;
+  color: $color__white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: row;
+  padding: 0 $spacing__s;
+  margin: 0 $spacing__m;
+
+  .button--text-link {
+    color: $color__white;
+  }
+}
+
+.contest-page__bot-race-status-text {
+  display: flex;
+  .icon {
+    margin-right: $spacing__s;
+  }
 }
 
 .contest-page__top-bar {

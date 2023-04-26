@@ -119,7 +119,7 @@ const ReportForm = ({ data, location }) => {
   ): FindingEditRequest => {
     const requestData: FindingEditRequest = {
       issue: issueId!,
-      contest: parseInt(data.contest),
+      contest: data.contest,
       emailAddresses: data.emailAddresses,
       risk: { oldValue: state.risk, newValue: data.risk },
       attributedTo: {
@@ -317,7 +317,7 @@ const ReportForm = ({ data, location }) => {
       ) : (
         <SubmitFindings
           sponsor={sponsor.name}
-          contest={contestid}
+          contest={parseInt(contestid)}
           contestType={fields.type || "Audit"}
           contestPath={fields.contestPath}
           repo={findingsRepo}
