@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    // ... other options
+    "target": "esnext",
+    "lib": ["dom", "esnext"],
+    "jsx": "react",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "resolveJsonModule": true
+  },
+  "include": [
+    "./src/**/*",
+    "./gatsby-node.js",
+    "./gatsby-config.js",
+    "./plugins/**/*",
+    "./_data/**/*"
+  ]
+}
