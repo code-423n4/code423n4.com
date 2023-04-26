@@ -1,18 +1,22 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Link } from "gatsby";
 
-import { getDates } from "../utils/time";
+import { ContestStatus, getDates } from "../utils/time";
 
 import ClientOnly from "./ClientOnly";
 import Countdown from "./Countdown";
 import SponsorLink from "./SponsorLink";
-import { format } from "date-fns";
+
+const statusText = {
+  active: "Live",
+  soon: "Soon",
+  completed: "Ended",
+};
 
 const ContestTile = ({ contest, updateContestStatus, user, reduced }) => {
   const {
     sponsor,
     title,
-    league,
     amount,
     details,
     start_time,
@@ -22,9 +26,12 @@ const ContestTile = ({ contest, updateContestStatus, user, reduced }) => {
     fields,
     status,
   } = contest;
-  const t = getDates(start_time, end_time);
+
   const [canViewContest, setCanViewContest] = useState(false);
-  const [contestStatusIndicator, setContestStatusIndicator] = useState(status);
+  const [contestTimelineObject, setContestTimelineObject] = useState(
+    getDates(start_time, end_time)
+  );
+  const hasBotRace = fields.codeAccess === "public";
 
   useEffect(() => {
     if (fields.codeAccess === "public") {
@@ -36,14 +43,18 @@ const ContestTile = ({ contest, updateContestStatus, user, reduced }) => {
     }
   }, [fields, user]);
 
-  const statusText = {
-    active: "Live",
-    soon: "Soon",
-    completed: "Ended",
-  };
+  const updateContestTileStatus = useCallback(() => {
+    updateContestStatus();
+    const newTimelineObject = getDates(start_time, end_time);
+    setContestTimelineObject(newTimelineObject);
+  }, [start_time]);
 
   return (
-    <div className={"contest-tile " + t.contestStatus + " " + reduced}>
+    <div
+      className={
+        "contest-tile " + contestTimelineObject.contestStatus + " " + reduced
+      }
+    >
       <div className="contest-tile__top">
         <header className="contest-tile__content">
           <div className="contest-tile__logo">
@@ -58,7 +69,21 @@ const ContestTile = ({ contest, updateContestStatus, user, reduced }) => {
                 {title}
               </Link>
             </h2>
-            <p className="contest-tile__details">{details}</p>
+            <p className="contest-tile__details">
+              {details}
+              {hasBotRace &&
+                (contestTimelineObject.botRaceStatus === ContestStatus.Soon ||
+                  contestTimelineObject.botRaceStatus ===
+                    ContestStatus.Live) && (
+                  <span className="contest-tile__bot-race-status">
+                    <img src="/images/icon/wolf-bot/16.svg" className="icon" />
+                    {contestTimelineObject.botRaceStatus ===
+                      ContestStatus.Soon && <>1st hour: Bot Race</>}
+                    {contestTimelineObject.botRaceStatus ===
+                      ContestStatus.Live && <>Bot Race live</>}
+                  </span>
+                )}
+            </p>
           </div>
         </header>
         {amount ? <p className="contest-tile__amount">{amount}</p> : null}
@@ -69,21 +94,25 @@ const ContestTile = ({ contest, updateContestStatus, user, reduced }) => {
             <span
               className={
                 "contest-tile__status-indicator-text contest-tile__status-indicator-text--" +
-                t.contestStatus
+                contestTimelineObject.contestStatus
               }
             >
-              {statusText[t.contestStatus]}
+              {statusText[contestTimelineObject.contestStatus]}
             </span>
-            {t.contestStatus === "soon" || t.contestStatus === "active" ? (
+            {contestTimelineObject.contestStatus === "soon" ||
+            contestTimelineObject.contestStatus === "active" ? (
               <span className="contest-tile__countdown">
-                {t.contestStatus === "active" && <span>Ends in</span>}
-                {t.contestStatus === "soon" && <span>Starts in</span>}
+                {contestTimelineObject.contestStatus === "active" && (
+                  <span>Ends in</span>
+                )}
+                {contestTimelineObject.contestStatus === "soon" && (
+                  <span>Starts in</span>
+                )}
                 <Countdown
-                  state={t.contestStatus}
                   start={start_time}
                   end={end_time}
                   isPreview={findingsRepo === ""}
-                  updateContestStatus={updateContestStatus}
+                  updateContestStatus={updateContestTileStatus}
                 />
               </span>
             ) : null}
@@ -96,16 +125,21 @@ const ContestTile = ({ contest, updateContestStatus, user, reduced }) => {
             >
               {`${findingsRepo === "" ? "Preview" : "View"}`} competition
             </Link>
-            {t.contestStatus === "active" && contestRepo && canViewContest && (
-              <a href={contestRepo} className="contest-tile__button">
-                View repo
-              </a>
-            )}
-            {(t.contestStatus === "active" || status === "Active Contest") &&
+            {contestTimelineObject.contestStatus === "active" &&
+              contestRepo &&
+              canViewContest && (
+                <a href={contestRepo} className="contest-tile__button">
+                  View repo
+                </a>
+              )}
+            {(contestTimelineObject.contestStatus === "active" ||
+              status === "Active Contest") &&
             findingsRepo &&
             fields.status &&
             fields.submissionPath &&
-            canViewContest ? (
+            canViewContest &&
+            (!hasBotRace ||
+              contestTimelineObject.botRaceStatus === ContestStatus.Done) ? (
               <Link to={fields.submissionPath} className="contest-tile__button">
                 Submit finding
               </Link>
