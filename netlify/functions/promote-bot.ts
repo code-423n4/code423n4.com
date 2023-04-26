@@ -1,5 +1,4 @@
 import dedent from "dedent";
-import { readFileSync } from "fs";
 import Moralis from "moralis-v1/node";
 import { Octokit } from "@octokit/core";
 import { createPullRequest } from "octokit-plugin-create-pull-request";
@@ -13,14 +12,10 @@ import {
   moralisServerUrl,
   token,
 } from "../_config";
-import {
-  BotCreateRequest,
-  BotFileData,
-  PaymentAddress,
-  UserFileData,
-} from "../../types/user";
+import { BotFileData, BotPromotionRequest } from "../../types/user";
+import { Username } from "../../types/shared";
 import { sendConfirmationEmail, getGroupEmails } from "../util/user-utils";
-import { checkAuth } from "../util/auth-utils";
+import { checkAuth, checkBotAuth } from "../util/auth-utils";
 import { isDangerousHandle } from "../util/validation-utils";
 
 const START = new Date(nextBotQualifier.start);
@@ -28,8 +23,6 @@ const END = new Date(nextBotQualifier.end);
 
 const OctokitClient = Octokit.plugin(createPullRequest);
 const octokit = new OctokitClient({ auth: token });
-const owner = process.env.GITHUB_REPO_OWNER!;
-const botApplicationRepo = "bot-applications";
 
 exports.handler = async (event) => {
   if (!(await checkAuth(event))) {
@@ -66,42 +59,14 @@ exports.handler = async (event) => {
       };
     }
 
-    const data: BotCreateRequest = JSON.parse(event.body);
-    const {
-      botName,
-      image,
-      crewMembers,
-      description,
-      submission,
-      polygonAddress,
-      ethereumAddress,
-    } = data;
-    const username = event.headers["c4-user"];
-
+    const data: BotPromotionRequest = JSON.parse(event.body);
+    const { botName, submission } = data;
     // ensure we have the data we need
     if (!botName) {
       return {
         statusCode: 422,
         body: JSON.stringify({
           error: "Bot name is required.",
-        }),
-      };
-    }
-
-    if (botName.length > 25) {
-      return {
-        statusCode: 400,
-        body: JSON.stringify({
-          error: "Bot name's length is limited to 25 characters.",
-        }),
-      };
-    }
-
-    if (!crewMembers || !crewMembers.includes(username)) {
-      return {
-        statusCode: 422,
-        body: JSON.stringify({
-          error: "You must be listed on the crew for any bot you register.",
         }),
       };
     }
@@ -116,74 +81,18 @@ exports.handler = async (event) => {
       };
     }
 
-    // make sure bot name is not already taken as a warden/team name
-    try {
-      const existingUser: UserFileData = JSON.parse(
-        readFileSync(`./_data/handles/${botName}.json`).toString()
-      );
-      if (existingUser) {
-        return {
-          statusCode: 400,
-          body: JSON.stringify({
-            error: `${botName} is already a registered username`,
-          }),
-        };
-      }
-    } catch (error) {
-      // do nothing - if this error is caught, then the bot name is valid
-    }
-
-    // make sure bot name is not already taken by another bot
-    try {
-      const existingBot: BotFileData = JSON.parse(
-        readFileSync(`./_data/bots/${botName},json`).toString()
-      );
-      if (existingBot) {
-        return {
-          statusCode: 400,
-          body: JSON.stringify({
-            error: `${botName} is already a registered bot name`,
-          }),
-        };
-      }
-    } catch (error) {
-      // do nothing - if this error is caught, then the bot name is valid
-    }
-
-    const paymentAddresses: PaymentAddress[] = [
-      { chain: "polygon", address: polygonAddress },
-    ];
-    if (ethereumAddress) {
-      paymentAddresses.push({ chain: "ethereum", address: ethereumAddress });
-    }
+    const username: Username = event.headers["c4-user"];
+    const oldBotData = await checkBotAuth(botName, username);
+    delete oldBotData.imageUrl;
 
     const formattedBotData: BotFileData = {
-      handle: botName,
-      crew: crewMembers,
-      paymentAddresses,
+      ...oldBotData,
+      relegated: false,
     };
-
-    let avatarFilename = "";
-    let base64Avatar = "";
-    if (image) {
-      const decodedImage = Buffer.from(image, "base64");
-      const { data, info } = await sharp(decodedImage)
-        .resize({ width: 512 })
-        .toBuffer({ resolveWithObject: true });
-      base64Avatar = data.toString("base64");
-      avatarFilename = `${botName}.${info.format}`;
-      formattedBotData.image = `./avatars/${botName}.${info.format}`;
-    }
 
     const files: { [path: string]: string | File } = {
       [`_data/bots/${botName}.json`]: JSON.stringify(formattedBotData, null, 2),
     };
-    if (image) {
-      files[`_data/bots/avatars/${avatarFilename}`] = {
-        content: base64Avatar,
-        encoding: "base64",
-      };
-    }
 
     await Moralis.start({
       serverUrl: moralisServerUrl,
@@ -198,19 +107,16 @@ exports.handler = async (event) => {
     const gitHubUsername = user[0].attributes["gitHubUsername"];
 
     const branchName = `bot/${botName}`;
-    const title = `Register bot ${botName}`;
+    const title = `Promote bot ${botName}`;
     const body = dedent`
-    Registration for bot ${botName} submitted by ${username}.
-    
-    Description:
-    ${description}
+    Promotion for bot ${botName} submitted by ${username}.
 
     ${gitHubUsername && "@" + gitHubUsername}
     `;
 
     // create file for bot account
-    const registrationResponse = await octokit.createPullRequest({
-      owner,
+    const promotionResponse = await octokit.createPullRequest({
+      owner: process.env.GITHUB_REPO_OWNER!,
       repo: process.env.REPO!,
       title,
       body,
@@ -224,7 +130,7 @@ exports.handler = async (event) => {
       ],
     });
 
-    if (!registrationResponse) {
+    if (!promotionResponse) {
       return {
         statusCode: 400,
         body: JSON.stringify({ error: "Failed to create pull request." }),
@@ -234,25 +140,27 @@ exports.handler = async (event) => {
     await octokit.request(
       "POST /repos/{owner}/{repo}/issues/{issue_number}/labels",
       {
-        owner,
+        owner: process.env.GITHUB_REPO_OWNER!,
         repo: process.env.REPO!,
-        issue_number: registrationResponse!.data.number,
-        labels: ["bot-application"],
+        issue_number: promotionResponse!.data.number,
+        labels: ["bot-promotion"],
       }
     );
 
     // submit application entry
     const submissionBody = dedent`
-    [Bot registration PR](${registrationResponse.data.html_url}) 
+    Bot registration PR: ${promotionResponse.data.html_url}
 
-    [Bot submission](https://github.com/${owner}/${botApplicationRepo}/blob/main/data/${botName}-report.md).
+    Bot submission:
+    
+    ${submission}
     `;
 
     const issueResult = await octokit.request(
       "POST /repos/{owner}/{repo}/issues",
       {
-        owner,
-        repo: botApplicationRepo,
+        owner: process.env.GITHUB_REPO_OWNER!,
+        repo: "bot-applications",
         title: `${botName} Bot Application`,
         body: submissionBody,
         labels: ["QA (Quality Assurance"],
@@ -266,7 +174,7 @@ exports.handler = async (event) => {
 
     const fileData = {
       handle: botName,
-      crew: crewMembers,
+      crew: oldBotData.crew,
       issueId,
       issueUrl,
     };
@@ -277,37 +185,26 @@ exports.handler = async (event) => {
 
     // add data file for application entry
     await octokit.request("PUT /repos/{owner}/{repo}/contents/{path}", {
-      owner,
-      repo: botApplicationRepo,
+      owner: process.env.GITHUB_REPO_OWNER!,
+      repo: "bot-applications",
       path,
       message,
       content,
     });
 
-    // add markdown file for submission
-    await octokit.request("PUT /repos/{owner}/{repo}/contents/{path}", {
-      owner,
-      repo: botApplicationRepo,
-      path: `data/${botName}-report.md`,
-      message: `${botName} data for issue #${issueId}`,
-      content: Buffer.from(body).toString("base64"),
-    });
-
-    const emails = await getGroupEmails(crewMembers);
-    const emailSubject = `Application to register bot "${botName}" has been submitted`;
+    const emails = await getGroupEmails(oldBotData.crew);
+    const emailSubject = `Application to promote bot "${botName}" has been submitted`;
     const emailBody = dedent`
-    An application to register a new bot (${botName}) has been received with the following crew: ${crewMembers.join(
-      ", "
-    )}
+    An application to promote the bot ${botName} from relegation has been received.
     
-    You can see the PR here: ${registrationResponse.data.html_url}
+    You can see the PR here: ${promotionResponse.data.html_url}
     `;
     await sendConfirmationEmail(emails, emailSubject, emailBody);
 
     return {
       statusCode: 201,
       body: JSON.stringify({
-        message: `Created PR ${registrationResponse.data.number}`,
+        message: `Created PR ${promotionResponse.data.number}`,
       }),
     };
   } catch (error) {
