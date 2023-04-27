@@ -1,6 +1,8 @@
 require("dotenv").config();
 
-const nextBotQualifier = require("_data/bot-race-qualifier.json");
+const nextBotQualifier = JSON.parse(
+  require("fs").readFileSync("_data/bot-race-qualifier.json", "utf8")
+);
 
 module.exports = {
   token: process.env.GITHUB_TOKEN,
