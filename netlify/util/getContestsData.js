@@ -6,7 +6,7 @@ import fetch from "node-fetch";
 
 /**
  * @async
- * @returns {[Contest]}
+ * @returns {Promise<[Contest]>}
  * @throws Various errors if data cannot be fetched or processed.
  */
 const getApiContestData = async () => {

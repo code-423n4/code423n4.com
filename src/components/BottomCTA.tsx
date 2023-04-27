@@ -23,7 +23,7 @@ export default function BottomCTA({ viewMode }: BottomCTAProps): JSX.Element {
                 Secure the crypto ecosystem and get paid.
               </h2>
               <a
-                href="/https://discord.gg/code4rena"
+                href="https://discord.gg/code4rena"
                 className="button button--primary"
                 target="_blank"
                 rel="noreferrer"

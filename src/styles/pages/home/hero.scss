@@ -29,7 +29,6 @@
     display: block;
     margin-bottom: $spacing__s;
     @include breakpoint("m") {
-      margin-bottom: 0;
       display: inline-flex;
     }
   }

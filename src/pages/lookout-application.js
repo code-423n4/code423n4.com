@@ -32,7 +32,7 @@ const config = {
         <a
           href="https://code4rena.notion.site/Pre-sort-Lookout-Guidelines-bead139f7ec9469197c7d46f759d89d5"
           target="_blank"
-          rel="norefferrer"
+          rel="noreferrer"
         >
           Read the Lookout Guidelines ↗
         </a>

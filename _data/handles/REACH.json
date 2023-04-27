@@ -1,0 +1,26 @@
+{
+  "handle": "REACH",
+  "members": [
+    "Mis4nthr0pic",
+    "infosec_us_team",
+    "CHALK",
+    "KrisApostolov",
+    "Azaryan",
+    "3agle",
+    "escrow",
+    "0xWagmi",
+    "mariodev",
+    "0x3b"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x798BC384E20d5D16987A07487FC695985F1742c5"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x798BC384E20d5D16987A07487FC695985F1742c5"
+    }
+  ],
+  "image": "./avatars/REACH.jpeg"
+}
