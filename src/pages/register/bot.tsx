@@ -52,10 +52,10 @@ export default function BotRegistration({ data }) {
         {/* Hero */}
         <section className="register-bot__hero type__copy">
           <div className="register-bot__hero-content limited-width">
-            <h1 className="type__headline__page-title">
+            <h1 className="type__headline__landing-hero">
               Gentlefrens, start your engines.
             </h1>
-            <h2 className="type__subline__page-title">
+            <h2 className="type__subline__landing-hero">
               Coordinating AI and human efforts to provide the most
               comprehensive vulnerability reports for{" "}
               <span className="no-break">web3 projects</span>.
