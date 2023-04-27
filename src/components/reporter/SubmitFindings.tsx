@@ -185,20 +185,9 @@ const SubmitFindings = ({
     }
   }, [currentUser]);
 
-  const getIssueTypes = async (): Promise<{ issueTypes: any[] }> => {
-    // // TODO
-    // // Change URL
-    // const res = await fetch(`${process.env.C4_API_URL}/api/v0/getIssueTypes`, {
-    //   method: "POST",
-    //   // body: JSON.stringify({ token: process.env.C4_API_TOKEN }),
-    // });
-    // if (res.status !== 200) {
-    //   console.log(await res.text());
-    //   throw Error("Bad response from API server");
-    // }
-    // return await res.json();
-    // //TODO
-    // // Define how to add the issue types to the submission
+  const getIssueTypes = (): { issueTypes: any[] } => {
+    // Based on discussion with Nate
+    // Hardcode for now.
     return {
       issueTypes: [
         { uid: "tU2XavuSLCq", name: "Invalid Validation", color: "#0000FF" },
