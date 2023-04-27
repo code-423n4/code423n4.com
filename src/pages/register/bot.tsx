@@ -143,7 +143,7 @@ export default function BotRegistration({ data }) {
             </h3>
             <div className="register-bot__text">
               <p className="register-bot__timeline-time">
-                Date to be announced
+                27 April 2023
               </p>
               <ul>
                 <li>
