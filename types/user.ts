@@ -25,6 +25,7 @@ export interface BotFileData extends UserFileData {
     chain: SupportedChain;
     address: WalletAddress;
   }[];
+  relegated?: boolean;
 }
 
 export interface BotData extends UserData, BotFileData {}
@@ -50,7 +51,7 @@ export interface TeamCreateRequest {
 }
 
 export interface BotCreateRequest {
-  botName: string;
+  botName: Username;
   crewMembers: Username[];
   description: string;
   submission: FindingBody;
@@ -59,8 +60,13 @@ export interface BotCreateRequest {
   image?: RelativeURL;
 }
 
+export interface BotPromotionRequest {
+  botName: Username;
+  submission: FindingBody;
+}
+
 export interface TeamUpdateRequest {
-  teamName: string;
+  teamName: Username;
   members: {
     oldValue: Username[];
     newValue: Username[];
@@ -80,6 +86,31 @@ export interface TeamUpdateRequest {
   image?: RelativeURL;
 }
 
+export interface BotUpdateRequest {
+  botName: Username;
+  crew: {
+    oldValue: Username[];
+    newValue: Username[];
+  };
+  polygonAddress: {
+    oldValue: WalletAddress;
+    newValue: WalletAddress;
+  };
+  ethereumAddress?: {
+    oldValue: WalletAddress;
+    newValue: WalletAddress;
+  };
+  image?: RelativeURL;
+  relegated?: {
+    oldValue: boolean;
+    newValue: boolean;
+  };
+}
+
 export interface TeamDeleteRequest {
-  teamName: string;
+  name: Username;
+}
+
+export interface BotDeleteRequest {
+  name: Username;
 }
