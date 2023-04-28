@@ -290,8 +290,7 @@ const ReportForm = ({ data, location }) => {
     }
     return { links: linksToCode, body };
   };
-  //TODO
-  // Extract the issueType from the body.
+
   const separateIssueTypeFromBody = (
     issueBody: string
   ): { issueType: string; newBody: string } => {

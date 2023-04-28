@@ -41,7 +41,6 @@ import { DynamicInputGroup } from "../DynamicInputGroup";
 import FormField from "./widgets/FormField";
 import WardenDetails from "../WardenDetails";
 import Widget from "./widgets/Widget";
-import { issueTypes } from "../../utils/issueList";
 
 enum FormStatus {
   Unsubmitted = "unsubmitted",
@@ -102,7 +101,7 @@ const SubmitFindings = ({
   const [newTeamAddress, setNewTeamAddress] = useState<string>("");
   const [attributedTo, setAttributedTo] = useState<string>(initialAttributedTo);
   const [fieldList, setFieldList] = useState<Field[]>([riskField]);
-  const [issueTypesList, setIssueTypeList] = useState(issueTypeListField([]));
+  console.log("state,", state);
 
   // effects
   useEffect(() => {
@@ -150,7 +149,7 @@ const SubmitFindings = ({
         return;
       }
       if (!checkQaOrGasFinding(state.risk)) {
-        fieldList.push(issueTypesList);
+        fieldList.push(issueTypeListField);
       }
       setFieldList(
         fieldList.concat([
@@ -160,7 +159,7 @@ const SubmitFindings = ({
         ])
       );
     }
-  }, [state.risk, currentUser, state.isMitigated, issueTypesList]);
+  }, [state.risk, currentUser, state.isMitigated, state.issueType]);
 
   useEffect(() => {
     if (!currentUser.isLoggedIn) {
@@ -171,10 +170,6 @@ const SubmitFindings = ({
       showPaymentAddressModal();
     }
   }, [currentUser]);
-
-  useEffect(() => {
-    setIssueTypeList(issueTypeListField(issueTypes));
-  }, []);
 
   // change handlers
   const handleChange = (e) => {
@@ -437,6 +432,7 @@ const SubmitFindings = ({
     attributedTo,
   ]);
 
+  //TODO handle issueType
   const validator = useCallback(() => {
     if (!currentUser.isLoggedIn) {
       return true;
