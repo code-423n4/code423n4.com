@@ -103,11 +103,6 @@ const SubmitFindings = ({
   const [attributedTo, setAttributedTo] = useState<string>(initialAttributedTo);
   const [fieldList, setFieldList] = useState<Field[]>([riskField]);
   const [issueTypesList, setIssueTypeList] = useState(issueTypeListField([]));
-  // Hardcoded for now based on discussion with Nate
-
-  useEffect(() => {
-    setIssueTypeList(issueTypeListField(issueTypes));
-  }, []);
 
   // effects
   useEffect(() => {
@@ -176,6 +171,10 @@ const SubmitFindings = ({
       showPaymentAddressModal();
     }
   }, [currentUser]);
+
+  useEffect(() => {
+    setIssueTypeList(issueTypeListField(issueTypes));
+  }, []);
 
   // change handlers
   const handleChange = (e) => {
