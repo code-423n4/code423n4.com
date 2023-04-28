@@ -101,7 +101,7 @@ const SubmitFindings = ({
   const [newTeamAddress, setNewTeamAddress] = useState<string>("");
   const [attributedTo, setAttributedTo] = useState<string>(initialAttributedTo);
   const [fieldList, setFieldList] = useState<Field[]>([riskField]);
-  console.log("state,", state);
+  // console.log("state,", state);
 
   // effects
   useEffect(() => {
@@ -439,7 +439,12 @@ const SubmitFindings = ({
     }
     const isQaOrGasFinding = checkQaOrGasFinding(state.risk);
     // extract required fields from field data for validation check
-    let requiredFields = [state.risk, state.title, state.details];
+    let requiredFields = [
+      state.risk,
+      state.title,
+      state.details,
+      state.mitigationOf,
+    ];
     if (isQaOrGasFinding) {
       requiredFields = [state.risk, state.qaGasDetails];
     }
