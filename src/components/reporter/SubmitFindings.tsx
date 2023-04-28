@@ -443,7 +443,7 @@ const SubmitFindings = ({
       state.risk,
       state.title,
       state.details,
-      state.mitigationOf,
+      state.issueType,
     ];
     if (isQaOrGasFinding) {
       requiredFields = [state.risk, state.qaGasDetails];
