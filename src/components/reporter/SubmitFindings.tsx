@@ -101,7 +101,6 @@ const SubmitFindings = ({
   const [newTeamAddress, setNewTeamAddress] = useState<string>("");
   const [attributedTo, setAttributedTo] = useState<string>(initialAttributedTo);
   const [fieldList, setFieldList] = useState<Field[]>([riskField]);
-  // console.log("state,", state);
 
   // effects
   useEffect(() => {

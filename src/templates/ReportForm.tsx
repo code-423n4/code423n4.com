@@ -49,6 +49,7 @@ const initialState: ReportState = {
   linksToCode: [""],
   mitigationOf: "",
   isMitigated: false,
+  issueType: null,
 };
 
 const ReportForm = ({ data, location }) => {
