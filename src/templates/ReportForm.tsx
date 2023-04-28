@@ -17,14 +17,15 @@ import useUser from "../hooks/UserContext";
 // components
 import ProtectedPage from "../components/ProtectedPage";
 import SubmitFindings from "../components/reporter/SubmitFindings";
+import { ReportId, RiskLabelName } from "../../types/shared";
 
 export interface ReportState {
   title: string;
-  risk: string;
+  risk: RiskLabelName | "";
   details: string;
   qaGasDetails: string;
   linksToCode: string[];
-  mitigationOf: string;
+  mitigationOf: ReportId;
   isMitigated: boolean;
 }
 
@@ -118,7 +119,7 @@ const ReportForm = ({ data, location }) => {
   ): FindingEditRequest => {
     const requestData: FindingEditRequest = {
       issue: issueId!,
-      contest: parseInt(data.contest),
+      contest: data.contest,
       emailAddresses: data.emailAddresses,
       risk: { oldValue: state.risk, newValue: data.risk },
       attributedTo: {
@@ -316,7 +317,7 @@ const ReportForm = ({ data, location }) => {
       ) : (
         <SubmitFindings
           sponsor={sponsor.name}
-          contest={contestid}
+          contest={parseInt(contestid)}
           contestType={fields.type || "Audit"}
           contestPath={fields.contestPath}
           repo={findingsRepo}

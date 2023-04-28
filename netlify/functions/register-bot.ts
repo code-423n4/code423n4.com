@@ -4,9 +4,15 @@ import Moralis from "moralis-v1/node";
 import { Octokit } from "@octokit/core";
 import { createPullRequest } from "octokit-plugin-create-pull-request";
 import { File } from "octokit-plugin-create-pull-request/dist-types/types";
+import { isAfter, isBefore } from "date-fns";
 const sharp = require("sharp");
 
-import { moralisAppId, moralisServerUrl, token } from "../_config";
+import {
+  nextBotQualifier,
+  moralisAppId,
+  moralisServerUrl,
+  token,
+} from "../_config";
 import {
   BotCreateRequest,
   BotFileData,
@@ -17,8 +23,13 @@ import { sendConfirmationEmail, getGroupEmails } from "../util/user-utils";
 import { checkAuth } from "../util/auth-utils";
 import { isDangerousHandle } from "../util/validation-utils";
 
+const START = new Date(nextBotQualifier.start);
+const END = new Date(nextBotQualifier.end);
+
 const OctokitClient = Octokit.plugin(createPullRequest);
 const octokit = new OctokitClient({ auth: token });
+const owner = process.env.GITHUB_REPO_OWNER!;
+const botApplicationRepo = "bot-applications";
 
 exports.handler = async (event) => {
   if (!(await checkAuth(event))) {
@@ -44,11 +55,8 @@ exports.handler = async (event) => {
 
     // check that application was submitted within the application window
     const now = Date.now();
-    // @todo: replace with correct start and end times
-    const start = new Date("2022-01-17T00:00:00.000Z").getTime();
-    const end = new Date("2022-01-17T00:00:00.000Z").getTime();
 
-    if (now < start || now > end) {
+    if (isBefore(now, START) || isAfter(now, END)) {
       return {
         statusCode: 400,
         body: JSON.stringify({
@@ -202,7 +210,7 @@ exports.handler = async (event) => {
 
     // create file for bot account
     const registrationResponse = await octokit.createPullRequest({
-      owner: process.env.GITHUB_REPO_OWNER!,
+      owner,
       repo: process.env.REPO!,
       title,
       body,
@@ -223,22 +231,31 @@ exports.handler = async (event) => {
       };
     }
 
+    await octokit.request(
+      "POST /repos/{owner}/{repo}/issues/{issue_number}/labels",
+      {
+        owner,
+        repo: process.env.REPO!,
+        issue_number: registrationResponse!.data.number,
+        labels: ["bot-application"],
+      }
+    );
+
     // submit application entry
     const submissionBody = dedent`
-    Bot registration PR: ${registrationResponse.data.html_url}
+    [Bot registration PR](${registrationResponse.data.html_url}) 
 
-    Bot submission:
-    
-    ${submission}
+    [Bot submission](https://github.com/${owner}/${botApplicationRepo}/blob/main/data/${botName}-report.md).
     `;
 
     const issueResult = await octokit.request(
       "POST /repos/{owner}/{repo}/issues",
       {
-        owner: process.env.GITHUB_REPO_OWNER!,
-        repo: "bot-applications",
+        owner,
+        repo: botApplicationRepo,
         title: `${botName} Bot Application`,
         body: submissionBody,
+        labels: ["QA (Quality Assurance"],
       }
     );
 
@@ -260,11 +277,20 @@ exports.handler = async (event) => {
 
     // add data file for application entry
     await octokit.request("PUT /repos/{owner}/{repo}/contents/{path}", {
-      owner: process.env.GITHUB_REPO_OWNER!,
-      repo: "bot-applications",
+      owner,
+      repo: botApplicationRepo,
       path,
       message,
       content,
+    });
+
+    // add markdown file for submission
+    await octokit.request("PUT /repos/{owner}/{repo}/contents/{path}", {
+      owner,
+      repo: botApplicationRepo,
+      path: `data/${botName}-report.md`,
+      message: `${botName} data for issue #${issueId}`,
+      content: Buffer.from(body).toString("base64"),
     });
 
     const emails = await getGroupEmails(crewMembers);
