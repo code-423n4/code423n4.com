@@ -41,6 +41,10 @@ const ticketTags = {
     name: "Team request 👏",
     color: "blue",
   },
+  sensitiveDisclosure: {
+    name: "Sensitive disclosure 🚨",
+    color: "yellow",
+  },
 };
 
 interface NotionHelpdeskTicket {
