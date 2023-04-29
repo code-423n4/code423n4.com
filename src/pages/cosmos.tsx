@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { graphql } from "gatsby";
+import useUser from "../hooks/UserContext";
 
 import ContestList from "../components/ContestList";
 import DefaultLayout from "../templates/DefaultLayout";
@@ -34,6 +35,8 @@ export default function Contests({ data }) {
   const [filteredContests, setFilteredContest] = useState<ContestStatusMap>(
     defaultContests
   );
+
+  const { currentUser } = useUser();
 
   useEffect(() => {
     setFilteredContest(sortContests(data.contests.edges));
@@ -83,6 +86,7 @@ export default function Contests({ data }) {
           case "Needs Judging":
           case "Judging Complete":
           case "Awarding":
+          case "Pre-sort":
           case "Reporting":
           default:
             statusObject.completed.push(contest);
@@ -106,63 +110,58 @@ export default function Contests({ data }) {
 
   return (
     <DefaultLayout pageTitle="Cosmos" bodyClass="cosmos">
-      <section className="cosmos-hero">
-        <img
-          src="/images/cosmos-logo.svg"
-          className="cosmos-logo"
-          alt="Cosmos"
-        />
-        <p>&mdash; on &mdash;</p>
-        <img src="/images/c4-logo.svg" className="c4-logo" alt="Code Arena" />
-      </section>
-      <section className="cosmos-wrapper">
-        <h1>Audit contests for the Cosmos ecosystem</h1>
-        <p>
-          Code4rena contests incentivize finding as many rare and high risk
-          vulnerabilities as possible in a short, focused window.
-        </p>
-        <Definitions />
-      </section>
-      {filteredContests && filteredContests.activeContests.length > 0 && (
+      <div className="limited-width type__copy form">
         <section className="cosmos-wrapper">
-          <h2 className="upcoming-header">Active contests</h2>
-          <ContestList
-            updateContestStatus={updateContestStatus}
-            contests={filteredContests.activeContests}
-          />
-        </section>
-      )}
-      {filteredContests && filteredContests.upcomingContests.length > 0 && (
-        <section className="cosmos-wrapper">
-          <h2 className="upcoming-header">Upcoming contests</h2>
-          <ContestList
-            updateContestStatus={updateContestStatus}
-            contests={filteredContests.upcomingContests}
-          />
-        </section>
-      )}
-      {filteredContests && filteredContests.completed.length > 0 && (
-        <section className="cosmos-wrapper">
-          <h2>Completed contests</h2>
-          <ContestList
-            updateContestStatus={updateContestStatus}
-            contests={filteredContests.completed.reverse()}
-          />
-        </section>
-      )}
-      <section className="cosmos-bkg">
-        <div className="cosmos-wrapper">
-          <h2>Want to sponsor an audit contest for your project?</h2>
+          <h1>Audit contests for the Cosmos ecosystem</h1>
           <p>
-            We’re booking new Cosmos contests now.{" "}
-            <a href="https://discord.gg/code4rena">Join our Discord</a> and say,
-            “I want to be a sponsor.”
+            Code4rena contests incentivize finding as many rare and high risk
+            vulnerabilities as possible in a short, focused window.
           </p>
-          <a className="button cta-button" href="https://docs.code4rena.com">
-            Read how C4 works »
-          </a>
-        </div>
-      </section>
+        </section>
+        {filteredContests && filteredContests.activeContests.length > 0 && (
+          <section className="cosmos-wrapper">
+            <h2 className="upcoming-header">Active contests</h2>
+            <ContestList
+              updateContestStatus={updateContestStatus}
+              contests={filteredContests.activeContests}
+              user={currentUser}
+            />
+          </section>
+        )}
+        {filteredContests && filteredContests.upcomingContests.length > 0 && (
+          <section className="cosmos-wrapper">
+            <h2 className="upcoming-header">Upcoming contests</h2>
+            <ContestList
+              updateContestStatus={updateContestStatus}
+              contests={filteredContests.upcomingContests}
+              user={currentUser}
+            />
+          </section>
+        )}
+        {filteredContests && filteredContests.completed.length > 0 && (
+          <section className="cosmos-wrapper">
+            <h2>Completed contests</h2>
+            <ContestList
+              updateContestStatus={updateContestStatus}
+              contests={filteredContests.completed.reverse()}
+              user={currentUser}
+            />
+          </section>
+        )}
+        <section className="cosmos-bkg">
+          <div className="cosmos-wrapper">
+            <h2>Want to sponsor an audit contest for your project?</h2>
+            <p>
+              We’re booking new Cosmos contests now.{" "}
+              <a href="https://discord.gg/code4rena">Join our Discord</a> and
+              say, “I want to be a sponsor.”
+            </p>
+            <a className="button cta-button" href="https://docs.code4rena.com">
+              Read how C4 works »
+            </a>
+          </div>
+        </section>
+      </div>
     </DefaultLayout>
   );
 }
@@ -188,7 +187,7 @@ export const query = graphql`
             name
             image {
               childImageSharp {
-                resize(width: 160) {
+                resize(width: 80) {
                   src
                 }
               }
@@ -200,6 +199,7 @@ export const query = graphql`
             contestPath
             artPath
             status
+            codeAccess
           }
         }
       }

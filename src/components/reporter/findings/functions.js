@@ -1,5 +1,3 @@
-import { riskField } from "./fields";
-
 export const config = {
   labelAll: "bug",
 };
@@ -24,20 +22,7 @@ export const getCurrentStateFromStorage = (localStorageKey, initialState) => {
     return initialState;
   }
 
-  const riskIndex = riskField.options.findIndex(
-    (element) => element.value === findingData.risk
-  );
-  return {
-    title: findingData.title || initialState.title,
-    risk:
-      riskIndex >= 0 ? riskField.options[riskIndex].value : initialState.risk,
-    details: findingData.details || initialState.details,
-    qaGasDetails: findingData.qaGasDetails || initialState.qaGasDetails,
-    linksToCode:
-      findingData.linksToCode && findingData.linksToCode.length > 0
-        ? findingData.linksToCode
-        : initialState.linksToCode,
-  };
+  return findingData;
 };
 
 export const setStateInLocalStorage = (localStorageKey, state) => {

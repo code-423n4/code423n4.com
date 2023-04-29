@@ -12,7 +12,7 @@ import { toast } from "react-toastify";
 import { navigate } from "gatsby";
 
 // types
-import { TeamData } from "../../types/user";
+import { BotData, TeamData } from "../../types/user";
 
 // hooks
 import { ModalProvider, useModalContext } from "./ModalContext";
@@ -36,6 +36,13 @@ export interface TeamInfo extends UserBasicInfo {
   members: string[];
 }
 
+export interface BotInfo extends UserBasicInfo {
+  polygonAddress: string;
+  ethereumAddress?: string;
+  crew: string[];
+  relegated: boolean;
+}
+
 interface UserState extends UserBasicInfo {
   discordUsername: string;
   gitHubUsername: string;
@@ -44,6 +51,8 @@ interface UserState extends UserBasicInfo {
   moralisId: string;
   teams: TeamInfo[];
   isLoggedIn: boolean;
+  isCertified: boolean;
+  bot?: BotInfo;
 }
 
 interface User {
@@ -63,6 +72,8 @@ const DEFAULT_STATE: UserState = {
   isLoggedIn: false,
   image: undefined,
   link: undefined,
+  isCertified: false,
+  bot: undefined,
 };
 
 const UserContext = createContext<User>({
@@ -165,6 +176,16 @@ const UserProvider = ({ children }) => {
       gitHubUsername,
       email,
     } = user.attributes;
+    let isCertified = false;
+
+    // check if user has certified role
+    const certifiedRoleQuery = new Moralis.Query("_Role");
+    certifiedRoleQuery.equalTo("name", "certified");
+    const certifiedRole = await certifiedRoleQuery.find();
+    if (certifiedRole.length > 0) {
+      isCertified = true;
+    }
+
     const userResponse = await fetch(
       `/.netlify/functions/get-user?id=${username}`
     );
@@ -224,6 +245,29 @@ const UserProvider = ({ children }) => {
       });
     }
 
+    // fetching bot
+    const botResponse = await fetch(
+      `/.netlify/functions/get-bot?id=${username}`
+    );
+    let bot: BotInfo | undefined = undefined;
+    if (botResponse.status === 200) {
+      const botFileData: BotData = await botResponse.json();
+      bot = {
+        crew: botFileData.crew,
+        username: botFileData.handle,
+        polygonAddress:
+          botFileData.paymentAddresses.find(
+            (address) => address.chain === "polygon"
+          )?.address || "",
+        ethereumAddress:
+          botFileData.paymentAddresses.find(
+            (address) => address.chain === "ethereum"
+          )?.address || "",
+        relegated: botFileData.relegated || false,
+        image: botFileData.imageUrl,
+      };
+    }
+
     setCurrentUser({
       username,
       moralisId,
@@ -235,6 +279,8 @@ const UserProvider = ({ children }) => {
       image,
       teams,
       isLoggedIn: true,
+      isCertified,
+      bot,
     });
   };
 

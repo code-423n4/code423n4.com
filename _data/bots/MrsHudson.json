@@ -1,0 +1,12 @@
+{
+  "handle": "MrsHudson",
+  "crew": [
+    "slvDev"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xe7fcB129601440f203eC7cce82987874Cd711391"
+    }
+  ]
+}
