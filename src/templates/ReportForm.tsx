@@ -27,7 +27,7 @@ export interface ReportState {
   linksToCode: string[];
   mitigationOf: ReportId;
   isMitigated: boolean;
-  issueType?: string;
+  issueType: string;
 }
 
 enum FormMode {
@@ -49,7 +49,7 @@ const initialState: ReportState = {
   linksToCode: [""],
   mitigationOf: "",
   isMitigated: false,
-  issueType: null,
+  issueType: "",
 };
 
 const ReportForm = ({ data, location }) => {
@@ -140,6 +140,10 @@ const ReportForm = ({ data, location }) => {
         newValue: data.isMitigated!,
         oldValue: state.isMitigated,
       },
+      issueType: {
+        newValue: data.issueType!,
+        oldValue: state.issueType,
+      },
     };
 
     if (state.title !== data.title) {
@@ -224,6 +228,8 @@ const ReportForm = ({ data, location }) => {
     setMode(FormMode.Create);
     setAttributedTo(currentUser.username);
   };
+
+  console.log("initialState", initialState);
 
   useEffect(() => {
     (async () => {

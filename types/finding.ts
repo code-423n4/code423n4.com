@@ -54,6 +54,10 @@ export interface FindingEditRequest {
     newValue: boolean;
     oldValue: boolean;
   };
+  issueType?: {
+    newValue: string;
+    oldValue: string;
+  };
 }
 
 export interface WardenFindingsForContest {
@@ -77,6 +81,7 @@ export interface FindingCreateRequest {
   address?: WalletAddress;
   mitigationOf?: ReportId;
   isMitigated?: boolean;
+  issueType?: string;
 }
 
 export interface BotReportCreateRequest {
