@@ -211,7 +211,7 @@ const ReportForm = ({ data, location }) => {
       linksToCode: links,
       isMitigated: finding.isMitigated || false,
       mitigationOf: finding.mitigationOf || "",
-      issueType,
+      issueType: issueType || "",
     });
     setAttributedTo(finding.handle);
     setFindingId(`${contestid}-${finding.issueNumber}`);
