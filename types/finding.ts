@@ -23,6 +23,7 @@ export interface Finding {
   handle: string;
   isMitigated?: boolean;
   mitigationOf?: ReportId;
+  issueType?: string;
 }
 
 export interface Label {
