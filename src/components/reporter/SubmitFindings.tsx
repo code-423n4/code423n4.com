@@ -331,7 +331,7 @@ const SubmitFindings = ({
     const markdownBody = `# Lines of code\n\n${linksToCodeString}\n\n\n# Vulnerability details\n\n${
       state.details
     }${
-      !isQaOrGasFinding ? `\n\n\n## Assessed type\n\n${state.issueType} ` : ""
+      !isQaOrGasFinding ? `\n\n\n## Assessed type\n\n${state.issueType}` : ""
     }`;
     let risk = state.risk;
     let title = getTitle(state.title, state.risk);

@@ -229,8 +229,6 @@ const ReportForm = ({ data, location }) => {
     setAttributedTo(currentUser.username);
   };
 
-  console.log("initialState", initialState);
-
   useEffect(() => {
     (async () => {
       if (currentUser.isLoggedIn) {
