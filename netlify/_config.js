@@ -12,7 +12,7 @@ module.exports = {
   apiToken: process.env.C4_API_TOKEN,
   // keep in sync with START and END in _data/bot-race-qualifier.json
   nextBotQualifier: {
-    start: "2023-04-12T20:00:00.000Z",
-    end: "2023-04-12T21:00:00.000Z",
+    start: "2023-05-03T20:00:00.000Z",
+    end: "2023-05-03T21:00:00.000Z",
   },
 };
