@@ -253,28 +253,37 @@ exports.handler = async (event) => {
 
   const owner = process.env.GITHUB_CONTEST_REPO_OWNER;
 
+  let isQaOrGasSubmission = false;
+  let qaOrGasSubmissionBody = "";
+  let markdownPath = "";
+  const riskCode = getRiskCodeFromGithubLabel(risk);
   try {
-    let isQaOrGasSubmission = false;
-    let qaOrGasSubmissionBody = "";
-    let markdownPath = "";
-    const riskCode = getRiskCodeFromGithubLabel(risk);
     if (!isMitigationReport) {
       markdownPath = `data/${attributedTo}-${riskCode}.md`;
       qaOrGasSubmissionBody = `See the markdown file with the details of this report [here](https://github.com/${owner}/${repo}/blob/main/${markdownPath}).`;
       isQaOrGasSubmission = Boolean(riskCode === "G" || riskCode === "Q");
-      if (isQaOrGasSubmission) {
-        const existingReport = await getMarkdownReportForUser(
-          octokit,
-          repo,
-          attributedTo,
-          riskCode as "Q" | "G"
-        );
-        if (existingReport) {
-          throw {
-            status: 400,
-            message: `It looks like you've already submitted a ${risk} report for this contest.`,
-          };
+      try {
+        if (isQaOrGasSubmission) {
+          const existingReport = await getMarkdownReportForUser(
+            octokit,
+            repo,
+            attributedTo,
+            riskCode as "Q" | "G"
+          );
+          if (existingReport) {
+            throw {
+              status: 400,
+              message: `It looks like you've already submitted a ${risk} report for this contest.`,
+            };
+          }
         }
+      } catch (error) {
+        throw {
+          status: error.status || 500,
+          message: `Error checking for report: ${
+            error.message || "Something went wrong"
+          }`,
+        };
       }
     }
 
@@ -286,16 +295,23 @@ exports.handler = async (event) => {
       labels.push(`MR-${mitigationOf}`);
     }
 
-    const issueResult = await octokit.request(
-      "POST /repos/{owner}/{repo}/issues",
-      {
+    let issueResult;
+    try {
+      issueResult = await octokit.request("POST /repos/{owner}/{repo}/issues", {
         owner,
         repo,
         title: !isConfirmedMitigation ? title : mitigationTitle,
         body: isQaOrGasSubmission ? qaOrGasSubmissionBody : body,
         labels: !isConfirmedMitigation ? labels : mitigationLabels,
-      }
-    );
+      });
+    } catch (error) {
+      throw {
+        status: error.status || 500,
+        message: `Error creating issue: ${
+          error.message || "Something went wrong"
+        }`,
+      };
+    }
 
     const issueId = issueResult.data.number;
     const issueUrl = issueResult.data.html_url;
@@ -314,39 +330,63 @@ exports.handler = async (event) => {
     const content = Buffer.from(JSON.stringify(fileData, null, 2)).toString(
       "base64"
     );
-
-    await octokit.request("PUT /repos/{owner}/{repo}/contents/{path}", {
-      owner,
-      repo,
-      path,
-      message,
-      content,
-    });
-
-    if (isQaOrGasSubmission) {
+    try {
       await octokit.request("PUT /repos/{owner}/{repo}/contents/{path}", {
         owner,
         repo,
-        path: markdownPath,
-        message: `${attributedTo} data for issue #${issueId}`,
-        content: Buffer.from(body).toString("base64"),
+        path,
+        message,
+        content,
       });
-    }
-
-    if (apiKey && domain && process.env.EMAIL_SENDER) {
-      const text = dedent`
-      C4 finding submitted: 
-      risk = ${risk}
-      
-      ${body}
-      `;
-      const subject = `C4 ${sponsor} finding: ${title}`;
-
-      await sendConfirmationEmail(emailAddresses, subject, text);
-      return {
-        statusCode: 200,
-        body: "Issue posted successfully and confirmation email sent.",
+    } catch (error) {
+      throw {
+        status: error.status || 500,
+        message: `Error creating submission file: ${
+          error.message || "Something went wrong"
+        }`,
       };
+    }
+    if (isQaOrGasSubmission) {
+      try {
+        await octokit.request("PUT /repos/{owner}/{repo}/contents/{path}", {
+          owner,
+          repo,
+          path: markdownPath,
+          message: `${attributedTo} data for issue #${issueId}`,
+          content: Buffer.from(body).toString("base64"),
+        });
+      } catch (error) {
+        throw {
+          status: error.status || 500,
+          message: `Error creating QA or Gas markdown file: ${
+            error.message || "Something went wrong"
+          }`,
+        };
+      }
+    }
+    if (apiKey && domain && process.env.EMAIL_SENDER) {
+      try {
+        const text = dedent`
+        C4 finding submitted: 
+        risk = ${risk}
+        
+        ${body}
+        `;
+        const subject = `C4 ${sponsor} finding: ${title}`;
+
+        await sendConfirmationEmail(emailAddresses, subject, text);
+        return {
+          statusCode: 200,
+          body: "Issue posted successfully and confirmation email sent.",
+        };
+      } catch (error) {
+        throw {
+          status: error.status || 500,
+          message: `Issue posted successfully. Confirmation email failed: ${
+            error.message || "Something went wrong"
+          }`,
+        };
+      }
     } else {
       return {
         statusCode: 200,
