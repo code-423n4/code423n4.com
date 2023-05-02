@@ -431,7 +431,6 @@ const SubmitFindings = ({
     attributedTo,
   ]);
 
-  //TODO handle issueType
   const validator = useCallback(() => {
     if (!currentUser.isLoggedIn) {
       return true;
