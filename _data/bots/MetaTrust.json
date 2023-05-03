@@ -1,0 +1,16 @@
+{
+  "handle": "MetaTrust",
+  "crew": [
+    "BradMoon"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x8625C682Ac045652A95dd0cD6Dea8E47E3cFb175"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x8625C682Ac045652A95dd0cD6Dea8E47E3cFb175"
+    }
+  ]
+}
