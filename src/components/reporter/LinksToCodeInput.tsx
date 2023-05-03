@@ -1,7 +1,6 @@
 import React, { ReactNode } from "react";
 
 import { DynamicInputGroup } from "../DynamicInputGroup";
-import * as styles from "./widgets/Widgets.module.scss";
 
 interface LinksToCodeProps {
   onChange: (payload: string[]) => void;
@@ -32,10 +31,8 @@ const LinksToCode = ({ onChange, linksToCode }: LinksToCodeProps) => {
 
   return (
     <div className="links-to-code">
-      <label htmlFor="links-to-code" className={styles.Label}>
-        Links to affected code *
-      </label>
-      <p className={styles.Help}>
+      <label htmlFor="links-to-code">Links to affected code *</label>
+      <p>
         Provide GitHub links, including line numbers, to all instances of this
         bug throughout the repo. (
         <a

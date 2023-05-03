@@ -17,16 +17,17 @@ import useUser from "../hooks/UserContext";
 // components
 import ProtectedPage from "../components/ProtectedPage";
 import SubmitFindings from "../components/reporter/SubmitFindings";
-
-// styles
-import * as styles from "../components/form/Form.module.scss";
+import { ReportId, RiskLabelName } from "../../types/shared";
 
 export interface ReportState {
   title: string;
-  risk: string;
+  risk: RiskLabelName | "";
   details: string;
   qaGasDetails: string;
   linksToCode: string[];
+  mitigationOf: ReportId;
+  isMitigated: boolean;
+  issueType: string;
 }
 
 enum FormMode {
@@ -39,12 +40,16 @@ const mdTemplate =
   "Proof of Concept\nProvide direct links to all referenced code in GitHub. " +
   "Add screenshots, logs, or any other relevant proof that illustrates the concept." +
   "\n\n## Tools Used\n\n## Recommended Mitigation Steps";
+
 const initialState: ReportState = {
   title: "",
   risk: "",
   details: mdTemplate,
   qaGasDetails: "",
   linksToCode: [""],
+  mitigationOf: "",
+  isMitigated: false,
+  issueType: "",
 };
 
 const ReportForm = ({ data, location }) => {
@@ -116,7 +121,7 @@ const ReportForm = ({ data, location }) => {
   ): FindingEditRequest => {
     const requestData: FindingEditRequest = {
       issue: issueId!,
-      contest: parseInt(data.contest),
+      contest: data.contest,
       emailAddresses: data.emailAddresses,
       risk: { oldValue: state.risk, newValue: data.risk },
       attributedTo: {
@@ -124,7 +129,23 @@ const ReportForm = ({ data, location }) => {
         newValue: data.attributedTo,
         address: data.address,
       },
+      mitigationOf: data.mitigationOf
+        ? {
+            newValue: data.mitigationOf!,
+            oldValue: state.mitigationOf,
+          }
+        : undefined,
+      isMitigated: {
+        //update these values here from ui update
+        newValue: data.isMitigated!,
+        oldValue: state.isMitigated,
+      },
+      issueType: {
+        newValue: data.issueType!,
+        oldValue: state.issueType,
+      },
     };
+
     if (state.title !== data.title) {
       requestData.title = data.title;
     }
@@ -181,15 +202,20 @@ const ReportForm = ({ data, location }) => {
     // normalize whitespace
     const normalizedBody = finding.body.replace(/\r\n/g, "\n");
     const { links, body } = separateLinksFromBody(normalizedBody, finding.risk);
+    const { issueType, newBody } = separateIssueTypeFromBody(body);
+
     setMode(FormMode.Edit);
     setIssueId(finding.issueNumber);
     setFindingId(`${contestid}-${finding.issueNumber}`);
     setState({
       title: finding.title,
       risk: finding.risk,
-      details: body,
+      details: newBody,
       qaGasDetails: normalizedBody,
       linksToCode: links,
+      isMitigated: finding.isMitigated || false,
+      mitigationOf: finding.mitigationOf || "",
+      issueType: issueType || "",
     });
     setAttributedTo(finding.handle);
     setFindingId(`${contestid}-${finding.issueNumber}`);
@@ -207,7 +233,6 @@ const ReportForm = ({ data, location }) => {
     (async () => {
       if (currentUser.isLoggedIn) {
         const user = await Moralis.User.current();
-
         if (location.state && location.state.finding) {
           const finding = location.state.finding;
           initializeEditState(finding);
@@ -271,30 +296,50 @@ const ReportForm = ({ data, location }) => {
     return { links: linksToCode, body };
   };
 
+  const separateIssueTypeFromBody = (
+    issueBody: string
+  ): { issueType: string; newBody: string } => {
+    let newBody = issueBody;
+    let issueType: string = "";
+    const itcEnd = newBody.length;
+    if (!issueBody.includes("## Assessed type")) {
+      return { issueType: issueType, newBody };
+    } else if (itcEnd >= 0) {
+      const issueTypeArray = newBody
+        .slice("\n\n\n## Assessed type\n\n".length, itcEnd)
+        .split("\n");
+      issueType = issueTypeArray[issueTypeArray.length - 1];
+      const index = newBody.lastIndexOf("## Assessed type");
+      if (index >= 0) {
+        newBody = newBody.substring(0, index);
+      } else {
+        newBody = newBody;
+      }
+    }
+    return { issueType: issueType, newBody };
+  };
+
   return (
-    <ProtectedPage pageTitle="Submit finding | Code 423n4">
+    <ProtectedPage pageTitle="Submit finding | Code4rena">
       {isLoading ? (
         // @todo: style a loading state
         <span>Loading...</span>
       ) : hasContestEnded ? (
-        <div className="center">
+        <div>
           <h1>This contest has ended.</h1>
           <p>You can no longer submit findings for this contest.</p>
-          <Link
-            to="/contests"
-            className="contest-repo button cta-button primary"
-          >
+          <Link to="/contests" className="button button--primary">
             View active contests
           </Link>
         </div>
       ) : isClosed ? (
-        <div className={styles.Form}>
-          <h1 className={styles.Heading1}>This finding has been withdrawn</h1>
-          <h3 className={styles.Heading3}>Submitted by:</h3>
+        <div className={"form__form"}>
+          <h1>This finding has been withdrawn</h1>
+          <h3>Submitted by:</h3>
           <ul>
             <li>{attributedTo}</li>
           </ul>
-          <h3 className={styles.Heading3}>Finding:</h3>
+          <h3>Finding:</h3>
           <ul>
             <li>Risk: {state.risk}</li>
             <li>Title: {state.title}</li>
@@ -304,7 +349,8 @@ const ReportForm = ({ data, location }) => {
       ) : (
         <SubmitFindings
           sponsor={sponsor.name}
-          contest={contestid}
+          contest={parseInt(contestid)}
+          contestType={fields.type || "Audit"}
           contestPath={fields.contestPath}
           repo={findingsRepo}
           title={title}
@@ -347,6 +393,7 @@ export const pageQuery = graphql`
       fields {
         submissionPath
         contestPath
+        type
       }
     }
   }
