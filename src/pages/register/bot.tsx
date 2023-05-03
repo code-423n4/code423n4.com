@@ -70,7 +70,37 @@ export default function BotRegistration({ data }) {
           </div>
           <div className="register-bot__hero-ground"></div>
           <div className="register-bot__hero-countdown">
-            The first Qualifier Race will be held April 12.
+            {registrationWindowStatus === ContestStatus.Live && (
+              <Countdown
+                text="Bot Race Qualifier is live! Ends in: "
+                start={START}
+                end={END}
+                isPreview={false}
+                updateContestStatus={updateContestStatus}
+              />
+            )}
+            {registrationWindowStatus === ContestStatus.Done && (
+              <>
+                Keep your eye on our Announcements channel in{" "}
+                <a
+                  href="https://discord.gg/code4rena"
+                  rel="noreferrer"
+                  aria-label="Discord announcements channel (Opens in a new window)"
+                >
+                  Discord
+                </a>{" "}
+                to find out when the next one will be.
+              </>
+            )}
+            {registrationWindowStatus === ContestStatus.Soon && (
+              <Countdown
+                text="Bot Race Qualifier starts in: "
+                start={START}
+                end={END}
+                isPreview={false}
+                updateContestStatus={updateContestStatus}
+              />
+            )}
           </div>
         </section>
 
@@ -142,9 +172,7 @@ export default function BotRegistration({ data }) {
               <div className="register-bot__header-stage-name">Bot Race</div>
             </h3>
             <div className="register-bot__text">
-              <p className="register-bot__timeline-time">
-                27 April 2023
-              </p>
+              <p className="register-bot__timeline-time">27 April 2023</p>
               <ul>
                 <li>
                   The first hour of each audit competition will be dedicated to
@@ -213,9 +241,9 @@ export default function BotRegistration({ data }) {
                           href={REPO}
                           target="_blank"
                           rel="noreferrer"
-                          aria-label="Link to the 2023-04-frankencoin repo (Opens in a new window)"
+                          aria-label="Link to the contest repo (Opens in a new window)"
                         >
-                          2023-04-frankencoin
+                          {REPO.replace("https://github.com/code-423n4/", "")}
                         </a>
                       </div>
                     </div>
