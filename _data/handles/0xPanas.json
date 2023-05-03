@@ -1,5 +1,18 @@
 {
   "image": "./avatars/0xPanas.png",
   "handle": "0xPanas",
-  "members": ["Bronicle", "Deivitto"]
+  "members": [
+    "Bronicle",
+    "Deivitto"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xa322bD417154D04d5704952E550288f0f91044Bd"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0xa322bD417154D04d5704952E550288f0f91044Bd"
+    }
+  ]
 }
