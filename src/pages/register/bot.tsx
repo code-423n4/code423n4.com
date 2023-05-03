@@ -151,7 +151,9 @@ export default function BotRegistration({ data }) {
               </div>
             </h3>
             <div className="register-bot__text">
-              <p className="register-bot__timeline-time">Early April</p>
+              <p className="register-bot__timeline-time">
+                Starting Early April
+              </p>
               <ul>
                 <li>
                   Bot Crews race to have their bots deliver the highest quality
@@ -172,7 +174,9 @@ export default function BotRegistration({ data }) {
               <div className="register-bot__header-stage-name">Bot Race</div>
             </h3>
             <div className="register-bot__text">
-              <p className="register-bot__timeline-time">27 April 2023</p>
+              <p className="register-bot__timeline-time">
+                Starting 27 April 2023
+              </p>
               <ul>
                 <li>
                   The first hour of each audit competition will be dedicated to
