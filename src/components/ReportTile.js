@@ -9,7 +9,7 @@ const ReportTile = ({ report }) => {
   const { start_time, end_time } = contest;
   const t = getDates(start_time, end_time);
 
-  const reportUrl = `/reports/${slug}`;
+  const reportUrl = `/reports/${slug.toLowerCase()}`;
 
   return (
     <div className={"report-tile"}>
