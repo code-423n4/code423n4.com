@@ -27,6 +27,7 @@ export interface ReportState {
   linksToCode: string[];
   mitigationOf: ReportId;
   isMitigated: boolean;
+  issueType: string;
 }
 
 enum FormMode {
@@ -48,6 +49,7 @@ const initialState: ReportState = {
   linksToCode: [""],
   mitigationOf: "",
   isMitigated: false,
+  issueType: "",
 };
 
 const ReportForm = ({ data, location }) => {
@@ -119,7 +121,7 @@ const ReportForm = ({ data, location }) => {
   ): FindingEditRequest => {
     const requestData: FindingEditRequest = {
       issue: issueId!,
-      contest: parseInt(data.contest),
+      contest: data.contest,
       emailAddresses: data.emailAddresses,
       risk: { oldValue: state.risk, newValue: data.risk },
       attributedTo: {
@@ -137,6 +139,10 @@ const ReportForm = ({ data, location }) => {
         //update these values here from ui update
         newValue: data.isMitigated!,
         oldValue: state.isMitigated,
+      },
+      issueType: {
+        newValue: data.issueType!,
+        oldValue: state.issueType,
       },
     };
 
@@ -196,17 +202,20 @@ const ReportForm = ({ data, location }) => {
     // normalize whitespace
     const normalizedBody = finding.body.replace(/\r\n/g, "\n");
     const { links, body } = separateLinksFromBody(normalizedBody, finding.risk);
+    const { issueType, newBody } = separateIssueTypeFromBody(body);
+
     setMode(FormMode.Edit);
     setIssueId(finding.issueNumber);
     setFindingId(`${contestid}-${finding.issueNumber}`);
     setState({
       title: finding.title,
       risk: finding.risk,
-      details: body,
+      details: newBody,
       qaGasDetails: normalizedBody,
       linksToCode: links,
       isMitigated: finding.isMitigated || false,
       mitigationOf: finding.mitigationOf || "",
+      issueType: issueType || "",
     });
     setAttributedTo(finding.handle);
     setFindingId(`${contestid}-${finding.issueNumber}`);
@@ -287,6 +296,29 @@ const ReportForm = ({ data, location }) => {
     return { links: linksToCode, body };
   };
 
+  const separateIssueTypeFromBody = (
+    issueBody: string
+  ): { issueType: string; newBody: string } => {
+    let newBody = issueBody;
+    let issueType: string = "";
+    const itcEnd = newBody.length;
+    if (!issueBody.includes("## Assessed type")) {
+      return { issueType: issueType, newBody };
+    } else if (itcEnd >= 0) {
+      const issueTypeArray = newBody
+        .slice("\n\n\n## Assessed type\n\n".length, itcEnd)
+        .split("\n");
+      issueType = issueTypeArray[issueTypeArray.length - 1];
+      const index = newBody.lastIndexOf("## Assessed type");
+      if (index >= 0) {
+        newBody = newBody.substring(0, index);
+      } else {
+        newBody = newBody;
+      }
+    }
+    return { issueType: issueType, newBody };
+  };
+
   return (
     <ProtectedPage pageTitle="Submit finding | Code4rena">
       {isLoading ? (
@@ -317,7 +349,7 @@ const ReportForm = ({ data, location }) => {
       ) : (
         <SubmitFindings
           sponsor={sponsor.name}
-          contest={contestid}
+          contest={parseInt(contestid)}
           contestType={fields.type || "Audit"}
           contestPath={fields.contestPath}
           repo={findingsRepo}

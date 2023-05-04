@@ -1,4 +1,6 @@
 import {
+  AbsoluteURL,
+  ContestNumber,
   DateString,
   FindingBody,
   IssueNumber,
@@ -21,6 +23,7 @@ export interface Finding {
   handle: string;
   isMitigated?: boolean;
   mitigationOf?: ReportId;
+  issueType?: string;
 }
 
 export interface Label {
@@ -52,6 +55,10 @@ export interface FindingEditRequest {
     newValue: boolean;
     oldValue: boolean;
   };
+  issueType?: {
+    newValue: string;
+    oldValue: string;
+  };
 }
 
 export interface WardenFindingsForContest {
@@ -63,9 +70,9 @@ export interface WardenFindingsForContest {
 
 export interface FindingCreateRequest {
   user: Username;
-  contest: string;
+  contest: ContestNumber;
   sponsor: string;
-  repo: string;
+  repo: AbsoluteURL;
   emailAddresses: string[];
   attributedTo: Username;
   risk: RiskLabelName | "";
@@ -75,6 +82,13 @@ export interface FindingCreateRequest {
   address?: WalletAddress;
   mitigationOf?: ReportId;
   isMitigated?: boolean;
+  issueType?: string;
+}
+
+export interface BotReportCreateRequest {
+  contest: ContestNumber;
+  botName: Username;
+  body: FindingBody;
 }
 
 export interface FindingDeleteRequest {
