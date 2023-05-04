@@ -1,15 +1,21 @@
 import { Handler } from "@netlify/functions";
 import { Response } from "@netlify/functions/src/function/response";
 import { Event } from "@netlify/functions/src/function/event";
-import { Octokit } from "@octokit/core";
+import { Octokit } from "@octokit/rest";
 import { createOrUpdateTextFile } from "@octokit/plugin-create-or-update-text-file";
 
 // types
+import {
+  ContestFindingsRepoName,
+  IssueNumber,
+  RiskLabelName,
+  Username,
+  WalletAddress,
+} from "../../types/shared";
 import { Contest } from "../../types/contest";
 import {
   FindingDeleteRequest,
   FindingEditRequest,
-  TeamFindings,
   WardenFindingsForContest,
 } from "../../types/finding";
 import { TeamData } from "../../types/user";
@@ -22,6 +28,7 @@ import {
   isContestActive,
 } from "../util/contest-utils";
 import {
+  getAllFindings,
   getAvailableFindings,
   getRepoName,
   getWardenFindingsForContest,
@@ -37,38 +44,30 @@ import {
 import { apiKey, domain } from "../_config";
 
 async function getFinding(
-  username: string,
-  contest: Contest,
-  issueId: number
+  username: Username,
+  repoName: ContestFindingsRepoName,
+  issueNumber: IssueNumber
 ): Promise<Response> {
-  const client = new Octokit({ auth: process.env.GITHUB_TOKEN });
+  const client = new Octokit({ auth: process.env.GITHUB_TOKEN_FETCH });
 
-  const submission_files = (
-    await getAvailableFindings(client, username, contest)
+  const allFindings = await getAllFindings(
+    client,
+    repoName,
+    process.env.GITHUB_CONTEST_REPO_OWNER!
+  );
+
+  // todo: don't rely on full listing; just fetch the individual issue
+  let finding;
+  const findingsByHandle = (
+    await getWardenFindingsForContest(client, allFindings, repoName, username)
   ).filter((item) => {
-    if (item.issueNumber === issueId) {
+    if (item.issueNumber === issueNumber) {
       return item;
     }
   });
 
-  // todo: don't rely on full listing
-  let finding;
-  if (submission_files.length === 1) {
-    const findings = (
-      await getWardenFindingsForContest(
-        client,
-        submission_files[0].handle,
-        contest
-      )
-    ).filter((item) => {
-      if (item.issueNumber === issueId) {
-        return item;
-      }
-    });
-
-    if (findings.length === 1) {
-      finding = findings[0];
-    }
+  if (findingsByHandle.length === 1) {
+    finding = findingsByHandle[0];
   }
 
   if (finding) {
@@ -90,67 +89,48 @@ async function getFinding(
   };
 }
 
-async function getTeamsFindings(
-  teamNames: string[],
-  octokit: Octokit,
-  contest: Contest,
-  wardenFindingsForContest: WardenFindingsForContest
-): Promise<void[]> {
-  const promises: Promise<void>[] = [];
-  for (const teamName of teamNames) {
-    promises.push(
-      getSingleTeamFindings(teamName, octokit, contest).then((teamFindings) => {
-        wardenFindingsForContest.teams[teamFindings.teamName] =
-          teamFindings.findings;
-      })
-    );
-  }
-  return await Promise.all(promises);
-}
-
-async function getSingleTeamFindings(
-  teamName: string,
-  octokit: Octokit,
-  contest: Contest
-): Promise<TeamFindings> {
-  return getWardenFindingsForContest(octokit, teamName, contest).then(
-    (teamFindings) => {
-      return {
-        teamName: teamName,
-        findings: teamFindings,
-      };
-    }
-  );
-}
-
 async function getFindings(
-  username: string,
-  contest: Contest,
+  username: Username,
+  repoName: ContestFindingsRepoName,
   includeTeams: boolean = true
 ): Promise<Response> {
-  const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
+  const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN_FETCH });
 
   const wardenFindingsForContest: WardenFindingsForContest = {
     user: [],
     teams: {},
   };
 
-  const promises: Promise<void | void[]>[] = [];
+  const allFindings = await getAllFindings(
+    octokit,
+    repoName,
+    process.env.GITHUB_CONTEST_REPO_OWNER!
+  );
+
+  const wardenAndTeamFindingRequests: Promise<void | void[]>[] = [];
   if (includeTeams) {
     const teamNames = await getUserTeams(username);
-    promises.push(
-      getTeamsFindings(teamNames, octokit, contest, wardenFindingsForContest)
-    );
+    for (const team of teamNames) {
+      wardenAndTeamFindingRequests.push(
+        getWardenFindingsForContest(octokit, allFindings, repoName, team).then(
+          (teamFindings) => {
+            wardenFindingsForContest.teams[team] = teamFindings;
+          }
+        )
+      );
+    }
   }
-  promises.push(
-    getWardenFindingsForContest(octokit, username, contest).then(
+
+  wardenAndTeamFindingRequests.push(
+    getWardenFindingsForContest(octokit, allFindings, repoName, username).then(
       (wardenFindings) => {
         wardenFindingsForContest.user = wardenFindings;
       }
     )
   );
+
   try {
-    await Promise.all(promises);
+    await Promise.all(wardenAndTeamFindingRequests);
     return {
       statusCode: 200,
       headers: {
@@ -172,11 +152,15 @@ async function getFindings(
 }
 
 async function handleAttributionChange(
-  client,
-  repoName,
-  issueNumber,
-  username,
-  attributedTo: { newValue: string; oldValue: string; address?: string }
+  client: Octokit & { createOrUpdateTextFile },
+  repoName: ContestFindingsRepoName,
+  issueNumber: IssueNumber,
+  username: Username,
+  attributedTo: {
+    newValue: Username;
+    oldValue: Username;
+    address?: WalletAddress;
+  }
 ) {
   if (attributedTo.newValue !== username) {
     const team: TeamData = await checkTeamAuth(attributedTo.newValue, username);
@@ -244,9 +228,9 @@ async function handleAttributionChange(
 }
 
 async function editFinding(
-  username: string,
+  username: Username,
   contest: Contest,
-  issueNumber: number,
+  issueNumber: IssueNumber,
   data: FindingEditRequest
 ): Promise<void> {
   const CustOcto = Octokit.plugin(createOrUpdateTextFile);
@@ -327,7 +311,7 @@ async function editFinding(
   const available_findings = await getAvailableFindings(
     client,
     username,
-    contest
+    repoName
   );
 
   const canAccess =
@@ -442,7 +426,7 @@ async function editFinding(
       };
     }
 
-    const migationConfirmedLabe = "mitigation-confirmed";
+    const mitigationConfirmedLabel = "mitigation-confirmed";
     try {
       await client.request(
         "POST /repos/{owner}/{repo}/issues/{issue_number}/labels",
@@ -450,7 +434,7 @@ async function editFinding(
           owner: process.env.GITHUB_REPO_OWNER!,
           repo: repoName,
           issue_number: issueNumber,
-          labels: [migationConfirmedLabe],
+          labels: [mitigationConfirmedLabel],
         }
       );
     } catch (error) {
@@ -529,11 +513,11 @@ async function editFinding(
 }
 
 async function deleteFinding(
-  username: string,
+  username: Username,
   contest: Contest,
-  issueNumber: number,
-  risk: string,
-  attributedTo: string,
+  issueNumber: IssueNumber,
+  risk: RiskLabelName,
+  attributedTo: Username,
   emailAddresses: string[]
 ) {
   const CustOcto = Octokit.plugin(createOrUpdateTextFile);
@@ -638,10 +622,12 @@ const handler: Handler = async (event: Event): Promise<Response> => {
         // includeTeams = req.queryStringParameters?.includeTeams)
         // }
 
+        const repoName = getRepoName(contest);
+
         if (issueNumber !== undefined) {
-          return await getFinding(username, contest, issueNumber);
+          return await getFinding(username, repoName, issueNumber);
         } else {
-          return await getFindings(username, contest, includeTeams);
+          return await getFindings(username, repoName, includeTeams);
         }
       case "POST":
         const data: FindingEditRequest = JSON.parse(event.body!);
@@ -685,7 +671,7 @@ const handler: Handler = async (event: Event): Promise<Response> => {
           username,
           contest,
           issueNumber,
-          risk,
+          risk as RiskLabelName,
           attributedTo,
           [...emailAddresses, ...teamEmails]
         );

@@ -1,7 +1,9 @@
 import { differenceInDays, getYear } from "date-fns";
 import fs, { readFileSync } from "fs";
+import { AwardFinding } from "../../types/finding";
 import { getApiContestData } from "../util/getContestsData";
-import csv from "csvtojson";
+import { getApiFindingsData } from "../util/getFindingsData";
+import { DBContest } from "../../types/contest";
 
 const getWardenInfo = (handle: string) => {
   const wardenFile = readFileSync(`./_data/handles/${handle}.json`);
@@ -21,43 +23,32 @@ const getWardenInfo = (handle: string) => {
 const getLeaderboardResults = async (
   contestRange: string,
   contestId?: string,
-  handle?: string,
-  allContestsGraphQl?: any
+  handle?: string
 ) => {
   // @TODO: also filter by contestId (if provided)
-  let allContests;
-  if (allContestsGraphQl) {
-    allContests = allContestsGraphQl;
-  } else {
-    allContests = await getApiContestData();
-  }
+  const allContests = await getApiContestData();
 
   const filteredContests = allContests
     .filter(
-      (contest) => withinTimeframe(contest, contestRange) || !contestRange
+      (contest: DBContest) =>
+        withinTimeframe(contest, contestRange) || !contestRange
     )
     .filter((contest) => !contestId || Number(contestId) === contest.contestid);
 
   // get findings, filtered by contest
-  const allFindings = (await csv().fromFile("_data/findings/findings.csv"))
-    .map((finding) => {
-      finding.awardUSD = parseFloat(finding.awardUSD);
-      finding.split = parseInt(finding.split, 10);
-      return finding;
-    })
-    .filter((finding) =>
-      filteredContests.some(
-        (contest) => contest.contestid.toString() === finding.contest
-      )
-    );
+  const allFindings = (await getApiFindingsData()).filter((finding) =>
+    filteredContests.some((contest) => contest.contestid === finding.contest)
+  );
 
   // get deduplicated handles from findings
   const allHandles = Array.from(
-    new Set(allFindings.map((finding) => finding.handle))
+    new Set(allFindings.map((finding: AwardFinding) => finding.handle))
   )
-    .map((handle) => getWardenInfo(handle))
-    .filter((handle) => handle.showOnLeaderboard !== false);
-
+    .map((handle: string) => getWardenInfo(handle))
+    .filter(
+      (handle) =>
+        handle.showOnLeaderboard === undefined || !handle.showOnLeaderboard
+    );
   return computeWardenStats(allHandles, allFindings);
 };
 
@@ -120,6 +111,7 @@ function computeWardenStats(wardens, findings) {
       ...handleData,
       ...computeResults(wardensFindings),
     };
+
     if (combinedData.allFindings > 0) {
       result.push(combinedData);
     }
@@ -176,13 +168,13 @@ function computeResults(findings) {
 }
 
 exports.handler = async (event) => {
-  // only allow POST
+  // only allow GET
 
-  if (event.httpMethod !== "POST") {
+  if (event.httpMethod !== "GET") {
     return {
       statusCode: 405,
       body: "Method not allowed",
-      headers: { Allow: "POST" },
+      headers: { Allow: "GET" },
     };
   }
 
@@ -195,16 +187,10 @@ exports.handler = async (event) => {
 
     // range
     const contestRange = event.queryStringParameters.range;
-    const contests = JSON.parse(event.body).map((el) => el.node);
     return {
       statusCode: 200,
       body: JSON.stringify(
-        await getLeaderboardResults(
-          contestRange,
-          contestId,
-          contestHandle,
-          contests
-        )
+        await getLeaderboardResults(contestRange, contestId, contestHandle)
       ),
     };
   } catch (error) {
