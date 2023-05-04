@@ -1,3 +1,4 @@
+import { addHours, isAfter, isBefore } from "date-fns";
 import { Contest } from "../../types/contest";
 import { getApiContestData } from "./getContestsData";
 
@@ -18,6 +19,18 @@ function isContestActive(contest: Contest): boolean {
   const end = new Date(contest.end_time).getTime();
 
   return now >= start && now <= end;
+}
+
+function isBotRaceActive(contest: Contest): boolean {
+  if (!contest) {
+    return false;
+  }
+
+  const now = Date.now();
+  const start = new Date(contest.start_time);
+  const end = addHours(start, 1);
+
+  return isAfter(now, start) && isBefore(now, end);
 }
 
 // @todo: determine if this is the right place for these functions
@@ -48,6 +61,7 @@ function getGithubLabelFromRiskCode(code: string): string {
 export {
   getContest,
   isContestActive,
+  isBotRaceActive,
   getRiskCodeFromGithubLabel,
   getGithubLabelFromRiskCode,
 };
