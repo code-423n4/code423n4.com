@@ -78,7 +78,7 @@ exports.handler = async (event) => {
         body:
           `See the markdown file with the details of this report ` +
           `[here](https://github.com/${owner}/${repo}/blob/main/data/${botName}-report.md).`,
-        labels: ["QA (Quality Assurance"],
+        labels: ["QA (Quality Assurance)"],
       }
     );
 
@@ -122,7 +122,7 @@ exports.handler = async (event) => {
       `competition has been submitted`;
     const emailBody = dedent`
       ${botName} Bot Race Report:
-  
+
       ${body}
     `;
     await sendConfirmationEmail(emails, emailSubject, emailBody);
