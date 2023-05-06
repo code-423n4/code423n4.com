@@ -1,0 +1,17 @@
+{
+  "handle": "Maiev",
+  "crew": [
+    "019EC6E2"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x3f87d31C28328C8A2526F7CaF4Fd083403c8faC8"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x3f87d31C28328C8A2526F7CaF4Fd083403c8faC8"
+    }
+  ],
+  "image": "./avatars/Maiev.jpeg"
+}
