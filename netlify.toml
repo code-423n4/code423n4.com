@@ -14,8 +14,14 @@
   to = "/register"
   status = 200
 
-  [[redirects]]
+[[redirects]]
   from = "/community-resources/contests.csv"
+  to = "/.netlify/functions/resources"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/community-resources/findings.csv"
   to = "/.netlify/functions/resources"
   status = 200
   force = true
@@ -29,4 +35,4 @@
 
 [functions]
   directory = "netlify/functions/"
-  included_files = ["_data/findings/*", "_data/handles/*.json"]
+  included_files = ["_data/findings/*", "_data/handles/*.json", "_data/bots/*.json", "_data/bot-race-qualifier.json"]
