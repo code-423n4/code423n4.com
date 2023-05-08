@@ -1,0 +1,18 @@
+{
+  "handle": "Arbor-Finance",
+  "members": [
+    "namaskar",
+    "bookland"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xcc1a924bef4c12c17bf99e32e015f6a275c2f833"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0xcc1a924bef4c12c17bf99e32e015f6a275c2f833"
+    }
+  ],
+  "image": "./avatars/Arbor-Finance.png"
+}

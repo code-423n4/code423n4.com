@@ -1,0 +1,12 @@
+{
+  "handle": "Shinchan",
+  "members": ["Sm4rty", "prasantgupta52", "Rohan16"],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x1e0095cafBa200599075F125236fdb097423F52e"
+    }
+  ],
+  "link": "",
+  "image": "./avatars/Shinchan.png"
+}

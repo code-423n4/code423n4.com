@@ -29,15 +29,8 @@ const plugins = [
   {
     resolve: `gatsby-source-filesystem`,
     options: {
-      path: `${__dirname}/_data/contests/contests.csv`,
-      name: `contests`,
-    },
-  },
-  {
-    resolve: `gatsby-source-filesystem`,
-    options: {
-      path: `${__dirname}/_data/findings/findings.csv`,
-      name: `findings`,
+      path: `${__dirname}/_data/bots`,
+      name: `bots`,
     },
   },
   {
@@ -58,6 +51,7 @@ const plugins = [
     resolve: `gatsby-transformer-remark`,
     options: {
       plugins: [
+        `gatsby-remark-autolink-headers`,
         `gatsby-remark-copy-linked-files`,
         `gatsby-remark-smartypants`,
         {
@@ -94,6 +88,10 @@ const plugins = [
             },
           },
         },
+        {
+          resolve: `gatsby-remark-mathjax`,
+          options: {},
+        },
       ],
     },
   },
@@ -110,12 +108,6 @@ const plugins = [
       },
     },
   },
-  {
-    resolve: `gatsby-source-filesystem`,
-    options: {
-      path: `${__dirname}/_data/`,
-    },
-  },
   `gatsby-transformer-sharp`,
   `gatsby-plugin-sharp`,
   {
@@ -123,23 +115,13 @@ const plugins = [
     options: {
       extensions: [`.mdx`],
       defaultLayouts: {
-        reports: require.resolve("./src/templates/ReportLayout.js"),
+        reports: require.resolve("./src/templates/DefaultLayout.js"),
         default: require.resolve("./src/templates/DefaultLayout.js"),
       },
     },
   },
   `gatsby-plugin-sass`,
 ];
-
-if (process.env.NODE_ENV === "development") {
-  plugins.push({
-    resolve: `gatsby-source-filesystem`,
-    options: {
-      path: `${__dirname}/_test-data/contests/contests.csv`,
-      name: `contests`,
-    },
-  });
-}
 
 module.exports = {
   siteMetadata: {
