@@ -2,7 +2,7 @@
 
 export const titleField = {
   name: "title",
-  label: "Title *",
+  label: "Title",
   helpText:
     "Summarize your findings for the bug or vulnerability. (This will be the issue title.)",
   widget: "text",
@@ -12,7 +12,7 @@ export const titleField = {
 export const wardenField = (wardens) => {
   return {
     name: "handle",
-    label: "Handle *",
+    label: "Handle",
     helpText: "Handle you're competing under (individual or team name)",
     widget: "warden",
     required: true,
@@ -30,7 +30,7 @@ export const linksToCodeField = {
 
 export const mitigationRiskField = {
   name: "risk",
-  label: "Risk rating *",
+  label: "Risk rating",
   widget: "select",
   required: true,
   options: [
@@ -47,7 +47,7 @@ export const mitigationRiskField = {
 
 export const riskField = {
   name: "risk",
-  label: "Risk rating *",
+  label: "Risk rating",
   widget: "select",
   required: true,
   options: [
@@ -72,7 +72,7 @@ export const riskField = {
 
 export const vulnerabilityDetailsField = {
   name: "details",
-  label: "Vulnerability details *",
+  label: "Vulnerability details",
   helpText:
     "Link to all referenced sections of code in GitHub. \n You can use " +
     "[markdown](https://www.markdownguide.org/basic-syntax/) including " +
@@ -85,7 +85,7 @@ export const vulnerabilityDetailsField = {
 
 export const qaGasDetailsField = {
   name: "qaGasDetails",
-  label: "Report contents *",
+  label: "Report contents",
   helpText:
     "Link to all referenced sections of code in GitHub. \n You can use " +
     "[markdown](https://www.markdownguide.org/basic-syntax/) including " +
@@ -105,9 +105,48 @@ export const mitigationField = {
 
 export const mitigationOfField = {
   name: "mitigationOf",
-  label: "Report ID of original finding *",
+  label: "Report ID of original finding",
   helpText: `For new findings, please enter "NEW"`,
   placeholder: "H-01",
   widget: "text",
   required: true,
+};
+
+export const issueTypeListField = {
+  name: "issueType",
+  label: "Issue type",
+  widget: "select",
+  required: true,
+  options: [
+    { label: "Access Control", value: "Access Control" },
+    { label: "call/delegatecall", value: "call/delegatecall" },
+    { label: "CanAuto", value: "CanAuto" },
+    { label: "Context", value: "Context" },
+    { label: "Decimal", value: "Decimal" },
+    { label: "DoS", value: "DoS" },
+    { label: "en/de-code", value: "en/de-code" },
+    { label: "ERC20", value: "ERC20" },
+    { label: "ERC4626", value: "ERC4626" },
+    { label: "ERC721", value: "ERC721" },
+    { label: "Error", value: "Error" },
+    { label: "ETH-Transfer", value: "ETH-Transfer" },
+    { label: "Governance", value: "Governance" },
+    { label: "GOX", value: "GOX" },
+    { label: "Invalid Validation", value: "Invalid Validation" },
+    { label: "Library", value: "Library" },
+    { label: "Loop", value: "Loop" },
+    { label: "Math", value: "Math" },
+    { label: "MEV", value: "MEV" },
+    { label: "Oracle", value: "Oracle" },
+    { label: "Other", value: "Other" },
+    { label: "Payable", value: "Payable" },
+    { label: "Reentrancy", value: "Reentrancy" },
+    { label: "Rug-Pull", value: "Rug-Pull" },
+    { label: "Solmate", value: "Solmate" },
+    { label: "Timing", value: "Timing" },
+    { label: "Token-Transfer", value: "Token-Transfer" },
+    { label: "Under/Overflow", value: "Under/Overflow" },
+    { label: "Uniswap", value: "Uniswap" },
+    { label: "Upgradable", value: "Upgradable" },
+  ],
 };

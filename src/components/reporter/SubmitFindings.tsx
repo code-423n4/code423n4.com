@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 
 // types
 import { Field } from "./widgets/Widgets";
+import { ContestNumber } from "../../../types/shared";
 import { ReportState } from "../../templates/ReportForm";
 import { FindingCreateRequest } from "../../../types/finding";
 
@@ -20,6 +21,7 @@ import {
   mitigationField,
   mitigationRiskField,
   mitigationOfField,
+  issueTypeListField,
 } from "./findings/fields";
 import {
   config,
@@ -40,9 +42,6 @@ import FormField from "./widgets/FormField";
 import WardenDetails from "../WardenDetails";
 import Widget from "./widgets/Widget";
 
-// styles
-import * as styles from "../../styles/Main.module.scss";
-
 enum FormStatus {
   Unsubmitted = "unsubmitted",
   Submitting = "submitting",
@@ -53,7 +52,7 @@ enum FormStatus {
 
 interface SubmitFindingsProps {
   sponsor: string;
-  contest: string;
+  contest: ContestNumber;
   contestPath: string;
   repo: string;
   title: string;
@@ -102,6 +101,7 @@ const SubmitFindings = ({
   const [newTeamAddress, setNewTeamAddress] = useState<string>("");
   const [attributedTo, setAttributedTo] = useState<string>(initialAttributedTo);
   const [fieldList, setFieldList] = useState<Field[]>([riskField]);
+
   // effects
   useEffect(() => {
     if (!attributedTo) {
@@ -147,6 +147,9 @@ const SubmitFindings = ({
         setFieldList(fieldList);
         return;
       }
+      if (!checkQaOrGasFinding(state.risk)) {
+        fieldList.push(issueTypeListField);
+      }
       setFieldList(
         fieldList.concat([
           titleField,
@@ -155,7 +158,7 @@ const SubmitFindings = ({
         ])
       );
     }
-  }, [state.risk, currentUser, state.isMitigated]);
+  }, [state.risk, currentUser, state.isMitigated, state.issueType]);
 
   useEffect(() => {
     if (!currentUser.isLoggedIn) {
@@ -325,7 +328,11 @@ const SubmitFindings = ({
   const submitFinding = useCallback(async () => {
     const isQaOrGasFinding = checkQaOrGasFinding(state.risk);
     const linksToCodeString = state.linksToCode.join("\n");
-    const markdownBody = `# Lines of code\n\n${linksToCodeString}\n\n\n# Vulnerability details\n\n${state.details}`;
+    const markdownBody = `# Lines of code\n\n${linksToCodeString}\n\n\n# Vulnerability details\n\n${
+      state.details
+    }${
+      !isQaOrGasFinding ? `\n\n\n## Assessed type\n\n${state.issueType}` : ""
+    }`;
     let risk = state.risk;
     let title = getTitle(state.title, state.risk);
     let body = markdownBody;
@@ -384,16 +391,27 @@ const SubmitFindings = ({
         // clear location state
         navigate("", { state: {} });
       } else {
-        const { error } = await response.json();
-        if (error.startsWith("Failed to send confirmation email")) {
-          setStatus(FormStatus.Submitted);
-          if (typeof window !== `undefined`) {
-            window.localStorage.removeItem(findingId);
-          }
-          toast.error(error);
-        } else {
+        const res = await response.text();
+        if (res.startsWith("Timeout")) {
           setStatus(FormStatus.Error);
-          setErrorMessage(error);
+          setErrorMessage(
+            "Your request timed out. However, this does not necessarily " +
+              "mean your finding was not submitted. Please check the findings " +
+              "tab on the contest page. If you don't see your submission there, " +
+              "then please try again."
+          );
+        } else {
+          const { error } = JSON.parse(res);
+          if (error.startsWith("Failed to send confirmation email")) {
+            setStatus(FormStatus.Submitted);
+            if (typeof window !== `undefined`) {
+              window.localStorage.removeItem(findingId);
+            }
+            toast.error(error);
+          } else {
+            setStatus(FormStatus.Error);
+            setErrorMessage(error);
+          }
         }
       }
     } catch (error) {
@@ -419,7 +437,12 @@ const SubmitFindings = ({
     }
     const isQaOrGasFinding = checkQaOrGasFinding(state.risk);
     // extract required fields from field data for validation check
-    let requiredFields = [state.risk, state.title, state.details];
+    let requiredFields = [
+      state.risk,
+      state.title,
+      state.details,
+      state.issueType,
+    ];
     if (isQaOrGasFinding) {
       requiredFields = [state.risk, state.qaGasDetails];
     }
@@ -514,27 +537,21 @@ const SubmitFindings = ({
   };
 
   return (
-    <div className={styles.Form__Form}>
-      <h1 className={styles.Form__Heading1}>{`${title} finding`}</h1>
+    <div className="limited-width form submit-findings">
+      <h1>{`${title} finding`}</h1>
       {(status === FormStatus.Unsubmitted ||
         status === FormStatus.Deleting ||
         status === FormStatus.Submitting) && (
         <form>
-          <fieldset className={styles.Widget__Fields}>
-            <h2 className={styles.Form__Heading2}>User Info</h2>
+          <div className="submit-findings__user-info">
+            <h2>User Info</h2>
             {currentUser.teams.length > 0 ? (
               <>
-                <h3 className={styles.Widget__Label}>Submitting as</h3>
-                <fieldset
-                  className={clsx(
-                    styles.Widget__Fields,
-                    styles.Widget__RadioGroup
-                  )}
-                >
-                  <h4 className={styles.Form__Heading4}>WARDEN</h4>
-                  <label className={styles.Widget__RadioLabel}>
+                <h3>Submitting as</h3>
+                <fieldset className="submit-findings__submitting-as">
+                  <h4>Warden</h4>
+                  <label className="form__radio">
                     <input
-                      className={styles.Widget__Radio}
                       type="radio"
                       value={currentUser.username}
                       name="currentUser"
@@ -546,15 +563,11 @@ const SubmitFindings = ({
                       image={currentUser.image}
                     />
                   </label>
-                  <h4 className={styles.Form__Heading4}>TEAM MEMBER</h4>
+                  <h4>Team Member</h4>
                   {currentUser.teams.map((team, i) => (
                     <>
-                      <label
-                        className={styles.Widget__RadioLabel}
-                        key={team.username}
-                      >
+                      <label key={team.username} className="form__radio">
                         <input
-                          className={styles.Widget__Radio}
                           type="radio"
                           value={i}
                           name="team"
@@ -574,8 +587,6 @@ const SubmitFindings = ({
                           </label>
                           <input
                             className={clsx(
-                              styles.Widget__Control,
-                              styles.Widget__Text,
                               (!newTeamAddress ||
                                 newTeamAddress.length !== 42) &&
                                 hasValidationErrors &&
@@ -589,12 +600,12 @@ const SubmitFindings = ({
                             maxLength={42}
                           />
                           {!newTeamAddress && hasValidationErrors && (
-                            <p className={styles.Widget__ErrorMessage}>
+                            <p>
                               <small>This field is required</small>
                             </p>
                           )}
                           {newTeamAddress.length !== 42 && hasValidationErrors && (
-                            <p className={styles.Widget__ErrorMessage}>
+                            <p>
                               <small>
                                 Polygon address must be 42 characters long
                               </small>
@@ -610,22 +621,21 @@ const SubmitFindings = ({
               <WardenDetails
                 username={currentUser.username}
                 image={currentUser.image}
-                className={styles.Widget__Container}
               />
             )}
-            <DynamicInputGroup
-              fields={additionalEmailAddresses}
-              onChange={(emails) => setAdditionalEmailAddresses(emails)}
-              fieldName="email address"
-            >
-              <label htmlFor="email" className={styles.Widget__Label}>
-                Email
-              </label>
-              <p>{currentUser.emailAddress}</p>
-            </DynamicInputGroup>
-          </fieldset>
-          <fieldset className={styles.Form__EmphasizedInputGroup}>
-            <h2 className={styles.Form__Heading2}>
+            <fieldset>
+              <DynamicInputGroup
+                fields={additionalEmailAddresses}
+                onChange={(emails) => setAdditionalEmailAddresses(emails)}
+                fieldName="email address"
+              >
+                <label htmlFor="email">Email</label>
+                <p>{currentUser.emailAddress}</p>
+              </DynamicInputGroup>
+            </fieldset>
+          </div>
+          <fieldset>
+            <h2>
               {contestType === "Mitigation review"
                 ? "Mitigation Review"
                 : "Finding"}
@@ -646,6 +656,7 @@ const SubmitFindings = ({
                 />
               ) : (
                 <FormField
+                  required={field.required}
                   key={`${field.name} ${index}`}
                   name={field.name}
                   label={field.label}
@@ -664,10 +675,10 @@ const SubmitFindings = ({
             })}
           </fieldset>
           <Agreement />
-          <div className={styles.Form__ButtonsWrapper}>
+          <div className="form__submit-button-holder">
             {cancelButtonText && (
               <button
-                className="button cta-button secondary"
+                className="button button--secondary"
                 type="button"
                 onClick={handleCancel}
               >
@@ -676,7 +687,7 @@ const SubmitFindings = ({
             )}
             {onDelete && (
               <button
-                className="button cta-button danger"
+                className="button button--danger"
                 type="button"
                 onClick={handleDeleteClick}
               >
@@ -686,7 +697,7 @@ const SubmitFindings = ({
               </button>
             )}
             <button
-              className="button cta-button"
+              className="button button--primary form__submit-button"
               type="button"
               onClick={handleSubmit}
               disabled={status !== FormStatus.Unsubmitted}
@@ -699,10 +710,10 @@ const SubmitFindings = ({
         </form>
       )}
       {status === FormStatus.Error && (
-        <div className="centered-text">
+        <div className="spacing-top__xl">
           <p>{errorMessage}</p>
           <button
-            className="button cta-button"
+            className="button button--primary form__submit-button"
             type="button"
             onClick={() => setStatus(FormStatus.Unsubmitted)}
           >
@@ -711,16 +722,16 @@ const SubmitFindings = ({
         </div>
       )}
       {status === FormStatus.Submitted && (
-        <div className="centered-text">
-          <h2 className={styles.Form__Heading2}>Thank you!</h2>
-          <p>{successMessage}</p>
-          <div className={styles.Form__ButtonsWrapper}>
-            <Link to={contestPath} className="button cta-button secondary">
+        <div className="spacing-top__xl">
+          <h2>Thank you!</h2>
+          <p className="spacing-bottom__m">{successMessage}</p>
+          <div>
+            <Link to={contestPath} className="button button--secondary">
               Back to contest
             </Link>
             {successButtonText && (
               <button
-                className="button cta-button"
+                className="button button--primary"
                 type="button"
                 onClick={handleReset}
               >
