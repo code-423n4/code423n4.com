@@ -1,7 +1,5 @@
 import React, { ReactNode, useState } from "react";
 
-import * as styles from "./Form.module.scss";
-
 enum FormStatus {
   Unsubmitted = "unsubmitted",
   Submitting = "submitting",
@@ -13,7 +11,8 @@ interface FormProps extends JSX.ElementChildrenAttribute {
   successMessage: string | ReactNode;
   onSubmit: () => Promise<void>;
   successButtonText?: string;
-  title?: string;
+  title?: string | ReactNode;
+  subtitle?: string;
   resetForm?: () => void;
   validator?: () => boolean;
   submitButtonText?: string;
@@ -22,6 +21,7 @@ interface FormProps extends JSX.ElementChildrenAttribute {
 const Form = ({
   children,
   title,
+  subtitle,
   successMessage,
   successButtonText,
   onSubmit,
@@ -58,32 +58,35 @@ const Form = ({
   };
 
   return (
-    <div className={styles.Form}>
-      {title && <h1 className={styles.Heading1}>{title}</h1>}
+    <div className="form">
+      {title && <h1 className="type__headline__page-title">{title}</h1>}
+      {subtitle && <h2 className="type__subline__l">{subtitle}</h2>}
       {(status === FormStatus.Unsubmitted ||
         status === FormStatus.Submitting) && (
         <form>
           <>
             {children}
-            <button
-              className="button cta-button centered"
-              type="button"
-              onClick={submit}
-              disabled={status !== FormStatus.Unsubmitted}
-            >
-              {status === FormStatus.Unsubmitted &&
-                (submitButtonText || "Submit")}
-              {status === FormStatus.Submitting && "Submitting..."}
-            </button>
+            <div className="form__submit-button-holder">
+              <button
+                className="button button--primary form__submit-button"
+                type="button"
+                onClick={submit}
+                disabled={status !== FormStatus.Unsubmitted}
+              >
+                {status === FormStatus.Unsubmitted &&
+                  (submitButtonText || "Submit")}
+                {status === FormStatus.Submitting && "Submitting..."}
+              </button>
+            </div>
           </>
         </form>
       )}
       {status === FormStatus.Error && (
         <>
-          <h2>Whoops!</h2>
+          <h2>Sorry, an error has occurred.</h2>
           <p>{errorMessage}</p>
           <button
-            className="button cta-button"
+            className="button button--primary form__submit-button"
             type="button"
             onClick={() => setStatus(FormStatus.Unsubmitted)}
           >
@@ -97,7 +100,7 @@ const Form = ({
           <p>{successMessage}</p>
           {successButtonText && (
             <button
-              className="button cta-button"
+              className="button button--primary form__submit-button"
               type="button"
               onClick={handleReset}
             >
