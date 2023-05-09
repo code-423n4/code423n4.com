@@ -1,4 +1,5 @@
 @import "../variables";
+@import "../components/button";
 
 // CSS rule order
 // --------------------
@@ -18,12 +19,12 @@
   display: block;
   width: 100%;
   padding: $spacing__s;
-  border: 1px solid $color__n-80;
+  border: 1px solid $color__n-85;
   border-radius: $border-radius__m;
   font-size: 1rem;
   line-height: 1.5;
   color: $color__white;
-  background-color: $color__n-80;
+  background-color: $color__n-85;
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 
   &:focus {
@@ -32,9 +33,9 @@
     box-shadow: 0 0 0 0.2rem rgba($color__button-blurple, 0.25);
   }
   &:disabled {
-    background-color: $color__n-70;
-    border-color: $color__n-70;
-    color: $color__n-40;
+    background-color: $color__n-90;
+    border-color: $color__n-90;
+    color: $color__n-30;
   }
   &::placeholder {
     color: $color__n-20;
@@ -64,11 +65,11 @@ form,
   }
   // TODO: replace these with fieldsets in the html, then remove this
   > div {
-    margin-bottom: $spacing__l;
+    margin-bottom: $spacing__xl;
   }
 }
 fieldset {
-  margin: $spacing__l 0;
+  margin: $spacing__xl 0;
 
   &:has(fieldset) {
     margin-bottom: 0;
@@ -94,6 +95,7 @@ form,
     .form__help-text {
       padding-top: 0;
       font-size: $font-size__small;
+      color: $color__n-20;
     }
   }
 }
@@ -101,21 +103,34 @@ form,
 // Default Errors
 // --------------------
 
-// TODO: This could be better with more javascript and less reliance on has()
-// Firefox users won't see the error outline color
-form > div:has(.form-field__error) {
-  input[type="text"],
-  input[type="password"],
-  input[type="email"],
-  input[type="tel"],
-  input[type="number"],
-  input[type="search"],
-  textarea {
-    border-color: $color__form-error;
-  }
-}
 .form-field__error {
   margin-top: $spacing__s;
+  color: $color__form-error !important;
+
+  &:before {
+    content: "⚠ ";
+  }
+}
+
+// TODO: When all this gets cleaned up eventually, this should live with its component, if that still exists
+.input__input-error {
+  border: 2px solid $color__form-error !important;
+}
+
+// TODO: This could be better with more javascript and less reliance on has()
+form:has(.form-field__error) {
+  .form__submit-button-holder {
+    &:before {
+      content: "There appear to be errors present in the form. You will need to fix these to proceed. For any questions, please reach out to the C4 team in our Discord.";
+      margin-bottom: $spacing__s;
+      max-width: 50rem;
+      display: block;
+      color: $color__form-error;
+    }
+  }
+  .form__submit-button {
+    @include button--primary--disabled;
+  }
 }
 
 // Checkboxes
@@ -197,7 +212,7 @@ input[type="checkbox"] {
     margin: $spacing__m 0;
   }
   .react-select__control {
-    background-color: $color__n-80;
+    background-color: $color__n-85;
     padding: 0;
     color: white;
     border: 2px solid transparent;
@@ -213,7 +228,7 @@ input[type="checkbox"] {
   }
 
   .react-select__indicator-separator {
-    background-color: $color__n-30;
+    background-color: $color__n-50;
   }
 
   .react-select__indicator {

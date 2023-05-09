@@ -1,0 +1,13 @@
+{
+  "handle": "BGSecurity",
+  "members": [
+    "anonresercher",
+    "martin"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x88e85a0fB291025845337381Ed5f00364c8FFD69"
+    }
+  ]
+}

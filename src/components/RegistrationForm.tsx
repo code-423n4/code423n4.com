@@ -349,12 +349,14 @@ export default function RegistrationForm({ handles }) {
   const usernameValidator = useCallback(
     (value: string) => {
       const validationErrors: (string | React.ReactNode)[] = [];
-      if (
-        Object.keys(handles).find(
-          (handle) => handle.toLowerCase() === value.toLowerCase()
-        )
-      ) {
-        validationErrors.push(`${value} is already a registered username.`);
+      const handleNames: string[] = Array.from(handles.values());
+      const existingHandle = handleNames.find((handle) => {
+        return handle.toLowerCase() === value.toLowerCase();
+      });
+      if (existingHandle) {
+        validationErrors.push(
+          `${value} is already registered as a team, bot, or warden.`
+        );
       }
       if (isDangerousUsername) {
         validationErrors.push(
@@ -422,25 +424,26 @@ export default function RegistrationForm({ handles }) {
               Discord
             </a>
           </p>
-          <Tabs className="form-tab">
-            <TabList className="secondary-nav">
-              <Tab
-                onClick={() => setRegistrationType(RegistrationType.Wallet)}
-                className="secondary-nav__item"
-              >
-                Register with Wallet
-              </Tab>
-              <Tab
-                onClick={() =>
-                  setRegistrationType(RegistrationType.UsernameAndPassword)
-                }
-                className="secondary-nav__item"
-              >
-                Register with Password
-              </Tab>
-            </TabList>
-            <TabPanel>
-              <form>
+          <form>
+            <Tabs className="form-tab">
+              <TabList className="secondary-nav">
+                <Tab
+                  onClick={() => setRegistrationType(RegistrationType.Wallet)}
+                  className="secondary-nav__item"
+                >
+                  Register with Wallet
+                </Tab>
+                <Tab
+                  onClick={() =>
+                    setRegistrationType(RegistrationType.UsernameAndPassword)
+                  }
+                  className="secondary-nav__item"
+                >
+                  Register with Password
+                </Tab>
+              </TabList>
+
+              <TabPanel>
                 <RegistrationFormCommonFields
                   username={state.username}
                   discordUsername={state.discordUsername}
@@ -488,10 +491,8 @@ export default function RegistrationForm({ handles }) {
                     )}
                   </label>
                 </fieldset>
-              </form>
-            </TabPanel>
-            <TabPanel>
-              <form>
+              </TabPanel>
+              <TabPanel>
                 <RegistrationFormCommonFields
                   username={state.username}
                   discordUsername={state.discordUsername}
@@ -522,51 +523,55 @@ export default function RegistrationForm({ handles }) {
                   forceValidation={status === FormStatus.SubmitAttempted}
                   maxLength={42}
                 />
-              </form>
-            </TabPanel>
-          </Tabs>
-          <div className="register__captcha-container">
-            <HCaptcha
-              sitekey={process.env.GATSBY_HCAPTCHA_SITE_KEY!}
-              theme="dark"
-              onVerify={handleCaptchaVerification}
-            />
-          </div>
-          <fieldset>
-            <Agreement />
-          </fieldset>
-          <div className="Form__ButtonsWrapper">
-            {status === FormStatus.Submitting ? (
-              <span className={clsx("button button--primary")}>
-                Submitting...
-              </span>
-            ) : registrationType === RegistrationType.UsernameAndPassword ? (
-              <button
-                className={clsx("button button--primary")}
-                type="button"
-                onClick={() => submitRegistration()}
-              >
-                Register
-              </button>
-            ) : (
-              <>
+              </TabPanel>
+            </Tabs>
+            <div className="register__captcha-container">
+              <HCaptcha
+                sitekey={process.env.GATSBY_HCAPTCHA_SITE_KEY!}
+                theme="dark"
+                onVerify={handleCaptchaVerification}
+              />
+            </div>
+            <fieldset>
+              <Agreement />
+            </fieldset>
+            <div className="form__submit-button-holder">
+              {status === FormStatus.Submitting ? (
+                <span className={clsx("button button--primary")}>
+                  Submitting...
+                </span>
+              ) : registrationType === RegistrationType.UsernameAndPassword ? (
                 <button
-                  className={clsx("button button--primary")}
+                  className={clsx("button button--primary form__submit-button")}
                   type="button"
-                  onClick={() => submitRegistration("metamask")}
+                  onClick={() => submitRegistration()}
                 >
-                  Register with MetaMask
+                  Register
                 </button>
-                <button
-                  className={clsx("button button--primary")}
-                  type="button"
-                  onClick={() => submitRegistration("walletConnect")}
-                >
-                  Register with WalletConnect
-                </button>
-              </>
-            )}
-          </div>
+              ) : (
+                <>
+                  <button
+                    className={clsx(
+                      "button button--primary form__submit-button"
+                    )}
+                    type="button"
+                    onClick={() => submitRegistration("metamask")}
+                  >
+                    Register with MetaMask
+                  </button>
+                  <button
+                    className={clsx(
+                      "button button--primary form__submit-button"
+                    )}
+                    type="button"
+                    onClick={() => submitRegistration("walletConnect")}
+                  >
+                    Register with WalletConnect
+                  </button>
+                </>
+              )}
+            </div>
+          </form>
         </>
       )}
       {status === FormStatus.Error && (
@@ -578,7 +583,7 @@ export default function RegistrationForm({ handles }) {
               <small>{errorMessage}</small>
             </p>
           )}
-          <button className="button cta-button" onClick={resetForm}>
+          <button className="button button--primary" onClick={resetForm}>
             Try again
           </button>
         </>

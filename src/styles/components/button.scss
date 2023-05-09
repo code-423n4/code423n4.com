@@ -19,8 +19,10 @@
 
 $button__border-width: 2px;
 
-// Mixins for the white button styles
+// Mixins
 // --------------------
+
+// White button
 
 @mixin button--white {
   background: $color__white;
@@ -48,6 +50,19 @@ $button__border-width: 2px;
   }
 }
 
+// Disabled button
+@mixin button--primary--disabled {
+  background: $color__n-90;
+  border-color: $color__n-90;
+  color: $color__n-30;
+
+  cursor: not-allowed;
+
+  &:before {
+    content: "⚠\00a0";
+  }
+}
+
 // Button primary
 // --------------------
 
@@ -56,6 +71,7 @@ $button__border-width: 2px;
   padding: $spacing__s $spacing__l;
   margin-right: $spacing__s;
   display: inline-flex;
+  align-items: center;
   background: $color__button-blurple;
   border: $button__border-width solid $color__button-blurple;
   border-radius: $border-radius__m;
@@ -79,6 +95,10 @@ $button__border-width: 2px;
 
   &--white {
     @include button--white;
+  }
+
+  img {
+    margin-right: $spacing__xs;
   }
 }
 
@@ -165,11 +185,39 @@ $button__border-width: 2px;
   text-decoration: underline;
 
   &:after {
-    content: " →";
+    content: " →";
   }
 
   &:hover {
     color: $color__blurple__text--light;
     background: transparent;
   }
+}
+
+// Button back link
+// --------------------
+
+.button--back-link {
+  padding: $spacing__s 0;
+  background: transparent;
+  border: none;
+  color: $color__blurple__text;
+  text-decoration: underline;
+
+  &:before {
+    content: "← ";
+  }
+
+  &:hover {
+    color: $color__blurple__text--light;
+    background: transparent;
+  }
+}
+
+// Button small
+// --------------------
+
+.button--small {
+  padding: $spacing__xs $spacing__s;
+  font-size: $font-size__small;
 }
