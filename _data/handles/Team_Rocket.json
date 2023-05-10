@@ -1,0 +1,13 @@
+{
+  "handle": "Team_Rocket",
+  "members": [
+    "Shame",
+    "AlexCzm"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x376A21fAEAd5603A0912A220D030A97358c7AC25"
+    }
+  ]
+}
