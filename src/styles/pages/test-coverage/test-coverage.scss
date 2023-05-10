@@ -24,6 +24,10 @@
       rgba(43, 16, 128, 0) 100%
     ),
     #0c0b0e;
+
+  .type__subline__landing-hero {
+    max-width: 500px;
+  }
 }
 
 .tc__section {
@@ -56,8 +60,13 @@
   }
 }
 
-.tc__why ul {
-  margin-bottom: 0;
+.tc__saves-section {
+  ul {
+    margin-bottom: 0;
+  }
+  p {
+    padding-bottom: $spacing__l;
+  }
 }
 .tc__screens {
   display: flex;
@@ -96,7 +105,7 @@
 }
 
 .tc__cta {
-  margin: calc($spacing__xl + $spacing__m) auto $spacing__xl auto;
+  margin: calc($spacing__xl + $spacing__xl) auto $spacing__xxl auto;
   h2 {
     margin-bottom: $spacing__l;
 
@@ -106,8 +115,7 @@
   }
 
   p {
-    max-width: 750px;
+    max-width: 850px;
     margin: 0 auto $spacing__xl auto;
-    text-align: center;
   }
 }
