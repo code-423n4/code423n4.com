@@ -54,6 +54,7 @@
   order: -1;
   max-width: 300px;
   margin: 0 auto;
+
   @include breakpoint("s") {
     order: 1;
     max-width: none;
