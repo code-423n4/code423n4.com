@@ -48,15 +48,18 @@ export default function HowItWorks(data) {
                 coverage can be completed in just a matter of days, saving your
                 team precious time.
               </p>
+              <h3>Save money. </h3>
               <p>
-                <h3>Save money. </h3> By utilizing Code4rena Test Coverage, your
-                project can save money that would have been spent on hiring
-                freelancers to complete test coverage.
+                {" "}
+                By utilizing Code4rena Test Coverage, your project can save
+                money that would have been spent on hiring freelancers to
+                complete test coverage.
               </p>
+              <h3>Ensure quality. </h3>
               <p>
-                <h3>Ensure quality. </h3> You’re empowered to ship code that has
-                been thoroughly tested by security-minded experts, allowing your
-                team to stay focused on the things that only they can do.
+                You’re empowered to ship code that has been thoroughly tested by
+                security-minded experts, allowing your team to stay focused on
+                the things that only they can do.
               </p>
             </div>
             <div className="tc__screens">
