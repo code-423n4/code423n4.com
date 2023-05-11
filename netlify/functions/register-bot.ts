@@ -201,7 +201,7 @@ exports.handler = async (event) => {
     const title = `Register bot ${botName}`;
     const registrationBody = dedent`
     Registration for bot ${botName} submitted by ${username}.
-    
+
     Description:
     ${description}
 
@@ -243,7 +243,7 @@ exports.handler = async (event) => {
 
     // submit application entry
     const submissionBody = dedent`
-    [Bot registration PR](${registrationResponse.data.html_url}) 
+    [Bot registration PR](${registrationResponse.data.html_url})
 
     [Bot submission](https://github.com/${owner}/${botApplicationRepo}/blob/main/data/${botName}-report.md).
     `;
@@ -255,7 +255,7 @@ exports.handler = async (event) => {
         repo: botApplicationRepo,
         title: `${botName} Bot Application`,
         body: submissionBody,
-        labels: ["QA (Quality Assurance"],
+        labels: ["QA (Quality Assurance)"],
       }
     );
 
@@ -299,7 +299,7 @@ exports.handler = async (event) => {
     An application to register a new bot (${botName}) has been received with the following crew: ${crewMembers.join(
       ", "
     )}
-    
+
     You can see the PR here: ${registrationResponse.data.html_url}
 
     The content of the submission follows:
