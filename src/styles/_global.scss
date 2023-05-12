@@ -12,7 +12,9 @@
 @import "components/button";
 @import "components/bottom-cta";
 @import "components/contest-tile/contest-tile";
+@import "components/competition-tags";
 @import "components/dropdown";
+@import "components/eyebrow-bar";
 @import "components/footer";
 @import "components/header";
 @import "components/modal";
@@ -25,10 +27,12 @@
 @import "components/input";
 
 // pages
+@import "pages/contest/bot-race";
 @import "pages/contest/contest";
 @import "pages/contest/submit-findings";
 @import "pages/contests/contests";
 @import "pages/help/help";
+@import "pages/how-it-works/how-it-works";
 @import "pages/home/featured-contests";
 @import "pages/home/hero";
 @import "pages/home/top-names";
@@ -36,11 +40,15 @@
 @import "pages/home/pizzazz";
 @import "pages/leaderboard/leaderboard";
 @import "pages/newsletter-signup/newsletter-signup";
+@import "pages/user/account";
 @import "pages/user/login";
 @import "pages/user/register";
+@import "pages/user/register-bot";
 @import "pages/report/report";
 @import "pages/reports/reports";
+@import "pages/test-coverage/test-coverage";
 @import "pages/four-oh-four/four-oh-four";
+@import "pages/applications/lookout-application";
 
 // CSS Instructions
 // ------------------------------------------------

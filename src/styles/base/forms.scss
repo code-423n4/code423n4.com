@@ -19,12 +19,12 @@
   display: block;
   width: 100%;
   padding: $spacing__s;
-  border: 1px solid $color__n-80;
+  border: 1px solid $color__n-85;
   border-radius: $border-radius__m;
   font-size: 1rem;
   line-height: 1.5;
   color: $color__white;
-  background-color: $color__n-80;
+  background-color: $color__n-85;
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 
   &:focus {
@@ -65,11 +65,11 @@ form,
   }
   // TODO: replace these with fieldsets in the html, then remove this
   > div {
-    margin-bottom: $spacing__l;
+    margin-bottom: $spacing__xl;
   }
 }
 fieldset {
-  margin: $spacing__l 0;
+  margin: $spacing__xl 0;
 
   &:has(fieldset) {
     margin-bottom: 0;
@@ -95,6 +95,7 @@ form,
     .form__help-text {
       padding-top: 0;
       font-size: $font-size__small;
+      color: $color__n-20;
     }
   }
 }
@@ -104,7 +105,7 @@ form,
 
 .form-field__error {
   margin-top: $spacing__s;
-  color: $color__form-error;
+  color: $color__form-error !important;
 
   &:before {
     content: "⚠ ";
@@ -211,7 +212,7 @@ input[type="checkbox"] {
     margin: $spacing__m 0;
   }
   .react-select__control {
-    background-color: $color__n-80;
+    background-color: $color__n-85;
     padding: 0;
     color: white;
     border: 2px solid transparent;
@@ -227,7 +228,7 @@ input[type="checkbox"] {
   }
 
   .react-select__indicator-separator {
-    background-color: $color__n-30;
+    background-color: $color__n-50;
   }
 
   .react-select__indicator {
@@ -390,6 +391,18 @@ input[type="checkbox"] {
   th {
     border: 1px solid $color__n-60;
     padding: 6px 13px;
+  }
+
+  ul {
+    list-style-type: disc;
+    margin: 1em 1em 1em 2em;
+  }
+  ol {
+    list-style-type: decimal;
+    margin: 1em 1em 1em 2em;
+  }
+  li {
+    margin-bottom: 0.5em;
   }
 }
 

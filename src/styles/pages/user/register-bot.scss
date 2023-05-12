@@ -1,0 +1,323 @@
+@import "../../variables";
+
+// --------------------------------------------------
+// Bot Registration Page
+// --------------------------------------------------
+
+// CSS rule order
+// --------------------
+
+// 1. Variables
+// 2. Box model properties
+// 3. Display and position
+// 4. Background
+// 5. Border
+// 6. Box shadow
+// 7. Text
+// 8. Transforms
+// 9. Other
+
+$stretch-rectangles-height: 396px;
+$site-width: 1030px;
+$ground-height: 70px;
+$waves-aspect-ratio: 3;
+$breakpoint-for-hero: 1530px;
+$timeline-name-width: 260px;
+
+// --------------------------------------------------
+// Hero
+// --------------------------------------------------
+
+.register-bot__hero {
+  background: url("/images/br-hero-stars.svg"),
+    linear-gradient(
+      180deg,
+      rgba(43, 16, 128, 0) 0%,
+      rgba(73, 31, 242, 0.16) 69.79%
+    ),
+    #0c0b0e;
+  background-position: top center, center, center;
+}
+
+.waves-wrapper {
+  width: 100%;
+  position: relative;
+  aspect-ratio: $waves-aspect-ratio;
+  @media (min-width: $breakpoint-for-hero) {
+    min-height: $stretch-rectangles-height;
+    aspect-ratio: initial;
+
+    // TODO Replace this with background-size-based solution
+    &:before {
+      content: "";
+      height: $stretch-rectangles-height;
+      width: calc(50% - (#{$site-width} * 0.5));
+      display: block;
+      position: absolute;
+      top: 0;
+      background-image: url("/images/br-hero-waves-repeat.svg");
+      background-repeat: repeat-x;
+    }
+  }
+}
+
+.waves {
+  position: absolute;
+  left: -20%;
+
+  @media (min-width: $breakpoint-for-hero) {
+    left: calc(50% - #{$site-width});
+  }
+}
+
+.register-bot__hero-countdown {
+  padding: $spacing__m;
+  background: $color__blended-80;
+  text-align: center;
+  color: $color__white;
+}
+
+.register-bot__hero-ground {
+  min-height: 4vw;
+  margin-top: -11vw;
+  background-image: url("/images/br-hero-ground.svg");
+  background-repeat: no-repeat;
+  background-position: bottom;
+  background-size: cover;
+
+  @media (min-width: $breakpoint-for-hero) {
+    min-height: $ground-height;
+    margin-top: calc($stretch-rectangles-height / -7);
+  }
+}
+
+// --------------------------------------------------
+// What's a bot race?
+// --------------------------------------------------
+
+.register-bot__sub-header {
+  margin-bottom: $spacing__xl;
+  text-align: center;
+
+  @include breakpoint("m") {
+    margin-bottom: $spacing__xxl;
+  }
+}
+
+.register-bot__top-text-container {
+  margin: $spacing__xl auto;
+  @include breakpoint("m") {
+    margin: $spacing__xxl auto;
+  }
+}
+
+.register-bot__top-text {
+  margin-top: $spacing__l;
+  grid-gap: $spacing__m;
+
+  @include breakpoint("m") {
+    margin-top: $spacing__xl;
+    grid-column-gap: $spacing__xxl;
+  }
+
+  p img {
+    float: left;
+    padding-right: $spacing__m;
+  }
+  strong {
+    color: $color__white;
+  }
+}
+
+// --------------------------------------------------
+// Stages / Timeline
+// --------------------------------------------------
+
+.register-bot__stage-container {
+  h3 {
+    padding: $spacing__m;
+    margin: $spacing__l 0;
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+    border: 1px solid $color__n-60;
+    border-radius: $border-radius__m;
+
+    @include breakpoint("m") {
+      margin: 0;
+    }
+    div {
+      font-size: $headline-font-size__xxs;
+    }
+    .register-bot__header-stage-number {
+      color: $color__blurple__text;
+    }
+  }
+}
+
+.register-bot__text {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  @include breakpoint("m") {
+    flex-direction: row;
+  }
+  ul {
+    list-style: none;
+    flex: 1;
+    @include breakpoint("m") {
+      padding: 0;
+      margin: 0;
+      padding: $spacing__l $spacing__xl;
+    }
+
+    li:before {
+      content: "\2022";
+      color: $color__blurple-60;
+      font-weight: bold;
+      display: inline-block;
+      width: 1em;
+      margin-left: -1em;
+    }
+  }
+}
+
+p.register-bot__timeline-time {
+  margin: 0 0 $spacing__m $spacing__m;
+  color: $color__blurple__text;
+  text-align: left;
+  position: relative;
+
+  @include breakpoint("m") {
+    padding: $spacing__l $spacing__xl 0;
+    margin: 0 $spacing__xl 0 0;
+    text-align: right;
+    width: $timeline-name-width;
+    border-right: 1px solid $color__n-60; // Timeline line
+
+    &:before {
+      content: "";
+      display: block;
+      width: 1rem;
+      height: 1rem;
+      top: calc($spacing__xl * 1);
+      right: calc($spacing__xl * -0.28);
+      position: absolute;
+      background: url("/images/br-icon-circle.svg") no-repeat;
+      background-size: contain;
+    }
+  }
+}
+
+.register-bot__stage-two {
+  @include breakpoint("m") {
+    padding-bottom: $spacing__xl;
+    .register-bot__timeline-time {
+      border-width: 0px;
+      border-style: solid;
+      border-right: 1px solid;
+      border-image: linear-gradient(
+          to bottom,
+          $color__n-60,
+          rgba($color__n-60, 0)
+        )
+        0 100%;
+    }
+  }
+}
+
+.register-bot__learn-more {
+  margin: 0 auto $spacing__xxl auto;
+  text-align: center;
+
+  @include breakpoint("m") {
+    margin: 0 auto $spacing__xxxl auto;
+  }
+}
+
+// --------------------------------------------------
+// Coming Soon
+// --------------------------------------------------
+
+.register-bot__bottom-cta {
+  margin: $spacing__xl auto;
+
+  @include breakpoint("m") {
+    margin: $spacing__xxl auto;
+  }
+  h2 {
+    margin-bottom: $spacing__m;
+  }
+  h3 {
+    margin: 0 auto;
+    text-align: center;
+    font-weight: 500;
+  }
+}
+
+.register-bot__coming-soon {
+  max-width: 500px;
+  margin: $spacing__l auto;
+  text-align: center;
+  padding: $spacing__l $spacing__l;
+  border: 1px solid $color__n-60;
+  border-radius: $border-radius__m;
+
+  @include breakpoint("m") {
+    margin: $spacing__xl auto;
+  }
+}
+
+.register-bot__bot-image {
+  width: 100%;
+  max-width: 450px;
+  margin: 0 auto;
+
+  @include breakpoint("m") {
+    margin: 0 auto;
+  }
+}
+
+// --------------------------------------------------
+// Registration Form
+// --------------------------------------------------
+
+.register-bot__agreement {
+  li:before {
+    content: "\2022";
+    color: $color__blurple-60;
+    font-weight: bold;
+    display: inline-block;
+    width: 1em;
+  }
+}
+
+.register-bot__repo-link-wrapper {
+  display: flex;
+  margin: $spacing__l auto;
+  padding: $spacing__l $spacing__l;
+  border: 1px solid $color__n-60;
+  border-radius: $border-radius__m;
+}
+
+.register-bot__repo-link {
+  padding: $spacing__l;
+}
+
+.register-bot__register {
+  margin-top: $spacing__xl;
+  padding-top: $spacing__l;
+  padding-bottom: $spacing__l;
+  border-top: 1px solid $color__n-60;
+
+  @include breakpoint("m") {
+    margin-top: $spacing__xxxl;
+    padding-top: $spacing__xxl;
+    padding-bottom: $spacing__xxl;
+  }
+
+  &.register-bot__register--soon,
+  &.register-bot__register--closed {
+    text-align: center;
+  }
+}
