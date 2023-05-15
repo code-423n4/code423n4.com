@@ -76,7 +76,7 @@ const HeroIndex = ({ viewMode }) => {
               </div>
               <div className="hero__statistic">
                 <p className="type__headline__l hero__statistic-number">
-                  4,900+
+                  4,830+
                 </p>
                 <p className="hero__statistic-unit hero__statistic-unit--short">
                   registered wardens
