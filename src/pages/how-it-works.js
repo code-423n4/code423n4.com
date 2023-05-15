@@ -137,6 +137,21 @@ export default function HowItWorks(data) {
             </Link>
           </p>
         </section>
+        <section className="how-it-works__section">
+          <h3 className="type__headline__s">Test Coverage</h3>
+          <p>
+            Code4rena Test Coverage empowers projects to meet all of their
+            priorities without compromise, by providing projects with surge
+            capacity for their engineering teams pre-launch. Ship quality code
+            that has been thoroughly tested by our community of security-minded
+            experts, at an accelerated rate.
+          </p>
+          <p>
+            <Link to="/test-coverage" className="button button--text-link">
+              Learn more about Test Coverage
+            </Link>
+          </p>
+        </section>
       </div>
     </DefaultLayout>
   );
