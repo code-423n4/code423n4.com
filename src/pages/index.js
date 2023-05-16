@@ -132,7 +132,7 @@ export default function SiteIndex({ data }) {
               {filteredContests &&
               filteredContests.activeContests.length > 0 ? (
                 <div className="featured-contests__active background--low-contrast">
-                  <h1 className="type__headline__l">Active competitions</h1>
+                  <h1 className="type__headline__l">Active audits</h1>
                   <p className="type__subline__s spacing-bottom__l">
                     Currently finding the highest-severity vulnerabilities for:
                   </p>
