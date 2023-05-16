@@ -123,7 +123,9 @@ export default function SiteIndex({ data }) {
           <SkeletonLoader layout={"background--" + viewMode} limitedWidth />
         ) : null}
         {/* Blurple background area */}
-        {filteredContests && filteredContests.activeContests.length > 0 ? (
+        {filteredContests &&
+        (filteredContests.activeContests.length > 0 ||
+          filteredContests.upcomingContests.length > 0) ? (
           <div className={"background--" + viewMode}>
             <div className="limited-width home__featured-contests-blurple-area">
               {/* Active contests */}
