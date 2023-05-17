@@ -1,5 +1,8 @@
 {
   "handle": "NightSi",
+  "moralisId": null,
+  "image": "HzYayLHpvWM",
+  "showOnLeaderboard": true,
   "members": [
     "0xsi",
     "nighthawk"
@@ -13,6 +16,5 @@
       "chain": "ethereum",
       "address": "0x6e2A17c412f35Bda19Ad5fe4866654a0Eb66eF31"
     }
-  ],
-  "image": "./avatars/NightSi.png"
+  ]
 }
