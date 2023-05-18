@@ -1,5 +1,10 @@
 {
   "handle": "NightSi",
+  "link": null,
+  "moralisId": null,
+  "image": "./avatars/NightSi.png",
+  "showOnLeaderboard": true,
+  "imageUrl": "https://raw.githubusercontent.com/code-423n4/code423n4.com/main/_data/handles/avatars/NightSi.png",
   "members": [
     "0xsi",
     "nighthawk"
@@ -8,11 +13,6 @@
     {
       "chain": "polygon",
       "address": "0x6e2A17c412f35Bda19Ad5fe4866654a0Eb66eF31"
-    },
-    {
-      "chain": "ethereum",
-      "address": "0x6e2A17c412f35Bda19Ad5fe4866654a0Eb66eF31"
     }
-  ],
-  "image": "./avatars/NightSi.png"
+  ]
 }
