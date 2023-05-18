@@ -1,0 +1,16 @@
+{
+  "handle": "gerdusx-bot",
+  "crew": [
+    "gerdusx"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x2Bf3712ba246AAa2D6A8e132E7c054672fc0B17B"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x2Bf3712ba246AAa2D6A8e132E7c054672fc0B17B"
+    }
+  ]
+}
