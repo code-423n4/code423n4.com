@@ -1,0 +1,13 @@
+{
+  "handle": "coypu",
+  "crew": [
+    "aviggiano"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x21BAA4e147Ca6117152A022e68b756BFACc4a665"
+    }
+  ],
+  "image": "./avatars/coypu.png"
+}
