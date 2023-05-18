@@ -134,6 +134,7 @@ const SubmitFindings = ({
           titleField,
           linksToCodeField,
           vulnerabilityDetailsField,
+          issueTypeListField,
         ])
       );
       return;
@@ -147,14 +148,12 @@ const SubmitFindings = ({
         setFieldList(fieldList);
         return;
       }
-      if (!checkQaOrGasFinding(state.risk)) {
-        fieldList.push(issueTypeListField);
-      }
       setFieldList(
         fieldList.concat([
           titleField,
           linksToCodeField,
           vulnerabilityDetailsField,
+          issueTypeListField,
         ])
       );
     }
