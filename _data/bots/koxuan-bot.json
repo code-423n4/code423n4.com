@@ -1,0 +1,16 @@
+{
+  "handle": "koxuan-bot",
+  "crew": [
+    "koxuan"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x52ABbDEbB67Df220d8d67C9a98d377cCde91378F"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x52ABbDEbB67Df220d8d67C9a98d377cCde91378F"
+    }
+  ]
+}
