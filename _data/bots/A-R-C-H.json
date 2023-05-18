@@ -1,0 +1,17 @@
+{
+  "handle": "A-R-C-H",
+  "crew": [
+    "Dewaxindo"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x6f197C36aCB590fB3Da6d7E1B52c27bD5cc3dfD5"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x6f197C36aCB590fB3Da6d7E1B52c27bD5cc3dfD5"
+    }
+  ],
+  "image": "./avatars/A-R-C-H.png"
+}
