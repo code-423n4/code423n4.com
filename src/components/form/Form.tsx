@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import React, { ReactNode, useState } from "react";
 
 enum FormStatus {
@@ -15,7 +16,8 @@ interface FormProps extends JSX.ElementChildrenAttribute {
   subtitle?: string;
   resetForm?: () => void;
   validator?: () => boolean;
-  submitButtonText?: string;
+  submitButtonText?: string | ReactNode;
+  className?: string;
 }
 
 const Form = ({
@@ -28,6 +30,7 @@ const Form = ({
   resetForm,
   validator,
   submitButtonText,
+  className,
 }: FormProps) => {
   // Component State
   const [status, setStatus] = useState<FormStatus>(FormStatus.Unsubmitted);
@@ -58,7 +61,7 @@ const Form = ({
   };
 
   return (
-    <div className="form">
+    <div className={clsx("form", className && className)}>
       {title && <h1 className="type__headline__page-title">{title}</h1>}
       {subtitle && <h2 className="type__subline__l">{subtitle}</h2>}
       {(status === FormStatus.Unsubmitted ||

@@ -70,7 +70,11 @@ const Widget = ({ field, fieldState, isInvalid, onChange }) => {
   );
 
   const linksToCodeInputGroup = (
-    <LinksToCode onChange={handleChange} linksToCode={fieldState[name]} />
+    <LinksToCode
+      onChange={handleChange}
+      linksToCode={fieldState[name]}
+      required={required}
+    />
   );
 
   const checkboxWidget = (

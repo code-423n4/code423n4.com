@@ -28,23 +28,6 @@ export const linksToCodeField = {
   required: true,
 };
 
-export const mitigationRiskField = {
-  name: "risk",
-  label: "Risk rating",
-  widget: "select",
-  required: true,
-  options: [
-    {
-      label: "Medium Risk",
-      value: "2 (Med Risk)",
-    },
-    {
-      label: "High Risk",
-      value: "3 (High Risk)",
-    },
-  ],
-};
-
 export const riskField = {
   name: "risk",
   label: "Risk rating",
@@ -93,22 +76,6 @@ export const qaGasDetailsField = {
     "in this field",
   type: "markdown",
   widget: "textarea",
-  required: true,
-};
-
-export const mitigationField = {
-  name: "isMitigated",
-  label: "Mitigation confirmed (no new vulnerabilities detected)",
-  widget: "checkbox",
-  required: false,
-};
-
-export const mitigationOfField = {
-  name: "mitigationOf",
-  label: "Report ID of original finding",
-  helpText: `For new findings, please enter "NEW"`,
-  placeholder: "H-01",
-  widget: "text",
   required: true,
 };
 

@@ -10,17 +10,28 @@ const SelectFieldOptionLabel = ({ label }) => {
   );
 };
 
-const SelectField = ({
+interface SelectFieldProps {
+  name: string;
+  options: { label?: string; value: string | number; image?: unknown }[];
+  onChange: React.ChangeEventHandler<HTMLInputElement>;
+  isInvalid?: boolean;
+  fieldState: string | number;
+  required?: boolean;
+}
+
+export default function SelectField({
   name,
   options,
   onChange,
   isInvalid,
   fieldState,
   required,
-}) => {
+}: SelectFieldProps) {
   const handleChange = useCallback(
     (option) => {
       const value = option && option.value ? option.value : "";
+      // create pseudo event object to enable using the same change handler for all inputs
+      // @ts-ignore
       onChange({ target: { name, value } });
     },
     [onChange, name]
@@ -39,6 +50,4 @@ const SelectField = ({
       classNamePrefix="react-select"
     />
   );
-};
-
-export default SelectField;
+}

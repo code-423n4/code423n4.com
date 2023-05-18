@@ -11,6 +11,12 @@ import {
   WalletAddress,
 } from "./shared";
 
+export enum MitigationStatus {
+  MitigationConfirmed = 1,
+  Unmitigated,
+  New,
+}
+
 export interface Finding {
   title: string;
   body: FindingBody;
@@ -21,7 +27,7 @@ export interface Finding {
   updatedAt: DateString;
   issueNumber: number;
   handle: string;
-  isMitigated?: boolean;
+  mitigationStatus?: MitigationStatus;
   mitigationOf?: ReportId;
   issueType?: string;
 }
@@ -51,9 +57,9 @@ export interface FindingEditRequest {
     newValue: ReportId;
     oldValue: ReportId;
   };
-  isMitigated?: {
-    newValue: boolean;
-    oldValue: boolean;
+  mitigationStatus?: {
+    newValue: MitigationStatus;
+    oldValue: MitigationStatus;
   };
   issueType?: {
     newValue: string;
@@ -81,7 +87,7 @@ export interface FindingCreateRequest {
   labels: string[];
   address?: WalletAddress;
   mitigationOf?: ReportId;
-  isMitigated?: boolean;
+  mitigationStatus?: MitigationStatus;
   issueType?: string;
 }
 
