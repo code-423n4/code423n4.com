@@ -1,0 +1,16 @@
+{
+  "handle": "Arial",
+  "crew": [
+    "arialblack14"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x81f6aa8F68204150F06061f8f4b0e3276782B36e"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x81f6aa8F68204150F06061f8f4b0e3276782B36e"
+    }
+  ]
+}
