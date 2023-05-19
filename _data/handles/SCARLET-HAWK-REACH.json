@@ -1,0 +1,21 @@
+{
+  "handle": "SCARLET-HAWK-REACH",
+  "members": [
+    "Mis4nthr0pic",
+    "escrow",
+    "Azaryan",
+    "0xAsen",
+    "jabher",
+    "cholakov",
+    "0xweb3boy",
+    "Satyam_Sharma",
+    "Velislav4o",
+    "7dee"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x798BC384E20d5D16987A07487FC695985F1742c5"
+    }
+  ]
+}
