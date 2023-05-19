@@ -1,0 +1,13 @@
+{
+  "handle": "Dimagu",
+  "members": [
+    "marcKn",
+    "dmtrbch"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "matic:0xb5AC47577211389BBD64A4BC10feeEf018"
+    }
+  ]
+}
