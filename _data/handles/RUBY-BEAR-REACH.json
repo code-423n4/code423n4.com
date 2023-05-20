@@ -1,0 +1,25 @@
+{
+  "handle": "RUBY-BEAR-REACH",
+  "members": [
+    "Angry_Mustache_Man",
+    "zuhaibmohd",
+    "Bloqarl",
+    "sayan",
+    "BlockChomper",
+    "dnkolegov",
+    "0xfave",
+    "Mis4nthr0pic",
+    "escrow",
+    "queueunit"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x798BC384E20d5D16987A07487FC695985F1742c5"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x798BC384E20d5D16987A07487FC695985F1742c5"
+    }
+  ]
+}
