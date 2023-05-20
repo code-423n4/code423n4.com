@@ -290,7 +290,7 @@ exports.handler = async (event) => {
       repo: botApplicationRepo,
       path: `data/${botName}-report.md`,
       message: `${botName} data for issue #${issueId}`,
-      content: Buffer.from(submissionBody).toString("base64"),
+      content: Buffer.from(submission).toString("base64"),
     });
 
     const emails = await getGroupEmails(crewMembers);
