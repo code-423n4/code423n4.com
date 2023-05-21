@@ -1,0 +1,18 @@
+{
+  "handle": "BLUE-FOX-REACH",
+  "members": [
+    "Mis4nthr0pic",
+    "escrow",
+    "frenchkebab",
+    "the_endless_sea",
+    "Abims",
+    "lil_eth",
+    "secoalba"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x798BC384E20d5D16987A07487FC695985F1742c5"
+    }
+  ]
+}
