@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 
 // types
 import { Field } from "./widgets/Widgets";
+import { ContestNumber } from "../../../types/shared";
 import { ReportState } from "../../templates/ReportForm";
 import { FindingCreateRequest } from "../../../types/finding";
 
@@ -20,6 +21,7 @@ import {
   mitigationField,
   mitigationRiskField,
   mitigationOfField,
+  issueTypeListField,
 } from "./findings/fields";
 import {
   config,
@@ -50,7 +52,7 @@ enum FormStatus {
 
 interface SubmitFindingsProps {
   sponsor: string;
-  contest: string;
+  contest: ContestNumber;
   contestPath: string;
   repo: string;
   title: string;
@@ -99,6 +101,7 @@ const SubmitFindings = ({
   const [newTeamAddress, setNewTeamAddress] = useState<string>("");
   const [attributedTo, setAttributedTo] = useState<string>(initialAttributedTo);
   const [fieldList, setFieldList] = useState<Field[]>([riskField]);
+
   // effects
   useEffect(() => {
     if (!attributedTo) {
@@ -131,6 +134,7 @@ const SubmitFindings = ({
           titleField,
           linksToCodeField,
           vulnerabilityDetailsField,
+          issueTypeListField,
         ])
       );
       return;
@@ -149,10 +153,11 @@ const SubmitFindings = ({
           titleField,
           linksToCodeField,
           vulnerabilityDetailsField,
+          issueTypeListField,
         ])
       );
     }
-  }, [state.risk, currentUser, state.isMitigated]);
+  }, [state.risk, currentUser, state.isMitigated, state.issueType]);
 
   useEffect(() => {
     if (!currentUser.isLoggedIn) {
@@ -322,7 +327,11 @@ const SubmitFindings = ({
   const submitFinding = useCallback(async () => {
     const isQaOrGasFinding = checkQaOrGasFinding(state.risk);
     const linksToCodeString = state.linksToCode.join("\n");
-    const markdownBody = `# Lines of code\n\n${linksToCodeString}\n\n\n# Vulnerability details\n\n${state.details}`;
+    const markdownBody = `# Lines of code\n\n${linksToCodeString}\n\n\n# Vulnerability details\n\n${
+      state.details
+    }${
+      !isQaOrGasFinding ? `\n\n\n## Assessed type\n\n${state.issueType}` : ""
+    }`;
     let risk = state.risk;
     let title = getTitle(state.title, state.risk);
     let body = markdownBody;
@@ -427,7 +436,12 @@ const SubmitFindings = ({
     }
     const isQaOrGasFinding = checkQaOrGasFinding(state.risk);
     // extract required fields from field data for validation check
-    let requiredFields = [state.risk, state.title, state.details];
+    let requiredFields = [
+      state.risk,
+      state.title,
+      state.details,
+      state.issueType,
+    ];
     if (isQaOrGasFinding) {
       requiredFields = [state.risk, state.qaGasDetails];
     }

@@ -1,10 +1,16 @@
 import { navigate } from "gatsby";
-import React, { useCallback, useState, useRef, ReactNode } from "react";
+import React, {
+  useCallback,
+  useState,
+  useRef,
+  ReactNode,
+  PropsWithChildren,
+} from "react";
 import Avatar from "react-avatar";
 import { useMoralis } from "react-moralis";
 
 // types
-import { BotCreateRequest } from "../../types/user";
+import { BotCreateRequest, BotPromotionRequest } from "../../types/user";
 
 // hooks
 import useUser from "../hooks/UserContext";
@@ -36,7 +42,7 @@ const initialState: BotState = {
   botImage: "",
 };
 
-interface BotRegistrationProps {
+interface BotRegistrationProps extends PropsWithChildren {
   handles: Set<string>; // includes teams, wardens, and other bots
   wardens: WardenFieldOption[]; // only contains individual wardens; not teams or bots
 }
@@ -44,6 +50,7 @@ interface BotRegistrationProps {
 export default function BotRegistrationForm({
   handles,
   wardens,
+  children,
 }: BotRegistrationProps) {
   const { currentUser } = useUser();
   const { user, isInitialized } = useMoralis();
@@ -130,39 +137,26 @@ export default function BotRegistrationForm({
 
   const validator = useCallback(() => {
     setSubmitted(true);
-    const crewValidationErrors = validateCrew(crew);
-    const polygonAddressErrors = validateAddress(state.polygonAddress);
-    const botNameErrors = validateBotName(state.botName);
+    if (currentUser.bot && currentUser.bot.relegated) {
+      return !state.submission;
+    }
+    const validationErrors = [
+      ...validateCrew(crew),
+      ...validateAddress(state.polygonAddress),
+      ...validateBotName(state.botName),
+    ];
+
     if (
       !state.botName ||
       !state.description ||
       !state.submission ||
       !state.polygonAddress ||
-      polygonAddressErrors.length ||
-      crewValidationErrors.length ||
-      botNameErrors.length
+      validationErrors.length
     ) {
       return true;
     }
     return false;
   }, [state, handles, currentUser, initialState]);
-
-  const onSubmit = useCallback(
-    async (requestBody, user) => {
-      const sessionToken = user.attributes.sessionToken;
-
-      return await fetch("/.netlify/functions/register-bot", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-Authorization": `Bearer ${sessionToken}`,
-          "C4-User": currentUser.username,
-        },
-        body: JSON.stringify(requestBody),
-      });
-    },
-    [currentUser]
-  );
 
   const validateCrew = useCallback(
     (crewMembers): (string | ReactNode)[] => {
@@ -207,156 +201,216 @@ export default function BotRegistrationForm({
     [handles, initialState]
   );
 
+  const registerBot = useCallback(
+    async (sessionToken: string): Promise<void> => {
+      const requestBody: BotCreateRequest = {
+        botName: state.botName,
+        description: state.description,
+        submission: state.submission,
+        crewMembers: crew.map((member) => member.value),
+        polygonAddress: state.polygonAddress,
+        ethereumAddress: state.ethereumAddress,
+      };
+
+      if (state.avatarFile && state.botImage) {
+        requestBody.image = state.botImage.substring(
+          state.botImage.indexOf(",") + 1
+        );
+      }
+
+      const response = await fetch("/.netlify/functions/register-bot", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Authorization": `Bearer ${sessionToken}`,
+          "C4-User": currentUser.username,
+        },
+        body: JSON.stringify(requestBody),
+      });
+      setSubmitted(false);
+
+      if (!response.ok) {
+        const res = await response.json();
+        throw throwErrorMessage(res.error || "");
+      }
+    },
+    [avatarInputRef, state, crew, currentUser]
+  );
+
+  const promoteBot = useCallback(
+    async (sessionToken: string): Promise<void> => {
+      const requestBody: BotPromotionRequest = {
+        botName: currentUser.bot!.username,
+        submission: state.submission,
+      };
+
+      const response = await fetch("/.netlify/functions/promote-bot", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Authorization": `Bearer ${sessionToken}`,
+          "C4-User": currentUser.username,
+        },
+        body: JSON.stringify(requestBody),
+      });
+      setSubmitted(false);
+
+      if (!response.ok) {
+        const res = await response.json();
+        throw throwErrorMessage(res.error || "");
+      }
+    },
+    [state, currentUser]
+  );
+
   const submit = useCallback(async (): Promise<void> => {
-    if (!currentUser.isLoggedIn || !isInitialized) {
+    if (!currentUser.isLoggedIn || !isInitialized || !user) {
       navigate("/");
       return;
     }
 
-    const requestBody: BotCreateRequest = {
-      botName: state.botName,
-      description: state.description,
-      submission: state.submission,
-      crewMembers: crew.map((member) => member.value),
-      polygonAddress: state.polygonAddress,
-      ethereumAddress: state.ethereumAddress,
-    };
+    const sessionToken = user.attributes.sessionToken;
 
-    if (state.avatarFile && state.botImage) {
-      requestBody.image = state.botImage.substring(
-        state.botImage.indexOf(",") + 1
-      );
-    }
-
-    const response = await onSubmit(requestBody, user);
-    setSubmitted(false);
-
-    if (!response.ok) {
-      const res = await response.json();
-      throw throwErrorMessage(res.error || "");
-    }
-  }, [
-    avatarInputRef,
-    state,
-    crew,
-    currentUser,
-    handles,
-    isInitialized,
-    onSubmit,
-  ]);
+    if (!currentUser.bot) {
+      await registerBot(sessionToken);
+    } else if (currentUser.bot.relegated) {
+      await promoteBot(sessionToken);
+    } else throw "You cannot register more than one bot";
+  }, [avatarInputRef, state, crew, currentUser, isInitialized]);
 
   return (
     <Form
-      successMessage="Your bot registration application has been submitted."
+      successMessage={
+        currentUser.bot && currentUser.bot.relegated
+          ? "Your submission was received."
+          : "Your bot registration application has been submitted."
+      }
       onSubmit={submit}
-      submitButtonText="Register Bot"
+      submitButtonText={
+        currentUser.bot && currentUser.bot.relegated ? "Submit" : "Register Bot"
+      }
       validator={validator}
+      title={
+        currentUser.bot && currentUser.bot.relegated
+          ? "Apply for promotion"
+          : "Register your Bot"
+      }
     >
-      <Input
-        forceValidation={submitted === true}
-        name="botName"
-        placeholder="Wardenator"
-        value={state.botName}
-        required={true}
-        label="Bot Name"
-        helpText="Supports alphanumeric characters, underscores, and hyphens. Maximum 25 characters."
-        handleChange={handleChange}
-        validator={validateBotName}
-      />
-      <WardenField
-        name="crew"
-        required={true}
-        options={wardens}
-        onChange={(e) => {
-          setCrew((e.target.value as WardenFieldOption[]) || []);
-        }}
-        fieldState={crew}
-        isMulti={true}
-        validator={validateCrew}
-        label="Bot Crew"
-        helpText="The warden(s) who control and maintain the bot"
-      />
-      <Input
-        forceValidation={submitted === true}
-        name="polygonAddress"
-        placeholder="0x00000..."
-        value={state.polygonAddress}
-        required={true}
-        label="Polygon Address"
-        helpText="Address where your bot's prize should go"
-        handleChange={handleChange}
-        validator={validateAddress}
-        maxLength={42}
-      />
-      <Input
-        forceValidation={submitted === true}
-        name="ethereumAddress"
-        placeholder="0x00000..."
-        value={state.ethereumAddress}
-        label="Ethereum Address"
-        helpText="Address where we can send ethereum for contests that are awarded in eth"
-        handleChange={handleChange}
-        validator={validateAddress}
-        maxLength={42}
-      />
-      <FormField
-        name="description"
-        label="Description"
-        helpText="Describe your bot. Cite any open source tools that you use."
-        isInvalid={submitted && !state.description}
-        required={true}
-      >
-        <TextArea
-          name="description"
-          required={true}
-          onChange={handleChange}
-          fieldState={state.description}
-          isInvalid={submitted && !state.description}
-        />
-      </FormField>
-      <FormField
-        name="submission"
-        label="Submission"
-        helpText="Enter the output from your bot."
-        isInvalid={submitted && !state.submission}
-        required={true}
-      >
-        <TextArea
-          name="submission"
-          required={true}
-          onChange={handleChange}
-          fieldState={state.submission}
-          isInvalid={submitted && !state.submission}
-        />
-      </FormField>
-      <div className="widget__container">
-        <label htmlFor="avatar">Avatar (Optional)</label>
-        <Avatar
-          src={state.botImage}
-          name={state.botName}
-          size="50px"
-          round="50px"
-        />
-        <input
-          className="widget__avatar"
-          type="file"
-          id="avatar"
-          name="avatar"
-          accept=".png,.jpg,.jpeg,.webp"
-          // @ts-ignore // @todo: solve this typescript error
-          ref={avatarInputRef}
-          onChange={handleAvatarChange}
-        />
-        {state.avatarFile && (
-          <button
-            type="button"
-            onClick={removeAvatar}
-            aria-label="Remove avatar"
+      {children}
+      {!currentUser.bot && (
+        <>
+          <Input
+            forceValidation={submitted === true}
+            name="botName"
+            placeholder="Wardenator"
+            value={state.botName}
+            required={true}
+            label="Bot Name"
+            helpText="Supports alphanumeric characters, underscores, and hyphens. Maximum 25 characters."
+            handleChange={handleChange}
+            validator={validateBotName}
+          />
+          <WardenField
+            name="crew"
+            required={true}
+            options={wardens}
+            onChange={(e) => {
+              setCrew((e.target.value as WardenFieldOption[]) || []);
+            }}
+            fieldState={crew}
+            isMulti={true}
+            validator={validateCrew}
+            label="Bot Crew"
+            helpText="The warden(s) who control and maintain the bot"
+          />
+          <Input
+            forceValidation={submitted === true}
+            name="polygonAddress"
+            placeholder="0x00000..."
+            value={state.polygonAddress}
+            required={true}
+            label="Polygon Address"
+            helpText="Address where your bot's prize should go"
+            handleChange={handleChange}
+            validator={validateAddress}
+            maxLength={42}
+          />
+          <Input
+            forceValidation={submitted === true}
+            name="ethereumAddress"
+            placeholder="0x00000..."
+            value={state.ethereumAddress}
+            label="Ethereum Address"
+            helpText="Address where we can send ethereum for contests that are awarded in eth"
+            handleChange={handleChange}
+            validator={validateAddress}
+            maxLength={42}
+          />
+          <FormField
+            name="description"
+            label="Description"
+            helpText="Describe your bot. Cite any open source tools that you use."
+            isInvalid={submitted && !state.description}
+            required={true}
           >
-            &#x2715;
-          </button>
-        )}
-      </div>
+            <TextArea
+              name="description"
+              required={true}
+              onChange={handleChange}
+              fieldState={state.description}
+              isInvalid={submitted && !state.description}
+            />
+          </FormField>
+        </>
+      )}
+      {(!currentUser.bot || currentUser.bot.relegated) && (
+        <FormField
+          name="submission"
+          label="Submission"
+          helpText="Enter the output from your bot."
+          isInvalid={submitted && !state.submission}
+          required={true}
+        >
+          <TextArea
+            name="submission"
+            required={true}
+            onChange={handleChange}
+            fieldState={state.submission}
+            isInvalid={submitted && !state.submission}
+          />
+        </FormField>
+      )}
+      {!currentUser.bot && (
+        <div className="widget__container">
+          <label htmlFor="avatar">Avatar (Optional)</label>
+          <Avatar
+            src={state.botImage}
+            name={state.botName}
+            size="50px"
+            round="50px"
+          />
+          <input
+            className="widget__avatar"
+            type="file"
+            id="avatar"
+            name="avatar"
+            accept=".png,.jpg,.jpeg,.webp"
+            // @ts-ignore // @todo: solve this typescript error
+            ref={avatarInputRef}
+            onChange={handleAvatarChange}
+          />
+          {state.avatarFile && (
+            <button
+              type="button"
+              onClick={removeAvatar}
+              aria-label="Remove avatar"
+            >
+              &#x2715;
+            </button>
+          )}
+        </div>
+      )}
+
       <div className="register-bot__agreement">
         By submitting this form, you agree to:
         <ul>

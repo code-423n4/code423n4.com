@@ -11,7 +11,8 @@ interface FormProps extends JSX.ElementChildrenAttribute {
   successMessage: string | ReactNode;
   onSubmit: () => Promise<void>;
   successButtonText?: string;
-  title?: string;
+  title?: string | ReactNode;
+  subtitle?: string;
   resetForm?: () => void;
   validator?: () => boolean;
   submitButtonText?: string;
@@ -20,6 +21,7 @@ interface FormProps extends JSX.ElementChildrenAttribute {
 const Form = ({
   children,
   title,
+  subtitle,
   successMessage,
   successButtonText,
   onSubmit,
@@ -58,6 +60,7 @@ const Form = ({
   return (
     <div className="form">
       {title && <h1 className="type__headline__page-title">{title}</h1>}
+      {subtitle && <h2 className="type__subline__l">{subtitle}</h2>}
       {(status === FormStatus.Unsubmitted ||
         status === FormStatus.Submitting) && (
         <form>

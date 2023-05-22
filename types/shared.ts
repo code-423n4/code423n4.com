@@ -1,6 +1,7 @@
 export type AbsoluteURL = string;
 export type RelativeURL = string;
-export type Slug = string;
+export type ContestSlug = string;
+export type ContestNumber = number;
 export type WalletAddress = string;
 export type UserId = string;
 export type Username = string;

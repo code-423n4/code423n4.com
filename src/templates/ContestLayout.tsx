@@ -1,4 +1,3 @@
-import clsx from "clsx";
 import { graphql, Link } from "gatsby";
 import Moralis from "moralis-v1";
 import React, { useEffect, useState } from "react";
@@ -7,21 +6,22 @@ import rehypeKatex from "rehype-katex";
 import remarkBreaks from "remark-breaks";
 import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
+import ReactMarkdown from "react-markdown";
 
 // types
 import { WardenFindingsForContest } from "../../types/finding";
 // helpers
-import { getDates } from "../utils/time";
+import { ContestStatus, getDates } from "../utils/time";
 // hooks
 import useUser from "../hooks/UserContext";
 // components
+import DefaultLayout from "./DefaultLayout";
 import ClientOnly from "../components/ClientOnly";
 import Countdown from "../components/Countdown";
-import DefaultLayout from "./DefaultLayout";
 import FindingsList from "../components/FindingsList";
 import LeaderboardTableReduced from "../components/LeaderboardTableReduced";
 import WardenDetails from "../components/WardenDetails";
-import ReactMarkdown from "react-markdown";
+import ContestStatusBar from "../components/contest/ContestStatusBar";
 
 enum FindingsStatus {
   Fetching = "fetching",
@@ -30,23 +30,6 @@ enum FindingsStatus {
 }
 
 const ContestLayout = ({ data }) => {
-  // state
-  const [artOpen, setArtOpen] = useState(false);
-  const [findingsList, setFindingsList] = useState<WardenFindingsForContest>({
-    user: [],
-    teams: {},
-  });
-  const [findingsStatus, setFindingsStatus] = useState<FindingsStatus>(
-    FindingsStatus.Fetching
-  );
-  const [errorMessage, setErrorMessage] = useState<string>("");
-  const [canViewContest, setCanViewContest] = useState<boolean>(false);
-  const [leaderboardResults, setLeaderboardResults] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-
-  // hooks
-  const { currentUser } = useUser();
-
   const {
     title,
     sponsor,
@@ -59,11 +42,29 @@ const ContestLayout = ({ data }) => {
     end_time,
     contestid,
   } = data.contestsCsv;
-
   const { markdownRemark } = data;
 
-  const t = getDates(start_time, end_time);
-  const dateDescription = `${amount}\n${t.startDay}—${t.endDay}`;
+  // state
+  // const [artOpen, setArtOpen] = useState(false);
+  const [findingsList, setFindingsList] = useState<WardenFindingsForContest>({
+    user: [],
+    teams: {},
+  });
+  const [findingsStatus, setFindingsStatus] = useState<FindingsStatus>(
+    FindingsStatus.Fetching
+  );
+  const [errorMessage, setErrorMessage] = useState<string>("");
+  const [canViewContest, setCanViewContest] = useState<boolean>(false);
+  const [leaderboardResults, setLeaderboardResults] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [contestTimelineObject, setContestTimelineObject] = useState(
+    getDates(start_time, end_time)
+  );
+
+  // hooks
+  const { currentUser } = useUser();
+
+  const dateDescription = `${amount}\n${contestTimelineObject.startDay}—${contestTimelineObject.endDay}`;
   const pageTitle = `Code4rena ${title}`;
 
   const canViewReport = Boolean(markdownRemark && markdownRemark.frontmatter);
@@ -74,11 +75,17 @@ const ContestLayout = ({ data }) => {
       : `/reports/${data.markdownRemark.frontmatter.slug}`;
   }
 
-  const statusText = {
-    active: "Live",
-    soon: "Coming Soon",
-    completed: "Ended",
-  };
+  useEffect(() => {
+    const timer = setInterval(() => {
+      const updatedTime = getDates(start_time, end_time);
+      const hasEnded = updatedTime.contestStatus === ContestStatus.Done;
+      setContestTimelineObject(updatedTime);
+      if (hasEnded) {
+        clearInterval(timer);
+      }
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [start_time]);
 
   useEffect(() => {
     (async () => {
@@ -155,26 +162,18 @@ const ContestLayout = ({ data }) => {
       <div className="">
         <ClientOnly>
           <section className="contest-page__top limited-width">
-            {t.contestStatus === "soon" || t.contestStatus === "active" ? (
-              <div className="contest-page__top-bar">
-                <span
-                  className={
-                    "contest-tile__status-indicator-text contest-tile__status-indicator-text--" +
-                    t.contestStatus
-                  }
-                >
-                  {statusText[t.contestStatus]}
-                </span>
-                <span className="contest-tile__countdown">
-                  {t.contestStatus === "soon" ? "Starts in:" : "Ends in:"}
-                  <Countdown
-                    start={start_time}
-                    end={end_time}
-                    isPreview={findingsRepo === ""}
-                  />
-                </span>
-              </div>
-            ) : null}
+            {contestTimelineObject.contestStatus === "soon" ||
+              (contestTimelineObject.contestStatus === "active" && (
+                <ContestStatusBar
+                  findingsRepo={findingsRepo}
+                  start_time={start_time}
+                  end_time={end_time}
+                  contestTimelineObject={contestTimelineObject}
+                  contestNumber={contestid}
+                  botRacePath={fields.submissionPath + "/bot"}
+                  hasBotRace={fields.codeAccess === "public"}
+                />
+              ))}
 
             <div className="contest-page__top-content">
               <div className="contest-page__project">
@@ -191,29 +190,17 @@ const ContestLayout = ({ data }) => {
                 <div>
                   <h1 className="type__headline__xs">{title}</h1>
                   <p>{details}</p>
-                  {contestid === 231 && (
-                    <p>
-                      <span className="competition-tag--blurple">
-                        Bot Race Qualifier
-                      </span>
-                      <Link
-                        to="/register/bot"
-                        className="button button--text-link"
-                      >
-                        Register your bot
-                      </Link>
-                    </p>
-                  )}
                 </div>
               </div>
               <div className="contest-page__button-wrapper">
-                {t.contestStatus !== "soon" && canViewContest && (
-                  <a href={repo} className="button button--primary">
-                    View Repo
-                  </a>
-                )}
+                {contestTimelineObject.contestStatus !== "soon" &&
+                  canViewContest && (
+                    <a href={repo} className="button button--primary">
+                      View Repo
+                    </a>
+                  )}
 
-                {t.contestStatus === "active" &&
+                {contestTimelineObject.contestStatus === "active" &&
                   findingsRepo &&
                   fields.submissionPath &&
                   canViewContest && (
@@ -235,13 +222,13 @@ const ContestLayout = ({ data }) => {
               <li className="contest-page__start-date">
                 <span className="contest-page__grid-label">Start Date</span>
                 <span className="contest-page__grid-value type__headline__xs">
-                  {t.startDay}
+                  {contestTimelineObject.startDay}
                 </span>
               </li>
               <li className="contest-page__end-date">
                 <span className="contest-page__grid-label">End Date</span>
                 <span className="contest-page__grid-value type__headline__xs">
-                  {t.endDay}
+                  {contestTimelineObject.endDay}
                 </span>
               </li>
               <li className="contest-page__amount">
@@ -253,24 +240,24 @@ const ContestLayout = ({ data }) => {
               <li className="contest-page__duration">
                 <span className="contest-page__grid-label">Duration</span>
                 <span className="contest-page__grid-value type__headline__xs">
-                  {t.daysDuration} days
+                  {contestTimelineObject.daysDuration} days
                 </span>
               </li>
             </ul>
           </section>
           <Tabs className="contest-page__tabs">
             <TabList className="limited-width secondary-nav">
-              {t.contestStatus === "completed" && (
+              {contestTimelineObject.contestStatus === "completed" && (
                 <Tab className="secondary-nav__item">Results</Tab>
               )}
               <Tab className="secondary-nav__item">Details</Tab>
-              {t.contestStatus === "active" && (
+              {contestTimelineObject.contestStatus === "active" && (
                 <Tab className="secondary-nav__item">Your Findings</Tab>
               )}
             </TabList>
 
             <section className="contest-page__tab-container full-width">
-              {t.contestStatus === "completed" && (
+              {contestTimelineObject.contestStatus === "completed" && (
                 <TabPanel>
                   <div className="leaderboard__container leaderboard__container--contests">
                     <LeaderboardTableReduced
@@ -282,7 +269,7 @@ const ContestLayout = ({ data }) => {
               )}
               <TabPanel>
                 <div className="limited-width type__copy">
-                  {t.contestStatus === "soon" ? (
+                  {contestTimelineObject.contestStatus === "soon" ? (
                     <div className="coming-soon tab__content--message">
                       <h2 className="type__headline__l">
                         Contest details coming soon
@@ -307,7 +294,7 @@ const ContestLayout = ({ data }) => {
                   )}
                 </div>
               </TabPanel>
-              {t.contestStatus === "active" && (
+              {contestTimelineObject.contestStatus === "active" && (
                 <TabPanel>
                   <div className="limited-width type__copy">
                     {findingsStatus === FindingsStatus.Error ? (

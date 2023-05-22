@@ -194,6 +194,26 @@ $button__border-width: 2px;
   }
 }
 
+// Button back link
+// --------------------
+
+.button--back-link {
+  padding: $spacing__s 0;
+  background: transparent;
+  border: none;
+  color: $color__blurple__text;
+  text-decoration: underline;
+
+  &:before {
+    content: "← ";
+  }
+
+  &:hover {
+    color: $color__blurple__text--light;
+    background: transparent;
+  }
+}
+
 // Button small
 // --------------------
 
