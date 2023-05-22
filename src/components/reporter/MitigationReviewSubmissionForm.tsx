@@ -66,29 +66,33 @@ export default function MitigationReviewSubmissionForm({
     setState(currentState);
   }, [findingId, initialState]);
 
-  const handleChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
-    const { name, value } = e.target;
-    setState((prevState) => {
-      const newState = {
-        ...prevState,
-        [name]: value,
-      };
-      setStateInLocalStorage(findingId, newState);
-      return newState;
-    });
-  };
+  const handleChange: React.ChangeEventHandler<HTMLInputElement> = useCallback(
+    (e) => {
+      const { name, value } = e.target;
+      setState((prevState) => {
+        const newState = {
+          ...prevState,
+          [name]: value,
+        };
+        setStateInLocalStorage(findingId, newState);
+        return newState;
+      });
+    },
+    [state]
+  );
 
-  const handleCodeReferencesChange = (codeReferences: AbsoluteURL[]) => {
-    setState((prevState) => ({ ...prevState, linksToCode: codeReferences }));
-  };
+  const handleCodeReferencesChange = useCallback(
+    (codeReferences: AbsoluteURL[]) => {
+      setState((prevState) => {
+        const newState = { ...prevState, linksToCode: codeReferences };
+        setStateInLocalStorage(findingId, newState);
+        return newState;
+      });
+    },
+    [state]
+  );
 
   const submit = async () => {
-    setIsSubmitted(true);
-    const isInvalid = validator();
-    if (isInvalid) {
-      return;
-    }
-
     const title =
       state.mitigationStatus === MitigationStatus.New
         ? state.title
@@ -127,6 +131,10 @@ export default function MitigationReviewSubmissionForm({
       labels,
     };
 
+    if (state.mitigationOf) {
+      data.mitigationOf = state.mitigationOf;
+    }
+
     const response = await onSubmit(data);
     if (response.ok) {
       if (typeof window !== `undefined`) {
@@ -150,12 +158,15 @@ export default function MitigationReviewSubmissionForm({
             window.localStorage.removeItem(findingId);
           }
           toast.error(error);
+        } else {
+          throw error;
         }
       }
     }
   };
 
   const validator = useCallback(() => {
+    setIsSubmitted(true);
     const requiredFields = [state.details];
     switch (state.mitigationStatus) {
       case MitigationStatus.MitigationConfirmed:
@@ -178,7 +189,12 @@ export default function MitigationReviewSubmissionForm({
     return requiredFields.some((field) => {
       return field === "" || field === undefined;
     });
-  }, []);
+  }, [state]);
+
+  const resetForm = useCallback(() => {
+    setState(initialState);
+    setIsSubmitted(false);
+  }, [initialState, state, isSubmitted]);
 
   return (
     <Form
@@ -197,6 +213,7 @@ export default function MitigationReviewSubmissionForm({
       submitButtonText={submitButtonText}
       className="limited-width submit-findings"
       title={`Mitigation Review for ${sponsor}`}
+      resetForm={resetForm}
     >
       <fieldset className="form-field">
         <label>Mitigation status *</label>
@@ -206,8 +223,8 @@ export default function MitigationReviewSubmissionForm({
           mitigation did not create any new issues
           <br />
           <strong>Unmitigated:</strong>
-          &nbsp;a mitigation for the original vulnerability was not implemented
-          or was not fully successful
+          &nbsp;the attempted mitigation for the original issue was not fully
+          successful
           <br />
           <strong>New:</strong>
           &nbsp;
@@ -266,7 +283,7 @@ export default function MitigationReviewSubmissionForm({
       {state.mitigationStatus === MitigationStatus.New && (
         <Input
           name="title"
-          value={title}
+          value={state.title}
           required={true}
           handleChange={handleChange}
           label="Title"
@@ -317,6 +334,11 @@ export default function MitigationReviewSubmissionForm({
             required={state.mitigationStatus === MitigationStatus.New}
             onChange={handleChange}
             fieldState={state.issueType}
+            isInvalid={
+              isSubmitted &&
+              !state.issueType &&
+              state.mitigationStatus === MitigationStatus.New
+            }
           />
         </fieldset>
       )}

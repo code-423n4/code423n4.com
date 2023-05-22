@@ -17,6 +17,7 @@ interface SelectFieldProps {
   isInvalid?: boolean;
   fieldState: string | number;
   required?: boolean;
+  errorMessage?: string;
 }
 
 export default function SelectField({
@@ -26,6 +27,7 @@ export default function SelectField({
   isInvalid,
   fieldState,
   required,
+  errorMessage,
 }: SelectFieldProps) {
   const handleChange = useCallback(
     (option) => {
@@ -38,16 +40,26 @@ export default function SelectField({
   );
 
   return (
-    <Select
-      name={name}
-      aria-describedby={name + "--error"}
-      required={required}
-      value={options.find((o) => o.value === fieldState) || "Select ..."}
-      formatOptionLabel={SelectFieldOptionLabel}
-      options={options}
-      onChange={handleChange}
-      className={clsx("ReactSelect", isInvalid && "WardenField__Invalid")}
-      classNamePrefix="react-select"
-    />
+    <>
+      <Select
+        name={name}
+        aria-describedby={name}
+        required={required}
+        value={options.find((o) => o.value === fieldState) || "Select ..."}
+        formatOptionLabel={SelectFieldOptionLabel}
+        options={options}
+        onChange={handleChange}
+        className={clsx("ReactSelect", isInvalid && "input__input-error")}
+        classNamePrefix="react-select"
+      />
+      {isInvalid && (
+        <div id={name + "--error"} className={"form-field__error"}>
+          {required &&
+            !options.find((o) => o.value === fieldState) &&
+            "This field is required"}
+          {errorMessage && errorMessage}
+        </div>
+      )}
+    </>
   );
 }
