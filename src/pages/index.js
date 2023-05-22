@@ -123,14 +123,16 @@ export default function SiteIndex({ data }) {
           <SkeletonLoader layout={"background--" + viewMode} limitedWidth />
         ) : null}
         {/* Blurple background area */}
-        {filteredContests && filteredContests.activeContests.length > 0 ? (
+        {filteredContests &&
+        (filteredContests.activeContests.length > 0 ||
+          filteredContests.upcomingContests.length > 0) ? (
           <div className={"background--" + viewMode}>
             <div className="limited-width home__featured-contests-blurple-area">
               {/* Active contests */}
               {filteredContests &&
               filteredContests.activeContests.length > 0 ? (
                 <div className="featured-contests__active background--low-contrast">
-                  <h1 className="type__headline__l">Active competitions</h1>
+                  <h1 className="type__headline__l">Active audits</h1>
                   <p className="type__subline__s spacing-bottom__l">
                     Currently finding the highest-severity vulnerabilities for:
                   </p>
