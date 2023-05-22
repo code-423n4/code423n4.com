@@ -165,7 +165,6 @@ const ReportForm = ({ data, location }) => {
           }
         : undefined,
       mitigationStatus: {
-        //update these values here from ui update
         newValue: data.mitigationStatus!,
         oldValue: mitigationReviewState.mitigationStatus,
       },
@@ -273,7 +272,7 @@ const ReportForm = ({ data, location }) => {
           title: finding.title,
           risk: finding.risk,
           details: newBody,
-          linksToCode: links,
+          linksToCode: links.length > 0 ? links : [""],
           mitigationStatus: finding.mitigationStatus,
           mitigationOf: finding.mitigationOf || "",
           issueType: issueType || "",

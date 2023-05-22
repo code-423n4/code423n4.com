@@ -129,6 +129,7 @@ export default function MitigationReviewSubmissionForm({
       title,
       body: markdownBody,
       labels,
+      mitigationStatus: state.mitigationStatus,
     };
 
     if (state.mitigationOf) {
@@ -265,7 +266,7 @@ export default function MitigationReviewSubmissionForm({
             required={true}
             options={[
               {
-                label: "Low / Non-critical)",
+                label: "Low / Non-critical",
                 value: "QA (Quality Assurance)",
               },
               {
