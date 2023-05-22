@@ -1,0 +1,19 @@
+{
+  "handle": "GREY-GORILLA-REACH",
+  "members": [
+    "Mis4nthr0pic",
+    "escrow",
+    "evmBrahmin",
+    "Gaonuk",
+    "0xffchain",
+    "0xLegrev",
+    "cryptofrankey",
+    "Vazi"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x798BC384E20d5D16987A07487FC695985F1742c5"
+    }
+  ]
+}
