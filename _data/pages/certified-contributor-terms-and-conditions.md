@@ -77,7 +77,7 @@ The Certified Contributor hereby makes the following representations and warrant
 * c. **Sub-Contracting**:  Certified Contributor will not subcontract or delegate any services subject to these CC Terms to any other person or entity; including without limitation any individual or entity under contract with the Certified Contributor as an independent contractor or similar. 
 
 ## 9. Media and Publicity
-The Parties agree that C4 and C4's Agent shall be permitted to identify the Certified Contributor by their avatars and/or handles and generally describe the Certified Contributor services to third parties and in marketing materials to the extent that these materials do not disclose any Confidential Information. Certified Contributor may publicly identify their role in the C4DAO as Warden, Judge, Sponsor, or Mason, but shall not identify or any make statement or representation regarding Sponsor, C4 DAO, C4, C4's Agent, or any affiliate thereof, without prior written approval from C4's Agent or voted approval of the C4DAO, as applicable.  
+The Parties agree that C4 and C4's Agent shall be permitted to identify the Certified Contributor by their avatars and/or handles and generally describe the Certified Contributor services to third parties and in marketing materials to the extent that these materials do not disclose any Confidential Information. Certified Contributor may publicly identify their role in the C4DAO as Warden, Judge, Sponsor, or Mason, but shall not identify or make any statement or representation regarding Sponsor, C4 DAO, C4, C4's Agent, or any affiliate thereof, without prior written approval from C4's Agent or voted approval of the C4DAO, as applicable.  
 
 ## 10. Termination
 
