@@ -33,21 +33,15 @@ export default function HowItWorks(data) {
         </section>
         <section className="how-it-works__section">
           <h3 className="type__headline__s">Scout</h3>
-          <p>Scouts focus on scoping and pre-competition intel.</p>
+          <p>Scouts focus on scoping and pre-audit intel.</p>
         </section>
         <section className="how-it-works__section">
           <h3 className="type__headline__s">Lookout</h3>
-          <p>
-            Lookouts review and organize submissions to Code4rena’s
-            competitions, focusing on lightening and clarifying the project
-            team’s workload, and preparing the repo for judging.
-          </p>
+          <p>Lookouts review and organize submissions to Code4rena’s audits.</p>
         </section>
 
-        {/* Competition Types */}
-        <h2 className="spacing-top__xxl spacing-bottom__xl">
-          Competition Types
-        </h2>
+        {/* Audit Types */}
+        <h2 className="spacing-top__xxl spacing-bottom__xl">Audit Types</h2>
         <section className="how-it-works__section">
           <h3 className="type__headline__s">Open</h3>
           <p>
@@ -65,32 +59,32 @@ export default function HowItWorks(data) {
           </p>
         </section>
         <section className="how-it-works__section">
-          <h3 className="type__headline__s">Classified</h3>
+          <h3 className="type__headline__s">Private</h3>
           <p>
-            This type of competition is restricted to Wardens who have met the
+            This type of audit is restricted to Wardens who have met the
             conditions of the Code4rena{" "}
             <a href="https://docs.code4rena.com/roles/certified-contributors">
               Certified Contributor
             </a>{" "}
             program, which includes a Non-Disclosure Agreement. With
             customizations available for your privacy needs, Code4rena can offer
-            you an audit that is as stealthy as you would like.
+            you an audit that is as stealthy as you’d like.
           </p>
           <p>
             <a
               href="https://medium.com/code4rena/a-look-at-code4rena-audits-classified-3ee3cbe87617"
               className="button button--text-link"
             >
-              Learn more about Classified competitions
+              Learn more about Private audits
             </a>
           </p>
         </section>
         <section className="how-it-works__section">
-          <h3 className="type__headline__s">Versus</h3>
+          <h3 className="type__headline__s">Invitational</h3>
           <p>
             Sponsors get the opportunity to work with top Wardens from the
-            Code4rena community in a format that best suits their needs. When a
-            Versus competition is announced, a limited number of the
+            Code4rena community in a format that best suits their needs. When an
+            Invitational audit is announced, a limited number of the
             highest-ranking Wardens who RSVP within a 48-hour window can
             participate in the audit.
           </p>
@@ -99,14 +93,14 @@ export default function HowItWorks(data) {
               href="https://medium.com/code4rena/a-look-at-code4rena-audits-versus-6c55d57939ef"
               className="button button--text-link"
             >
-              Learn more about Versus competitions
+              Learn more about Invitational audits
             </a>
           </p>
         </section>
         <section className="how-it-works__section">
           <h3 className="type__headline__s">Mitigation review</h3>
           <p>
-            Once new code is ready for review after a Code4rena competition, the
+            Once new code is ready for review after a Code4rena audit, the
             highest-performing Wardens who found the initial vulnerabilities are
             invited to participate in a Mitigation review. Insertions, deletions
             and changes are considered in scope, with these Wardens doing
@@ -129,11 +123,26 @@ export default function HowItWorks(data) {
             Bots are registered and used to submit findings that can be
             automatically detected in a project’s code, with the winning report
             serving as a resource for all auditors and forming the basis for
-            known issues for the audit competition.
+            known issues for the audit.
           </p>
           <p>
             <Link to="/register/bot" className="button button--text-link">
               Learn more about Bot Races
+            </Link>
+          </p>
+        </section>
+        <section className="how-it-works__section">
+          <h3 className="type__headline__s">Test Coverage</h3>
+          <p>
+            Code4rena Test Coverage empowers projects to meet all of their
+            priorities without compromise, by providing projects with surge
+            capacity for their engineering teams pre-launch. Ship quality code
+            that has been thoroughly tested by our community of security-minded
+            experts, at an accelerated rate.
+          </p>
+          <p>
+            <Link to="/test-coverage" className="button button--text-link">
+              Learn more about Test Coverage
             </Link>
           </p>
         </section>

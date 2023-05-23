@@ -1,16 +1,18 @@
 {
-  "handle": "REACH",
+  "handle": "RUBY-BEAR-REACH",
   "members": [
+    "Angry_Mustache_Man",
+    "zuhaibmohd",
+    "Bloqarl",
+    "sayan",
+    "BlockChomper",
     "Mis4nthr0pic",
-    "CHALK",
-    "KrisApostolov",
-    "3agle",
     "escrow",
-    "0xWagmi",
-    "0x3b",
-    "0xWOK",
-    "mariodev",
-    "DedOhWale"
+    "queueunit",
+    "0xtotem",
+    "CHALK",
+    "pxng0lin",
+    "Tim"
   ],
   "paymentAddresses": [
     {
@@ -21,6 +23,5 @@
       "chain": "ethereum",
       "address": "0x798BC384E20d5D16987A07487FC695985F1742c5"
     }
-  ],
-  "image": "./avatars/REACH.jpeg"
+  ]
 }
