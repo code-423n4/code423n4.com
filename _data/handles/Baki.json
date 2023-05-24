@@ -1,0 +1,13 @@
+{
+  "handle": "Baki",
+  "members": [
+    "supernova",
+    "Viraz"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xa967A4EFe40C454c69FBbC54f32d39A50A66f688"
+    }
+  ]
+}
