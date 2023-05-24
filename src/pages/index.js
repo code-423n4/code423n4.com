@@ -105,50 +105,65 @@ export default function SiteIndex({ data }) {
           For Wardens
         </SecondaryNavItem>
       </SecondaryNav>
+
       {/* Hero */}
       <HomepageHero viewMode={viewMode} />
+
+      {/* Pizzazz */}
       <Pizzazz />
 
       {/* Top names bar under hero */}
-      {!viewMode || (viewMode === "warden" && <HomepageTopNames />)}
-      {viewMode === "project" && <TrustBar />}
+      {!viewMode || (viewMode === "project" && <TrustBar />)}
+      {viewMode === "warden" && <HomepageTopNames />}
 
       {/* Contests */}
-      <section
-        className={"home__featured-contests background--" + viewMode}
-        data-nosnippet
-      >
-        <div className="limited-width">
-          <h1 className="type__headline__l">Active competitions</h1>
-          {/* Skeleton loader animation */}
-          {!filteredContests ? <SkeletonLoader /> : null}
-          {/* Active contests */}
-          {filteredContests && filteredContests.activeContests.length > 0 ? (
-            <div className="featured-contests__active background--low-contrast">
-              <p className="type__subline__s spacing-bottom__l">
-                Currently finding the highest-severity vulnerabilities for:
-              </p>
-              <ContestList
-                updateContestStatus={updateContestStatus}
-                contests={filteredContests.activeContests}
-                user={currentUser}
-              />
+      <section className={"home__featured-contests"} data-nosnippet>
+        {/* Skeleton loader animation */}
+        {!filteredContests ? (
+          <SkeletonLoader layout={"background--" + viewMode} limitedWidth />
+        ) : null}
+        {/* Blurple background area */}
+        {filteredContests &&
+        (filteredContests.activeContests.length > 0 ||
+          filteredContests.upcomingContests.length > 0) ? (
+          <div className={"background--" + viewMode}>
+            <div className="limited-width home__featured-contests-blurple-area">
+              {/* Active contests */}
+              {filteredContests &&
+              filteredContests.activeContests.length > 0 ? (
+                <div className="featured-contests__active background--low-contrast">
+                  <h1 className="type__headline__l">Active audits</h1>
+                  <p className="type__subline__s spacing-bottom__l">
+                    Currently finding the highest-severity vulnerabilities for:
+                  </p>
+                  <ContestList
+                    updateContestStatus={updateContestStatus}
+                    contests={filteredContests.activeContests}
+                    user={currentUser}
+                  />
+                </div>
+              ) : null}
+
+              {/* Upcoming contests */}
+              {filteredContests &&
+              filteredContests.upcomingContests.length > 0 ? (
+                <div className="featured-contests__upcoming background--low-contrast">
+                  <h2 className="type__headline__xs spacing-top__xl spacing-bottom__l">
+                    Upcoming audits
+                  </h2>
+                  <ContestList
+                    updateContestStatus={updateContestStatus}
+                    contests={filteredContests.upcomingContests}
+                    user={currentUser}
+                  />
+                </div>
+              ) : null}
             </div>
-          ) : null}
-          {/* Upcoming contests */}
-          {filteredContests && filteredContests.upcomingContests.length > 0 ? (
-            <div className="featured-contests__upcoming background--low-contrast">
-              <h2 className="type__headline__xs spacing-top__xl spacing-bottom__l">
-                Upcoming audits
-              </h2>
-              <ContestList
-                updateContestStatus={updateContestStatus}
-                contests={filteredContests.upcomingContests}
-                user={currentUser}
-              />
-            </div>
-          ) : null}
-        </div>
+          </div>
+        ) : (
+          ""
+        )}
+        {/* Completed contests */}
         {filteredContests && filteredContests.swiperContests.length > 0 ? (
           <div className="featured-contests__completed">
             <div className="limited-width">

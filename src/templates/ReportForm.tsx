@@ -9,6 +9,7 @@ import {
   FindingCreateRequest,
   FindingDeleteRequest,
   FindingEditRequest,
+  MitigationStatus,
 } from "../../types/finding";
 
 // hooks
@@ -17,15 +18,26 @@ import useUser from "../hooks/UserContext";
 // components
 import ProtectedPage from "../components/ProtectedPage";
 import SubmitFindings from "../components/reporter/SubmitFindings";
+import { AbsoluteURL, ReportId, RiskLabelName } from "../../types/shared";
+import MitigationReviewSubmissionForm from "../components/reporter/MitigationReviewSubmissionForm";
 
 export interface ReportState {
   title: string;
-  risk: string;
+  risk: RiskLabelName | "";
   details: string;
   qaGasDetails: string;
-  linksToCode: string[];
-  mitigationOf: string;
-  isMitigated: boolean;
+  linksToCode: AbsoluteURL[];
+  issueType: string;
+}
+
+export interface MitigationReviewSubmissionState {
+  title: string;
+  risk: RiskLabelName | "";
+  details: string;
+  linksToCode: AbsoluteURL[];
+  issueType: string;
+  mitigationOf: ReportId;
+  mitigationStatus: MitigationStatus;
 }
 
 enum FormMode {
@@ -45,8 +57,17 @@ const initialState: ReportState = {
   details: mdTemplate,
   qaGasDetails: "",
   linksToCode: [""],
+  issueType: "",
+};
+
+const initialMRSubmissionState: MitigationReviewSubmissionState = {
+  title: "",
+  risk: "",
+  details: "",
+  linksToCode: [""],
   mitigationOf: "",
-  isMitigated: false,
+  mitigationStatus: MitigationStatus.MitigationConfirmed,
+  issueType: "",
 };
 
 const ReportForm = ({ data, location }) => {
@@ -65,6 +86,10 @@ const ReportForm = ({ data, location }) => {
 
   // state
   const [state, setState] = useState<ReportState>(initialState);
+  const [
+    mitigationReviewState,
+    setMitigationReviewState,
+  ] = useState<MitigationReviewSubmissionState>(initialMRSubmissionState);
   const [attributedTo, setAttributedTo] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [mode, setMode] = useState<FormMode>(FormMode.Create);
@@ -92,7 +117,10 @@ const ReportForm = ({ data, location }) => {
         mode === FormMode.Create ? "submit-finding" : "manage-findings";
       let requestData: FindingCreateRequest | FindingEditRequest = data;
       if (mode === FormMode.Edit) {
-        requestData = getUpdatedFindingRequestData(data);
+        requestData =
+          fields.type === "Mitigation review"
+            ? getUpdatedMitigationFindingRequestData(data)
+            : getUpdatedFindingRequestData(data);
       }
       const user = await Moralis.User.current();
       if (!user) {
@@ -113,12 +141,58 @@ const ReportForm = ({ data, location }) => {
     [currentUser, mode, issueId, attributedTo, state]
   );
 
+  const getUpdatedMitigationFindingRequestData = (
+    data: FindingCreateRequest
+  ): FindingEditRequest => {
+    const requestData: FindingEditRequest = {
+      issue: issueId!,
+      contest: data.contest,
+      emailAddresses: data.emailAddresses,
+      risk: { oldValue: mitigationReviewState.risk, newValue: data.risk },
+      attributedTo: {
+        oldValue: attributedTo,
+        newValue: data.attributedTo,
+        address: data.address,
+      },
+      issueType: {
+        newValue: data.issueType!,
+        oldValue: mitigationReviewState.issueType,
+      },
+      mitigationOf: data.mitigationOf
+        ? {
+            newValue: data.mitigationOf!,
+            oldValue: mitigationReviewState.mitigationOf,
+          }
+        : undefined,
+      mitigationStatus: {
+        newValue: data.mitigationStatus!,
+        oldValue: mitigationReviewState.mitigationStatus,
+      },
+      body: data.body,
+    };
+
+    if (mitigationReviewState.title !== data.title) {
+      requestData.title = data.title;
+    }
+
+    // If nothing changed, do not submit
+    if (
+      requestData.attributedTo.newValue === requestData.attributedTo.oldValue &&
+      requestData.risk.newValue === requestData.risk.oldValue &&
+      !requestData.title &&
+      !requestData.body
+    ) {
+      throw "There were no changes to save.";
+    }
+    return requestData;
+  };
+
   const getUpdatedFindingRequestData = (
     data: FindingCreateRequest
   ): FindingEditRequest => {
     const requestData: FindingEditRequest = {
       issue: issueId!,
-      contest: parseInt(data.contest),
+      contest: data.contest,
       emailAddresses: data.emailAddresses,
       risk: { oldValue: state.risk, newValue: data.risk },
       attributedTo: {
@@ -126,16 +200,9 @@ const ReportForm = ({ data, location }) => {
         newValue: data.attributedTo,
         address: data.address,
       },
-      mitigationOf: data.mitigationOf
-        ? {
-            newValue: data.mitigationOf!,
-            oldValue: state.mitigationOf,
-          }
-        : undefined,
-      isMitigated: {
-        //update these values here from ui update
-        newValue: data.isMitigated!,
-        oldValue: state.isMitigated,
+      issueType: {
+        newValue: data.issueType!,
+        oldValue: state.issueType,
       },
     };
 
@@ -195,18 +262,29 @@ const ReportForm = ({ data, location }) => {
     // normalize whitespace
     const normalizedBody = finding.body.replace(/\r\n/g, "\n");
     const { links, body } = separateLinksFromBody(normalizedBody, finding.risk);
+    const { issueType, newBody } = separateIssueTypeFromBody(body);
+
     setMode(FormMode.Edit);
     setIssueId(finding.issueNumber);
     setFindingId(`${contestid}-${finding.issueNumber}`);
-    setState({
-      title: finding.title,
-      risk: finding.risk,
-      details: body,
-      qaGasDetails: normalizedBody,
-      linksToCode: links,
-      isMitigated: finding.isMitigated || false,
-      mitigationOf: finding.mitigationOf || "",
-    });
+    fields.type === "Mitigation review"
+      ? setMitigationReviewState({
+          title: finding.title,
+          risk: finding.risk,
+          details: newBody,
+          linksToCode: links.length > 0 ? links : [""],
+          mitigationStatus: finding.mitigationStatus,
+          mitigationOf: finding.mitigationOf || "",
+          issueType: issueType || "",
+        })
+      : setState({
+          title: finding.title,
+          risk: finding.risk,
+          details: newBody,
+          qaGasDetails: normalizedBody,
+          linksToCode: links,
+          issueType: issueType || "",
+        });
     setAttributedTo(finding.handle);
     setFindingId(`${contestid}-${finding.issueNumber}`);
   };
@@ -286,6 +364,29 @@ const ReportForm = ({ data, location }) => {
     return { links: linksToCode, body };
   };
 
+  const separateIssueTypeFromBody = (
+    issueBody: string
+  ): { issueType: string; newBody: string } => {
+    let newBody = issueBody;
+    let issueType: string = "";
+    const itcEnd = newBody.length;
+    if (!issueBody.includes("## Assessed type")) {
+      return { issueType: issueType, newBody };
+    } else if (itcEnd >= 0) {
+      const issueTypeArray = newBody
+        .slice("\n\n\n## Assessed type\n\n".length, itcEnd)
+        .split("\n");
+      issueType = issueTypeArray[issueTypeArray.length - 1];
+      const index = newBody.lastIndexOf("## Assessed type");
+      if (index >= 0) {
+        newBody = newBody.substring(0, index);
+      } else {
+        newBody = newBody;
+      }
+    }
+    return { issueType: issueType, newBody };
+  };
+
   return (
     <ProtectedPage pageTitle="Submit finding | Code4rena">
       {isLoading ? (
@@ -313,11 +414,29 @@ const ReportForm = ({ data, location }) => {
             <li>Details: {state.qaGasDetails}</li>
           </ul>
         </div>
+      ) : fields.type === "Mitigation review" ? (
+        <MitigationReviewSubmissionForm
+          sponsor={sponsor.name}
+          contest={parseInt(contestid)}
+          contestPath={fields.contestPath}
+          repo={findingsRepo}
+          title={title}
+          initialState={mitigationReviewState}
+          onSubmit={onSubmit}
+          findingId={findingId}
+          submitButtonText={
+            mode === FormMode.Create ? "Create Issue" : "Update Issue"
+          }
+          successMessage={
+            mode === FormMode.Create
+              ? "Your report has been submitted."
+              : "Your report has been updated."
+          }
+        />
       ) : (
         <SubmitFindings
           sponsor={sponsor.name}
-          contest={contestid}
-          contestType={fields.type || "Audit"}
+          contest={parseInt(contestid)}
           contestPath={fields.contestPath}
           repo={findingsRepo}
           title={title}
