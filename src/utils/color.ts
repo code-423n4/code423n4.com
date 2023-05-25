@@ -3,7 +3,7 @@
  * https://natclark.com/tutorials/javascript-lighten-darken-hex-color/
  */
 
-export const transformColor = (hexColor, magnitude) => {
+export const transformColor = (hexColor: string, magnitude: number): string => {
   hexColor = hexColor.replace(`#`, ``);
   if (hexColor.length === 6) {
     const decimalColor = parseInt(hexColor, 16);
