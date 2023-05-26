@@ -1,0 +1,22 @@
+{
+  "handle": "MoneyPrinter_OriginStory",
+  "members": [
+    "BlockChomper",
+    "reentrant",
+    "ubermensch",
+    "sayan",
+    "dnkolegov",
+    "Angry_Mustache_Man"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x72dDe2A2969a513dFE803d87ca35454BfA119E32"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x72dDe2A2969a513dFE803d87ca35454BfA119E32"
+    }
+  ],
+  "image": "./avatars/MoneyPrinter_OriginStory.jpeg"
+}
