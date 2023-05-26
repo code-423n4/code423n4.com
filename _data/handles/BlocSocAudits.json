@@ -1,0 +1,20 @@
+{
+  "handle": "BlocSocAudits",
+  "members": [
+    "0xpanicError",
+    "Varun_05",
+    "prady"
+  ],
+  "link": "https://blocsoc.iitr.ac.in/",
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x2B626fCDD6b0756c90553D5b2D1E55d9709E9Feb"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x2B626fCDD6b0756c90553D5b2D1E55d9709E9Feb"
+    }
+  ],
+  "image": "./avatars/BlocsSocAudits.png"
+}
