@@ -132,7 +132,7 @@ export default function BotRegistration({ data }) {
                 src="/images/br-icon-coins.svg"
                 alt="Icon of two stacks of coins that are shining"
               />
-              <strong>10%</strong> of each contest pool will be dedicated to Bot
+              A portion of each contest pool is dedicated to Bot
               Race prizes.
             </p>
           </div>
