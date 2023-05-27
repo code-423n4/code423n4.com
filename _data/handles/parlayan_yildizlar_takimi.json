@@ -1,0 +1,13 @@
+{
+  "handle": "parlayan_yildizlar_takimi",
+  "members": [
+    "ulas",
+    "caglankaan"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xAEDd76E8e68edAC3eE0BFC75B02161E0e3Bdaca5"
+    }
+  ]
+}

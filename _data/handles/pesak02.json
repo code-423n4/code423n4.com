@@ -1,0 +1,17 @@
+{
+  "handle": "pesak02",
+  "members": [
+    "pedr02b2",
+    "sakshamguruji"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x3a3E9807733A42d511d4E2bcf8896aEB674Db641"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x3a3E9807733A42d511d4E2bcf8896aEB674Db641"
+    }
+  ]
+}
