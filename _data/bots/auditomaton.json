@@ -13,5 +13,6 @@
       "address": "0xabF9984f06799C7D9378628e31136B321D159318"
     }
   ],
-  "image": "./avatars/auditomaton.png"
+  "image": "./avatars/auditomaton.png",
+  "relegated": true
 }
