@@ -1,8 +1,12 @@
 {
   "handle": "parlayan_yildizlar_takimi",
+  "moralisId": null,
+  "image": null,
+  "showOnLeaderboard": true,
   "members": [
     "ulas",
-    "caglankaan"
+    "caglankaan",
+    "ata"
   ],
   "paymentAddresses": [
     {
