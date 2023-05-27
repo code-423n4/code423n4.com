@@ -1,0 +1,18 @@
+{
+  "handle": "LaScaloneta",
+  "members": [
+    "nicobevi",
+    "juancito"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xe7292962e48c18e04Bd26aB2AcCA00Ef794E8171"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0xe7292962e48c18e04Bd26aB2AcCA00Ef794E8171"
+    }
+  ],
+  "image": "./avatars/LaScaloneta.jpeg"
+}

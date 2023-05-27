@@ -1,0 +1,95 @@
+@import "../variables";
+
+// --------------------------------------------------
+// Dropdown Component
+// --------------------------------------------------
+
+// CSS rule order
+// --------------------
+
+// 1. Variables
+// 2. Box model properties
+// 3. Display and position
+// 4. Background
+// 5. Border
+// 6. Box shadow
+// 7. Text
+// 8. Transforms
+// 9. Other
+
+// TODO: Review this and see if it can be simplified
+// It didn't get a full rewrite in the rebrand, so some of the classes may not be in use anymore
+
+.dropdown__wrapper {
+  position: relative;
+}
+
+.dropdown__dropdown-list-container {
+  visibility: hidden;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  transition: all 300ms;
+  width: 260px;
+  background: transparent;
+  padding-top: 15px;
+  transform: translateY(-15px);
+  opacity: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  &.dropdown__open {
+    visibility: visible;
+    opacity: 1;
+    z-index: 1;
+    transform: translateY(0);
+  }
+}
+
+.dropdown__dropdown-list {
+  background: $color__n-90;
+  border-radius: 6px;
+  padding: 10px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.dropdown__button {
+  color: #fff;
+  background: $color__n-90;
+  text-align: left;
+  margin: 0;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  font-weight: normal;
+  text-transform: none;
+
+  &:hover {
+    background: $color__n-90;
+    color: white;
+  }
+}
+
+.dropdown__dropdown-icon {
+  stroke: currentColor;
+  fill: currentColor;
+  display: inline-flex;
+  padding: 0;
+  margin-left: 5px;
+  &:hover {
+    box-shadow: none;
+  }
+
+  &.dropdown__open {
+    transform: rotate(-180deg);
+    transition: transform 150ms ease;
+  }
+}
+// TODO: This also affects the leaderboard. This doesn't feel like its final home
+.sb-avatar,
+.sb-avatar--text {
+  margin-right: $spacing__s;
+}

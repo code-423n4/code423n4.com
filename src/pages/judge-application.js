@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { StaticQuery, graphql } from "gatsby";
 
-import DefaultLayout from "../templates/DefaultLayout";
 import Widgets from "../components/reporter/widgets/Widgets";
 import useUser from "../hooks/UserContext";
 import { useMoralis } from "react-moralis";
+
+import ProtectedPage from "../components/ProtectedPage";
 
 const config = {
   labelAll: "candidate",
@@ -95,7 +96,7 @@ const wardenListQuery = graphql`
           handle
           image {
             childImageSharp {
-              resize(width: 64, quality: 90) {
+              resize(width: 80) {
                 src
               }
             }
@@ -176,11 +177,11 @@ const JudgeApplication = () => {
         fields[0].options = wardens;
 
         return (
-          <DefaultLayout
+          <ProtectedPage
             bodyClass="judge-application"
             pageTitle="Judge Application | Code4rena"
           >
-            <div className="wrapper-main">
+            <div className="limited-width">
               {(status === FormStatus.Unsubmitted ||
                 status === FormStatus.Submitting) && (
                 <>
@@ -270,7 +271,7 @@ const JudgeApplication = () => {
                 </div>
               )}
             </div>
-          </DefaultLayout>
+          </ProtectedPage>
         );
       }}
     />

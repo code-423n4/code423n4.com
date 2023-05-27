@@ -1,0 +1,12 @@
+{
+  "handle": "Aussie_Battlers",
+  "members": ["sseefried", "oyc_109"],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x6E93Aad801FB8cBf099190F0C0167F383Efa45C2"
+    }
+  ],
+  "link": "",
+  "image": "./avatars/Aussie_Battlers.jpeg"
+}

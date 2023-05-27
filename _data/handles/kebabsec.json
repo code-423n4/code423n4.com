@@ -1,5 +1,10 @@
 {
-  "image": "",
   "handle": "kebabsec",
-  "members": ["okkothejawa", "FlameHorizon"]
+  "members": ["okkothejawa", "FlameHorizon"],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xB2fbcF2Fb1Eb86464d60F04bEd4065404cD67e18"
+    }
+  ]
 }
