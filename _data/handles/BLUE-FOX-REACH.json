@@ -1,11 +1,13 @@
 {
   "handle": "BLUE-FOX-REACH",
+  "moralisId": null,
+  "image": null,
+  "showOnLeaderboard": true,
   "members": [
     "Mis4nthr0pic",
     "escrow",
     "frenchkebab",
     "the_endless_sea",
-    "Abims",
     "lil_eth",
     "secoalba"
   ],
