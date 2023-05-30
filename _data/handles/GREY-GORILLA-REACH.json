@@ -1,5 +1,8 @@
 {
   "handle": "GREY-GORILLA-REACH",
+  "moralisId": null,
+  "image": null,
+  "showOnLeaderboard": true,
   "members": [
     "Mis4nthr0pic",
     "escrow",
@@ -7,7 +10,6 @@
     "Gaonuk",
     "0xffchain",
     "0xLegrev",
-    "cryptofrankey",
     "Vazi"
   ],
   "paymentAddresses": [
