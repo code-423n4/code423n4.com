@@ -1,0 +1,18 @@
+{
+  "handle": "WATER-PHOENIX",
+  "members": [
+    "escrow",
+    "Dewaxindo",
+    "aslanbek",
+    "Coffee_Weed",
+    "0xElvisC0stell0",
+    "Silvermist",
+    "0xTaylor"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x798BC384E20d5D16987A07487FC695985F1742c5"
+    }
+  ]
+}
