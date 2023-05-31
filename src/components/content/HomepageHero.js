@@ -61,14 +61,14 @@ const HeroIndex = ({ viewMode }) => {
             </div>
             <div className="hero__right-side type__copy">
               <div className="hero__statistic">
-                <p className="type__headline__l hero__statistic-number">803</p>
+                <p className="type__headline__l hero__statistic-number">865</p>
                 <p className="hero__statistic-unit hero__statistic-unit--short">
                   unique <br /> high-severity vulns
                 </p>
               </div>
               <div className="hero__statistic">
                 <p className="type__headline__l hero__statistic-number">
-                  17,340
+                  18,660
                 </p>
                 <p className="hero__statistic-unit hero__statistic-unit--short">
                   unique findings
@@ -76,14 +76,14 @@ const HeroIndex = ({ viewMode }) => {
               </div>
               <div className="hero__statistic">
                 <p className="type__headline__l hero__statistic-number">
-                  3,215+
+                  4,830+
                 </p>
                 <p className="hero__statistic-unit hero__statistic-unit--short">
                   registered wardens
                 </p>
               </div>
               <div className="hero__statistic">
-                <p className="type__headline__l hero__statistic-number">217</p>
+                <p className="type__headline__l hero__statistic-number">225</p>
                 <p className="hero__statistic-unit hero__statistic-unit--short">
                   audits completed
                 </p>
@@ -134,7 +134,7 @@ const HeroIndex = ({ viewMode }) => {
               </p>
             </div>
             <div className="hero__statistic">
-              <p className="type__headline__l hero__statistic-number">$9,860</p>
+              <p className="type__headline__l hero__statistic-number">$8,340</p>
               <p className="hero__statistic-unit">
                 2023 avg payout per competition for top 3
               </p>
