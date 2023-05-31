@@ -1,5 +1,8 @@
 {
   "handle": "RUBY-BEAR-REACH",
+  "moralisId": "",
+  "image": "",
+  "showOnLeaderboard": true,
   "members": [
     "Angry_Mustache_Man",
     "zuhaibmohd",
@@ -10,7 +13,6 @@
     "queueunit",
     "0xtotem",
     "CHALK",
-    "pxng0lin",
     "Tim"
   ],
   "paymentAddresses": [
