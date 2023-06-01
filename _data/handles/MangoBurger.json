@@ -1,8 +1,13 @@
 {
   "handle": "MangoBurger",
-  "members": ["CaptainMango"],
   "link": "code4rena.com",
+  "moralisId": null,
   "image": "./avatars/MangoBurger.jpeg",
+  "showOnLeaderboard": true,
+  "imageUrl": "https://raw.githubusercontent.com/code-423n4/code423n4.com/main/_data/handles/avatars/MangoBurger.jpeg",
+  "members": [
+    "CaptainMango"
+  ],
   "paymentAddresses": [
     {
       "chain": "polygon",
