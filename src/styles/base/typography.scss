@@ -15,6 +15,21 @@
   font-style: normal;
 }
 
+// Mixins
+// ------------------------------------------------
+
+@mixin word-wrap() {
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  -ms-word-break: break-all;
+  word-break: break-all;
+  word-break: break-word;
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+
 // [Tip] Only set type rules here. For all other things `body`, check `base-layout`.
 body {
   font-family: $font__default;
@@ -86,7 +101,8 @@ h6,
 .type__subline__m,
 .type__subline__s,
 .type__subline__xs,
-.type__subline__xxs {
+.type__subline__xxs,
+.type__subline__xxxs {
   color: $color__subline;
   font-weight: 400;
   margin-bottom: 0.4em;
@@ -142,7 +158,7 @@ h1 {
 .type__headline__l,
 h2 {
   font-size: $headline-font-size__m;
-  line-height: 115%;
+  line-height: 130%;
 
   @include breakpoint("m") {
     font-size: $headline-font-size__l;
@@ -179,6 +195,9 @@ h5 {
 h6 {
   font-size: $headline-font-size__xxs;
 }
+.type__headline__xxxs {
+  font-size: $headline-font-size__xxxs;
+}
 
 // Special Headlines
 // ------------------------------------------------
@@ -193,13 +212,16 @@ h6 {
   }
 }
 .type__subline__page-title {
-  font-size: $headline-font-size__xxs;
-  line-height: 115%;
   margin-bottom: $spacing__l;
-  margin-top: -$spacing__m; // TODO: don't use negative margin
+  margin-top: -$spacing__s; // TODO: don't use negative margin
+  font-size: $headline-font-size__xxxs;
+  font-weight: 500;
+  line-height: 135%;
+
   @include breakpoint("m") {
     font-size: $headline-font-size__xxs;
     margin-bottom: $spacing__xl;
+    line-height: 115%;
   }
 }
 
@@ -207,6 +229,7 @@ h6 {
 // ------------------------------------------------
 
 .type__subline__s {
+  margin-bottom: 0.3em;
   font-size: $headline-font-size__xxs;
   font-family: $font__default;
   font-weight: 500;
@@ -214,11 +237,11 @@ h6 {
   line-height: 120%;
   text-decoration: none;
   text-transform: none;
-  margin-bottom: 0.3em;
   @include breakpoint("m") {
     font-size: $headline-font-size__xxs;
   }
 }
+
 .type__subline__m {
   font-size: $headline-font-size__xxs;
   font-family: $font__default;
@@ -249,17 +272,34 @@ h6 {
     font-size: $headline-font-size__xxl;
   }
 }
-//TODO this is currently unused
-.type__subline__hero {
-  font-size: $headline-font-size__m;
-  font-family: $font__default;
-  font-weight: 500;
-  font-style: normal;
-  line-height: 120%;
-  text-decoration: none;
-  text-transform: none;
+
+.type__headline__landing-hero {
+  margin-top: $spacing__l;
+  margin-bottom: 0.3em;
+  text-align: center;
+  font-size: $headline-font-size__l;
+
+  @include breakpoint("xxs") {
+    font-size: $headline-font-size__ll;
+  }
+
   @include breakpoint("m") {
-    font-size: $headline-font-size__l;
+    margin-top: $spacing__xxl;
+    font-size: $headline-font-size__xxl;
+  }
+}
+
+.type__subline__landing-hero {
+  max-width: 500px;
+  margin: 0 auto;
+  text-align: center;
+  line-height: 1.5;
+  font-weight: 400;
+  font-size: 1.1rem;
+
+  @include breakpoint("m") {
+    max-width: 700px;
+    font-size: 1.3rem;
   }
 }
 
@@ -422,10 +462,28 @@ h6 {
 // Adding a class of `type__text` to a parent element will apply these styles.
 
 .type__text {
-  font-size: 1rem;
-  font-family: $font__default;
-  font-weight: 400;
-  line-height: 130%;
+  @mixin type__text {
+    font-size: $font-size__text;
+    font-family: $font__default;
+    font-weight: 400;
+    line-height: 130%;
+    @include word-wrap;
+  }
+
+  @include type__text;
+
+  &--lists {
+    @include type__text;
+
+    ul {
+      margin-left: 1.5em;
+    }
+
+    li {
+      margin-bottom: 0.3em;
+      list-style-type: disc;
+    }
+  }
 }
 .type__text-bold,
 .type__text strong {
