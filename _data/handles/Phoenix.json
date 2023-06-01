@@ -1,14 +1,5 @@
 {
   "handle": "Phoenix",
-  "members": [
-    "Janio",
-    "luciana"
-  ],
-  "paymentAddresses": [
-    {
-      "chain": "polygon",
-      "address": "0xfd89e7442c341919f055fa917134769cac3af28b"
-    }
-  ],
-  "image": "./avatars/Phoenix.jpeg"
+  "link": "",
+  "moralisId": "Yum7Vq80MLeUwunOA39BjkBe"
 }
