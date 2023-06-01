@@ -1,5 +1,8 @@
 {
   "handle": "WATER-PHOENIX",
+  "moralisId": null,
+  "image": null,
+  "showOnLeaderboard": true,
   "members": [
     "escrow",
     "Dewaxindo",
@@ -7,7 +10,9 @@
     "Coffee_Weed",
     "0xElvisC0stell0",
     "Silvermist",
-    "0xTaylor"
+    "0xTaylor",
+    "nullity",
+    "yellowBirdy"
   ],
   "paymentAddresses": [
     {
