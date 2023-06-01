@@ -1,12 +1,14 @@
 {
   "handle": "MangoBurger",
-  "members": ["CaptainMango"],
-  "link": "code4rena.com",
-  "image": "./avatars/MangoBurger.jpeg",
+  "members": [
+    "CaptainMango"
+  ],
   "paymentAddresses": [
     {
       "chain": "polygon",
       "address": "0x0000000000000000000000000000000000000000"
     }
-  ]
+  ],
+  "link": "code4rena.com",
+  "image": "./avatars/MangoBurger.jpeg"
 }
