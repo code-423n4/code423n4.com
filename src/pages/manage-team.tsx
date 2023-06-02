@@ -17,9 +17,6 @@ import ProtectedPage from "../components/ProtectedPage";
 import TeamForm, { TeamState } from "../components/TeamForm";
 import { WardenFieldOption } from "../components/reporter/widgets/WardenField";
 
-// styles
-import * as styles from "../styles/Main.module.scss";
-
 export default function TeamManagement({ data, location }) {
   const { currentUser } = useUser();
 
@@ -30,7 +27,6 @@ export default function TeamManagement({ data, location }) {
   >();
 
   useEffect(() => {
-    // @todo: show error message when user tries to manage a team they are not on
     (async () => {
       if (location.state && location.state.team) {
         const team: TeamInfo = location.state.team;
@@ -99,7 +95,7 @@ export default function TeamManagement({ data, location }) {
     data.handles.edges.map((h) => h.node.handle)
   );
 
-  let wardens: { value: string; image: unknown }[] = [];
+  let wardens: WardenFieldOption[] = [];
   data.handles.edges.forEach(({ node }) => {
     if (!node.members) {
       wardens.push({ value: node.handle, image: node.image });
@@ -173,10 +169,10 @@ export default function TeamManagement({ data, location }) {
       pageTitle="Manage Team | Code 423n4"
       message="You need to be a registered warden, currently connected via wallet to manage a team."
     >
-      <div className="wrapper-main">
+      <div className="limited-width">
         {unauthorized ? (
           <div className="centered-text">
-            <div className={styles.Form__Form}>
+            <div className="form">
               <h1>Unauthorized</h1>
               <p>You are not authorized to view or edit this team.</p>
             </div>

@@ -1,6 +1,6 @@
-import React, { useState, useEffect }  from 'react'
+import React, { useState, useEffect } from "react";
 
-const SponsorLink = ({ sponsor }) => {
+const SponsorLink = ({ sponsor, className, size }) => {
   // This is a work-around for an issue with React's rehydration function, which
   // does not account for differences in attributes
   // This approach was suggested here: https://github.com/gatsbyjs/gatsby/discussions/17914
@@ -9,33 +9,34 @@ const SponsorLink = ({ sponsor }) => {
 
   useEffect(() => setIsClient(true), []);
 
+  // TODO: Could this use the react avatar system instead? Would that be better?
   const getSponsorImg = () => {
     if (!sponsor) {
       return;
     }
     if (sponsor.link) {
       return (
-        <a href={sponsor.link}>
-          <img
-            src={sponsor.image.childImageSharp.resize.src}
-            alt={sponsor.name}
-          />
-        </a>
+        <div className="project-link__placeholder-logo">
+          <a href={sponsor.link}>
+            <img
+              src={sponsor.image.childImageSharp.resize.src}
+              alt={sponsor.name}
+              {...(size ? { width: size, height: size } : {})}
+            />
+          </a>
+        </div>
       );
     }
     return (
-      <img
-        src={sponsor.image.childImageSharp.resize.src}
-        alt={sponsor.name}
-      />
+      <img src={sponsor.image.childImageSharp.resize.src} alt={sponsor.name} />
     );
-  }
+  };
 
   return (
-    <div className="wrapper-sponsor">
+    <div className={"project-link " + (className ? className : "")}>
       {isClient ? getSponsorImg() : <div className="placeholder-img"></div>}
     </div>
   );
-}
+};
 
 export default SponsorLink;

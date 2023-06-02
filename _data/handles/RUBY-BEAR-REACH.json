@@ -1,0 +1,28 @@
+{
+  "handle": "RUBY-BEAR-REACH",
+  "moralisId": "",
+  "image": "",
+  "showOnLeaderboard": true,
+  "members": [
+    "Angry_Mustache_Man",
+    "zuhaibmohd",
+    "Bloqarl",
+    "sayan",
+    "Mis4nthr0pic",
+    "escrow",
+    "queueunit",
+    "0xtotem",
+    "CHALK",
+    "Tim"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x798BC384E20d5D16987A07487FC695985F1742c5"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x798BC384E20d5D16987A07487FC695985F1742c5"
+    }
+  ]
+}

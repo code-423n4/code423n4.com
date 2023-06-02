@@ -1,0 +1,51 @@
+@import "../../variables";
+
+// --------------------------------------------------
+// Login Page
+// --------------------------------------------------
+
+// CSS rule order
+// --------------------
+
+// 1. Variables
+// 2. Box model properties
+// 3. Display and position
+// 4. Background
+// 5. Border
+// 6. Box shadow
+// 7. Text
+// 8. Transforms
+// 9. Other
+
+.login__display-as-buttons {
+  padding: $spacing__l 0 $spacing__xl;
+  margin: 0 auto;
+  width: 100%;
+  max-width: max-content;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  > * {
+    margin-bottom: $spacing__s;
+  }
+}
+
+.login__button {
+  margin-right: 0;
+  img {
+    // TODO: Make these buttons use the button component; finish button component to include icons
+    margin-left: -$spacing__s;
+  }
+}
+
+.login__not-registered {
+  margin-top: $spacing__l;
+
+  p {
+    margin-bottom: $spacing__s;
+  }
+
+  .login__button {
+    justify-content: center;
+  }
+}
