@@ -1,12 +1,13 @@
 {
   "handle": "MoneyPrinter_OriginStory",
+  "moralisId": "",
+  "image": "",
+  "showOnLeaderboard": true,
   "members": [
     "BlockChomper",
     "reentrant",
     "ubermensch",
-    "sayan",
-    "dnkolegov",
-    "Angry_Mustache_Man"
+    "dnkolegov"
   ],
   "paymentAddresses": [
     {
@@ -17,6 +18,5 @@
       "chain": "ethereum",
       "address": "0x72dDe2A2969a513dFE803d87ca35454BfA119E32"
     }
-  ],
-  "image": "./avatars/MoneyPrinter_OriginStory.jpeg"
+  ]
 }
