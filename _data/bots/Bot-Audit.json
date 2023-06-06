@@ -1,0 +1,12 @@
+{
+  "handle": "Bot-Audit",
+  "crew": [
+    "bigtone"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x41ed07bAc1EBa12A60bD77dA0562B63f9FaF0CAe"
+    }
+  ]
+}
