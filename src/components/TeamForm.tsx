@@ -177,7 +177,6 @@ export default function TeamForm({
 
   const submit = useCallback(async (): Promise<void> => {
     if (!currentUser.isLoggedIn || !user || !isInitialized) {
-      console.log(!currentUser.isLoggedIn, !user, !isInitialized);
       navigate("/");
       return;
     }
@@ -341,7 +340,7 @@ export default function TeamForm({
             type="file"
             id="avatar"
             name="avatar"
-            accept=".png,.jpg,.jpeg,.webp"
+            accept=".png,.jpg,.jpeg"
             // @ts-ignore // @todo: solve this typescript error
             ref={avatarInputRef}
             onChange={handleAvatarChange}

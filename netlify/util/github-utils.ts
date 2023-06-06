@@ -2,7 +2,11 @@ import { Octokit } from "@octokit/rest";
 import jszip from "jszip";
 
 import { Contest } from "../../types/contest";
-import { Finding, OctokitIssuePaginationResponse } from "../../types/finding";
+import {
+  Finding,
+  MitigationStatus,
+  OctokitIssuePaginationResponse,
+} from "../../types/finding";
 import {
   ContestFindingsRepoName,
   IssueNumber,
@@ -208,6 +212,7 @@ async function getWardenFindingsForContest(
     "edited-by-warden",
     "withdrawn by warden",
     "mitigation-confirmed",
+    "unmitigated",
   ];
 
   return await Promise.all(
@@ -246,6 +251,14 @@ async function getWardenFindingsForContest(
         const isMitigated = !!finding.labels.find((label) => {
           return label.name === "mitigation-confirmed";
         });
+        const isUnmitigated = !!finding.labels.find((label) => {
+          return label.name === "unmitigated";
+        });
+        const mitigationStatus = isMitigated
+          ? MitigationStatus.MitigationConfirmed
+          : isUnmitigated
+          ? MitigationStatus.Unmitigated
+          : MitigationStatus.New;
 
         const mitigationOfLabel = finding.labels.find((label) => {
           return label.name.startsWith("MR-");
@@ -264,7 +277,7 @@ async function getWardenFindingsForContest(
           ...finding,
           labels,
           body,
-          isMitigated,
+          mitigationStatus,
           mitigationOf,
         };
       })
