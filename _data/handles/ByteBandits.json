@@ -1,0 +1,14 @@
+{
+  "handle": "ByteBandits",
+  "members": [
+    "Cryptor",
+    "sakshamguruji"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xaB740f9e4d5dBAB1f1eac55e708C5887B4Ac6F21"
+    }
+  ],
+  "image": "./avatars/ByteBandits.png"
+}
