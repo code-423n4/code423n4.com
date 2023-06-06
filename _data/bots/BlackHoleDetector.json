@@ -1,0 +1,16 @@
+{
+  "handle": "BlackHoleDetector",
+  "crew": [
+    "oualidpro"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x726768160025d11D07613c394E3cD1ffC572c6e8"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x84eeaCeb416630c16B8c3267bF894D0852B2F9f3"
+    }
+  ]
+}
