@@ -1,0 +1,13 @@
+{
+  "handle": "baudit",
+  "crew": [
+    "codeslide"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xA1dC84D392446c264BddB994c2506FAAb06Cd97F"
+    }
+  ],
+  "image": "./avatars/baudit.png"
+}
