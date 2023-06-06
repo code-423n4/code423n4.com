@@ -1,0 +1,17 @@
+{
+  "handle": "Panecinator",
+  "crew": [
+    "0xpanicError"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x2B626fCDD6b0756c90553D5b2D1E55d9709E9Feb"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x2B626fCDD6b0756c90553D5b2D1E55d9709E9Feb"
+    }
+  ],
+  "image": "./avatars/Panecinator.jpeg"
+}
