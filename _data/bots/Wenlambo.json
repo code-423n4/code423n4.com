@@ -1,0 +1,17 @@
+{
+  "handle": "Wenlambo",
+  "crew": [
+    "Franfran"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xdAaA1Ba6839a7F04061dA8805De5800B152Def2F"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0xdAaA1Ba6839a7F04061dA8805De5800B152Def2F"
+    }
+  ],
+  "image": "./avatars/Wenlambo.jpeg"
+}
