@@ -1,14 +1,17 @@
 {
   "handle": "ByteBandits",
+  "moralisId": null,
+  "image": "8Dg26amoXxb",
+  "showOnLeaderboard": true,
   "members": [
     "Cryptor",
-    "sakshamguruji"
+    "sakshamguruji",
+    "berlin-101"
   ],
   "paymentAddresses": [
     {
       "chain": "polygon",
-      "address": "0xaB740f9e4d5dBAB1f1eac55e708C5887B4Ac6F21"
+      "address": "0x0b1249742EEE10349566b02f926D42C33694B082"
     }
-  ],
-  "image": "./avatars/ByteBandits.png"
+  ]
 }
