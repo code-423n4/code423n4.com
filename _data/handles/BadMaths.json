@@ -1,0 +1,22 @@
+{
+  "handle": "BadMaths",
+  "link": "https://twitter.com/nicobevi_eth",
+  "moralisId": null,
+  "image": "./avatars/BadMaths.png",
+  "showOnLeaderboard": true,
+  "members": [
+    "Deivitto",
+    "nicobevi",
+    "0x4non"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xe7292962e48c18e04bd26ab2acca00ef794e8171"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0xa0dF0E58e5a0D7c61D3eF0a140cCe006Cd1B12E6"
+    }
+  ]
+}

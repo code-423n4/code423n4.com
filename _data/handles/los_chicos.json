@@ -1,0 +1,19 @@
+{
+  "handle": "los_chicos",
+  "members": [
+    "Saintcode_",
+    "0xadrii"
+  ],
+  "link": "https://twitter.com/vn_martinez_",
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x1c8cA94eC89DA62C0a069767b1fc98B72f9017C4"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x1c8cA94eC89DA62C0a069767b1fc98B72f9017C4"
+    }
+  ],
+  "image": "./avatars/los_chicos.jpeg"
+}

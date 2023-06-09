@@ -1,0 +1,23 @@
+{
+  "handle": "WATER-PHOENIX",
+  "moralisId": "",
+  "image": "",
+  "showOnLeaderboard": true,
+  "members": [
+    "escrow",
+    "Dewaxindo",
+    "aslanbek",
+    "Coffee_Weed",
+    "0xElvisC0stell0",
+    "Silvermist",
+    "0xTaylor",
+    "nullity",
+    "yellowBirdy"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x798BC384E20d5D16987A07487FC695985F1742c5"
+    }
+  ]
+}
