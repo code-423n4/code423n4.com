@@ -1,16 +1,23 @@
 import { Handler } from "@netlify/functions";
 import { Response } from "@netlify/functions/src/function/response";
 import { Event } from "@netlify/functions/src/function/event";
-import { Octokit } from "@octokit/core";
+import { Octokit } from "@octokit/rest";
 import { createOrUpdateTextFile } from "@octokit/plugin-create-or-update-text-file";
 
 // types
+import {
+  ContestFindingsRepoName,
+  IssueNumber,
+  RiskLabelName,
+  Username,
+  WalletAddress,
+} from "../../types/shared";
 import { Contest } from "../../types/contest";
 import {
-  Finding,
   FindingDeleteRequest,
   FindingEditRequest,
-  FindingsResponse,
+  MitigationStatus,
+  WardenFindingsForContest,
 } from "../../types/finding";
 import { TeamData } from "../../types/user";
 
@@ -22,53 +29,46 @@ import {
   isContestActive,
 } from "../util/contest-utils";
 import {
+  getAllFindings,
   getAvailableFindings,
   getRepoName,
-  wardenFindingsForContest,
+  getWardenFindingsForContest,
 } from "../util/github-utils";
 import {
   getUserTeams,
   updateTeamAddresses,
   sendConfirmationEmail,
-  getTeamEmails,
+  getGroupEmails,
 } from "../util/user-utils";
 
 // config
 import { apiKey, domain } from "../_config";
 
 async function getFinding(
-  username: string,
-  contest: Contest,
-  issueId: number
+  username: Username,
+  repoName: ContestFindingsRepoName,
+  issueNumber: IssueNumber
 ): Promise<Response> {
-  const client = new Octokit({ auth: process.env.GITHUB_TOKEN });
+  const client = new Octokit({ auth: process.env.GITHUB_TOKEN_FETCH });
 
-  const submission_files = (
-    await getAvailableFindings(client, username, contest)
+  const allFindings = await getAllFindings(
+    client,
+    repoName,
+    process.env.GITHUB_CONTEST_REPO_OWNER!
+  );
+
+  // todo: don't rely on full listing; just fetch the individual issue
+  let finding;
+  const findingsByHandle = (
+    await getWardenFindingsForContest(client, allFindings, repoName, username)
   ).filter((item) => {
-    if (item.issueNumber === issueId) {
+    if (item.issueNumber === issueNumber) {
       return item;
     }
   });
 
-  // todo: don't rely on full listing
-  let finding;
-  if (submission_files.length === 1) {
-    const findings = (
-      await wardenFindingsForContest(
-        client,
-        submission_files[0].handle,
-        contest
-      )
-    ).filter((item) => {
-      if (item.issueNumber === issueId) {
-        return item;
-      }
-    });
-
-    if (findings.length === 1) {
-      finding = findings[0];
-    }
+  if (findingsByHandle.length === 1) {
+    finding = findingsByHandle[0];
   }
 
   if (finding) {
@@ -91,51 +91,77 @@ async function getFinding(
 }
 
 async function getFindings(
-  username: string,
-  contest: Contest,
+  username: Username,
+  repoName: ContestFindingsRepoName,
   includeTeams: boolean = true
 ): Promise<Response> {
-  const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
+  const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN_FETCH });
 
-  const wardenFindings: Finding[] = await wardenFindingsForContest(
-    octokit,
-    username,
-    contest
-  );
-
-  const res: FindingsResponse = {
-    user: wardenFindings,
+  const wardenFindingsForContest: WardenFindingsForContest = {
+    user: [],
     teams: {},
   };
 
-  if (includeTeams) {
-    const teamHandles = await getUserTeams(username);
+  const allFindings = await getAllFindings(
+    octokit,
+    repoName,
+    process.env.GITHUB_CONTEST_REPO_OWNER!
+  );
 
-    for (const teamHandle of teamHandles) {
-      const teamFindings: Finding[] = await wardenFindingsForContest(
-        octokit,
-        teamHandle,
-        contest
+  const wardenAndTeamFindingRequests: Promise<void | void[]>[] = [];
+  if (includeTeams) {
+    const teamNames = await getUserTeams(username);
+    for (const team of teamNames) {
+      wardenAndTeamFindingRequests.push(
+        getWardenFindingsForContest(octokit, allFindings, repoName, team).then(
+          (teamFindings) => {
+            wardenFindingsForContest.teams[team] = teamFindings;
+          }
+        )
       );
-      res.teams[teamHandle] = teamFindings;
     }
   }
 
-  return {
-    statusCode: 200,
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(res),
-  };
+  wardenAndTeamFindingRequests.push(
+    getWardenFindingsForContest(octokit, allFindings, repoName, username).then(
+      (wardenFindings) => {
+        wardenFindingsForContest.user = wardenFindings;
+      }
+    )
+  );
+
+  try {
+    await Promise.all(wardenAndTeamFindingRequests);
+    return {
+      statusCode: 200,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(wardenFindingsForContest),
+    };
+  } catch (error) {
+    return {
+      statusCode: error.status || 500,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        error: error.message || "Failed to fetch findings",
+      }),
+    };
+  }
 }
 
 async function handleAttributionChange(
-  client,
-  repoName,
-  issueNumber,
-  username,
-  attributedTo: { newValue: string; oldValue: string; address?: string }
+  client: Octokit & { createOrUpdateTextFile },
+  repoName: ContestFindingsRepoName,
+  issueNumber: IssueNumber,
+  username: Username,
+  attributedTo: {
+    newValue: Username;
+    oldValue: Username;
+    address?: WalletAddress;
+  }
 ) {
   if (attributedTo.newValue !== username) {
     const team: TeamData = await checkTeamAuth(attributedTo.newValue, username);
@@ -203,30 +229,57 @@ async function handleAttributionChange(
 }
 
 async function editFinding(
-  username: string,
+  username: Username,
   contest: Contest,
-  issueNumber: number,
+  issueNumber: IssueNumber,
   data: FindingEditRequest
 ): Promise<void> {
   const CustOcto = Octokit.plugin(createOrUpdateTextFile);
   const client = new CustOcto({ auth: process.env.GITHUB_TOKEN });
+  if (data.mitigationOf?.oldValue !== data.mitigationOf?.newValue) {
+    throw {
+      message: `You cannot change the report id ${data.mitigationOf?.oldValue} for this mitigation issue.`,
+    };
+  }
 
+  //is user marked issue as mitigation confirmed but then changed their minds remove the mitigation confirmed label and add new risk label and body
+  //mitigation confirmed and no risk label exists
+  let oldRiskCode = "";
+  let newRiskCode = "";
+  if (!data.mitigationOf) {
+    oldRiskCode = getRiskCodeFromGithubLabel(data.risk.oldValue);
+    newRiskCode = getRiskCodeFromGithubLabel(data.risk.newValue);
+  } else {
+    oldRiskCode = data.risk.oldValue
+      ? getRiskCodeFromGithubLabel(data.risk.oldValue)
+      : "";
+    newRiskCode = data.risk.newValue
+      ? getRiskCodeFromGithubLabel(data.risk.newValue)
+      : "";
+  }
   // don't allow users to change risk to or from QA or gas
-  const oldRiskCode = getRiskCodeFromGithubLabel(data.risk.oldValue);
-  const newRiskCode = getRiskCodeFromGithubLabel(data.risk.newValue);
+
   const isQaOrGasSubmission = Boolean(
     newRiskCode === "Q" ||
       newRiskCode === "G" ||
       oldRiskCode === "Q" ||
       oldRiskCode === "G"
   );
+
+  // Only handle risk changes between Med and High, unless this is an MR submission
   if (oldRiskCode !== newRiskCode) {
-    if (oldRiskCode === "Q" || oldRiskCode === "G") {
+    if (
+      (oldRiskCode === "Q" || oldRiskCode === "G") &&
+      !data.mitigationStatus
+    ) {
       throw {
         message: `You cannot change the risk level for ${data.risk.oldValue} reports.`,
       };
     }
-    if (newRiskCode === "Q" || newRiskCode === "G") {
+    if (
+      (newRiskCode === "Q" || newRiskCode === "G") &&
+      !data.mitigationStatus
+    ) {
       throw {
         message: `You cannot convert risk from ${data.risk.oldValue} to ${data.risk.newValue}. Try withdrawing your finding and then adding it to your ${data.risk.newValue} report.`,
       };
@@ -257,7 +310,7 @@ async function editFinding(
       data.attributedTo.newValue,
       username
     );
-    teamEmails = await getTeamEmails(team);
+    teamEmails = await getGroupEmails(team.members);
   }
 
   const owner = process.env.GITHUB_REPO_OWNER!;
@@ -266,7 +319,7 @@ async function editFinding(
   const available_findings = await getAvailableFindings(
     client,
     username,
-    contest
+    repoName
   );
 
   const canAccess =
@@ -301,26 +354,31 @@ async function editFinding(
       emailBody;
     edited = true;
   }
-
-  // Only handle risk changes between Med and High
-  if (!isQaOrGasSubmission && data.risk.oldValue !== data.risk.newValue) {
-    try {
-      await client.request(
-        "DELETE /repos/{owner}/{repo}/issues/{issue_number}/labels/{name}",
-        {
-          owner: process.env.GITHUB_REPO_OWNER!,
-          repo: repoName,
-          issue_number: issueNumber,
-          name: data.risk.oldValue,
-        }
-      );
-    } catch (error) {
-      throw {
-        status: error.status || 500,
-        message: `Error removing old label: [${data.risk.oldValue}] - ${
-          error.message || "unknown"
-        }`,
-      };
+  // Only handle risk changes between Med and High, unless this is an MR submission
+  if (
+    (!isQaOrGasSubmission || data.mitigationStatus) &&
+    data.risk.oldValue !== data.risk.newValue
+  ) {
+    const labelNameToBeRemoved = data.risk.oldValue;
+    if (labelNameToBeRemoved) {
+      try {
+        await client.request(
+          "DELETE /repos/{owner}/{repo}/issues/{issue_number}/labels/{name}",
+          {
+            owner: process.env.GITHUB_REPO_OWNER!,
+            repo: repoName,
+            issue_number: issueNumber,
+            name: labelNameToBeRemoved,
+          }
+        );
+      } catch (error) {
+        throw {
+          status: error.status || 500,
+          message: `Error removing old label: [${labelNameToBeRemoved}] - ${
+            error.message || "unknown"
+          }`,
+        };
+      }
     }
 
     try {
@@ -346,17 +404,80 @@ async function editFinding(
       `Risk changed from ${data.risk.oldValue} to ${data.risk.newValue}\n\n` +
       emailBody;
     edited = true;
+  } else if (
+    data.mitigationStatus?.oldValue !== data.mitigationStatus?.newValue
+  ) {
+    let labelNameToBeRemoved = "";
+    if (
+      data.mitigationStatus?.oldValue === MitigationStatus.MitigationConfirmed
+    ) {
+      labelNameToBeRemoved = "mitigation-confirmed";
+    } else if (
+      data.mitigationStatus?.oldValue === MitigationStatus.Unmitigated
+    ) {
+      labelNameToBeRemoved = "unmitigated";
+    }
+    if (labelNameToBeRemoved) {
+      try {
+        await client.request(
+          "DELETE /repos/{owner}/{repo}/issues/{issue_number}/labels/{name}",
+          {
+            owner: process.env.GITHUB_REPO_OWNER!,
+            repo: repoName,
+            issue_number: issueNumber,
+            name: labelNameToBeRemoved,
+          }
+        );
+      } catch (error) {
+        throw {
+          status: error.status || 500,
+          message: `Error removing old label: [${labelNameToBeRemoved}] - ${
+            error.message || "unknown"
+          }`,
+        };
+      }
+    }
+
+    let labelNameToAdd = "";
+    if (
+      data.mitigationStatus?.newValue === MitigationStatus.MitigationConfirmed
+    ) {
+      labelNameToAdd = "mitigation-confirmed";
+    } else if (
+      data.mitigationStatus?.newValue === MitigationStatus.Unmitigated
+    ) {
+      labelNameToAdd = "unmitigated";
+    }
+
+    if (labelNameToAdd) {
+      try {
+        await client.request(
+          "POST /repos/{owner}/{repo}/issues/{issue_number}/labels",
+          {
+            owner: process.env.GITHUB_REPO_OWNER!,
+            repo: repoName,
+            issue_number: issueNumber,
+            labels: [labelNameToAdd],
+          }
+        );
+      } catch (error) {
+        throw {
+          status: error.status || 500,
+          message: `Error adding new mitigation status label: [${labelNameToAdd}] - ${
+            error.message || "unknown"
+          }`,
+        };
+      }
+    }
   }
 
   // Simple field handling {title, body}
   const simpleFields: { title?: string; body?: string } = {};
-
   if (data.title) {
     simpleFields.title = data.title;
     emailBody = `Title changed: ${data.title}\n\n` + emailBody;
     edited = true;
   }
-
   if (data.body) {
     if (isQaOrGasSubmission) {
       await client.createOrUpdateTextFile({
@@ -416,11 +537,11 @@ async function editFinding(
 }
 
 async function deleteFinding(
-  username: string,
+  username: Username,
   contest: Contest,
-  issueNumber: number,
-  risk: string,
-  attributedTo: string,
+  issueNumber: IssueNumber,
+  risk: RiskLabelName,
+  attributedTo: Username,
   emailAddresses: string[]
 ) {
   const CustOcto = Octokit.plugin(createOrUpdateTextFile);
@@ -525,10 +646,12 @@ const handler: Handler = async (event: Event): Promise<Response> => {
         // includeTeams = req.queryStringParameters?.includeTeams)
         // }
 
+        const repoName = getRepoName(contest);
+
         if (issueNumber !== undefined) {
-          return await getFinding(username, contest, issueNumber);
+          return await getFinding(username, repoName, issueNumber);
         } else {
-          return await getFindings(username, contest, includeTeams);
+          return await getFindings(username, repoName, includeTeams);
         }
       case "POST":
         const data: FindingEditRequest = JSON.parse(event.body!);
@@ -566,13 +689,13 @@ const handler: Handler = async (event: Event): Promise<Response> => {
 
         if (attributedTo !== username) {
           const team: TeamData = await checkTeamAuth(attributedTo, username);
-          teamEmails = await getTeamEmails(team);
+          teamEmails = await getGroupEmails(team.members);
         }
         await deleteFinding(
           username,
           contest,
           issueNumber,
-          risk,
+          risk as RiskLabelName,
           attributedTo,
           [...emailAddresses, ...teamEmails]
         );

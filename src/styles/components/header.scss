@@ -1,0 +1,321 @@
+@import "../variables";
+
+// --------------------------------------------------
+// Header Component
+// --------------------------------------------------
+
+// CSS rule order
+// --------------------
+
+// 1. Variables
+// 2. Box model properties
+// 3. Display and position
+// 4. Background
+// 5. Border
+// 6. Box shadow
+// 7. Text
+// 8. Transforms
+// 9. Other
+
+.header {
+  width: 100%;
+  display: flex;
+}
+
+// Nav
+// --------------------------------------------------
+
+.header__nav {
+  width: 100%;
+  padding: $spacing__l 0 $spacing__xl 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  @include breakpoint("m") {
+    flex-wrap: nowrap;
+    justify-content: space-between;
+  }
+}
+.header__logo-and-burger {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  @include breakpoint("m") {
+    width: auto;
+  }
+}
+.header__nav-links {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: $spacing__l 0;
+
+  margin-bottom: $spacing__l;
+  border-bottom: 1px solid $color__n-60;
+
+  @include breakpoint("m") {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+  }
+
+  @include breakpoint("m") {
+    padding: 0;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    & > a {
+      padding: $spacing__s;
+      margin: 0 $spacing__s;
+    }
+  }
+  display: none;
+
+  > a {
+    width: 100%;
+    padding: $spacing__s $spacing__s $spacing__s 0;
+    color: $color__white;
+    display: block;
+    word-break: normal;
+    &:hover {
+      color: $color__blurple__text--light;
+    }
+
+    @include breakpoint("m") {
+      width: auto;
+    }
+  }
+}
+.header__nav.open {
+  .header__nav-links {
+    display: flex;
+  }
+}
+.header__nav-buttons {
+  flex-shrink: 0;
+  margin-top: $spacing__l;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  .button--primary {
+    margin-right: 0;
+  }
+
+  @include breakpoint("m") {
+    width: auto;
+    margin-top: 0;
+  }
+}
+
+// Hamburger Menu
+// --------------------------------------------------
+
+@include accessible-animation {
+  .hamburger * {
+    transition: all 0.5s ease-out;
+  }
+}
+
+.hamburger {
+  display: block;
+  cursor: pointer;
+  background: none;
+  border: none;
+  justify-self: flex-end;
+}
+
+.header .header__nav.open .hamburger {
+  order: 0;
+}
+.header .header__nav.open .hamburger .top-bun {
+  opacity: 0;
+}
+.header .header__nav.open .hamburger .patty {
+  transform: rotate(45deg) translate(20%, -48%);
+}
+.header .header__nav.open .hamburger .bottom-bun {
+  transform: rotate(-45deg) translate(-48%, -20%);
+}
+
+@include breakpoint("m") {
+  .hamburger {
+    display: none;
+    height: 25px;
+  }
+}
+
+// Logo
+// --------------------------------------------------
+
+.logo {
+  max-width: 160px;
+  display: flex;
+  align-items: center; // [Tip] always set `align-items` on flex parents with images as direct children to prevent image stretching. We're using an svg so it's not an issue here, but it's good to know.
+}
+
+// Login
+// --------------------------------------------------
+
+// TODO: Review this and see if it can be simplified
+// It didn't get a full rewrite in the rebrand, so some of the classes may not be in use anymore
+
+.login__button-wrapper {
+  display: inline-block;
+  padding-left: $spacing__s;
+  margin-left: $spacing__s;
+}
+
+.login__button {
+  display: flex;
+  align-items: center;
+}
+
+.login__no-dropdown {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  flex-direction: column;
+  @include breakpoint("m") {
+    flex-direction: row;
+  }
+}
+
+.login__button--smaller {
+  display: flex;
+  align-items: center;
+}
+
+.login__icon {
+  margin-right: 10px;
+  height: 20px;
+}
+
+.login__link {
+  display: flex !important;
+  align-items: center;
+}
+
+.login__dividing-line {
+  margin: 40px;
+  min-width: 70%;
+  max-width: 100%;
+  height: 0;
+}
+
+.login__desktop {
+  @media (max-width: 960px) {
+    display: none;
+  }
+}
+
+.login__mobile {
+  width: 100%;
+  border-top: 1px solid $color__n-60;
+  padding-top: $spacing__l;
+
+  @media (min-width: 960px) {
+    display: none;
+  }
+}
+
+.user-dropdown {
+  display: inline-flex;
+  padding-left: 15px;
+  height: 20px;
+  align-items: center;
+  justify-content: center;
+  font-family: $font__default;
+}
+
+.user-dropdown__user-dropdown {
+  display: inline-flex;
+  position: relative;
+  height: 30px;
+  width: 30px;
+  border: none;
+  padding: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.user-dropdown__user-dropdown-list {
+  display: flex;
+  flex-direction: column;
+  border-radius: 5px;
+  width: 180px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  box-sizing: border-box;
+  text-align: left;
+  width: 100%;
+}
+
+.user-dropdown__user-info {
+  margin: 10px;
+  padding-bottom: 15px;
+  color: white;
+}
+
+.user-dropdown__avatar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.user-dropdown__mobile-menu-item {
+  color: white;
+  font-weight: 800;
+  text-transform: uppercase;
+  text-decoration: none;
+  background: transparent;
+  display: block;
+  text-align: left;
+  padding: 20px 0;
+  margin: 0;
+  border: none;
+  border-bottom: 1px solid #efefef1a;
+  width: 100%;
+}
+
+.user-dropdown__button {
+  font-size: inherit;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.user-dropdown__icon {
+  color: white;
+  margin-right: 10px;
+  height: 20px;
+  width: 20px;
+}
+// Logged in
+.user-dropdown__caret {
+  color: white;
+}
+
+.user-dropdown__avatar {
+  @include breakpoint("m") {
+    // padding: 0 $spacing__xl 0 0;
+  }
+}
+
+.user-dropdown__trigger {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  svg {
+    fill: $color__white;
+  }
+}

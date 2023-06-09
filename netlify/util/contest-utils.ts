@@ -1,16 +1,11 @@
-import csv from "csvtojson";
+import { addHours, isAfter, isBefore } from "date-fns";
 import { Contest } from "../../types/contest";
+import { getApiContestData } from "./getContestsData";
 
 async function getContest(contestId: number): Promise<Contest | undefined> {
-  const allContests = await csv().fromFile("_data/contests/contests.csv");
+  const allContests = await getApiContestData();
   let contests: Contest[] = allContests;
-  if (process.env.NODE_ENV === "development") {
-    const testContests = await csv().fromFile(
-      "_test-data/contests/contests.csv"
-    );
-    contests = contests.concat(testContests);
-  }
-  const contest = contests.find((c) => parseInt(c.contestid) == contestId);
+  const contest = contests.find((c) => c.contestid == contestId);
   return contest;
 }
 
@@ -24,6 +19,18 @@ function isContestActive(contest: Contest): boolean {
   const end = new Date(contest.end_time).getTime();
 
   return now >= start && now <= end;
+}
+
+function isBotRaceActive(contest: Contest): boolean {
+  if (!contest) {
+    return false;
+  }
+
+  const now = Date.now();
+  const start = new Date(contest.start_time);
+  const end = addHours(start, 1);
+
+  return isAfter(now, start) && isBefore(now, end);
 }
 
 // @todo: determine if this is the right place for these functions
@@ -40,7 +47,7 @@ function getRiskCodeFromGithubLabel(label: string): string {
       return code;
     }
   }
-  throw { message: "risk not found" };
+  return "";
 }
 
 function getGithubLabelFromRiskCode(code: string): string {
@@ -54,6 +61,7 @@ function getGithubLabelFromRiskCode(code: string): string {
 export {
   getContest,
   isContestActive,
+  isBotRaceActive,
   getRiskCodeFromGithubLabel,
   getGithubLabelFromRiskCode,
 };

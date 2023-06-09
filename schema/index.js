@@ -1,16 +1,16 @@
 import HandlesJson from "./HandlesJson";
+import BotsJson from "./BotsJson";
 import OrgsJson from "./OrgsJson";
 import ContestsCsv from "./ContestsCsv";
 import ContestsCsvFields from "./ContestsCsvFields";
-import FindingsCsv from "./FindingsCsv";
-import MarkdownRemark from "./MarkdownRemark";
+import ReportsJson from "./ReportsJson";
 
 const SchemaCustomization = `
 ${HandlesJson}
+${BotsJson}
 ${OrgsJson}
 ${ContestsCsv}
 ${ContestsCsvFields}
-${FindingsCsv}
-${MarkdownRemark}
+${ReportsJson}
 `;
 export default SchemaCustomization;

@@ -1,0 +1,542 @@
+@import "../variables";
+
+// File instructions
+// -----------------
+// This file contains all the type rules for the site. It is imported by
+// `base-layout.scss` and should not be imported anywhere else.
+
+@font-face {
+  font-family: "Satoshi Variable";
+  src: url("./fonts/Satoshi-Variable.woff2") format("woff2"),
+    url("./fonts/Satoshi-Variable.woff") format("woff"),
+    url("./fonts/Satoshi-Variable.ttf") format("truetype");
+  font-weight: 300 900;
+  font-display: swap;
+  font-style: normal;
+}
+
+// Mixins
+// ------------------------------------------------
+
+@mixin word-wrap() {
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  -ms-word-break: break-all;
+  word-break: break-all;
+  word-break: break-word;
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+
+// [Tip] Only set type rules here. For all other things `body`, check `base-layout`.
+body {
+  font-family: $font__default;
+  font-size: 100%; // Set by the user's stylesheet. Assumed to be 16px.
+  line-height: 150%;
+}
+
+a {
+  color: $color__blurple__text;
+  @include accessible-animation {
+    transition: color 0.2s ease-in-out;
+  }
+
+  &:hover {
+    color: $color__blurple__text--light;
+  }
+}
+
+h1 a,
+h2 a,
+h3 a,
+h4 a,
+h5 a,
+h6 a {
+  color: inherit;
+  text-decoration: none;
+
+  &:hover {
+    color: inherit;
+    text-decoration: underline;
+  }
+
+  &::after {
+    // content: " →";
+  }
+}
+
+// Headings
+// ------------------------------------------------
+
+// TODO: make this a mixin
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.type__headline__hero,
+.type__headline__xl,
+.type__headline__l,
+.type__headline__m,
+.type__headline__s,
+.type__headline__xs,
+.type__headline__xxs {
+  margin-top: 0.3em;
+  margin-bottom: 0.3em;
+  font-family: $font__default;
+  font-weight: 700;
+  color: $color__headline;
+
+  &:first-child {
+    margin-top: 0.3em;
+  }
+}
+
+.type__subline__hero,
+.type__subline__xl,
+.type__subline__l,
+.type__subline__m,
+.type__subline__s,
+.type__subline__xs,
+.type__subline__xxs,
+.type__subline__xxxs {
+  color: $color__subline;
+  font-weight: 400;
+  margin-bottom: 0.4em;
+}
+// TODO: make this a mixin
+.background--blurple,
+.background--warden,
+.background--project,
+.background--low-contrast {
+  color: $color__white;
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  .type__headline__hero,
+  .type__headline__xl,
+  .type__headline__l,
+  .type__headline__m,
+  .type__headline__s,
+  .type__headline__xs,
+  .type__headline__xxs {
+    color: $color__white;
+  }
+
+  .type__subline__hero,
+  .type__subline__xl,
+  .type__subline__l,
+  .type__subline__m,
+  .type__subline__s,
+  .type__subline__xs,
+  .type__subline__xxs {
+    color: rgba($color__white, 0.7);
+  }
+  p,
+  span {
+    color: $color__white;
+  }
+}
+
+// [Tip] When using headlines, use the `type__` classes instead of the `h` tags. Use the correct `h` tag for the position you're in, and assign it a new class.
+.type__headline__xl,
+h1 {
+  font-size: $headline-font-size__l;
+  line-height: 115%;
+
+  @include breakpoint("m") {
+    font-size: $headline-font-size__xl;
+  }
+}
+.type__headline__l,
+h2 {
+  font-size: $headline-font-size__m;
+  line-height: 130%;
+
+  @include breakpoint("m") {
+    font-size: $headline-font-size__l;
+  }
+}
+.type__headline__m,
+h3 {
+  font-size: $headline-font-size__s;
+  line-height: 120%;
+
+  @include breakpoint("m") {
+    font-size: $headline-font-size__m;
+  }
+}
+.type__headline__s,
+h4 {
+  font-size: $headline-font-size__xs;
+  line-height: 120%;
+
+  @include breakpoint("m") {
+    font-size: $headline-font-size__s;
+  }
+}
+.type__headline__xs,
+h5 {
+  font-size: $headline-font-size__xxs;
+  line-height: 120%;
+
+  @include breakpoint("m") {
+    font-size: $headline-font-size__xs;
+  }
+}
+.type__headline__xxs,
+h6 {
+  font-size: $headline-font-size__xxs;
+}
+.type__headline__xxxs {
+  font-size: $headline-font-size__xxxs;
+}
+
+// Special Headlines
+// ------------------------------------------------
+
+.type__headline__page-title {
+  font-size: $headline-font-size__l;
+  line-height: 115%;
+  margin-bottom: $spacing__l;
+  @include breakpoint("m") {
+    font-size: $headline-font-size__xl;
+    margin-bottom: $spacing__xl;
+  }
+}
+.type__subline__page-title {
+  margin-bottom: $spacing__l;
+  margin-top: -$spacing__s; // TODO: don't use negative margin
+  font-size: $headline-font-size__xxxs;
+  font-weight: 500;
+  line-height: 135%;
+
+  @include breakpoint("m") {
+    font-size: $headline-font-size__xxs;
+    margin-bottom: $spacing__xl;
+    line-height: 115%;
+  }
+}
+
+// Sublines
+// ------------------------------------------------
+
+.type__subline__s {
+  margin-bottom: 0.3em;
+  font-size: $headline-font-size__xxs;
+  font-family: $font__default;
+  font-weight: 500;
+  font-style: normal;
+  line-height: 120%;
+  text-decoration: none;
+  text-transform: none;
+  @include breakpoint("m") {
+    font-size: $headline-font-size__xxs;
+  }
+}
+
+.type__subline__m {
+  font-size: $headline-font-size__xxs;
+  font-family: $font__default;
+  font-weight: 500;
+  font-style: normal;
+  line-height: 120%;
+  text-decoration: none;
+  text-transform: none;
+  margin-bottom: 0.3em;
+  @include breakpoint("m") {
+    font-size: $headline-font-size__xxs;
+  }
+}
+
+// Heroes
+// ------------------------------------------------
+
+.type__headline__hero {
+  font-size: $headline-font-size__xl;
+  font-family: $font__default;
+  font-weight: 700;
+  font-style: normal;
+  line-height: 115%;
+  text-decoration: none;
+  text-transform: none;
+  margin-bottom: 0.3em;
+  @include breakpoint("m") {
+    font-size: $headline-font-size__xxl;
+  }
+}
+
+.type__headline__landing-hero {
+  margin-top: $spacing__l;
+  margin-bottom: 0.3em;
+  text-align: center;
+  font-size: $headline-font-size__l;
+
+  @include breakpoint("xxs") {
+    font-size: $headline-font-size__ll;
+  }
+
+  @include breakpoint("m") {
+    margin-top: $spacing__xxl;
+    font-size: $headline-font-size__xxl;
+  }
+}
+
+.type__subline__landing-hero {
+  max-width: 500px;
+  margin: 0 auto;
+  text-align: center;
+  line-height: 1.5;
+  font-weight: 400;
+  font-size: 1.1rem;
+
+  @include breakpoint("m") {
+    max-width: 700px;
+    font-size: 1.3rem;
+  }
+}
+
+// Code
+// ------------------------------------------------
+
+pre {
+  width: calc(96vw - 2 * #{$spacing__xl});
+  margin: $spacing__xl 0;
+  padding: $spacing__s $spacing__m;
+  overflow-x: auto;
+
+  background: $color__n-90 !important;
+
+  font-family: $font__code;
+  font-size: $font-size__copy__code;
+  line-height: 1.45;
+
+  border-radius: $border-radius__m;
+
+  @include breakpoint("m") {
+    width: 100%;
+  }
+
+  code {
+    background-color: $color__n-90 !important;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    height: 10px;
+    background-color: $color__blurple-70;
+  }
+
+  &::-webkit-scrollbar {
+    height: 10px;
+  }
+
+  &::-webkit-scrollbar-track {
+    border: none;
+    background-color: $color__n-90;
+  }
+}
+
+// Summary / Details
+// ------------------------------------------------
+
+summary,
+.summary {
+  display: list-item;
+
+  &::marker {
+    color: $color__n-60;
+  }
+
+  &--right-marker {
+    list-style-position: inside;
+    direction: rtl; // TODO not this (this is how I'm making the arrow show up on the right)
+    text-align: left;
+  }
+}
+
+// Type classes
+// ------------------------------------------------
+
+// Copy
+// -----------------
+// This is the default type style for the site. It is used for most of the copy.
+// Adding a class of `type__copy` to a parent element will apply these styles.
+
+.type__copy {
+  font-size: $font-size__copy;
+  font-family: $font__default;
+  font-weight: 500;
+  line-height: 150%;
+}
+.type__copy-p,
+.type__copy p {
+  margin-bottom: 1.5em;
+}
+.type__copy__bold,
+.type__copy strong {
+  font-weight: 700;
+}
+.type__copy__inline-link,
+.type__copy a {
+  font-weight: 700;
+  text-decoration: underline;
+}
+.type__copy__inline-code,
+.type__copy p code,
+.type__copy h1 code,
+.type__copy h2 code,
+.type__copy h3 code,
+.type__copy h4 code,
+.type__copy h5 code,
+.type__copy h6 code,
+.type__copy li code,
+.type__copy dt code,
+.type__copy dd code,
+.type__copy td code,
+.type__copy th code {
+  padding: 0.1em 0.3em;
+  border-radius: 0.2em;
+
+  background-color: $color__n-80;
+  color: $color__n-10;
+
+  font-family: $font__code;
+  font-style: normal;
+  font-weight: 400;
+  font-size: $font-size__copy__code;
+  line-height: inherit;
+}
+.type__copy {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  a,
+  code {
+    word-break: break-word;
+  }
+}
+.type__copy__ul,
+.type__copy ul {
+  list-style: disc;
+}
+.type__copy__ol,
+.type__copy ol {
+  list-style: decimal;
+}
+.type__copy__ol,
+.type__copy__ul,
+.type__copy ol,
+.type__copy ul {
+  margin-left: 2em;
+  margin-bottom: 1em;
+}
+.type__copy li {
+  margin-bottom: 0.5em;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin-top: 1em;
+
+  &:first-child {
+    margin-top: 0.25em;
+  }
+}
+
+// Text
+// -----------------
+// This is the type style for the product. It's slightly smaller than the copy.
+// Adding a class of `type__text` to a parent element will apply these styles.
+
+.type__text {
+  @mixin type__text {
+    font-size: $font-size__text;
+    font-family: $font__default;
+    font-weight: 400;
+    line-height: 130%;
+    @include word-wrap;
+  }
+
+  @include type__text;
+
+  &--lists {
+    @include type__text;
+
+    ul {
+      margin-left: 1.5em;
+    }
+
+    li {
+      margin-bottom: 0.3em;
+      list-style-type: disc;
+    }
+  }
+}
+.type__text-bold,
+.type__text strong {
+  font-weight: 700;
+}
+.type__text-inline-link,
+.type__text a {
+  font-weight: 700;
+  text-decoration: underline;
+}
+.type__text-inline-code,
+.type__text code {
+  font-family: $font__code;
+  font-style: normal;
+  font-weight: 400;
+  font-size: $font-size__text__code;
+  line-height: inherit;
+  background-color: $color__n-80;
+  color: $color__n-10;
+  padding: 0.1em 0.3em;
+  border-radius: 0.2em;
+}
+
+// Small
+// -----------------
+
+.type__small,
+small {
+  font-size: $font-size__small;
+  font-family: $font__default;
+  font-weight: 500;
+  font-style: normal;
+  line-height: 145%;
+}
+.type__small-bold,
+.type__small strong {
+  font-weight: 700;
+}
+.type__small-inline-link,
+.type__small a {
+  font-size: $font-size__small;
+  font-weight: 700;
+  text-decoration: underline;
+}
+.type__small-inline-code,
+.type__small code {
+  font-size: $font-size__small;
+  font-family: "PT Mono";
+  font-weight: 400;
+  font-style: normal;
+  line-height: 145%;
+  background-color: $color__n-80;
+  color: $color__n-10;
+  padding: 0.1em 0.3em;
+  border-radius: 0.2em;
+}
