@@ -8,11 +8,16 @@ function FormField({
   type = "",
   isInvalid,
   children,
+  required = false,
   errorMessage = "This field is required",
 }) {
   return (
     <fieldset className="form-field">
-      {label && <label htmlFor={name}>{label}</label>}
+      {label && (
+        <label htmlFor={name}>
+          {label + ` ${required ? "*" : "(Optional)"}`}
+        </label>
+      )}
       {type !== "markdown" && helpText ? (
         <p>{helpText}</p>
       ) : (

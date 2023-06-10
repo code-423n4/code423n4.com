@@ -1,0 +1,12 @@
+{
+  "handle": "Narya",
+  "crew": [
+    "wen"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x97F74E6ba17A7484fbafbbc0b41BfF3630C9dac4"
+    }
+  ]
+}

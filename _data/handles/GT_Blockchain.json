@@ -1,0 +1,20 @@
+{
+  "handle": "GT_Blockchain",
+  "members": [
+    "0xTraub",
+    "0xTinder",
+    "0x6020c0",
+    "zion",
+    "xkycc"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x238bf1E5853E3B37129F2bdCf2726949A1E83f68"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x238bf1E5853E3B37129F2bdCf2726949A1E83f68"
+    }
+  ]
+}

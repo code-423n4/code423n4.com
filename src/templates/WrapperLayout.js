@@ -1,6 +1,7 @@
 import React from "react";
 import Helmet from "react-helmet";
 import "../styles/_global.scss";
+import EyebrowBar from "../components/EyebrowBar";
 
 const WrapperLayout = (props) => {
   const {
@@ -75,7 +76,9 @@ const WrapperLayout = (props) => {
         </title>
         <body className={bodyClass} />
       </Helmet>
-      {children}
+
+      <EyebrowBar />
+      <div className="wrapper__grid">{children}</div>
     </>
   );
 };

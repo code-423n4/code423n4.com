@@ -1,6 +1,7 @@
 import Moralis from "moralis-v1/node";
 import fetch from "node-fetch";
 import { Event } from "@netlify/functions/src/function/event";
+import { BotData } from "../../types/user";
 
 const { moralisAppId, moralisServerUrl } = require("../_config");
 
@@ -64,4 +65,21 @@ async function checkTeamAuth(teamName, username) {
   return team;
 }
 
-export { checkAuth, checkTeamAuth };
+async function checkBotAuth(botName, username) {
+  const botResponse = await fetch(
+    `${process.env.URL}/.netlify/functions/get-bot?id=${username}`
+  );
+  if (botResponse.status !== 200) {
+    throw { status: 401, message: "Bot does not exist" };
+  }
+  const bot: BotData = await botResponse.json();
+  if (!bot.crew || !bot.crew.includes(username)) {
+    throw {
+      status: 401,
+      message: `${username} is not a member of the bot crew for ${botName}`,
+    };
+  }
+  return bot;
+}
+
+export { checkAuth, checkTeamAuth, checkBotAuth };

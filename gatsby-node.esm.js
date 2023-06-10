@@ -7,7 +7,6 @@ import path from "path";
 import webpack from "webpack";
 import SchemaCustomization from "./schema";
 import { getApiContestData } from "./netlify/util/getContestsData";
-const { token } = require("./netlify/_config");
 
 const privateContestMessage = dedent`
 ## Contest details are not available. Why not?
@@ -19,7 +18,7 @@ For more information on participating in a private audit, please see this [post]
 
 const graphqlWithAuth = graphql.defaults({
   headers: {
-    authorization: `Bearer ${token}`,
+    authorization: `Bearer ${process.env.GITHUB_TOKEN_FETCH}`,
   },
 });
 
@@ -107,6 +106,7 @@ const queries = {
             readmeContent
             artPath
             status
+            codeAccess
           }
         }
       }
@@ -189,11 +189,21 @@ exports.onCreateNode = async ({ node, getNode, actions }) => {
       name: "status",
       value: node.status,
     });
+
     createNodeField({
       node,
       name: "codeAccess",
       value: node.codeAccess,
     });
+
+    if (node.codeAccess === "public") {
+      createNodeField({
+        node,
+        name: `botSubmissionPath`,
+        value: contestSubmissionPermalink(node) + "/bot",
+      });
+    }
+
     createNodeField({
       node,
       name: "type",
@@ -231,12 +241,25 @@ exports.createPages = async ({ graphql, actions }) => {
   const { createPage } = actions;
   const contests = await graphql(queries.contests);
   const formTemplate = path.resolve("./src/templates/ReportForm.tsx");
+  const botRaceFormTemplate = path.resolve("./src/templates/BotRaceForm.tsx");
   const contestTemplate = path.resolve("./src/templates/ContestLayout.tsx");
   contests.data.contests.edges.forEach((contest) => {
     if (contest.node.findingsRepo) {
       createPage({
         path: contest.node.fields.submissionPath,
         component: formTemplate,
+        context: {
+          contestId: contest.node.contestid,
+        },
+      });
+    }
+    if (
+      contest.node.fields.codeAccess === "public" &&
+      contest.node.contestid !== 241
+    ) {
+      createPage({
+        path: contest.node.fields.submissionPath + "/bot",
+        component: botRaceFormTemplate,
         context: {
           contestId: contest.node.contestid,
         },
