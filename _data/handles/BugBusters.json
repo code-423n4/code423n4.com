@@ -4,15 +4,11 @@
     "nirlin",
     "0xepley"
   ],
-  "link": "https://twitter.com/0xnirlin",
   "paymentAddresses": [
     {
       "chain": "polygon",
       "address": "0x773c652FF2C4578d747FAE9BbC9066d37A45D3A6"
-    },
-    {
-      "chain": "ethereum",
-      "address": "0x1A1da7Be44D477a887341Dc3EBC09A45798c7752"
     }
-  ]
+  ],
+  "link": "https://twitter.com/0xnirlin"
 }
