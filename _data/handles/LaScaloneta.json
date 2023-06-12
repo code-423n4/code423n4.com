@@ -1,8 +1,5 @@
 {
   "handle": "LaScaloneta",
-  "moralisId": null,
-  "image": "./avatars/LaScaloneta.jpeg",
-  "showOnLeaderboard": true,
   "members": [
     "nicobevi",
     "juancito",
@@ -12,10 +9,7 @@
     {
       "chain": "polygon",
       "address": "0xa0dF0E58e5a0D7c61D3eF0a140cCe006Cd1B12E6"
-    },
-    {
-      "chain": "ethereum",
-      "address": "0xa0dF0E58e5a0D7c61D3eF0a140cCe006Cd1B12E6"
     }
-  ]
+  ],
+  "image": "./avatars/LaScaloneta.jpeg"
 }
