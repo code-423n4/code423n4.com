@@ -8,11 +8,7 @@
     {
       "chain": "polygon",
       "address": "0xdb2135151bc06748d53b8CA3b6D74C703f284903"
-    },
-    {
-      "chain": "ethereum",
-      "address": "0xdb2135151bc06748d53b8CA3b6D74C703f284903"
     }
   ],
-  "image": "./avatars/Ack.png"
+  "image": "ycXZBbmMP49"
 }
