@@ -8,16 +8,12 @@
     "alexroan",
     "carlitox477"
   ],
-  "link": "https://www.cyfrin.io/",
   "paymentAddresses": [
     {
       "chain": "polygon",
       "address": "0xa5D0084A766203b463b3164DFc49D91509C12daB"
-    },
-    {
-      "chain": "ethereum",
-      "address": "0xa5D0084A766203b463b3164DFc49D91509C12daB"
     }
   ],
+  "link": "https://www.cyfrin.io/",
   "image": "./avatars/Cyfrin.png"
 }
