@@ -1,10 +1,10 @@
 {
   "handle": "UniversalCrypto",
-  "link": null,
-  "moralisId": null,
-  "image": null,
+  "link": "",
+  "moralisId": "",
+  "image": "",
   "showOnLeaderboard": true,
-  "imageUrl": null,
+  "imageUrl": "",
   "members": [
     "amaechieth",
     "tettehnetworks"
