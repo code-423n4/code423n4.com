@@ -1,6 +1,7 @@
 {
   "handle": "ByteBandits",
   "moralisId": "",
+  "image": "",
   "showOnLeaderboard": true,
   "members": [
     "Cryptor",
@@ -10,7 +11,7 @@
   "paymentAddresses": [
     {
       "chain": "polygon",
-      "address": "0x0b1249742EEE10349566b02f926D42C33694B082"
+      "address": "0x9709DedD4184041443c1fB7AFA0aEA9a7D8d361e"
     }
   ]
 }
