@@ -1,10 +1,5 @@
 {
   "handle": "scokaf",
-  "link": null,
-  "moralisId": null,
-  "image": "./avatars/scokaf.jpeg",
-  "showOnLeaderboard": true,
-  "imageUrl": "https://raw.githubusercontent.com/code-423n4/code423n4.com/main/_data/handles/avatars/scokaf.jpeg",
   "members": [
     "Scoon",
     "jauvany"
@@ -14,5 +9,6 @@
       "chain": "polygon",
       "address": "0x7ae68D82DCc454487652415a7AB79Ea4f291840f"
     }
-  ]
+  ],
+  "image": "./avatars/scokaf.jpeg"
 }
