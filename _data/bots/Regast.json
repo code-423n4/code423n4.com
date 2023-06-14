@@ -1,0 +1,16 @@
+{
+  "handle": "Regast",
+  "crew": [
+    "MiloTruck"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x9834b17a29652e317202109C2e624FE0A32A1383"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x9834b17a29652e317202109C2e624FE0A32A1383"
+    }
+  ]
+}
