@@ -1,0 +1,14 @@
+{
+  "handle": "BlockHealers",
+  "members": [
+    "tnquanghuy0512",
+    "BlockBuster",
+    "kodyvim"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x6849fcEc09514CEC11e362c9E73848EbAA4cB071"
+    }
+  ]
+}
