@@ -1,14 +1,16 @@
 {
   "handle": "Audit_Avengers",
+  "link": "https://twitter.com/JP_Courses",
+  "moralisId": "",
+  "image": "./avatars/Audit_Avengers.png",
+  "showOnLeaderboard": true,
   "members": [
     "JP_Courses",
-    "WoolCentaur",
     "pxng0lin",
-    "alliums8510",
-    "CryptoFallen",
-    "scoolj"
+    "zzebra83",
+    "Aon_8",
+    "ravikiranweb3"
   ],
-  "link": "https://twitter.com/JP_Courses",
   "paymentAddresses": [
     {
       "chain": "polygon",
@@ -18,6 +20,5 @@
       "chain": "ethereum",
       "address": "0x82aAE2d95b92dD5576DbC59F455521250bb9396A"
     }
-  ],
-  "image": "./avatars/Audit_Avengers.png"
+  ]
 }
