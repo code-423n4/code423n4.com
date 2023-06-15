@@ -1,9 +1,13 @@
 {
   "handle": "Verichains",
+  "moralisId": null,
+  "image": null,
+  "showOnLeaderboard": true,
   "members": [
     "lifebow",
     "nt",
-    "LowK"
+    "LowK",
+    "th13vn"
   ],
   "paymentAddresses": [
     {
