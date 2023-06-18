@@ -1,9 +1,5 @@
 {
   "handle": "Audit_Avengers",
-  "link": "https://twitter.com/JP_Courses",
-  "moralisId": "",
-  "image": "./avatars/Audit_Avengers.png",
-  "showOnLeaderboard": true,
   "members": [
     "JP_Courses",
     "pxng0lin",
@@ -15,10 +11,8 @@
     {
       "chain": "polygon",
       "address": "0x82aAE2d95b92dD5576DbC59F455521250bb9396A"
-    },
-    {
-      "chain": "ethereum",
-      "address": "0x82aAE2d95b92dD5576DbC59F455521250bb9396A"
     }
-  ]
+  ],
+  "link": "https://twitter.com/JP_Courses",
+  "image": "./avatars/Audit_Avengers.png"
 }
