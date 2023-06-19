@@ -1,0 +1,13 @@
+{
+  "handle": "Warden",
+  "members": [
+    "clash",
+    "xxxxx"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x9cdCEcDB141500Be9A844D22b51411606f725A6D"
+    }
+  ]
+}
