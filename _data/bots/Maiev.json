@@ -13,5 +13,6 @@
       "address": "0x3f87d31C28328C8A2526F7CaF4Fd083403c8faC8"
     }
   ],
-  "image": "./avatars/Maiev.jpeg"
+  "image": "./avatars/Maiev.jpeg",
+  "relegated": true
 }
