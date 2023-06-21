@@ -27,6 +27,7 @@ interface ContestTimelineBarProps {
   findingsRepo: AbsoluteURL;
   contestNumber: ContestNumber;
   botRacePath: RelativeURL;
+  hasBotRace: boolean;
 }
 
 export default function ContestStatusBar({
@@ -36,6 +37,7 @@ export default function ContestStatusBar({
   findingsRepo,
   contestNumber,
   botRacePath,
+  hasBotRace,
 }: ContestTimelineBarProps) {
   const { currentUser } = useUser();
 
@@ -59,22 +61,23 @@ export default function ContestStatusBar({
 
   return (
     <div className="contest-page__status-bar">
-      {contestTimelineObject.botRaceStatus === ContestStatus.Live && (
-        <div className="contest-page__bot-race-status-bar">
-          <span className="contest-page__bot-race-status-text">
-            <img src="/images/icon/wolf-bot/16.svg" className="icon" />
-            <strong>{botRaceMessage}</strong>
-            &nbsp; Ends in{" "}
-            {formatDistance(
-              new Date(Date.now()),
-              contestTimelineObject.botRaceEnd
-            )}
-          </span>
-          <Link to={linkTo} className="button button--text-link">
-            {linkText}
-          </Link>
-        </div>
-      )}
+      {contestTimelineObject.botRaceStatus === ContestStatus.Live &&
+        hasBotRace && (
+          <div className="contest-page__bot-race-status-bar">
+            <span className="contest-page__bot-race-status-text">
+              <img src="/images/icon/wolf-bot/16.svg" className="icon" />
+              <strong>{botRaceMessage}</strong>
+              &nbsp; Ends in{" "}
+              {formatDistance(
+                new Date(Date.now()),
+                contestTimelineObject.botRaceEnd
+              )}
+            </span>
+            <Link to={linkTo} className="button button--text-link">
+              {linkText}
+            </Link>
+          </div>
+        )}
       <div className="contest-page__top-bar">
         <span
           className={

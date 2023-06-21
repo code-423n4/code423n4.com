@@ -1,0 +1,18 @@
+{
+  "handle": "zero-x",
+  "members": [
+    "krishichawda",
+    "VictoryGod",
+    "vangrim"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xD3e6F67cf34358D6035B40779CA63C53Fb752B49"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0xD3e6F67cf34358D6035B40779CA63C53Fb752B49"
+    }
+  ]
+}
