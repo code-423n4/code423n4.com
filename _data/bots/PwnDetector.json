@@ -1,0 +1,19 @@
+{
+  "handle": "PwnDetector",
+  "crew": [
+    "ladboy233",
+    "chaduke",
+    "rivalq",
+    "sakshamguruji"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xE1faAeb0D29C9cF411CbD47dAAB14A21ebe266A4"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0xE1faAeb0D29C9cF411CbD47dAAB14A21ebe266A4"
+    }
+  ]
+}

@@ -6,6 +6,7 @@ type ContestsCsvFields implements Node @dontInfer {
   readmeContent: String
   status: String
   codeAccess: String
+  type: String
 }`;
 
 export default ContestsCsvFields;

@@ -1,0 +1,90 @@
+// Solid theme variables
+$contest-tile--solid__border-color: $color__n-60;
+$contest-tile--solid__border: 1px solid $contest-tile--solid__border-color;
+$contest-tile--solid__background: $color__n-90;
+
+// Transparent theme variables
+$contest-tile--transparent__border-color: rgba($color__white, 0.4);
+$contest-tile--transparent__border: 1px solid rgba($color__white, 0.4);
+$contest-tile--transparent__background: linear-gradient(
+  180deg,
+  rgba($color__white, 0.1) 0%,
+  rgba($color__white, 0.05) 100%
+);
+$contest-tile--transparent__amount-background: linear-gradient(
+  45deg,
+  rgba($color__white, 0.1) 0%,
+  rgba($color__white, 0.05) 100%
+);
+
+// Mixin Theme: Solid (Default)
+// --------------------------------------------------
+// Default style uses the neutral palette ($color__n-*)
+
+@mixin contest-tile--solid {
+  background: $contest-tile--solid__background;
+  border-color: $contest-tile--solid__border-color;
+  .contest-tile__button-wrapper {
+    a {
+      border-color: $contest-tile--solid__border-color;
+      &:hover {
+        background: $color__n-80;
+      }
+    }
+  }
+  .contest-tile__amount {
+    background: none;
+    border-color: $contest-tile--solid__border-color;
+  }
+
+  .contest-tile__bottom {
+    border-color: $contest-tile--solid__border-color;
+  }
+
+  .contest-tile__countdown {
+    border-color: $contest-tile--solid__border-color;
+
+    .countdown {
+      background: $color__n-80;
+    }
+  }
+}
+
+// Mixin Theme: Transparent (goes over colorful backgrounds)
+// --------------------
+// Transparent style uses white ($color__white)
+
+@mixin contest-tile--transparent {
+  background: $contest-tile--transparent__background;
+  border-color: $contest-tile--transparent__border-color;
+
+  .contest-tile__amount {
+    border-color: $contest-tile--transparent__border-color;
+  }
+
+  .contest-tile__countdown {
+    border-color: $contest-tile--transparent__border-color;
+
+    .countdown {
+      background: rgba(0, 0, 0, 0.1);
+    }
+  }
+
+  .contest-tile__bottom {
+    border-color: $contest-tile--transparent__border-color;
+  }
+
+  .contest-tile__button-wrapper {
+    a {
+      color: $color__white;
+      border-color: $contest-tile--transparent__border-color;
+      &:hover {
+        background: rgba($color__white, 0.1);
+      }
+    }
+  }
+
+  .contest-tile__status-indicator {
+    border-color: $contest-tile--transparent__border-color;
+  }
+}
