@@ -8,8 +8,8 @@ Any data that was or still is in this folder is likely to go away soon. But we u
 
 Please use the following URLs to access the following data:
 
-* https://code4rena.com/community-resources/findings.csv
-* https://code4rena.com/community-resources/contests.csv 
+* <https://code4rena.com/community-resources/findings.csv>
+* <https://code4rena.com/community-resources/contests.csv>
 * `${findingsRepo}/raw/main/report.md`
 
 And please [let us know](https://code4rena.com/help) if there's anything else you need access to in a more stable way.
