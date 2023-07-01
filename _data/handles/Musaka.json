@@ -1,5 +1,8 @@
 {
   "handle": "Musaka",
+  "moralisId": null,
+  "image": null,
+  "showOnLeaderboard": true,
   "members": [
     "0x3b",
     "ZdravkoHr"
