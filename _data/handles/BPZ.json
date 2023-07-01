@@ -1,8 +1,5 @@
 {
   "handle": "BPZ",
-  "moralisId": "",
-  "image": "",
-  "showOnLeaderboard": true,
   "members": [
     "Bitcoinfever244",
     "PrasadLak",
@@ -12,10 +9,6 @@
     {
       "chain": "polygon",
       "address": "0x44131fe1266BB3A96E16281c2f5bdba6F21ff270"
-    },
-    {
-      "chain": "ethereum",
-      "address": "0xA60D46eDFb9AA21fa285623105D5B1cb08886eE3"
     }
   ]
 }
