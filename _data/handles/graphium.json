@@ -1,0 +1,18 @@
+{
+  "handle": "graphium",
+  "members": [
+    "coincoin",
+    "panda"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xE17C28FAbB44aF0428C6a1093351aD85A3eA6B74"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0xE17C28FAbB44aF0428C6a1093351aD85A3eA6B74"
+    }
+  ],
+  "image": "./avatars/graphium.webp"
+}
