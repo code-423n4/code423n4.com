@@ -1,6 +1,9 @@
 {
   "handle": "cthulhu_cult",
-  "members": ["badbird", "seanamani"],
+  "members": [
+    "badbird",
+    "seanamani"
+  ],
   "paymentAddresses": [
     {
       "chain": "polygon",
