@@ -1,7 +1,7 @@
 {
   "handle": "Musaka",
-  "moralisId": null,
-  "image": null,
+  "moralisId": "",
+  "image": "",
   "showOnLeaderboard": true,
   "members": [
     "0x3b",
