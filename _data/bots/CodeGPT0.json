@@ -1,0 +1,12 @@
+{
+  "handle": "CodeGPT0",
+  "crew": [
+    "codegpt"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x799D1621cA4BBe67B96B3b80da0fdAB90Eea524e"
+    }
+  ]
+}
