@@ -1,0 +1,16 @@
+{
+  "handle": "GasAxy",
+  "crew": [
+    "niser93"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x9a7f04d238D274563a9D20229d86571FB4dFd3F0"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x9a7f04d238D274563a9D20229d86571FB4dFd3F0"
+    }
+  ]
+}
