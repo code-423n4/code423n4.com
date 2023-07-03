@@ -1,0 +1,16 @@
+{
+  "handle": "auditbase-bot",
+  "crew": [
+    "fellows"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x8629ee3aE8F2655F6B4A11efAC03Bb581e9c8a3E"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x8629ee3aE8F2655F6B4A11efAC03Bb581e9c8a3E"
+    }
+  ]
+}
