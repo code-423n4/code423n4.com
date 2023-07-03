@@ -1,18 +1,13 @@
 {
   "handle": "RUBY-BEAR-REACH",
+  "moralisId": "",
+  "image": "",
+  "showOnLeaderboard": true,
   "members": [
     "Angry_Mustache_Man",
-    "zuhaibmohd",
-    "Bloqarl",
-    "sayan",
-    "BlockChomper",
     "Mis4nthr0pic",
     "escrow",
-    "queueunit",
-    "0xtotem",
-    "CHALK",
-    "pxng0lin",
-    "Tim"
+    "0xtotem"
   ],
   "paymentAddresses": [
     {
