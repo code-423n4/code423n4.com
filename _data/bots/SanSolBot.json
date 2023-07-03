@@ -1,0 +1,17 @@
+{
+  "handle": "SanSolBot",
+  "crew": [
+    "saneryee"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x8165636930a7020f4106c9a153463626a4D9bDa2"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x8165636930a7020f4106c9a153463626a4D9bDa2"
+    }
+  ],
+  "image": "./avatars/SanSolBot.png"
+}
