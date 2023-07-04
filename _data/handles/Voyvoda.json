@@ -5,15 +5,11 @@
     "deadrxsezzz",
     "alexxander"
   ],
-  "link": "https://twitter.com/VoyvodaSec",
   "paymentAddresses": [
     {
       "chain": "polygon",
       "address": "0x8921D08F3068B3BA08C213eAcfb744fBf75388c7"
-    },
-    {
-      "chain": "ethereum",
-      "address": "0x8921D08F3068B3BA08C213eAcfb744fBf75388c7"
     }
-  ]
+  ],
+  "link": "https://twitter.com/VoyvodaSec"
 }
