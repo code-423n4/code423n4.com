@@ -1,0 +1,21 @@
+{
+  "handle": "Decurity_AI_v0",
+  "crew": [
+    "Beched",
+    "raz0r",
+    "me_na0mi",
+    "dexus",
+    "frodan"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xe60b1Ede3384ed987756A33257D757f25A84B297"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0xe60b1Ede3384ed987756A33257D757f25A84B297"
+    }
+  ],
+  "image": "./avatars/Decurity_AI_v0.jpeg"
+}

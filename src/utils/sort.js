@@ -9,7 +9,7 @@ const sortByContestStart = (orderBy) => (a, b) => {
   // let contestB = new Date(a.node.frontmatter.contest.start_time).getTime();
 
   let sorted = contestA < contestB ? 1 : contestA > contestB ? -1 : 0;
-  return (orderBy === "reverse") ? sorted * -1 : sorted;
+  return orderBy === "reverse" ? sorted * -1 : sorted;
 };
 
 export { sortByContestStart };

@@ -95,7 +95,7 @@ export default function Contests({ data }) {
       <div className="limited-width">
         {filteredContests && filteredContests.activeContests.length > 0 ? (
           <section>
-            <h1 className="type__headline__page-title">Active competitions</h1>
+            <h1 className="type__headline__page-title">Active audits</h1>
             <ContestList
               updateContestStatus={updateContestStatus}
               contests={filteredContests.activeContests}
@@ -106,7 +106,7 @@ export default function Contests({ data }) {
         {filteredContests && filteredContests.upcomingContests.length > 0 ? (
           <section>
             <h1 className="spacing-bottom__xl type__headline_l">
-              Upcoming competitions
+              Upcoming audits
             </h1>
             <ContestList
               updateContestStatus={updateContestStatus}
@@ -166,7 +166,7 @@ export default function Contests({ data }) {
         {filteredContests && filteredContests.completed.length > 0 ? (
           <section>
             <h1 className="spacing-bottom__xl type__headline_l">
-              Completed competitions
+              Completed audits
             </h1>
             <ContestList
               updateContestStatus={updateContestStatus}

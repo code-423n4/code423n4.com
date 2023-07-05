@@ -7,6 +7,7 @@ import Login from "../components/Login/Login";
 interface ProtectedPageProps {
   children: JSX.Element;
   pageTitle: string;
+  bodyClass?: string;
   message?: string | ReactNode;
   pageDescription?: string;
 }
@@ -14,13 +15,18 @@ interface ProtectedPageProps {
 export default function ProtectedPage({
   children,
   pageTitle,
+  bodyClass,
   message,
   pageDescription,
 }: ProtectedPageProps) {
   const { currentUser } = useUser();
 
   return (
-    <DefaultLayout pageTitle={pageTitle} pageDescription={pageDescription}>
+    <DefaultLayout
+      pageTitle={pageTitle}
+      pageDescription={pageDescription}
+      bodyClass={bodyClass}
+    >
       {currentUser.isLoggedIn ? (
         children
       ) : (

@@ -1,0 +1,12 @@
+{
+  "handle": "iceBearRobot",
+  "crew": [
+    "IceBear"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x5Ca57602fa4CC0B90456f60d992146e281dEbB39"
+    }
+  ]
+}
