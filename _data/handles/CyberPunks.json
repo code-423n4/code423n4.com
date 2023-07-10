@@ -4,15 +4,11 @@
     "Stryder",
     "andrewprasaath"
   ],
-  "link": "https://anjanayraina.github.io/my_portfolio_website",
   "paymentAddresses": [
     {
       "chain": "polygon",
       "address": "0x8A48d85d15d8BcdeF07c2F855CbEcDaDC774d5DE"
-    },
-    {
-      "chain": "ethereum",
-      "address": "0x8A48d85d15d8BcdeF07c2F855CbEcDaDC774d5DE"
     }
-  ]
+  ],
+  "link": "https://anjanayraina.github.io/my_portfolio_website"
 }
