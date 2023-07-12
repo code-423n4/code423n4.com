@@ -1,0 +1,19 @@
+{
+  "handle": "GREY-HAWK-REACH",
+  "members": [
+    "escrow",
+    "aslanbek",
+    "nour99",
+    "dimulski",
+    "aswinraj94",
+    "0xprinc",
+    "tnquanghuy0512",
+    "Imogene"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x798BC384E20d5D16987A07487FC695985F1742c5"
+    }
+  ]
+}
