@@ -1,11 +1,14 @@
 {
   "handle": "Voyvoda",
+  "link": "https://twitter.com/VoyvodaSec",
+  "moralisId": null,
+  "image": "./avatars/Voyvoda.jpeg",
+  "showOnLeaderboard": true,
   "members": [
     "gogo",
     "deadrxsezzz",
     "alexxander"
   ],
-  "link": "https://twitter.com/VoyvodaSec",
   "paymentAddresses": [
     {
       "chain": "polygon",
