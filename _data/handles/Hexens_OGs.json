@@ -1,0 +1,14 @@
+{
+  "handle": "Hexens_OGs",
+  "members": [
+    "tpiliposian",
+    "rootNad",
+    "0xlyov"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x975436CA41E5455839Cd79c1D02c4692361DFB25"
+    }
+  ]
+}
