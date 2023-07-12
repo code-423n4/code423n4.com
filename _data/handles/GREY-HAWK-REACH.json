@@ -1,7 +1,7 @@
 {
   "handle": "GREY-HAWK-REACH",
-  "moralisId": null,
-  "image": null,
+  "moralisId": "",
+  "image": "",
   "showOnLeaderboard": true,
   "members": [
     "escrow",
