@@ -1,0 +1,13 @@
+{
+  "handle": "0xAce",
+  "members": [
+    "Coollaitar",
+    "0xaditya"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x693E2f7ADA3deaC0756DC8f4D449f96A0BD3C99e"
+    }
+  ]
+}
