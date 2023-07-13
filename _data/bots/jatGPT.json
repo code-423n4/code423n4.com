@@ -12,5 +12,6 @@
       "chain": "ethereum",
       "address": "0x4f5F14AF7E1999fa09dD0CEa786B82B4Fc4B9910"
     }
-  ]
+  ],
+  "relegated": true
 }
