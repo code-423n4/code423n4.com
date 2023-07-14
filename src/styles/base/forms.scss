@@ -105,7 +105,7 @@ form,
 
 .form-field__error {
   margin-top: $spacing__s;
-  color: $color__form-error;
+  color: $color__form-error !important;
 
   &:before {
     content: "⚠ ";
@@ -391,6 +391,18 @@ input[type="checkbox"] {
   th {
     border: 1px solid $color__n-60;
     padding: 6px 13px;
+  }
+
+  ul {
+    list-style-type: disc;
+    margin: 1em 1em 1em 2em;
+  }
+  ol {
+    list-style-type: decimal;
+    margin: 1em 1em 1em 2em;
+  }
+  li {
+    margin-bottom: 0.5em;
   }
 }
 

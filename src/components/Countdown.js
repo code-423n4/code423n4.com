@@ -5,8 +5,8 @@ const Countdown = ({
   start,
   end,
   isPreview,
-  text = undefined,
-  updateContestStatus = undefined,
+  updateContestStatus,
+  text = "",
 }) => {
   const [contestTimer, setContestTimer] = useState(getDates(start, end));
   const [timeLeft, setTimeLeft] = useState(
@@ -16,24 +16,31 @@ const Countdown = ({
   const type = isPreview ? "preview" : "contest";
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setContestTimer(getDates(start, end));
+    const timer = setInterval(() => {
+      const newTimer = getDates(start, end);
       setTimeLeft(getTimeRemaining(contestTimer));
 
-      if (timeLeft.total >= 1000) {
-        return;
-      } else {
+      if (
+        contestTimer.contestStatus !== newTimer.contestStatus ||
+        contestTimer.botRaceStatus !== newTimer.botRaceStatus
+      ) {
+        setContestTimer(newTimer);
         if (updateContestStatus) {
           updateContestStatus();
         }
-        setTimeLeft(0);
+      }
+
+      if (!timeLeft || timeLeft.total < 1000) {
+        clearInterval(timer);
+        return;
       }
     }, 1000);
-    return () => clearTimeout(timer);
-  });
+    return () => clearInterval(timer);
+  }, [start]);
 
   return (
     <div className="countdown">
+      {text && text}
       <span className="wrapper-time">
         {contestTimer.contestStatus === "active" ? (
           <span className="countdown-live"></span>
@@ -47,13 +54,6 @@ const Countdown = ({
         {":"}
         <span className="seconds">{timeLeft.ss}</span>
       </span>
-      {text && timeLeft.total > 0 ? (
-        <span className="wrapper-time end-cap">
-          {contestTimer.contestStatus === "soon"
-            ? ` until ${type} starts`
-            : ` until ${type} ends`}
-        </span>
-      ) : null}
     </div>
   );
 };
