@@ -1,9 +1,13 @@
 {
   "handle": "Hexens_OGs",
+  "moralisId": "",
+  "image": "",
+  "showOnLeaderboard": true,
   "members": [
     "tpiliposian",
     "rootNad",
-    "0xlyov"
+    "0xlyov",
+    "0xkasper"
   ],
   "paymentAddresses": [
     {
