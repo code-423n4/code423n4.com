@@ -1,0 +1,13 @@
+{
+  "handle": "Starfire",
+  "members": [
+    "0xAxe",
+    "y403l"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x2496AE96926F42Ac6f0DF53355EC086e7DEF2BA6"
+    }
+  ]
+}
