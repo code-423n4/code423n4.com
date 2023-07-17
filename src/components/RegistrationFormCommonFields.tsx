@@ -74,7 +74,7 @@ export default function RegistrationFormCommonFields({
         name="discordUsername"
         aria-describedby={"discordUsername--error"}
         helpText="Used in case we need to contact you about your submissions or winnings."
-        placeholder="Warden#1234"
+        placeholder="warden123"
         value={discordUsername}
         handleChange={handleChange}
         validator={discordUsernameValidator}

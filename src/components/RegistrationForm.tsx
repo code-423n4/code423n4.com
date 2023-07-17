@@ -90,7 +90,7 @@ export default function RegistrationForm({ handles }) {
 
   // global variables
   const avatarInputRef = useRef<HTMLInputElement>();
-  const discordUsernameRegex = new RegExp(/.*#[0-9]{4}/, "g");
+  const discordUsernameRegex = new RegExp(/[a-z0-9-.]*/, "g");
 
   const updateErrorMessage = (
     message: string | React.ReactNode | undefined
@@ -373,7 +373,7 @@ export default function RegistrationForm({ handles }) {
       const validationErrors: (string | React.ReactNode)[] = [];
       if (!isValidDiscord) {
         validationErrors.push(
-          "Make sure you enter your discord username, and not your server nickname. It should end with '#' followed by 4 digits."
+          "Make sure you enter your discord username in lowercase, and not your server nickname or display name."
         );
       }
       return validationErrors;
