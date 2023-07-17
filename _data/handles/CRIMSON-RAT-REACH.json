@@ -1,0 +1,24 @@
+{
+  "handle": "CRIMSON-RAT-REACH",
+  "moralisId": "",
+  "image": "",
+  "showOnLeaderboard": true,
+  "members": [
+    "escrow",
+    "cergyk",
+    "paspe",
+    "VictoryGod",
+    "0xtotem",
+    "imkapadia",
+    "devblixt",
+    "vani",
+    "vangrim",
+    "0xChuck"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x43BC7Be8b597414348657e9929319202Ffb56f75"
+    }
+  ]
+}
