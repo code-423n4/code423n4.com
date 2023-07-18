@@ -1,0 +1,14 @@
+{
+  "handle": "LosPollosHermanos",
+  "members": [
+    "scaraven",
+    "LemonKurd",
+    "jc1"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x4D536BeAC61812EcAC0e4364e9Bd1bA9B96c062B"
+    }
+  ]
+}

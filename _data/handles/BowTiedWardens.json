@@ -1,5 +1,16 @@
 {
-  "image": "",
   "handle": "BowTiedWardens",
-  "members": ["BowTiedHeron", "BowTiedPickle", "m4rio_eth", "Dravee", "BowTiedFirefox"]
+  "members": [
+    "BowTiedHeron",
+    "BowTiedPickle",
+    "m4rio_eth",
+    "Dravee",
+    "BowTiedFirefox"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x644AEDa9E5797474B28A656d9e2016A927B0aE1B"
+    }
+  ]
 }

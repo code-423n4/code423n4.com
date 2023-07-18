@@ -1,0 +1,11 @@
+{
+  "handle": "MidnightTeaParty",
+  "members": ["Tutturu","phaze"],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xF7507bC0C470e7D499299B3DBB163850CF134c6a"
+    }
+  ],
+  "image": "./avatars/MidnightTeaParty.png"
+}

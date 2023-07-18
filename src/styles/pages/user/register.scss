@@ -1,0 +1,50 @@
+@import "../../variables";
+
+// --------------------------------------------------
+// Warden Registration Page
+// --------------------------------------------------
+
+// CSS rule order
+// --------------------
+
+// 1. Variables
+// 2. Box model properties
+// 3. Display and position
+// 4. Background
+// 5. Border
+// 6. Box shadow
+// 7. Text
+// 8. Transforms
+// 9. Other
+
+.register {
+  max-width: $form__max-width;
+
+  .button {
+    margin-top: $spacing__s;
+    width: 100%;
+    justify-content: center;
+
+    @include breakpoint("xs") {
+      width: auto;
+    }
+  }
+
+  .secondary-nav {
+    padding-top: $spacing__l;
+    margin: $spacing__l 0;
+    border-top: 2px solid $color__n-30;
+
+    @include breakpoint("m") {
+      margin-top: $spacing__l;
+    }
+  }
+}
+
+.register__payment-wallet {
+  margin: $spacing__xl 0 $spacing__l 0;
+}
+
+.register__captcha-container {
+  margin-top: $spacing__l;
+}

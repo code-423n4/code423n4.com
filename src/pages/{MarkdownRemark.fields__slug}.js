@@ -1,5 +1,6 @@
 import * as React from "react";
 import { graphql } from "gatsby";
+import DOMPurify from "isomorphic-dompurify";
 
 import DefaultLayout from "../templates/DefaultLayout";
 
@@ -8,10 +9,10 @@ function PageTemplate({ data }) {
 
   return (
     <DefaultLayout title={page.frontmatter.title} bodyClass="page">
-      <div className="wrapper-main">
-        <article>
-          <div dangerouslySetInnerHTML={{ __html: page.html }} />
-        </article>
+      <div className="limited-width type__copy">
+        <div
+          dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(page.html) }}
+        />
       </div>
     </DefaultLayout>
   );

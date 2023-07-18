@@ -1,0 +1,22 @@
+{
+  "handle": "M4TZ1P",
+  "members": [
+    "DekaiHako",
+    "holyhansss_kr",
+    "Zer0Luck",
+    "AAIIWITF",
+    "exd0tpy"
+  ],
+  "link": "https://matzip.xyz/",
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x1Ad1caB34C37e62885054e6AA39721Cb277E4f7C"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x1Ad1caB34C37e62885054e6AA39721Cb277E4f7C"
+    }
+  ],
+  "image": "./avatars/M4TZ1P.png"
+}

@@ -1,0 +1,2 @@
+"contestid","title","sponsor","details","start_time","end_time","amount","repo","findingsRepo","hide","league"
+"999999","TEST contest","C4","TEST: This is a test contest for dev purposes","2022-01-17T00:00:00.000Z","2025-02-22T23:59:00.000Z","$200,000 USDC","https://github.com/code-423n4/2022-01-dev-test-repo","https://github.com/code-423n4/2022-01-dev-test-repo-findings","False","eth"

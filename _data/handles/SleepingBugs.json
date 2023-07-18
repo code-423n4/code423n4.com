@@ -1,0 +1,20 @@
+{
+  "handle": "SleepingBugs",
+  "moralisId": null,
+  "image": "./avatars/SleepingBugs.jpeg",
+  "showOnLeaderboard": true,
+  "members": [
+    "Deivitto",
+    "0xLovesleep"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x5356275AbD8BB26188eEe5B23277660BdCbC0477"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x5356275AbD8BB26188eEe5B23277660BdCbC0477"
+    }
+  ]
+}

@@ -1,0 +1,58 @@
+@import "../variables";
+@import "./contest-tile/contest-tile-themes";
+
+// --------------------------------------------------
+// Project Link Component
+// --------------------------------------------------
+
+// CSS rule order
+// --------------------
+
+// 1. Variables
+// 2. Box model properties
+// 3. Display and position
+// 4. Background
+// 5. Border
+// 6. Box shadow
+// 7. Text
+// 8. Transforms
+// 9. Other
+
+.project-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  a:has(img) {
+    width: 100%;
+  }
+
+  img {
+    width: 100%;
+    height: auto;
+    max-width: 100%;
+    max-height: 100%;
+    border: $contest-tile--solid__border;
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+
+    // Styles for when images 404
+    text-align: center;
+    background: $color__white;
+    color: $color__black;
+    overflow: hidden;
+  }
+
+  // Styles for when there is no image during the build process
+  .project-link__placeholder-logo {
+    min-width: 50px;
+    min-height: 50px;
+    width: 100%;
+    aspect-ratio: 1/1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    font-weight: 300;
+  }
+}
