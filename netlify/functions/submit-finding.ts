@@ -326,6 +326,7 @@ exports.handler = async (event) => {
       const text = dedent`
       C4 finding submitted: 
       risk = ${risk}
+      issueId = ${issueId}
       
       ${body}
       `;
