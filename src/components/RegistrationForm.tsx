@@ -363,6 +363,12 @@ export default function RegistrationForm({ handles }) {
           "Supports alphanumeric characters, underscores, and hyphens."
         );
       }
+      if (value.includes(' ')) {
+        validationErrors.push(
+          "Username cannot contain spaces."
+        );
+      }
+  
       return validationErrors;
     },
     [isDangerousUsername, handles]
@@ -376,9 +382,30 @@ export default function RegistrationForm({ handles }) {
           "Make sure you enter your discord username, and not your server nickname. It should end with '#' followed by 4 digits."
         );
       }
+      if (value.includes(' ')) {
+        validationErrors.push(
+          "Discord username cannot contain spaces."
+        );
+      }
+  
       return validationErrors;
     },
     [isValidDiscord]
+  );
+
+  const gitHubUsernameValidator = useCallback(
+    (value: string) => {
+      const validationErrors: (string | React.ReactNode)[] = [];
+  
+      if (value.includes(' ')) {
+        validationErrors.push(
+          "GitHub username cannot contain spaces."
+        );
+      }
+
+      return validationErrors;
+    },
+    []
   );
 
   const passwordValidator = (value: string) => {
@@ -458,6 +485,7 @@ export default function RegistrationForm({ handles }) {
                   handleAvatarChange={handleAvatarChange}
                   removeAvatar={removeAvatar}
                   usernameValidator={usernameValidator}
+                  gitHubUsernameValidator={gitHubUsernameValidator}
                   discordUsernameValidator={discordUsernameValidator}
                   passwordValidator={passwordValidator}
                   confirmPasswordValidator={confirmPasswordValidator}
@@ -507,6 +535,7 @@ export default function RegistrationForm({ handles }) {
                   handleAvatarChange={handleAvatarChange}
                   removeAvatar={removeAvatar}
                   usernameValidator={usernameValidator}
+                  gitHubUsernameValidator={gitHubUsernameValidator}
                   discordUsernameValidator={discordUsernameValidator}
                   passwordValidator={passwordValidator}
                   confirmPasswordValidator={confirmPasswordValidator}

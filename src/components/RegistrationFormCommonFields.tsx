@@ -15,6 +15,7 @@ interface RegistrationFormCommonFieldsProps {
   handleAvatarChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   removeAvatar: () => void;
   usernameValidator: (value: string) => (string | ReactNode)[];
+  gitHubUsernameValidator: (value: string) => (string | ReactNode)[];
   discordUsernameValidator: (value: string) => (string | ReactNode)[];
   passwordValidator: (value: string) => (string | ReactNode)[];
   confirmPasswordValidator: (value: string) => (string | ReactNode)[];
@@ -35,6 +36,7 @@ export default function RegistrationFormCommonFields({
   handleAvatarChange,
   removeAvatar,
   usernameValidator,
+  gitHubUsernameValidator,
   discordUsernameValidator,
   passwordValidator,
   confirmPasswordValidator,
@@ -124,6 +126,7 @@ export default function RegistrationFormCommonFields({
         aria-describedby={"gitHubUsername--error"}
         placeholder="Username"
         value={gitHubUsername}
+        validator={gitHubUsernameValidator}
         handleChange={handleChange}
       />
       <Input
