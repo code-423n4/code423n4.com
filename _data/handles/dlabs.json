@@ -1,0 +1,19 @@
+{
+  "handle": "dlabs",
+  "members": [
+    "jacopo",
+    "DomMac"
+  ],
+  "link": "https://dlabs.app",
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xb218F0279316d45D2493E0877CF171268C0Ffe3a"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0xb218F0279316d45D2493E0877CF171268C0Ffe3a"
+    }
+  ],
+  "image": "./avatars/dlabs.png"
+}
