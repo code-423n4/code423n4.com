@@ -1,216 +1,146 @@
 import React from "react";
+// import Swiper core and required modules
+import { Navigation, Pagination, Scrollbar, A11y } from "swiper";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css/bundle";
 
-const Testimonials = () => (
-  <>
-    <h5 className="center testimonials-header">The crowd goes wild</h5>
-    <div className="testimonials">
-      <figure>
-        <blockquote>
-          <p>
-            This result far exceeded previous experiences I’ve had with 2–4
-            week-long audits by individual companies. I highly recommend the
-            Code 423n4 competitive audit approach for anyone starting a new
-            project.
-          </p>
-        </blockquote>
-        <figcaption>
-          LSDan <cite>ElasticDAO</cite>
-        </figcaption>
-      </figure>
-      <figure className="tweet">
-        <blockquote>
-          <p lang="en" dir="ltr">
-            Speaking of bold &amp; ambitious security projects, another one is{" "}
-            <a href="https://twitter.com/code423n4?ref_src=twsrc%5Etfw">
-              @code423n4
-            </a>{" "}
-            — &quot;a community-driven approach to competitive smart contract
-            audits,&quot; with sponsors like{" "}
-            <a href="https://twitter.com/SlingshotCrypto?ref_src=twsrc%5Etfw">
-              @SlingshotCrypto
-            </a>{" "}
-            <a href="https://twitter.com/maplefinance?ref_src=twsrc%5Etfw">
-              @maplefinance
-            </a>{" "}
-            <a href="https://twitter.com/NFTX_?ref_src=twsrc%5Etfw">@NFTX_</a>{" "}
-            &amp;{" "}
-            <a href="https://twitter.com/yield?ref_src=twsrc%5Etfw">@yield</a>.
-            <br />
-            <br />
-            It&#39;s a great place for aspiring auditors to compete &amp; learn
-            🐞🧐🔐💰
-          </p>
-        </blockquote>
-        <figcaption>
-          <a href="https://twitter.com/0xRajeev/status/1400466820759375876?ref_src=twsrc%5Etfw">
-            RajΞΞv (@0xRajeev)
-          </a>
-        </figcaption>
-      </figure>
-      <figure className="tweet">
-        <blockquote>
-          <p lang="en" dir="ltr">
-            Great work everyone! This was a fantastic experience.
-          </p>
-        </blockquote>
-        <figcaption>
-          <a href="https://twitter.com/GhoulSol/status/1398424011336527873?ref_src=twsrc%5Etfw">
-            Ghoul.sol (@GhoulSol)
-          </a>
-        </figcaption>
-      </figure>
-      <figure>
-        <blockquote>
-          <p>
-            Overall, I have to say you guys have some very smart folks and some
-            of the findings identified are quite good! Definitely a much better
-            experience than the traditional audit we had gone through.
-          </p>
-        </blockquote>
-        <figcaption>
-          Jason<cite>Fairside</cite>
-        </figcaption>
-      </figure>
-      <figure className="tweet">
-        <blockquote>
-          <p lang="en" dir="ltr">
-            Amazing response for{" "}
-            <a href="https://twitter.com/code423n4?ref_src=twsrc%5Etfw">
-              @code423n4
-            </a>{" "}
-            sponsorship. Great community{" "}
-            <a href="https://twitter.com/scott_lew_is?ref_src=twsrc%5Etfw">
-              @scott_lew_is
-            </a>{" "}
-            <a href="https://twitter.com/0xzak?ref_src=twsrc%5Etfw">@0xzak</a>{" "}
-            has built. This will change the future of the auditing industry.
-            <br />
-            <br />
-            Furthering deflationary{" "}
-            <a href="https://twitter.com/search?q=%24ETH&amp;src=ctag&amp;ref_src=twsrc%5Etfw">
-              $ETH
-            </a>{" "}
-            on top of{" "}
-            <a href="https://twitter.com/hashtag/eip1559?src=hash&amp;ref_src=twsrc%5Etfw">
-              #eip1559
-            </a>{" "}
-            , I&#39;ll be sponsoring an additional 1000 VETH to wardens of{" "}
-            <a href="https://twitter.com/VaderProtocol?ref_src=twsrc%5Etfw">
-              @VaderProtocol
-            </a>{" "}
-            <a href="https://t.co/99a9N0ZTAH">https://t.co/99a9N0ZTAH</a>
-          </p>
-        </blockquote>
-        <figcaption>
-          <a href="https://twitter.com/mervynchng89/status/1382498579118313473?ref_src=twsrc%5Etfw">
-            🔥Mervyn🔥 (@mervynchng89)
-          </a>
-        </figcaption>
-      </figure>
-      <figure className="tweet">
-        <blockquote>
-          <p lang="en" dir="ltr">
-            Awesome job wolf pack! 🐺 🐺 🐺 <br />
-            <br />
-            Special Thanks to{" "}
-            <a href="https://twitter.com/cmichelio?ref_src=twsrc%5Etfw">
-              @cmichelio
-            </a>{" "}
-            <a href="https://twitter.com/shw9453?ref_src=twsrc%5Etfw">
-              @shw9453
-            </a>{" "}
-            <a href="https://twitter.com/0xRajeev?ref_src=twsrc%5Etfw">
-              @0xRajeev
-            </a>{" "}
-            from{" "}
-            <a href="https://twitter.com/FairsideNetwork?ref_src=twsrc%5Etfw">
-              @FairSideNetwork
-            </a>{" "}
-            <br />
-            <br />
-            You guys did NOT disappoint{" "}
-            <a href="https://twitter.com/0xzak?ref_src=twsrc%5Etfw">
-              @0xzak
-            </a>{" "}
-            <a href="https://twitter.com/scott_lew_is?ref_src=twsrc%5Etfw">
-              @scott_lew_is
-            </a>{" "}
-            Keep crushing it! 👏 👏 👏{" "}
-            <a href="https://t.co/RU2nSQCOxG">https://t.co/RU2nSQCOxG</a>
-          </p>
-        </blockquote>
-        <figcaption>
-          <a href="https://twitter.com/Brandon_FSN/status/1407460200316088321?ref_src=twsrc%5Etfw">
-            Brandon Brown 🔥 (@Brandon_FSN)
-          </a>
-        </figcaption>
-      </figure>
-      <figure>
-        <blockquote>
-          <p>
-            Want to give a massive shout out to all the wardens that took part
-            in the Reality Cards contest last week- you guys found some really
-            amazing stuff- so good that we're considering doing a second round!
-            🤣thanks so much guys!
-          </p>
-        </blockquote>
-        <figcaption>
-          Andrew<cite>Reality Cards</cite>
-        </figcaption>
-      </figure>
-      <figure className="tweet">
-        <blockquote>
-          <p lang="en" dir="ltr">
-            Breadth and depth.
-            <br />
-            <br />
-            We got some wardens that looked at every line of the code for common
-            mistakes. We got wardens that looked for economic attacks. We got
-            trained auditors going by the book, and we got rookies with
-            unbounded hunger to find bugs. I feel we got an excellent audit.
-          </p>
-        </blockquote>
-        <figcaption>
-          <a href="https://twitter.com/alcueca/status/1400746871719710728?ref_src=twsrc%5Etfw">
-            frob.eth | Alberto Cuesta Cañada (@alcueca)
-          </a>
-        </figcaption>
-      </figure>
-      <figure className="tweet">
-        <blockquote>
-          <p lang="en" dir="ltr">
-            And the results.
-            <br />
-            <br />I can&#39;t give details yet, but there were two big issues
-            that would have been fatal, about six that would have been
-            uncomfortable, and about 30 that were just unaesthetic. <br />
-            <br />
-            We got our money&#39;s worth. Don&#39;t go out into the wild without
-            an audit.{" "}
-            <a href="https://t.co/DIm992DxNP">pic.twitter.com/DIm992DxNP</a>
-          </p>
-        </blockquote>
-        <figcaption>
-          <a href="https://twitter.com/alcueca/status/1400747819259023360?ref_src=twsrc%5Etfw">
-            frob.eth | Alberto Cuesta Cañada (@alcueca)
-          </a>
-        </figcaption>
-      </figure>
-      <figure>
-        <blockquote>
-          <p>
-            C4 contests attract new, unique and complicated projects so it is a
-            perfect learning opportunity... Here projects seriously invest in
-            their security so it is always a motivation to try my best to find
-            bugs in their code.
-          </p>
-        </blockquote>
-        <figcaption>
-          Pauliax/Thunder<cite>C4 Warden</cite>
-        </figcaption>
-      </figure>
-    </div>
-  </>
+// object with quotes, has quote, author, author title, author link, viewMode
+
+const testimonials = [
+  {
+    quote:
+      "One of the things I enjoy most about competing on @code4rena is getting to read lots of code and see new techniques in the wild.",
+    author: "Horsefacts",
+    authorTitle: "",
+    authorLink: "https://twitter.com/eth_call/status/1621940992411574284",
+    viewMode: "warden",
+  },
+  {
+    quote:
+      "We greatly enjoyed our @code4rena experience - here's why it is the best value in auditing: quick spin-up time, flexible bounty awards, open nature means more eyes on your code, by our count ~10x more vs traditional audit shops, helpful community of wardens and judges",
+    author: "@_benjaminhughes",
+    authorTitle: "",
+    authorLink:
+      "https://twitter.com/_benjaminhughes/status/1554527455087558658?s=20&t=SxGE6sz2wxxChjUfrCW3dQ",
+    viewMode: "sponsor",
+  },
+  {
+    quote:
+      "After grinding for 14 months I finally reached my goal of being the first to cross 1M$ on the @code4rena leaderboard. Thanks to everyone involved, this has been very fun, lucrative, and I learned a lot by seeing other wardens' vulnerabilities that I missed.",
+    author: "Cmichel",
+    authorTitle: "",
+    authorLink: "https://twitter.com/cmichelio/status/1521241247159140355",
+    viewMode: "warden",
+  },
+  {
+    quote:
+      "Just went through the latest @code4rena audit report of the @blur_io exchange. This report is a great example of why audits are so important - wardens were able to discover a high risk exploit that would've allowed sellers to steal funds from buyers.",
+    author: "cygaar",
+    authorTitle: "",
+    authorLink: "https://twitter.com/0xCygaar/status/1601065454771924992",
+    viewMode: "warden",
+  },
+  {
+    quote:
+      "These @code4rena payouts are ridiculous. I'm tempted to drop everything and tunnel vision that",
+    author: "@DeGatchi",
+    authorTitle: "",
+    authorLink: "https://twitter.com/DeGatchi/status/1624020967281557504",
+    viewMode: "warden",
+  },
+  {
+    quote: "C4 wardens > any single audit shop IMO",
+    author: "@_benjaminhughes",
+    authorTitle: "",
+    authorLink: "https://twitter.com/_benjaminhughes",
+    viewMode: "sponsor",
+  },
+  {
+    quote:
+      "Thank you to all of the wardens who have been working on our code base. So many great questions and so many many of them. I hope you'll all come try it out when we're live and critique the user experience from top to bottom. 10/10 would work with y'all again.",
+    author: "androolloyd",
+    authorTitle: "",
+    authorLink: "",
+    viewMode: "sponsor",
+  },
+];
+
+const breakpoints = {
+  750: {
+    slidesPerView: 2,
+    spaceBetween: 16,
+  },
+  1024: {
+    slidesPerView: 2.5,
+    spaceBetween: 32,
+  },
+};
+
+const Testimonials = ({ viewMode }) => (
+  <div className="testimonials">
+    <h2 className="type__headline__l">Don't just take our word for it.</h2>
+    {/* Warden View */}
+    {/* {!viewMode ||
+      (viewMode === "warden" && ( */}
+    <>
+      <div className="swiper-holder">
+        <Swiper
+          modules={[Navigation, Pagination, Scrollbar, A11y]}
+          spaceBetween={32}
+          slidesPerView={1}
+          navigation
+          pagination={{ clickable: true }}
+          scrollbar={{ draggable: true }}
+          breakpoints={breakpoints}
+        >
+          {testimonials.map((testimonial, index) => (
+            <SwiperSlide key={index}>
+              <blockquote className="testimonials__quote">
+                <p className="testimonials__quote-text">{testimonial.quote}</p>
+                <p className="testimonials__author-text">
+                  <strong>
+                    —
+                    {testimonial.authorLink ? (
+                      <a
+                        href={testimonial.authorLink}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        {testimonial.author}
+                      </a>
+                    ) : (
+                      testimonial.author
+                    )}
+                  </strong>
+                  {/* <em>{testimonial.authorTitle}</em> */}
+                </p>
+              </blockquote>
+            </SwiperSlide>
+          ))}
+        </Swiper>
+      </div>
+    </>
+    {/* ))} */}
+
+    {/* Sponsor View */}
+    {/* {viewMode && viewMode === "sponsor" && (
+      <>
+        <div className="testimonials__quotes">
+          <blockquote className="testimonials__quote">
+            <p className="type__body__m">
+              “We were able to find and fix a critical vulnerability in our
+              application before it was exploited by an attacker.”
+            </p>
+            <p className="type__body__m">
+              <strong>— John Doe</strong>
+              <br />
+              <em>CEO, Company Name</em>
+            </p>
+          </blockquote>
+        </div>
+      </>
+    )} */}
+  </div>
 );
 
 export default Testimonials;
