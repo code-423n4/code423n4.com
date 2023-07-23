@@ -1,0 +1,21 @@
+{
+  "handle": "Audit_Avengers_2",
+  "members": [
+    "JP_Courses",
+    "ravikiranweb3",
+    "zzebra83",
+    "0xMosh"
+  ],
+  "link": "https://twitter.com/JP_Courses",
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x82aAE2d95b92dD5576DbC59F455521250bb9396A"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x82aAE2d95b92dD5576DbC59F455521250bb9396A"
+    }
+  ],
+  "image": "./avatars/Audit_Avengers_2.png"
+}

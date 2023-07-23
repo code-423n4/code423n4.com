@@ -1,0 +1,16 @@
+{
+  "handle": "TwelveSec",
+  "members": [
+    "0xDecorativePineapple",
+    "gkaragiannidis",
+    "0xRav3n"
+  ],
+  "link": "https://twelvesec.com/",
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x984047f743f0151D3bdbc0f11727eF4e27c32f3B"
+    }
+  ],
+  "image": "./avatars/TwelveSec.png"
+}
