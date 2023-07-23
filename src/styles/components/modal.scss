@@ -1,0 +1,95 @@
+@import "../variables";
+
+// --------------------------------------------------
+// Modal Component
+// --------------------------------------------------
+
+// CSS rule order
+// --------------------
+
+// 1. Variables
+// 2. Box model properties
+// 3. Display and position
+// 4. Background
+// 5. Border
+// 6. Box shadow
+// 7. Text
+// 8. Transforms
+// 9. Other
+
+// TODO: Review this and see if it can be simplified
+// It didn't get a full rewrite in the rebrand, so some of the classes may not be in use anymore
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(24, 31, 36, 0.7); //overlay color
+  z-index: 999;
+}
+
+.modal--main {
+  position: fixed;
+  background: $color__n-80;
+  min-width: 50vw;
+  max-width: 90vw;
+  height: max-content;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 12px;
+  padding: 30px 30px 50px 30px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+.modal--close-modal-icon {
+  position: absolute;
+  top: 13px;
+  right: 13px;
+  height: 20px;
+  width: 20px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.modal--main-content {
+  min-width: 70%;
+  margin-bottom: 40px;
+  max-width: 100%;
+}
+
+.modal--main-buttons {
+  justify-self: flex-end;
+  display: flex;
+  flex-direction: row-reverse;
+}
+
+@media only screen and (max-width: 740px),
+  (min-device-width: 768px) and (max-device-width: 1024px) {
+  .modal--main {
+    position: fixed;
+    background: $color__n-80;
+    min-width: 90vw;
+    max-width: 90vw;
+    padding: 10px 10px 20px 10px;
+  }
+}
+
+// Forms
+// --------------------------------------------------
+
+.modal input[type="text"],
+.modal input[type="password"],
+.modal input[type="email"],
+.modal input[type="tel"],
+.modal input[type="number"],
+.modal input[type="search"],
+.modal textarea {
+  background: $color__n-60;
+}
