@@ -1,0 +1,12 @@
+{
+  "handle": "PaleoBot",
+  "crew": [
+    "banpaleo5"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xd78c006Db3159445E91EE8081CE2c785283eA630"
+    }
+  ]
+}
