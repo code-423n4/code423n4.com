@@ -1,0 +1,17 @@
+{
+  "handle": "WeByte",
+  "members": [
+    "33audits",
+    "sunbreather"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x6b85A3d42A12cC43D5C87B21337782B6097e2d61"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x6b85A3d42A12cC43D5C87B21337782B6097e2d61"
+    }
+  ]
+}
