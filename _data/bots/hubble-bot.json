@@ -1,0 +1,17 @@
+{
+  "handle": "hubble-bot",
+  "crew": [
+    "ksk2345",
+    "shri4net"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xc343235ec8143eab788d706165d50082833ff137"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0xc343235ec8143eab788d706165d50082833ff137"
+    }
+  ]
+}
