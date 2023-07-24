@@ -1,0 +1,16 @@
+{
+  "handle": "D2Hunter",
+  "crew": [
+    "nirlin"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x1A1da7Be44D477a887341Dc3EBC09A45798c7752"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x1A1da7Be44D477a887341Dc3EBC09A45798c7752"
+    }
+  ]
+}
