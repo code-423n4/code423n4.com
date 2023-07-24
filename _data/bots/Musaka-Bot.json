@@ -1,0 +1,17 @@
+{
+  "handle": "Musaka-Bot",
+  "crew": [
+    "ZdravkoHr",
+    "0x3b"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xc681946e6BE5Eda66F3aEFF5DCDF64384AFB8EA2"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0xcdb31907EB44E4918131401cA01e1A0dB1DCB9C8"
+    }
+  ]
+}
