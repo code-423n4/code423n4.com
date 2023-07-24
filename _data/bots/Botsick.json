@@ -1,0 +1,13 @@
+{
+  "handle": "Botsick",
+  "crew": [
+    "Koolex",
+    "Evo"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x28d4a49F94A837C0c39dd7f4cBc4C3a488c1ec1a"
+    }
+  ]
+}
