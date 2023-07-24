@@ -1,0 +1,12 @@
+{
+  "handle": "SolSavior",
+  "crew": [
+    "solsaver"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xff58C1E2B8C006DdA85A9Cc00aC34Ba0A59CA319"
+    }
+  ]
+}
