@@ -1,0 +1,12 @@
+{
+  "handle": "CJ",
+  "crew": [
+    "yongskiws"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x7334dbbb39a1fa2247dad3dafc6f763f2c0aa5bf"
+    }
+  ]
+}
