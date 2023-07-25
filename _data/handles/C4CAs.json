@@ -1,13 +1,22 @@
 {
   "handle": "C4CAs",
   "members": [
-    "CloudEllie",
-    "liveactionllama"
+    "Coffee_Weed",
+    "Coffee_Weed",
+    "Coffee_Weed",
+    "Coffee_Weed",
+    "Coffee_Weed"
   ],
+  "link": "<3",
   "paymentAddresses": [
     {
       "chain": "polygon",
-      "address": "0xc0ffee254729296a45a3885639AC7E10F9d54979"
+      "address": "0xad050bf165033dd1b86d23a75504e079b2053f2c"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0xad050bf165033dd1b86d23a75504e079b2053f2c"
     }
-  ]
+  ],
+  "image": "./avatars/C4CAs.png"
 }
