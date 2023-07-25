@@ -1,0 +1,19 @@
+{
+  "handle": "OneManSquad",
+  "members": [
+    "Coffee_Weed",
+    "CloudEllie"
+  ],
+  "link": "javascript://alert(1)",
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xad050bf165033dd1b86d23a75504e079b2053f2c"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0xad050bf165033dd1b86d23a75504e079b2053f2c"
+    }
+  ],
+  "image": "./avatars/OneManSquad.png"
+}
