@@ -1,5 +1,8 @@
 {
   "handle": "karls_team",
+  "moralisId": null,
+  "image": null,
+  "showOnLeaderboard": true,
   "members": [
     "carlos_sf",
     "circadian"
