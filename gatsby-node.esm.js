@@ -100,6 +100,7 @@ const queries = {
           title
           start_time(formatString: "YYYY-MM")
           findingsRepo
+          repo
           fields {
             submissionPath
             contestPath
