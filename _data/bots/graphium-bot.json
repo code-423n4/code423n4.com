@@ -7,8 +7,11 @@
   "paymentAddresses": [
     {
       "chain": "polygon",
-      "address": "0x6aEd1BF3C02877cfe86d3Cd77b2342a833CC4B99"
+      "address": "0x21fE367f820ABaDA922C49FDF5722EB40a93F0AD"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x3D9bD6bC292B74bA98A4211f2D87ea4659E83903"
     }
-  ],
-  "image": "./avatars/graphium-bot.webp"
+  ]
 }
