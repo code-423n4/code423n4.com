@@ -1,0 +1,15 @@
+{
+  "handle": "DEDSEC",
+  "members": [
+    "stephan",
+    "naveendilsara",
+    "sandamalgamage"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xc1797EFc742345390eC1a38e3f92aEe24603086D"
+    }
+  ],
+  "image": "./avatars/DEDSEC.png"
+}
