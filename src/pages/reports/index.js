@@ -8,37 +8,33 @@ export default function ReportIndex({ data }) {
   const reports = data.reports.edges;
 
   return (
-    <DefaultLayout pageTitle="Security Audit Reports" bodyClass="report-page">
-      <div className="wrapper-main">
-        <section>
-          <h1 className="page-header">Audit Reports</h1>
-          <div className="wrapper-report">
-            {reports ? (
-              <ReportList reports={reports} />
-            ) : (
-              "No reports yet. You can add one in the `_reports` directory."
-            )}
-          </div>
-        </section>
-      </div>
+    <DefaultLayout pageTitle="Security Audit Reports" bodyClass="reports-page">
+      <section className="limited-width">
+        <h1 className="type__headline__page-title">Audit Reports</h1>
+        <div className="grid__one-by-three--break-m-s">
+          {reports ? (
+            <ReportList reports={reports} />
+          ) : (
+            "No reports yet. You can add one in the `_reports` directory."
+          )}
+        </div>
+      </section>
     </DefaultLayout>
   );
 }
 
 export const query = graphql`
   query {
-    reports: allMarkdownRemark(
-      filter: { fields: { collection: { eq: "reports" } } }
-      sort: { fields: frontmatter___contest___contestid }
-    ) {
+    reports: allReportsJson(sort: { fields: circa___contest___contestid }) {
       edges {
         node {
           id
-          frontmatter {
+          frontmatter: circa {
             title
             slug
             findings
             altUrl
+            date
             sponsor {
               id
               image {

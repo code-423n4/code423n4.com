@@ -1,0 +1,17 @@
+{
+  "handle": "LightChaser",
+  "crew": [
+    "ChaseTheLight"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xbc82D9654283289fb48729968f804ab822DcC144"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0xbc82D9654283289fb48729968f804ab822DcC144"
+    }
+  ],
+  "image": "./avatars/LightChaser.jpeg"
+}
