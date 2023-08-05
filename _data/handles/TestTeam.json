@@ -1,0 +1,17 @@
+{
+  "handle": "TestTeam",
+  "members": [
+    "StefanAndrei",
+    "0xmatei"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x5d89287D089888b8d69F78395C3FeB8406818fFa"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x5d89287D089888b8d69F78395C3FeB8406818fFa"
+    }
+  ]
+}
