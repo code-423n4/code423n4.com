@@ -1,0 +1,20 @@
+{
+  "handle": "RED-LOTUS-REACH",
+  "moralisId": "",
+  "image": "",
+  "showOnLeaderboard": true,
+  "members": [
+    "escrow",
+    "3agle",
+    "DedOhWale",
+    "BlockChomper",
+    "reentrant",
+    "cholakov"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x43BC7Be8b597414348657e9929319202Ffb56f75"
+    }
+  ]
+}

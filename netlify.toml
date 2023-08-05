@@ -35,4 +35,4 @@
 
 [functions]
   directory = "netlify/functions/"
-  included_files = ["_data/findings/*", "_data/handles/*.json"]
+  included_files = ["_data/findings/*", "_data/handles/*.json", "_data/bots/*.json", "_data/bot-race-qualifier.json"]

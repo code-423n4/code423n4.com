@@ -1,0 +1,16 @@
+{
+  "handle": "4lpine",
+  "crew": [
+    "Picodes"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x7D7849Ac4aF7B3217C3A6088fA0c7dbB4e23c153"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x7D7849Ac4aF7B3217C3A6088fA0c7dbB4e23c153"
+    }
+  ]
+}

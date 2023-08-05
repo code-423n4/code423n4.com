@@ -71,6 +71,7 @@ $button__border-width: 2px;
   padding: $spacing__s $spacing__l;
   margin-right: $spacing__s;
   display: inline-flex;
+  align-items: center;
   background: $color__button-blurple;
   border: $button__border-width solid $color__button-blurple;
   border-radius: $border-radius__m;
@@ -94,6 +95,10 @@ $button__border-width: 2px;
 
   &--white {
     @include button--white;
+  }
+
+  img {
+    margin-right: $spacing__xs;
   }
 }
 
@@ -180,11 +185,39 @@ $button__border-width: 2px;
   text-decoration: underline;
 
   &:after {
-    content: " →";
+    content: " →";
   }
 
   &:hover {
     color: $color__blurple__text--light;
     background: transparent;
   }
+}
+
+// Button back link
+// --------------------
+
+.button--back-link {
+  padding: $spacing__s 0;
+  background: transparent;
+  border: none;
+  color: $color__blurple__text;
+  text-decoration: underline;
+
+  &:before {
+    content: "← ";
+  }
+
+  &:hover {
+    color: $color__blurple__text--light;
+    background: transparent;
+  }
+}
+
+// Button small
+// --------------------
+
+.button--small {
+  padding: $spacing__xs $spacing__s;
+  font-size: $font-size__small;
 }

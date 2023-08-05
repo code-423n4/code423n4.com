@@ -1,12 +1,11 @@
 import { Handler } from "@netlify/functions";
-import { Octokit } from "@octokit/core";
+import { Octokit } from "@octokit/rest";
 import jwt from "jsonwebtoken";
+import { Finding, Label } from "../../types/finding";
 
-import { QueryResponse, getAllIssues } from "../util/github-utils";
+import { getAllFindings } from "../util/github-utils";
 
-function getRiskFromLabels(
-  labels: QueryResponse["repository"]["issues"]["nodes"][number]["labels"]["nodes"]
-): string {
+function getRiskFromLabels(labels: Label[]): string {
   for (let i = 0; i < labels.length; i++) {
     if (labels[i].name === "invalid") {
       return "INVALID";
@@ -28,15 +27,11 @@ function getRiskFromLabels(
   return "";
 }
 
-function getIsDuplicateFromLabels(
-  labels: QueryResponse["repository"]["issues"]["nodes"][number]["labels"]["nodes"]
-): boolean {
+function getIsDuplicateFromLabels(labels: Label[]): boolean {
   return labels.map((l) => l.name).includes("duplicate");
 }
 
-function getIsInvalidFromLabels(
-  labels: QueryResponse["repository"]["issues"]["nodes"][number]["labels"]["nodes"]
-): boolean {
+function getIsInvalidFromLabels(labels: Label[]): boolean {
   return labels.map((l) => l.name).includes("invalid");
 }
 
@@ -49,22 +44,20 @@ interface SimplifiedIssue {
   isInvalid: boolean;
 }
 
-function simplifyData(
-  issue: QueryResponse["repository"]["issues"]["nodes"][number]
-): SimplifiedIssue {
+function simplifyData(issue: Finding): SimplifiedIssue {
   return {
-    id: issue.number,
+    id: issue.issueNumber,
     title: issue.title,
-    risk: getRiskFromLabels(issue.labels.nodes),
+    risk: getRiskFromLabels(issue.labels),
     isOpen: issue.state === "OPEN",
-    isDuplicate: getIsDuplicateFromLabels(issue.labels.nodes),
-    isInvalid: getIsInvalidFromLabels(issue.labels.nodes),
+    isDuplicate: getIsDuplicateFromLabels(issue.labels),
+    isInvalid: getIsInvalidFromLabels(issue.labels),
   };
 }
 
 function isAuthorized(jwtToken: string, requestedRepo: string): boolean {
   try {
-    const verification = jwt.verify(jwtToken, process.env.JWT_SIGNING_TOKEN);
+    const verification = jwt.verify(jwtToken, process.env.JWT_SIGNING_TOKEN!);
     if (typeof verification === "string") {
       return false;
     }
@@ -126,7 +119,7 @@ async function createUpgradedIssue(repo, issue) {
 
 async function doUpdateFromGitHub(repo) {
   const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
-  const issues = await getAllIssues(octokit, repo, "code-423n4");
+  const issues = await getAllFindings(octokit, repo, "code-423n4");
   const response = issues
     .map(simplifyData)
     .reduce<Record<number, SimplifiedIssue>>((a, b) => {
@@ -140,42 +133,44 @@ async function doUpdateFromGitHub(repo) {
   };
 }
 
-const handler: Handler = async (event, context) => {
-  try {
-    const { authorization } = event.headers;
+const handler: Handler = (event) => {
+  (async () => {
+    try {
+      const { authorization } = event.headers;
 
-    if (!authorization) {
+      if (!authorization) {
+        return {
+          statusCode: 401,
+          body: JSON.stringify({ error: "Authorization required" }),
+        };
+      }
+
+      const body = JSON.parse(event.body!);
+      const { name } = body;
+
+      if (!isAuthorized(authorization, name)) {
+        return {
+          statusCode: 401,
+          body: JSON.stringify({ error: "Authorization failed" }),
+        };
+      }
+
+      const { action, args } = body;
+
+      switch (action) {
+        case "update-from-github":
+          return await doUpdateFromGitHub(name);
+        case "upgrade-submission":
+          return await createUpgradedIssue(name, args);
+      }
+    } catch (err) {
+      console.error(err);
       return {
-        statusCode: 401,
-        body: JSON.stringify({ error: "Authorization required" }),
+        statusCode: 500,
+        body: JSON.stringify({ error: "Internal server error" }),
       };
     }
-
-    const body = JSON.parse(event.body);
-    const { name } = body;
-
-    if (!isAuthorized(authorization, name)) {
-      return {
-        statusCode: 401,
-        body: JSON.stringify({ error: "Authorization failed" }),
-      };
-    }
-
-    const { action, args } = body;
-
-    switch (action) {
-      case "update-from-github":
-        return await doUpdateFromGitHub(name);
-      case "upgrade-submission":
-        return await createUpgradedIssue(name, args);
-    }
-  } catch (err) {
-    console.error(err);
-    return {
-      statusCode: 500,
-      body: JSON.stringify({ error: "Internal server error" }),
-    };
-  }
+  })();
 };
 
 export { handler };

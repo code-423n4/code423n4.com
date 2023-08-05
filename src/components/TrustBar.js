@@ -52,11 +52,6 @@ const logos = [
     alt: "PoolTogether",
   },
   {
-    title: "Tally Wallet",
-    imgSrc: "/images/logos/tally.svg",
-    alt: "Tally Wallet",
-  },
-  {
     title: "Sushi",
     imgSrc: "/images/logos/sushi-logo-full.svg",
     alt: "Sushi",
