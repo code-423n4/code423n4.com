@@ -1,0 +1,147 @@
+@import "../variables";
+
+// CSS rule order
+// --------------------
+
+// 1. Variables
+// 2. Box model properties
+// 3. Display and position
+// 4. Background
+// 5. Border
+// 6. Box shadow
+// 7. Text
+// 8. Transforms
+// 9. Other
+
+// [Tip] For typography applied to `body`, check `base-typography`.
+body {
+  background: $color__background;
+  color: $color__text;
+  min-height: 100%;
+  height: 100%;
+}
+#___gatsby,
+#gatsby-focus-wrapper,
+html {
+  min-height: 100%;
+  height: 100%;
+}
+.wrapper__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto 1fr auto;
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
+
+  .header {
+    grid-area: 1 / 1 / 2 / 2;
+    align-self: start;
+  }
+  main {
+    grid-area: 2 / 1 / 3 / 2;
+    align-self: start;
+  }
+  .footer {
+    grid-area: 3 / 1 / 4 / 2;
+    align-self: end;
+  }
+}
+
+main {
+  width: 100%;
+  padding-bottom: $spacing__l;
+
+  @include breakpoint("m") {
+    padding-bottom: $spacing__xl;
+  }
+}
+
+.full-width {
+  width: 100%;
+  padding: 0;
+}
+
+// use this when you aren't nesting a limited-width container inside. That way you still get the padding you need.
+.full-width--padded {
+  width: 100%;
+  padding: 0 $spacing__xl;
+}
+
+.limited-width {
+  max-width: $layout__max-width;
+  margin: 0 auto;
+  padding: 0 $spacing__xl;
+
+  &--centered {
+    text-align: center;
+  }
+
+  &--background {
+    background: $color__n-80;
+    border-radius: $border-radius__m;
+    padding: $spacing__xl;
+  }
+}
+
+// Reusable Grids
+// --------------------
+
+.grid__one-by-two--break-s {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto;
+  grid-column-gap: $spacing__l;
+  grid-row-gap: $spacing__l;
+  @include breakpoint("s") {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.grid__one-by-two,
+.grid__one-by-two--break-m {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto;
+  grid-column-gap: $spacing__l;
+  grid-row-gap: $spacing__l;
+  @include breakpoint("m") {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.grid__one-by-three--break-s {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto;
+  grid-column-gap: $spacing__l;
+  grid-row-gap: $spacing__l;
+  @include breakpoint("s") {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
+
+.grid__one-by-three,
+.grid__one-by-three--break-m {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto;
+  grid-column-gap: $spacing__l;
+  grid-row-gap: $spacing__l;
+  @include breakpoint("m") {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
+
+.grid__one-by-three--break-m-s {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto;
+  grid-column-gap: $spacing__l;
+  grid-row-gap: $spacing__l;
+  @include breakpoint("s") {
+    grid-template-columns: 1fr 1fr;
+  }
+  @include breakpoint("m") {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
