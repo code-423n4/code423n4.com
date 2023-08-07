@@ -1,0 +1,24 @@
+{
+  "handle": "Inspex",
+  "members": [
+    "Resistor",
+    "jokopoppo",
+    "DeStinE21",
+    "mimic_f",
+    "Rugsurely",
+    "ErbaZZ",
+    "rxnnxchxi"
+  ],
+  "link": "https://twitter.com/InspexCo",
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x66113C6c4dDE1451C43A47564C99097156f18e1b"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x66113C6c4dDE1451C43A47564C99097156f18e1b"
+    }
+  ],
+  "image": "./avatars/Inspex.png"
+}
