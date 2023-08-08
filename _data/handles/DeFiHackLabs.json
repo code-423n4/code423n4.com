@@ -1,11 +1,8 @@
 {
-  "handle": "DeFiHackLabs",
   "members": [
     "SunSec",
     "gbaleee",
-    "0x4non",
-    "Aits",
-    "Rappie"
+    "0x4non"
   ],
   "paymentAddresses": [
     {
@@ -17,5 +14,6 @@
       "address": "0x4276BF06Aebd8A1F3D89a1fd5BF84bFa1B7D03Ce"
     }
   ],
+  "handle": "DeFiHackLabs",
   "image": "./avatars/DeFiHackLabs.png"
 }
