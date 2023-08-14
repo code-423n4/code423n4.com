@@ -1,0 +1,16 @@
+{
+  "handle": "GREEN-GECKO-REACH",
+  "members": [
+    "escrow",
+    "Azaryan",
+    "Habib0x",
+    "Praise",
+    "0xOse"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x43BC7Be8b597414348657e9929319202Ffb56f75"
+    }
+  ]
+}
