@@ -1,10 +1,14 @@
 {
   "handle": "BadMaths",
+  "link": "https://twitter.com/nicobevi_eth",
+  "moralisId": null,
+  "image": "./avatars/BadMaths.png",
+  "showOnLeaderboard": true,
   "members": [
     "Deivitto",
-    "nicobevi"
+    "nicobevi",
+    "0x4non"
   ],
-  "link": "https://twitter.com/nicobevi_eth",
   "paymentAddresses": [
     {
       "chain": "polygon",
@@ -12,8 +16,7 @@
     },
     {
       "chain": "ethereum",
-      "address": "0xe7292962e48c18e04bd26ab2acca00ef794e8171"
+      "address": "0xa0dF0E58e5a0D7c61D3eF0a140cCe006Cd1B12E6"
     }
-  ],
-  "image": "./avatars/BadMaths.png"
+  ]
 }
