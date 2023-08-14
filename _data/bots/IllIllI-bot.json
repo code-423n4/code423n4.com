@@ -1,0 +1,16 @@
+{
+  "handle": "IllIllI-bot",
+  "crew": [
+    "IllIllI"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xcc6b0a35481ea40b60780b7c0294c6c29061038f"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0xcc6b0a35481ea40b60780b7c0294c6c29061038f"
+    }
+  ]
+}

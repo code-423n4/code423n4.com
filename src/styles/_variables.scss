@@ -1,0 +1,187 @@
+// Colors
+// ------------------------------------------------
+
+// Black and white
+$color__white: hsl(0, 0%, 100%);
+$color__black: hsl(240, 20%, 1%);
+
+// Neutral palette
+$color__n-100: hsl(260, 13%, 5%);
+$color__n-90: hsl(251, 16.9%, 12.7%);
+$color__n-85: hsl(249, 17%, 15%);
+$color__n-80: hsl(251, 15.7%, 20%);
+$color__n-70: hsl(250, 16.4%, 21.6%);
+$color__n-60: hsl(251, 13.6%, 27.1%);
+$color__n-50: hsl(253, 11.2%, 31.4%);
+$color__n-40: hsl(252, 10.9%, 36.1%);
+$color__n-30: hsl(252, 11.3%, 45.1%);
+$color__n-20: hsl(252, 6.8%, 57.1%);
+$color__n-10: hsl(257, 4.3%, 68.4%);
+$color__n-5: hsl(252, 8.9%, 78%);
+$color__n-2: hsl(0, 0%, 90.2%);
+
+// Blurple palette
+// TODO these colors need hand adjustments
+$color__blurple-80: #4a3dff;
+$color__blurple-70: #5f3dff;
+$color__blurple-60: #7549ff; // button
+$color__blurple-50: #7f5bff; // button hover
+$color__blurple-40: #7f63ef; // text
+$color__blurple-30: #9385ff; // text light
+$color__blurple-20: #9e99ff;
+
+$color__blurple__text: $color__blurple-40;
+$color__blurple__text--light: $color__blurple-30;
+
+// Green palette
+$color__green: hsl(144, 58%, 59%);
+
+// Red palette
+$color__red: #ff427b;
+
+// Brand colors
+$color__button-blurple: $color__blurple-60;
+$color__button-blurple--hover: $color__blurple-50;
+$color__project-color: #463dff;
+$color__project-color--hover: lighten($color__project-color, 5%);
+
+$color__project: $color__project-color;
+$color__warden: $color__button-blurple;
+
+// Blended colors
+$color__blended-60: #4d22c7;
+
+$color__blended-80: #2c0e83;
+
+// Color Defaults
+// ------------------------------------------------
+
+// Background
+$color__background: $color__n-100;
+
+// Text
+$color__text: $color__n-10;
+$color__headline: $color__white;
+$color__subline: $color__n-10;
+
+// Forms
+$color__form-error: $color__red;
+
+// Buttons
+$color__button-danger: $color__red;
+$color__button-danger--hover: lighten($color__button-danger, 5%);
+
+// 🍔 TODO add default font sizes and em spacing
+
+// Font Sizes
+// ------------------------------------------------
+
+$font-size__copy: 1.2rem;
+$font-size__copy__code: 0.9em; // I'm also using this for all code blocks
+$font-size__text: 1rem;
+$font-size__text__code: 0.9em;
+$font-size__small: 0.933rem;
+
+$headline-font-size__xxxs: 1rem; // Sublines
+$headline-font-size__xxs: 1.3rem; // H6
+$headline-font-size__xs: 1.3rem; // H5
+$headline-font-size__s: 1.3rem; // H4
+$headline-font-size__m: 1.6rem; // H3
+$headline-font-size__l: 1.8rem; // H2
+$headline-font-size__ll: 2.1rem; // H2
+$headline-font-size__xl: 2.533rem; // H1
+$headline-font-size__xxl: 3.2rem; // Hero headline
+$headline-font-size__xxxl: 3.2rem; // Landing page hero headline
+
+// Font Families
+// ------------------------------------------------
+
+$font__default: "Satoshi Variable", sans-serif;
+// 🍔 TODO add DM sans as body copy font
+$font__code: "PT Mono", monospace;
+
+// Breakpoints
+// ------------------------------------------------
+
+$breakpoint__xxs: 450px;
+$breakpoint__xs: 600px;
+$breakpoint__s: 750px;
+$breakpoint__m: 960px;
+$breakpoint__l: 1280px;
+$breakpoint__xl: 1920px;
+
+// Layout
+// ------------------------------------------------
+
+$layout__max-width: 1100px;
+$report__max-width: 900px;
+$contest__max-width: 1100px;
+$form__max-width: 900px;
+$newsletter-signup__max-width: 900px;
+
+// Shadows
+// ------------------------------------------------
+
+$shadow__base: 0 0 0.5rem 0 rgba(0, 0, 0, 0.5);
+$shadow__hover: 0 0 0.5rem 0 rgba(0, 0, 0, 0.75);
+
+// Border radius
+// ------------------------------------------------
+
+$border-radius__base: 0.2rem; // 4px
+$border-radius__l: calc($border-radius__base * 2); // 8px
+$border-radius__m: $border-radius__base; // 4px
+$border-radius__s: calc($border-radius__base/ 2); // 2px
+
+// Z-index
+// ------------------------------------------------
+
+$z-index__base: 1;
+$z-index__modal: 1000;
+
+// Media queries
+// ------------------------------------------------
+
+@mixin breakpoint($breakpoint) {
+  $breakpoints: (
+    "xxs": $breakpoint__xxs,
+    "xs": $breakpoint__xs,
+    "s": $breakpoint__s,
+    "m": $breakpoint__m,
+    "l": $breakpoint__l,
+    "xl": $breakpoint__xl,
+  );
+
+  @media (min-width: map-get($breakpoints, $breakpoint)) {
+    @content;
+  }
+}
+
+// Transitions
+// ------------------------------------------------
+
+$transition__base: 0.2s ease-in-out;
+
+// Animations
+// ------------------------------------------------
+
+// Example of using @media to wrap an animation mixin.
+@mixin accessible-animation {
+  @media (prefers-reduced-motion: no-preference) {
+    @content;
+  }
+}
+
+// Spacing
+// ------------------------------------------------
+
+$spacing__base: 0.5rem; // 8px
+
+$spacing__xxs: calc($spacing__base/ 4); // 2px
+$spacing__xs: calc($spacing__base/ 2); // 4px
+$spacing__s: $spacing__base; // 8px
+$spacing__m: calc($spacing__base * 2); // 16px
+$spacing__l: calc($spacing__base * 3); // 24px
+$spacing__xl: calc($spacing__base * 4); // 32px
+$spacing__xxl: calc($spacing__base * 8); // 64px
+$spacing__xxxl: calc($spacing__base * 10); // 80px
