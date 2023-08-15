@@ -1,0 +1,20 @@
+{
+  "handle": "Zellic",
+  "members": [
+    "vakzz",
+    "Faith",
+    "unblvr"
+  ],
+  "link": "https://twitter.com/zellic_io",
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x498C0c17e26EEEC63375A4A20Ba8A91Aa357CbcD"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x2694410f290284f0Eb0D8501Bc44EccEFC0975da"
+    }
+  ],
+  "image": "./avatars/Zellic.png"
+}
