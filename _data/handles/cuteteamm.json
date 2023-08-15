@@ -1,10 +1,8 @@
 {
-  "handle": "cuteteamm",
   "members": [
     "cuteboiz",
     "Mehul"
   ],
-  "link": "https://example.com",
   "paymentAddresses": [
     {
       "chain": "polygon",
@@ -14,5 +12,7 @@
       "chain": "ethereum",
       "address": "0x20217d27C10b3dE5B9F2f49843EbC1fDCc259f65"
     }
-  ]
+  ],
+  "handle": "cuteteamm",
+  "link": ""
 }
