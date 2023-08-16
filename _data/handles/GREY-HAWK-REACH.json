@@ -1,22 +1,17 @@
 {
-  "handle": "GREY-HAWK-REACH",
-  "moralisId": "",
-  "image": "",
-  "showOnLeaderboard": true,
   "members": [
     "escrow",
     "aslanbek",
-    "nour99",
     "dimulski",
     "aswinraj94",
     "0xprinc",
-    "tnquanghuy0512",
-    "Imogene"
+    "Kose"
   ],
   "paymentAddresses": [
     {
       "chain": "polygon",
       "address": "0x43BC7Be8b597414348657e9929319202Ffb56f75"
     }
-  ]
+  ],
+  "handle": "GREY-HAWK-REACH"
 }
