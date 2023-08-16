@@ -70,37 +70,6 @@ $timeline-name-width: 260px;
   }
 }
 
-.register-bot__hero-content {
-  text-align: center;
-
-  .type__headline__page-title {
-    margin-top: $spacing__l;
-    font-size: $headline-font-size__l;
-
-    @include breakpoint("xxs") {
-      font-size: $headline-font-size__xl;
-    }
-
-    @include breakpoint("m") {
-      margin-top: $spacing__xxl;
-      font-size: $headline-font-size__xxl;
-    }
-  }
-
-  h2 {
-    max-width: 500px;
-    margin: calc($spacing__m * -0.2) auto 0;
-    line-height: 1.5;
-    font-weight: 400;
-    font-size: 1.1rem;
-
-    @include breakpoint("m") {
-      font-size: 1.3rem;
-      max-width: 700px;
-    }
-  }
-}
-
 .register-bot__hero-countdown {
   padding: $spacing__m;
   background: $color__blended-80;

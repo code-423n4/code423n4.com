@@ -199,9 +199,9 @@ exports.handler = async (event) => {
 
     const branchName = `bot/${botName}`;
     const title = `Register bot ${botName}`;
-    const body = dedent`
+    const registrationBody = dedent`
     Registration for bot ${botName} submitted by ${username}.
-    
+
     Description:
     ${description}
 
@@ -213,7 +213,7 @@ exports.handler = async (event) => {
       owner,
       repo: process.env.REPO!,
       title,
-      body,
+      body: registrationBody,
       head: branchName,
       base: process.env.BRANCH_NAME,
       changes: [
@@ -243,7 +243,7 @@ exports.handler = async (event) => {
 
     // submit application entry
     const submissionBody = dedent`
-    [Bot registration PR](${registrationResponse.data.html_url}) 
+    [Bot registration PR](${registrationResponse.data.html_url})
 
     [Bot submission](https://github.com/${owner}/${botApplicationRepo}/blob/main/data/${botName}-report.md).
     `;
@@ -255,7 +255,7 @@ exports.handler = async (event) => {
         repo: botApplicationRepo,
         title: `${botName} Bot Application`,
         body: submissionBody,
-        labels: ["QA (Quality Assurance"],
+        labels: ["QA (Quality Assurance)"],
       }
     );
 
@@ -290,7 +290,7 @@ exports.handler = async (event) => {
       repo: botApplicationRepo,
       path: `data/${botName}-report.md`,
       message: `${botName} data for issue #${issueId}`,
-      content: Buffer.from(body).toString("base64"),
+      content: Buffer.from(submission).toString("base64"),
     });
 
     const emails = await getGroupEmails(crewMembers);
@@ -299,17 +299,30 @@ exports.handler = async (event) => {
     An application to register a new bot (${botName}) has been received with the following crew: ${crewMembers.join(
       ", "
     )}
-    
-    You can see the PR here: ${registrationResponse.data.html_url}
-    `;
-    await sendConfirmationEmail(emails, emailSubject, emailBody);
 
-    return {
-      statusCode: 201,
-      body: JSON.stringify({
-        message: `Created PR ${registrationResponse.data.number}`,
-      }),
-    };
+    You can see the PR here: ${registrationResponse.data.html_url}
+
+    The content of the submission follows:
+
+    ${submissionBody}
+    `;
+    try {
+      await sendConfirmationEmail(emails, emailSubject, emailBody);
+
+      return {
+        statusCode: 201,
+        body: JSON.stringify({
+          message: `Created PR ${registrationResponse.data.number}`,
+        }),
+      };
+    } catch (error) {
+      return {
+        statusCode: 500,
+        body: JSON.stringify({
+          error: `Bot application succeeded, but email confirmation failed`,
+        }),
+      };
+    }
   } catch (error) {
     return {
       statusCode: error?.status || error?.response?.status || 500,

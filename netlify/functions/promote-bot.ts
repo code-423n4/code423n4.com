@@ -152,7 +152,7 @@ exports.handler = async (event) => {
     Bot registration PR: ${promotionResponse.data.html_url}
 
     Bot submission:
-    
+
     ${submission}
     `;
 
@@ -163,7 +163,7 @@ exports.handler = async (event) => {
         repo: "bot-applications",
         title: `${botName} Bot Application`,
         body: submissionBody,
-        labels: ["QA (Quality Assurance"],
+        labels: ["QA (Quality Assurance)"],
       }
     );
 
@@ -196,7 +196,7 @@ exports.handler = async (event) => {
     const emailSubject = `Application to promote bot "${botName}" has been submitted`;
     const emailBody = dedent`
     An application to promote the bot ${botName} from relegation has been received.
-    
+
     You can see the PR here: ${promotionResponse.data.html_url}
     `;
     await sendConfirmationEmail(emails, emailSubject, emailBody);
