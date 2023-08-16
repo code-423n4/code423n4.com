@@ -1,0 +1,13 @@
+{
+  "handle": "plainshift",
+  "members": [
+    "surya",
+    "thank_you"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xB25E126Fb65eBe555C24D9e506fC1E67fD98e014"
+    }
+  ]
+}
