@@ -1,0 +1,75 @@
+@import "../variables";
+
+// --------------------------------------------------
+// Footer Component
+// --------------------------------------------------
+
+// CSS rule order
+// --------------------
+
+// 1. Variables
+// 2. Box model properties
+// 3. Display and position
+// 4. Background
+// 5. Border
+// 6. Box shadow
+// 7. Text
+// 8. Transforms
+// 9. Other
+
+.footer {
+  padding: $spacing__l $spacing__l $spacing__m;
+  @include breakpoint("m") {
+    padding: $spacing__l $spacing__l $spacing__l;
+  }
+
+  text-align: center;
+
+  .eth-address {
+    word-break: break-all;
+  }
+}
+
+.footer__items {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.footer__item {
+  margin-right: 0 $spacing__s;
+  @include breakpoint("m") {
+    margin-right: 0 $spacing__m;
+  }
+
+  &::after {
+    content: "|";
+    margin: $spacing__s;
+    color: $color__n-60;
+
+    @include breakpoint("m") {
+      margin: $spacing__m;
+    }
+  }
+
+  &:first-child {
+    margin-right: 0;
+  }
+
+  &:last-child {
+    &::after {
+      content: "";
+    }
+  }
+
+  a {
+    color: $color__blurple__text;
+    text-decoration: none;
+    transition: color 0.2s ease-in-out;
+
+    &:hover {
+      color: $color__n-40;
+    }
+  }
+}

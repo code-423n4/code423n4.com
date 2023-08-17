@@ -1,0 +1,14 @@
+{
+  "handle": "graphium-bot",
+  "crew": [
+    "panda",
+    "coincoin"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x21fE367f820ABaDA922C49FDF5722EB40a93F0AD"
+    }
+  ],
+  "image": "./avatars/graphium-bot.webp"
+}

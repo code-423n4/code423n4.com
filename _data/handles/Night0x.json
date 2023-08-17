@@ -1,0 +1,14 @@
+{
+  "handle": "Night0x",
+  "members": [
+    "nighthawk",
+    "0xsi"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x6e2A17c412f35Bda19Ad5fe4866654a0Eb66eF31"
+    }
+  ],
+  "image": "./avatars/Night0x.png"
+}

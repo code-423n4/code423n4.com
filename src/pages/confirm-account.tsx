@@ -16,9 +16,6 @@ import DefaultLayout from "../templates/DefaultLayout";
 import Form from "../components/form/Form";
 import { Input } from "../components/Input";
 
-// styles
-import * as styles from "../styles/Main.module.scss";
-
 enum FormStatus {
   Unsubmitted = "unsubmitted",
   SubmitAttempted = "submitAttempted",
@@ -237,7 +234,7 @@ export default function ConfirmAccount() {
 
   return (
     <DefaultLayout hideConnectWalletDropdown={true}>
-      <div className="wrapper-main">
+      <div className="limited-width type__copy form">
         {status === FormStatus.Loading ? (
           // @todo: style a loading state
           <div>LOADING...</div>
@@ -269,12 +266,12 @@ export default function ConfirmAccount() {
             {handles.length > 1 && (
               <>
                 <fieldset
-                  className={clsx(styles.Widget__Fields, styles.Widget__RadioGroup)}
+                  className={clsx("widget__fields", "widget__radio-group")}
                 >
                   {handles.map((handle) => (
-                    <label className={styles.Widget__RadioLabel} key={handle}>
+                    <label className="widget__radio-label" key={handle}>
                       <input
-                        className={styles.Widget__Radio}
+                        className="widget__radio"
                         type="radio"
                         value={handle}
                         name="handle"
