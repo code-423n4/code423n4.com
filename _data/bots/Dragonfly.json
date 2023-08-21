@@ -1,0 +1,12 @@
+{
+  "handle": "Dragonfly",
+  "crew": [
+    "pfapostol"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x7aed85c78dda77147914c80db417f099e456a8a5"
+    }
+  ]
+}
