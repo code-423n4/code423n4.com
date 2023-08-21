@@ -1,0 +1,16 @@
+{
+  "handle": "auditooor",
+  "crew": [
+    "boredpukar"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x96f99A141bddFE05991Edd7B496E9f1A6a4F60Cf"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x96f99A141bddFE05991Edd7B496E9f1A6a4F60Cf"
+    }
+  ]
+}
