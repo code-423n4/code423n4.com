@@ -1,0 +1,17 @@
+{
+  "handle": "TrailingCrits",
+  "members": [
+    "Dravee",
+    "bytes032"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x369D73b05d3E35399c69Cee3C3d8053c2307604C"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x369D73b05d3E35399c69Cee3C3d8053c2307604C"
+    }
+  ]
+}
