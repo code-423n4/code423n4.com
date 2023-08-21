@@ -1,0 +1,12 @@
+{
+  "handle": "yjrwkk-bot-2",
+  "crew": [
+    "yjrwkk"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xe3f133304b35224ba088ae1d58f9db4b7de41beb"
+    }
+  ]
+}
