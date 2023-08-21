@@ -1,0 +1,13 @@
+{
+  "handle": "Bolo",
+  "crew": [
+    "PNS"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x7729feb92bdb42b49420329ce0945c45c2cceccf"
+    }
+  ],
+  "image": "./avatars/Bolo.jpeg"
+}
