@@ -1,0 +1,12 @@
+{
+  "handle": "Praetorian-Guard",
+  "crew": [
+    "tsvetanovv"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xCcCB1171eE537a5407BaA8015Ca03F6d799aBCc2"
+    }
+  ]
+}
