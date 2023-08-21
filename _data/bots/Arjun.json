@@ -1,0 +1,17 @@
+{
+  "handle": "Arjun",
+  "crew": [
+    "dharma09"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x3ec3d93f7b86f1164162a3266519e8b749c0c6e9"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x3ec3d93f7b86f1164162a3266519e8b749c0c6e9"
+    }
+  ],
+  "image": "./avatars/Arjun.png"
+}
