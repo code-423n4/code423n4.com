@@ -1,0 +1,16 @@
+{
+  "handle": "dervish",
+  "crew": [
+    "0rpse"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x6b4f6FC2ECe2633F2d5303DA70dbF573158F7534"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x6b4f6FC2ECe2633F2d5303DA70dbF573158F7534"
+    }
+  ]
+}
