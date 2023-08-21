@@ -1,0 +1,16 @@
+{
+  "handle": "Guild_1",
+  "members": [
+    "David_",
+    "AnandK_2024",
+    "emmaglorypraise",
+    "natachi"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x641D0FB3969f8A7E8c71A14D333d425C23F545B5"
+    }
+  ],
+  "image": "./avatars/Guild_1.jpeg"
+}
