@@ -1,0 +1,16 @@
+{
+  "handle": "balkan_bot",
+  "crew": [
+    "B353N"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x6Cb5Ce4a8D270DEd99cdaf5F64F78B2d8518065c"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x6Cb5Ce4a8D270DEd99cdaf5F64F78B2d8518065c"
+    }
+  ]
+}
