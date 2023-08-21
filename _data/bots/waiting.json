@@ -1,0 +1,12 @@
+{
+  "handle": "waiting",
+  "crew": [
+    "wait"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x5Cc572Dae198370fc03C6ed58d2494858A7A03a1"
+    }
+  ]
+}
