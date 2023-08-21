@@ -1,0 +1,19 @@
+{
+  "handle": "duodit",
+  "members": [
+    "dwward3n",
+    "clash"
+  ],
+  "link": "https://code4rena.com/@duodit",
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xA4Fab45d64e2cA87e04B840b51eFa5d3E47Da799"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0xA4Fab45d64e2cA87e04B840b51eFa5d3E47Da799"
+    }
+  ],
+  "image": "./avatars/duodit.png"
+}

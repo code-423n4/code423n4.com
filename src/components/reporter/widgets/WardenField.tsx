@@ -4,18 +4,15 @@ import React, { ReactNode, useCallback, useState } from "react";
 
 import Select from "react-select";
 
-import * as styles from "./WardenField.module.scss";
-import * as inputStyles from "../../Input.module.scss";
-
 const WardenOptionLabel = ({ value, image }) => {
   return (
-    <div className={styles.OptionContainer}>
+    <div className={"warden-field__option-container"}>
       <Avatar
-        src={image ? image.childImageSharp.resize.src : ""}
+        src={image?.childImageSharp?.resize?.src || ""}
         name={value}
         size="27px"
         round="27px"
-        className={styles.Avatar}
+        className="warden-field__avatar"
       />
       <span>{value}</span>
     </div>
@@ -95,14 +92,11 @@ const WardenField = ({
 
   return (
     <div>
-      {label && (
-        <label className={inputStyles.Label} htmlFor={name}>
-          {required ? label + " *" : label}
-        </label>
-      )}
-      {helpText && <p className={inputStyles.Help}>{helpText}</p>}
+      {label && <label htmlFor={name}>{required ? label + " *" : label}</label>}
+      {helpText && <p className="form__help-text">{helpText}</p>}
       <Select
         name={name}
+        aria-describedby={name}
         required={required}
         value={
           isMulti
@@ -112,7 +106,7 @@ const WardenField = ({
         formatOptionLabel={WardenOptionLabel}
         options={options}
         onChange={handleChange}
-        className={clsx(styles.ReactSelect, isInvalid && styles.Invalid)}
+        className={clsx("react-select", isInvalid && "warden-field__invalid")}
         classNamePrefix="react-select"
         isClearable={true}
         isMulti={isMulti}
@@ -120,9 +114,9 @@ const WardenField = ({
       />
       {isInvalid &&
         validationErrors.map((validationError) => (
-          <label htmlFor={name} className={inputStyles.ErrorMessage}>
+          <p id={name} className={"input__error-message form-field__error"}>
             {validationError}
-          </label>
+          </p>
         ))}
     </div>
   );
