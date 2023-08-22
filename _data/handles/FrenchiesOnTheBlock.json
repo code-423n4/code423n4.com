@@ -1,0 +1,18 @@
+{
+  "handle": "FrenchiesOnTheBlock",
+  "members": [
+    "MiniGlome",
+    "lil_eth"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x0f48deb0a7A954AD6536e423E3A2452e4D2d1349"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x0f48deb0a7A954AD6536e423E3A2452e4D2d1349"
+    }
+  ],
+  "image": "./avatars/FrenchiesOnTheBlock.jpeg"
+}
