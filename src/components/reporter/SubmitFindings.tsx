@@ -18,9 +18,6 @@ import {
   linksToCodeField,
   vulnerabilityDetailsField,
   qaGasDetailsField,
-  mitigationField,
-  mitigationRiskField,
-  mitigationOfField,
   issueTypeListField,
 } from "./findings/fields";
 import {
@@ -64,7 +61,6 @@ interface SubmitFindingsProps {
   successMessage: string;
   successButtonText?: string;
   cancelButtonText?: string;
-  contestType: "Mitigation review" | "Audit";
   onDelete?: () => Promise<void>;
 }
 
@@ -82,7 +78,6 @@ const SubmitFindings = ({
   successMessage,
   successButtonText,
   cancelButtonText,
-  contestType,
   onDelete,
 }: SubmitFindingsProps) => {
   // hooks
@@ -115,49 +110,27 @@ const SubmitFindings = ({
   }, [findingId, initialState]);
 
   useEffect(() => {
-    // set which fields are shown based on risk and audit type
+    // set which fields are shown based on risk
     let fieldList: Field[] = [riskField];
-    if (contestType === "Mitigation review") {
-      fieldList = [mitigationOfField, mitigationField];
-      if (state.isMitigated) {
-        fieldList.push(qaGasDetailsField);
-        setFieldList(fieldList);
-        return;
-      }
-      fieldList.push(mitigationRiskField);
-      if (!state.risk) {
-        setFieldList(fieldList);
-        return;
-      }
-      setFieldList(
-        fieldList.concat([
-          titleField,
-          linksToCodeField,
-          vulnerabilityDetailsField,
-          issueTypeListField,
-        ])
-      );
+
+    if (!state.risk) {
+      setFieldList(fieldList);
       return;
-    } else {
-      if (!state.risk) {
-        setFieldList(fieldList);
-        return;
-      }
-      if (checkQaOrGasFinding(state.risk)) {
-        fieldList.push(qaGasDetailsField);
-        setFieldList(fieldList);
-        return;
-      }
-      setFieldList(
-        fieldList.concat([
-          titleField,
-          linksToCodeField,
-          vulnerabilityDetailsField,
-          issueTypeListField,
-        ])
-      );
     }
-  }, [state.risk, currentUser, state.isMitigated, state.issueType]);
+    if (checkQaOrGasFinding(state.risk)) {
+      fieldList.push(qaGasDetailsField);
+      setFieldList(fieldList);
+      return;
+    }
+    setFieldList(
+      fieldList.concat([
+        titleField,
+        linksToCodeField,
+        vulnerabilityDetailsField,
+        issueTypeListField,
+      ])
+    );
+  }, [state.risk, currentUser]);
 
   useEffect(() => {
     if (!currentUser.isLoggedIn) {
@@ -185,16 +158,6 @@ const SubmitFindings = ({
             const newState = {
               ...prevState,
               [name]: getTitle(value, prevState.risk),
-            };
-            setStateInLocalStorage(findingId, newState);
-            return newState;
-          });
-          break;
-        case "isMitigated":
-          setState((prevState) => {
-            const newState = {
-              ...prevState,
-              [name]: !prevState.isMitigated,
             };
             setStateInLocalStorage(findingId, newState);
             return newState;
@@ -337,21 +300,8 @@ const SubmitFindings = ({
     let body = markdownBody;
     let labels = [config.labelAll, state.risk];
 
-    let mitigationOf: string | undefined = state.mitigationOf;
-
     if (isQaOrGasFinding) {
       body = state.qaGasDetails;
-    }
-
-    if (contestType === "Mitigation review") {
-      mitigationOf = state.mitigationOf;
-      labels = [state.risk];
-      if (state.isMitigated) {
-        body = state.qaGasDetails;
-        title = "";
-        risk = "";
-        labels = [];
-      }
     }
     const emailAddressList: string[] = additionalEmailAddresses.filter(
       (email) => !!email
@@ -369,8 +319,6 @@ const SubmitFindings = ({
       title,
       body,
       labels,
-      mitigationOf,
-      isMitigated: state.isMitigated,
     };
     if (attributedTo !== currentUser.username) {
       const team = currentUser.teams.find(
@@ -444,19 +392,6 @@ const SubmitFindings = ({
     ];
     if (isQaOrGasFinding) {
       requiredFields = [state.risk, state.qaGasDetails];
-    }
-    if (contestType === "Mitigation review") {
-      if (state.isMitigated) {
-        // if the finding is mitigated, we only need "mitigation of"
-        if (!state.mitigationOf || !state.qaGasDetails) {
-          setHasValidationErrors(true);
-          return true;
-        } else {
-          return false;
-        }
-      } else {
-        requiredFields.push(state.mitigationOf);
-      }
     }
     const hasErrors = requiredFields.some((field) => {
       return field === "" || field === undefined;
@@ -634,11 +569,7 @@ const SubmitFindings = ({
             </fieldset>
           </div>
           <fieldset>
-            <h2>
-              {contestType === "Mitigation review"
-                ? "Mitigation Review"
-                : "Finding"}
-            </h2>
+            <h2>Finding</h2>
             {fieldList.map((field, index) => {
               let isInvalid = false;
               if (field.name === "linksToCode") {
