@@ -1,0 +1,13 @@
+{
+  "handle": "IndieSec",
+  "members": [
+    "Chinmay",
+    "0xgunslinger"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xea75FaaA8f7259F848ed4Fe41862F972D0A524cC"
+    }
+  ]
+}
