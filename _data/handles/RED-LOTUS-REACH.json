@@ -1,15 +1,12 @@
 {
   "handle": "RED-LOTUS-REACH",
-  "moralisId": "",
-  "image": "",
-  "showOnLeaderboard": true,
   "members": [
     "escrow",
-    "3agle",
     "DedOhWale",
     "BlockChomper",
     "reentrant",
-    "cholakov"
+    "SaharDevep",
+    "infosec_us_team"
   ],
   "paymentAddresses": [
     {
