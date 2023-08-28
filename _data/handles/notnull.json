@@ -1,0 +1,18 @@
+{
+  "handle": "notnull",
+  "members": [
+    "Osiris",
+    "0x00face"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xc9808944047D1fF1899d8d0a3f42fABBD9E895EA"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0xc9808944047D1fF1899d8d0a3f42fABBD9E895EA"
+    }
+  ],
+  "image": "./avatars/notnull.png"
+}
