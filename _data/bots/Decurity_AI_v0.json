@@ -17,5 +17,6 @@
       "address": "0xe60b1Ede3384ed987756A33257D757f25A84B297"
     }
   ],
-  "image": "./avatars/Decurity_AI_v0.jpeg"
+  "image": "./avatars/Decurity_AI_v0.jpeg",
+  "relegated": true
 }
