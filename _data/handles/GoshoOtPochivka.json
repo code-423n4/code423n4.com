@@ -1,0 +1,15 @@
+{
+  "handle": "GoshoOtPochivka",
+  "members": [
+    "B353N",
+    "deth",
+    "cats"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x84d0cd6eC10d86A6840167af36584C40467A2ced"
+    }
+  ],
+  "image": "./avatars/GoshoOtPochivka.png"
+}
