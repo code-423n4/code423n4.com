@@ -1,0 +1,14 @@
+{
+  "handle": "Team-Slayer",
+  "members": [
+    "Mike_Bello90",
+    "ThaddeusCrypto"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xD4298CA6D3654DcCa95b39Ef612c7270d8EdF8Cb"
+    }
+  ],
+  "image": "./avatars/Team-Slayer.jpeg"
+}
