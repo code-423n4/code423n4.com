@@ -1,0 +1,19 @@
+{
+  "handle": "0xLanterns",
+  "members": [
+    "kiki_dev",
+    "wall604"
+  ],
+  "link": "https://twitter.com/Kiki_developer",
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x58a17A4D6C147BC72bcBfaB7B700626b01C04eb7"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x58a17A4D6C147BC72bcBfaB7B700626b01C04eb7"
+    }
+  ],
+  "image": "./avatars/0xLanterns.png"
+}

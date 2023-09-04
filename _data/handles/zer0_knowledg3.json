@@ -1,0 +1,19 @@
+{
+  "handle": "zer0_knowledg3",
+  "members": [
+    "Draco000",
+    "ArtemkaWeb3",
+    "Remaerd369"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x8647F3f6BE05A9299D70100a675B820957E461B8"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x8647F3f6BE05A9299D70100a675B820957E461B8"
+    }
+  ],
+  "image": "./avatars/zer0_knowledg3.jpeg"
+}
