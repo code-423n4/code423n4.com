@@ -1,0 +1,12 @@
+{
+  "handle": "znBotty",
+  "crew": [
+    "Rolezn"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xf6850e8F677D320159Bb8C84F40dD136d03A2ebb"
+    }
+  ]
+}
