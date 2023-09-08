@@ -1,0 +1,17 @@
+{
+  "handle": "sivanesh_vegeta",
+  "crew": [
+    "sivanesh_808"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xCC6cec3d968145d1ab6644a28C413Eb5988b2d26"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0xCC6cec3d968145d1ab6644a28C413Eb5988b2d26"
+    }
+  ],
+  "image": "./avatars/sivanesh_vegeta.png"
+}
