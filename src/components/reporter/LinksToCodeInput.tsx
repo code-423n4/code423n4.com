@@ -1,14 +1,14 @@
 import React, { ReactNode } from "react";
 
 import { DynamicInputGroup } from "../DynamicInputGroup";
-import * as styles from "./widgets/Widgets.module.scss";
 
 interface LinksToCodeProps {
   onChange: (payload: string[]) => void;
   linksToCode: string[];
+  required: boolean;
 }
 
-const LinksToCode = ({ onChange, linksToCode }: LinksToCodeProps) => {
+const LinksToCode = ({ onChange, linksToCode, required }: LinksToCodeProps) => {
   const validator = (line: string): (string | ReactNode)[] => {
     const errors: (string | ReactNode)[] = [];
     const linksToCodeRegex = new RegExp("#L[0-9]+(-L[0-9]+)?$");
@@ -32,10 +32,10 @@ const LinksToCode = ({ onChange, linksToCode }: LinksToCodeProps) => {
 
   return (
     <div className="links-to-code">
-      <label htmlFor="links-to-code" className={styles.Label}>
-        Links to affected code *
+      <label htmlFor="links-to-code">
+        Links to affected code{required ? " *" : " (Optional)"}
       </label>
-      <p className={styles.Help}>
+      <p>
         Provide GitHub links, including line numbers, to all instances of this
         bug throughout the repo. (
         <a

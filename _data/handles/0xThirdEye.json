@@ -1,0 +1,15 @@
+{
+  "handle": "0xThirdEye",
+  "members": [
+    "YungChaza",
+    "amaechieth"
+  ],
+  "link": "0xthirdeye.com",
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x4DAAAEc900Ea75BE23b47f342bf1cabAEaE54538"
+    }
+  ],
+  "image": "./avatars/0xThirdEye.png"
+}

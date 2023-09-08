@@ -96,7 +96,7 @@ const wardenListQuery = graphql`
           handle
           image {
             childImageSharp {
-              resize(width: 64, quality: 90) {
+              resize(width: 80) {
                 src
               }
             }
@@ -181,7 +181,7 @@ const JudgeApplication = () => {
             bodyClass="judge-application"
             pageTitle="Judge Application | Code4rena"
           >
-            <div className="wrapper-main">
+            <div className="limited-width">
               {(status === FormStatus.Unsubmitted ||
                 status === FormStatus.Submitting) && (
                 <>

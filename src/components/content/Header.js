@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "gatsby";
 import clsx from "clsx";
+import Button from "../Button";
 
 import useUser from "../../hooks/UserContext";
 
@@ -18,9 +19,9 @@ const Hamburger = ({ mobileNavOpen, setMobileNavOpen }) => {
       aria-expanded={mobileNavOpen}
     >
       <svg
-        height="21"
-        viewBox="0 0 28 21"
-        width="28"
+        height="22"
+        viewBox="0 0 22 22"
+        width="22"
         xmlns="http://www.w3.org/2000/svg"
       >
         <g fill="#d8d8d8" fillRule="evenodd">
@@ -38,27 +39,36 @@ const Header = ({ hideConnectWalletDropdown = false }) => {
   const { currentUser } = useUser();
 
   return (
-    <header className={clsx(mobileNavOpen && "open")}>
+    <header
+      className={"header full-width--padded " + clsx(mobileNavOpen && "open")}
+    >
       <a className="visually-hidden focusable skip-link" href="#skip-link">
         Skip Navigation
       </a>
-      <nav className={clsx(mobileNavOpen && "open")} role="navigation">
-        <Link className="logo" to="/">
-          <img src="/images/c4-logo.svg" alt="Code 423n4" />
-        </Link>
-        <Hamburger
-          setMobileNavOpen={setMobileNavOpen}
-          mobileNavOpen={mobileNavOpen}
-        />
-        <div className="nav-links">
+      <nav
+        className={"header__nav " + clsx(mobileNavOpen && "open")}
+        role="navigation"
+      >
+        <div className="header__logo-and-burger">
+          <Link className="logo" to="/">
+            <img src="/images/c4-logo.svg" alt="Code4rena Logo" />
+          </Link>
+          <Hamburger
+            setMobileNavOpen={setMobileNavOpen}
+            mobileNavOpen={mobileNavOpen}
+          />
+        </div>
+        <div className="header__nav-links">
+          <Link to="/how-it-works">How it works</Link>
           <Link to="/leaderboard">Leaderboard</Link>
-          <Link to="/contests">Contests</Link>
+          <Link to="/contests">Audits</Link>
           <Link to="/reports">Reports</Link>
-          <Link to="/cosmos">Cosmos</Link>
           <a href="https://docs.code4rena.com">Docs</a>
           <Link to="/help">Help</Link>
-          {!hideConnectWalletDropdown &&
-            (currentUser.isLoggedIn ? <UserDropdown /> : <Login />)}
+          <div className="header__nav-buttons">
+            {!hideConnectWalletDropdown &&
+              (currentUser.isLoggedIn ? <UserDropdown /> : <Login />)}
+          </div>
         </div>
       </nav>
       <span id="skip-link"></span>

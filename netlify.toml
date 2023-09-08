@@ -14,6 +14,18 @@
   to = "/register"
   status = 200
 
+[[redirects]]
+  from = "/community-resources/contests.csv"
+  to = "/.netlify/functions/resources"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/community-resources/findings.csv"
+  to = "/.netlify/functions/resources"
+  status = 200
+  force = true
+
 [context.deploy-preview]
   ignore = "bash ./netlify-ignore-branch.sh"
   environment = { GATSBY_STAGING = "true" }
@@ -23,4 +35,4 @@
 
 [functions]
   directory = "netlify/functions/"
-  included_files = ["_data/contests/*", "_data/handles/*.json"]
+  included_files = ["_data/findings/*", "_data/handles/*.json", "_data/bots/*.json", "_data/bot-race-qualifier.json"]
