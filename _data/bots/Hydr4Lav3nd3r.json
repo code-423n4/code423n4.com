@@ -1,0 +1,16 @@
+{
+  "handle": "Hydr4Lav3nd3r",
+  "crew": [
+    "oakcobalt"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xd8a7570eaD74fd0030caDFbad28Eebc4c0dF34b7"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0xd8a7570eaD74fd0030caDFbad28Eebc4c0dF34b7"
+    }
+  ]
+}
