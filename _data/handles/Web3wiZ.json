@@ -1,0 +1,15 @@
+{
+  "handle": "Web3wiZ",
+  "members": [
+    "djroy777",
+    "hackit_bharat",
+    "pheonix_01",
+    "sivanesh_808"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x437FDA1B4D6B92d651Ae50AA3dB0E36EA2B0b510"
+    }
+  ]
+}
