@@ -1,0 +1,13 @@
+{
+  "handle": "kudalumping",
+  "crew": [
+    "yongskiws"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x7334dbbb39a1Fa2247DAd3dafC6f763F2c0aa5BF"
+    }
+  ],
+  "image": "./avatars/kudalumping.png"
+}
