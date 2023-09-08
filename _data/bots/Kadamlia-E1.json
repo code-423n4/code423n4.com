@@ -1,0 +1,16 @@
+{
+  "handle": "Kadamlia-E1",
+  "crew": [
+    "0xE1D"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x66DF316109e02E4Ec25a25aB31B7046C28E515D8"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x66DF316109e02E4Ec25a25aB31B7046C28E515D8"
+    }
+  ]
+}
