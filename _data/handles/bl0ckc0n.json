@@ -1,0 +1,17 @@
+{
+  "handle": "bl0ckc0n",
+  "members": [
+    "0xwasny",
+    "fsk"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x9C84d84b46971Faf8B480aB116b7f5391D630fA1"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x9C84d84b46971Faf8B480aB116b7f5391D630fA1"
+    }
+  ]
+}
