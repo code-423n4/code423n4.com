@@ -1,0 +1,20 @@
+{
+  "handle": "marco-and-frens",
+  "members": [
+    "marcobesier",
+    "lyrxthegreat",
+    "Yama"
+  ],
+  "link": "https://x.com/marcobesier",
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xfd44C68C42E6a51B1277ee01D03E91F5F6606850"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0xfd44C68C42E6a51B1277ee01D03E91F5F6606850"
+    }
+  ],
+  "image": "./avatars/marco-and-frens.png"
+}

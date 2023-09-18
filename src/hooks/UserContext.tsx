@@ -12,7 +12,7 @@ import { toast } from "react-toastify";
 import { navigate } from "gatsby";
 
 // types
-import { TeamData } from "../../types/user";
+import { BotData, TeamData } from "../../types/user";
 
 // hooks
 import { ModalProvider, useModalContext } from "./ModalContext";
@@ -36,6 +36,13 @@ export interface TeamInfo extends UserBasicInfo {
   members: string[];
 }
 
+export interface BotInfo extends UserBasicInfo {
+  polygonAddress: string;
+  ethereumAddress?: string;
+  crew: string[];
+  relegated: boolean;
+}
+
 interface UserState extends UserBasicInfo {
   discordUsername: string;
   gitHubUsername: string;
@@ -45,6 +52,7 @@ interface UserState extends UserBasicInfo {
   teams: TeamInfo[];
   isLoggedIn: boolean;
   isCertified: boolean;
+  bot?: BotInfo;
 }
 
 interface User {
@@ -65,6 +73,7 @@ const DEFAULT_STATE: UserState = {
   image: undefined,
   link: undefined,
   isCertified: false,
+  bot: undefined,
 };
 
 const UserContext = createContext<User>({
@@ -236,6 +245,29 @@ const UserProvider = ({ children }) => {
       });
     }
 
+    // fetching bot
+    const botResponse = await fetch(
+      `/.netlify/functions/get-bot?id=${username}`
+    );
+    let bot: BotInfo | undefined = undefined;
+    if (botResponse.status === 200) {
+      const botFileData: BotData = await botResponse.json();
+      bot = {
+        crew: botFileData.crew,
+        username: botFileData.handle,
+        polygonAddress:
+          botFileData.paymentAddresses.find(
+            (address) => address.chain === "polygon"
+          )?.address || "",
+        ethereumAddress:
+          botFileData.paymentAddresses.find(
+            (address) => address.chain === "ethereum"
+          )?.address || "",
+        relegated: botFileData.relegated || false,
+        image: botFileData.imageUrl,
+      };
+    }
+
     setCurrentUser({
       username,
       moralisId,
@@ -248,6 +280,7 @@ const UserProvider = ({ children }) => {
       teams,
       isLoggedIn: true,
       isCertified,
+      bot,
     });
   };
 

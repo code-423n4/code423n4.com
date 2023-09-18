@@ -1,0 +1,17 @@
+{
+  "handle": "CodeFoxInc",
+  "link": "https://twitter.com/CodeFoxInc",
+  "moralisId": null,
+  "image": "./avatars/CodeFoxInc.png",
+  "showOnLeaderboard": true,
+  "members": [
+    "thurendous",
+    "retocrooman"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x6513695C2cA914e34aa3aDC03BC940B57749d854"
+    }
+  ]
+}
