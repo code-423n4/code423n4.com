@@ -1,0 +1,17 @@
+{
+  "handle": "G-Security",
+  "members": [
+    "Arabadzhiev",
+    "mitko1111"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x6155e174Af5CCe250b98bF5C794a7a11B50Fb04a"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x6155e174Af5CCe250b98bF5C794a7a11B50Fb04a"
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "members": [
+    "cuteboiz",
+    "Mehul"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x20217d27C10b3dE5B9F2f49843EbC1fDCc259f65"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x20217d27C10b3dE5B9F2f49843EbC1fDCc259f65"
+    }
+  ],
+  "handle": "cuteteamm",
+  "link": ""
+}

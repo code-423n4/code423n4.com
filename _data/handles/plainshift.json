@@ -1,0 +1,15 @@
+{
+  "handle": "plainshift",
+  "link": "https://twitter.com/plainshift",
+  "members": [
+    "surya",
+    "thank_you",
+    "windhustler"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xfd33b937951138A83b40f4313DE63dfe458Afc91"
+    }
+  ]
+}
