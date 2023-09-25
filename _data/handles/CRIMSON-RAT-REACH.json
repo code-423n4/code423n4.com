@@ -1,8 +1,5 @@
 {
   "handle": "CRIMSON-RAT-REACH",
-  "moralisId": "",
-  "image": "",
-  "showOnLeaderboard": true,
   "members": [
     "escrow",
     "cergyk",
@@ -13,7 +10,8 @@
     "devblixt",
     "vani",
     "vangrim",
-    "0xChuck"
+    "0xChuck",
+    "Angry_Mustache_Man"
   ],
   "paymentAddresses": [
     {
