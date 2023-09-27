@@ -1,0 +1,18 @@
+{
+  "handle": "0xdd",
+  "members": [
+    "a3yip6",
+    "Damon",
+    "Canyon"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x67be1Dd67339D080f9D4CA1976fB0fc69Ca6238A"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x67be1Dd67339D080f9D4CA1976fB0fc69Ca6238A"
+    }
+  ]
+}

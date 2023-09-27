@@ -1,0 +1,17 @@
+{
+  "handle": "FearlessLions",
+  "image": "./avatars/FearlessLions.jpeg",
+  "members": [
+    "Azaryan",
+    "paspe",
+    "cholakov",
+    "Velislav4o",
+    "petersspetrov"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x2fd7b0040908ca41b3bd86d99f5b7224fae87bda"
+    }
+  ]
+}

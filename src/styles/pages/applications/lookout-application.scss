@@ -1,0 +1,59 @@
+@import "../../variables";
+
+// --------------------------------------------------
+// Apply for Lookout Page
+// --------------------------------------------------
+
+// CSS rule order
+// --------------------
+
+// 1. Variables
+// 2. Box model properties
+// 3. Display and position
+// 4. Background
+// 5. Border
+// 6. Box shadow
+// 7. Text
+// 8. Transforms
+// 9. Other
+
+.lookout-application {
+  fieldset {
+    margin-bottom: $spacing__l;
+    padding: $spacing__xl 0;
+    border-bottom: 1px solid $color__n-90;
+
+    &:last-of-type {
+      border-bottom: none;
+    }
+  }
+  textarea {
+    min-height: 12rem;
+  }
+  .form__submit-button-holder {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+
+  // TODO: Replace with a more formalized error / success screen design
+  .centered-text {
+    text-align: center;
+
+    .form__submit-button-holder {
+      margin-top: $spacing__l;
+    }
+  }
+}
+
+.lookout-application__thank-you {
+  ol {
+    list-style: decimal;
+    margin: $spacing__l 0 $spacing__l $spacing__l;
+
+    li {
+      margin-bottom: $spacing__s;
+    }
+  }
+}
