@@ -1,0 +1,16 @@
+{
+  "handle": "maa",
+  "crew": [
+    "maanas"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xECA705C4E77dCF86111f5565baA5C96949CD2FDb"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0xECA705C4E77dCF86111f5565baA5C96949CD2FDb"
+    }
+  ]
+}
