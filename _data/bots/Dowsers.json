@@ -1,0 +1,17 @@
+{
+  "handle": "Dowsers",
+  "crew": [
+    "desaperh",
+    "vipe0x"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xC3d5DdA80F9DEd4b29a9D0eCE0B5C0eb9Af95140"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0xC3d5DdA80F9DEd4b29a9D0eCE0B5C0eb9Af95140"
+    }
+  ]
+}
