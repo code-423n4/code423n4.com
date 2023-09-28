@@ -1,0 +1,18 @@
+{
+  "handle": "Vegeta",
+  "crew": [
+    "sivanesh_808",
+    "Sathish9098"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x627465C9954c0f5d2673563946dD3D0DFC1E6A93"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x627465C9954c0f5d2673563946dD3D0DFC1E6A93"
+    }
+  ],
+  "image": "./avatars/Vegeta.png"
+}
