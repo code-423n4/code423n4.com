@@ -1,0 +1,16 @@
+{
+  "handle": "BlackHole",
+  "crew": [
+    "twicek"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xDcE804b4821Ee91763b54608f88aDd226b4d4EAc"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0xDcE804b4821Ee91763b54608f88aDd226b4d4EAc"
+    }
+  ]
+}
