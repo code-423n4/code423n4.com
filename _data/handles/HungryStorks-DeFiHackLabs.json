@@ -1,11 +1,12 @@
 {
   "handle": "HungryStorks-DeFiHackLabs",
+  "image": "./avatars/HungryStorks-DeFiHackLabs.png",
   "members": [
     "SunSec",
     "yellowBirdy",
-    "sashik_eth",
     "Aits",
-    "0xAxe"
+    "0xAxe",
+    "Ronin"
   ],
   "paymentAddresses": [
     {
@@ -16,6 +17,5 @@
       "chain": "ethereum",
       "address": "0x4276bf06aebd8a1f3d89a1fd5bf84bfa1b7d03ce"
     }
-  ],
-  "image": "./avatars/HungryStorks-DeFiHackLabs.png"
+  ]
 }
