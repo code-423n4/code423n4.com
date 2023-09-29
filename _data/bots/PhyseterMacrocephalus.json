@@ -1,0 +1,17 @@
+{
+  "handle": "PhyseterMacrocephalus",
+  "crew": [
+    "marchev"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xC076043aE095eDAa09cE373310cE7dCB451A1B92"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0xC076043aE095eDAa09cE373310cE7dCB451A1B92"
+    }
+  ],
+  "image": "./avatars/PhyseterMacrocephalus.png"
+}

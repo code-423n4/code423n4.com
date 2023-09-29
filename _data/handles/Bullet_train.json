@@ -1,0 +1,18 @@
+{
+  "handle": "Bullet_train",
+  "members": [
+    "phenom80",
+    "0xDemuth"
+  ],
+  "link": "https://twitter.com/4n0n_x",
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x60075791A0ccC5B87c13063b349977CEBdb83347"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x60075791A0ccC5B87c13063b349977CEBdb83347"
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "handle": "AuditAvengers",
+  "members": [
+    "piyushshukla",
+    "HydroGypsy",
+    "0xBlackie"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xa6C997685C2CC95Ff2237F11597C95e1DE5dAe6d"
+    }
+  ],
+  "image": "./avatars/AuditAvengers.jpeg"
+}
