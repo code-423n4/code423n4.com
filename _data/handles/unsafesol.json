@@ -1,0 +1,13 @@
+{
+  "handle": "unsafesol",
+  "members": [
+    "Angry_Mustache_Man",
+    "devblixt"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x63ccbfeC4c89FF3FA52Bf3043e1C86dCFFf687a8"
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "handle": "Web3Rakshak",
+  "members": [
+    "Avi17",
+    "GauravGR8"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x759eC7eB0dcc57668f67b2D85B1d5c9390CDa534"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x759eC7eB0dcc57668f67b2D85B1d5c9390CDa534"
+    }
+  ]
+}
