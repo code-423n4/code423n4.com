@@ -27,6 +27,13 @@ const plugins = [
     },
   },
   {
+    resolve: `gatsby-source-filesystem`,
+    options: {
+      path: `${__dirname}/_data/bots`,
+      name: `bots`,
+    },
+  },
+  {
     resolve: "gatsby-source-filesystem",
     options: {
       path: `${__dirname}/_data/pages`,
@@ -108,7 +115,7 @@ const plugins = [
     options: {
       extensions: [`.mdx`],
       defaultLayouts: {
-        reports: require.resolve("./src/templates/ReportLayout.js"),
+        reports: require.resolve("./src/templates/DefaultLayout.js"),
         default: require.resolve("./src/templates/DefaultLayout.js"),
       },
     },
