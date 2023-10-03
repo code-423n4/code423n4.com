@@ -1,0 +1,17 @@
+{
+  "handle": "s500",
+  "members": [
+    "degensec",
+    "0xl51"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x38235ad1D721a10b8b21D177c859fD5aE26F5B6D"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x38235ad1D721a10b8b21D177c859fD5aE26F5B6D"
+    }
+  ]
+}
