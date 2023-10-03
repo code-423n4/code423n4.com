@@ -1,0 +1,18 @@
+{
+  "handle": "0xBeastxx",
+  "members": [
+    "0xHarryBarz",
+    "0xpetern"
+  ],
+  "link": "https://x.com/0xHarry342",
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xaB0A6E658B29Acb8Ee2d13D08bAE7AB3Db6b97C6"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0xaB0A6E658B29Acb8Ee2d13D08bAE7AB3Db6b97C6"
+    }
+  ]
+}
