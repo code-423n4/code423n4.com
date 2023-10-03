@@ -1,5 +1,8 @@
 {
   "handle": "Avci",
+  "moralisId": null,
+  "image": "./avatars/Avci.jpeg",
+  "showOnLeaderboard": true,
   "members": [
     "0xArshia",
     "0xdanial"
@@ -8,7 +11,10 @@
     {
       "chain": "polygon",
       "address": "0xE36d5f8cd620d6C396315a81A60129AEf1234d2c"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0xE36d5f8cd620d6C396315a81A60129AEf1234d2c"
     }
-  ],
-  "image": "./avatars/Avci.jpeg"
+  ]
 }
