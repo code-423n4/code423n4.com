@@ -1,0 +1,18 @@
+{
+  "handle": "Pechenite",
+  "members": [
+    "Bozho",
+    "radev_sw"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xccd2FAbc75d45993a62Fd559A7FDd75712E4976D"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0xccd2FAbc75d45993a62Fd559A7FDd75712E4976D"
+    }
+  ],
+  "image": "./avatars/Pechenite.jpeg"
+}

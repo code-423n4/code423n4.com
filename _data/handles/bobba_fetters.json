@@ -1,0 +1,18 @@
+{
+  "handle": "bobba_fetters",
+  "members": [
+    "joaovwfreire",
+    "kevo_0"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x882374Cea80B70E5A31594C06F5670258fF61744"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x882374Cea80B70E5A31594C06F5670258fF61744"
+    }
+  ],
+  "image": "./avatars/bobba_fetters.jpeg"
+}
