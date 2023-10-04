@@ -1,0 +1,21 @@
+{
+  "handle": "ThreeSigma",
+  "members": [
+    "0x73696d616f",
+    "0xCarolina",
+    "EduCatarino",
+    "SolidityDev99"
+  ],
+  "link": "https://twitter.com/threesigmaxyz",
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x2770cC972a7666C974B1b1269F4F31b97f99f898"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x2770cC972a7666C974B1b1269F4F31b97f99f898"
+    }
+  ],
+  "image": "./avatars/ThreeSigma.png"
+}
