@@ -1,0 +1,13 @@
+{
+  "handle": "SBSecurity",
+  "members": [
+    "Blckhv",
+    "Slavcheww"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x0cd0873f928EdEd4D2B50F29b5B0E13bCa30aE93"
+    }
+  ]
+}
