@@ -1,0 +1,39 @@
+{
+  "handle": "UNCHAIN",
+  "members": [
+    "Tomo",
+    "mashharuki",
+    "yawn",
+    "keit",
+    "ahayashi",
+    "sho",
+    "KazumaHamamoto",
+    "cardene",
+    "cotoneum",
+    "mugi",
+    "yosuke",
+    "masaru",
+    "kevin_katsu",
+    "junya",
+    "daikai",
+    "mabuk",
+    "mameta",
+    "kyok1st",
+    "0xShin",
+    "hamaup",
+    "kii",
+    "yoki"
+  ],
+  "link": "https://unchain.tech/",
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x68bf922E7392a18AEAe233410D0c26c038446236"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x68bf922E7392a18AEAe233410D0c26c038446236"
+    }
+  ],
+  "image": "./avatars/UNCHAIN.png"
+}

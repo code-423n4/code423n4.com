@@ -1,0 +1,19 @@
+{
+  "handle": "W3S4vengers_2",
+  "members": [
+    "JP_Courses",
+    "ravikiranweb3"
+  ],
+  "link": "https://twitter.com/W3S4vengers",
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x82aAE2d95b92dD5576DbC59F455521250bb9396A"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x82aAE2d95b92dD5576DbC59F455521250bb9396A"
+    }
+  ],
+  "image": "./avatars/W3S4vengers_2.png"
+}
