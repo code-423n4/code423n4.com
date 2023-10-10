@@ -2,8 +2,18 @@
   "handle": "PwnedNoMore",
   "members": [
     "izhuer",
-    "ItsNio",
-    "papr1ka2"
+    "wen"
   ],
-  "address": "0xe03a2766325d914898cdA00d4EF927A305786Aa7"
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x97F74E6ba17A7484fbafbbc0b41BfF3630C9dac4"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x97F74E6ba17A7484fbafbbc0b41BfF3630C9dac4"
+    }
+  ],
+  "link": "https://twitter.com/pwnednomore",
+  "image": "./avatars/PwnedNoMore.jpeg"
 }

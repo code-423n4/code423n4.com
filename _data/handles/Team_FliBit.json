@@ -1,0 +1,13 @@
+{
+  "handle": "Team_FliBit",
+  "members": [
+    "14si2o_Flint",
+    "Naubit"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xD54E23A58950E32dfCe00f0B6A788AFa8f674411"
+    }
+  ]
+}

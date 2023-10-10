@@ -1,21 +1,24 @@
-import path from "path";
-import { createFilePath } from "gatsby-source-filesystem";
-import { Octokit } from "@octokit/core";
 import { graphql } from "@octokit/graphql";
 import format from "date-fns/format";
+import dedent from "dedent";
+import { createFilePath } from "gatsby-source-filesystem";
+import fetch from "node-fetch";
+import path from "path";
 import webpack from "webpack";
-
 import SchemaCustomization from "./schema";
+import { getApiContestData } from "./netlify/util/getContestsData";
 
-const { token } = require("./functions/_config");
+const privateContestMessage = dedent`
+## Contest details are not available. Why not?
 
-const octokit = new Octokit({
-  auth: token,
-});
+The contest is limited to specific participants. Most Code4rena contests are open and public, but some have special requirements. In those cases, the code and contest details remain private (at least for now).
+
+For more information on participating in a private audit, please see this [post](https://mirror.xyz/c4blog.eth/Ww3sILR-e5iWoMYNpZEB9UME_vA8G0Yqa6TYvpSdEM0).
+`;
 
 const graphqlWithAuth = graphql.defaults({
   headers: {
-    authorization: `Bearer ${token}`,
+    authorization: `Bearer ${process.env.GITHUB_TOKEN_FETCH}`,
   },
 });
 
@@ -49,25 +52,26 @@ function contestSubmissionPermalink(contestNode) {
 function getRepoName(contestNode) {
   const regex = "([^/]+$)";
   const url = contestNode.repo;
-
   const result = url.match(regex);
   const repoName = result[0];
   return repoName;
 }
 
 async function fetchReadmeMarkdown(contestNode) {
-  const { data } = await octokit.request("GET /repos/{owner}/{repo}/readme", {
-    owner: process.env.GITHUB_CONTEST_REPO_OWNER,
-    repo: `${getRepoName(contestNode)}`,
-    headers: {
-      accept: "application/vnd.github.v3.html+json",
-    },
-  });
-
+  const response = await fetch(
+    `https://raw.githubusercontent.com/${
+      process.env.GITHUB_CONTEST_REPO_OWNER
+    }/${getRepoName(contestNode)}/main/README.md`
+  );
+  if (response.status === 404) {
+    return privateContestMessage;
+  }
+  const data = await response.text();
   return data;
 }
 
 async function fetchSocialImage(contestNode) {
+  // @todo: fetch without auth
   const { repository } = await graphqlWithAuth(
     `query socialImage($repo: String!) {
     repository(owner: "${process.env.GITHUB_CONTEST_REPO_OWNER}", name: $repo) {
@@ -101,6 +105,8 @@ const queries = {
             contestPath
             readmeContent
             artPath
+            status
+            codeAccess
           }
         }
       }
@@ -143,6 +149,14 @@ exports.onCreateNode = async ({ node, getNode, actions }) => {
     });
   }
 
+  if (node.internal.type === `ReportsJson`) {
+    createNodeField({
+      node,
+      name: `slug`,
+      value: node.circa.slug,
+    });
+  }
+
   if (node.internal.type === `ContestsCsv`) {
     createNodeField({
       node,
@@ -169,15 +183,66 @@ exports.onCreateNode = async ({ node, getNode, actions }) => {
       name: `artPath`,
       value: socialImageUrl,
     });
+
+    createNodeField({
+      node,
+      name: "status",
+      value: node.status,
+    });
+
+    createNodeField({
+      node,
+      name: "codeAccess",
+      value: node.codeAccess,
+    });
+
+    if (node.codeAccess === "public") {
+      createNodeField({
+        node,
+        name: `botSubmissionPath`,
+        value: contestSubmissionPermalink(node) + "/bot",
+      });
+    }
+
+    createNodeField({
+      node,
+      name: "type",
+      value: node.type,
+    });
   }
+};
+
+exports.sourceNodes = async ({
+  actions,
+  createContentDigest,
+  createNodeId,
+}) => {
+  const { createNode } = actions;
+  const apiContestsData = await getApiContestData();
+  apiContestsData.forEach((contest) => {
+    const newNode = createNode({
+      ...contest,
+      contestid: contest.contest_id,
+      findingsRepo: contest.findings_repo,
+      amount: contest.formatted_amount,
+      id: createNodeId(`ContestsCsv-${contest.contest_id}`),
+      parent: null,
+      children: [],
+      internal: {
+        type: "ContestsCsv",
+        contentDigest: createContentDigest(contest),
+      },
+    });
+  });
+  return;
 };
 
 exports.createPages = async ({ graphql, actions }) => {
   const { createPage } = actions;
-
   const contests = await graphql(queries.contests);
-  const formTemplate = path.resolve("./src/templates/ReportForm.js");
-  const contestTemplate = path.resolve("./src/templates/ContestLayout.js");
+  const formTemplate = path.resolve("./src/templates/ReportForm.tsx");
+  const botRaceFormTemplate = path.resolve("./src/templates/BotRaceForm.tsx");
+  const contestTemplate = path.resolve("./src/templates/ContestLayout.tsx");
   contests.data.contests.edges.forEach((contest) => {
     if (contest.node.findingsRepo) {
       createPage({
@@ -187,15 +252,18 @@ exports.createPages = async ({ graphql, actions }) => {
           contestId: contest.node.contestid,
         },
       });
-
-      // XXX: inject old-style reporting form
+    }
+    if (
+      contest.node.fields.codeAccess === "public" &&
+      contest.node.contestid !== 241
+    ) {
       createPage({
-        path: contest.node.fields.submissionPath + "-old",
-        component: path.resolve("./src/templates/OldReportForm.js"),
+        path: contest.node.fields.submissionPath + "/bot",
+        component: botRaceFormTemplate,
         context: {
           contestId: contest.node.contestid,
         },
-      })
+      });
     }
 
     createPage({
@@ -208,7 +276,7 @@ exports.createPages = async ({ graphql, actions }) => {
   });
 };
 
-exports.onCreateWebpackConfig = ({ actions }) => {
+exports.onCreateWebpackConfig = ({ actions, stage, getConfig }) => {
   actions.setWebpackConfig({
     plugins: [
       new webpack.IgnorePlugin({
@@ -216,6 +284,7 @@ exports.onCreateWebpackConfig = ({ actions }) => {
         contextRegExp: /jsdom$/,
       }),
       new webpack.ProvidePlugin({
+        process: "process/browser",
         Buffer: [require.resolve("buffer/"), "Buffer"],
       }),
     ],
@@ -227,6 +296,7 @@ exports.onCreateWebpackConfig = ({ actions }) => {
         https: require.resolve("https-browserify"),
         os: require.resolve("os-browserify/browser"),
         stream: require.resolve("stream-browserify"),
+        url: require.resolve("url"),
       },
     },
   });

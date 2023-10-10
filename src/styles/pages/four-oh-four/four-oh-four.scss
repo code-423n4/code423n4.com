@@ -1,0 +1,11 @@
+@import "../../variables";
+
+// 404 Page
+// --------------------
+
+.four-oh-four-page__image {
+  margin-top: $spacing__l;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

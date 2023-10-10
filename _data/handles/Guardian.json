@@ -1,0 +1,12 @@
+{
+  "handle": "Guardian",
+  "members": ["owenthurm", "Green"],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x5156b0072568905afd2f57fc1f4c0de48fa86bf3"
+    }
+  ],
+  "link": "https://twitter.com/GuardianAudits",
+  "image": "./avatars/Guardian.png"
+}
