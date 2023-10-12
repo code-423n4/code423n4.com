@@ -1,0 +1,14 @@
+{
+  "handle": "rektthecode",
+  "members": [
+    "Angry_Mustache_Man",
+    "devblixt",
+    "VictoryGod"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x1CCa317526F5DD5c607eE80d58B671e7528f9fD2"
+    }
+  ]
+}
