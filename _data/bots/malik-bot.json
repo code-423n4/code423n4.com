@@ -1,0 +1,16 @@
+{
+  "handle": "malik-bot",
+  "crew": [
+    "ayo_dev"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x30bE4D758d86cfb1Ae74Ae698f2CF4BA7dC8d693"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x30bE4D758d86cfb1Ae74Ae698f2CF4BA7dC8d693"
+    }
+  ]
+}
