@@ -1,0 +1,12 @@
+{
+  "handle": "Ibukunator",
+  "crew": [
+    "Ibukun"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xf4e653dbd31101ce0d2b0c52fc71b72ef7d17a96"
+    }
+  ]
+}
