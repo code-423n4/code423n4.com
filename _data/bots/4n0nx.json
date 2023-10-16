@@ -1,0 +1,16 @@
+{
+  "handle": "4n0nx",
+  "crew": [
+    "phenom80"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x60075791A0ccC5B87c13063b349977CEBdb83347"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x60075791A0ccC5B87c13063b349977CEBdb83347"
+    }
+  ]
+}
