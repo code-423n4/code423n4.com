@@ -9,7 +9,7 @@
   "paymentAddresses": [
     {
       "chain": "polygon",
-      "address": "0x5f410E7e24459Bf38aBEDfDc090EDB06aA2868b0"
+      "address": "0x0000000000000000000000000000000000000000"
     }
   ]
 }
