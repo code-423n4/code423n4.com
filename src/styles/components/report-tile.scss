@@ -1,0 +1,102 @@
+@import "../variables";
+
+// --------------------------------------------------
+// Report Tile Component
+// --------------------------------------------------
+
+// CSS rule order
+// --------------------
+
+// 1. Variables
+// 2. Box model properties
+// 3. Display and position
+// 4. Background
+// 5. Border
+// 6. Box shadow
+// 7. Text
+// 8. Transforms
+// 9. Other
+
+.report-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  background: $color__n-85;
+  border-radius: $border-radius__m;
+
+  @include breakpoint("s") {
+  }
+}
+
+.report-tile__project-link {
+  max-width: 10rem;
+  width: 3rem;
+  margin-top: $spacing__s;
+}
+
+.report-tile__project-name a {
+  color: $color__white;
+
+  &:hover {
+    color: $color__white;
+    text-decoration: underline;
+  }
+}
+
+.report-tile__content-wrapper {
+  flex: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: $spacing__m;
+}
+
+.report-tile__content {
+  padding-left: 20px;
+}
+
+.report-tile__footer {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  border-top: 1px solid $color__n-70;
+}
+
+.report-tile__report-link {
+  padding: $spacing__s $spacing__m;
+  border-left: 1px solid $color__n-70;
+  color: $color__n-10;
+  @mixin accessible-animation {
+    transition: all $transition__base;
+  }
+  &:hover {
+    background: $color__n-70;
+    color: $color__white;
+  }
+}
+
+.report-tile__published {
+  padding: $spacing__s $spacing__m;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  // justify-content: flex-end; // if we move publication dates
+  font-size: $font-size__small;
+
+  svg {
+    margin-right: $spacing__s;
+    width: 1rem;
+    display: inline-block;
+
+    fill: none;
+    stroke: $color__n-10;
+    stroke-linejoin: round;
+    stroke-width: 2px;
+    .svg {
+      fill: none;
+      stroke: $color__n-10;
+      stroke-linejoin: round;
+      stroke-width: 2px;
+    }
+  }
+}

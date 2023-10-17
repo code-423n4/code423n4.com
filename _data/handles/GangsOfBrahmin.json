@@ -1,0 +1,17 @@
+{
+  "handle": "GangsOfBrahmin",
+  "members": [
+    "Satyam_Sharma",
+    "0xweb3boy"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xE9f495DdB9D8F50d3DB48cBA953f38E4Bb252C40"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0xE9f495DdB9D8F50d3DB48cBA953f38E4Bb252C40"
+    }
+  ]
+}

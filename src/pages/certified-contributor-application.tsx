@@ -9,8 +9,6 @@ import useUser from "../hooks/UserContext";
 import { Input } from "../components/Input";
 import ProtectedPage from "../components/ProtectedPage";
 
-import * as styles from "../styles/Main.module.scss";
-
 function ApplyForCertifiedContributor() {
   enum FormStatus {
     Unsubmitted = "unsubmitted",
@@ -84,7 +82,7 @@ function ApplyForCertifiedContributor() {
             pageDescription="Apply to become a Certified Warden."
             pageTitle="Certified Warden Application | Code 423n4"
           >
-            <div className="wrapper-main">
+            <div className="limited-width type__copy">
               <h1 className="page-header">Certified Wardens</h1>
               {status === FormStatus.Unsubmitted && (
                 <article
@@ -97,7 +95,7 @@ function ApplyForCertifiedContributor() {
               )}
               {(status === FormStatus.Unsubmitted ||
                 status === FormStatus.Submitting) && (
-                <form className={clsx(styles.Form__Form, styles.Form__FormSmall)}>
+                <form className="form spacing-bottom__xl spacing-top__xl">
                   <h1>Certification Application</h1>
                   <Input
                     label="Github Username"
@@ -106,23 +104,20 @@ function ApplyForCertifiedContributor() {
                     name="gitHubUsername"
                     required={true}
                   />
-                  <label
-                    htmlFor="acceptAgreeement"
-                    className={styles.Widget__Control}
-                  >
+                  <label htmlFor="acceptAgreeement" className="widget__control">
                     <input
                       type="checkbox"
                       id="acceptAgreeement"
                       checked={acceptedAgreement}
                       onChange={handleAgreement}
-                      className={styles.Widget__Checkbox}
+                      className={"widget__checkbox"}
                     />
                     I have read and agree to the terms and conditions (see
                     below)
                     {!acceptedAgreement && (
                       <label
                         htmlFor="acceptAgreeement"
-                        className={styles.Widget__ErrorMessage}
+                        className={"widget__error-message"}
                       >
                         <small>
                           You must accept the terms and conditions to apply.
@@ -131,7 +126,7 @@ function ApplyForCertifiedContributor() {
                     )}
                   </label>
                   <button
-                    className="button cta-button primary centered"
+                    className="button button--primary"
                     type="button"
                     onClick={handleSubmit}
                     disabled={
@@ -153,7 +148,7 @@ function ApplyForCertifiedContributor() {
               )}
               {status === FormStatus.Submitted && (
                 <div>
-                  <h1 className="centered-text">Thank you!</h1>
+                  <h1>Thank you!</h1>
                   <p>
                     Your application has been submitted, and we will review it
                     ASAP. Please note:

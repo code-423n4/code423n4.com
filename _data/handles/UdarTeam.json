@@ -7,11 +7,11 @@
   "paymentAddresses": [
     {
       "chain": "polygon",
-      "address": "0x16514b719274484b06D56459f97139b333bd8130"
+      "address": "0xe658823a5b0757757900db7d7513b11004863FA6"
     },
     {
       "chain": "ethereum",
-      "address": "0x16514b719274484b06D56459f97139b333bd8130"
+      "address": "0xe658823a5b0757757900db7d7513b11004863FA6"
     }
   ]
 }
