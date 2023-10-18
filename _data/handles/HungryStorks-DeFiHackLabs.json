@@ -1,0 +1,23 @@
+{
+  "handle": "HungryStorks-DeFiHackLabs",
+  "image": "./avatars/HungryStorks-DeFiHackLabs.png",
+  "members": [
+    "SunSec",
+    "0xAxe",
+    "Ronin",
+    "juancito",
+    "jeS5_c",
+    "Polaris_tow",
+    "tnquanghuy0512"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x4276bf06aebd8a1f3d89a1fd5bf84bfa1b7d03ce"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x4276bf06aebd8a1f3d89a1fd5bf84bfa1b7d03ce"
+    }
+  ]
+}
