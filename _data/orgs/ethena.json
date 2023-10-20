@@ -1,5 +1,5 @@
 {
-"name": "Ethena Labs", (mandatory field; case sensitive)
-"link": "https://twitter.com/ethena_labs", (optional field)
-"image": "./avatars/ethena.png" (mandatory field)
+"name": "Ethena Labs",
+"link": "https://twitter.com/ethena_labs",
+"image": "./avatars/ethena.png"
 }
