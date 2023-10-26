@@ -1,5 +1,6 @@
 {
   "handle": "BEYOND",
+  "image": "./avatars/BEYOND.png",
   "members": [
     "m4k2",
     "Greed"
@@ -9,6 +10,5 @@
       "chain": "polygon",
       "address": "0x9dFfC1C946e22A1d5792B89C18157b7c1cB4D06b"
     }
-  ],
-  "image": "./avatars/BEYOND.png"
+  ]
 }
