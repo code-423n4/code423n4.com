@@ -3,7 +3,6 @@
 const { readFile, stat } = require("fs/promises");
 const path = require("path");
 const glob = require("tiny-glob");
-const csv = require("csvtojson");
 
 async function getUniqueHandles() {
   const handles = await glob("./_data/handles/*.json");
@@ -153,56 +152,52 @@ async function validateOrganizations() {
   console.log("✅  Organization validation passed!");
 }
 
-async function validateFindings() {
-  let passedValidation = true;
-  let parsedFindings;
-  try {
-    parsedFindings = await csv({
-      colParser: {
-        contest: "number",
-      },
-    }).fromFile("./_data/findings/findings.csv");
-  } catch (err) {
-    console.error(`Unable to parse JSON file at ${findingsFile}`);
-    passedValidation = false;
-  }
+// async function validateFindings() {
+//   let passedValidation = true;
+//   let parsedFindings;
+//   try {
+//     parsedFindings = await getApiFindingsData();
+//   } catch (err) {
+//     console.error(`Unable to parse JSON file at ${findingsFile}`);
+//     passedValidation = false;
+//   }
 
-  const uniqueHandles = await getUniqueHandles();
-  const unknownHandles = new Set();
-  const unknownContestIds = new Set();
-  for (const finding of parsedFindings) {
-    if (!uniqueHandles.has(finding.handle)) {
-      unknownHandles.add(finding.handle);
-      passedValidation = false;
-      continue;
-    }
-  }
+//   const uniqueHandles = await getUniqueHandles();
+//   const unknownHandles = new Set();
+//   const unknownContestIds = new Set();
+//   for (const finding of parsedFindings) {
+//     if (!uniqueHandles.has(finding.handle)) {
+//       unknownHandles.add(finding.handle);
+//       passedValidation = false;
+//       continue;
+//     }
+//   }
 
-  if (unknownHandles.size > 0) {
-    console.error(`Found ${unknownHandles.size} unknown handles:`);
-    console.log(unknownHandles);
-  }
+//   if (unknownHandles.size > 0) {
+//     console.error(`Found ${unknownHandles.size} unknown handles:`);
+//     console.log(unknownHandles);
+//   }
 
-  if (unknownContestIds.size > 0) {
-    console.error(`Found ${unknownContestIds.size} unknown contestids:`);
-    console.log(unknownContestIds);
-  }
+//   if (unknownContestIds.size > 0) {
+//     console.error(`Found ${unknownContestIds.size} unknown contestids:`);
+//     console.log(unknownContestIds);
+//   }
 
-  if (!passedValidation) {
-    throw new Error(
-      "❌  Findings validation failed. See above log for more information."
-    );
-  }
+//   if (!passedValidation) {
+//     throw new Error(
+//       "❌  Findings validation failed. See above log for more information."
+//     );
+//   }
 
-  console.log("✅  Findings validation passed!");
-}
+//   console.log("✅  Findings validation passed!");
+// }
 
 (async () => {
   try {
     await validateHandles();
     await validateTeams();
     await validateOrganizations();
-    await validateFindings();
+    // await validateFindings();
     console.log("Validation passed!");
   } catch (err) {
     console.error(err);

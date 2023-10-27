@@ -67,6 +67,13 @@ export const query = graphql`
       edges {
         node {
           handle
+          image {
+            childImageSharp {
+              resize(width: 80) {
+                src
+              }
+            }
+          }
         }
       }
     }

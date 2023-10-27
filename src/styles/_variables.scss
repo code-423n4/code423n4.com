@@ -82,6 +82,7 @@ $font-size__text: 1rem;
 $font-size__text__code: 0.9em;
 $font-size__small: 0.933rem;
 
+$headline-font-size__xxxs: 1rem; // Sublines
 $headline-font-size__xxs: 1.3rem; // H6
 $headline-font-size__xs: 1.3rem; // H5
 $headline-font-size__s: 1.3rem; // H4
@@ -90,6 +91,7 @@ $headline-font-size__l: 1.8rem; // H2
 $headline-font-size__ll: 2.1rem; // H2
 $headline-font-size__xl: 2.533rem; // H1
 $headline-font-size__xxl: 3.2rem; // Hero headline
+$headline-font-size__xxxl: 3.2rem; // Landing page hero headline
 
 // Font Families
 // ------------------------------------------------
@@ -97,20 +99,6 @@ $headline-font-size__xxl: 3.2rem; // Hero headline
 $font__default: "Satoshi Variable", sans-serif;
 // 🍔 TODO add DM sans as body copy font
 $font__code: "PT Mono", monospace;
-
-// Spacing
-// ------------------------------------------------
-
-$spacing__base: 0.5rem; // 8px
-
-$spacing__xxs: calc($spacing__base/ 4); // 2px
-$spacing__xs: calc($spacing__base/ 2); // 4px
-$spacing__s: $spacing__base; // 8px
-$spacing__m: calc($spacing__base * 2); // 16px
-$spacing__l: calc($spacing__base * 3); // 24px
-$spacing__xl: calc($spacing__base * 4); // 32px
-$spacing__xxl: calc($spacing__base * 8); // 64px
-$spacing__xxxl: calc($spacing__base * 10); // 80px
 
 // Breakpoints
 // ------------------------------------------------
@@ -183,3 +171,17 @@ $transition__base: 0.2s ease-in-out;
     @content;
   }
 }
+
+// Spacing
+// ------------------------------------------------
+
+$spacing__base: 0.5rem; // 8px
+
+$spacing__xxs: calc($spacing__base/ 4); // 2px
+$spacing__xs: calc($spacing__base/ 2); // 4px
+$spacing__s: $spacing__base; // 8px
+$spacing__m: calc($spacing__base * 2); // 16px
+$spacing__l: calc($spacing__base * 3); // 24px
+$spacing__xl: calc($spacing__base * 4); // 32px
+$spacing__xxl: calc($spacing__base * 8); // 64px
+$spacing__xxxl: calc($spacing__base * 10); // 80px

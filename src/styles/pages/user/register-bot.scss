@@ -70,37 +70,6 @@ $timeline-name-width: 260px;
   }
 }
 
-.register-bot__hero-content {
-  text-align: center;
-
-  .type__headline__page-title {
-    margin-top: $spacing__l;
-    font-size: $headline-font-size__l;
-
-    @include breakpoint("xxs") {
-      font-size: $headline-font-size__xl;
-    }
-
-    @include breakpoint("m") {
-      margin-top: $spacing__xxl;
-      font-size: $headline-font-size__xxl;
-    }
-  }
-
-  h2 {
-    max-width: 500px;
-    margin: calc($spacing__m * -0.2) auto 0;
-    line-height: 1.5;
-    font-weight: 400;
-    font-size: 1.1rem;
-
-    @include breakpoint("m") {
-      font-size: 1.3rem;
-      max-width: 700px;
-    }
-  }
-}
-
 .register-bot__hero-countdown {
   padding: $spacing__m;
   background: $color__blended-80;
@@ -312,6 +281,28 @@ p.register-bot__timeline-time {
 // --------------------------------------------------
 // Registration Form
 // --------------------------------------------------
+
+.register-bot__agreement {
+  li:before {
+    content: "\2022";
+    color: $color__blurple-60;
+    font-weight: bold;
+    display: inline-block;
+    width: 1em;
+  }
+}
+
+.register-bot__repo-link-wrapper {
+  display: flex;
+  margin: $spacing__l auto;
+  padding: $spacing__l $spacing__l;
+  border: 1px solid $color__n-60;
+  border-radius: $border-radius__m;
+}
+
+.register-bot__repo-link {
+  padding: $spacing__l;
+}
 
 .register-bot__register {
   margin-top: $spacing__xl;

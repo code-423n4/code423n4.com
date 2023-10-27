@@ -1,0 +1,18 @@
+{
+  "handle": "auditomaton",
+  "crew": [
+    "dudevision"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xabF9984f06799C7D9378628e31136B321D159318"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0xabF9984f06799C7D9378628e31136B321D159318"
+    }
+  ],
+  "image": "./avatars/auditomaton.png",
+  "relegated": true
+}

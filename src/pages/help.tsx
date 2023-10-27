@@ -43,6 +43,10 @@ function ContactUs() {
           value: "bug",
         },
         {
+          label: "Sensitive disclosure",
+          value: "sensitiveDisclosure",
+        },
+        {
           label: "Other",
           value: "other",
         },
@@ -50,13 +54,13 @@ function ContactUs() {
     },
     {
       name: "subject",
-      label: "Subject *",
+      label: "Subject",
       widget: "text",
       required: true,
     },
     {
       name: "description",
-      label: "Description *",
+      label: "Description",
       widget: "textarea",
       maxSize: 2000,
       required: true,
