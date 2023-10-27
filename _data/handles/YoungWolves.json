@@ -1,0 +1,14 @@
+{
+  "handle": "YoungWolves",
+  "members": [
+    "lopotras",
+    "Bloqarl"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xc035Ba036855a5f7f3399443615D3ca5c739F639"
+    }
+  ],
+  "image": "./avatars/YoungWolves.png"
+}
