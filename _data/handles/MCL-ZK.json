@@ -1,0 +1,13 @@
+{
+  "handle": "MCL-ZK",
+  "members": [
+    "Dimaranti",
+    "Stefan-Nikolov"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xa4e2de2d0D93DFD834d0B012CC9317f3a87A06C6"
+    }
+  ]
+}

@@ -1,5 +1,6 @@
 {
   "handle": "plainshift",
+  "link": "https://twitter.com/plainshift",
   "members": [
     "surya",
     "thank_you"
@@ -7,7 +8,11 @@
   "paymentAddresses": [
     {
       "chain": "polygon",
-      "address": "0xB25E126Fb65eBe555C24D9e506fC1E67fD98e014"
+      "address": "0xfd33b937951138A83b40f4313DE63dfe458Afc91"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0xb25e126fb65ebe555c24d9e506fc1e67fd98e014"
     }
   ]
 }
