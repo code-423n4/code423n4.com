@@ -1,0 +1,13 @@
+{
+  "handle": "karls_team",
+  "members": [
+    "carlos_sf",
+    "circadian"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x81493b153fbe7079f881d429fd0dfc932e38b06f"
+    }
+  ]
+}

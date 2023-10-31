@@ -1,0 +1,17 @@
+{
+  "handle": "BitDefendoor",
+  "members": [
+    "KrisApostolov",
+    "deliriusz"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x0EBBf3b11ae65958d6265641C48f19126a575bD5"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x0EBBf3b11ae65958d6265641C48f19126a575bD5"
+    }
+  ]
+}
