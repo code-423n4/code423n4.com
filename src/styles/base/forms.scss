@@ -1,0 +1,457 @@
+@import "../variables";
+@import "../components/button";
+
+// CSS rule order
+// --------------------
+
+// 1. Variables
+// 2. Box model properties
+// 3. Display and position
+// 4. Background
+// 5. Border
+// 6. Box shadow
+// 7. Text
+// 8. Transforms
+// 9. Other
+
+// TODO: Should this go in variables?
+@mixin form-element {
+  display: block;
+  width: 100%;
+  padding: $spacing__s;
+  border: 1px solid $color__n-85;
+  border-radius: $border-radius__m;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: $color__white;
+  background-color: $color__n-85;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+
+  &:focus {
+    border-color: $color__button-blurple;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba($color__button-blurple, 0.25);
+  }
+  &:disabled {
+    background-color: $color__n-90;
+    border-color: $color__n-90;
+    color: $color__n-30;
+  }
+  &::placeholder {
+    color: $color__n-20;
+  }
+}
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="tel"],
+input[type="number"],
+input[type="search"],
+textarea {
+  @include form-element;
+}
+
+textarea {
+  resize: vertical;
+}
+
+// Default Spacing
+// --------------------
+
+form,
+.form {
+  p {
+    margin-bottom: $spacing__s;
+  }
+  // TODO: replace these with fieldsets in the html, then remove this
+  > div {
+    margin-bottom: $spacing__xl;
+  }
+}
+fieldset {
+  margin: $spacing__xl 0;
+
+  &:has(fieldset) {
+    margin-bottom: 0;
+  }
+}
+// Default Labels
+// --------------------
+
+form,
+.form {
+  label {
+    padding-bottom: $spacing__s;
+    display: block;
+    color: $color__white;
+    font-weight: 600;
+
+    // Firefox doesn't support :has() yet
+    &:has(~ p) {
+      padding-bottom: 0;
+    }
+
+    ~ p,
+    .form__help-text {
+      padding-top: 0;
+      font-size: $font-size__small;
+      color: $color__n-20;
+    }
+  }
+}
+
+// Default Errors
+// --------------------
+
+.form-field__error {
+  margin-top: $spacing__s;
+  color: $color__form-error !important;
+
+  &:before {
+    content: "⚠ ";
+  }
+}
+
+// TODO: When all this gets cleaned up eventually, this should live with its component, if that still exists
+.input__input-error {
+  border: 2px solid $color__form-error !important;
+}
+
+// TODO: This could be better with more javascript and less reliance on has()
+form:has(.form-field__error) {
+  .form__submit-button-holder {
+    &:before {
+      content: "There appear to be errors present in the form. You will need to fix these to proceed. For any questions, please reach out to the C4 team in our Discord.";
+      margin-bottom: $spacing__s;
+      max-width: 50rem;
+      display: block;
+      color: $color__form-error;
+    }
+  }
+  .form__submit-button {
+    @include button--primary--disabled;
+  }
+}
+
+// Checkboxes
+// --------------------
+
+input[type="checkbox"] {
+  display: inline-block;
+  margin-right: $spacing__s;
+}
+
+// How to use:
+//
+// TODO - Finish this
+//
+// div.checkbox
+//   input
+//   label
+
+// .checkbox {
+//   margin: $spacing__l 0 $spacing__s 0;
+// }
+
+// .checkbox input[type="checkbox"] {
+//   opacity: 0;
+// }
+
+// .checkbox label {
+//   position: relative;
+//   display: inline-block;
+//   padding-left: $spacing__l;
+// }
+
+// .checkbox label::before,
+// .checkbox label::after {
+//   position: absolute;
+//   content: "";
+//   display: inline-block;
+// }
+
+// // Outer checkbox
+// .checkbox label::before {
+//   height: $spacing__m;
+//   width: $spacing__m;
+
+//   border: 1px solid;
+//   left: 0px;
+//   top: $spacing__xs;
+// }
+
+// .checkbox label::after {
+//   height: 0.3125rem;
+//   width: 0.5625rem;
+//   border-left: $spacing__xxs solid;
+//   border-bottom: $spacing__xxs solid;
+
+//   transform: rotate(-45deg);
+
+//   left: 4px;
+//   top: $spacing__s;
+// }
+
+// .checkbox input[type="checkbox"] + label::after {
+//   content: none;
+// }
+// .checkbox input[type="checkbox"]:checked + label::after {
+//   content: "";
+// }
+// .checkbox input[type="checkbox"]:focus + label::before {
+//   outline: rgb(59, 153, 252) auto 0.3125rem;
+// }
+
+// React Select
+// --------------------
+// TODO: see if after we finish the upgrade that we can remove the .limited-width specificity here
+// TODO: Review these styles
+// TODO: There's some low contrast
+.limited-width {
+  .react-select {
+    margin: $spacing__m 0;
+  }
+  .react-select__control {
+    background-color: $color__n-85;
+    padding: 0;
+    color: white;
+    border: 2px solid transparent;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  .react-select__control--is-focused,
+  .react-select__control--is-focused:focus-within {
+    border: 2px solid $color__n-60;
+  }
+
+  .react-select__indicator-separator {
+    background-color: $color__n-50;
+  }
+
+  .react-select__indicator {
+    color: $color__white;
+    &:focus,
+    &:hover {
+      color: $color__white;
+    }
+  }
+
+  .react-select__single-value {
+    color: white;
+  }
+
+  /* inside the select */
+
+  .react-select__menu {
+    background-color: $color__n-80;
+    color: $color__white;
+  }
+
+  .react-select__option--is-focused {
+    background-color: $color__n-60;
+    outline: 2px solid $color__n-60;
+  }
+
+  .react-select__placeholder {
+    color: $color__white;
+    opacity: 0.5;
+    font-size: 0.9em;
+  }
+
+  .react-select__input {
+    color: $color__white;
+  }
+
+  .react-select__multi-value {
+    background-color: $color__n-60;
+    color: $color__white;
+  }
+
+  .react-select__multi-value__remove:hover {
+    color: var(--hot-pink);
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+}
+
+// Form info blobs
+// --------------------
+//
+// How to use
+//
+// .form__info-blob
+//   svg (or anything with .icon)
+//   p
+
+.form__info-blob {
+  display: flex;
+  align-items: flex-start;
+  margin: $spacing__s 0;
+  padding: $spacing__m;
+  border-radius: $border-radius__m;
+  background-color: $color__n-90;
+  border: 1px solid $color__n-60;
+  color: $color__white;
+  font-size: $font-size__small;
+  line-height: 1.5;
+  svg,
+  .icon {
+    margin-right: $spacing__s;
+  }
+  p {
+    margin-bottom: 0;
+  }
+}
+
+// Markdown
+// --------------------
+
+.widget__markdown {
+  border: 1px solid $color__n-60;
+  padding: $spacing__m;
+  border-radius: $border-radius__m;
+  min-height: 25rem;
+
+  @include breakpoint($breakpoint__m) {
+    padding: $spacing__l;
+  }
+}
+
+.widget__textarea-container {
+  textarea {
+    min-height: 25rem;
+  }
+}
+
+// TODO - Review this code
+.widget__markdown {
+  overflow: auto;
+
+  h1,
+  h2,
+  h3 {
+    font-weight: 600;
+    text-align: left;
+    color: white;
+    margin-top: 1em;
+    padding-bottom: 8px;
+    border-bottom: 1px solid $color__n-60;
+  }
+  h1 {
+    font-size: 28px;
+  }
+  h2 {
+    font-size: 24px;
+  }
+  h3 {
+    font-size: 20px;
+  }
+
+  pre {
+    padding: 16px;
+    overflow: auto;
+    font-size: 85%;
+    line-height: 1.45;
+    background-color: $color__n-80;
+    border-radius: $border-radius__m;
+
+    &::-webkit-scrollbar {
+      height: 5px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      height: 5px;
+    }
+  }
+
+  code {
+    padding: 0;
+    margin: 0;
+    background-color: $color__n-80;
+    display: inline;
+    overflow: visible;
+    line-height: inherit;
+    word-wrap: normal;
+  }
+
+  table {
+    border-collapse: collapse;
+    margin-bottom: $spacing__m;
+  }
+
+  tbody {
+    tr:nth-child(2n) {
+      background-color: $color__n-90;
+    }
+  }
+
+  td,
+  th {
+    border: 1px solid $color__n-60;
+    padding: 6px 13px;
+  }
+
+  ul {
+    list-style-type: disc;
+    margin: 1em 1em 1em 2em;
+  }
+  ol {
+    list-style-type: decimal;
+    margin: 1em 1em 1em 2em;
+  }
+  li {
+    margin-bottom: 0.5em;
+  }
+}
+
+// Radio buttons
+// --------------------
+
+// TODO this is too specific
+.form .form__radio {
+  display: flex;
+  align-items: center;
+  margin-bottom: $spacing__s;
+  input {
+    margin-right: $spacing__s;
+  }
+}
+
+// Selects
+// --------------------
+
+.select {
+  width: 100%;
+  min-height: 50px; // make sure it looks good in all browsers
+  padding: $spacing__s $spacing__m;
+  display: block;
+  background: url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/PjxzdmcgaGVpZ2h0PSIxNzkyIiB2aWV3Qm94PSIwIDAgMTc5MiAxNzkyIiB3aWR0aD0iMTc5MiIgZmlsbD0iI2ZmZmZmZiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMTY4MyA4MDhsLTc0MiA3NDFxLTE5IDE5LTQ1IDE5dC00NS0xOWwtNzQyLTc0MXEtMTktMTktMTktNDUuNXQxOS00NS41bDE2Ni0xNjVxMTktMTkgNDUtMTl0NDUgMTlsNTMxIDUzMSA1MzEtNTMxcTE5LTE5IDQ1LTE5dDQ1IDE5bDE2NiAxNjVxMTkgMTkgMTkgNDUuNXQtMTkgNDUuNXoiLz48L3N2Zz4=")
+    no-repeat right 1em center/0.8em 0.8em $color__n-80;
+  border: 2px solid transparent;
+  border-radius: $border-radius__m;
+  color: $color__n-5;
+  font-size: $font-size__text;
+  font-weight: bold;
+  // remove defaults
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -ms-appearance: none;
+  -o-appearance: none;
+  appearance: none;
+
+  // remove defaults
+  &::-ms-expand {
+    display: none;
+  }
+}
+
+.select-label {
+  display: block;
+  margin-bottom: 0.3em;
+  &::after {
+    content: "▼";
+    color: red;
+  }
+}

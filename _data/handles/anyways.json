@@ -1,0 +1,17 @@
+{
+  "handle": "anyways",
+  "members": [
+    "rahne",
+    "nooneisking"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x9fe804d409235A5F257438eD20a06feB32cB5B73"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x9fe804d409235A5F257438eD20a06feB32cB5B73"
+    }
+  ]
+}

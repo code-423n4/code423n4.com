@@ -1,0 +1,44 @@
+@import "../../variables";
+
+// --------------------------------------------------
+// Skeleton Loader
+// --------------------------------------------------
+
+// TODO: Finish this
+.skeleton-loader div div {
+  margin-bottom: $spacing__l;
+  border-radius: $border-radius__m;
+  min-height: 10rem;
+  background: linear-gradient(
+      -45deg,
+      rgba(white, 0.3) 0%,
+      rgba(white, 0.1) 100%
+    ),
+    linear-gradient(
+      rgba($color__button-blurple, 0.1) 0%,
+      rgba($color__button-blurple, 0.1) 45%,
+      transparent 45%,
+      transparent 55%,
+      rgba($color__button-blurple, 0.1) 55%,
+      rgba($color__button-blurple, 0.1) 100%
+    ),
+    transparent;
+  background-size: 200% 100%;
+  @include accessible-animation {
+    animation: gradient 2s ease infinite;
+  }
+
+  @keyframes gradient {
+    0% {
+      background-position: -200% 100%;
+    }
+    100% {
+      background-position: -300% 100%;
+    }
+  }
+}
+
+.skeleton-loader .limited-width {
+  padding-top: $spacing__xl;
+  padding-bottom: $spacing__xl;
+}

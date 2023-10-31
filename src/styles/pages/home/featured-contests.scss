@@ -1,0 +1,51 @@
+@import "../../variables";
+@import "../../components/contest-tile/contest-tile";
+
+// --------------------------------------------------
+// Featured Contests
+// --------------------------------------------------
+
+// CSS rule order
+// --------------------
+
+// 1. Variables
+// 2. Box model properties
+// 3. Display and position
+// 4. Background
+// 5. Border
+// 6. Box shadow
+// 7. Text
+// 8. Transforms
+// 9. Other
+
+.background--warden,
+.background--project {
+  background: $color__blended-60;
+}
+.home__featured-contests {
+  .featured-contests__active,
+  .featured-contests__upcoming {
+    .contest-tile {
+      @include contest-tile--transparent;
+    }
+  }
+
+  .featured-contests__completed {
+    padding: $spacing__xl 0;
+    background: $color__n-90;
+
+    @include breakpoint("s") {
+      margin-top: $spacing__xl 0;
+    }
+  }
+
+  .skeleton-loader {
+    padding-bottom: $spacing__l;
+  }
+}
+
+.home__featured-contests-blurple-area {
+  background: $color__blended-60;
+  padding-top: $spacing__l;
+  padding-bottom: calc($spacing__xl + $spacing__m);
+}

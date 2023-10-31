@@ -1,0 +1,136 @@
+@import "../variables";
+
+// CSS rule order
+// --------------------
+
+// 1. Variables
+// 2. Box model properties
+// 3. Display and position
+// 4. Background
+// 5. Border
+// 6. Box shadow
+// 7. Text
+// 8. Transforms
+// 9. Other
+
+// This hides an element visually, but still allows it to be read by screen readers.
+.visually-hidden {
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+
+// Pair .visually-hidden with .focusable to show the element when it's focused.
+// This is useful for off-screen navigations like the skip link.
+.visually-hidden.focusable:focus {
+  clip: auto;
+  clip-path: none;
+  height: auto;
+  overflow: auto;
+  position: static;
+  white-space: normal;
+  width: auto;
+}
+
+// Typography and button children will automatically swap to white with this class
+// TODO: Move these somewhere more appropriate.
+.background--blurple {
+  background: $color__button-blurple;
+}
+.background--darker {
+  background: rgba(0, 0, 0, 0.2);
+}
+// .background--low-contrast {
+//  // Document me somewhere, but this doesn't need any special treatment. It does the same thing as the blurple background class, only without the blurple. We could use it when the background is busy.
+// }
+
+// Use this with a span to make text not wrap
+.no-break {
+  white-space: nowrap;
+}
+
+// Centering helper classes
+// ------------------------
+
+.center--text {
+  text-align: center;
+}
+
+.center--margin {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.center--flex,
+.center--flex--both {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.center--flex--vertical {
+  display: flex;
+  align-items: center;
+}
+
+.center--flex--horizontal {
+  display: flex;
+  justify-content: center;
+}
+
+// Spacing helper classes
+// --------------------
+
+.spacing-bottom__xxs {
+  margin-bottom: $spacing__xxs !important;
+}
+.spacing-bottom__xs {
+  margin-bottom: $spacing__xs !important;
+}
+.spacing-bottom__s {
+  margin-bottom: $spacing__s !important;
+}
+.spacing-bottom__m {
+  margin-bottom: $spacing__m !important;
+}
+.spacing-bottom__l {
+  margin-bottom: $spacing__l !important;
+}
+.spacing-bottom__xl {
+  margin-bottom: $spacing__xl !important;
+}
+.spacing-bottom__xxl {
+  margin-bottom: $spacing__xxl !important;
+}
+.spacing-bottom__xxxl {
+  margin-bottom: $spacing__xxxl !important;
+}
+
+.spacing-top__xxs {
+  margin-top: $spacing__xxs !important;
+}
+.spacing-top__xs {
+  margin-top: $spacing__xs !important;
+}
+.spacing-top__s {
+  margin-top: $spacing__s !important;
+}
+.spacing-top__m {
+  margin-top: $spacing__m !important;
+}
+.spacing-top__l {
+  margin-top: $spacing__l !important;
+}
+.spacing-top__xl {
+  margin-top: $spacing__xl !important;
+}
+.spacing-top__xxl {
+  margin-top: $spacing__xxl !important;
+}
+.spacing-top__xxxl {
+  margin-top: $spacing__xxxl !important;
+}
