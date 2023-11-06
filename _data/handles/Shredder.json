@@ -2,7 +2,7 @@
   "handle": "Shredder",
   "members": [
     "yashar",
-    "I_S_Valkov"
+    "mobinpou"
   ],
   "paymentAddresses": [
     {
@@ -13,5 +13,6 @@
       "chain": "ethereum",
       "address": "0x562ed4a5B6866e278C31E7ec3b51B4c45AaAAE4c"
     }
-  ]
+  ],
+  "image": "./avatars/Shredder.png"
 }
