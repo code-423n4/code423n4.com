@@ -1,0 +1,5 @@
+{
+"name": "KelpDAO", (mandatory field; case sensitive)
+"link": "https://twitter.com/KelpDAO", (optional field)
+"image": "./avatars/kelp.jpg" (mandatory field)
+}
