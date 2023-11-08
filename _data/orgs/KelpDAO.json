@@ -1,5 +1,5 @@
 {
-"name": "Kelp DAO", (mandatory field; case sensitive)
-"link": "https://twitter.com/KelpDAO", (optional field)
-"image": "./avatars/kelp.jpg" (mandatory field)
+"name": "Kelp DAO",
+"link": "https://twitter.com/KelpDAO",
+"image": "./avatars/kelp.jpg"
 }
