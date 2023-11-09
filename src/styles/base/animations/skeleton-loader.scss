@@ -1,5 +1,9 @@
 @import "../../variables";
 
+// --------------------------------------------------
+// Skeleton Loader
+// --------------------------------------------------
+
 // TODO: Finish this
 .skeleton-loader div div {
   margin-bottom: $spacing__l;
@@ -32,4 +36,9 @@
       background-position: -300% 100%;
     }
   }
+}
+
+.skeleton-loader .limited-width {
+  padding-top: $spacing__xl;
+  padding-bottom: $spacing__xl;
 }

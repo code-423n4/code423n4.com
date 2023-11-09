@@ -8,7 +8,7 @@ const WardenOptionLabel = ({ value, image }) => {
   return (
     <div className={"warden-field__option-container"}>
       <Avatar
-        src={image ? image.childImageSharp.resize.src : ""}
+        src={image?.childImageSharp?.resize?.src || ""}
         name={value}
         size="27px"
         round="27px"

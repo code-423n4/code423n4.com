@@ -9,26 +9,8 @@
   }
 }
 
-// .trustbar__logos {
-//   margin-top: $spacing__m;
-//   margin-bottom: $spacing__s;
-// }
-
-// .trustbar__logos a {
-//   display: inline-block;
-// }
-
-// .trustbar__logos img {
-//   height: 30px;
-//   max-width: 100px;
-//   padding: 2px;
-//   opacity: 0.7;
-//   display: inline-block;
-//   margin: $spacing__m $spacing__m 0 0;
-// }
-
 .trustbar__logos {
-  margin: $spacing__xl 0 0;
+  margin: $spacing__xl 0 $spacing__m;
   padding: 0;
   list-style: none;
 
@@ -37,37 +19,13 @@
   justify-content: stretch;
 }
 
-.trustbar__logos a {
-  margin: 0 $spacing__xs $spacing__xs 0;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-
-  @include breakpoint("s") {
-    font-size: $headline-font-size__xxs;
-    margin: 0 $spacing__s $spacing__s 0;
-  }
-
-  &:hover {
-    background-color: $color__project;
-    color: $color__white;
-    border-color: $color__project;
-  }
-}
-
-.trustbar__logos img {
-  height: 25px;
-  max-width: 62px;
-  padding: 2px;
-  opacity: 0.7;
-  display: inline-block;
-  @include breakpoint("s") {
-    height: 25px;
-    max-width: 100px;
-  }
-}
 .trustbar__logo {
-  padding: calc($spacing__s) calc($spacing__m + 5px);
+  height: 40px;
+  max-width: 100px;
+  width: fit-content;
+  padding: $spacing__s $spacing__m;
+  margin: 0 $spacing__xs $spacing__xs 0;
+
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -75,15 +33,11 @@
   border: 2px solid transparent;
   border-radius: $border-radius__m;
   color: $color__n-5;
-  &:hover {
-    @include accessible-animation {
-      transition: $transition__base;
-    }
-    background: $color__blurple-60;
-    color: $color__white;
 
-    .hero__top-auditor-link-arrow {
-      border-color: rgba($color__white, 0.2);
-    }
+  opacity: 0.7;
+
+  @include breakpoint("s") {
+    height: 55px;
+    max-width: 110px;
   }
 }
