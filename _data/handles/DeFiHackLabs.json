@@ -1,13 +1,15 @@
 {
   "handle": "DeFiHackLabs",
+  "image": "./avatars/DeFiHackLabs.png",
   "members": [
     "SunSec",
-    "gbaleee",
+    "AkshaySrivastav",
+    "Sm4rty",
     "Cache_and_Burn",
-    "secoalba",
-    "0x4non",
-    "Aits",
-    "sayan"
+    "ret2basic",
+    "zuhaibmohd",
+    "sashik_eth",
+    "Ronin"
   ],
   "paymentAddresses": [
     {
@@ -18,6 +20,5 @@
       "chain": "ethereum",
       "address": "0x4276BF06Aebd8A1F3D89a1fd5BF84bFa1B7D03Ce"
     }
-  ],
-  "image": "./avatars/DeFiHackLabs.png"
+  ]
 }

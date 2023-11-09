@@ -1,0 +1,13 @@
+{
+  "handle": "smaul0",
+  "members": [
+    "smaul",
+    "MBabattya"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xCf1858e3c1DDc43986E34957f52D558a4C26EFDD"
+    }
+  ]
+}
