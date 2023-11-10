@@ -1,12 +1,14 @@
 {
   "handle": "MangoBot",
   "crew": [
-    "CaptainMango"
+    "CaptainMango",
+    "bluejacket"
   ],
   "paymentAddresses": [
     {
       "chain": "polygon",
       "address": "0x0000000000000000000000000000000000000000"
     }
-  ]
+  ],
+  "image": "./avatars/MangoBot.jpeg"
 }
