@@ -1,0 +1,13 @@
+{
+  "handle": "Black_Box",
+  "members": [
+    "Japy69",
+    "p4y4b13"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x5d7FfFEc6bBbf3a871Fb9EF0783b1E9986ec3973"
+    }
+  ]
+}
