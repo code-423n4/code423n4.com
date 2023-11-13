@@ -1,0 +1,15 @@
+{
+  "handle": "SeveritySquad",
+  "members": [
+    "shealtielanz",
+    "castle_chain",
+    "0xdice91"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x86b8fb59ea9dab7a7de10b6dc9d8aad93ce24049"
+    }
+  ],
+  "image": "./avatars/SeveritySquad.png"
+}
