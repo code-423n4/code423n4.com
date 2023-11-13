@@ -1,0 +1,17 @@
+{
+  "handle": "crack-the-kelp",
+  "members": [
+    "Parth",
+    "wildanvin"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xa00efCD04c6bc0749ce21E753ADE3e3E80c02c3B"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0xa00efCD04c6bc0749ce21E753ADE3e3E80c02c3B"
+    }
+  ]
+}
