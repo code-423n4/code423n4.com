@@ -1,0 +1,15 @@
+{
+  "handle": "CSL",
+  "members": [
+    "levi_104",
+    "steadyman",
+    "shaflow2"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x0000F5BD8Ca20BA703Bf6a1Ef039f796BB82D8d2"
+    }
+  ],
+  "image": "./avatars/CSL.png"
+}
