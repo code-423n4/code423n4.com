@@ -1,0 +1,17 @@
+{
+  "handle": "0x3e84fa45",
+  "members": [
+    "0xArcturus",
+    "markus_ether"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xB23d4e4E1388265f51558c6b003C4e1a7a668A0c"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0xB23d4e4E1388265f51558c6b003C4e1a7a668A0c"
+    }
+  ]
+}
