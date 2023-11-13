@@ -1,0 +1,21 @@
+{
+  "handle": "CRIMSON-RAT-REACH",
+  "members": [
+    "cergyk",
+    "paspe",
+    "VictoryGod",
+    "0xtotem",
+    "imkapadia",
+    "devblixt",
+    "vani",
+    "vangrim",
+    "0xChuck",
+    "Angry_Mustache_Man"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x43BC7Be8b597414348657e9929319202Ffb56f75"
+    }
+  ]
+}

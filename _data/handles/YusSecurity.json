@@ -1,0 +1,14 @@
+{
+  "handle": "YusSecurity",
+  "members": [
+    "flacko",
+    "marchev"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x12852C1459B46BeD792C3036462347D8C7471200"
+    }
+  ],
+  "image": "./avatars/YusSecurity.png"
+}
