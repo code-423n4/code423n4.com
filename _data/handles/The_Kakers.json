@@ -1,0 +1,17 @@
+{
+  "handle": "The_Kakers",
+  "members": [
+    "juancito",
+    "oxizo"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x6c93491F07918b5E54087FD6eeDC8b74bAdebF13"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x6c93491F07918b5E54087FD6eeDC8b74bAdebF13"
+    }
+  ]
+}
