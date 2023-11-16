@@ -1,0 +1,17 @@
+{
+  "handle": "PendoraBox",
+  "members": [
+    "0xAtharv",
+    "0xblackskull"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x6f99706afEec0f2A1328924673d822aA1FFc0426"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x6f99706afEec0f2A1328924673d822aA1FFc0426"
+    }
+  ]
+}
