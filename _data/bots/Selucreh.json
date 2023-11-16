@@ -1,0 +1,16 @@
+{
+  "handle": "Selucreh",
+  "crew": [
+    "sxima"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x8804486b513734602947b6fb80110589e504ca60"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x8804486b513734602947b6fb80110589e504ca60"
+    }
+  ]
+}

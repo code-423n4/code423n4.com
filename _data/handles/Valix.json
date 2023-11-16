@@ -1,0 +1,19 @@
+{
+  "handle": "Valix",
+  "members": [
+    "0x8e88",
+    "merlinboii"
+  ],
+  "link": "https://twitter.com/ValixConsulting",
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xe5174d23689b54710f3bdbA49Cc2Dd5cB4700ea7"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0xe5174d23689b54710f3bdbA49Cc2Dd5cB4700ea7"
+    }
+  ],
+  "image": "./avatars/Valix.png"
+}

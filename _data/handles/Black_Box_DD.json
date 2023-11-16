@@ -2,13 +2,12 @@
   "handle": "Black_Box_DD",
   "members": [
     "p4y4b13",
-    "ch13fd357r0y3r",
-    "Suzombie"
+    "ch13fd357r0y3r"
   ],
   "paymentAddresses": [
     {
       "chain": "polygon",
-      "address": "0xA71E202e3EEa08a50c0eD24705aC916A246d6930"
+      "address": "0xD8885d4f2Cc94fC4c892C80344eCa61633252f03"
     }
   ]
 }
