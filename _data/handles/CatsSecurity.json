@@ -1,5 +1,6 @@
 {
   "handle": "CatsSecurity",
+  "image": "./avatars/CatsSecurity.png",
   "members": [
     "cats",
     "nirlin"
@@ -7,8 +8,7 @@
   "paymentAddresses": [
     {
       "chain": "polygon",
-      "address": "0xaC4Cb8282d291a74e8C881620E3AFaF6dE98d6aE"
+      "address": "0xac4cb8282d291a74e8c881620e3afaf6de98d6ae"
     }
-  ],
-  "image": "./avatars/CatsSecurity.png"
+  ]
 }
