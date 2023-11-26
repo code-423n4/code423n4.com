@@ -1,0 +1,13 @@
+{
+  "handle": "PositiveSecurity",
+  "members": [
+    "AndreyBa",
+    "PositiveWeb3"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xfd07850df7036ba07efb2de6229460e7e1c82355"
+    }
+  ]
+}

@@ -10,11 +10,11 @@
   "paymentAddresses": [
     {
       "chain": "polygon",
-      "address": "0x2770cC972a7666C974B1b1269F4F31b97f99f898"
+      "address": "0x452B7F438AFfc7971A48b623b32ad5C705b001E7"
     },
     {
       "chain": "ethereum",
-      "address": "0x2770cC972a7666C974B1b1269F4F31b97f99f898"
+      "address": "0x452B7F438AFfc7971A48b623b32ad5C705b001E7"
     }
   ],
   "image": "./avatars/ThreeSigma.png"
