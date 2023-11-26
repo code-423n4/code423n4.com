@@ -1,0 +1,17 @@
+{
+  "handle": "Team-Alpha",
+  "members": [
+    "BBHunt3r",
+    "hagrid"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xb24c9c43a29846cddd04beceaf8781d82da9a95d"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0xb24c9c43a29846cddd04beceaf8781d82da9a95d"
+    }
+  ]
+}
