@@ -1,9 +1,12 @@
 {
   "handle": "BPZ",
+  "moralisId": "",
+  "image": "",
+  "showOnLeaderboard": true,
   "members": [
-    "pa6221",
     "Bitcoinfever244",
-    "PrasadLak"
+    "PrasadLak",
+    "zinc42"
   ],
   "paymentAddresses": [
     {

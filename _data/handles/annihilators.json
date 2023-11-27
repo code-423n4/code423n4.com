@@ -1,0 +1,14 @@
+{
+  "handle": "annihilators",
+  "members": [
+    "nooneisking",
+    "praneshasp"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x1c572400d5c2389d3eb44d5cfb6d7746c56bbc0c"
+    }
+  ],
+  "image": "./avatars/annihilators.jpeg"
+}
