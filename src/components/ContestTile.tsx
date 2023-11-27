@@ -31,7 +31,8 @@ const ContestTile = ({ contest, updateContestStatus, user, reduced }) => {
   const [contestTimelineObject, setContestTimelineObject] = useState(
     getDates(start_time, end_time)
   );
-  const hasBotRace = fields.codeAccess === "public";
+  const hasBotRace =
+    fields.codeAccess === "public" && contest.contestid !== 241;
 
   useEffect(() => {
     if (fields.codeAccess === "public") {

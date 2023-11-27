@@ -171,7 +171,9 @@ const ContestLayout = ({ data }) => {
                   contestTimelineObject={contestTimelineObject}
                   contestNumber={contestid}
                   botRacePath={fields.submissionPath + "/bot"}
-                  hasBotRace={fields.codeAccess === "public"}
+                  hasBotRace={
+                    fields.codeAccess === "public" && contestid !== 241
+                  }
                 />
               ))}
 

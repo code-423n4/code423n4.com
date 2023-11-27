@@ -253,7 +253,10 @@ exports.createPages = async ({ graphql, actions }) => {
         },
       });
     }
-    if (contest.node.fields.codeAccess === "public") {
+    if (
+      contest.node.fields.codeAccess === "public" &&
+      contest.node.contestid !== 241
+    ) {
       createPage({
         path: contest.node.fields.submissionPath + "/bot",
         component: botRaceFormTemplate,

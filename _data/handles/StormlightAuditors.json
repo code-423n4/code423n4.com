@@ -1,0 +1,18 @@
+{
+  "handle": "StormlightAuditors",
+  "members": [
+    "vangrim",
+    "EVDoc"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xbD5d7FecF4C88bD808B03cD00D96D19913C0c904"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0xbD5d7FecF4C88bD808B03cD00D96D19913C0c904"
+    }
+  ],
+  "image": "./avatars/StormlightAuditors.png"
+}
