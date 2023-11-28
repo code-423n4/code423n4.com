@@ -1,12 +1,15 @@
-{
-  "handle": "Oak_Cobalt",
+  "handle": "o4kc0b4lt",
   "crew": [
     "oakcobalt"
   ],
   "paymentAddresses": [
     {
       "chain": "polygon",
-      "address": "0x0000000000000000000000000000000000000000"
+      "address": "0xd8a7570eaD74fd0030caDFbad28Eebc4c0dF34b7"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0xd8a7570eaD74fd0030caDFbad28Eebc4c0dF34b7"
     }
   ]
 }
