@@ -1,0 +1,13 @@
+{
+  "handle": "Hubble-SAT",
+  "crew": [
+    "ksk2345",
+    "shri4net"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x0000000000000000000000000000000000000000"
+    }
+  ]
+}
