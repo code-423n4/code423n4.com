@@ -10,5 +10,6 @@
       "address": "0x0000000000000000000000000000000000000000"
     }
   ],
-  "image": "./avatars/MangoBot.jpeg"
+  "image": "./avatars/MangoBot.jpeg",
+  "relegated": true
 }
