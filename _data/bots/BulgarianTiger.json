@@ -1,0 +1,16 @@
+{
+  "handle": "BulgarianTiger",
+  "crew": [
+    "0xMilenov"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xc9A550e89C468c3E391c0B45A47881847d80551c"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0xc9A550e89C468c3E391c0B45A47881847d80551c"
+    }
+  ]
+}
