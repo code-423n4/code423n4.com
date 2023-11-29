@@ -1,5 +1,6 @@
 {
   "handle": "PositiveSecurity",
+  "link": " https://x.com/PositiveWeb3",
   "members": [
     "AndreyBa",
     "PositiveWeb3",
@@ -8,6 +9,10 @@
   "paymentAddresses": [
     {
       "chain": "polygon",
+      "address": "0xfd07850df7036ba07efb2de6229460e7e1c82355"
+    },
+    {
+      "chain": "ethereum",
       "address": "0xfd07850df7036ba07efb2de6229460e7e1c82355"
     }
   ]
