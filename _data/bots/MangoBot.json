@@ -3,7 +3,8 @@
   "crew": [
     "CaptainMango",
     "bluejacket",
-    "say-cheese"
+    "say-cheese",
+    "geodude"
   ],
   "paymentAddresses": [
     {
@@ -11,6 +12,6 @@
       "address": "0x0000000000000000000000000000000000000000"
     }
   ],
-  "image": "./avatars/MangoBot.jpeg",
+  "image": "./avatars/MangoBot.png",
   "relegated": true
 }
