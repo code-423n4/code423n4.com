@@ -1,0 +1,13 @@
+{
+  "handle": "CTeam",
+  "members": [
+    "caventa",
+    "Juntao"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x2cae7254921ecaaee84b123cc4d6b94729f71023"
+    }
+  ]
+}
