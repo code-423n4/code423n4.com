@@ -1,0 +1,18 @@
+{
+  "handle": "Team-Alpha",
+  "image": "./avatars/Team-Alpha.png",
+  "members": [
+    "BBHunt3r",
+    "hagrid"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x9261c3aaf7211cf7e70ef3a550354f8ecd51d20d"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x9261c3aaf7211cf7e70ef3a550354f8ecd51d20d"
+    }
+  ]
+}
