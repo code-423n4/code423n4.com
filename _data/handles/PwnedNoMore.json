@@ -2,10 +2,7 @@
   "handle": "PwnedNoMore",
   "members": [
     "izhuer",
-    "ItsNio",
-    "wen",
-    "h5n8514",
-    "hashminer0725"
+    "wen"
   ],
   "paymentAddresses": [
     {
@@ -17,5 +14,6 @@
       "address": "0x97F74E6ba17A7484fbafbbc0b41BfF3630C9dac4"
     }
   ],
-  "link": "https://twitter.com/pwnednomore"
+  "link": "https://twitter.com/pwnednomore",
+  "image": "./avatars/PwnedNoMore.jpeg"
 }

@@ -1,0 +1,17 @@
+{
+  "handle": "contractcops",
+  "members": [
+    "NikolayKostadinov",
+    "ovcharov"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x7711e10506bDD0950d7a115A63eE646566fa821E"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x7711e10506bDD0950d7a115A63eE646566fa821E"
+    }
+  ]
+}
