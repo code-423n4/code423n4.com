@@ -4,24 +4,21 @@ import { graphql } from "gatsby";
 import DefaultLayout from "../templates/DefaultLayout";
 import LeaderboardTableReduced from "../components/LeaderboardTableReduced";
 
-export default function Leaderboard({ data }) {
+export default function Leaderboard() {
   const [timeFrame, setTimeFrame] = useState("Last 60 days");
   const [leaderboardResults, setLeaderboardResults] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const contests = data.contests.edges;
 
   useEffect(() => {
     (async () => {
       const result = await fetch(
         `/.netlify/functions/leaderboard?range=${timeFrame}`,
         {
-          method: "POST",
           headers: {
             "Content-Type": "application/json",
             // "X-Authorization": `Bearer ${sessionToken}`,
             // "C4-User": currentUser.username,
           },
-          body: JSON.stringify(contests),
         }
       );
       if (result.ok) {
@@ -72,45 +69,3 @@ export default function Leaderboard({ data }) {
     </DefaultLayout>
   );
 }
-
-export const query = graphql`
-  query {
-    contests: allContestsCsv(
-      filter: { hide: { ne: true } }
-      sort: { fields: end_time, order: ASC }
-    ) {
-      edges {
-        node {
-          id
-          title
-          details
-          hide
-          league
-          start_time
-          end_time
-          amount
-          repo
-          findingsRepo
-          sponsor {
-            name
-            image {
-              childImageSharp {
-                resize(width: 80) {
-                  src
-                }
-              }
-            }
-            link
-          }
-          fields {
-            submissionPath
-            contestPath
-            status
-            codeAccess
-          }
-          contestid
-        }
-      }
-    }
-  }
-`;

@@ -2,148 +2,79 @@ import React from "react";
 
 const logos = [
   {
-    link: "https://opensea.io",
+    title: "ENS",
+    imgSrc: "/images/logos/ens-logo-full.svg",
+    alt: "ENS",
+  },
+  {
     title: "OpenSea",
     imgSrc: "/images/logos/opensea.svg",
     alt: "OpenSea",
   },
   {
-    link: "https://ens.domains",
-    title: "ENS",
-    imgSrc: "/images/logos/ens.svg",
-    alt: "ENS",
+    title: "NounsDAO",
+    imgSrc: "/images/logos/nouns-logo-full.svg",
+    alt: "NounsDAO",
   },
   {
-    link: "https://aave.com",
+    title: "The Graph",
+    imgSrc: "/images/logos/the-graph-logo-full.svg",
+    alt: "The Graph",
+  },
+  {
+    title: "Blur",
+    imgSrc: "/images/logos/blur-logo-full.svg",
+    alt: "Blur",
+  },
+  {
+    title: "Chainlink",
+    imgSrc: "/images/logos/chainlink-logo-full.svg",
+    alt: "Chainlink",
+  },
+  {
+    title: "ZkSync",
+    imgSrc: "/images/logos/zksync-logo-full.svg",
+    alt: "ZKSync",
+  },
+  {
     title: "Aave",
     imgSrc: "/images/logos/aave.svg",
     alt: "Aave",
   },
   {
-    link: "https://pooltogether.com",
+    title: "Trader Joe",
+    imgSrc: "/images/logos/trader-joe-plaintext-logo.svg",
+    alt: "Trader Joe",
+  },
+  {
     title: "PoolTogether",
     imgSrc: "/images/logos/pooltogether.svg",
     alt: "PoolTogether",
   },
   {
-    link: "https://sushi.com",
     title: "Sushi",
-    imgSrc: "/images/logos/sushi.svg",
+    imgSrc: "/images/logos/sushi-logo-full.svg",
     alt: "Sushi",
   },
   {
-    link: "https://slingshot.finance",
-    title: "Slingshot",
-    imgSrc: "/images/logos/slingshot.svg",
-    alt: "Slingshot",
-  },
-  {
-    link: "https://mechanism.capital",
-    title: "Mechanism Capital",
-    imgSrc: "/images/logos/mechanism.png",
-    alt: "Mechanism Capital",
-  },
-  {
-    link: "https://tally.cash",
-    title: "Tally Wallet",
-    imgSrc: "/images/logos/tally.svg",
-    alt: "Tally Wallet",
-  },
-  {
-    link: "https://nascent.xyz",
-    title: "Nascent",
-    imgSrc: "/images/logos/nascent.svg",
-    alt: "Nascent",
-  },
-  {
-    link: "http://www.1kxfoundation.com/",
-    title: "1kx",
-    imgSrc: "/images/logos/1kx.svg",
-    alt: "1kx",
-  },
-  {
-    link: "https://www.connext.network/",
-    title: "Connext",
-    imgSrc: "/images/logos/connext.svg",
-    alt: "Connext",
-  },
-  {
-    link: "https://metacartel.xyz/",
-    title: "MetaCartel Venture DAO",
-    imgSrc: "/images/logos/metacartel.svg",
-    alt: "MetaCartel Venture DAO",
-  },
-  {
-    link: "https://foundation.app/",
-    title: "Foundation",
-    imgSrc: "/images/logos/foundation.svg",
-    alt: "Foundation",
-  },
-  {
-    link: "https://nouns.wtf/",
-    title: "NounsDAO",
-    imgSrc: "/images/logos/nounsdao.svg",
-    alt: "NounsDAO",
-  },
-  {
-    link: "https://www.olympusdao.finance/",
-    title: "OlympusDAO",
-    imgSrc: "/images/logos/olympusdao.svg",
-    alt: "OlympusDAO",
-  },
-  {
-    link: "https://juicebox.money/",
     title: "JuiceBox",
-    imgSrc: "/images/logos/juicebox.svg",
+    imgSrc: "/images/logos/juicebox-logo-full.svg",
     alt: "JuiceBox",
   },
   {
-    link: "https://alchemix.fi",
-    title: "Alchemix",
-    imgSrc: "/images/logos/alchemix.svg",
-    alt: "Alchemix",
+    title: "Tessera",
+    imgSrc: "/images/logos/tessera-logo-full.svg",
+    alt: "Tessera",
   },
   {
-    link: "https://frax.finance/",
-    title: "Frax Finance",
-    imgSrc: "/images/logos/fraxfinance.svg",
-    alt: "Frax Finance",
-  },
-  {
-    link: "https://unlock-protocol.com/",
-    title: "Unlock Protocol",
-    imgSrc: "/images/logos/unlock.svg",
-    alt: "Unlock",
-  },
-  {
-    link: "https://maple.finance/",
-    title: "Maple Finance",
-    imgSrc: "/images/logos/maple.svg",
-    alt: "Maple Finance",
-  },
-  {
-    link: "https://elasticswap.org",
-    title: "Elastic Swap",
-    imgSrc: "/images/logos/elasticswap.svg",
-    alt: "Elastic Swap",
-  },
-  {
-    link: "https://www.gravitybridge.net/",
-    title: "Gravity Bridge",
-    imgSrc: "/images/logos/gravity-bridge.svg",
-    alt: "Gravity Bridge",
-  },
-  {
-    link: "https://www.yield.app/",
     title: "Yield",
-    imgSrc: "/images/logos/yield.svg",
+    imgSrc: "/images/logos/yield-protocol-logo-full.svg",
     alt: "Yield",
   },
   {
-    link: "https://www.forgottenrunes.com/",
-    title: "Forgotten Runes",
-    imgSrc: "/images/logos/forgotten-runes.svg",
-    alt: "Forgotten Runes",
+    title: "Foundation",
+    imgSrc: "/images/logos/foundation.svg",
+    alt: "Foundation",
   },
 ];
 const TrustBar = () => (
@@ -155,16 +86,11 @@ const TrustBar = () => (
       <p className="type__subline__s">There's a reason why.</p>
       <div className="trustbar__logos">
         {logos.map((logo) => (
-          <a
-            href={logo.link}
-            title={logo.title}
-            key={logo.link}
-            target="_blank"
-            rel="noreferrer"
+          <img
+            src={logo.imgSrc}
+            alt={logo.alt + " logo"}
             className="trustbar__logo"
-          >
-            <img src={logo.imgSrc} alt={logo.alt} />
-          </a>
+          />
         ))}
       </div>
     </div>

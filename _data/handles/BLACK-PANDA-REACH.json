@@ -1,0 +1,21 @@
+{
+  "handle": "BLACK-PANDA-REACH",
+  "members": [
+    "Muhab",
+    "deliriusz",
+    "savi0ur",
+    "lopotras",
+    "Naubit",
+    "santipu_",
+    "devscrooge",
+    "ret2basic",
+    "Draco000",
+    "Velislav4o"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x43BC7Be8b597414348657e9929319202Ffb56f75"
+    }
+  ]
+}

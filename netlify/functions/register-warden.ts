@@ -331,9 +331,10 @@ exports.handler = async (event) => {
       }
     } catch (error) {
       return {
-        statusCode: error.response.status,
+        statusCode: error?.response?.status || 500,
         body: JSON.stringify({
-          error: error.response.data.message.toString(),
+          error:
+            "" + error?.response?.data?.message || "Internal server error.",
         }),
       };
     }
