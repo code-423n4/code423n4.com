@@ -1,0 +1,13 @@
+{
+  "handle": "MyTeam",
+  "members": [
+    "0xk4w4ida",
+    "bluejacket"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x0000000000000000000000000000000000000000"
+    }
+  ]
+}
