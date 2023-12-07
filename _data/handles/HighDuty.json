@@ -1,0 +1,13 @@
+{
+  "handle": "HighDuty",
+  "members": [
+    "nmirchev8",
+    "cholakov"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x49Fdc004E1bbf150a771BAB729A4F452f36290Df"
+    }
+  ]
+}
