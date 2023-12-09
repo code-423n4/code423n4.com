@@ -1,0 +1,19 @@
+{
+  "handle": "NoName",
+  "members": [
+    "Abuchtela",
+    "cros"
+  ],
+  "link": "https://twitter.com/amberbuchtela",
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x0B58857708a6f84e7EE04BEAEF069a7E6D1D4A0b"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x0B58857708a6f84e7EE04BEAEF069a7E6D1D4A0b"
+    }
+  ],
+  "image": "./avatars/NoName.png"
+}
