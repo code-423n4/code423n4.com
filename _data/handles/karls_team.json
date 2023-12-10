@@ -1,13 +1,12 @@
 {
   "handle": "karls_team",
   "members": [
-    "carlos_sf",
-    "circadian"
+    "carlos_sf"
   ],
   "paymentAddresses": [
     {
       "chain": "polygon",
-      "address": "0x81493b153fbe7079f881d429fd0dfc932e38b06f"
+      "address": "0x9d43e17d99132F8Ff8210466e6460C5bD2326606"
     }
   ]
 }
