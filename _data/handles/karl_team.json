@@ -1,0 +1,12 @@
+{
+  "handle": "karl_team",
+  "members": [
+    "carlos_sf"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x9d43e17d99132F8Ff8210466e6460C5bD2326606"
+    }
+  ]
+}
