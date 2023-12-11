@@ -1,0 +1,13 @@
+{
+  "handle": "thellamafactor",
+  "members": [
+    "thebrittfactor_test",
+    "llamatest"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x0111111111111111111111111111111111111111"
+    }
+  ]
+}
