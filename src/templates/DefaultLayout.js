@@ -1,11 +1,13 @@
 import React from "react";
-import Helmet from "react-helmet";
 import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import Footer from "../components/content/Footer";
 import Header from "../components/content/Header";
 import LoginModal from "../components/Login/LoginModal";
 import Modal from "../components/Modal";
+import WrapperLayout from "./WrapperLayout";
+import EyebrowBar from "../components/EyebrowBar";
 
 const DefaultLayout = (props) => {
   const {
@@ -19,77 +21,19 @@ const DefaultLayout = (props) => {
   } = props;
   return (
     <>
-      <Helmet
-        htmlAttributes={{
-          lang: "en",
-        }}
+      <WrapperLayout
+        bodyClass={bodyClass}
+        url={url}
+        pageDescription={pageDescription}
+        pageTitle={pageTitle}
       >
-        <meta charset="utf-8" />
-        <meta httpEquiv="X-UA-Compatible" content="chrome-1" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta name="description" content={pageDescription} />
-        <meta name="keywords" content="" />
-        <meta property="og:site_name" content="Code4rena" />
-        <meta property="og:title" content={pageTitle} />
-        {pageDescription ? (
-          <meta property="og:description" content={pageDescription} />
-        ) : (
-          <meta
-            property="og:description"
-            content="The future of audits is decentralized."
-          />
-        )}
-        <meta property="og:type" content="article" />
-        <meta property="og:url" content={`https://code4rena.com/${url}`} />
-        {preview ? (
-          <meta property="og:image" content={preview} />
-        ) : (
-          <meta
-            property="og:image"
-            content="https://code4rena.com/images/C4-banner.png"
-          />
-        )}
-        <link
-          rel="apple-touch-icon"
-          sizes="180x180"
-          href="/images/apple-touch-icon.png"
-        />
-        <link
-          rel="icon"
-          type="image/png"
-          sizes="32x32"
-          href="/images/favicon-32.png"
-        />
-        <link
-          rel="icon"
-          type="image/png"
-          sizes="16x16"
-          href="/images/favicon-16.png"
-        />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin="true"
-        />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Roboto+Mono&family=Roboto:wght@400;700&family=Space+Mono&display=swap"
-          rel="stylesheet"
-        />
-        <title>
-          {pageTitle ? `${pageTitle} — ` : ""}
-          Code4rena
-        </title>
-        <body className={bodyClass} />
-      </Helmet>
-      <Header hideConnectWalletDropdown={hideConnectWalletDropdown} />
-      <ToastContainer />
-      <Modal />
-      <LoginModal />
-      <main>
-        {children}
+        <Header hideConnectWalletDropdown={hideConnectWalletDropdown} />
+        <ToastContainer />
+        <Modal />
+        <LoginModal />
+        <main>{children}</main>
         <Footer />
-      </main>
+      </WrapperLayout>
     </>
   );
 };

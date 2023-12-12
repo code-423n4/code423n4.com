@@ -1,0 +1,16 @@
+{
+  "handle": "S5",
+  "members": [
+    "geodude",
+    "YungMessiah",
+    "DK",
+    "SamusElderg",
+    "say-cheese"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x5f410E7e24459Bf38aBEDfDc090EDB06aA2868b0"
+    }
+  ]
+}

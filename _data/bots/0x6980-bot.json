@@ -1,0 +1,16 @@
+{
+  "handle": "0x6980-bot",
+  "crew": [
+    "0x6980"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x606Fc4a54A577813cdA1c28fC328dfA3BBfC9B91"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x606Fc4a54A577813cdA1c28fC328dfA3BBfC9B91"
+    }
+  ]
+}

@@ -1,0 +1,142 @@
+// css-init by @sir-sharkey https://github.com/sir-sharkey/css-init/blob/main/dist/init.css
+// v 1.2.14
+
+// Modifications:
+// - Removed `color: initial` from `*, :after, :before`
+// - Removed `min-height: 100vh` from `body`
+// - Removed `font-weight: 400` from `*, :after, :before`
+
+// `*` as a selector is really aggressive for what's being set in there.
+
+*,
+:after,
+:before {
+  background: none;
+  border: none;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  font-size: 100%;
+  font-style: normal;
+  // font-weight: 400;
+  margin: 0;
+  padding: 0;
+  vertical-align: baseline;
+}
+button,
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+body {
+  -webkit-text-size-adjust: none;
+  -moz-text-size-adjust: none;
+  -ms-text-size-adjust: none;
+  text-size-adjust: none;
+  line-height: 1.5;
+  // min-height: 100vh; // vh is a dangerous game with scrollbars -🍔
+  width: 100%;
+}
+a,
+button,
+details,
+input[type="button"],
+input[type="checkbox"],
+input[type="file"],
+input[type="image"],
+input[type="radio"],
+input[type="range"],
+input[type="reset"],
+input[type="submit"],
+label,
+select {
+  cursor: pointer;
+}
+article,
+aside,
+audio,
+canvas,
+details,
+figcaption,
+figure,
+footer,
+header,
+main,
+nav,
+rt,
+ruby,
+section,
+summary {
+  display: block;
+}
+bdi,
+mark,
+meter,
+output,
+progress,
+time {
+  display: inline-block;
+}
+[hidden],
+datalist,
+dialog:not([open]),
+rp {
+  display: none;
+}
+a {
+  text-decoration: none;
+}
+ol,
+ul {
+  list-style: none;
+}
+embed,
+iframe,
+img,
+object,
+picture,
+svg,
+video {
+  display: block;
+  height: auto;
+  max-width: 100%;
+}
+blockquote,
+q {
+  quotes: none;
+}
+blockquote:after,
+blockquote:before,
+q:after,
+q:before {
+  content: none;
+}
+strong {
+  font-weight: 700;
+}
+
+em {
+  font-style: italic;
+}
+
+code,
+kbd,
+pre,
+samp {
+  font-family: monospace;
+}
+
+sub {
+  vertical-align: sub;
+}
+
+sup {
+  vertical-align: super;
+}
+
+small {
+  font-size: small;
+}
+table {
+  border-collapse: collapse;
+}

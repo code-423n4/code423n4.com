@@ -24,7 +24,7 @@ import { getMarkdownReportForUser } from "../util/github-utils";
 import {
   updateTeamAddresses,
   sendConfirmationEmail,
-  getTeamEmails,
+  getGroupEmails,
 } from "../util/user-utils";
 import { isDangerousHandle } from "../util/validation-utils";
 
@@ -36,6 +36,10 @@ function isDangerousRepo(s) {
 }
 
 exports.handler = async (event) => {
+  // @todo for Mitigation Review:
+  // extract relevant info from submission title and risk for mitigation reviews
+  // add proper labels to new issue
+
   // only allow POST
   if (event.httpMethod !== "POST") {
     return {
@@ -59,9 +63,9 @@ exports.handler = async (event) => {
     sponsor,
     repo,
     address,
+    mitigationOf,
   } = data;
   let emailAddresses: string[] = data.emailAddresses;
-
   await Moralis.start({
     serverUrl: moralisServerUrl,
     appId: moralisAppId,
@@ -84,18 +88,19 @@ exports.handler = async (event) => {
       }),
     };
   }
+  const isMitigationReport: boolean = mitigationOf ? true : false;
 
   // ensure we have the data we need
   if (
     emailAddresses.length == 0 ||
     !user ||
-    !risk ||
+    (!isMitigationReport && !risk) ||
     !title ||
     !body ||
     !labels ||
     !contest ||
     !sponsor ||
-    !attributedTo ||
+    (!isMitigationReport && !attributedTo) ||
     !repo
   ) {
     return {
@@ -156,7 +161,7 @@ exports.handler = async (event) => {
 
     if (attributedTo !== user) {
       const team: TeamData = await checkTeamAuth(attributedTo, user);
-      const teamEmailAddresses = await getTeamEmails(team);
+      const teamEmailAddresses = await getGroupEmails(team.members);
       emailAddresses = emailAddresses.concat(teamEmailAddresses);
       const teamPolygonAddress =
         team.paymentAddresses &&
@@ -244,24 +249,29 @@ exports.handler = async (event) => {
   }
 
   const owner = process.env.GITHUB_CONTEST_REPO_OWNER;
-  const riskCode = getRiskCodeFromGithubLabel(risk);
 
   try {
-    const markdownPath = `data/${attributedTo}-${riskCode}.md`;
-    const qaOrGasSubmissionBody = `See the markdown file with the details of this report [here](https://github.com/${owner}/${repo}/blob/main/${markdownPath}).`;
-    const isQaOrGasSubmission = Boolean(riskCode === "G" || riskCode === "Q");
-    if (isQaOrGasSubmission) {
-      const existingReport = await getMarkdownReportForUser(
-        octokit,
-        repo,
-        attributedTo,
-        riskCode as "Q" | "G"
-      );
-      if (existingReport) {
-        throw {
-          status: 400,
-          message: `It looks like you've already submitted a ${risk} report for this contest.`,
-        };
+    let isQaOrGasSubmission = false;
+    let qaOrGasSubmissionBody = "";
+    let markdownPath = "";
+    const riskCode = getRiskCodeFromGithubLabel(risk);
+    if (!isMitigationReport) {
+      markdownPath = `data/${attributedTo}-${riskCode}.md`;
+      qaOrGasSubmissionBody = `See the markdown file with the details of this report [here](https://github.com/${owner}/${repo}/blob/main/${markdownPath}).`;
+      isQaOrGasSubmission = Boolean(riskCode === "G" || riskCode === "Q");
+      if (isQaOrGasSubmission) {
+        const existingReport = await getMarkdownReportForUser(
+          octokit,
+          repo,
+          attributedTo,
+          riskCode as "Q" | "G"
+        );
+        if (existingReport) {
+          throw {
+            status: 400,
+            message: `It looks like you've already submitted a ${risk} report for this contest.`,
+          };
+        }
       }
     }
 

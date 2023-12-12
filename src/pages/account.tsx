@@ -4,21 +4,17 @@ import { useMoralis } from "react-moralis";
 import { toast } from "react-toastify";
 
 // types
-import { PaymentAddress } from "../../types/user";
+import { PaymentAddress, TeamDeleteRequest } from "../../types/user";
 
 // hooks
 import { useModalContext } from "../hooks/ModalContext";
-import useUser, { TeamInfo } from "../hooks/UserContext";
+import useUser from "../hooks/UserContext";
 
 // components
-import Card from "../components/Card";
 import { Input } from "../components/Input";
 import ProtectedPage from "../components/ProtectedPage";
-import WardenDetails from "../components/WardenDetails";
-
-// styles
-import * as formStyles from "../components/form/Form.module.scss";
-import * as inputStyles from "../components/Input.module.scss";
+import TeamBotTile from "../components/TeamBotTile";
+import { Username } from "../../types/shared";
 
 const initialState = {
   discordUsername: "",
@@ -28,7 +24,7 @@ const initialState = {
   ethereumAddress: "",
 };
 
-const initialPaymentAddressesState = {
+const initialPaymentAddressesState: Record<string, PaymentAddress> = {
   polygonAddress: { address: "", id: "", chain: "polygon" },
   ethereumAddress: { address: "", id: "", chain: "ethereum" },
 };
@@ -194,36 +190,43 @@ export default function AccountManagementPage() {
     [storedPaymentAddresses]
   );
 
-  const handleDelete = (team: TeamInfo) => {
+  const handleDelete = (name: Username, type: "Team" | "Bot") => {
     showModal({
-      title: `Delete Team: ${team.username}`,
-      body: `Are you sure you want to delete the team ${team.username}?`,
-      primaryButtonAction: async () => deleteTeam(team),
+      title: `Delete ${type}: ${name}`,
+      body: `Are you sure you want to delete the ${type.toLowerCase()} ${name}?`,
+      primaryButtonAction: async () => deleteTeamOrBot(name, type),
       primaryButtonText: "Delete",
     });
   };
 
-  const deleteTeam = useCallback(
-    async (team: TeamInfo) => {
+  const deleteTeamOrBot = useCallback(
+    async (name: Username, type: "Team" | "Bot") => {
       if (!user || !isInitialized) {
         return;
       }
       const sessionToken = user.attributes.sessionToken;
+      const request: TeamDeleteRequest = { name };
       try {
-        const response = await fetch("/.netlify/functions/manage-team", {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-            "X-Authorization": `Bearer ${sessionToken}`,
-            "C4-User": currentUser.username,
-          },
-          body: JSON.stringify({ teamName: team.username }),
-        });
+        const response = await fetch(
+          `/.netlify/functions/manage-${type.toLowerCase()}`,
+          {
+            method: "DELETE",
+            headers: {
+              "Content-Type": "application/json",
+              "X-Authorization": `Bearer ${sessionToken}`,
+              "C4-User": currentUser.username,
+            },
+            body: JSON.stringify(request),
+          }
+        );
         if (!response.ok) {
-          toast.error("An error ocurred while trying to delete your team");
+          toast.error(
+            `An error ocurred while trying to delete your ${type.toLowerCase()}`
+          );
         } else {
           toast.info(
-            "Success! Your request to delete your team has been submitted. It will take up to 48 hours to process your request."
+            `Success! Your request to delete your ${type.toLowerCase()} ` +
+              `has been submitted. It will take up to 48 hours to process your request.`
           );
         }
       } catch (error) {
@@ -263,15 +266,15 @@ export default function AccountManagementPage() {
   };
 
   return (
-    <ProtectedPage pageTitle="My Account | Code 423n4">
+    <ProtectedPage pageTitle="My Account | Code4rena">
       {isInitializing ? (
         // @todo: style a loading state
         <div>LOADING...</div>
       ) : (
-        <div className="wrapper-main">
-          <h1 className="page-header">Manage Account</h1>
-          <form className={formStyles.Form}>
-            <h2 className={formStyles.Heading2}>Payment Information</h2>
+        <div className="account limited-width">
+          <h1 className="type__headline__page-title">Manage Account</h1>
+          <form>
+            <h2>Payment Information</h2>
             <Input
               label="Polygon Address"
               required={true}
@@ -293,12 +296,12 @@ export default function AccountManagementPage() {
               handleSaveInputValue={handleSavePaymentAddress}
               maxLength={42}
             />
-            <div className={formStyles.DividingLine}></div>
-            <h2 className={formStyles.Heading2}>User Information</h2>
+            <hr />
+            <h2>User Information</h2>
             {authAddresses.length > 0 && (
               <>
-                <span className={inputStyles.Label}>Login Addresses</span>
-                <ul className={formStyles.List}>
+                <span>Login Addresses</span>
+                <ul>
                   {authAddresses.map((address) => (
                     <li>{address}</li>
                   ))}
@@ -332,7 +335,7 @@ export default function AccountManagementPage() {
               toggleEdit={true}
               handleSaveInputValue={handleSaveUserInfo}
             />
-            <div className={formStyles.ButtonsWrapper}>
+            <div>
               <button
                 type="button"
                 className="button cta-button"
@@ -341,10 +344,12 @@ export default function AccountManagementPage() {
                 Reset Password
               </button>
             </div>
-            <div className={formStyles.DividingLine}></div>
-            <h2 className={formStyles.Heading2}>Team Information</h2>
+
+            <hr />
+
+            <h2>Team Information</h2>
             {(currentUser.teams || []).length === 0 ? (
-              "You are not a member of any teams"
+              <p>You are not a member of any teams</p>
             ) : (
               <>
                 <p>
@@ -352,80 +357,79 @@ export default function AccountManagementPage() {
                   not immediately effective. It may take a few business days for
                   your changes to be reviewed and completed.
                 </p>
-                <div
-                  className={currentUser.teams.length > 1 ? "card-wrapper" : ""}
-                >
-                  {currentUser.teams.map((team) => (
-                    <Card
-                      title={
-                        <WardenDetails
-                          username={team.username}
-                          image={team.image}
-                          avatarSize="40px"
-                          className={inputStyles.Label}
-                        />
-                      }
-                      buttons={
-                        <>
-                          <Link
-                            to={`/manage-team?team=${team.username}`}
-                            state={team}
-                            className={inputStyles.IconButton}
-                          >
-                            <img src="/images/pencil.png" alt="edit" />
-                          </Link>
-                          <button
-                            type="button"
-                            className={inputStyles.IconButton}
-                            onClick={() => handleDelete(team)}
-                          >
-                            <img src="/images/trash-can.png" alt="delete" />
-                          </button>
-                        </>
-                      }
-                    >
-                      <>
-                        <span className={inputStyles.Label}>Members:</span>
-                        <ul className={formStyles.List}>
-                          {team.members.map((member) => (
-                            <li>{member}</li>
-                          ))}
-                        </ul>
-                        {team.ethereumAddress ||
-                          (team.polygonAddress && (
-                            <>
-                              <span className={inputStyles.Label}>
-                                Payment addresses:
-                              </span>
-                              <ul className={formStyles.List}>
-                                {team.polygonAddress && (
-                                  <li>
-                                    polygon:{" "}
-                                    {team.polygonAddress.slice(0, 5) +
-                                      "..." +
-                                      team.polygonAddress.slice(-4)}
-                                  </li>
-                                )}
-                                {team.ethereumAddress && (
-                                  <li>
-                                    ethereum:{" "}
-                                    {team.ethereumAddress.slice(0, 5) +
-                                      "..." +
-                                      team.ethereumAddress.slice(-4)}
-                                  </li>
-                                )}
-                              </ul>
-                            </>
-                          ))}
-                      </>
-                    </Card>
-                  ))}
-                </div>
+                {currentUser.teams.map((team) => (
+                  <TeamBotTile
+                    name={team.username}
+                    members={team.members}
+                    membersHeader="Members"
+                    image={team.image}
+                    polygonAddress={team.polygonAddress || ""}
+                    ethereumAddress={team.ethereumAddress}
+                    buttons={
+                      <div className="account__team-management-buttons">
+                        <Link
+                          to={`/manage-team?team=${team.username}`}
+                          state={team}
+                          className="account__team-management-button"
+                        >
+                          <img src="/images/icon/edit/16.svg" alt="edit" /> Edit
+                        </Link>
+                        <button
+                          type="button"
+                          className="account__team-management-button"
+                          onClick={() => handleDelete(team.username, "Team")}
+                        >
+                          <img src="/images/icon/delete/16.svg" alt="delete" />{" "}
+                          Delete
+                        </button>
+                      </div>
+                    }
+                  ></TeamBotTile>
+                ))}
               </>
             )}
-            <div className={formStyles.ButtonsWrapper}>
+            {currentUser.bot && (
+              <>
+                <h2>Bot Information</h2>
+                <p>
+                  <strong>Heads up!</strong> Changes you make to your bot are
+                  not immediately effective. It may take a few business days for
+                  your changes to be reviewed and completed.
+                </p>
+                <TeamBotTile
+                  name={currentUser.bot.username}
+                  members={currentUser.bot.crew}
+                  membersHeader="Crew"
+                  image={currentUser.bot.image}
+                  polygonAddress={currentUser.bot.polygonAddress || ""}
+                  ethereumAddress={currentUser.bot.ethereumAddress}
+                  buttons={
+                    <div className="account__team-management-buttons">
+                      <Link
+                        to={`/manage-bot?bot=${currentUser.bot.username}`}
+                        state={currentUser.bot}
+                        className="account__team-management-button"
+                      >
+                        <img src="/images/icon/edit/16.svg" alt="edit" /> Edit
+                      </Link>
+                      <button
+                        type="button"
+                        className="account__team-management-button"
+                        onClick={() =>
+                          handleDelete(currentUser.bot!.username, "Bot")
+                        }
+                      >
+                        <img src="/images/icon/delete/16.svg" alt="delete" />{" "}
+                        Delete
+                      </button>
+                    </div>
+                  }
+                ></TeamBotTile>
+              </>
+            )}
+            <div>
               <Link
-                to="/register-team"
+                to="/register/team"
                 className="button cta-button centered secondary"
               >
                 Create a new team

@@ -1,0 +1,36 @@
+@import "../../variables";
+
+// --------------------------------------------------
+// Submit Findings Page
+// --------------------------------------------------
+
+// CSS rule order
+// --------------------
+
+// 1. Variables
+// 2. Box model properties
+// 3. Display and position
+// 4. Background
+// 5. Border
+// 6. Box shadow
+// 7. Text
+// 8. Transforms
+// 9. Other
+
+.submit-findings h1 {
+  padding-bottom: $spacing__l;
+  border-bottom: 2px solid $color__n-60;
+}
+
+.submit-findings__user-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  border-bottom: 2px solid $color__n-60;
+}
+
+// choosing between submitting as a warden and as a team member
+.submit-findings__submitting-as {
+  margin-left: $spacing__l;
+}

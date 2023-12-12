@@ -1,0 +1,308 @@
+@import "../../variables";
+@import "./contest-tile-themes";
+
+// --------------------------------------------------
+// Contest Tile Component
+// --------------------------------------------------
+
+// Note: Colors don't go here, they go in the themes file
+// This file is for layout and spacing
+
+// Contest tile variables
+// --------------------
+
+$contest-tile__logo-container-width: 90px;
+
+// Contest Tile Component Styles
+// --------------------
+
+.contest-tile {
+  width: 100%;
+  margin-bottom: $spacing__m;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-radius: $border-radius__m;
+  border: 1px solid $contest-tile--solid__border-color;
+
+  @include contest-tile--solid;
+
+  @include breakpoint("s") {
+    margin-bottom: $spacing__l;
+  }
+}
+
+.contest-tile__bot-race-status {
+  display: inline-flex;
+  font-weight: 700;
+  color: $color__white;
+  margin-left: $spacing__m;
+  line-height: 100%;
+
+  .icon {
+    margin-right: $spacing__s;
+  }
+}
+
+.contest-tile__top {
+  display: flex;
+  flex-direction: column-reverse;
+  padding: 0;
+  @include breakpoint("s") {
+    padding: $spacing__m $spacing__l;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+}
+
+.contest-tile__logo-details-wrapper {
+  display: flex;
+}
+
+// Contest amount
+// --------------------
+
+.contest-tile__amount {
+  padding: $spacing__s $spacing__m;
+  color: $color__white;
+  font-weight: 500;
+  text-align: right;
+  font-size: $headline-font-size__xxs;
+  border-bottom: 1px solid $contest-tile--solid__border-color;
+
+  @include breakpoint("s") {
+    padding: $spacing__xs 0 $spacing__m $spacing__m;
+    justify-content: flex-start;
+    background: none;
+    border-bottom: none;
+    font-size: $headline-font-size__xs;
+  }
+}
+
+// Logo area
+// --------------------
+
+.contest-tile__logo {
+  width: calc($contest-tile__logo-container-width * 0.7);
+  margin-right: $spacing__m;
+  @include breakpoint("s") {
+    flex-shrink: 0;
+    padding: 0;
+    width: $contest-tile__logo-container-width;
+  }
+}
+
+.contest-tile__logo .project-link {
+  width: calc($contest-tile__logo-container-width * 0.7);
+  @include breakpoint("s") {
+    width: $contest-tile__logo-container-width;
+  }
+}
+
+// Content area
+// --------------------
+
+.contest-tile__content {
+  display: flex;
+  padding: $spacing__m;
+  @include breakpoint("s") {
+    padding: 0;
+    max-width: 40rem;
+  }
+}
+
+// Contest title
+// --------------------
+
+.contest-tile__title {
+  font-size: $headline-font-size__xxs;
+  font-weight: 500;
+  margin-top: 0;
+
+  @include breakpoint("s") {
+    font-size: $headline-font-size__xs;
+  }
+}
+
+// Contest time
+// --------------------
+
+.contest-tile__time-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin: $spacing__xs 0;
+  font-size: $font-size__small;
+}
+
+.contest-tile__days-duration {
+  margin-right: $spacing__s;
+}
+
+// Contest buttons and live indicator
+// --------------------
+
+.contest-tile__bottom {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid $contest-tile--solid__border-color;
+  @include breakpoint("m") {
+    flex-direction: row;
+  }
+}
+
+.contest-tile__button-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: stretch;
+
+  @include breakpoint("m") {
+    justify-content: center;
+    max-width: max-content;
+  }
+
+  .contest-tile__button {
+    width: 100%;
+    padding: $spacing__s $spacing__m;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $color__white;
+    text-align: center;
+    border-left: 1px solid $contest-tile--solid__border-color;
+
+    @include breakpoint("m") {
+      width: auto;
+    }
+    &:hover {
+      background: rgba($color__white, 0.1);
+    }
+    &:first-of-type {
+      border-left: 0;
+      @include breakpoint("m") {
+        border-left: 1px solid $contest-tile--solid__border-color;
+      }
+    }
+  }
+}
+
+.contest-tile__status-indicator {
+  padding-bottom: $spacing__m;
+  width: 100%;
+  border-bottom: 1px solid $contest-tile--solid__border-color;
+  display: flex;
+  flex-direction: column;
+
+  @include breakpoint("xs") {
+    padding-bottom: 0;
+    flex-direction: row;
+  }
+
+  @include breakpoint("m") {
+    width: auto;
+    border-bottom: 0;
+  }
+}
+
+.contest-tile__status-indicator-text {
+  display: flex;
+  align-items: center;
+  align-self: center;
+  padding: $spacing__s $spacing__m;
+  font-size: $font-size__small;
+  &:before {
+    content: "";
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: $spacing__s;
+    background: $color__white;
+  }
+}
+
+.contest-tile__status-indicator-text--active {
+  color: $color__white;
+  &:before {
+    background: $color__green;
+  }
+}
+
+.contest-tile__status-indicator-text--soon {
+  color: $color__white;
+}
+
+.contest-tile__status-indicator-text--completed {
+  &:before {
+    display: none;
+  }
+}
+
+.contest-tile__countdown {
+  padding-left: $spacing__m;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: $font-size__text;
+
+  @include breakpoint("xs") {
+    border-left: 1px solid $contest-tile--solid__border-color;
+  }
+
+  .countdown {
+    padding: 1px $spacing__m;
+    margin: 0 $spacing__s;
+    border-radius: 1rem;
+    background: rgba(0, 0, 0, 0.1);
+    font-family: monospace;
+    font-weight: normal;
+  }
+  .countdown-live {
+    display: none;
+  }
+}
+
+// Class Theme: Reduced
+// --------------------------------------------------
+
+// This theme forces the contest tile to remain in mobile view
+// It is commonly used with the swiper component
+//
+// [Tip] This is needed on the swiper parent container
+//  .swiper-slide
+//    display: flex
+//    height: auto
+
+.reduced {
+  .contest-tile__top {
+    padding: 0;
+    flex-direction: column-reverse;
+  }
+  .contest-tile__amount {
+    padding: $spacing__s $spacing__m;
+    border-bottom: $contest-tile--solid__border;
+    font-size: $headline-font-size__xxs;
+  }
+  .contest-tile__logo {
+    width: calc($contest-tile__logo-container-width * 0.7);
+  }
+  .contest-tile__logo .project-link {
+    width: calc($contest-tile__logo-container-width * 0.7);
+  }
+  .contest-tile__content {
+    padding: $spacing__m;
+  }
+
+  .contest-tile__button-wrapper {
+    width: 100%;
+    .contest-tile__button {
+      width: 100%;
+    }
+  }
+
+  .contest-tile__status-indicator {
+    width: 100%;
+  }
+}

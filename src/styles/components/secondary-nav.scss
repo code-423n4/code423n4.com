@@ -1,0 +1,40 @@
+@import "../variables";
+
+// --------------------------------------------------
+// Secondary Nav Component
+// --------------------------------------------------
+
+.secondary-nav {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: $spacing__m;
+}
+
+button.secondary-nav__item,
+li.secondary-nav__item {
+  margin-right: $spacing__s;
+  padding: $spacing__s $spacing__m;
+
+  display: inline-block;
+
+  border-radius: 50px;
+  border: 1px solid $color__n-30;
+
+  color: $color__text;
+  font-size: $font-size__small;
+  font-weight: 500;
+  line-height: 130%;
+  text-decoration: none;
+
+  cursor: pointer;
+
+  &.active,
+  &.react-tabs__tab--selected {
+    color: $color__white;
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  @include breakpoint("m") {
+    font-size: $font-size__text;
+  }
+}

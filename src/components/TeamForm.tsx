@@ -1,5 +1,5 @@
 import { navigate } from "gatsby";
-import Moralis from "moralis/types";
+import Moralis from "moralis-v1/types";
 import React, {
   useCallback,
   useState,
@@ -21,9 +21,6 @@ import useUser from "../hooks/UserContext";
 import Form from "./form/Form";
 import { Input } from "./Input";
 import WardenField, { WardenFieldOption } from "./reporter/widgets/WardenField";
-
-// styles
-import * as widgetStyles from "../components/reporter/widgets/Widgets.module.scss";
 
 export interface TeamState {
   teamName: string;
@@ -106,7 +103,6 @@ export default function TeamForm({
       };
       fileReader.onerror = (err) => reject(err);
     });
-    return;
   };
 
   const handleAvatarChange = async (
@@ -181,7 +177,6 @@ export default function TeamForm({
 
   const submit = useCallback(async (): Promise<void> => {
     if (!currentUser.isLoggedIn || !user || !isInitialized) {
-      console.log(!currentUser.isLoggedIn, !user, !isInitialized);
       navigate("/");
       return;
     }
@@ -195,7 +190,7 @@ export default function TeamForm({
     };
 
     if (state.avatarFile && state.teamImage) {
-      requestBody.image = state.teamImage.substr(
+      requestBody.image = state.teamImage.substring(
         state.teamImage.indexOf(",") + 1
       );
     }
@@ -225,13 +220,19 @@ export default function TeamForm({
   const validateTeamName = useCallback(
     (teamName: string): (string | ReactNode)[] => {
       const errors: (string | ReactNode)[] = [];
+      const handleNames: string[] = Array.from(handles.values());
+      const existingHandle = handleNames.find((handle) => {
+        return handle.toLowerCase() === teamName.toLowerCase();
+      });
       if (teamName.match(/^[0-9a-zA-Z_\-]+$/) === null) {
         errors.push(
           "Supports alphanumeric characters, underscores, and hyphens"
         );
       }
-      if (!initialState && handles.has(teamName)) {
-        errors.push(`${teamName} is already registered as a team or warden.`);
+      if (!initialState && existingHandle) {
+        errors.push(
+          `${teamName} is already registered as a team, bot, or warden.`
+        );
       }
       return errors;
     },
@@ -297,7 +298,7 @@ export default function TeamForm({
           value={state.polygonAddress}
           required={true}
           label="Polygon Address"
-          helpText="Address where your team's prize should go. If you use a smart contract wallet, please contact one of our organizers in Discord in addition to adding the address here."
+          helpText="Address where your team's prize should go."
           handleChange={handleChange}
           validator={validateAddress}
           maxLength={42}
@@ -323,11 +324,9 @@ export default function TeamForm({
           handleChange={handleChange}
         />
 
-        <div className={widgetStyles.Container}>
-          <label htmlFor="avatar" className={widgetStyles.Label}>
-            Avatar (Optional)
-          </label>
-          <p className={widgetStyles.Help}>
+        <div className="widget__container">
+          <label htmlFor="avatar">Avatar (Optional)</label>
+          <p className="form__help-text">
             An avatar displayed next to your name on the leaderboard.
           </p>
           <Avatar
@@ -337,18 +336,17 @@ export default function TeamForm({
             round="50px"
           />
           <input
-            className={widgetStyles.Avatar}
+            className="widget__avatar"
             type="file"
             id="avatar"
             name="avatar"
-            accept=".png,.jpg,.jpeg,.webp"
+            accept=".png,.jpg,.jpeg"
             // @ts-ignore // @todo: solve this typescript error
             ref={avatarInputRef}
             onChange={handleAvatarChange}
           />
           {state.avatarFile && (
             <button
-              className="remove-line-button"
               type="button"
               onClick={removeAvatar}
               aria-label="Remove avatar"

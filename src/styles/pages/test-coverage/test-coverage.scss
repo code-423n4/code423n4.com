@@ -1,0 +1,122 @@
+@import "../../variables";
+
+// --------------------------------------------------
+// Test Coverage Marketing Page
+// --------------------------------------------------
+
+// CSS rule order
+// --------------------
+
+// 1. Variables
+// 2. Box model properties
+// 3. Display and position
+// 4. Background
+// 5. Border
+// 6. Box shadow
+// 7. Text
+// 8. Transforms
+// 9. Other
+
+.tc__hero {
+  background: radial-gradient(
+      100% 100% at 50% 100%,
+      rgba(73, 31, 242, 0.16) 0%,
+      rgba(43, 16, 128, 0) 100%
+    ),
+    #0c0b0e;
+
+  .type__subline__landing-hero {
+    max-width: 500px;
+  }
+}
+
+.tc__section {
+  margin-top: $spacing__xl;
+
+  @include breakpoint("m") {
+    margin-top: $spacing__xxl;
+  }
+
+  h2 {
+    margin-bottom: $spacing__xl;
+    text-align: center;
+
+    @include breakpoint("m") {
+      margin-bottom: $spacing__xl;
+    }
+  }
+  strong {
+    color: $color__white;
+  }
+}
+
+.tc__why .grid__one-by-two--break-s .tc__screens {
+  order: -1;
+  max-width: 300px;
+  margin: 0 auto;
+
+  @include breakpoint("s") {
+    order: 1;
+    max-width: none;
+  }
+}
+
+.tc__saves-section {
+  ul {
+    margin-bottom: 0;
+  }
+  p {
+    padding-bottom: $spacing__l;
+  }
+}
+.tc__screens {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tc__steps {
+  padding: $spacing__m 0 $spacing__xl 0;
+  background: linear-gradient(
+      180deg,
+      rgba(43, 16, 128, 0) 0%,
+      rgba(73, 31, 242, 0.16) 69.79%
+    ),
+    #0c0b0e;
+
+  @include breakpoint("m") {
+    padding: $spacing__xl 0 $spacing__xxl 0;
+  }
+
+  ul {
+    margin: 0;
+  }
+
+  li {
+    list-style-type: none;
+
+    @include breakpoint("m") {
+      padding-right: $spacing__xl;
+    }
+
+    p {
+      margin-bottom: $spacing__m;
+    }
+  }
+}
+
+.tc__cta {
+  margin: calc($spacing__xl + $spacing__xl) auto $spacing__xxl auto;
+  h2 {
+    margin-bottom: $spacing__l;
+
+    @include breakpoint("m") {
+      margin-bottom: $spacing__m;
+    }
+  }
+
+  p {
+    max-width: 850px;
+    margin: 0 auto $spacing__xl auto;
+  }
+}

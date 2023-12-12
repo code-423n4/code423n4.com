@@ -6,7 +6,15 @@ import WardenField from "./WardenField";
 import ContestWarning from "../findings/ContestWarning";
 
 const Widget = ({ field, fieldState, isInvalid, onChange }) => {
-  const { widget, name, required, options, maxSize } = field;
+  const {
+    widget,
+    name,
+    required,
+    options,
+    maxSize,
+    label,
+    placeholder,
+  } = field;
 
   function handleChange(e) {
     onChange(e);
@@ -19,6 +27,7 @@ const Widget = ({ field, fieldState, isInvalid, onChange }) => {
       onChange={handleChange}
       fieldState={fieldState[name]}
       isInvalid={isInvalid}
+      placeholder={placeholder}
     />
   );
 
@@ -61,7 +70,25 @@ const Widget = ({ field, fieldState, isInvalid, onChange }) => {
   );
 
   const linksToCodeInputGroup = (
-    <LinksToCode onChange={handleChange} linksToCode={fieldState[name]} />
+    <LinksToCode
+      onChange={handleChange}
+      linksToCode={fieldState[name]}
+      required={required}
+    />
+  );
+
+  const checkboxWidget = (
+    <label htmlFor={name} className={"widget__container"}>
+      <input
+        className={"widget__checkbox"}
+        type="checkbox"
+        id={name}
+        name={name}
+        checked={fieldState[name] === true}
+        onChange={handleChange}
+      />
+      {label}
+    </label>
   );
 
   const widgets = {
@@ -70,6 +97,7 @@ const Widget = ({ field, fieldState, isInvalid, onChange }) => {
     select: selectFieldWidget,
     warden: wardenFieldWidget,
     linksToCode: linksToCodeInputGroup,
+    checkbox: checkboxWidget,
   };
 
   return widgets[widget];

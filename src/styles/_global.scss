@@ -1,0 +1,122 @@
+// base
+@import "base/reset";
+@import "base/forms";
+@import "base/helper-classes";
+@import "base/layout";
+@import "base/tables";
+@import "base/typography";
+@import "base/animations/skeleton-loader";
+@import "base/animations/swiper";
+
+// components
+@import "components/button";
+@import "components/bottom-cta";
+@import "components/contest-tile/contest-tile";
+@import "components/competition-tags";
+@import "components/dropdown";
+@import "components/eyebrow-bar";
+@import "components/footer";
+@import "components/header";
+@import "components/modal";
+@import "components/report-tile";
+@import "components/secondary-nav";
+@import "components/project-link";
+@import "components/testimonials";
+@import "components/toastify";
+@import "components/warden-field";
+@import "components/input";
+
+// pages
+@import "pages/contest/bot-race";
+@import "pages/contest/contest";
+@import "pages/contest/submit-findings";
+@import "pages/contests/contests";
+@import "pages/help/help";
+@import "pages/how-it-works/how-it-works";
+@import "pages/home/featured-contests";
+@import "pages/home/hero";
+@import "pages/home/top-names";
+@import "pages/home/trustbar";
+@import "pages/home/pizzazz";
+@import "pages/leaderboard/leaderboard";
+@import "pages/newsletter-signup/newsletter-signup";
+@import "pages/user/account";
+@import "pages/user/login";
+@import "pages/user/register";
+@import "pages/user/register-bot";
+@import "pages/report/report";
+@import "pages/reports/reports";
+@import "pages/test-coverage/test-coverage";
+@import "pages/four-oh-four/four-oh-four";
+@import "pages/applications/lookout-application";
+
+// CSS Instructions
+// ------------------------------------------------
+
+// Adding a new file
+// --------------------
+
+// 1. Create a new file in the `src/styles` directory.
+// 2. Import the file in `src/styles/_global.scss` using `@import`.
+//    Note:
+//    - The order of the `@import` list is important.
+//    - They're designed to go from the most general to the most specific.
+//    - New files should be added to the bottom of their respective sections.
+
+// CSS rule order
+// --------------------
+
+// 1. Variables
+
+// 2. Box model properties
+//    - margin
+//    - padding
+//    - width
+//    - height
+
+// 3. Display and position
+//    - display
+//    - position
+//    - top
+//    - right
+//    - bottom
+//    - left
+//    - z-index
+
+// 4. Background
+//    - background
+//    - background-color
+//    - background-image
+//    - background-repeat
+//    - background-position
+//    - background-size
+
+// 5. Border
+//    - border
+//    - border-radius
+//    - outline
+
+// 6. Box shadow
+
+// 7. Text
+//    - font
+//    - font-family
+//    - font-size
+//    - font-weight
+//    - line-height
+//    - text-align
+//    - text-decoration
+//    - text-transform
+//    - text-indent
+//    - text-shadow
+//    - color
+
+// 8. Transforms
+//    - transition
+//    - animation
+
+// 9. Other
+//    - cursor
+//    - opacity
+//    - visibility
+//    - overflow

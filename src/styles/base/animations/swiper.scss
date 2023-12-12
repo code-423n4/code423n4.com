@@ -1,0 +1,71 @@
+@import "../../variables";
+
+// CSS rule order
+// --------------------
+
+// 1. Variables
+// 2. Box model properties
+// 3. Display and position
+// 4. Background
+// 5. Border
+// 6. Box shadow
+// 7. Text
+// 8. Transforms
+// 9. Other
+
+:root {
+  --swiper-theme-color: $color__white;
+}
+
+// TODO: This is a hack to get the swiper to be responsive, do it properly
+.swiper {
+  max-width: calc(92vw - $spacing__l * 2);
+  padding-bottom: $spacing__l;
+  margin: 0;
+
+  @include breakpoint("s") {
+    max-width: calc(92vw - $spacing__l * 2);
+  }
+
+  @include breakpoint("m") {
+    max-width: calc(96vw - $spacing__l * 2);
+    padding-bottom: $spacing__xl;
+  }
+
+  @include breakpoint("l") {
+    max-width: calc($layout__max-width - $spacing__l * 2);
+  }
+}
+
+.swiper-slide {
+  display: flex;
+  height: auto;
+}
+
+.swiper {
+  .swiper-button-prev,
+  .swiper-button-next,
+  .swiper-scrollbar {
+    opacity: 0;
+    @include accessible-animation {
+      transition: opacity 0.2s ease-in-out;
+    }
+  }
+  &:hover {
+    .swiper-button-prev,
+    .swiper-button-next,
+    .swiper-scrollbar {
+      opacity: 1;
+
+      &.swiper-button-disabled {
+        opacity: 0.3;
+      }
+    }
+  }
+}
+.swiper-pagination-bullet {
+  background: rgba($color__white, 0.5);
+}
+.swiper-pagination-bullet-active {
+  background: white;
+}
