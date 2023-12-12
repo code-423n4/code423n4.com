@@ -1,0 +1,14 @@
+{
+  "handle": "Mexico",
+  "members": [
+    "mektigboy",
+    "rdaemon"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xBa6c3eB68223afF74eb08cfDd38f860998e72d8b"
+    }
+  ],
+  "image": "./avatars/Mexico.png"
+}

@@ -1,0 +1,20 @@
+{
+  "handle": "Amber_Labs",
+  "members": [
+    "n33k",
+    "cwu",
+    "ashirleyshe"
+  ],
+  "link": "https://twitter.com/ambergroup_io",
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x24Bf6D89c33C1eB01F51669d9a1AFB2e7d240E38"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x24Bf6D89c33C1eB01F51669d9a1AFB2e7d240E38"
+    }
+  ],
+  "image": "./avatars/Amber_Labs.webp"
+}

@@ -1,5 +1,11 @@
 {
   "image": "",
   "handle": "poirots",
-  "members": ["DavideSilva", "resende", "naps62"]
+  "members": ["DavideSilva", "resende", "naps62", "eighty"],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x1B2f066126475d61bb7a24261Ac30EAB00d84c40"
+    }
+  ]
 }
