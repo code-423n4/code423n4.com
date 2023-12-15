@@ -1,0 +1,15 @@
+{
+  "handle": "cool-bot",
+  "relegated": false,
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xc819da48c2c21af37db7e41cad21cd4a5f5ab9cb"
+    }
+  ],
+  "crew": [
+    "YgW6OQy",
+    "0syJ2"
+  ],
+  "uid": "73YWKCCw7o2"
+}
