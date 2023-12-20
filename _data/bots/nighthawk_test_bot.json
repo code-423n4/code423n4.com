@@ -1,0 +1,15 @@
+{
+  "handle": "nighthawk_test_bot",
+  "relegated": false,
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0000000000000000000000000000000000000000"
+    }
+  ],
+  "crew": [
+    "nighthawk",
+    "jacobheun"
+  ],
+  "uid": "hfuerfiefohhr"
+}
