@@ -1,0 +1,46 @@
+@import "../variables";
+
+// --------------------------------------------------
+// Competition Tags
+// --------------------------------------------------
+
+// CSS rule order
+// --------------------
+
+// 1. Variables
+// 2. Box model properties
+// 3. Display and position
+// 4. Background
+// 5. Border
+// 6. Box shadow
+// 7. Text
+// 8. Transforms
+// 9. Other
+
+.competition-tag {
+  @mixin competition-tag-default {
+    padding: 0.2em 0.8em;
+    margin: 0.6em 0.6em 0.6em 0;
+    display: inline-block;
+    background: $color__n-90;
+    color: $color__n-20;
+    font-size: 1rem;
+    border-radius: 1em;
+  }
+
+  @include competition-tag-default;
+
+  &--blurple {
+    @include competition-tag-default;
+    background: $color__button-blurple;
+    color: $color__white;
+  }
+}
+
+// Mixin for competition tag
+
+@mixin competition-tag($background-color, $text-color) {
+  @include competition-tag-default;
+  background: $background-color;
+  color: $text-color;
+}

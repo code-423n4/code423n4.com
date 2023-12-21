@@ -1,0 +1,64 @@
+@import "../../variables";
+
+// --------------------------------------------------
+// Account Page
+// --------------------------------------------------
+
+// CSS rule order
+// --------------------
+
+// 1. Variables
+// 2. Box model properties
+// 3. Display and position
+// 4. Background
+// 5. Border
+// 6. Box shadow
+// 7. Text
+// 8. Transforms
+// 9. Other
+
+.account__team {
+  margin-bottom: $spacing__l;
+  border: 1px solid $color__n-60;
+  border-radius: $border-radius__m;
+  display: flex;
+  flex-direction: column;
+
+  @include breakpoint("m") {
+    // flex-direction: row;
+  }
+
+  ~ .account__team {
+    margin-top: $spacing__l;
+  }
+}
+
+.account__team-info {
+  padding: $spacing__m;
+}
+
+.account__team-management-buttons {
+  display: flex;
+  justify-content: flex-end;
+  border-top: 1px solid $color__n-60;
+
+  @include breakpoint("m") {
+  }
+}
+
+.account__team-management-button {
+  padding: $spacing__m;
+  display: flex;
+  background: transparent;
+  border-left: 1px solid $color__n-60;
+  color: $color__n-5;
+
+  img {
+    margin-right: $spacing__xs;
+  }
+
+  &:hover {
+    background: $color__button-blurple;
+    color: $color__white;
+  }
+}

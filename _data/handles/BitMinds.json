@@ -1,0 +1,13 @@
+{
+  "handle": "BitMinds",
+  "members": [
+    "Cryptor",
+    "berlin-101"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xaB6842079B2516A01de75C3B0f0C63FA8367Ac4C"
+    }
+  ]
+}

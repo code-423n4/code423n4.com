@@ -1,0 +1,15 @@
+{
+  "handle": "tenset-security",
+  "members": [
+    "danilych",
+    "loganspark"
+  ],
+  "link": "https://twitter.com/tenset_security",
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x294E65f971Eb3e5d6721d44844cE433720023872"
+    }
+  ],
+  "image": "./avatars/tenset-security.png"
+}

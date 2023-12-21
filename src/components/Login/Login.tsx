@@ -145,11 +145,11 @@ const Login = ({ displayAsButtons = false }) => {
   return (
     <>
       {displayAsButtons ? (
-        <div className="login__no-dropdown">
+        <div className="login__display-as-buttons">
           <button
             type="button"
             onClick={(e) => handleLogin(e)}
-            className="button login__button--smaller"
+            className="button button--primary login__button"
           >
             <img
               src="/images/meta-mask-logo.svg"
@@ -161,7 +161,7 @@ const Login = ({ displayAsButtons = false }) => {
           <button
             type="button"
             onClick={(e) => handleLogin(e, "walletConnect")}
-            className="button login__button--smaller"
+            className="button button--primary login__button"
           >
             <img
               src="/images/wallet-connect-logo.svg"
@@ -171,7 +171,7 @@ const Login = ({ displayAsButtons = false }) => {
             WalletConnect
           </button>
           <button
-            className="button login__button--smaller"
+            className="button button--primary login__button"
             type="button"
             onClick={openLoginModal}
           >
@@ -180,11 +180,17 @@ const Login = ({ displayAsButtons = false }) => {
               alt="login icon"
               className={"login__icon"}
             />
-            Log in
+            Log in with password
           </button>
-          <Link className="button login__button--smaller" to="/register">
-            Register
-          </Link>
+          <div className="login__not-registered">
+            <p>Not a warden yet?</p>
+            <Link
+              className="button button--secondary login__button"
+              to="/register"
+            >
+              Register
+            </Link>
+          </div>
         </div>
       ) : (
         <>

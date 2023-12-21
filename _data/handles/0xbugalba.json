@@ -1,0 +1,13 @@
+{
+  "handle": "0xbugalba",
+  "members": [
+    "Bugi",
+    "secoalba"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x6f12fec3E1b8689364637EBd35B47f49EeAD7076"
+    }
+  ]
+}

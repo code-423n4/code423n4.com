@@ -15,7 +15,7 @@ const TextField = ({
 
   return (
     <input
-      className={clsx(isInvalid && "--input-error")}
+      className={clsx(isInvalid && "input__input-error")}
       name={name}
       type="text"
       onChange={handleChange}

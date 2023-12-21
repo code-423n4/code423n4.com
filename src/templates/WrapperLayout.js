@@ -1,6 +1,7 @@
 import React from "react";
 import Helmet from "react-helmet";
 import "../styles/_global.scss";
+import EyebrowBar from "../components/EyebrowBar";
 
 const WrapperLayout = (props) => {
   const {
@@ -61,13 +62,13 @@ const WrapperLayout = (props) => {
           rel="icon"
           type="image/png"
           sizes="32x32"
-          href="/images/favicon-32.png"
+          href="/images/c4-favicon-32.png"
         />
         <link
           rel="icon"
           type="image/png"
           sizes="16x16"
-          href="/images/favicon-16.png"
+          href="/images/c4-favicon-16.png"
         />
         <title>
           {pageTitle ? `${pageTitle} — ` : ""}
@@ -75,7 +76,9 @@ const WrapperLayout = (props) => {
         </title>
         <body className={bodyClass} />
       </Helmet>
-      {children}
+
+      <EyebrowBar />
+      <div className="wrapper__grid">{children}</div>
     </>
   );
 };

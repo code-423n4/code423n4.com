@@ -1,0 +1,13 @@
+{
+  "handle": "unchecked",
+  "members": [
+    "Omsify",
+    "sqrlfirst"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xEd7f7a9158B4969e53048B3058622D9EeFB2F6B9"
+    }
+  ]
+}

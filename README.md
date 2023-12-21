@@ -47,7 +47,7 @@ Fork [code-423n4/code423n4.com](https://github.com/code-423n4/code423n4.com) and
 
 #### Required
 
-- Generate GitHub [personal access token] with(https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token) with "full control of private repositories" scope and set `GITHUB_TOKEN`
+- Generate GitHub [personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token) with "full control of private repositories" scope and set `GITHUB_TOKEN`
 - Use your GitHub username for `GITHUB_REPO_OWNER`
 - Set `GITHUB_CONTEST_REPO_OWNER` to `code-423n4`
 - Set `NODE_ENV` to `development`
@@ -70,8 +70,18 @@ If you submit test findings to the default test contest repo, you can find your 
 
 ## Develop
 
+First time setup:
+
 ```
+nvm install
+npm install -g yarn
 yarn
+```
+
+Then and every subsequent time:
+
+```
+nvm use
 yarn start
 ```
 

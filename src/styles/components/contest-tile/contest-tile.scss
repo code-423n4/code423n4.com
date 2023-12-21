@@ -32,6 +32,18 @@ $contest-tile__logo-container-width: 90px;
   }
 }
 
+.contest-tile__bot-race-status {
+  display: inline-flex;
+  font-weight: 700;
+  color: $color__white;
+  margin-left: $spacing__m;
+  line-height: 100%;
+
+  .icon {
+    margin-right: $spacing__s;
+  }
+}
+
 .contest-tile__top {
   display: flex;
   flex-direction: column-reverse;
