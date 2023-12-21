@@ -1,0 +1,13 @@
+{
+  "handle": "SECURITISE",
+  "members": [
+    "Audinarey",
+    "b0g0"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x79f2F20fa3dC519B243590aa51aB5CAe2552b9ae"
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "handle": "Yukti_Chinta",
+  "members": [
+    "kenzo",
+    "ElKu"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x0bf39FE34A3C99DE2415774F4750755345E4e2bf"
+    }
+  ],
+  "image": "./avatars/Yukti_Chinta.jpeg"
+}
