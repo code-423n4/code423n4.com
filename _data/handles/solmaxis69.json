@@ -1,0 +1,19 @@
+{
+  "handle": "solmaxis69",
+  "members": [
+    "seeques",
+    "melihdhs",
+    "TabFoxOne"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xb7b735d2DD0933803635BA4805E73CaB1025E8F6"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0xb7b735d2DD0933803635BA4805E73CaB1025E8F6"
+    }
+  ],
+  "image": "./avatars/solmaxis69.png"
+}
