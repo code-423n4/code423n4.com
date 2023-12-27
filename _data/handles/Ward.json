@@ -1,0 +1,18 @@
+{
+  "handle": "Ward",
+  "members": [
+    "0xpessimist",
+    "natzuu"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x6468e4fd73DF68e4aAf1cF26728B1e6d7F5a69d3"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x6468e4fd73DF68e4aAf1cF26728B1e6d7F5a69d3"
+    }
+  ],
+  "image": "./avatars/Ward.png"
+}

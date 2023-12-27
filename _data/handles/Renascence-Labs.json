@@ -1,0 +1,15 @@
+{
+  "handle": "Renascence-Labs",
+  "members": [
+    "MiloTruck",
+    "HollaDieWaldfee",
+    "alexxander",
+    "bytes032"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xE7ffE6C84D67998Aa77cE9139ED89AdA44057A6f"
+    }
+  ]
+}
