@@ -1,0 +1,17 @@
+{
+  "handle": "ASLANBEK_KUNANBAEV",
+  "members": [
+    "aslanbek",
+    "ABAIKUNANBAEV"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x70E1f57646e1CA09D082A2027bFa965853f39ee0"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x70E1f57646e1CA09D082A2027bFa965853f39ee0"
+    }
+  ]
+}
