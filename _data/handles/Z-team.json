@@ -1,0 +1,13 @@
+{
+  "handle": "Z-team",
+  "members": [
+    "sakshamguruji",
+    "beber89"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xf767a658b657842de92950bd0a954054d5953324"
+    }
+  ]
+}
