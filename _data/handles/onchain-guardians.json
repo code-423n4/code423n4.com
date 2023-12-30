@@ -1,0 +1,13 @@
+{
+  "handle": "onchain-guardians",
+  "members": [
+    "Viraz",
+    "0xepley"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xe2cD977766b4d75ee23cCb74f88F4d34862D5D09"
+    }
+  ]
+}
