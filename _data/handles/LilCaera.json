@@ -1,0 +1,13 @@
+{
+  "handle": "LilCaera",
+  "members": [
+    "CaeraDenoir",
+    "datacirexyen"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x5710E179e336f234238eBF4A110D817eBE0B2e42"
+    }
+  ]
+}
