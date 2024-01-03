@@ -1,0 +1,13 @@
+{
+  "handle": "Testing",
+  "members": [
+    "matthewcsimpson",
+    "SamusElderg"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x8bb2f4c523449365e735e2e0244763757bdc0f98"
+    }
+  ]
+}
