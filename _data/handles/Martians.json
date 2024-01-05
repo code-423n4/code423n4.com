@@ -1,0 +1,18 @@
+{
+  "handle": "Martians",
+  "image": "./avatars/Martians.png",
+  "members": [
+    "Nikki",
+    "0xvj"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x785671720e63a1e39f98b12288c0639b693f40f3"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x785671720e63a1e39f98b12288c0639b693f40f3"
+    }
+  ]
+}

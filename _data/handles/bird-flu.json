@@ -1,0 +1,13 @@
+{
+  "handle": "bird-flu",
+  "members": [
+    "bowtiedvirus",
+    "BowTiedOriole"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x391F705c02f3B006782cF2a5c842DDd1B8b95DF8"
+    }
+  ]
+}

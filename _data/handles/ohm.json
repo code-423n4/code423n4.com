@@ -1,0 +1,17 @@
+{
+  "handle": "ohm",
+  "members": [
+    "0x4ka5h",
+    "0x_kmr_"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xE673c58c3e30Ec06100c3D9F30C4C6aa5063fA7a"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0xE673c58c3e30Ec06100c3D9F30C4C6aa5063fA7a"
+    }
+  ]
+}

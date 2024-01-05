@@ -1,0 +1,18 @@
+{
+  "handle": "Coverage",
+  "members": [
+    "0xrafaelnicolau",
+    "0xrebelo"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x92e83ffCEA6F3e67Ceb3AD023401Ea30943bD67a"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x92e83ffCEA6F3e67Ceb3AD023401Ea30943bD67a"
+    }
+  ],
+  "image": "./avatars/Coverage.png"
+}

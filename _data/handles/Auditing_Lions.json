@@ -1,0 +1,15 @@
+{
+  "handle": "Auditing_Lions",
+  "members": [
+    "Velislav4o",
+    "paspe",
+    "dyoff"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xdb3B35EA44D374b7DF53157336F0FFE4d24c89C7"
+    }
+  ],
+  "image": "./avatars/Auditing_Lions.png"
+}
