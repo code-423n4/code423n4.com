@@ -1,0 +1,13 @@
+{
+  "handle": "MevSec",
+  "members": [
+    "Franfran",
+    "Ethnical"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x870a6af6d2FCa5a462118C1AF9581E5f8eB828a6"
+    }
+  ]
+}
