@@ -1,0 +1,14 @@
+{
+  "handle": "Josephdara_0xTiwa",
+  "members": [
+    "josephdara",
+    "0xTiwa"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x282772f8446ffc632Db09bE463D22c5523BBb96c"
+    }
+  ],
+  "image": "./avatars/Josephdara_0xTiwa.png"
+}
