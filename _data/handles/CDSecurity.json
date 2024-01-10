@@ -1,0 +1,13 @@
+{
+  "handle": "CDSecurity",
+  "members": [
+    "ddimitrov22",
+    "chrisdior4"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x59dA688CF5d3Bc3E29FC5d0EdFEb6196Cae196cE"
+    }
+  ]
+}
