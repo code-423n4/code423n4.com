@@ -1,0 +1,17 @@
+{
+  "handle": "Tera",
+  "crew": [
+    "kn0t"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xC9221E9ffed5277B7E0A62f5275FcF13c6B89B92"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0xC9221E9ffed5277B7E0A62f5275FcF13c6B89B92"
+    }
+  ],
+  "image": "./avatars/Tera.jpeg"
+}

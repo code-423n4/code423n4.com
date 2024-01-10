@@ -1,0 +1,81 @@
+@import "../../variables";
+
+// --------------------------------------------------
+// Homepage Top Names
+// --------------------------------------------------
+
+// CSS rule order
+// --------------------
+
+// 1. Variables
+// 2. Box model properties
+// 3. Display and position
+// 4. Background
+// 5. Border
+// 6. Box shadow
+// 7. Text
+// 8. Transforms
+// 9. Other
+
+.hero__top-auditors {
+  padding: $spacing__l 0 $spacing__xl;
+  background: $color__n-85;
+}
+.hero__top-auditors-list {
+  margin: $spacing__xl 0 0;
+  padding: 0;
+  list-style: none;
+}
+.hero__top-auditor,
+.hero__top-auditors-list li {
+  font-size: $font-size__text;
+  color: $color__n-5;
+  margin: 0 $spacing__xs $spacing__xs 0;
+  display: inline-block;
+
+  @include breakpoint("s") {
+    font-size: $headline-font-size__xxs;
+    margin: 0 $spacing__s $spacing__s 0;
+  }
+
+  &:last-of-type {
+    // background: none;
+  }
+}
+.hero__top-auditor-name {
+  padding: calc($spacing__s) calc($spacing__m - 5px); // TODO: I mean this does work but it's unpleasant to look at
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: $color__n-80;
+  border: 2px solid transparent;
+  border-radius: $border-radius__m;
+  color: $color__n-5;
+}
+a.hero__top-auditor-name {
+  &:hover {
+    @include accessible-animation {
+      transition: $transition__base;
+    }
+    background: $color__blurple-60;
+    color: $color__white;
+
+    .hero__top-auditor-link-arrow {
+      border-color: rgba($color__white, 0.2);
+    }
+  }
+}
+
+.hero__top-auditor-link-arrow {
+  margin-left: $spacing__s;
+  font-size: 0.8rem;
+  border-left: 1px solid $color__n-60;
+  padding-left: 0.5rem;
+  font-weight: bold;
+}
+
+.hero__top-auditors-list .button--tertiary {
+  display: inline-flex;
+  font-size: $font-size__copy;
+  padding: $spacing__s $spacing__m;
+}

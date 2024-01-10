@@ -1,0 +1,316 @@
+@import "../../variables";
+
+// --------------------------------------------------
+// Contest Page
+// --------------------------------------------------
+
+// CSS rule order
+// --------------------
+
+// 1. Variables
+// 2. Box model properties
+// 3. Display and position
+// 4. Background
+// 5. Border
+// 6. Box shadow
+// 7. Text
+// 8. Transforms
+// 9. Other
+
+.contest-page .limited-width {
+  max-width: $contest__max-width;
+}
+
+.contest-page__top {
+  margin-bottom: $spacing__xxl;
+}
+
+.contest-page__bot-race-status-bar {
+  background-color: $color__blurple-80;
+  border-radius: $border-radius__m $border-radius__m 0px 0px;
+  color: $color__white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: row;
+  padding: 0 $spacing__s;
+  margin: 0 $spacing__m;
+
+  .button--text-link {
+    color: $color__white;
+  }
+}
+
+.contest-page__bot-race-status-text {
+  display: flex;
+  .icon {
+    margin-right: $spacing__s;
+  }
+}
+
+.contest-page__top-bar {
+  margin-bottom: $spacing__s;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid $color__n-60;
+  border-radius: $border-radius__m;
+
+  .contest-tile__status-indicator-text {
+    padding: $spacing__m $spacing__l;
+    border-right: 1px solid $color__n-60;
+  }
+
+  .countdown {
+    //this is the inner div
+    margin-left: $spacing__s;
+    margin-top: $spacing__xxs;
+    font-family: $font__code;
+    font-size: 0.93em;
+    border: 1px solid $color__n-60;
+  }
+}
+
+.contest-page .contest-tile__countdown {
+  display: flex;
+  font-size: $font-size__text;
+  align-items: center;
+  justify-content: center;
+  padding: $spacing__m;
+  border-left: 1px solid $color__n-60;
+}
+
+.contest-page__top-content {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: $spacing__l 0;
+  @include breakpoint("s") {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+.contest-page__button-wrapper {
+  margin-top: $spacing__l;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-start;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+  a {
+    width: 100%;
+    display: block;
+    margin-bottom: $spacing__s;
+    text-align: center;
+  }
+  @include breakpoint("s") {
+    margin-top: 0;
+    flex-direction: row;
+    align-items: center;
+    a {
+      width: auto;
+      margin-bottom: 0;
+      margin-right: $spacing__s;
+      text-align: left;
+    }
+  }
+  @include breakpoint("m") {
+    flex-direction: row;
+  }
+}
+
+.contest-page__project {
+  display: flex;
+  flex-grow: 1;
+  align-items: center;
+  @include breakpoint("s") {
+    margin-right: $spacing__xl;
+  }
+
+  h1 {
+    margin: 0 0 $spacing__xs 0;
+  }
+
+  p {
+    margin: 0;
+    font-size: $font-size__text;
+    line-height: 130%;
+  }
+}
+.contest-page__project-link {
+  max-width: 90px;
+  min-width: 50px;
+  margin-right: $spacing__m;
+  @include breakpoint("m") {
+    margin-right: $spacing__l;
+  }
+}
+.contest-page__details-grid {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  @include breakpoint("xs") {
+    flex-direction: row;
+    flex-wrap: wrap;
+    flex-shrink: 0;
+  }
+
+  li {
+    min-width: 45%;
+    padding: $spacing__m;
+    display: flex;
+    flex-direction: column;
+    border-left: 1px solid $color__n-70;
+    font-size: $font-size__text;
+    line-height: 130%;
+    color: $color__n-20;
+
+    @include breakpoint("s") {
+      padding: $spacing__l $spacing__m;
+    }
+    @include breakpoint("m") {
+      min-width: auto;
+    }
+  }
+}
+
+.contest-page__grid-label {
+  font-size: $font-size__text;
+  line-height: 130%;
+  font-weight: 500;
+}
+
+.contest-page__grid-value {
+  color: $color__white;
+  font-weight: 500;
+  margin-top: $spacing__s;
+}
+// Tabs
+// --------------------
+
+.contest-page__tab-container .limited-width {
+  .countdown {
+    display: inline-block;
+  }
+}
+
+.leaderboard__container--contests {
+  margin: 0 auto;
+  margin-top: $spacing__m;
+  padding-bottom: $spacing__m;
+
+  @include breakpoint("s") {
+    margin-top: $spacing__l;
+    padding-bottom: $spacing__xl;
+  }
+}
+
+.leaderboard__container--contests > div {
+  border-top: 3px solid $color__n-90;
+  margin: 0 auto;
+}
+
+.contest-page__tab-container:has(.tab__content--message) {
+  padding-top: $spacing__l;
+  padding-bottom: $spacing__l;
+  background: $color__n-90;
+
+  .countdown {
+    padding: $spacing__m $spacing__l;
+    font-family: $font__code;
+    font-size: 1.1em;
+    border: 1px solid $color__n-60;
+    border-radius: $border-radius__m;
+    color: $color__white;
+  }
+}
+
+// Findings List
+// --------------------
+
+// TODO - Clean these up, some duplicates
+
+.findings-list__details {
+  > * {
+    display: inline-block;
+    margin-right: $spacing__s;
+  }
+}
+
+.findings-list__risk {
+  padding: $spacing__xxs $spacing__s;
+  font-size: $font-size__small;
+  border: 1px solid currentColor;
+  border-radius: 1rem;
+}
+.findings-list__heading {
+  list-style-type: none;
+}
+
+ul.findings-list__list {
+  list-style: none;
+  padding: 0;
+  margin-left: 0;
+}
+
+.findings-list__list-item {
+  display: flex;
+  padding: 10px;
+  align-items: flex-start;
+  justify-content: flex-start;
+
+  &:not(:last-of-type) {
+    border-bottom: 1px solid $color__n-60;
+  }
+  // overriding base style for span inside li
+  span::before {
+    content: "";
+  }
+  span::after {
+    content: "";
+  }
+}
+
+.findings-list__status {
+  fill: currentColor;
+  margin: $spacing__s $spacing__s 0 0;
+  // TODO: move these colors
+  &.findings-list__OPEN {
+    color: #3fb950; // color from GH
+  }
+
+  &.findings-list__CLOSED {
+    color: #a371f7; // color from GH
+  }
+}
+
+.findings-list__title-and-labels {
+  display: flex;
+  align-items: center;
+}
+
+.findings-list__title {
+  &.findings-list__CLOSED {
+    text-decoration: line-through;
+  }
+}
+
+.findings-list__risk {
+  border: 1px solid currentColor;
+  border-radius: 1rem;
+  font-weight: 500;
+  line-height: 12px;
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  background-color: transparent;
+}
+
+.findings-list__details {
+  display: flex;
+  align-items: center;
+}
