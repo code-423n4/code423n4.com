@@ -1,0 +1,17 @@
+{
+  "handle": "Eigenvectors",
+  "members": [
+    "Cosine",
+    "timo"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x8859932AfF6088425Adc3009E374452C5EB89a9e"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x8859932AfF6088425Adc3009E374452C5EB89a9e"
+    }
+  ]
+}
