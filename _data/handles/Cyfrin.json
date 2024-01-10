@@ -1,5 +1,9 @@
 {
   "handle": "Cyfrin",
+  "link": "https://www.cyfrin.io/",
+  "moralisId": null,
+  "image": "./avatars/Cyfrin.png",
+  "showOnLeaderboard": true,
   "members": [
     "PatrickAlphaC",
     "giovannidisiena",
@@ -8,16 +12,14 @@
     "alexroan",
     "carlitox477"
   ],
-  "link": "https://www.cyfrin.io/",
   "paymentAddresses": [
     {
       "chain": "polygon",
-      "address": "0xa5D0084A766203b463b3164DFc49D91509C12daB"
+      "address": "0x3846c3A30E62075Fa916216b35EF04B8F53931f6"
     },
     {
       "chain": "ethereum",
-      "address": "0xa5D0084A766203b463b3164DFc49D91509C12daB"
+      "address": "0x3846c3A30E62075Fa916216b35EF04B8F53931f6"
     }
-  ],
-  "image": "./avatars/Cyfrin.png"
+  ]
 }
