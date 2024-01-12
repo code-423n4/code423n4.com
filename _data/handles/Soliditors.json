@@ -1,10 +1,11 @@
 {
   "handle": "Soliditors",
+  "link": "https://twitter.com/soliditors",
+  "image": "./avatars/Soliditors.png",
   "members": [
     "0xBeirao",
     "Tadev"
   ],
-  "link": "https://twitter.com/soliditors",
   "paymentAddresses": [
     {
       "chain": "polygon",
