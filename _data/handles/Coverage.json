@@ -1,8 +1,9 @@
 {
   "handle": "Coverage",
+  "image": "./avatars/Coverage.png",
   "members": [
     "0xrafaelnicolau",
-    "0xrebelo"
+    "zegarcao"
   ],
   "paymentAddresses": [
     {
@@ -13,6 +14,5 @@
       "chain": "ethereum",
       "address": "0x92e83ffCEA6F3e67Ceb3AD023401Ea30943bD67a"
     }
-  ],
-  "image": "./avatars/Coverage.png"
+  ]
 }
