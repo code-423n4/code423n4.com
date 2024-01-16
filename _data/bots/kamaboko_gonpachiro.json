@@ -1,0 +1,17 @@
+{
+  "handle": "kamaboko_gonpachiro",
+  "crew": [
+    "avik_saikat"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x4217ac7e12CA88C07B63acE2F602e4f41971F77f"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x4217ac7e12CA88C07B63acE2F602e4f41971F77f"
+    }
+  ],
+  "image": "./avatars/kamaboko_gonpachiro.png"
+}
