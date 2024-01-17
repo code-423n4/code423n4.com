@@ -1,0 +1,19 @@
+{
+  "handle": "Soliditors",
+  "link": "https://twitter.com/soliditors",
+  "image": "./avatars/Soliditors.png",
+  "members": [
+    "0xBeirao",
+    "Tadev"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xC0E7Ee6B20E4D3f965b203D485F02E1d2f06e09c"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0xC0E7Ee6B20E4D3f965b203D485F02E1d2f06e09c"
+    }
+  ]
+}
