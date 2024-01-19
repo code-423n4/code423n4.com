@@ -1,0 +1,53 @@
+@import "../variables";
+
+table {
+  margin-bottom: $spacing__l;
+  // border-collapse: collapse;
+  width: calc(96vw - 2 * #{$spacing__xl});
+  overflow-x: auto;
+  max-width: 100%;
+  display: block;
+  color: $color__text;
+  background: $color__n-90;
+  border: 1px solid $color__n-80;
+  font-size: $font-size__text;
+  line-height: 130%;
+}
+table thead th,
+table tfoot th {
+  color: $color__white;
+  background: $color__n-80;
+  font-weight: 400;
+}
+table caption {
+  padding: 0.5em;
+}
+table th,
+table td {
+  padding: 0.5em;
+  border: 1px solid $color__n-80;
+  text-align: left;
+}
+
+table a {
+  color: $color__blurple__text--light;
+
+  &:hover {
+    color: $color__blurple-20;
+  }
+}
+
+// Zebra striping
+// -----------------
+
+.table--zebra tbody tr:nth-of-type(odd) {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+// Numbers
+// -----------------
+
+.table__cell--number {
+  text-align: right;
+  font-family: $font__code;
+}

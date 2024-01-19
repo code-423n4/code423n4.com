@@ -1,0 +1,14 @@
+{
+  "handle": "Armoured-Crows",
+  "members": [
+    "0xfps",
+    "octecca"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x9912Bd35e5521Add4180e447c0E236272f51867a"
+    }
+  ],
+  "image": "./avatars/Armoured-Crows.jpeg"
+}

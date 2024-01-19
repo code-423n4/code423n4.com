@@ -1,0 +1,11 @@
+{
+  "handle": "Trabajo_de_mates",
+  "members": ["Saintcode_", "tay054"],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x1c8cA94eC89DA62C0a069767b1fc98B72f9017C4"
+    }
+  ],
+  "image": "./avatars/Trabajo_de_mates.jpeg"
+}

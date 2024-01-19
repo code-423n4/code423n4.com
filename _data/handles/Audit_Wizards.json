@@ -1,0 +1,11 @@
+{
+  "handle": "Audit_Wizards",
+  "members": ["Indigo", "aidank1234"],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x9B6812Bf787b814cd2AA13D319A371EAC5Dff49B"
+    }
+  ],
+  "link": ""
+}

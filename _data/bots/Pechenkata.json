@@ -1,0 +1,18 @@
+{
+  "handle": "Pechenkata",
+  "crew": [
+    "Bozho",
+    "radev_sw"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x4936A6704d771204b7adee7f5F5ad5c2c4678d63"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x4936A6704d771204b7adee7f5F5ad5c2c4678d63"
+    }
+  ],
+  "image": "./avatars/Pechenkata.jpeg"
+}

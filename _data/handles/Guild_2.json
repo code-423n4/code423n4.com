@@ -1,0 +1,15 @@
+{
+  "handle": "Guild_2",
+  "members": [
+    "David_",
+    "BlackAdam",
+    "kayzee",
+    "Bough"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xAF4E62159E131607c09a8664FAe7D687350baE7E"
+    }
+  ]
+}

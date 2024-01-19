@@ -1,0 +1,19 @@
+{
+  "handle": "Pessimistic",
+  "members": [
+    "PavelCore",
+    "yhtyyar",
+    "olegggatttor"
+  ],
+  "link": "https://pessimistic.io/",
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x07610FB4A7Fb42dD6B2dB96573F8Af8F92319604"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x07610FB4A7Fb42dD6B2dB96573F8Af8F92319604"
+    }
+  ]
+}

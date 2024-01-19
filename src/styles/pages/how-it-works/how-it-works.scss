@@ -1,0 +1,18 @@
+@import "../../_variables.scss";
+
+.how-it-works {
+  h3 {
+    font-weight: 600;
+  }
+}
+
+.how-it-works__section {
+  background: $color__n-90;
+  padding: $spacing__l;
+  border-radius: $border-radius__m;
+  margin-bottom: $spacing__l;
+
+  p {
+    margin-bottom: 0;
+  }
+}

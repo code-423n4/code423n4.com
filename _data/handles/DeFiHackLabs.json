@@ -1,0 +1,20 @@
+{
+  "handle": "DeFiHackLabs",
+  "image": "./avatars/DeFiHackLabs.png",
+  "members": [
+    "SunSec",
+    "ret2basic",
+    "IceBear",
+    "xuwinnie"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x4276BF06Aebd8A1F3D89a1fd5BF84bFa1B7D03Ce"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x4276BF06Aebd8A1F3D89a1fd5BF84bFa1B7D03Ce"
+    }
+  ]
+}
