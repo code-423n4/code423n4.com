@@ -1,0 +1,13 @@
+{
+  "handle": "lesspopular",
+  "members": [
+    "igorline",
+    "plotchy"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x406C94847d1b4C7B212Fd66e825249Aeaa7FcCA5"
+    }
+  ]
+}

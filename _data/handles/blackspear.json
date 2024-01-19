@@ -1,0 +1,12 @@
+{
+  "handle": "blackspear",
+  "members": ["asnared", "vex"],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xA9fD227A8DF066D251d9c3F80905D643bcd768D0"
+    }
+  ],
+  "link": "https://blackspear.xyz",
+  "image": "./avatars/blackspear.png"
+}

@@ -1,0 +1,15 @@
+{
+  "handle": "Guild_3",
+  "members": [
+    "David_",
+    "amarachiugwu",
+    "mastamynd",
+    "Sayrarh"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x3072d16ED07957f66000c55a2Bf1d61bB7F9fCdc"
+    }
+  ]
+}
