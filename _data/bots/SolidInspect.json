@@ -1,0 +1,12 @@
+{
+  "handle": "SolidInspect",
+  "crew": [
+    "caglankaan"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x5CF094a64E99A85AA7866DB5B2A51827C7D224aF"
+    }
+  ]
+}
