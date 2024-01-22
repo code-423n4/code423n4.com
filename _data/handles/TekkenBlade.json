@@ -1,0 +1,13 @@
+{
+  "handle": "TekkenBlade",
+  "members": [
+    "bbl4de",
+    "Tekken"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xF3D27Ba648251E705519A947Ae2329792BBd64E9"
+    }
+  ]
+}
