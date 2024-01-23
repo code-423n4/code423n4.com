@@ -1,0 +1,17 @@
+{
+  "handle": "KickingTheDoor",
+  "members": [
+    "0xdedo93",
+    "ravenrocks"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x5f69aa39b792489026bb8ec01c2ede87bc380f48"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x5f69aa39b792489026bb8ec01c2ede87bc380f48"
+    }
+  ]
+}
