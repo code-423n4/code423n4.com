@@ -1,9 +1,10 @@
 {
   "handle": "solmaxis69",
+  "link": "https://twitter.com/solmaxis69",
+  "image": "./avatars/solmaxis69.png",
   "members": [
     "seeques",
-    "melihdhs",
-    "TabFoxOne"
+    "melihdhs"
   ],
   "paymentAddresses": [
     {
@@ -14,6 +15,5 @@
       "chain": "ethereum",
       "address": "0xb7b735d2DD0933803635BA4805E73CaB1025E8F6"
     }
-  ],
-  "image": "./avatars/solmaxis69.png"
+  ]
 }
