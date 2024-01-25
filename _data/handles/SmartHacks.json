@@ -1,0 +1,17 @@
+{
+  "handle": "SmartHacks",
+  "members": [
+    "aman",
+    "bomanaps"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x7AE2775BfF644668df620F234042Ed42E168224D"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x7AE2775BfF644668df620F234042Ed42E168224D"
+    }
+  ]
+}
