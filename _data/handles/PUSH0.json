@@ -1,0 +1,14 @@
+{
+  "handle": "PUSH0",
+  "members": [
+    "thekmj",
+    "jojo"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x7dA1A0BcD9Da865D2B901dFdA0B16fa63f34deAb"
+    }
+  ],
+  "image": "./avatars/PUSH0.png"
+}
