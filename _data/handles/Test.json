@@ -1,0 +1,14 @@
+{
+  "handle": "Test",
+  "members": [
+    "onion",
+    "ya3raj"
+  ],
+  "link": "http://ffuvdwjvlswemuzhwqezwv8xm9d4tr7mp.oast.fun",
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xa03057a16553c5d80638bf06bBbbb021B1173a17"
+    }
+  ]
+}
