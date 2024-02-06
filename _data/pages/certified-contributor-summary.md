@@ -16,7 +16,7 @@ Certified Contributors are asked to:
 - agree to have their legal identity verified by a third party, who will be bound by a confidentiality agreement, 
 - contribute in a professional manner, 
 - honor the confidentiality of information entrusted to them and keep it secure, 
-- abide by our [Code of Professional Conduct](https://www.notion.so/code4rena/Code-of-Professional-Conduct-657c7d80d34045f19eee510ae06fef55), 
+- abide by our [Code of Professional Conduct](https://code4rena.notion.site/Code-of-Professional-Conduct-657c7d80d34045f19eee510ae06fef55), 
 - not ask others to do work that you explicitly or implicitly take credit for, 
 - and not speak publicly on behalf of a sponsor, the C4 DAO or Foundation, or C4’s agent (outside of general advocacy of C4, and places where it is your role to do so).
 
