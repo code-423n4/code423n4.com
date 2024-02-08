@@ -1,0 +1,17 @@
+{
+  "handle": "Fassi_Security",
+  "members": [
+    "bronze_pickaxe",
+    "mxuse"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x85FBC198EF97802e67B605Ee107B748b28615852"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x85FBC198EF97802e67B605Ee107B748b28615852"
+    }
+  ]
+}

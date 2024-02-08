@@ -1,0 +1,17 @@
+{
+  "handle": "L9",
+  "members": [
+    "valentin_s2304",
+    "Dots"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x43E7E1B4e348bb8e42720e6F53D9AA6223245d1E"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x43E7E1B4e348bb8e42720e6F53D9AA6223245d1E"
+    }
+  ]
+}
