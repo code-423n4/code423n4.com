@@ -1,15 +1,15 @@
 {
   "handle": "OffsideLabs",
+  "link": "https://twitter.com/Offside_Labs",
+  "image": "./avatars/OffsideLabs.png",
   "members": [
     "ronnyx2017",
     "offside0011"
   ],
-  "link": "https://twitter.com/Offside_Labs",
   "paymentAddresses": [
     {
       "chain": "polygon",
-      "address": "0x86B474b800318d67b1C41a00ebfd259312a7eCd1"
+      "address": "0x7bffcc16504eb4e8f0c1014bbbe7ec6f327e3f08"
     }
-  ],
-  "image": "./avatars/OffsideLabs.png"
+  ]
 }
