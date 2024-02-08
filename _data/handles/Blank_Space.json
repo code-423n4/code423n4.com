@@ -1,0 +1,17 @@
+{
+  "handle": "Blank_Space",
+  "members": [
+    "10ambear",
+    "bLnk"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xF32D12C8CFe0c56BFbA6D45Ba09311cD28f47d4a"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0xF32D12C8CFe0c56BFbA6D45Ba09311cD28f47d4a"
+    }
+  ]
+}
