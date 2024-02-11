@@ -1,0 +1,14 @@
+{
+  "handle": "Air_JustUzair_Juanpe",
+  "image": "./avatars/Air_JustUzair_Juanpe.png",
+  "members": [
+    "JustUzair",
+    "air_0x"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x5037582ea373f08A7EbF4952423ED7A9226aD49B"
+    }
+  ]
+}
