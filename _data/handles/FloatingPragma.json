@@ -1,0 +1,19 @@
+{
+  "handle": "FloatingPragma",
+  "members": [
+    "Stoicov",
+    "nmirchev8"
+  ],
+  "link": "https://twitter.com/GeoGen100, https://twitter.com/nmirchev8",
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xE7Bd1E29Ef6d0E24fdAdb79D72de585AC76f1e5a"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x629C4eb55dE2A8DFfc26DDc50e9b511A88069948"
+    }
+  ],
+  "image": "./avatars/FloatingPragma.png"
+}
