@@ -1,0 +1,17 @@
+{
+  "handle": "SharedBot",
+  "crew": [
+    "0xk4w4ida"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x0000000000000000000000000000000000000000"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x0000000000000000000000000000000000000000"
+    }
+  ],
+  "image": "./avatars/SharedBot.png"
+}
