@@ -1,0 +1,19 @@
+{
+  "handle": "2007DUO",
+  "members": [
+    "0xfr4n",
+    "0xemy"
+  ],
+  "link": "https://twitter.com/0xfr4n",
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x408f14147Ca4C502D9CE600126427e8493e2d110"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x408f14147Ca4C502D9CE600126427e8493e2d110"
+    }
+  ],
+  "image": "./avatars/2007DUO.png"
+}
