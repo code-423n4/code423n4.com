@@ -2,7 +2,7 @@
   "handle": "Extropy",
   "link": "https://twitter.com/extropy",
   "moralisId": null,
-  "showOnLeaderboard": true,
+  "showOnLeaderboard": false,
   "members": [
     "LaurenceKirk",
     "codemedici",
