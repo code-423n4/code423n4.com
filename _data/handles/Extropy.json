@@ -1,0 +1,17 @@
+{
+  "handle": "Extropy",
+  "link": "https://twitter.com/extropy",
+  "moralisId": null,
+  "showOnLeaderboard": true,
+  "members": [
+    "LaurenceKirk",
+    "codemedici",
+    "0xWill"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xBa7fa4Da9aB96c1fdE1FFD34569Df2E955d2e640"
+    }
+  ]
+}
