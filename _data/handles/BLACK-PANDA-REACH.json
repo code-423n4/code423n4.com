@@ -1,18 +1,6 @@
 {
   "handle": "BLACK-PANDA-REACH",
   "showOnLeaderboard": false,
-  "members": [
-    "Muhab",
-    "deliriusz",
-    "savi0ur",
-    "lopotras",
-    "Naubit",
-    "santipu_",
-    "devscrooge",
-    "ret2basic",
-    "Draco000",
-    "Velislav4o"
-  ],
   "paymentAddresses": [
     {
       "chain": "polygon",
