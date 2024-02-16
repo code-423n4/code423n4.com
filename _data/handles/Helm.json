@@ -1,5 +1,6 @@
 {
   "handle": "Helm",
+  "image": "./avatars/Helm.png",
   "members": [
     "JustUzair",
     "TarunRao0"
@@ -13,6 +14,5 @@
       "chain": "ethereum",
       "address": "0x2e5B608ee78362f84835c86579602f200b4e5BB7"
     }
-  ],
-  "image": "./avatars/Helm.png"
+  ]
 }
