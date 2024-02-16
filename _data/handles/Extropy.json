@@ -3,11 +3,6 @@
   "link": "https://twitter.com/extropy",
   "moralisId": null,
   "showOnLeaderboard": false,
-  "members": [
-    "LaurenceKirk",
-    "codemedici",
-    "0xWill"
-  ],
   "paymentAddresses": [
     {
       "chain": "polygon",
