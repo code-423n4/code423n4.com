@@ -1,9 +1,6 @@
 {
-  "handle": "COSMIC-BEE-REACH",
-  "members": [
-    "0xarno",
-    "solsaver"
-  ],
+  "handle": "BLACK-PANDA-REACH",
+  "showOnLeaderboard": false,
   "paymentAddresses": [
     {
       "chain": "polygon",
