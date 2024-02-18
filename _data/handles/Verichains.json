@@ -1,0 +1,18 @@
+{
+  "handle": "Verichains",
+  "moralisId": "",
+  "image": "",
+  "showOnLeaderboard": true,
+  "members": [
+    "lifebow",
+    "nt",
+    "LowK",
+    "th13vn"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x9a928C4b51CF080929F854532a347E68dC4ddD08"
+    }
+  ]
+}
