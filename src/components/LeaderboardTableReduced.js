@@ -146,7 +146,11 @@ const LeaderboardTableReduced = (props) => {
   return (
     <>
       <div className="leaderboard-table-reduced__wrapper">
-        <div {...getTableProps()} className="leaderboard-table__headers"  id="column__headers">
+        <div
+          {...getTableProps()}
+          className="leaderboard-table__headers"
+          id="column__headers"
+        >
           {headerGroups.map((headerGroup) => (
             <ul {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map((column) => (

@@ -39,6 +39,7 @@ const Widgets = (props) => {
             label={label}
             helpText={helpText}
             isInvalid={isInvalid}
+            required={required}
           >
             <Widget
               field={field}

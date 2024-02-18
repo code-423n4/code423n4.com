@@ -1,0 +1,17 @@
+{
+  "handle": "0xAlix2",
+  "members": [
+    "a_kalout",
+    "ali_shehab"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xe52a4EaeA658AB94437165CacA01a37A64c0f18e"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0xe52a4EaeA658AB94437165CacA01a37A64c0f18e"
+    }
+  ]
+}

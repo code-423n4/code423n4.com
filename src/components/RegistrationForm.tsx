@@ -354,7 +354,9 @@ export default function RegistrationForm({ handles }) {
         return handle.toLowerCase() === value.toLowerCase();
       });
       if (existingHandle) {
-        validationErrors.push(`${value} is already a registered username.`);
+        validationErrors.push(
+          `${value} is already registered as a team, bot, or warden.`
+        );
       }
       if (isDangerousUsername) {
         validationErrors.push(

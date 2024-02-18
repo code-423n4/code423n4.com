@@ -1,0 +1,14 @@
+{
+  "handle": "EagleSecurity",
+  "members": [
+    "mitev",
+    "alexander_orjustalex"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x857C39c671dDb7399A43124463EB3F90d342350C"
+    }
+  ],
+  "image": "./avatars/EagleSecurity.png"
+}

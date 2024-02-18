@@ -27,6 +27,13 @@ const plugins = [
     },
   },
   {
+    resolve: `gatsby-source-filesystem`,
+    options: {
+      path: `${__dirname}/_data/bots`,
+      name: `bots`,
+    },
+  },
+  {
     resolve: "gatsby-source-filesystem",
     options: {
       path: `${__dirname}/_data/pages`,

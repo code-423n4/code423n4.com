@@ -1,0 +1,20 @@
+{
+  "handle": "CodeWasp",
+  "members": [
+    "kuprum",
+    "slylandro_star",
+    "spaghetticode_sentinel",
+    "audithare"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xC4855c81401d108Ba73c98A2E62Fc17c5953d40A"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0xC4855c81401d108Ba73c98A2E62Fc17c5953d40A"
+    }
+  ],
+  "image": "./avatars/CodeWasp.png"
+}

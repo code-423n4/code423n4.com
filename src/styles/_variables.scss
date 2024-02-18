@@ -8,7 +8,7 @@ $color__black: hsl(240, 20%, 1%);
 // Neutral palette
 $color__n-100: hsl(260, 13%, 5%);
 $color__n-90: hsl(251, 16.9%, 12.7%);
-$color__n-85: #1d1b26;
+$color__n-85: hsl(249, 17%, 15%);
 $color__n-80: hsl(251, 15.7%, 20%);
 $color__n-70: hsl(250, 16.4%, 21.6%);
 $color__n-60: hsl(251, 13.6%, 27.1%);
@@ -51,6 +51,8 @@ $color__warden: $color__button-blurple;
 // Blended colors
 $color__blended-60: #4d22c7;
 
+$color__blended-80: #2c0e83;
+
 // Color Defaults
 // ------------------------------------------------
 
@@ -58,7 +60,7 @@ $color__blended-60: #4d22c7;
 $color__background: $color__n-100;
 
 // Text
-$color__text: $color__n-20;
+$color__text: $color__n-10;
 $color__headline: $color__white;
 $color__subline: $color__n-10;
 
@@ -80,13 +82,16 @@ $font-size__text: 1rem;
 $font-size__text__code: 0.9em;
 $font-size__small: 0.933rem;
 
+$headline-font-size__xxxs: 1rem; // Sublines
 $headline-font-size__xxs: 1.3rem; // H6
 $headline-font-size__xs: 1.3rem; // H5
 $headline-font-size__s: 1.3rem; // H4
 $headline-font-size__m: 1.6rem; // H3
 $headline-font-size__l: 1.8rem; // H2
+$headline-font-size__ll: 2.1rem; // H2
 $headline-font-size__xl: 2.533rem; // H1
 $headline-font-size__xxl: 3.2rem; // Hero headline
+$headline-font-size__xxxl: 3.2rem; // Landing page hero headline
 
 // Font Families
 // ------------------------------------------------
@@ -95,23 +100,10 @@ $font__default: "Satoshi Variable", sans-serif;
 // 🍔 TODO add DM sans as body copy font
 $font__code: "PT Mono", monospace;
 
-// Spacing
-// ------------------------------------------------
-
-$spacing__base: 0.5rem; // 8px
-
-$spacing__xxs: calc($spacing__base/ 4); // 2px
-$spacing__xs: calc($spacing__base/ 2); // 4px
-$spacing__s: $spacing__base; // 8px
-$spacing__m: calc($spacing__base * 2); // 16px
-$spacing__l: calc($spacing__base * 3); // 24px
-$spacing__xl: calc($spacing__base * 4); // 32px
-$spacing__xxl: calc($spacing__base * 8); // 64px
-$spacing__xxxl: calc($spacing__base * 10); // 80px
-
 // Breakpoints
 // ------------------------------------------------
 
+$breakpoint__xxs: 450px;
 $breakpoint__xs: 600px;
 $breakpoint__s: 750px;
 $breakpoint__m: 960px;
@@ -152,6 +144,7 @@ $z-index__modal: 1000;
 
 @mixin breakpoint($breakpoint) {
   $breakpoints: (
+    "xxs": $breakpoint__xxs,
     "xs": $breakpoint__xs,
     "s": $breakpoint__s,
     "m": $breakpoint__m,
@@ -178,3 +171,17 @@ $transition__base: 0.2s ease-in-out;
     @content;
   }
 }
+
+// Spacing
+// ------------------------------------------------
+
+$spacing__base: 0.5rem; // 8px
+
+$spacing__xxs: calc($spacing__base/ 4); // 2px
+$spacing__xs: calc($spacing__base/ 2); // 4px
+$spacing__s: $spacing__base; // 8px
+$spacing__m: calc($spacing__base * 2); // 16px
+$spacing__l: calc($spacing__base * 3); // 24px
+$spacing__xl: calc($spacing__base * 4); // 32px
+$spacing__xxl: calc($spacing__base * 8); // 64px
+$spacing__xxxl: calc($spacing__base * 10); // 80px

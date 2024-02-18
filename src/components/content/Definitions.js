@@ -13,7 +13,10 @@ const Definitions = () => {
       </div>
       <div>
         <h3>Judges</h3>
-        <p>Decide severity and validity of wardens’ findings and rate their performance.</p>
+        <p>
+          Decide severity and validity of wardens’ findings and rate their
+          performance.
+        </p>
       </div>
     </div>
   );
