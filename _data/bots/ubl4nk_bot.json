@@ -1,0 +1,16 @@
+{
+  "handle": "ubl4nk_bot",
+  "crew": [
+    "ubl4nk"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x7dd442dAF22860E575EBEaC0D00dFe68E76255Bd"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x7dd442dAF22860E575EBEaC0D00dFe68E76255Bd"
+    }
+  ]
+}
