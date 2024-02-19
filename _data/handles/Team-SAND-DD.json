@@ -1,0 +1,14 @@
+{
+  "handle": "Team-SAND-DD",
+  "members": [
+    "avik_saikat",
+    "BioMatriX"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x4Fa53Bc429E4BE0d5a6C971866109Df986C3dDcC"
+    }
+  ],
+  "image": "./avatars/Team-SAND-DD.png"
+}
