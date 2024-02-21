@@ -1,0 +1,16 @@
+{
+  "handle": "A-BOT",
+  "crew": [
+    "D_Auditor"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x3e89abC3968399fa8f75478468f62b784296EA29"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x3e89abC3968399fa8f75478468f62b784296EA29"
+    }
+  ]
+}
