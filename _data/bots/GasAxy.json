@@ -1,8 +1,8 @@
 {
   "handle": "GasAxy",
-  "crew": [
-    "niser93"
-  ],
+  "relegated": false,
+  "relative_image_url": "./avatars/GasAxy.jpeg",
+  "image": "zp3cYF7VD7U",
   "paymentAddresses": [
     {
       "chain": "polygon",
@@ -13,6 +13,8 @@
       "address": "0x9a7f04d238D274563a9D20229d86571FB4dFd3F0"
     }
   ],
-  "image": "./avatars/GasAxy.jpeg",
-  "relegated": true
+  "crew": [
+    "niser93"
+  ],
+  "uid": "7auwijZbM9b"
 }
