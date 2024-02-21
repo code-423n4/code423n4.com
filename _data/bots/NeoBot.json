@@ -1,0 +1,16 @@
+{
+  "handle": "NeoBot",
+  "crew": [
+    "neocrao"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xD7171035731C7A554C345F799C6ae5fdb565E5df"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0xD7171035731C7A554C345F799C6ae5fdb565E5df"
+    }
+  ]
+}
