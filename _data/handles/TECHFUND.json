@@ -1,0 +1,15 @@
+{
+  "handle": "TECHFUND",
+  "members": [
+    "piyushshukla",
+    "Gowtham_Ponnana",
+    "alternato7368"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xfEa5155950026074D6aAbd7e3925451f493Da56a"
+    }
+  ],
+  "image": "./avatars/TECHFUND.png"
+}
