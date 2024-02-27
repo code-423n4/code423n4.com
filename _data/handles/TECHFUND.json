@@ -1,5 +1,7 @@
 {
   "handle": "TECHFUND",
+  "link": "https://twitter.com/Techfund_inc",
+  "image": "./avatars/TECHFUND.png",
   "members": [
     "piyushshukla",
     "Gowtham_Ponnana",
@@ -10,6 +12,5 @@
       "chain": "polygon",
       "address": "0xfEa5155950026074D6aAbd7e3925451f493Da56a"
     }
-  ],
-  "image": "./avatars/TECHFUND.png"
+  ]
 }
