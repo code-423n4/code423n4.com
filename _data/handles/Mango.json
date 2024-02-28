@@ -1,0 +1,13 @@
+{
+  "handle": "Mango",
+  "maintainers": [
+    "CaptainMango"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x0000000000000000000000000000000000000000"
+    }
+  ],
+  "image": "./avatars/Mango.jpeg"
+}
