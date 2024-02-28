@@ -5,7 +5,7 @@ const Footer = () => {
   return (
     <footer className="footer limited-width">
       <ul className="footer__items">
-        <li className="footer__item">An open organization</li>
+        <li className="footer__item">☆ An open organization</li>
         <li className="footer__item">
           <a
             href="https://twitter.com/code4rena"

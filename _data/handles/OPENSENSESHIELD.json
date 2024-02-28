@@ -1,0 +1,22 @@
+{
+  "handle": "OPENSENSESHIELD",
+  "members": [
+    "Mis4nthr0pic",
+    "cergyk",
+    "HALITUS",
+    "deliriusz",
+    "0xStalin",
+    "ubermensch",
+    "Strikeout"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x798BC384E20d5D16987A07487FC695985F1742c5"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x798BC384E20d5D16987A07487FC695985F1742c5"
+    }
+  ]
+}

@@ -16,6 +16,7 @@ import { Contest } from "../../types/contest";
 import {
   FindingDeleteRequest,
   FindingEditRequest,
+  MitigationStatus,
   WardenFindingsForContest,
 } from "../../types/finding";
 import { TeamData } from "../../types/user";
@@ -265,13 +266,20 @@ async function editFinding(
       oldRiskCode === "G"
   );
 
+  // Only handle risk changes between Med and High, unless this is an MR submission
   if (oldRiskCode !== newRiskCode) {
-    if (oldRiskCode === "Q" || oldRiskCode === "G") {
+    if (
+      (oldRiskCode === "Q" || oldRiskCode === "G") &&
+      !data.mitigationStatus
+    ) {
       throw {
         message: `You cannot change the risk level for ${data.risk.oldValue} reports.`,
       };
     }
-    if (newRiskCode === "Q" || newRiskCode === "G") {
+    if (
+      (newRiskCode === "Q" || newRiskCode === "G") &&
+      !data.mitigationStatus
+    ) {
       throw {
         message: `You cannot convert risk from ${data.risk.oldValue} to ${data.risk.newValue}. Try withdrawing your finding and then adding it to your ${data.risk.newValue} report.`,
       };
@@ -346,37 +354,31 @@ async function editFinding(
       emailBody;
     edited = true;
   }
-  // Only handle risk changes between Med and High
+  // Only handle risk changes between Med and High, unless this is an MR submission
   if (
-    !isQaOrGasSubmission &&
-    data.risk.oldValue !== data.risk.newValue &&
-    !data.isMitigated?.newValue
+    (!isQaOrGasSubmission || data.mitigationStatus) &&
+    data.risk.oldValue !== data.risk.newValue
   ) {
-    //if a mitigation was originally confirmed
-    let removeMitigationConfirmedLabel = false;
-    if (data.mitigationOf && data.risk.oldValue === "") {
-      removeMitigationConfirmedLabel = true;
-    }
-    const labelNameToBeRemoved = !removeMitigationConfirmedLabel
-      ? data.risk.oldValue
-      : "mitigation-confirmed";
-    try {
-      await client.request(
-        "DELETE /repos/{owner}/{repo}/issues/{issue_number}/labels/{name}",
-        {
-          owner: process.env.GITHUB_REPO_OWNER!,
-          repo: repoName,
-          issue_number: issueNumber,
-          name: labelNameToBeRemoved,
-        }
-      );
-    } catch (error) {
-      throw {
-        status: error.status || 500,
-        message: `Error removing old label: [${data.risk.oldValue}] - ${
-          error.message || "unknown"
-        }`,
-      };
+    const labelNameToBeRemoved = data.risk.oldValue;
+    if (labelNameToBeRemoved) {
+      try {
+        await client.request(
+          "DELETE /repos/{owner}/{repo}/issues/{issue_number}/labels/{name}",
+          {
+            owner: process.env.GITHUB_REPO_OWNER!,
+            repo: repoName,
+            issue_number: issueNumber,
+            name: labelNameToBeRemoved,
+          }
+        );
+      } catch (error) {
+        throw {
+          status: error.status || 500,
+          message: `Error removing old label: [${labelNameToBeRemoved}] - ${
+            error.message || "unknown"
+          }`,
+        };
+      }
     }
 
     try {
@@ -403,47 +405,69 @@ async function editFinding(
       emailBody;
     edited = true;
   } else if (
-    !isQaOrGasSubmission &&
-    data.isMitigated?.oldValue !== data.isMitigated?.newValue &&
-    data.isMitigated?.newValue
+    data.mitigationStatus?.oldValue !== data.mitigationStatus?.newValue
   ) {
-    try {
-      await client.request(
-        "DELETE /repos/{owner}/{repo}/issues/{issue_number}/labels/{name}",
-        {
-          owner: process.env.GITHUB_REPO_OWNER!,
-          repo: repoName,
-          issue_number: issueNumber,
-          name: data.risk.oldValue,
-        }
-      );
-    } catch (error) {
-      throw {
-        status: error.status || 500,
-        message: `Error removing old risk label: [${data.risk.oldValue}] - ${
-          error.message || "unknown"
-        }`,
-      };
+    let labelNameToBeRemoved = "";
+    if (
+      data.mitigationStatus?.oldValue === MitigationStatus.MitigationConfirmed
+    ) {
+      labelNameToBeRemoved = "mitigation-confirmed";
+    } else if (
+      data.mitigationStatus?.oldValue === MitigationStatus.Unmitigated
+    ) {
+      labelNameToBeRemoved = "unmitigated";
+    }
+    if (labelNameToBeRemoved) {
+      try {
+        await client.request(
+          "DELETE /repos/{owner}/{repo}/issues/{issue_number}/labels/{name}",
+          {
+            owner: process.env.GITHUB_REPO_OWNER!,
+            repo: repoName,
+            issue_number: issueNumber,
+            name: labelNameToBeRemoved,
+          }
+        );
+      } catch (error) {
+        throw {
+          status: error.status || 500,
+          message: `Error removing old label: [${labelNameToBeRemoved}] - ${
+            error.message || "unknown"
+          }`,
+        };
+      }
     }
 
-    const mitigationConfirmedLabel = "mitigation-confirmed";
-    try {
-      await client.request(
-        "POST /repos/{owner}/{repo}/issues/{issue_number}/labels",
-        {
-          owner: process.env.GITHUB_REPO_OWNER!,
-          repo: repoName,
-          issue_number: issueNumber,
-          labels: [mitigationConfirmedLabel],
-        }
-      );
-    } catch (error) {
-      throw {
-        status: error.status || 500,
-        message: `Error adding new label: [mitigation-confirmed] - ${
-          error.message || "unknown"
-        }`,
-      };
+    let labelNameToAdd = "";
+    if (
+      data.mitigationStatus?.newValue === MitigationStatus.MitigationConfirmed
+    ) {
+      labelNameToAdd = "mitigation-confirmed";
+    } else if (
+      data.mitigationStatus?.newValue === MitigationStatus.Unmitigated
+    ) {
+      labelNameToAdd = "unmitigated";
+    }
+
+    if (labelNameToAdd) {
+      try {
+        await client.request(
+          "POST /repos/{owner}/{repo}/issues/{issue_number}/labels",
+          {
+            owner: process.env.GITHUB_REPO_OWNER!,
+            repo: repoName,
+            issue_number: issueNumber,
+            labels: [labelNameToAdd],
+          }
+        );
+      } catch (error) {
+        throw {
+          status: error.status || 500,
+          message: `Error adding new mitigation status label: [${labelNameToAdd}] - ${
+            error.message || "unknown"
+          }`,
+        };
+      }
     }
   }
 

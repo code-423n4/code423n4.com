@@ -24,10 +24,6 @@ const TextArea = ({
   onChange,
   maxSize,
 }: TextAreaProps) => {
-  function handleChange(e) {
-    onChange(e);
-  }
-
   return (
     <Tabs>
       <TabList className="secondary-nav">
@@ -45,7 +41,7 @@ const TextArea = ({
             )}
             name={name}
             aria-describedby={name + "--error"}
-            onChange={handleChange}
+            onChange={onChange}
             required={required}
             value={fieldState}
             maxLength={maxSize}

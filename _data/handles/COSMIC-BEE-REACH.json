@@ -1,0 +1,13 @@
+{
+  "handle": "COSMIC-BEE-REACH",
+  "members": [
+    "0xarno",
+    "solsaver"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x43BC7Be8b597414348657e9929319202Ffb56f75"
+    }
+  ]
+}
