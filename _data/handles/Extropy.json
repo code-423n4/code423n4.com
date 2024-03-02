@@ -2,13 +2,7 @@
   "handle": "Extropy",
   "link": "https://twitter.com/extropy",
   "moralisId": null,
-  "image": "./avatars/Extropy.png",
-  "showOnLeaderboard": true,
-  "members": [
-    "LaurenceKirk",
-    "codemedici",
-    "0xWill"
-  ],
+  "showOnLeaderboard": false,
   "paymentAddresses": [
     {
       "chain": "polygon",

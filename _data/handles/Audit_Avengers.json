@@ -2,12 +2,7 @@
   "handle": "Audit_Avengers",
   "link": "https://twitter.com/JP_Courses",
   "moralisId": "",
-  "image": "./avatars/Audit_Avengers.png",
-  "showOnLeaderboard": true,
-  "members": [
-    "JP_Courses",
-    "pxng0lin"
-  ],
+  "showOnLeaderboard": false,
   "paymentAddresses": [
     {
       "chain": "polygon",
