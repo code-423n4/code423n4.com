@@ -1,0 +1,13 @@
+{
+  "handle": "BClabs",
+  "members": [
+    "nalus",
+    "Reptilia"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xf51D3Fa02Fc8359cd97B904a82a1A3BAe16fa2B7"
+    }
+  ]
+}

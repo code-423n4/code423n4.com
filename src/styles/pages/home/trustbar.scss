@@ -1,0 +1,43 @@
+@import "../../variables";
+
+.trustbar {
+  background: $color__n-90;
+
+  .limited-width {
+    padding-top: $spacing__xl;
+    padding-bottom: $spacing__xl;
+  }
+}
+
+.trustbar__logos {
+  margin: $spacing__xl 0 $spacing__m;
+  padding: 0;
+  list-style: none;
+
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: stretch;
+}
+
+.trustbar__logo {
+  height: 40px;
+  max-width: 100px;
+  width: fit-content;
+  padding: $spacing__s $spacing__m;
+  margin: 0 $spacing__xs $spacing__xs 0;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: $color__n-80;
+  border: 2px solid transparent;
+  border-radius: $border-radius__m;
+  color: $color__n-5;
+
+  opacity: 0.7;
+
+  @include breakpoint("s") {
+    height: 55px;
+    max-width: 110px;
+  }
+}

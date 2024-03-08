@@ -1,0 +1,15 @@
+{
+  "handle": "Web3Tech_Team",
+  "members": [
+    "web3tech",
+    "aniketbhat",
+    "Ankit1995",
+    "hashTheBlocks"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xd1A519bF524F32C69E4432bEb8679207e8706574"
+    }
+  ]
+}

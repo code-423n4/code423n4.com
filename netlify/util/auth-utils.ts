@@ -1,20 +1,17 @@
-import Moralis from "moralis/node";
+import Moralis from "moralis-v1/node";
 import fetch from "node-fetch";
+import { Event } from "@netlify/functions/src/function/event";
+import { BotData } from "../../types/user";
 
-const {
-  moralisAppId,
-  moralisServerUrl,
-} = require("../_config");
+const { moralisAppId, moralisServerUrl } = require("../_config");
 
-
-async function checkAuth(event) {
+async function checkAuth(event: Event) {
   const authorization = event.headers["x-authorization"];
-  const sessionToken = authorization.split("Bearer ")[1];
   const user = event.headers["c4-user"];
-
-  if (!authorization) {
+  if (!authorization || !user) {
     return false;
   }
+  const sessionToken = authorization.split("Bearer ")[1];
 
   await Moralis.start({
     serverUrl: moralisServerUrl,
@@ -33,18 +30,56 @@ async function checkAuth(event) {
   }
 
   const { moralisId } = userData;
-  const confirmed = await Moralis.Cloud.run("confirmUser", {
-    sessionToken,
-    moralisId,
-    username: user,
-  });
-  if (!confirmed) {
+  try {
+    const confirmed = await Moralis.Cloud.run("confirmUser", {
+      sessionToken,
+      moralisId,
+      username: user,
+    });
+    if (!confirmed) {
+      return false;
+    }
+  } catch (error) {
+    // @todo: better error handling
+    console.log(error);
     return false;
   }
 
   return true;
 }
 
-export {
-  checkAuth,
-};
+async function checkTeamAuth(teamName, username) {
+  const teamResponse = await fetch(
+    `${process.env.URL}/.netlify/functions/get-user?id=${teamName}`
+  );
+  if (!teamResponse.ok) {
+    throw { status: 401, message: "Team does not exist" };
+  }
+  const team = await teamResponse.json();
+  if (!team.members || !team.members.includes(username)) {
+    throw {
+      status: 401,
+      message: `${username} is not a member of team ${teamName}`,
+    };
+  }
+  return team;
+}
+
+async function checkBotAuth(botName, username) {
+  const botResponse = await fetch(
+    `${process.env.URL}/.netlify/functions/get-bot?id=${username}`
+  );
+  if (botResponse.status !== 200) {
+    throw { status: 401, message: "Bot does not exist" };
+  }
+  const bot: BotData = await botResponse.json();
+  if (!bot.crew || !bot.crew.includes(username)) {
+    throw {
+      status: 401,
+      message: `${username} is not a member of the bot crew for ${botName}`,
+    };
+  }
+  return bot;
+}
+
+export { checkAuth, checkTeamAuth, checkBotAuth };

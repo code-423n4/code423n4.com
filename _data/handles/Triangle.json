@@ -1,0 +1,13 @@
+{
+  "handle": "Triangle",
+  "members": [],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x813bfBD9725D385cBE3e39AF0e01f076F7B654fb"
+    }
+  ],
+  "link": "",
+  "image": "./avatars/Triangle.png",
+  "showOnLeaderboard": false
+}

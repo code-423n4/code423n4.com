@@ -1,0 +1,54 @@
+@import "../variables";
+
+// --------------------------------------------------
+// Eyebrow Bar Component
+// --------------------------------------------------
+
+// CSS rule order
+// --------------------
+
+// 1. Variables
+// 2. Box model properties
+// 3. Display and position
+// 4. Background
+// 5. Border
+// 6. Box shadow
+// 7. Text
+// 8. Transforms
+// 9. Other
+
+.eyebrow-bar {
+  background: $color__blurple-60;
+  padding: calc($spacing__s * 1.2) 0;
+  font-size: 1.1rem;
+}
+
+.eyebrow-bar__content {
+  max-width: $layout__max-width;
+  margin: 0 auto;
+  text-align: center;
+  color: rgba($color__white, 0.8);
+
+  a {
+    color: $color__white;
+    font-weight: bold;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  a.eyebrow-bar__button {
+    display: inline-block;
+    padding: $spacing__xs $spacing__s;
+    margin-left: $spacing__s;
+    border: 1px solid rgba($color__white, 0.3);
+    border-radius: $border-radius__m;
+    white-space: nowrap;
+
+    &:hover {
+      background: rgba($color__white, 0.1);
+      text-decoration: none;
+    }
+  }
+}

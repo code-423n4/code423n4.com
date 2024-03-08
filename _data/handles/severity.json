@@ -1,0 +1,13 @@
+{
+  "handle": "severity",
+  "members": [
+    "medium-or-low",
+    "critical-or-high"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x377b891140Ff2257577768eca1d2563875D3AbD1"
+    }
+  ]
+}

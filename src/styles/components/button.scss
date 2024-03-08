@@ -1,0 +1,223 @@
+@import "../variables";
+
+// --------------------------------------------------
+// Button Component
+// --------------------------------------------------
+
+// CSS rule order
+// --------------------
+
+// 1. Variables
+// 2. Box model properties
+// 3. Display and position
+// 4. Background
+// 5. Border
+// 6. Box shadow
+// 7. Text
+// 8. Transforms
+// 9. Other
+
+$button__border-width: 2px;
+
+// Mixins
+// --------------------
+
+// White button
+
+@mixin button--white {
+  background: $color__white;
+  border-color: $color__white;
+  color: $color__blurple__text;
+
+  // TODO better hover styling for white buttons
+  &:hover {
+    background: rgba($color__white, 0.8);
+    border-color: $color__white;
+    color: $color__blurple__text--light;
+  }
+}
+
+@mixin button--secondary--white {
+  background: transparent;
+  border: 2px solid rgba($color__white, 0.8);
+  color: rgba($color__white, 0.8);
+
+  // TODO better hover styling for white buttons
+  &:hover {
+    background: rgba($color__white, 0.2);
+    color: $color__white;
+    border-color: $color__white;
+  }
+}
+
+// Disabled button
+@mixin button--primary--disabled {
+  background: $color__n-90;
+  border-color: $color__n-90;
+  color: $color__n-30;
+
+  cursor: not-allowed;
+
+  &:before {
+    content: "⚠\00a0";
+  }
+}
+
+// Button primary
+// --------------------
+
+.button--primary,
+.button {
+  padding: $spacing__s $spacing__l;
+  margin-right: $spacing__s;
+  display: inline-flex;
+  align-items: center;
+  background: $color__button-blurple;
+  border: $button__border-width solid $color__button-blurple;
+  border-radius: $border-radius__m;
+  color: $color__white;
+  font-family: $font__default;
+  font-weight: 500 !important; // These could be inherited from copy/text styles
+  text-decoration: none !important; // These could be inherited from copy/text styles
+  text-align: center;
+  flex-shrink: 0;
+  cursor: pointer;
+
+  @include accessible-animation {
+    transition: background 0.2s ease-in-out;
+  }
+
+  &:hover {
+    background: $color__button-blurple--hover;
+    border-color: $color__button-blurple--hover;
+    color: $color__white;
+  }
+
+  &--white {
+    @include button--white;
+  }
+
+  img {
+    margin-right: $spacing__xs;
+  }
+}
+
+.background--blurple,
+.background--low-contrast {
+  .button--primary {
+    @include button--white;
+  }
+}
+
+// Button secondary
+// --------------------
+
+.button--secondary {
+  background: transparent;
+  border: $button__border-width solid $color__button-blurple;
+  color: $color__white;
+
+  &:hover {
+    background: $color__button-blurple;
+    color: $color__white;
+  }
+  &--secondary--white {
+    @include button--secondary--white;
+  }
+}
+
+.background--blurple,
+.background--low-contrast {
+  .button--secondary {
+    @include button--secondary--white;
+  }
+}
+
+// Button tertiary
+// --------------------
+
+.button--tertiary {
+  padding: $spacing__s $spacing__l;
+  display: inline-flex;
+  background: transparent;
+  border: $button__border-width solid transparent;
+  border-radius: $border-radius__m;
+  color: $color__white;
+
+  &::after {
+    content: "\00a0→";
+    display: inline-block;
+  }
+
+  &:hover {
+    @include accessible-animation {
+      transition: $transition__base;
+    }
+    border-color: $color__button-blurple;
+    color: $color__white;
+  }
+}
+
+// Button danger
+// --------------------
+
+//TODO: This needs style consideration
+.button--danger {
+  background: transparent;
+  border: $button__border-width solid $color__button-danger;
+  color: $color__white;
+
+  &:hover {
+    background: $color__button-danger--hover;
+    border-color: $color__button-danger--hover;
+    color: $color__white;
+  }
+}
+
+// Button text link
+// --------------------
+
+.button--text-link {
+  padding: $spacing__s 0;
+  background: transparent;
+  border: none;
+  color: $color__blurple__text;
+  text-decoration: underline;
+
+  &:after {
+    content: " →";
+  }
+
+  &:hover {
+    color: $color__blurple__text--light;
+    background: transparent;
+  }
+}
+
+// Button back link
+// --------------------
+
+.button--back-link {
+  padding: $spacing__s 0;
+  background: transparent;
+  border: none;
+  color: $color__blurple__text;
+  text-decoration: underline;
+
+  &:before {
+    content: "← ";
+  }
+
+  &:hover {
+    color: $color__blurple__text--light;
+    background: transparent;
+  }
+}
+
+// Button small
+// --------------------
+
+.button--small {
+  padding: $spacing__xs $spacing__s;
+  font-size: $font-size__small;
+}

@@ -1,0 +1,15 @@
+{
+  "handle": "Override",
+  "members": [
+    "natzuu",
+    "whiskey",
+    "eren"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x3D0fF206A6c79e69739fac88c1D91920765c5873"
+    }
+  ],
+  "image": "./avatars/Override.png"
+}

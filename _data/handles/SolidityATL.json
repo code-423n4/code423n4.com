@@ -1,0 +1,17 @@
+{
+  "handle": "SolidityATL",
+  "members": [
+    "plasmablocks",
+    "wzrdk3lly"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xcc4D0aCBc5D23B1801825BbAF41042211Da1397e"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0xcc4D0aCBc5D23B1801825BbAF41042211Da1397e"
+    }
+  ]
+}

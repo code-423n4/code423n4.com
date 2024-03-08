@@ -1,8 +1,9 @@
 import React, { createContext, useContext, ReactNode, useState } from "react";
 
-interface ModalProps {
+export interface ModalProps {
   title: string | ReactNode;
   body: string | ReactNode;
+  type?: string;
   primaryButtonAction?: () => Promise<void>;
   primaryButtonText?: string | ReactNode;
   secondaryButtonAction?: () => Promise<void>;
@@ -24,7 +25,7 @@ const DEFAULT_STATE: ModalContext = {
 const ModalContext = createContext(DEFAULT_STATE);
 
 export const ModalProvider = ({ children }) => {
-  const [modalProps, setModalProps] = useState<ModalProps>(
+  const [modalProps, setModalProps] = useState<ModalProps | null>(
     DEFAULT_STATE.modalProps
   );
 

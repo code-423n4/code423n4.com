@@ -1,5 +1,6 @@
-import { readFileSync } from "fs";
-import fs from "fs";
+import fs, { readFileSync } from "fs";
+import { TeamData } from "../../types/user";
+import { isDangerousHandle } from "../util/validation-utils";
 
 exports.handler = async (event) => {
   // only allow GET
@@ -11,10 +12,6 @@ exports.handler = async (event) => {
     };
   }
 
-  function isDangerousHandle(s) {
-    return s.match(/^[0-9a-zA-Z_\-]+$/) === null;
-  }
-
   const userHandle = event.queryStringParameters.id;
 
   if (isDangerousHandle(userHandle)) {
@@ -22,14 +19,14 @@ exports.handler = async (event) => {
       statusCode: 400,
       body: JSON.stringify({
         error:
-          "Team name can only contain alphanumeric characters [a-zA-Z0-9], underscores (_), and hyphens (-).",
+          "Username can only contain alphanumeric characters [a-zA-Z0-9], underscores (_), and hyphens (-).",
       }),
     };
   }
 
   try {
     const usersFiles = fs.readdirSync("./_data/handles");
-    const teams = [];
+    const teams: TeamData[] = [];
     usersFiles.forEach((file) => {
       if (file.endsWith(".json")) {
         const wardenFile = readFileSync(`./_data/handles/${file}`);

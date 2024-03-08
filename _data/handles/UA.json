@@ -1,0 +1,18 @@
+{
+  "handle": "UA",
+  "image": "./avatars/UA.png",
+  "members": [
+    "JustUzair",
+    "ahmedaghadi"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x276Baa5633c2246cBb7b508539E66120caFD95F1"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x276Baa5633c2246cBb7b508539E66120caFD95F1"
+    }
+  ]
+}
