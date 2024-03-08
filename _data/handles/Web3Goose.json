@@ -1,8 +1,8 @@
 {
   "handle": "Web3Goose",
+  "image": "./avatars/Web3Goose.png",
   "members": [
     "BigGoose",
-    "0xAadi",
     "codehacker",
     "codehunter99"
   ],
@@ -15,6 +15,5 @@
       "chain": "ethereum",
       "address": "0x8997b145B302A13bFf57d3084DCD74f3e890F6C2"
     }
-  ],
-  "image": "./avatars/Web3Goose.png"
+  ]
 }
