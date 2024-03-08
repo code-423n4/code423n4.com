@@ -1,0 +1,13 @@
+{
+  "handle": "Teamsters",
+  "members": [
+    "adam-idarrha",
+    "0xPwned"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x8383278244554dd80295Eb424D7B2aF179A416FE"
+    }
+  ]
+}

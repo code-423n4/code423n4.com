@@ -1,0 +1,11 @@
+{
+  "handle": "V_B",
+  "members": ["Barichek", "vlad_bochok"],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x14cDd1552530AC4C38BF6c4fB31d8822560D15b3"
+    }
+  ],
+  "link": ""
+}

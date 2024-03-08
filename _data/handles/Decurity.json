@@ -1,0 +1,11 @@
+{
+  "handle": "Decurity",
+  "members": ["Beched", "me_na0mi", "raz0r"],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xe60b1Ede3384ed987756A33257D757f25A84B297"
+    }
+  ],
+  "link": "https://decurity.io/"
+}

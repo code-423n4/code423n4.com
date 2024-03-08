@@ -1,0 +1,18 @@
+{
+  "handle": "TeamSS",
+  "members": [
+    "0xSimeon",
+    "0xsagetony"
+  ],
+  "link": "https://x.com/sagetony224",
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x91F858aB36531C0Fb4EEC0B2A8BB5D3DfF99F543"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x91F858aB36531C0Fb4EEC0B2A8BB5D3DfF99F543"
+    }
+  ]
+}

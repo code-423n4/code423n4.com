@@ -1,0 +1,18 @@
+{
+  "handle": "DeFiGuard",
+  "members": [
+    "Dewaxindo",
+    "ka14ar"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xa6F8c01D96540C0a6c2e71fD33432df6c20f9874"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0xa6F8c01D96540C0a6c2e71fD33432df6c20f9874"
+    }
+  ],
+  "image": "./avatars/DeFiGuard.png"
+}

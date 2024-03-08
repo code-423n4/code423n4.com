@@ -1,0 +1,10 @@
+{
+  "handle": "antithesis",
+  "members": ["blockdev", "thebensams"],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x73286F355B8B8459175170420Ac4d3dBa799E6da"
+    }
+  ]
+}
