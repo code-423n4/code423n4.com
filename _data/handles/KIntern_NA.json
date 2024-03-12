@@ -2,8 +2,7 @@
   "handle": "KIntern_NA",
   "members": [
     "TrungOre",
-    "duc",
-    "Trumpero"
+    "duc"
   ],
   "paymentAddresses": [
     {
@@ -11,5 +10,6 @@
       "address": "0x9cD641c50320Ad533a07f6bAFE8b313599D071AE"
     }
   ],
-  "image": "./avatars/KIntern_NA.png"
+  "image": "./avatars/KIntern_NA.png",
+  "link": "https://twitter.com/Trungore"
 }
