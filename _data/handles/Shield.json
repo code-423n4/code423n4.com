@@ -1,16 +1,16 @@
 {
   "handle": "Shield",
+  "image": "./avatars/Shield.png",
   "members": [
-    "Udsen",
     "Dravee",
     "0xA5DF",
-    "Viraz"
+    "Viraz",
+    "Udsen"
   ],
   "paymentAddresses": [
     {
       "chain": "polygon",
       "address": "0x8C87758945f6439E2Ab3DD8323fc1a301203bd99"
     }
-  ],
-  "image": "./avatars/Shield.png"
+  ]
 }
