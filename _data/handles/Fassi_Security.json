@@ -1,6 +1,8 @@
 {
   "handle": "Fassi_Security",
-  "image": "./avatars/fassi_security.png",
+  "link": "https://twitter.com/fassi_security",
+  "image": "./avatars/Fassi_Security.png",
+
   "members": [
     "bronze_pickaxe",
     "mxuse"
