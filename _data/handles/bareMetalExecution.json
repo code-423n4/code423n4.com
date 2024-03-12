@@ -1,0 +1,17 @@
+{
+  "handle": "bareMetalExecution",
+  "members": [
+    "Daniel526",
+    "Tigerfrake"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x3fC544C0988851dEF4307375B2f08737368a31eA"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x3fC544C0988851dEF4307375B2f08737368a31eA"
+    }
+  ]
+}

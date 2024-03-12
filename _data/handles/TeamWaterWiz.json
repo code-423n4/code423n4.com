@@ -1,0 +1,19 @@
+{
+  "handle": "TeamWaterWiz",
+  "members": [
+    "elviric",
+    "cuscak"
+  ],
+  "link": "https://twitter.com/elviric",
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xBd66f0965CbFddf19CD06Da3Af6F5823620D7DdF"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0xBd66f0965CbFddf19CD06Da3Af6F5823620D7DdF"
+    }
+  ],
+  "image": "./avatars/TeamWaterWiz.png"
+}

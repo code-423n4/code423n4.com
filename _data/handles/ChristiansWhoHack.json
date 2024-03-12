@@ -1,0 +1,17 @@
+{
+  "handle": "ChristiansWhoHack",
+  "members": [
+    "Strikeout",
+    "ging3r"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x068C8e9D575105486935E93Eb0605Be3f4BB3395"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x068C8e9D575105486935E93Eb0605Be3f4BB3395"
+    }
+  ]
+}

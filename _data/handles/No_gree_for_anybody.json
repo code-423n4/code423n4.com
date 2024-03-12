@@ -1,0 +1,18 @@
+{
+  "handle": "No_gree_for_anybody",
+  "members": [
+    "0xSimeon",
+    "0xsagetony"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x91F858aB36531C0Fb4EEC0B2A8BB5D3DfF99F543"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x91F858aB36531C0Fb4EEC0B2A8BB5D3DfF99F543"
+    }
+  ],
+  "image": "./avatars/No_gree_for_anybody.png"
+}
