@@ -1,0 +1,18 @@
+{
+  "handle": "OdeWeb3",
+  "members": [
+    "mansa11",
+    "scoolj"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xdDa2274b467b9589FB9EE651454E0e3C34E22Eac"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0xdDa2274b467b9589FB9EE651454E0e3C34E22Eac"
+    }
+  ],
+  "image": "./avatars/OdeWeb3.png"
+}
