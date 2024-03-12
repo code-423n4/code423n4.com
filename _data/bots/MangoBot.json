@@ -1,0 +1,17 @@
+{
+  "handle": "MangoBot",
+  "crew": [
+    "CaptainMango",
+    "bluejacket",
+    "say-cheese",
+    "geodude"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x0000000000000000000000000000000000000000"
+    }
+  ],
+  "image": "./avatars/MangoBot.png",
+  "relegated": true
+}

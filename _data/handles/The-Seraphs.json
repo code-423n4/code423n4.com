@@ -1,0 +1,18 @@
+{
+  "handle": "The-Seraphs",
+  "image": "./avatars/The-Seraphs.png",
+  "members": [
+    "pxng0lin",
+    "solsaver"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x3ee171C31a218D18a77601aA638Dd2E6406A26Fe"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x3ee171C31a218D18a77601aA638Dd2E6406A26Fe"
+    }
+  ]
+}

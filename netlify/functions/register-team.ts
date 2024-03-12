@@ -5,7 +5,7 @@ import { Octokit } from "@octokit/core";
 
 import { token } from "../_config";
 import { TeamData } from "../../types/user";
-import { getTeamEmails, sendConfirmationEmail } from "../util/user-utils";
+import { getGroupEmails, sendConfirmationEmail } from "../util/user-utils";
 import { checkAuth } from "../util/auth-utils";
 import { isDangerousHandle } from "../util/validation-utils";
 
@@ -13,6 +13,15 @@ const OctokitClient = Octokit.plugin(createPullRequest);
 const octokit = new OctokitClient({ auth: token });
 
 exports.handler = async (event) => {
+  if (!(await checkAuth(event))) {
+    return {
+      statusCode: 401,
+      body: JSON.stringify({
+        error: "Unauthorized",
+      }),
+    };
+  }
+
   // only allow POST
   try {
     if (event.httpMethod !== "POST") {
@@ -89,15 +98,6 @@ exports.handler = async (event) => {
         statusCode: 422,
         body: JSON.stringify({
           error: "Team must include the user who created the team",
-        }),
-      };
-    }
-
-    if (!(await checkAuth(event))) {
-      return {
-        statusCode: 401,
-        body: JSON.stringify({
-          error: "Unauthorized",
         }),
       };
     }
@@ -184,7 +184,7 @@ exports.handler = async (event) => {
         }),
       });
 
-      const emails = await getTeamEmails(formattedTeamData);
+      const emails = await getGroupEmails(formattedTeamData.members);
       const emailSubject = `Code4rena team "${teamName}" has been created`;
       const emailBody = `A new Code4rena team (${teamName}) has been created with members: \n\n${members.join(
         ", "
@@ -197,8 +197,11 @@ exports.handler = async (event) => {
       };
     } catch (error) {
       return {
-        statusCode: error.response.status,
-        body: JSON.stringify({ error: error.response.data.message.toString() }),
+        statusCode: error?.response?.status || 500,
+        body: JSON.stringify({
+          error:
+            "" + error?.response?.data?.message || "Internal server error.",
+        }),
       };
     }
   } catch (error) {

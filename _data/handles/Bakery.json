@@ -1,0 +1,17 @@
+{
+  "handle": "Bakery",
+  "members": [
+    "wafflemakr",
+    "XORs33r"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xcb5911599D9461E76552a29a1b9FD409Ef2B95E9"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0xcb5911599D9461E76552a29a1b9FD409Ef2B95E9"
+    }
+  ]
+}

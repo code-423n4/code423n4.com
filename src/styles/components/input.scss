@@ -1,0 +1,30 @@
+@import "../variables";
+
+// --------------------------------------------------
+// input Component
+// --------------------------------------------------
+
+// CSS rule order
+// --------------------
+
+// 1. Variables
+// 2. Box model properties
+// 3. Display and position
+// 4. Background
+// 5. Border
+// 6. Box shadow
+// 7. Text
+// 8. Transforms
+// 9. Other
+
+.input {
+  .input__input-wrapper {
+    display: flex;
+    align-items: center;
+  }
+
+  .input__suffix-button {
+    margin-left: $spacing__s;
+    padding: $spacing__s;
+  }
+}

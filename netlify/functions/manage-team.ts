@@ -7,6 +7,7 @@ import { Response } from "@netlify/functions/src/function/response";
 import { Event } from "@netlify/functions/src/function/event";
 import { Octokit } from "@octokit/core";
 import { createOrUpdateTextFile } from "@octokit/plugin-create-or-update-text-file";
+import fetch from "node-fetch";
 
 import { token } from "../_config";
 import {
@@ -15,8 +16,7 @@ import {
   TeamUpdateRequest,
 } from "../../types/user";
 import { checkAuth, checkTeamAuth } from "../util/auth-utils";
-import { getTeamEmails, sendConfirmationEmail } from "../util/user-utils";
-import fetch from "node-fetch";
+import { getGroupEmails, sendConfirmationEmail } from "../util/user-utils";
 
 const OctokitClient = Octokit.plugin(createPullRequest, createOrUpdateTextFile);
 const octokit = new OctokitClient({ auth: token });
@@ -172,8 +172,8 @@ async function editTeam(
       }),
     });
 
-    const newMemberEmails = await getTeamEmails(newTeamData);
-    const oldMemberEmails = await getTeamEmails(oldTeamData);
+    const newMemberEmails = await getGroupEmails(newTeamData.members);
+    const oldMemberEmails = await getGroupEmails(oldTeamData.members);
     const emailSubject = `Code4rena team "${teamName}" has been modified`;
 
     const emailBody = dedent`
@@ -217,8 +217,8 @@ async function deleteTeam(
   username: string,
   sessionToken: string
 ): Promise<Response> {
-  const { teamName } = data;
-  if (!teamName) {
+  const { name } = data;
+  if (!name) {
     return {
       statusCode: 422,
       body: JSON.stringify({
@@ -226,11 +226,11 @@ async function deleteTeam(
       }),
     };
   }
-  const team = await checkTeamAuth(teamName, username);
+  const team = await checkTeamAuth(name, username);
 
-  const title = `Delete team ${teamName}`;
-  const body = `This auto-generated PR removes the team ${teamName}`;
-  const branchName = `team/${teamName}`;
+  const title = `Delete team ${name}`;
+  const body = `This auto-generated PR removes the team ${name}`;
+  const branchName = `team/${name}`;
 
   const res = await octokit.createPullRequest({
     owner: process.env.GITHUB_REPO_OWNER!,
@@ -255,7 +255,7 @@ async function deleteTeam(
   const removedFile = await octokit.createOrUpdateTextFile({
     owner: process.env.GITHUB_REPO_OWNER!,
     repo: process.env.REPO!,
-    path: `_data/handles/${teamName}.json`,
+    path: `_data/handles/${name}.json`,
     content: null,
     message: `File deleted by ${username}`,
     branch: branchName,
@@ -295,10 +295,10 @@ async function deleteTeam(
     }),
   });
 
-  const teamEmails = await getTeamEmails(team);
-  const emailSubject = `Code4rena team "${teamName}" has been deleted`;
+  const teamEmails = await getGroupEmails(team.members);
+  const emailSubject = `Code4rena team "${name}" has been deleted`;
   const emailBody = dedent`
-  Team ${teamName} deleted by ${username}
+  Team ${name} deleted by ${username}
 
   You can see the PR here: ${res.data.html_url}
   `;

@@ -1,0 +1,18 @@
+{
+  "handle": "FORTIFYX",
+  "members": [
+    "MaslarovK",
+    "Soltho"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xd431042b101B29Cd22270CB4C08c370128beAd55"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x9624bB22bE4c9c60cC3a1BCd34206AbAA7b67172"
+    }
+  ],
+  "image": "./avatars/FORTIFYX.png"
+}

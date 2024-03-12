@@ -1,0 +1,21 @@
+{
+  "handle": "ChainHunters",
+  "members": [
+    "Zer0Luck",
+    "junan",
+    "hyeon",
+    "nugurii0"
+  ],
+  "link": "https://dream-academy.io/#ChainHunters",
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x6C6b9C47B3924ED8083AB167EdA02ed0BC968800"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x6C6b9C47B3924ED8083AB167EdA02ed0BC968800"
+    }
+  ],
+  "image": "./avatars/ChainHunters.png"
+}

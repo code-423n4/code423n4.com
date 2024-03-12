@@ -1,0 +1,17 @@
+{
+  "handle": "The_Madaladinator",
+  "crew": [
+    "Madalad"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x9316dd59131E3B63A24971D3A659bA52b46ac659"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x9316dd59131E3B63A24971D3A659bA52b46ac659"
+    }
+  ],
+  "image": "./avatars/The_Madaladinator.png"
+}

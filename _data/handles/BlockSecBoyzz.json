@@ -1,0 +1,20 @@
+{
+  "handle": "BlockSecBoyzz",
+  "members": [
+    "VictoryGod",
+    "sc4r",
+    "fs0c",
+    "sh4dy",
+    "d4v1d"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xed47bd991A6767d090365DBeD6DA3d9496473cEE"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0xed47bd991A6767d090365DBeD6DA3d9496473cEE"
+    }
+  ]
+}

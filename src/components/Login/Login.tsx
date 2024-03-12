@@ -1,7 +1,6 @@
-import clsx from "clsx";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Moralis from "moralis-v1";
-import { navigate } from "gatsby";
+import { Link, navigate } from "gatsby";
 import { toast } from "react-toastify";
 import { useMoralis } from "react-moralis";
 
@@ -11,9 +10,6 @@ import useUser, { UserLoginError } from "../../hooks/UserContext";
 
 // components
 import Dropdown from "../Dropdown";
-
-// styles
-import * as styles from "../../styles/Main.module.scss";
 
 const Login = ({ displayAsButtons = false }) => {
   const { logUserOut, connectWallet } = useUser();
@@ -149,125 +145,154 @@ const Login = ({ displayAsButtons = false }) => {
   return (
     <>
       {displayAsButtons ? (
-        <div className={clsx(styles.Login__NoDropdown)}>
+        <div className="login__display-as-buttons">
           <button
             type="button"
             onClick={(e) => handleLogin(e)}
-            className={clsx("button", styles.Login__SmallerButton)}
+            className="button button--primary login__button"
           >
             <img
               src="/images/meta-mask-logo.svg"
               alt="logout icon"
-              className={styles.Login__Icon}
+              className={"login__icon"}
             />
             MetaMask
           </button>
           <button
             type="button"
             onClick={(e) => handleLogin(e, "walletConnect")}
-            className={clsx("button", styles.Login__SmallerButton)}
+            className="button button--primary login__button"
           >
             <img
               src="/images/wallet-connect-logo.svg"
               alt="logout icon"
-              className={styles.Login__Icon}
+              className={"login__icon"}
             />
             WalletConnect
           </button>
           <button
-            className={clsx("button", styles.Login__SmallerButton)}
+            className="button button--primary login__button"
             type="button"
             onClick={openLoginModal}
           >
             <img
               src="/images/sign-out.svg"
               alt="login icon"
-              className={styles.Login__Icon}
+              className={"login__icon"}
             />
-            Log in
+            Log in with password
           </button>
+          <div className="login__not-registered">
+            <p>Not a warden yet?</p>
+            <Link
+              className="button button--secondary login__button"
+              to="/register"
+            >
+              Register
+            </Link>
+          </div>
         </div>
       ) : (
         <>
           <Dropdown
-            wrapperClass={styles.Login__LoginButtonWrapper}
-            triggerButtonClass={styles.Login__LoginButton}
+            wrapperClass={"login__button-wrapper login__desktop"}
+            triggerButtonClass={"button login__button"}
             triggerButton="Connect"
             openOnHover={true}
-            className={styles.Login__Desktop}
           >
             <button
               type="button"
               onClick={(e) => handleLogin(e)}
-              className={clsx(styles.Dropdown__Button, styles.Login__Desktop)}
+              className="dropdown__button"
             >
               <img
                 src="/images/meta-mask-logo.svg"
                 alt="logout icon"
-                className={styles.Login__Icon}
+                className={"login__icon"}
               />
               MetaMask
             </button>
             <button
               type="button"
               onClick={(e) => handleLogin(e, "walletConnect")}
-              className={clsx(styles.Dropdown__Button, styles.Login__Desktop)}
+              className="dropdown__button"
             >
               <img
                 src="/images/wallet-connect-logo.svg"
                 alt="logout icon"
-                className={styles.Login__Icon}
+                className={"login__icon"}
               />
               WalletConnect
             </button>
             <button
-              className={clsx(styles.Dropdown__Button, styles.Login__Desktop)}
+              className="dropdown__button"
               type="button"
               onClick={openLoginModal}
             >
               <img
                 src="/images/sign-out.svg"
                 alt="login icon"
-                className={styles.Login__Icon}
+                className={"login__icon"}
               />
               Log in
             </button>
+            {/* using navigate function instead of <Link> for styling purposes */}
+            <button
+              className="dropdown__button"
+              type="button"
+              onClick={() => navigate("/register")}
+            >
+              <img
+                src="/images/register.svg"
+                alt="login icon"
+                className={"login__icon"}
+              />
+              Register
+            </button>
           </Dropdown>
-          <div className={styles.Login__Mobile}>
+          <div className={"login__mobile"}>
             <a
               href=""
               target="_blank"
               rel="noreferrer"
               onClick={(e) => handleLogin(e)}
-              className={styles.Login__Link}
+              className={"login__link"}
             >
               <img
                 src="/images/meta-mask-logo.svg"
                 alt="logout icon"
-                className={styles.Login__Icon}
+                className={"login__icon"}
               />
               Connect MetaMask
             </a>
             <a
               href=""
               onClick={(e) => handleLogin(e, "walletConnect")}
-              className={styles.Login__Link}
+              className={"login__link"}
             >
               <img
                 src="/images/wallet-connect-logo.svg"
                 alt="logout icon"
-                className={styles.Login__Icon}
+                className={"login__icon"}
               />
               Connect WalletConnect
             </a>
-            <a href="" className={styles.Login__Link} onClick={openLoginModal}>
+            <a href="" className={"login__link"} onClick={openLoginModal}>
               <img
                 src="/images/sign-out.svg"
                 alt="login icon"
-                className={styles.Login__Icon}
+                className={"login__icon"}
               />
               Log in
             </a>
+            <Link className="login__link" to="/register">
+              <img
+                src="/images/register.svg"
+                alt="login icon"
+                className={"login__icon"}
+              />
+              Register
+            </Link>
           </div>
         </>
       )}

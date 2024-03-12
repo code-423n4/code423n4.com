@@ -1,0 +1,21 @@
+.warden-field__option-container {
+  display: flex;
+  align-items: center;
+  min-height: 32px;
+
+  & span {
+    flex: 1;
+    font-family: inherit;
+    color: white;
+  }
+}
+
+.warden-field__avatar {
+  margin-right: $spacing__s;
+}
+
+.warden-field__invalid.react-select {
+  .react-select__control {
+    border: 2px solid $color__red;
+  }
+}

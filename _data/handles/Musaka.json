@@ -1,0 +1,13 @@
+{
+  "handle": "Musaka",
+  "members": [
+    "0x3b",
+    "ZdravkoHr"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xc681946e6BE5Eda66F3aEFF5DCDF64384AFB8EA2"
+    }
+  ]
+}

@@ -24,7 +24,7 @@ import { getMarkdownReportForUser } from "../util/github-utils";
 import {
   updateTeamAddresses,
   sendConfirmationEmail,
-  getTeamEmails,
+  getGroupEmails,
 } from "../util/user-utils";
 import { isDangerousHandle } from "../util/validation-utils";
 
@@ -89,22 +89,19 @@ exports.handler = async (event) => {
     };
   }
   const isMitigationReport: boolean = mitigationOf ? true : false;
-  let mitigationLabels = ["mitigation-confirmed", `MR-${mitigationOf}`];
-  let mitigationTitle = `Mitigation Confirmed for ${mitigationOf}`;
 
   // ensure we have the data we need
   if (
-    !isMitigationReport &&
-    (emailAddresses.length == 0 ||
-      !user ||
-      !risk ||
-      !title ||
-      !body ||
-      !labels ||
-      !contest ||
-      !sponsor ||
-      !attributedTo ||
-      !repo)
+    emailAddresses.length == 0 ||
+    !user ||
+    (!isMitigationReport && !risk) ||
+    !title ||
+    !body ||
+    !labels ||
+    !contest ||
+    !sponsor ||
+    (!isMitigationReport && !attributedTo) ||
+    !repo
   ) {
     return {
       statusCode: 422,
@@ -164,7 +161,7 @@ exports.handler = async (event) => {
 
     if (attributedTo !== user) {
       const team: TeamData = await checkTeamAuth(attributedTo, user);
-      const teamEmailAddresses = await getTeamEmails(team);
+      const teamEmailAddresses = await getGroupEmails(team.members);
       emailAddresses = emailAddresses.concat(teamEmailAddresses);
       const teamPolygonAddress =
         team.paymentAddresses &&
@@ -278,22 +275,14 @@ exports.handler = async (event) => {
       }
     }
 
-    //if it's a confirmed mitigation then no title will be provided
-    let isConfirmedMitigation = false;
-    if (isMitigationReport && (!body || !title || !risk)) {
-      isConfirmedMitigation = true;
-    } else if (isMitigationReport) {
-      labels.push(`MR-${mitigationOf}`);
-    }
-
     const issueResult = await octokit.request(
       "POST /repos/{owner}/{repo}/issues",
       {
         owner,
         repo,
-        title: !isConfirmedMitigation ? title : mitigationTitle,
+        title,
         body: isQaOrGasSubmission ? qaOrGasSubmissionBody : body,
-        labels: !isConfirmedMitigation ? labels : mitigationLabels,
+        labels,
       }
     );
 

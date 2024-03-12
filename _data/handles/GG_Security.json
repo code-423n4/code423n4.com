@@ -1,0 +1,17 @@
+{
+  "handle": "GG_Security",
+  "members": [
+    "georgits",
+    "halden"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xc9a465317e270863148d5ba7068f890cf8e7d632"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0xc9a465317e270863148d5ba7068f890cf8e7d632"
+    }
+  ]
+}

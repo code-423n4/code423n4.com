@@ -1,0 +1,15 @@
+{
+  "handle": "YusSecurity",
+  "image": "./avatars/YusSecurity.png",
+  "members": [
+    "flacko",
+    "marchev",
+    "dyoff"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x39639cc0C267d9e2B55113DBDa869A1e5aCACE98"
+    }
+  ]
+}

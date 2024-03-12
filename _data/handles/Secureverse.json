@@ -1,19 +1,5 @@
 {
   "handle": "Secureverse",
-  "members": [
-    "imkapadia",
-    "Nsecv",
-    "leosathya"
-  ],
-  "paymentAddresses": [
-    {
-      "chain": "polygon",
-      "address": "0x8fad8C82df03D310F72b4A53773c32071b55f11A"
-    },
-    {
-      "chain": "ethereum",
-      "address": "0x8fad8C82df03D310F72b4A53773c32071b55f11A"
-    }
-  ],
-  "image": "./avatars/Secureverse.png"
+  "members": [],
+  "showOnLeaderboard": false
 }
