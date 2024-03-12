@@ -1,0 +1,14 @@
+{
+  "handle": "ASCANsec",
+  "members": [
+    "Mylifechangefast_eth",
+    "bomanaps"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xa6D3FF5C22e1bB3B3951c9d243d67e797caB862E"
+    }
+  ],
+  "image": "./avatars/ASCANsec.png"
+}
