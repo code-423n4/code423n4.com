@@ -1,0 +1,12 @@
+{
+  "handle": "CryptoThemeX-CTX",
+  "crew": [
+    "cryptothemex"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x3e3647912a812Ab213b147F7bd997BCf5E8FC620"
+    }
+  ]
+}
