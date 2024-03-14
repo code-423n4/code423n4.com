@@ -1,0 +1,17 @@
+{
+  "handle": "Sharkalyzer",
+  "crew": [
+    "shark"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xd25F8b761d1792D0C388866Db2d79C3F7b7E6CF5"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0xd25F8b761d1792D0C388866Db2d79C3F7b7E6CF5"
+    }
+  ],
+  "image": "./avatars/Sharkalyzer.png"
+}
