@@ -1,8 +1,6 @@
 {
   "handle": "c4lanky",
-  "crew": [
-    "favelanky"
-  ],
+  "relegated": false,
   "paymentAddresses": [
     {
       "chain": "polygon",
@@ -13,5 +11,8 @@
       "address": "0x14BA66543Cf743900dE87648F6A565d9F1c2c8b5"
     }
   ],
-  "relegated": true
+  "crew": [
+    "favelanky"
+  ],
+  "uid": "vvhbPAuH2w8"
 }
