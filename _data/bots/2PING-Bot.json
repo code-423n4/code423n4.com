@@ -1,0 +1,16 @@
+{
+  "handle": "2PING-Bot",
+  "crew": [
+    "crc32"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x3ED009D82BfFb60828DC8547632faE2EFf3680db"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x3ED009D82BfFb60828DC8547632faE2EFf3680db"
+    }
+  ]
+}
