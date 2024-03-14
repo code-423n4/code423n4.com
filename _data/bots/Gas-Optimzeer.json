@@ -1,13 +1,14 @@
 {
   "handle": "Gas-Optimzeer",
-  "crew": [
-    "mgf15"
-  ],
+  "relegated": false,
   "paymentAddresses": [
     {
       "chain": "polygon",
       "address": "0xF4E6F6558219899499dd80D29dBfBbb486BA656b"
     }
   ],
-  "relegated": true
+  "crew": [
+    "mgf15"
+  ],
+  "uid": "vxUn3iqj5fR"
 }
