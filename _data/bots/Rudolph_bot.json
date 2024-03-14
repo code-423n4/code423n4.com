@@ -1,0 +1,16 @@
+{
+  "handle": "Rudolph_bot",
+  "crew": [
+    "rudolph"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x2aa9a2C3A4a863a79944b543C98a179F9998bADa"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0xb4B873d013576F05caC54f4F4C6109681733e0a5"
+    }
+  ]
+}
