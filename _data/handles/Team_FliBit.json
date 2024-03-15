@@ -1,9 +1,7 @@
 {
   "handle": "Team_FliBit",
-  "members": [
-    "14si2o_Flint",
-    "Naubit"
-  ],
+  "members": [],
+  "showOnLeaderboard": false,
   "paymentAddresses": [
     {
       "chain": "polygon",
