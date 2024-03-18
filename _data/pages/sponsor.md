@@ -53,7 +53,7 @@ Contests start Wednesday 00:00:00 UTC and end Tuesday 23:59 UTC. We schedule con
 
 ## 🤝 Step by step pre-contest process
 
-- If you haven't already, join the [C4 Discord](https://discord.gg/YgBwyreF9B) server and let us know you're interested in sponsoring a contest in the `#i-want-to-be-a-sponsor` channel.
+- If you haven't already, join the [C4 Discord](https://discord.gg/code4rena) server and let us know you're interested in sponsoring a contest in the `#i-want-to-be-a-sponsor` channel.
 - We'll set up a private repo for you to submit your contracts to be reviewed for scope and a recommended pot size.
 - After your code has been reviewed, a C4 Organizer will contact you to iron out the details.
 - Once we've received a deposit, we will finalize scheduling and begin to promote the contest to wardens.

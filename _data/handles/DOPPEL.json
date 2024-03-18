@@ -1,0 +1,13 @@
+{
+  "handle": "DOPPEL",
+  "members": [
+    "DJINN",
+    "onion"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x5cA2FEa4A4732F9Dc66be5Dd85a2a8Ce38738fF6"
+    }
+  ]
+}
