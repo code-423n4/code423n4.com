@@ -1,0 +1,11 @@
+{
+  "handle": "Nethermind",
+  "link": "https://nethermind.io/",
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xBc11295936Aa79d594139de1B2e12629414F3BDB"
+    }
+  ],
+  "showOnLeaderboard": false
+}
