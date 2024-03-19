@@ -1,0 +1,15 @@
+{
+  "handle": "KEVIN_COSTNER_WYATT_EARP",
+  "members": [
+    "matthewcsimpson",
+    "bluejacket"
+  ],
+  "link": "code4rena.com",
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619"
+    }
+  ],
+  "image": "./avatars/KEVIN_COSTNER_WYATT_EARP.png"
+}
