@@ -1,0 +1,18 @@
+{
+  "handle": "elcore",
+  "members": [
+    "xploeed",
+    "kind0"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x76C33C1B1762196Fd630bF01008272aF09263f34"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x76C33C1B1762196Fd630bF01008272aF09263f34"
+    }
+  ],
+  "image": "./avatars/elcore.png"
+}
