@@ -1,0 +1,13 @@
+{
+  "handle": "YP",
+  "members": [
+    "yixxas",
+    "P12473"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x9079426b034c524EBd6cAC9Cb78DbE8CB0749f4E"
+    }
+  ]
+}

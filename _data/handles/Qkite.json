@@ -1,0 +1,18 @@
+{
+  "handle": "Qkite",
+  "members": [
+    "deth",
+    "0x3b"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x7a79f608fE8302283C26C61A834d6fdf6FacF05F"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x7a79f608fE8302283C26C61A834d6fdf6FacF05F"
+    }
+  ],
+  "image": "./avatars/Qkite.png"
+}

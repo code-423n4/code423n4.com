@@ -1,0 +1,13 @@
+{
+  "handle": "RamenPeople",
+  "members": [
+    "kimchi",
+    "wasabi"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xc57755b06F110Ee51E92cecB2e07bEd2C8508285"
+    }
+  ]
+}

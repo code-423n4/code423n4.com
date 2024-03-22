@@ -1,0 +1,20 @@
+{
+  "handle": "TuringConsulting",
+  "members": [
+    "Saintcode_",
+    "0xadrii",
+    "JosepBove"
+  ],
+  "link": "https://twitter.com/TuringCons",
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x14306f86629E6bc885375a1f81611a4208316B2b"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x14306f86629E6bc885375a1f81611a4208316B2b"
+    }
+  ],
+  "image": "./avatars/TuringConsulting.png"
+}

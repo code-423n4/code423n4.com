@@ -1,0 +1,14 @@
+{
+  "handle": "BI_security",
+  "members": [
+    "b0g0",
+    "ilchovski"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xCBDC7b7626d26A9f89e5aAeb4B92448e8F64d79e"
+    }
+  ],
+  "image": "./avatars/BI_security.png"
+}
