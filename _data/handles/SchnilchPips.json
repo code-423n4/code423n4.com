@@ -1,0 +1,13 @@
+{
+  "handle": "SchnilchPips",
+  "members": [
+    "TheSchnilch",
+    "EngrPips"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x740718Ff7C76517977cce1a4e73520079030C9C4"
+    }
+  ]
+}
