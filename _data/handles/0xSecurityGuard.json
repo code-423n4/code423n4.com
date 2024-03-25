@@ -1,0 +1,14 @@
+{
+  "handle": "0xSecurityGuard",
+  "members": [
+    "zhaojohnson",
+    "hunter_w3b",
+    "niser93"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x9986fB0125591173E48f9E3D47B8250Fa60A2b1a"
+    }
+  ]
+}
