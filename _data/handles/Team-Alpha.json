@@ -1,5 +1,6 @@
 {
   "handle": "Team-Alpha",
+  "image": "./avatars/Team-Alpha.png",
   "members": [
     "BBHunt3r",
     "hagrid"
@@ -7,11 +8,11 @@
   "paymentAddresses": [
     {
       "chain": "polygon",
-      "address": "0xb24c9c43a29846cddd04beceaf8781d82da9a95d"
+      "address": "0x9261c3aaf7211cf7e70ef3a550354f8ecd51d20d"
     },
     {
       "chain": "ethereum",
-      "address": "0xb24c9c43a29846cddd04beceaf8781d82da9a95d"
+      "address": "0x9261c3aaf7211cf7e70ef3a550354f8ecd51d20d"
     }
   ]
 }

@@ -1,0 +1,14 @@
+{
+  "handle": "NPCsCorp",
+  "members": [
+    "0xStalin",
+    "sin1st3r__"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xFbAD768340a24E06384591537d7D2F80693d6aDB"
+    }
+  ],
+  "image": "./avatars/NPCsCorp.png"
+}

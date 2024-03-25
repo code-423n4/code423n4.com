@@ -1,0 +1,18 @@
+{
+  "handle": "c47ch3m4ll",
+  "members": [
+    "JohnnyTime",
+    "t4sk"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xFf3d275BB50bB677Ea1f117730B68Cf42651a60f"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0xFf3d275BB50bB677Ea1f117730B68Cf42651a60f"
+    }
+  ],
+  "image": "./avatars/c47ch3m4ll.png"
+}

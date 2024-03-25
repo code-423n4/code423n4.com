@@ -1,0 +1,19 @@
+{
+  "handle": "xfvyviem",
+  "members": [
+    "attacklancer",
+    "trqvel"
+  ],
+  "link": "t.me/@viemfinance",
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xb56a0108e992d0C98179AF533973d47fe465A6Cf"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0xb56a0108e992d0C98179AF533973d47fe465A6Cf"
+    }
+  ],
+  "image": "./avatars/xfvyviem.png"
+}
