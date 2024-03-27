@@ -2,10 +2,7 @@
   "handle": "RED-LOTUS-REACH",
   "members": [
     "escrow",
-    "DedOhWale",
-    "BlockChomper",
-    "reentrant",
-    "SaharDevep"
+    "BlockChomper"
   ],
   "paymentAddresses": [
     {

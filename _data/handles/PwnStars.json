@@ -1,0 +1,17 @@
+{
+  "handle": "PwnStars",
+  "members": [
+    "sakshamguruji",
+    "qbs"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xf9f1898f8253c809e1ef506e92a1aa01446670ac"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0xf9f1898f8253C809e1EF506E92a1aa01446670aC"
+    }
+  ]
+}

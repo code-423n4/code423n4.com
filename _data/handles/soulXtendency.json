@@ -1,0 +1,13 @@
+{
+  "handle": "soulXtendency",
+  "members": [
+    "Tendency",
+    "Soul22"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xD82Cc113Ba9E85062a886a0675f65439E7c9834b"
+    }
+  ]
+}

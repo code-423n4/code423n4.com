@@ -1,11 +1,8 @@
 {
   "handle": "COSMIC-BEE-REACH",
   "members": [
-    "escrow",
     "0xarno",
-    "solsaver",
-    "pxng0lin",
-    "Kaccatur"
+    "solsaver"
   ],
   "paymentAddresses": [
     {
