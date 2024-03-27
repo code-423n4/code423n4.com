@@ -1,5 +1,7 @@
 {
   "handle": "SBSecurity",
+  "link": "https://github.com/SB-Security/audits",
+  "image": "./avatars/SBSecurity.png",
   "members": [
     "Blckhv",
     "Slavcheww"
