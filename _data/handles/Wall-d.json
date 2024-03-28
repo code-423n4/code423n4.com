@@ -1,0 +1,13 @@
+{
+  "handle": "Wall-d",
+  "members": [
+    "Mahmudsudo",
+    "Unstacked"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x000d6B184928ae05F29EeDed091174c6cE5F183C"
+    }
+  ]
+}
