@@ -1,18 +1,18 @@
 {
   "handle": "Hoax",
+  "link": "https://linkedin.com/in/collinsoden",
   "members": [
     "Collinsoden",
     "ewah"
   ],
-  "link": "https://linkedin.com/in/collinsoden",
   "paymentAddresses": [
     {
       "chain": "polygon",
-      "address": "0x11d1f82d3cc43826b0fd1768587240d3ac8ae00e"
+      "address": "0x9d91ed6f34264d5ec4bd65ff66e4115c6ac65245"
     },
     {
       "chain": "ethereum",
-      "address": "0x11d1f82d3cc43826b0fd1768587240d3ac8ae00e"
+      "address": "0x9d91ed6f34264d5ec4bd65ff66e4115c6ac65245"
     }
   ]
 }
