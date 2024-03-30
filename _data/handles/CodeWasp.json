@@ -1,5 +1,7 @@
 {
   "handle": "CodeWasp",
+  "link": "https://twitter.com/codew4sp",
+  "image": "./avatars/CodeWasp.png",
   "members": [
     "kuprum",
     "slylandro_star",
@@ -15,6 +17,5 @@
       "chain": "ethereum",
       "address": "0xC4855c81401d108Ba73c98A2E62Fc17c5953d40A"
     }
-  ],
-  "image": "./avatars/CodeWasp.png"
+  ]
 }
