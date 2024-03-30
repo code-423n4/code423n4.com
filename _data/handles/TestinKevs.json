@@ -1,14 +1,14 @@
 {
-  "handle": "Testing",
-  "image": "./avatars/Testing.png",
+  "handle": "TestinKevs",
   "members": [
-    "matthewcsimpson",
-    "SamusElderg"
+    "SamusElderg",
+    "matthewcsimpson"
   ],
   "paymentAddresses": [
     {
       "chain": "polygon",
       "address": "0x8bb2f4c523449365e735e2e0244763757bdc0f98"
     }
-  ]
+  ],
+  "image": "./avatars/TestinKevs.png"
 }
