@@ -1,0 +1,15 @@
+{
+  "handle": "ButterflySecure",
+  "members": [
+    "Kamakura",
+    "anemone0759"
+  ],
+  "link": "https://butterflysec.com",
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x9FFFfbb2991f77f132554376c1b08281ae47F7F6"
+    }
+  ],
+  "image": "./avatars/ButterflySecure.png"
+}
