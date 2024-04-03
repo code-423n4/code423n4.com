@@ -1,0 +1,18 @@
+{
+  "handle": "cherrySec",
+  "members": [
+    "linmiaomiao",
+    "SinceJuly",
+    "breakpo1nt"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xef64AC016621019d9123B3cCbc62dAe9c81EEEFb"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0xef64AC016621019d9123B3cCbc62dAe9c81EEEFb"
+    }
+  ]
+}
