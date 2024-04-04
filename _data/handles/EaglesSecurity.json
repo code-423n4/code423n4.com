@@ -1,0 +1,13 @@
+{
+  "handle": "EaglesSecurity",
+  "members": [
+    "kane-goldmisth",
+    "julian_avantgarde"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x8F9EA5B95d784a46890b0a49684439cB677f9186"
+    }
+  ]
+}
