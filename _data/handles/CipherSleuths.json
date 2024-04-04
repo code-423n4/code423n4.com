@@ -1,0 +1,13 @@
+{
+  "handle": "CipherSleuths",
+  "members": [
+    "Viraz",
+    "Udsen"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xC583312280b4366d90e5DFCE22096D0593A1CB7F"
+    }
+  ]
+}
