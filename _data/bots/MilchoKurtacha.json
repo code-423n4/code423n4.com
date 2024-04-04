@@ -1,0 +1,12 @@
+{
+  "handle": "MilchoKurtacha",
+  "crew": [
+    "sme6en"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xfb5fD9425c4BF24ab44d26F75C40FC979096b724"
+    }
+  ]
+}

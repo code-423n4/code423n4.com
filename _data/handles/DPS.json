@@ -1,0 +1,13 @@
+{
+  "handle": "DPS",
+  "members": [
+    "0xJaeger",
+    "yvuchev"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xF3914730304022035ADA98D63471B71F4B39722B"
+    }
+  ]
+}
