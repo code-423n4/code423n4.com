@@ -1,0 +1,17 @@
+{
+  "handle": "BARW",
+  "members": [
+    "BenRai",
+    "albertwh1te"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x55E44232BE66f69D7e116F8b7f8d07755b2cE7e5"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x55E44232BE66f69D7e116F8b7f8d07755b2cE7e5"
+    }
+  ]
+}

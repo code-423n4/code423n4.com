@@ -1,0 +1,15 @@
+{
+  "handle": "Sentryx",
+  "members": [
+    "flacko",
+    "Buggsy"
+  ],
+  "link": "https://twitter.com/sentryxsec",
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x7DfF1D5a476b62a33bD9a8550C3f4Cf5839AFFed"
+    }
+  ],
+  "image": "./avatars/Sentryx.png"
+}

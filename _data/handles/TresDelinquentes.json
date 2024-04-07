@@ -1,0 +1,19 @@
+{
+  "handle": "TresDelinquentes",
+  "members": [
+    "deth",
+    "marchev",
+    "Silvermist"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xd134E4A3c8EC0FafcBf45F0bE4d759C86162C638"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0xd134E4A3c8EC0FafcBf45F0bE4d759C86162C638"
+    }
+  ],
+  "image": "./avatars/TresDelinquentes.png"
+}

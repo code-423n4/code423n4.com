@@ -1,0 +1,15 @@
+{
+  "handle": "Egis_Security",
+  "members": [
+    "nmirchev8",
+    "deth"
+  ],
+  "link": "https://github.com/Egis-Security/audits/blob/main/README.md",
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xE7Bd1E29Ef6d0E24fdAdb79D72de585AC76f1e5a"
+    }
+  ],
+  "image": "./avatars/Egis_Security.png"
+}

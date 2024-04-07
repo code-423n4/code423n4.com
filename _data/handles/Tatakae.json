@@ -1,0 +1,13 @@
+{
+  "handle": "Tatakae",
+  "members": [
+    "SaharDevep",
+    "mahdikarimi"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xf606969D93919Cc17ee1ed4cdBf9FA538f0d6CcE"
+    }
+  ]
+}
