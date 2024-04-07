@@ -1,0 +1,14 @@
+{
+  "handle": "UbiquitousComputing",
+  "members": [
+    "thekmj",
+    "simplor"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x4aCAeaD5249770F268F18284Ef7e71039DC127Fb"
+    }
+  ],
+  "image": "./avatars/UbiquitousComputing.png"
+}

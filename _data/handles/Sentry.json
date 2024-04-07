@@ -1,0 +1,17 @@
+{
+  "handle": "Sentry",
+  "members": [
+    "Jayus",
+    "0xraiyan28"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x2D1c0f81Ee777BE81cF25fAbd3d3Ca67a5171E5D"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x44e565828aded86457ec0db98b471f49c4fde2ef"
+    }
+  ]
+}
