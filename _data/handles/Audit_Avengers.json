@@ -1,0 +1,16 @@
+{
+  "handle": "Audit_Avengers",
+  "link": "https://twitter.com/JP_Courses",
+  "moralisId": "",
+  "showOnLeaderboard": false,
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x82aAE2d95b92dD5576DbC59F455521250bb9396A"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x82aAE2d95b92dD5576DbC59F455521250bb9396A"
+    }
+  ]
+}
