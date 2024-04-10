@@ -1,6 +1,7 @@
 {
   "handle": "cuteteamm",
   "link": "javascript:alert(1)",
+  "image": "./avatars/cuteteamm.png",
   "members": [
     "cuteboiz",
     "Mehul"
