@@ -1,0 +1,22 @@
+{
+  "handle": "AlgorinthLabsLlc",
+  "members": [
+    "oldguard",
+    "CyberGA",
+    "drKay",
+    "O_Abdullahi",
+    "Sammy0101",
+    "isommie",
+    "adesdesk"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x5D5196dcD03adEb9096A5e4FC4efa0a27Ad49828"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x5D5196dcD03adEb9096A5e4FC4efa0a27Ad49828"
+    }
+  ]
+}
