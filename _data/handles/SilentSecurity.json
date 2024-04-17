@@ -1,0 +1,17 @@
+{
+  "handle": "SilentSecurity",
+  "members": [
+    "contractsecure",
+    "sil3th"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x49d0eB86CCAD4da989DC54feCc1527a4c5a5D3b6"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x49d0eB86CCAD4da989DC54feCc1527a4c5a5D3b6"
+    }
+  ]
+}

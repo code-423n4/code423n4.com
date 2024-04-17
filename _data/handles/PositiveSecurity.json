@@ -1,0 +1,16 @@
+{
+  "handle": "PositiveSecurity",
+  "link": " https://x.com/PositiveWeb3",
+  "image": "./avatars/PositiveSecurity.png",
+  "members": [
+    "AndreyBa",
+    "PositiveWeb3",
+    "sosahacker"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xfb7e3d2db3bc8ccf6c608212A4430A0A520789aF"
+    }
+  ]
+}
