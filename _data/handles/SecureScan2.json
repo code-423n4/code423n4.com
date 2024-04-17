@@ -1,0 +1,18 @@
+{
+  "handle": "SecureScan2",
+  "members": [
+    "SecureScan",
+    "mohammed"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x2Bb9CBA70EC525018c46245dDd3863448d17D226"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x2Bb9CBA70EC525018c46245dDd3863448d17D226"
+    }
+  ],
+  "image": "./avatars/SecureScan2.png"
+}

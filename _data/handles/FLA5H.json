@@ -1,0 +1,18 @@
+{
+  "handle": "FLA5H",
+  "members": [
+    "0xPluto",
+    "Aiknr"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xe4a8b28Ed378713Fc742bFe05aD3Fb4d955fC728"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x435654CbB37949d658a42a53DFdC0ddD3925CfE2"
+    }
+  ],
+  "image": "./avatars/FLA5H.png"
+}

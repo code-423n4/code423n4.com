@@ -1,0 +1,17 @@
+{
+  "handle": "zero-idea",
+  "members": [
+    "juancito",
+    "adriro"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xCbf0c4fddAee3E5fC821EB7D3559859bd31771F9"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0xCbf0c4fddAee3E5fC821EB7D3559859bd31771F9"
+    }
+  ]
+}

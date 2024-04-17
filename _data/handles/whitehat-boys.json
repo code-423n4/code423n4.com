@@ -1,0 +1,13 @@
+{
+  "handle": "whitehat-boys",
+  "members": [
+    "Viraz",
+    "Tripathi"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x1dAF2DEe7B5D70A6693d9D1363D40df335538789"
+    }
+  ]
+}
