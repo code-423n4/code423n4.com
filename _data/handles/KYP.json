@@ -1,0 +1,17 @@
+{
+  "handle": "KYP",
+  "members": [
+    "yotov721",
+    "givn"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x2600b93Ec96A6feAe50989a26af0544556F77b05"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x2600b93Ec96A6feAe50989a26af0544556F77b05"
+    }
+  ]
+}
