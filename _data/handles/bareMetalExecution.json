@@ -1,8 +1,9 @@
 {
   "handle": "bareMetalExecution",
+  "image": "./avatars/bareMetalExecution.png",
   "members": [
     "Daniel526",
-    "VIELITE"
+    "Tigerfrake"
   ],
   "paymentAddresses": [
     {
