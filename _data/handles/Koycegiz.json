@@ -1,0 +1,18 @@
+{
+  "handle": "Koycegiz",
+  "members": [
+    "ljj",
+    "ulas"
+  ],
+  "link": "https://twitter.com/ljjeth",
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x526C34d58f50Bc2b610352f211841caDB7b20caA"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x526C34d58f50Bc2b610352f211841caDB7b20caA"
+    }
+  ]
+}
