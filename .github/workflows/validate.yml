@@ -16,5 +16,11 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 16.x
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@v44
       - run: yarn --frozen-lockfile
-      - run: yarn validate
+      - name: Validate
+        env: 
+          ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
+        run: yarn validate ${ALL_CHANGED_FILES}
