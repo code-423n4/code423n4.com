@@ -1,206 +1,68 @@
-// A script to validate data.
-// Run with `yarn validate`.
-const { readFile, stat } = require("fs/promises");
-const path = require("path");
-const glob = require("tiny-glob");
+const { readFile } = require("fs/promises");
+const fetch = require("node-fetch");
 
-async function getUniqueHandles() {
-  const handles = await glob("./_data/handles/*.json");
-  const uniqueHandles = new Set();
-  for (const handleFile of handles) {
-    const blob = await readFile(handleFile);
-    let parsedHandle;
-    try {
-      parsedHandle = JSON.parse(blob);
-    } catch (err) {
-      console.error(`Unable to parse JSON file at ${handleFile}`);
-      continue;
-    }
-
-    uniqueHandles.add(parsedHandle.handle);
-  }
-
-  return uniqueHandles;
-}
-
-// Validate handles.
-async function validateHandles() {
-  const handles = await glob("./_data/handles/*.json");
-  let passedValidation = true;
-  for (const handleFile of handles) {
-    const blob = await readFile(handleFile);
-    let parsedHandle;
-    try {
-      parsedHandle = JSON.parse(blob);
-    } catch (err) {
-      console.error(`Unable to parse JSON file at ${handleFile}`);
-      passedValidation = false;
-      continue;
-    }
-
-    if (!Object.prototype.hasOwnProperty.call(parsedHandle, "handle")) {
-      console.error(`Unable to find key "handle" in ${handleFile}`);
-      passedValidation = false;
-    }
-
-    if (
-      Object.prototype.hasOwnProperty.call(parsedHandle, "image") &&
-      parsedHandle.image !== ""
-    ) {
-      if (!parsedHandle.image.startsWith("./avatars/")) {
-        console.error(
-          `"image" property must begin with "./avatars" in ${handleFile}. Found ${parsedHandle.image}.`
-        );
-        passedValidation = false;
-      }
-
-      try {
-        await stat(
-          path.join(path.resolve("./_data/handles"), parsedHandle.image)
-        );
-      } catch (err) {
-        console.error(
-          `Unable to read file from "image" key in ${handleFile}. Does "${parsedHandle.image}" exist?`
-        );
-        passedValidation = false;
-      }
-    }
-  }
-
-  if (!passedValidation) {
-    throw new Error(
-      "❌  Handle validation failed. See above log for more information."
-    );
-  }
-
-  console.log("✅  Handle validation passed!");
-}
-
-// Validate teams.
-async function validateTeams() {
-  const uniqueHandles = await getUniqueHandles();
-  const handles = await glob("./_data/handles/*.json");
-  let passedValidation = true;
-  for (const handleFile of handles) {
-    const blob = await readFile(handleFile);
-    let parsedHandle;
-    try {
-      parsedHandle = JSON.parse(blob);
-    } catch (err) {
-      console.error(`Unable to parse JSON file at ${handleFile}`);
-      passedValidation = false;
-      continue;
-    }
-
-    if (Object.prototype.hasOwnProperty.call(parsedHandle, "members")) {
-      Array.prototype.forEach.call(parsedHandle.members, (member) => {
-        if (!uniqueHandles.has(member)) {
-          console.error(
-            `Team specified in ${handleFile} has unregistered handle: ${member}`
-          );
-          passedValidation = false;
-        }
-      });
-    }
-  }
-
-  if (!passedValidation) {
-    throw new Error(
-      "❌  Teams validation failed. See above log for more information."
-    );
-  }
-
-  console.log("✅  Handle validation passed!");
-}
-
-async function validateOrganizations() {
-  const orgs = await glob("./_data/orgs/*.json");
-  let passedValidation = true;
-  for (const orgFile of orgs) {
-    const blob = await readFile(orgFile);
-    let parsedOrg;
-    try {
-      parsedOrg = JSON.parse(blob);
-    } catch (err) {
-      console.error(`Unable to parse JSON file at ${orgFile}`);
-      passedValidation = false;
-      continue;
-    }
-
-    if (!Object.prototype.hasOwnProperty.call(parsedOrg, "image")) {
-      console.error(`Unable to find key "image" in ${orgFile}`);
-      passedValidation = false;
-      continue;
-    }
-
-    try {
-      await stat(path.join(path.resolve("./_data/orgs"), parsedOrg.image));
-    } catch (err) {
-      console.error(
-        `Unable to read file from "image" key in ${orgFile}. Does "${parsedOrg.image}" exist?`
-      );
-      passedValidation = false;
-    }
-  }
-
-  if (!passedValidation) {
-    throw new Error(
-      "❌  Organization validation failed. See above log for more information."
-    );
-  }
-
-  console.log("✅  Organization validation passed!");
-}
-
-// async function validateFindings() {
-//   let passedValidation = true;
-//   let parsedFindings;
-//   try {
-//     parsedFindings = await getApiFindingsData();
-//   } catch (err) {
-//     console.error(`Unable to parse JSON file at ${findingsFile}`);
-//     passedValidation = false;
-//   }
-
-//   const uniqueHandles = await getUniqueHandles();
-//   const unknownHandles = new Set();
-//   const unknownContestIds = new Set();
-//   for (const finding of parsedFindings) {
-//     if (!uniqueHandles.has(finding.handle)) {
-//       unknownHandles.add(finding.handle);
-//       passedValidation = false;
-//       continue;
-//     }
-//   }
-
-//   if (unknownHandles.size > 0) {
-//     console.error(`Found ${unknownHandles.size} unknown handles:`);
-//     console.log(unknownHandles);
-//   }
-
-//   if (unknownContestIds.size > 0) {
-//     console.error(`Found ${unknownContestIds.size} unknown contestids:`);
-//     console.log(unknownContestIds);
-//   }
-
-//   if (!passedValidation) {
-//     throw new Error(
-//       "❌  Findings validation failed. See above log for more information."
-//     );
-//   }
-
-//   console.log("✅  Findings validation passed!");
-// }
-
+// validate teams
 (async () => {
-  try {
-    await validateHandles();
-    await validateTeams();
-    await validateOrganizations();
-    // await validateFindings();
-    console.log("Validation passed!");
-  } catch (err) {
-    console.error(err);
-    process.exit(1);
+  const [argv1, argv2, ...changedFiles] = process.argv; // get all changed files
+  let passedValidation = true;
+  for (const changedFile of changedFiles) {
+    // for each changed file, do validation for team files
+    if (!changedFile.startsWith("_data/handles")) {
+      continue;
+    }
+    // read and parse the changed file
+    const blob = await readFile("./" + changedFile);
+    let parsedHandle;
+    try {
+      parsedHandle = JSON.parse(blob);
+    } catch (err) {
+      console.error(`❌ Unable to parse JSON file at ${changedFile}`);
+      passedValidation = false;
+      continue;
+    }
+    // check that the required handle field exists
+    const teamHandle = parsedHandle.handle;
+    if (!teamHandle) {
+      console.error("❌ Handle field must exist.");
+      passedValidation = false;
+      continue;
+    }
+    // check that the required members field exists
+    const teamMembers = parsedHandle.members;
+    if (!teamHandle) {
+      console.error("❌ Members field must exist.");
+      passedValidation = false;
+      continue;
+    }
+    // check that there is at least 1 member
+    if (teamMembers.length < 1) {
+      console.error("❌ Team must have 1 or more members");
+      passedValidation = false;
+      continue;
+    }
+    // give warning if handle exists, in case this is a team creation (as opposed to team edit).
+    const res = await fetch(
+      `https://api.code4rena.com/api/get-user?id=${teamHandle}`
+    ); // fetches either team or user
+    if (res.status === 200) {
+      console.info(
+        `❗ Handle ${teamHandle} is taken. Ignore if editting team.`
+      );
+    }
+    // check that each member in the team exists
+    for (const member of parsedHandle.members) {
+      const res = await fetch(
+        `https://api.code4rena.com/api/get-user?id=${member}`
+      );
+      if (res.status !== 200) {
+        console.error(`❌ Team member ${member} does not exist.`);
+        passedValidation = false;
+      }
+    }
+  }
+  if (!passedValidation) {
+    throw new Error(
+      "❌  Team validation failed. See above log for more information."
+    );
   }
 })();
