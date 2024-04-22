@@ -29,7 +29,7 @@ const fetch = require("node-fetch");
     }
     // check that the required members field exists
     const teamMembers = parsedHandle.members;
-    if (!teamHandle) {
+    if (!teamMembers) {
       console.error("❌ Members field must exist.");
       passedValidation = false;
       continue;
