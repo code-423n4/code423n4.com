@@ -1,0 +1,18 @@
+{
+  "handle": "TECHFUND",
+  "link": "https://twitter.com/Techfund_inc",
+  "image": "./avatars/TECHFUND.png",
+  "members": [
+    "piyushshukla",
+    "Gowtham_Ponnana",
+    "alternato7368",
+    "engineer",
+    "ravikiranweb3"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x1d502EDB891C3249931E3dF3b5473C164DD559cC"
+    }
+  ]
+}
