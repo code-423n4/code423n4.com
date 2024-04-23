@@ -1,0 +1,14 @@
+{
+  "handle": "BlockBreach_Audits",
+  "members": [
+    "NullbutC00L",
+    "invertedClimbing",
+    "chikenDOT"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x14bc2689C74b1CA0571C1A3329254067DA166C24"
+    }
+  ]
+}
