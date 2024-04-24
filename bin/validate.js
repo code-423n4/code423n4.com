@@ -7,7 +7,10 @@ const fetch = require("node-fetch");
   let passedValidation = true;
   for (const changedFile of changedFiles) {
     // for each changed file, do validation for team files
-    if (!changedFile.startsWith("_data/handles")) {
+    if (
+      !changedFile.startsWith("_data/handles") ||
+      changedFile.startsWith("_data/handles/avatars")
+    ) {
       continue;
     }
     // read and parse the changed file
@@ -34,20 +37,22 @@ const fetch = require("node-fetch");
       passedValidation = false;
       continue;
     }
-    // check that there is at least 1 member
-    if (teamMembers.length < 1) {
-      console.error("❌ Team must have 1 or more members");
-      passedValidation = false;
-      continue;
-    }
     // give warning if handle exists, in case this is a team creation (as opposed to team edit).
     const res = await fetch(
-      `https://api.code4rena.com/api/get-user?id=${teamHandle}`
-    ); // fetches either team or user
+      `https://api.code4rena.com/api/get-user?id=${teamHandle}` // fetches either team or user
+    );
+    // if the handle already exists, give a warning (could be team edit)
     if (res.status === 200) {
       console.info(
         `❗ Handle ${teamHandle} is taken. Ignore if editting team.`
       );
+    } else {
+      // team doesn't exist, so must be a team creation; check that there is at least 1 member
+      if (teamMembers.length < 1) {
+        console.error("❌ Team must have 1 or more members");
+        passedValidation = false;
+        continue;
+      }
     }
     // check that each member in the team exists
     for (const member of parsedHandle.members) {
