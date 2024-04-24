@@ -7,7 +7,10 @@ const fetch = require("node-fetch");
   let passedValidation = true;
   for (const changedFile of changedFiles) {
     // for each changed file, do validation for team files
-    if (!changedFile.startsWith("_data/handles")) {
+    if (
+      !changedFile.startsWith("_data/handles") ||
+      changedFile.startsWith("_data/handles/avatars")
+    ) {
       continue;
     }
     // read and parse the changed file
