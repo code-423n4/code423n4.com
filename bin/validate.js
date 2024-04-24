@@ -58,13 +58,15 @@ const fetch = require("node-fetch");
       }
     }
     // check that each member in the team exists
-    for (const member of parsedHandle.members) {
-      const res = await fetch(
-        `https://api.code4rena.com/api/get-user?id=${member}`
-      );
-      if (res.status !== 200) {
-        console.error(`❌ Team member ${member} does not exist.`);
-        passedValidation = false;
+    if (parsedHandle.members) {
+      for (const member of parsedHandle.members) {
+        const res = await fetch(
+          `https://api.code4rena.com/api/get-user?id=${member}`
+        );
+        if (res.status !== 200) {
+          console.error(`❌ Team member ${member} does not exist.`);
+          passedValidation = false;
+        }
       }
     }
   }
