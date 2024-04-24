@@ -1,9 +1,7 @@
 {
   "handle": "onchain-guardians",
-  "members": [
-    "Viraz",
-    "0xepley"
-  ],
+  "members": [],
+  "showOnLeaderboard": false,
   "paymentAddresses": [
     {
       "chain": "polygon",
