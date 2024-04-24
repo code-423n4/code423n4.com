@@ -30,12 +30,12 @@ const fetch = require("node-fetch");
       passedValidation = false;
       continue;
     }
-    // check that the required members field exists
+    // check that the required members field exists; warning if not as it may be a warden
     const teamMembers = parsedHandle.members;
     if (!teamMembers) {
-      console.error("❌ Members field must exist.");
-      passedValidation = false;
-      continue;
+      console.info(
+        "❗ Members field must exist for teams. Ignore for wardens."
+      );
     }
     // give warning if handle exists, in case this is a team creation (as opposed to team edit).
     const res = await fetch(
@@ -48,8 +48,11 @@ const fetch = require("node-fetch");
       );
     } else {
       // team doesn't exist, so must be a team creation; check that there is at least 1 member
-      if (teamMembers.length < 1) {
-        console.error("❌ Team must have 1 or more members");
+      if (parsedHandle.members && teamMembers.length < 1) {
+        // if members exist it must be a team
+        console.error(
+          "❗Teams should have 1 or more members. Ignore if for warden."
+        );
         passedValidation = false;
         continue;
       }
