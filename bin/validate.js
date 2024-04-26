@@ -38,11 +38,14 @@ const fetch = require("node-fetch");
       );
     }
     // give warning if handle exists, in case this is a team creation (as opposed to team edit).
-    const res = await fetch(
-      `https://api.code4rena.com/api/get-user?id=${teamHandle}` // fetches either team or user
-    );
+    const userFetches = await Promise.all([
+      await fetch(`https://api.code4rena.com/api/get-user?id=${teamHandle}`), // registered users and teams
+      await fetch(
+        `https://api-v1.code4rena.com/users/nonce?handle=${teamHandle}`
+      ), // catches non-verified/archived users not in v0
+    ]);
     // if the handle already exists, give a warning (could be team edit)
-    if (res.status === 200) {
+    if (userFetches[0].status === 200 || userFetches[1].status === 200) {
       console.info(
         `❗ Handle ${teamHandle} is taken. Ignore if editting team.`
       );
