@@ -1,0 +1,19 @@
+{
+  "handle": "LessDupes",
+  "members": [
+    "sin1st3r__",
+    "EV_om",
+    "3docSec"
+  ],
+  "link": "https://twitter.com/sin1st3r__",
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x3D0C2937001723782288EA0082fb99793097C0D3"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x3D0C2937001723782288EA0082fb99793097C0D3"
+    }
+  ]
+}
