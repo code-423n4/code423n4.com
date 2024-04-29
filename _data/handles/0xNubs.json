@@ -1,0 +1,14 @@
+{
+  "handle": "0xNubs",
+  "members": [
+    "Katrix",
+    "zeref",
+    "Sancybars"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x4E540CBc341a23EaB2E8a082CA5Ee8314caA5bDA"
+    }
+  ]
+}
