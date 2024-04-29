@@ -1,0 +1,17 @@
+{
+  "handle": "WinSec",
+  "members": [
+    "0xweb3boy",
+    "ni8mare"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x36A391B00c70e11F88Fd2F20dC5701Dd54B837e6"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x36A391B00c70e11F88Fd2F20dC5701Dd54B837e6"
+    }
+  ]
+}
