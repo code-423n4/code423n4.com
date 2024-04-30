@@ -1,11 +1,12 @@
 {
   "handle": "LessDupes",
+  "link": "https://twitter.com/sin1st3r__",
+  "image": "./avatars/LessDupes.png",
   "members": [
     "sin1st3r__",
     "EV_om",
     "3docSec"
   ],
-  "link": "https://twitter.com/sin1st3r__",
   "paymentAddresses": [
     {
       "chain": "polygon",
