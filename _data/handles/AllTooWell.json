@@ -1,0 +1,14 @@
+{
+  "handle": "AllTooWell",
+  "members": [
+    "zhuying",
+    "0x996"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xC74377d49B9aCc4C3A9597b7BabD7F65063DF227"
+    }
+  ],
+  "image": "./avatars/AllTooWell.png"
+}
