@@ -1,0 +1,18 @@
+{
+  "handle": "GoatedAudits",
+  "members": [
+    "0xjuan",
+    "Spearmint"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xB30f6C0F8541Fd856742267a16bf2B08E134272d"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0xB30f6C0F8541Fd856742267a16bf2B08E134272d"
+    }
+  ],
+  "image": "./avatars/GoatedAudits.png"
+}
