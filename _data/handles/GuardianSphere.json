@@ -1,9 +1,9 @@
 {
   "handle": "GuardianSphere",
+  "image": "./avatars/GuardianSphere.png",
   "members": [
     "Mylifechangefast_eth",
     "Bz",
-    "vks747",
     "unique"
   ],
   "paymentAddresses": [
