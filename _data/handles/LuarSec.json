@@ -1,0 +1,13 @@
+{
+  "handle": "LuarSec",
+  "members": [
+    "GhK3Ndf",
+    "lod1n"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xc9Ee754271fd62243D124E677C20831cd5dE3528"
+    }
+  ]
+}
