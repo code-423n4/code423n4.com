@@ -1,0 +1,18 @@
+{
+  "handle": "Web3Vikings",
+  "members": [
+    "shealtielanz",
+    "0xdice91"
+  ],
+  "link": "https://twitter.com/shealtielanz",
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x86b8fb59ea9dab7a7de10b6dc9d8aad93ce24049"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x86b8fb59ea9dab7a7de10b6dc9d8aad93ce24049"
+    }
+  ]
+}
