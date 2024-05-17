@@ -1,0 +1,17 @@
+{
+  "handle": "TPSec",
+  "members": [
+    "PetarTolev",
+    "Pataroff"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xBb0523d5FAE9356f01B2bBccf76ff7A2b58C91c3"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0xBb0523d5FAE9356f01B2bBccf76ff7A2b58C91c3"
+    }
+  ]
+}
