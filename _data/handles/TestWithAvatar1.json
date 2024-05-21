@@ -1,0 +1,22 @@
+{
+  "handle": "TestWithAvatar1",
+  "members": [
+    "SamusElderg",
+    "SgtWhiskers"
+  ],
+  "link": "https://twitter.com",
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x0000000000000000000000000000000000000000"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x0000000000000000000000000000000000000001"
+    },
+    {
+      "chain": "arbitrum",
+      "address": "0x0000000000000000000000000000000000000002"
+    }
+  ]
+}
