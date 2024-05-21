@@ -1,11 +1,8 @@
 {
   "handle": "ASCANsec",
   "image": "./avatars/ASCANsec.png",
-  "members": [
-    "Mylifechangefast_eth",
-    "Alchmy952",
-    "Mahmudsudo"
-  ],
+  "members": [],
+  "showOnLeaderboard": false,
   "paymentAddresses": [
     {
       "chain": "polygon",
