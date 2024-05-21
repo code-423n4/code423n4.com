@@ -1,9 +1,7 @@
 {
   "handle": "LFGSecurity",
-  "members": [
-    "georgits",
-    "0xfusion"
-  ],
+  "members": [],
+  "showOnLeaderboard": false,
   "paymentAddresses": [
     {
       "chain": "polygon",
