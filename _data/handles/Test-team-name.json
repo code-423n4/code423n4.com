@@ -1,0 +1,21 @@
+{
+  "handle": "Test-team-name",
+  "members": [
+    "SamusElderg",
+    "jacobheun"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x0000000000000000000000000000000000000000"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x0000000000000000000000000000000000000000"
+    },
+    {
+      "chain": "arbitrum",
+      "address": "0x0000000000000000000000000000000000000000"
+    }
+  ]
+}
