@@ -1,9 +1,7 @@
 {
   "handle": "JollyJay",
-  "members": [
-    "Mylifechangefast_eth",
-    "jollytesimal"
-  ],
+  "members": [],
+  "showOnLeaderboard": false,
   "paymentAddresses": [
     {
       "chain": "polygon",
