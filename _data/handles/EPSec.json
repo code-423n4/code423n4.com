@@ -1,0 +1,22 @@
+{
+  "handle": "EPSec",
+  "members": [
+    "1337web3",
+    "petarP1998"
+  ],
+  "link": "https://x.com/EPSecEth",
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xa7b675E242Aba3D40863bA18F1b4dC68e2e5C669"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0xa7b675E242Aba3D40863bA18F1b4dC68e2e5C669"
+    },
+    {
+      "chain": "arbitrum",
+      "address": "0xa7b675E242Aba3D40863bA18F1b4dC68e2e5C669"
+    }
+  ]
+}
