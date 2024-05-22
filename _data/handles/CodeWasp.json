@@ -1,11 +1,9 @@
 {
   "handle": "CodeWasp",
   "link": "https://twitter.com/codew4sp",
-  "image": "./avatars/CodeWasp.png",
   "members": [
     "kuprum",
     "slylandro_star",
-    "spaghetticode_sentinel",
     "audithare"
   ],
   "paymentAddresses": [
