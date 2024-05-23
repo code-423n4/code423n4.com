@@ -1,0 +1,17 @@
+{
+  "handle": "winwin",
+  "members": [
+    "Satyam_Sharma",
+    "Sathish9098"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xcd5b4e912e2d0e4ff775663aa12cf81bf627c926"
+    },
+    {
+      "chain": "arbitrum",
+      "address": "0xcd5b4e912e2d0e4ff775663aa12cf81bf627c926"
+    }
+  ]
+}
