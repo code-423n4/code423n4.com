@@ -1,0 +1,22 @@
+{
+  "handle": "Predy",
+  "members": [
+    "syuhei",
+    "wshino"
+  ],
+  "link": "https://x.com/predyfinance",
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xc0C6Be768cfa7C3E7996245e3506ad5b523b359b"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0xc0C6Be768cfa7C3E7996245e3506ad5b523b359b"
+    },
+    {
+      "chain": "arbitrum",
+      "address": "0xc0C6Be768cfa7C3E7996245e3506ad5b523b359b"
+    }
+  ]
+}
