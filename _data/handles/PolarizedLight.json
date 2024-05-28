@@ -1,0 +1,21 @@
+{
+  "handle": "PolarizedLight",
+  "members": [
+    "ChaseTheLight",
+    "kartik_giri_47538"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xbc82D9654283289fb48729968f804ab822DcC144"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0xbc82D9654283289fb48729968f804ab822DcC144"
+    },
+    {
+      "chain": "arbitrum",
+      "address": "0xbc82D9654283289fb48729968f804ab822DcC144"
+    }
+  ]
+}
