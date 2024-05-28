@@ -1,0 +1,14 @@
+{
+  "handle": "kukerlabs",
+  "members": [
+    "gorskireket",
+    "dyoff"
+  ],
+  "link": "https://x.com/kukerlabs",
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x03e76F68555988E5d0Fa6E189ff6e01792eFb0f7"
+    }
+  ]
+}

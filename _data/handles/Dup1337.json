@@ -1,6 +1,5 @@
 {
   "handle": "Dup1337",
-  "link": "https://twitter.com/0xDup1337",
   "members": [
     "sorrynotsorry",
     "deliriusz",
@@ -14,6 +13,12 @@
     {
       "chain": "ethereum",
       "address": "0x6262f720679C04cc7f2a14c0c03486D0287c4853"
+    },
+    {
+      "chain": "arbitrum",
+      "address": "0x6262f720679C04cc7f2a14c0c03486D0287c4853"
     }
-  ]
+  ],
+  "link": "https://twitter.com/0xDup1337",
+  "image": "7gTwhszSdmR"
 }
