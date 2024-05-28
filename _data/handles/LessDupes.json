@@ -1,7 +1,5 @@
 {
   "handle": "LessDupes",
-  "link": "https://twitter.com/sin1st3r__",
-  "image": "./avatars/LessDupes.png",
   "members": [
     "sin1st3r__",
     "EV_om",
@@ -15,6 +13,12 @@
     {
       "chain": "ethereum",
       "address": "0x3D0C2937001723782288EA0082fb99793097C0D3"
+    },
+    {
+      "chain": "arbitrum",
+      "address": "0x3D0C2937001723782288EA0082fb99793097C0D3"
     }
-  ]
+  ],
+  "link": "https://twitter.com/sin1st3r__",
+  "image": "wfBGZduNyeY"
 }
