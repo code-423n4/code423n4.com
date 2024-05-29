@@ -1,0 +1,18 @@
+{
+  "handle": "0xMATRIX",
+  "members": [
+    "Aristos",
+    "tofunmi",
+    "TheWeb3Mechanic"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x8fA5fe627a46ED3a8ec308d9c3440466340c0dbC"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x8fA5fe627a46ED3a8ec308d9c3440466340c0dbC"
+    }
+  ]
+}
