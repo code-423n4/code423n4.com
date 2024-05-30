@@ -1,0 +1,13 @@
+{
+  "handle": "XR20",
+  "members": [
+    "0x175",
+    "Tychai0s"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x8559bB9FBb9FB90Ef39bD22f63e006d41AcaD364"
+    }
+  ]
+}
