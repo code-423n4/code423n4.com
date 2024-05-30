@@ -1,7 +1,6 @@
 {
   "handle": "SBSecurity",
   "link": "https://github.com/SB-Security/audits",
-  "image": "./avatars/SBSecurity.png",
   "members": [
     "Blckhv",
     "Slavcheww"
@@ -9,7 +8,11 @@
   "paymentAddresses": [
     {
       "chain": "polygon",
-      "address": "0x0cd0873f928EdEd4D2B50F29b5B0E13bCa30aE93"
+      "address": "0x7855448179c966A70Eb20fc946f649cBc856c6A8"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x7855448179c966A70Eb20fc946f649cBc856c6A8"
     }
   ]
 }
