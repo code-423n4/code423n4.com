@@ -1,0 +1,21 @@
+{
+  "handle": "AirSprint",
+  "members": [
+    "CongZhang-CertiK",
+    "w1tcher"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x83a4BE6aCDA050DcC88eF754e3A447283f18c14b"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x83a4BE6aCDA050DcC88eF754e3A447283f18c14b"
+    },
+    {
+      "chain": "arbitrum",
+      "address": "0x83a4BE6aCDA050DcC88eF754e3A447283f18c14b"
+    }
+  ]
+}
