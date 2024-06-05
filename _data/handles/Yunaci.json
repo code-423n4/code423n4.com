@@ -1,0 +1,21 @@
+{
+  "handle": "Yunaci",
+  "members": [
+    "cholakov",
+    "Vancelot"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x25d0e1df316B97A8C8d7eA47090D9883791018D1"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x25d0e1df316B97A8C8d7eA47090D9883791018D1"
+    },
+    {
+      "chain": "arbitrum",
+      "address": "0x25d0e1df316B97A8C8d7eA47090D9883791018D1"
+    }
+  ]
+}
