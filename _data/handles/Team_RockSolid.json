@@ -1,0 +1,20 @@
+{
+  "handle": "Team_RockSolid",
+  "members": [
+    "14si2o_Flint",
+    "Drynooo",
+    "CaeraDenoir",
+    "OMEN"
+  ],
+  "link": "https://twitter.com/14si2O",
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x0Ef1597c7A5bb3C0079942D50096485156D7FF4a"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x0Ef1597c7A5bb3C0079942D50096485156D7FF4a"
+    }
+  ]
+}
