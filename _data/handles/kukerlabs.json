@@ -1,10 +1,11 @@
 {
   "handle": "kukerlabs",
+  "link": "https://x.com/kukerlabs",
   "members": [
     "gorskireket",
-    "dyoff"
+    "dyoff",
+    "web3km"
   ],
-  "link": "https://x.com/kukerlabs",
   "paymentAddresses": [
     {
       "chain": "polygon",
