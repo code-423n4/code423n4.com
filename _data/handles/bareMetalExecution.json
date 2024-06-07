@@ -1,10 +1,8 @@
 {
   "handle": "bareMetalExecution",
   "image": "./avatars/bareMetalExecution.png",
-  "members": [
-    "Daniel526",
-    "Tigerfrake"
-  ],
+  "members": [],
+  "showOnLeaderboard": false,
   "paymentAddresses": [
     {
       "chain": "polygon",
