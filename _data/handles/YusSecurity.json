@@ -1,10 +1,8 @@
 {
   "handle": "YusSecurity",
-  "image": "./avatars/YusSecurity.png",
   "members": [
     "flacko",
-    "marchev",
-    "dyoff"
+    "marchev"
   ],
   "paymentAddresses": [
     {
