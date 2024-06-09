@@ -1,0 +1,22 @@
+{
+  "handle": "dinosaur",
+  "members": [
+    "SanketKogekar",
+    "itsabinashb"
+  ],
+  "link": "https://x.com/SanketKogekar",
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x629c309999C4dA5E02f6821fDFD4cD8feE632854"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x629c309999C4dA5E02f6821fDFD4cD8feE632854"
+    },
+    {
+      "chain": "arbitrum",
+      "address": "0x629c309999C4dA5E02f6821fDFD4cD8feE632854"
+    }
+  ]
+}
