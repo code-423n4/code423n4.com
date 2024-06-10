@@ -1,0 +1,13 @@
+{
+  "handle": "Fortis_audits",
+  "members": [
+    "Mahi_Vasisth",
+    "Bluedragon101"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x0a1b97C516AeF459aAeD25C9F48451D75e03F1a1"
+    }
+  ]
+}
