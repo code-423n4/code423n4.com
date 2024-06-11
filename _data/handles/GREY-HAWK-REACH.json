@@ -1,6 +1,5 @@
 {
   "handle": "GREY-HAWK-REACH",
-  "image": "./avatars/GREY-HAWK-REACH.png",
   "members": [
     "aslanbek",
     "dimulski",
@@ -10,7 +9,7 @@
   "paymentAddresses": [
     {
       "chain": "polygon",
-      "address": "0x43BC7Be8b597414348657e9929319202Ffb56f75"
+      "address": "0x852D053412Ce4E14c6bD88031e520609A7F0b7c0"
     }
   ]
 }
