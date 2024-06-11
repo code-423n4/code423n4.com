@@ -1,0 +1,13 @@
+{
+  "handle": "fungi",
+  "members": [
+    "aspergillus",
+    "hezze"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x2aE63E3A2E5337EBA621229B19c854e636A5c95E"
+    }
+  ]
+}
