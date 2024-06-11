@@ -1,10 +1,10 @@
 {
   "handle": "EPSec",
+  "link": "https://x.com/ChDefendersEth",
   "members": [
     "1337web3",
     "petarP1998"
   ],
-  "link": "https://x.com/EPSecEth",
   "paymentAddresses": [
     {
       "chain": "polygon",
