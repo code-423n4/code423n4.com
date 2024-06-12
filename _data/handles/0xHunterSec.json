@@ -1,0 +1,22 @@
+{
+  "handle": "0xHunterSec",
+  "members": [
+    "hunter_w3b",
+    "albahaca",
+    "clara"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xaC8Ad704C2821C2962581c4C4da527c71E914aF1"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0xaC8Ad704C2821C2962581c4C4da527c71E914aF1"
+    },
+    {
+      "chain": "arbitrum",
+      "address": "0xaC8Ad704C2821C2962581c4C4da527c71E914aF1"
+    }
+  ]
+}
