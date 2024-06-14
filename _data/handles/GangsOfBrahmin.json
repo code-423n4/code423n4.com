@@ -1,9 +1,7 @@
 {
   "handle": "GangsOfBrahmin",
-  "members": [
-    "Satyam_Sharma",
-    "0xweb3boy"
-  ],
+  "members": [],
+  "showOnLeaderboard": false,
   "paymentAddresses": [
     {
       "chain": "polygon",
