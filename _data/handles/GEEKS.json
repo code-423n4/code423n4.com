@@ -1,0 +1,13 @@
+{
+  "handle": "GEEKS",
+  "members": [
+    "0xfave",
+    "SUPERMAN_I4G"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xA0800cf50E8D623f51f65A7BCA722b4EFb158d5F"
+    }
+  ]
+}
