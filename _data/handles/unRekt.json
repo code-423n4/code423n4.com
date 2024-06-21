@@ -1,0 +1,17 @@
+{
+  "handle": "unRekt",
+  "members": [
+    "tdey",
+    "Gululu"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x78f09303dA9594A0cAA24F748038e7beA98C019b"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x78f09303dA9594A0cAA24F748038e7beA98C019b"
+    }
+  ]
+}
