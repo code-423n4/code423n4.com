@@ -1,0 +1,21 @@
+{
+  "handle": "UncharteredDevs",
+  "members": [
+    "Hendobox",
+    "c-note"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x20bbf8e2bA6020707a28638A4fB943F4eb308564"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x20bbf8e2bA6020707a28638A4fB943F4eb308564"
+    },
+    {
+      "chain": "arbitrum",
+      "address": "0x20bbf8e2bA6020707a28638A4fB943F4eb308564"
+    }
+  ]
+}
