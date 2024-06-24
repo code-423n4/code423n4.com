@@ -1,0 +1,13 @@
+{
+  "handle": "Nebuchadnezzar",
+  "members": [
+    "EllipticPoint",
+    "elprofesor"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x808ddba8284dF868f8835772a4816BD29BfA8e55"
+    }
+  ]
+}
