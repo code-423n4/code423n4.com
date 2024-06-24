@@ -1,14 +1,22 @@
 {
   "handle": "50audits",
+  "link": "https://twitter.com/50audits",
   "members": [
     "thisvishalsingh",
-    "ParthMandale"
+    "jonatascm"
   ],
-  "link": "https://twitter.com/50audits",
   "paymentAddresses": [
     {
       "chain": "polygon",
-      "address": "0x20dFF5C82676bB9ED6130949Ad9D8494139ec422"
+      "address": "0xd896F4e34d0638242482Ba879a73A17E4b32dd0A"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0xd896F4e34d0638242482Ba879a73A17E4b32dd0A"
+    },
+    {
+      "chain": "arbitrum",
+      "address": "0xd896F4e34d0638242482Ba879a73A17E4b32dd0A"
     }
   ]
 }
