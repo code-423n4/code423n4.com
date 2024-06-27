@@ -1,0 +1,13 @@
+{
+  "handle": "NexusAudits",
+  "members": [
+    "cheatc0d3",
+    "Zanna"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x9A33ceEb23DE26c9588A2B0f771CD761226dbfcC"
+    }
+  ]
+}
