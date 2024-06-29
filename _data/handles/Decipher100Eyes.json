@@ -1,0 +1,15 @@
+{
+  "handle": "Decipher100Eyes",
+  "members": [
+    "rick",
+    "mansub-song",
+    "ssups",
+    "shkim9323"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x1a5ee6e111fae418373cff8d9332461609fd6a73"
+    }
+  ]
+}
