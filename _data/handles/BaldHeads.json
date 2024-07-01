@@ -1,0 +1,13 @@
+{
+  "handle": "BaldHeads",
+  "members": [
+    "PaulBirnbaum",
+    "modysec"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x768768535D3dc298bfb27b0d6d7B52ac7DDEDC50"
+    }
+  ]
+}
