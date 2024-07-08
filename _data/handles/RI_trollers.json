@@ -1,0 +1,22 @@
+{
+  "handle": "RI_trollers",
+  "members": [
+    "rscodes",
+    "tch1001",
+    "flyyee"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x2B197F2bb9C71460488eE7d52333308fEc3811b3"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x2B197F2bb9C71460488eE7d52333308fEc3811b3"
+    },
+    {
+      "chain": "arbitrum",
+      "address": "0x2B197F2bb9C71460488eE7d52333308fEc3811b3"
+    }
+  ]
+}
