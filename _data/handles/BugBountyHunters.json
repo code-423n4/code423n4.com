@@ -1,0 +1,13 @@
+{
+  "handle": "BugBountyHunters",
+  "members": [
+    "Jclark987",
+    "olioreos"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xA81D54ef1418F13fcf11b3AF6b33C0735821e76f"
+    }
+  ]
+}
