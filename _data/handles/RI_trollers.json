@@ -17,6 +17,10 @@
     {
       "chain": "arbitrum",
       "address": "0x2B197F2bb9C71460488eE7d52333308fEc3811b3"
+    },
+    {
+      "chain": "optimism",
+      "address": "0x2B197F2bb9C71460488eE7d52333308fEc3811b3"
     }
   ]
 }
