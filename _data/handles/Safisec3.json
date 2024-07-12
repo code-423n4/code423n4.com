@@ -1,11 +1,7 @@
 {
   "handle": "Safisec3",
-  "members": [
-    "safi",
-    "0xMirim",
-    "0xNezha"
-  ],
-  "link": "https://x.com/trust_safi?t=EJG8WcPWIgj6begEzdU3jw&s=09",
+  "members": [],
+  "showOnLeaderboard": false,
   "paymentAddresses": [
     {
       "chain": "polygon",
