@@ -1,0 +1,17 @@
+{
+  "handle": "BugMafia",
+  "members": [
+    "ArsenLupin",
+    "sammy"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x2772c2b56d91C9718967CB497926D48d67f76A35"
+    },
+    {
+      "chain": "optimism",
+      "address": "0xE60D664864734FFB68f330915695c68e1D006f02"
+    }
+  ]
+}
