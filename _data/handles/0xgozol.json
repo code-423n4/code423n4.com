@@ -1,0 +1,13 @@
+{
+  "handle": "0xgozol",
+  "members": [
+    "Koolex",
+    "Evo"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x9FBdDdF6C1F567d31CBE3242ceDF78aE619a09cf"
+    }
+  ]
+}
