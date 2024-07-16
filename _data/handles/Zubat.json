@@ -1,0 +1,25 @@
+{
+  "handle": "Zubat",
+  "members": [
+    "rileyholterhus",
+    "pwning"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xd9600E78efF03E3aC1fD63F0a701B6C39786a97B"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0xd9600E78efF03E3aC1fD63F0a701B6C39786a97B"
+    },
+    {
+      "chain": "arbitrum",
+      "address": "0xd9600E78efF03E3aC1fD63F0a701B6C39786a97B"
+    },
+    {
+      "chain": "optimism",
+      "address": "0xd9600E78efF03E3aC1fD63F0a701B6C39786a97B"
+    }
+  ]
+}
