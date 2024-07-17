@@ -1,0 +1,26 @@
+{
+  "handle": "Vulnerabits",
+  "members": [
+    "preslavxyz",
+    "stanchev"
+  ],
+  "link": "https://x.com/preslavxyz",
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x46295cf7a48f37c62f474cBa1eBcE45C0147034F"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x46295cf7a48f37c62f474cBa1eBcE45C0147034F"
+    },
+    {
+      "chain": "arbitrum",
+      "address": "0x46295cf7a48f37c62f474cBa1eBcE45C0147034F"
+    },
+    {
+      "chain": "optimism",
+      "address": "0x46295cf7a48f37c62f474cBa1eBcE45C0147034F"
+    }
+  ]
+}
