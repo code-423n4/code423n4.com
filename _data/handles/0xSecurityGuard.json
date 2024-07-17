@@ -1,6 +1,7 @@
 {
   "handle": "0xSecurityGuard",
   "members": [],
+  "showOnLeaderboard": false,
   "paymentAddresses": [
     {
       "chain": "polygon",
