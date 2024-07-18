@@ -1,0 +1,13 @@
+{
+  "handle": "X",
+  "members": [
+    "radiumx",
+    "godwin-x"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x453d06fccff2de2a9891d38ab5b612f5b9344cce"
+    }
+  ]
+}
