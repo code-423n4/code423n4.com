@@ -1,0 +1,18 @@
+{
+  "handle": "RadiantLabs",
+  "members": [
+    "EV_om",
+    "3docSec",
+    "haxatron"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x64bD160728f5305f84fA87287fe1Ec337587fb60"
+    },
+    {
+      "chain": "optimism",
+      "address": "0x64bD160728f5305f84fA87287fe1Ec337587fb60"
+    }
+  ]
+}
