@@ -1,0 +1,18 @@
+{
+  "handle": "KaligoAudits",
+  "members": [
+    "0xShiki",
+    "owliie",
+    "weedeus"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x71d4b4E3bd708854186086E34bb5A3D3D3e198Aa"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x71d4b4E3bd708854186086E34bb5A3D3D3e198Aa"
+    }
+  ]
+}
