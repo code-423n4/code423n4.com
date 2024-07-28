@@ -1,0 +1,25 @@
+{
+  "handle": "BugPull",
+  "members": [
+    "IlIlHunterlIlI",
+    "rzizah"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xFe21B910284f91E1458F29a081c81F7684571176"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0xFe21B910284f91E1458F29a081c81F7684571176"
+    },
+    {
+      "chain": "arbitrum",
+      "address": "0xFe21B910284f91E1458F29a081c81F7684571176"
+    },
+    {
+      "chain": "optimism",
+      "address": "0xFe21B910284f91E1458F29a081c81F7684571176"
+    }
+  ]
+}
