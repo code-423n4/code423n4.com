@@ -1,0 +1,15 @@
+{
+  "handle": "LogBytes",
+  "members": [
+    "developerjordy",
+    "Cyberwonder",
+    "Mylifechangefast_eth",
+    "Avalance"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x64bF05Ebb72d4151D599b78323d86f09dc6A0a13"
+    }
+  ]
+}
