@@ -1,0 +1,13 @@
+{
+  "handle": "ShadowBytes",
+  "members": [
+    "Mylifechangefast_eth",
+    "Avalance"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x3c7BCAD93f0e024B0eF8470305C79d0d73E07f26"
+    }
+  ]
+}

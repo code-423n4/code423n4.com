@@ -1,0 +1,13 @@
+{
+  "handle": "Undefined",
+  "members": [
+    "Silvermist",
+    "boringslav"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xD2AEC9eC398837231316d16Ceb90b75BdeBf73ad"
+    }
+  ]
+}

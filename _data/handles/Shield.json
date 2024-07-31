@@ -1,11 +1,11 @@
 {
   "handle": "Shield",
-  "image": "./avatars/Shield.png",
   "members": [
     "Dravee",
     "0xA5DF",
     "Viraz",
-    "Udsen"
+    "Udsen",
+    "ElGreenGoblino"
   ],
   "paymentAddresses": [
     {
