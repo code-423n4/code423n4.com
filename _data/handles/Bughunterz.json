@@ -1,0 +1,25 @@
+{
+  "handle": "Bughunterz",
+  "members": [
+    "Joshuajee",
+    "golomp"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x7CcF109b7833F038FE3aC0e257dF6e8886a15b5C"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x7CcF109b7833F038FE3aC0e257dF6e8886a15b5C"
+    },
+    {
+      "chain": "arbitrum",
+      "address": "0x7CcF109b7833F038FE3aC0e257dF6e8886a15b5C"
+    },
+    {
+      "chain": "optimism",
+      "address": "0x7CcF109b7833F038FE3aC0e257dF6e8886a15b5C"
+    }
+  ]
+}
