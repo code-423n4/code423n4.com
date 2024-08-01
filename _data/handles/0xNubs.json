@@ -1,10 +1,7 @@
 {
   "handle": "0xNubs",
-  "members": [
-    "Katrix",
-    "zeref",
-    "Sancybars"
-  ],
+  "members": [],
+  "showOnLeaderboard": false,
   "paymentAddresses": [
     {
       "chain": "polygon",

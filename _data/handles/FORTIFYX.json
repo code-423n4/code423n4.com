@@ -1,9 +1,7 @@
 {
   "handle": "FORTIFYX",
-  "members": [
-    "MaslarovK",
-    "Soltho"
-  ],
+  "members": [],
+  "showOnLeaderboard": false,
   "paymentAddresses": [
     {
       "chain": "polygon",
