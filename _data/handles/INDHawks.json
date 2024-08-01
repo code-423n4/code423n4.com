@@ -1,10 +1,7 @@
 {
   "handle": "INDHawks",
-  "members": [
-    "tdey",
-    "Gululu",
-    "sharonphiliplima"
-  ],
+  "members": [],
+  "showOnLeaderboard": false,
   "paymentAddresses": [
     {
       "chain": "polygon",
