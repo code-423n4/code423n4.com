@@ -1,9 +1,7 @@
 {
   "handle": "0xE79e",
-  "members": [
-    "0x18a6",
-    "yasmine"
-  ],
+  "members": [],
+  "showOnLeaderboard": false,
   "paymentAddresses": [
     {
       "chain": "polygon",
