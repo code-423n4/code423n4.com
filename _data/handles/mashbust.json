@@ -1,0 +1,13 @@
+{
+  "handle": "mashbust",
+  "members": [
+    "abdulsamijay",
+    "gulDozer"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xeC59B3d1d31F7675BBd7D08c7A60eCc24E812229"
+    }
+  ]
+}
