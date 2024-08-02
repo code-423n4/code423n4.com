@@ -1,0 +1,25 @@
+{
+  "handle": "Gladiators",
+  "members": [
+    "0xMax1mus",
+    "donkicha"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xaA42C3c8303B1A9B9ce5a1d128db836ebe2455e4"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0xaA42C3c8303B1A9B9ce5a1d128db836ebe2455e4"
+    },
+    {
+      "chain": "arbitrum",
+      "address": "0xaA42C3c8303B1A9B9ce5a1d128db836ebe2455e4"
+    },
+    {
+      "chain": "optimism",
+      "address": "0xaA42C3c8303B1A9B9ce5a1d128db836ebe2455e4"
+    }
+  ]
+}
