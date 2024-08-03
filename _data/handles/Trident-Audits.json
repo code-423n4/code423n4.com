@@ -1,0 +1,13 @@
+{
+  "handle": "Trident-Audits",
+  "members": [
+    "mgnfy_view",
+    "ebok21"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xd9c5ee55812e5e1c6035b52887CCE46915156E4E"
+    }
+  ]
+}
