@@ -1,0 +1,26 @@
+{
+  "handle": "MKVsentry",
+  "members": [
+    "bozhikov_",
+    "0xFear",
+    "vikthetilted"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xa6d46e9985960a678d05E05bE58A1CD630BafaE3"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0xa6d46e9985960a678d05E05bE58A1CD630BafaE3"
+    },
+    {
+      "chain": "arbitrum",
+      "address": "0xa6d46e9985960a678d05E05bE58A1CD630BafaE3"
+    },
+    {
+      "chain": "optimism",
+      "address": "0xa6d46e9985960a678d05E05bE58A1CD630BafaE3"
+    }
+  ]
+}
