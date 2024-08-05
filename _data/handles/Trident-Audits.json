@@ -8,6 +8,10 @@
     {
       "chain": "polygon",
       "address": "0xd9c5ee55812e5e1c6035b52887CCE46915156E4E"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0xd9c5ee55812e5e1c6035b52887CCE46915156E4E"
     }
   ]
 }
