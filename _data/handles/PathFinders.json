@@ -1,0 +1,13 @@
+{
+  "handle": "PathFinders",
+  "members": [
+    "0xredtrama",
+    "srhacker"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x427bFe2B07A1D43fF5E4560E60A8dA7f8e9Ea4d1"
+    }
+  ]
+}
