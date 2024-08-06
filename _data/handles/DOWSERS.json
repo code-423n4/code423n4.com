@@ -1,0 +1,13 @@
+{
+  "handle": "DOWSERS",
+  "members": [
+    "desaperh",
+    "PedroDowsers"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x22813d1916424dd3f27756A9a04d44b70c58998e"
+    }
+  ]
+}
