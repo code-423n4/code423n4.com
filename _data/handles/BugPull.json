@@ -7,19 +7,19 @@
   "paymentAddresses": [
     {
       "chain": "polygon",
-      "address": "0xFe21B910284f91E1458F29a081c81F7684571176"
+      "address": "0x723BAf4C0B7A6951b2BCCeFb1d197cE722a22C95"
     },
     {
       "chain": "ethereum",
-      "address": "0xFe21B910284f91E1458F29a081c81F7684571176"
+      "address": "0x723BAf4C0B7A6951b2BCCeFb1d197cE722a22C95"
     },
     {
       "chain": "arbitrum",
-      "address": "0xFe21B910284f91E1458F29a081c81F7684571176"
+      "address": "0x723BAf4C0B7A6951b2BCCeFb1d197cE722a22C95"
     },
     {
       "chain": "optimism",
-      "address": "0xFe21B910284f91E1458F29a081c81F7684571176"
+      "address": "0x723BAf4C0B7A6951b2BCCeFb1d197cE722a22C95"
     }
   ]
 }
