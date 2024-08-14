@@ -1,0 +1,26 @@
+{
+  "handle": "ParaTroopers",
+  "members": [
+    "nuthan2x",
+    "rishabh"
+  ],
+  "link": "https://x.com/nuthan2x",
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xE27f3181ae74667370aEF3283cF1e5aD1C1ee5bd"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0xE27f3181ae74667370aEF3283cF1e5aD1C1ee5bd"
+    },
+    {
+      "chain": "arbitrum",
+      "address": "0xE27f3181ae74667370aEF3283cF1e5aD1C1ee5bd"
+    },
+    {
+      "chain": "optimism",
+      "address": "0xE27f3181ae74667370aEF3283cF1e5aD1C1ee5bd"
+    }
+  ]
+}
