@@ -1,10 +1,7 @@
 {
   "handle": "RAJPUTANA_RIFLES",
-  "members": [
-    "nuthan2x",
-    "rishabh"
-  ],
-  "link": "https://x.com/nuthan2x",
+  "members": [],
+  "showOnLeaderboard": false,
   "paymentAddresses": [
     {
       "chain": "polygon",

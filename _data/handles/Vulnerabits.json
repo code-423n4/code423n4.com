@@ -1,10 +1,7 @@
 {
   "handle": "Vulnerabits",
-  "members": [
-    "preslavxyz",
-    "stanchev"
-  ],
-  "link": "https://x.com/preslavxyz",
+  "members": [],
+  "showOnLeaderboard": false,
   "paymentAddresses": [
     {
       "chain": "polygon",
