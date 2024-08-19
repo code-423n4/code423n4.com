@@ -4,6 +4,7 @@
     "thekmj",
     "3n0ch"
   ],
+  "showOnLeaderboard": false,
   "paymentAddresses": [
     {
       "chain": "polygon",
