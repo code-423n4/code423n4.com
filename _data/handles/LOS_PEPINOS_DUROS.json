@@ -1,9 +1,7 @@
 {
   "handle": "LOS_PEPINOS_DUROS",
-  "members": [
-    "gas_limit",
-    "JustUzair"
-  ],
+  "members": [],
+  "showOnLeaderboard": false,
   "paymentAddresses": [
     {
       "chain": "polygon",
