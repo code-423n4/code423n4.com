@@ -1,0 +1,13 @@
+{
+  "handle": "Omnes",
+  "members": [
+    "Deps",
+    "ECunha"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x4910B702739EAa0cf98523c3bb5FDA3B30E37250"
+    }
+  ]
+}
