@@ -1,0 +1,13 @@
+{
+  "handle": "OpaBatyo",
+  "members": [
+    "amarfares",
+    "AMOW"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xaC4Cb8282d291a74e8C881620E3AFaF6dE98d6aE"
+    }
+  ]
+}
