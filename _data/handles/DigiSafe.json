@@ -12,6 +12,14 @@
     {
       "chain": "ethereum",
       "address": "0x4eB2787cdCba6Ad94d90ce5da98d304037F217D7"
+    },
+    {
+      "chain": "arbitrum",
+      "address": "0xf90d3f0382a9FE4B13e0B782aDdd370C101d7735"
+    },
+    {
+      "chain": "optimism",
+      "address": "0xf90d3f0382a9FE4B13e0B782aDdd370C101d7735"
     }
   ]
 }
