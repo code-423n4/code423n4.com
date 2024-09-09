@@ -1,0 +1,13 @@
+{
+  "handle": "wasm_it",
+  "members": [
+    "rustguy",
+    "0xrex"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x3B94194A7a49dAeF3A1BF33088d8b0A32E13e53a"
+    }
+  ]
+}
