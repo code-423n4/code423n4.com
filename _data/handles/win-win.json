@@ -1,10 +1,7 @@
 {
   "handle": "win-win",
-  "members": [
-    "Satyam_Sharma",
-    "Sathish9098",
-    "ParthMandale"
-  ],
+  "members": [],
+  "showOnLeaderboard": false,
   "paymentAddresses": [
     {
       "chain": "polygon",
