@@ -1,0 +1,13 @@
+{
+  "handle": "WolfMen",
+  "members": [
+    "jovemjeune",
+    "gigantic"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xDdf4E32e4d23310E6Ec17870D0232905C05f2910"
+    }
+  ]
+}
