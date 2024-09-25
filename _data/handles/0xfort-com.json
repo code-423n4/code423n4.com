@@ -1,0 +1,26 @@
+{
+  "handle": "0xfort-com",
+  "members": [
+    "0xSaku",
+    "0xfort"
+  ],
+  "link": "http://www.0xfort.com",
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x5525dc165EBB0478Eef6aa69b30c1ba42c061C32"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x5525dc165EBB0478Eef6aa69b30c1ba42c061C32"
+    },
+    {
+      "chain": "arbitrum",
+      "address": "0x5525dc165EBB0478Eef6aa69b30c1ba42c061C32"
+    },
+    {
+      "chain": "optimism",
+      "address": "0x5525dc165EBB0478Eef6aa69b30c1ba42c061C32"
+    }
+  ]
+}
