@@ -1,0 +1,26 @@
+{
+  "handle": "ChainPatrol",
+  "members": [
+    "NoOne",
+    "Koko1912"
+  ],
+  "link": "https://x.com/zhulien_zhelev",
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x829FCB4b590451E2817cc880C65a311fE8553bF1"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x829FCB4b590451E2817cc880C65a311fE8553bF1"
+    },
+    {
+      "chain": "arbitrum",
+      "address": "0x829FCB4b590451E2817cc880C65a311fE8553bF1"
+    },
+    {
+      "chain": "optimism",
+      "address": "0x829FCB4b590451E2817cc880C65a311fE8553bF1"
+    }
+  ]
+}
