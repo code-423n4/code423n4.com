@@ -1,0 +1,15 @@
+{
+  "handle": "audism",
+  "members": [
+    "jeffy",
+    "YeGoRenji",
+    "squeezy",
+    "glitch"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x06Af657e516e398445dDC72e1Ce03CEC6C53461F"
+    }
+  ]
+}
