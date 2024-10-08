@@ -1,0 +1,17 @@
+{
+  "handle": "Hu3SLabs",
+  "members": [
+    "holydevoti0n",
+    "joaovwfreire"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xf57C8Bb47b56b06E11f28B273EcDa190b14C4dE4"
+    },
+    {
+      "chain": "arbitrum",
+      "address": "0xf57C8Bb47b56b06E11f28B273EcDa190b14C4dE4"
+    }
+  ]
+}
