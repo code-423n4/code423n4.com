@@ -1,0 +1,17 @@
+{
+  "handle": "BugHunters1",
+  "members": [
+    "0xpetern",
+    "0xHarryBarz"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x3204eDaEC5F666711d50981CC0542E510BFA2974"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x83E027C8267237d7FE5612B1c74462c50dD1DF4B"
+    }
+  ]
+}
