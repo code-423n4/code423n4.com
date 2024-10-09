@@ -1,0 +1,13 @@
+{
+  "handle": "ZINC",
+  "members": [
+    "PrasadLak",
+    "zinc42"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x8fa0636D9051DC6D6D14187C589aE6b887472862"
+    }
+  ]
+}
