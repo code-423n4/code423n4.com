@@ -1,0 +1,25 @@
+{
+  "handle": "tokentakers",
+  "members": [
+    "_karanel",
+    "Approximity"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x8553eA1F11370fC20fC6393e70562B064AD3D163"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x8553eA1F11370fC20fC6393e70562B064AD3D163"
+    },
+    {
+      "chain": "arbitrum",
+      "address": "0x8553eA1F11370fC20fC6393e70562B064AD3D163"
+    },
+    {
+      "chain": "optimism",
+      "address": "0x8553eA1F11370fC20fC6393e70562B064AD3D163"
+    }
+  ]
+}
