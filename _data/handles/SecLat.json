@@ -1,0 +1,14 @@
+{
+  "handle": "SecLat",
+  "members": [
+    "Mike_Bello90",
+    "ThaddeusCrypto"
+  ],
+  "link": "https://x.com/SecLat_Security",
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xD4298CA6D3654DcCa95b39Ef612c7270d8EdF8Cb"
+    }
+  ]
+}
