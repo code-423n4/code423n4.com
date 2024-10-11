@@ -1,9 +1,7 @@
 {
   "handle": "Team-Slayer",
-  "members": [
-    "Mike_Bello90",
-    "ThaddeusCrypto"
-  ],
+  "members": [],
+  "showOnLeaderboard": false,
   "paymentAddresses": [
     {
       "chain": "polygon",
