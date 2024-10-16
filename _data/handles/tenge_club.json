@@ -1,0 +1,25 @@
+{
+  "handle": "tenge_club",
+  "members": [
+    "typicalHuman",
+    "ABAIKUNANBAEV"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xD57fDcCa707189bCA685b7742728f32638F4cBc0"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0xD57fDcCa707189bCA685b7742728f32638F4cBc0"
+    },
+    {
+      "chain": "arbitrum",
+      "address": "0xD57fDcCa707189bCA685b7742728f32638F4cBc0"
+    },
+    {
+      "chain": "optimism",
+      "address": "0xD57fDcCa707189bCA685b7742728f32638F4cBc0"
+    }
+  ]
+}
