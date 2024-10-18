@@ -1,0 +1,13 @@
+{
+  "handle": "056Security",
+  "members": [
+    "0xb0k0",
+    "stanchev"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x2ba59ef2Bd73c9B6b152956d0E1c575237c65E1B"
+    }
+  ]
+}
