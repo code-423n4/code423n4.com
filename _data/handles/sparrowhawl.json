@@ -1,0 +1,26 @@
+{
+  "handle": "sparrowhawl",
+  "members": [
+    "vasanth",
+    "0xManishTech"
+  ],
+  "link": "https://www.linkedin.com/in/vasanth-marimuthu-574a2422a/",
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xe776777D530Fba7909D15c17Ac1D526105e14EC3"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0xe776777D530Fba7909D15c17Ac1D526105e14EC3"
+    },
+    {
+      "chain": "arbitrum",
+      "address": "0xe776777D530Fba7909D15c17Ac1D526105e14EC3"
+    },
+    {
+      "chain": "optimism",
+      "address": "0xe776777D530Fba7909D15c17Ac1D526105e14EC3"
+    }
+  ]
+}
