@@ -1,9 +1,7 @@
 {
   "handle": "100HP",
-  "members": [
-    "blutorque",
-    "Flare"
-  ],
+  "members": [],
+  "showOnLeaderboard": false,
   "paymentAddresses": [
     {
       "chain": "polygon",
