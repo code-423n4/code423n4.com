@@ -1,0 +1,13 @@
+{
+  "handle": "CipherShieldGlobal",
+  "members": [
+    "0xabhay",
+    "TopStar"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xB5E7a1F82bEDF99919776CDEa779c0dc559A879c"
+    }
+  ]
+}
