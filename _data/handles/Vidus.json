@@ -1,0 +1,13 @@
+{
+  "handle": "Vidus",
+  "members": [
+    "0xredtrama",
+    "silk_moth"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x4A259EEf66651D3642095135147a5201A370B4A0"
+    }
+  ]
+}
