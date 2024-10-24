@@ -1,0 +1,13 @@
+{
+  "handle": "Guardians",
+  "members": [
+    "igdbase",
+    "0xozovehe"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xa3C3611b65e6ABC91a58d39f12D04A4819FC2361"
+    }
+  ]
+}
