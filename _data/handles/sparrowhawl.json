@@ -1,10 +1,7 @@
 {
   "handle": "sparrowhawl",
-  "members": [
-    "vasanth",
-    "0xManishTech"
-  ],
-  "link": "https://www.linkedin.com/in/vasanth-marimuthu-574a2422a/",
+  "members": [],
+  "showOnLeaderboard": false,
   "paymentAddresses": [
     {
       "chain": "polygon",
