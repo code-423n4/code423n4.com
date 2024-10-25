@@ -1,10 +1,7 @@
 {
   "handle": "UA",
-  "image": "./avatars/UA.png",
-  "members": [
-    "JustUzair",
-    "ahmedaghadi"
-  ],
+  "members": [],
+  "showOnLeaderboard": false,
   "paymentAddresses": [
     {
       "chain": "polygon",
