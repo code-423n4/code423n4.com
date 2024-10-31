@@ -1,0 +1,25 @@
+{
+  "handle": "Exigentaudits",
+  "members": [
+    "OMEN",
+    "0xLeveler"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x500DBF2CeFAf281B250D9D8bBb38C7556602D09A"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x500DBF2CeFAf281B250D9D8bBb38C7556602D09A"
+    },
+    {
+      "chain": "arbitrum",
+      "address": "0x500DBF2CeFAf281B250D9D8bBb38C7556602D09A"
+    },
+    {
+      "chain": "optimism",
+      "address": "0x500DBF2CeFAf281B250D9D8bBb38C7556602D09A"
+    }
+  ]
+}
