@@ -1,0 +1,14 @@
+{
+  "handle": "Zyphernix_Security",
+  "members": [
+    "0xcodingowls",
+    "mgnfy_view"
+  ],
+  "link": "https://x.com/zyphernixsec",
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x719539d66dac7B06f7fe8Aa49fd32289aa87e7c6"
+    }
+  ]
+}
