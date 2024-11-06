@@ -1,9 +1,7 @@
 {
   "handle": "BugMafia",
-  "members": [
-    "ArsenLupin",
-    "sammy"
-  ],
+  "members": [],
+  "showOnLeaderboard": false,
   "paymentAddresses": [
     {
       "chain": "polygon",
