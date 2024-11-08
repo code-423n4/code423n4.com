@@ -1,0 +1,13 @@
+{
+  "handle": "ChainProof",
+  "members": [
+    "PrasadLak",
+    "Takarez"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xBB068427C4185334Bf914EBB980c56136bAB1977"
+    }
+  ]
+}
