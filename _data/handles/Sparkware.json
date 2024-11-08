@@ -1,9 +1,7 @@
 {
   "handle": "Sparkware",
-  "members": [
-    "ladboy233",
-    "Matin"
-  ],
+  "members": [],
+  "showOnLeaderboard": false,
   "paymentAddresses": [
     {
       "chain": "polygon",
