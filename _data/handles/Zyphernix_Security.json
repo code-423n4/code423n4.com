@@ -1,10 +1,11 @@
 {
   "handle": "Zyphernix_Security",
+  "link": "https://x.com/zyphernixsec",
   "members": [
     "0xcodingowls",
-    "mgnfy_view"
+    "mgnfy_view",
+    "ebok21"
   ],
-  "link": "https://x.com/zyphernixsec",
   "paymentAddresses": [
     {
       "chain": "polygon",
