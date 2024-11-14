@@ -7,11 +7,7 @@
   "paymentAddresses": [
     {
       "chain": "polygon",
-      "address": "0x64bD160728f5305f84fA87287fe1Ec337587fb60"
-    },
-    {
-      "chain": "optimism",
-      "address": "0x64bD160728f5305f84fA87287fe1Ec337587fb60"
+      "address": "0xC739EA73BaC477DBF16b23937695cF0E4C02E77B"
     }
   ]
 }
