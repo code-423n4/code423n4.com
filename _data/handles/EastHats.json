@@ -1,18 +1,18 @@
 {
   "handle": "EastHats",
+  "link": "https://cantina.xyz/u/easteuropehats",
   "members": [
     "ArsenLupin",
     "iamandreiski"
   ],
-  "link": "https://cantina.xyz/u/easteuropehats",
   "paymentAddresses": [
     {
       "chain": "polygon",
-      "address": "0x2772c2b56d91C9718967CB497926D48d67f76A35"
+      "address": "0x99d9A76a6667c92EA13965FE2ddBd25501279217"
     },
     {
       "chain": "ethereum",
-      "address": "0x2772c2b56d91C9718967CB497926D48d67f76A35"
+      "address": "0x99d9A76a6667c92EA13965FE2ddBd25501279217"
     }
   ]
 }
