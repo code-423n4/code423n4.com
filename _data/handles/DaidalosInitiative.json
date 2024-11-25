@@ -1,0 +1,13 @@
+{
+  "handle": "DaidalosInitiative",
+  "members": [
+    "Bigsam",
+    "mansa11"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x639043535394A587d00aEC45a62Ec30a434a7436"
+    }
+  ]
+}
