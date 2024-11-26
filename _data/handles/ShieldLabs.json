@@ -1,0 +1,13 @@
+{
+  "handle": "ShieldLabs",
+  "members": [
+    "tachida2k",
+    "danielbui12"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x8EEFC357946630350744395Cf219333bC00859D7"
+    }
+  ]
+}
