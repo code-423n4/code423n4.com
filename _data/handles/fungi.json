@@ -1,9 +1,7 @@
 {
   "handle": "fungi",
-  "members": [
-    "aspergillus",
-    "hezze"
-  ],
+  "members": [],
+  "showOnLeaderboard": false,
   "paymentAddresses": [
     {
       "chain": "polygon",
