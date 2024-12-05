@@ -1,9 +1,7 @@
 {
   "handle": "AndoyaSec",
-  "members": [
-    "0x60scs",
-    "mexp"
-  ],
+  "members": [],
+  "showOnLeaderboard": false,
   "link": "https://x.com/AndoyaSec",
   "paymentAddresses": [
     {
