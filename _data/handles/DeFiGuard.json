@@ -1,9 +1,7 @@
 {
   "handle": "DeFiGuard",
-  "members": [
-    "Dewaxindo",
-    "ka14ar"
-  ],
+  "members": [],
+  "showOnLeaderboard": false,
   "paymentAddresses": [
     {
       "chain": "polygon",
