@@ -1,10 +1,7 @@
 {
   "handle": "RI_trollers",
-  "members": [
-    "rscodes",
-    "tch1001",
-    "flyyee"
-  ],
+  "members": [],
+  "showOnLeaderboard": false,
   "paymentAddresses": [
     {
       "chain": "polygon",
