@@ -1,0 +1,26 @@
+{
+  "handle": "bumbleb33",
+  "members": [
+    "bumble",
+    "33audits"
+  ],
+  "link": "https://x.com/solidityauditor",
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x2222b80937E039dB2523B7617bF4B770ceF703BD"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x2222b80937E039dB2523B7617bF4B770ceF703BD"
+    },
+    {
+      "chain": "arbitrum",
+      "address": "0x2222b80937E039dB2523B7617bF4B770ceF703BD"
+    },
+    {
+      "chain": "optimism",
+      "address": "0x2222b80937E039dB2523B7617bF4B770ceF703BD"
+    }
+  ]
+}
