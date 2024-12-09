@@ -1,0 +1,17 @@
+{
+  "handle": "st_runk",
+  "members": [
+    "jrstrunk",
+    "dtstrunk"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x10954f973ddD96A87233a7A5fB8587aF295dbd02"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x10954f973ddD96A87233a7A5fB8587aF295dbd02"
+    }
+  ]
+}
