@@ -1,0 +1,17 @@
+{
+  "handle": "Vagabond",
+  "members": [
+    "0xsagetony",
+    "Fatma"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xa7ad87c0dd378b2a6d800d1eab62913e65e6ea50"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0xa7ad87c0dd378b2a6d800d1eab62913e65e6ea50"
+    }
+  ]
+}
