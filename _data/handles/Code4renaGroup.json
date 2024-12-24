@@ -1,0 +1,17 @@
+{
+  "handle": "Code4renaGroup",
+  "members": [
+    "debo",
+    "codehunter99"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x5e658DDEADD989f303BFD2f14EBa32b48E481045"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x5e658DDEADD989f303BFD2f14EBa32b48E481045"
+    }
+  ]
+}
