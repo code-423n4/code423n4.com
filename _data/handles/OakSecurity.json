@@ -1,0 +1,20 @@
+{
+  "handle": "OakSecurity",
+  "members": [
+    "ps",
+    "imxm",
+    "richie-oak",
+    "christianvari"
+  ],
+  "link": "https://x.com/SecurityOak",
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xCB67BC24C67e8FBd033249F2D41A2c231692e65a"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0xCB67BC24C67e8FBd033249F2D41A2c231692e65a"
+    }
+  ]
+}
