@@ -1,0 +1,14 @@
+{
+  "handle": "12121212",
+  "members": [
+    "skid0016",
+    "princekay",
+    "igdbase"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x186c4C86B91cB97624e7B9665c7a3f3b1C2Ff63E"
+    }
+  ]
+}
