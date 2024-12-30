@@ -1,0 +1,14 @@
+{
+  "handle": "HackSyndicate",
+  "members": [
+    "Agrawain",
+    "theoffspring",
+    "AntennaeVY"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x88cFd2d7e2205aAd736F98DF838A54594B8663Fe"
+    }
+  ]
+}
