@@ -1,0 +1,14 @@
+{
+  "handle": "Striking_Lions",
+  "members": [
+    "misbahu",
+    "Zabid27",
+    "firmanregar"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x259f02AbcA56b0d12a8e4Ab7fa5af9Acf577Fb2D"
+    }
+  ]
+}
