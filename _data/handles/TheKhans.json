@@ -1,0 +1,25 @@
+{
+  "handle": "TheKhans",
+  "members": [
+    "aman",
+    "asad"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x7AE2775BfF644668df620F234042Ed42E168224D"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x7AE2775BfF644668df620F234042Ed42E168224D"
+    },
+    {
+      "chain": "arbitrum",
+      "address": "0x7AE2775BfF644668df620F234042Ed42E168224D"
+    },
+    {
+      "chain": "optimism",
+      "address": "0x7AE2775BfF644668df620F234042Ed42E168224D"
+    }
+  ]
+}

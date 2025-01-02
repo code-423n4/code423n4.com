@@ -1,0 +1,13 @@
+{
+  "handle": "Contest-Squad",
+  "members": [
+    "shaflow2",
+    "Abdessamed"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xbE4bf446e2Bdd6ebaD529A4df21911c87E48E535"
+    }
+  ]
+}
