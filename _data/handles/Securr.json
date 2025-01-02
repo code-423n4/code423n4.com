@@ -1,0 +1,14 @@
+{
+  "handle": "Securr",
+  "members": [
+    "Viraz",
+    "etherhood",
+    "0xanmol"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xf88b0247e611eE5af8Cf98f5303769Cba8e7177C"
+    }
+  ]
+}
