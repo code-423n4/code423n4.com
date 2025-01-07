@@ -1,0 +1,14 @@
+{
+  "handle": "VeriaLabs",
+  "members": [
+    "stuxf",
+    "jayden"
+  ],
+  "link": "https://verialabs.com",
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x150f1EFB93CA36d1A94F23539C66ae5c45fd590F"
+    }
+  ]
+}
