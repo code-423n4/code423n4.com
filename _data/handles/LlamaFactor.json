@@ -1,0 +1,13 @@
+{
+  "handle": "LlamaFactor",
+  "members": [
+    "thebrittfactorC4",
+    "liveactionllama"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x0101010101010101010101010101010101001100"
+    }
+  ]
+}
