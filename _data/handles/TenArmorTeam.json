@@ -1,0 +1,14 @@
+{
+  "handle": "TenArmorTeam",
+  "members": [
+    "rebound",
+    "TenArmor"
+  ],
+  "link": "https://x.com/TenArmorAlert",
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x7313a26ec6e779864646718b6da2e96e0db04850"
+    }
+  ]
+}
