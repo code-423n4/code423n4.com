@@ -1,0 +1,25 @@
+{
+  "handle": "Arjuna",
+  "members": [
+    "calc1f4r",
+    "chitresh"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xF2fc7a3074C2581781926b1D02374063f13680A1"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0xF2fc7a3074C2581781926b1D02374063f13680A1"
+    },
+    {
+      "chain": "arbitrum",
+      "address": "0xF2fc7a3074C2581781926b1D02374063f13680A1"
+    },
+    {
+      "chain": "optimism",
+      "address": "0xF2fc7a3074C2581781926b1D02374063f13680A1"
+    }
+  ]
+}
