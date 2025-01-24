@@ -1,0 +1,25 @@
+{
+  "handle": "Heavyweight_hunters",
+  "members": [
+    "unnamed",
+    "0xriazaka"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xDa4d275b228277316576BfcC6bDB551c4D48d9aF"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0xDa4d275b228277316576BfcC6bDB551c4D48d9aF"
+    },
+    {
+      "chain": "arbitrum",
+      "address": "0xDa4d275b228277316576BfcC6bDB551c4D48d9aF"
+    },
+    {
+      "chain": "optimism",
+      "address": "0xDa4d275b228277316576BfcC6bDB551c4D48d9aF"
+    }
+  ]
+}
