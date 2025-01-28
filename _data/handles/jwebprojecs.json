@@ -1,0 +1,13 @@
+{
+  "handle": "jwebprojecs",
+  "members": [
+    "jauvany",
+    "Scoon"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x6A6327F6e290f936227C9ED1437cEff2a2923832"
+    }
+  ]
+}
