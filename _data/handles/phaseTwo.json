@@ -1,0 +1,25 @@
+{
+  "handle": "phaseTwo",
+  "members": [
+    "0xYudhishthra",
+    "W0RR1O"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xD410f655EbCe3E0a1980646FE2D5E0f2022d242b"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0xD410f655EbCe3E0a1980646FE2D5E0f2022d242b"
+    },
+    {
+      "chain": "arbitrum",
+      "address": "0xD410f655EbCe3E0a1980646FE2D5E0f2022d242b"
+    },
+    {
+      "chain": "optimism",
+      "address": "0xD410f655EbCe3E0a1980646FE2D5E0f2022d242b"
+    }
+  ]
+}
