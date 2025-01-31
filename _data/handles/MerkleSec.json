@@ -1,0 +1,13 @@
+{
+  "handle": "MerkleSec",
+  "members": [
+    "santev",
+    "dobrevaleri"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xcEf5fa3ff6A719eEAf3eAF781170C94e068e6bcE"
+    }
+  ]
+}
