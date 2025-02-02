@@ -1,0 +1,13 @@
+{
+  "handle": "potatoad-sec",
+  "members": [
+    "McToady",
+    "MrPotatoMagic"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xa9cFf4958da9b3695f2dB1D5AbC535b901c128a5"
+    }
+  ]
+}
