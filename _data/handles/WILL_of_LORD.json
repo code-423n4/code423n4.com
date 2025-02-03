@@ -1,0 +1,13 @@
+{
+  "handle": "WILL_of_LORD",
+  "members": [
+    "hail_the_lord",
+    "willycode20"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x3e2Cce5C52918081721b6cF47c7CB306aCb99c6d"
+    }
+  ]
+}
