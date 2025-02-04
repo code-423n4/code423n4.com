@@ -1,0 +1,13 @@
+{
+  "handle": "DoubleDragon",
+  "members": [
+    "balakay",
+    "emptycup"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x755BD848A4C7382b72A4734DCbc23522843c0cE0"
+    }
+  ]
+}
