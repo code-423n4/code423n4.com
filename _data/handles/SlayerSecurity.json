@@ -1,0 +1,25 @@
+{
+  "handle": "SlayerSecurity",
+  "members": [
+    "0xanmol",
+    "ni8mare"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x2BeAE531d1712828E132703b71e989cc9bBA951E"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x2BeAE531d1712828E132703b71e989cc9bBA951E"
+    },
+    {
+      "chain": "arbitrum",
+      "address": "0x2BeAE531d1712828E132703b71e989cc9bBA951E"
+    },
+    {
+      "chain": "optimism",
+      "address": "0x2BeAE531d1712828E132703b71e989cc9bBA951E"
+    }
+  ]
+}
