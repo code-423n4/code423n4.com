@@ -1,0 +1,18 @@
+{
+  "handle": "KannAudits",
+  "members": [
+    "0xKann",
+    "Pocas"
+  ],
+  "link": "https://x.com/KannAudits",
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x2181c1c51B1cBc02A838624Bb247795c2a386B00"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x2181c1c51B1cBc02A838624Bb247795c2a386B00"
+    }
+  ]
+}
