@@ -1,0 +1,13 @@
+{
+  "handle": "IQ_hunter",
+  "members": [
+    "Zkillua",
+    "thesvn"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x10D2C2D7997559056363489CE3869CBBd239650f"
+    }
+  ]
+}
