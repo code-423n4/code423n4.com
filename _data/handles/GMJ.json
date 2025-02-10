@@ -1,0 +1,14 @@
+{
+  "handle": "GMJ",
+  "members": [
+    "jauvany",
+    "claryssetem",
+    "gmtsague"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x7ae68D82DCc454487652415a7AB79Ea4f291840f"
+    }
+  ]
+}
