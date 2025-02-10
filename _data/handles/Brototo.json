@@ -1,0 +1,17 @@
+{
+  "handle": "Brototo",
+  "members": [
+    "YannApostrophe",
+    "AlexandreR"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x47908346739A59E92373B465649c5E2df6992dbD"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x47908346739A59E92373B465649c5E2df6992dbD"
+    }
+  ]
+}
