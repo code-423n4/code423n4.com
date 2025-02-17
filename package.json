@@ -1,0 +1,14 @@
+{
+  "name": "code423n4.com",
+  "version": "1.0.0",
+  "description": "Deprecated code423n4.com repository",
+  "main": "index.js",
+  "scripts": {
+    "validate": "node bin/validate.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "node-fetch": "^2.6.6"
+  }
+}

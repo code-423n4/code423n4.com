@@ -21,6 +21,6 @@ jobs:
         uses: tj-actions/changed-files@v44
       - run: yarn --frozen-lockfile
       - name: Validate
-        env: 
+        env:
           ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
-        run: yarn validate ${ALL_CHANGED_FILES}
+        run: npm run validate ${ALL_CHANGED_FILES}
