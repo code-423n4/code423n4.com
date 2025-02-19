@@ -1,0 +1,14 @@
+{
+  "handle": "ByteGuard",
+  "members": [
+    "Viraz",
+    "33audits",
+    "bumble"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x3e084907220E19F573cEa2fbb8De6628eCB7c270"
+    }
+  ]
+}
