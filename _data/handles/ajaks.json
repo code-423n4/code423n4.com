@@ -1,0 +1,14 @@
+{
+  "handle": "ajaks",
+  "members": [
+    "D1r3Wolf",
+    "Sud0u53r"
+  ],
+  "link": "https://x.com/ajaks_io",
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x1B4cb82a92E7B99032798aD08FE2FE1E6D7E5807"
+    }
+  ]
+}
