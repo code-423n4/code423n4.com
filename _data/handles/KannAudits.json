@@ -1,10 +1,11 @@
 {
   "handle": "KannAudits",
+  "link": "https://x.com/KannAudits",
   "members": [
     "0xKann",
-    "Pocas"
+    "Pocas",
+    "0x37"
   ],
-  "link": "https://x.com/KannAudits",
   "paymentAddresses": [
     {
       "chain": "polygon",
