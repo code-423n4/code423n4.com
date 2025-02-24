@@ -1,10 +1,10 @@
 {
   "handle": "DeFiHackLabs",
-  "image": "./avatars/DeFiHackLabs.png",
   "members": [
     "SunSec",
     "ret2basic",
-    "IceBear"
+    "IceBear",
+    "Usagi"
   ],
   "paymentAddresses": [
     {
