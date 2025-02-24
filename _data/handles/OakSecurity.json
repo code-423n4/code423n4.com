@@ -1,12 +1,13 @@
 {
   "handle": "OakSecurity",
+  "link": "https://x.com/SecurityOak",
   "members": [
     "ps",
     "imxm",
     "richie-oak",
-    "christianvari"
+    "christianvari",
+    "berndartmueller"
   ],
-  "link": "https://x.com/SecurityOak",
   "paymentAddresses": [
     {
       "chain": "polygon",
