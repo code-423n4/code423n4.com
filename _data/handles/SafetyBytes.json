@@ -1,0 +1,13 @@
+{
+  "handle": "SafetyBytes",
+  "members": [
+    "mladenov",
+    "yovchev_yoan"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x05E4eF2Fcf3000Ebd06Ec76Ba45Ea1Ac8ed7e4ec"
+    }
+  ]
+}
