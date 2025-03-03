@@ -1,0 +1,25 @@
+{
+  "handle": "0xVI",
+  "members": [
+    "p4y4b13",
+    "0xG0P1"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x09626CC4202fc968774A08c0b4b895f4e211a350"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x09626CC4202fc968774A08c0b4b895f4e211a350"
+    },
+    {
+      "chain": "arbitrum",
+      "address": "0x09626CC4202fc968774A08c0b4b895f4e211a350"
+    },
+    {
+      "chain": "optimism",
+      "address": "0x09626CC4202fc968774A08c0b4b895f4e211a350"
+    }
+  ]
+}
