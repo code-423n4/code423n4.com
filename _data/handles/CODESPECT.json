@@ -1,0 +1,26 @@
+{
+  "handle": "CODESPECT",
+  "members": [
+    "Talfao",
+    "Kalogerone"
+  ],
+  "link": "https://x.com/CODESPECT",
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x7aaeF9D9e3347F6F70dB547E090BEDB41E445dA0"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x7aaeF9D9e3347F6F70dB547E090BEDB41E445dA0"
+    },
+    {
+      "chain": "arbitrum",
+      "address": "0x7aaeF9D9e3347F6F70dB547E090BEDB41E445dA0"
+    },
+    {
+      "chain": "optimism",
+      "address": "0x7aaeF9D9e3347F6F70dB547E090BEDB41E445dA0"
+    }
+  ]
+}
