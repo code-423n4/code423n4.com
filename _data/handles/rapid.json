@@ -1,0 +1,13 @@
+{
+  "handle": "rapid",
+  "members": [
+    "dhank",
+    "LeFy"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xf96772f61393Cae4cb5181F1F5602a7473FF850b"
+    }
+  ]
+}
