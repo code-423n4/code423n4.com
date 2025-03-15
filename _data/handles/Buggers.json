@@ -1,0 +1,25 @@
+{
+  "handle": "Buggers",
+  "members": [
+    "Arvolear",
+    "hrom_h"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x0704675A283396508c4C989570BC4b63D6e331B0"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x0704675A283396508c4C989570BC4b63D6e331B0"
+    },
+    {
+      "chain": "arbitrum",
+      "address": "0x0704675A283396508c4C989570BC4b63D6e331B0"
+    },
+    {
+      "chain": "optimism",
+      "address": "0x0704675A283396508c4C989570BC4b63D6e331B0"
+    }
+  ]
+}
