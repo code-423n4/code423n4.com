@@ -1,0 +1,13 @@
+{
+  "handle": "HalalAudits",
+  "members": [
+    "halalauditor",
+    "0xlookman"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x9756c649e4304fa4247a22001887d9e84e654244"
+    }
+  ]
+}
