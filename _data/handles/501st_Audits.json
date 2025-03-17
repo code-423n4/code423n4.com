@@ -1,0 +1,26 @@
+{
+  "handle": "501st_Audits",
+  "members": [
+    "Rizo",
+    "okjaskaran"
+  ],
+  "link": "https://x.com/501stAudits",
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x5E5BfAC12088e241Cfe025D363ad9c235f6e3ea1"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x5E5BfAC12088e241Cfe025D363ad9c235f6e3ea1"
+    },
+    {
+      "chain": "arbitrum",
+      "address": "0x5E5BfAC12088e241Cfe025D363ad9c235f6e3ea1"
+    },
+    {
+      "chain": "optimism",
+      "address": "0x5E5BfAC12088e241Cfe025D363ad9c235f6e3ea1"
+    }
+  ]
+}
