@@ -1,0 +1,25 @@
+{
+  "handle": "ProtocolBreakers",
+  "members": [
+    "N16H7M4R3",
+    "0xSecurityManager"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x4f2b2b872847dfd86d231c18788626462564c430"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x4f2b2b872847dfd86d231c18788626462564c430"
+    },
+    {
+      "chain": "arbitrum",
+      "address": "0x4f2b2b872847dfd86d231c18788626462564c430"
+    },
+    {
+      "chain": "optimism",
+      "address": "0x4f2b2b872847dfd86d231c18788626462564c430"
+    }
+  ]
+}
