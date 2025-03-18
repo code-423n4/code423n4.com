@@ -1,0 +1,18 @@
+{
+  "handle": "0xForte",
+  "members": [
+    "Brdjx",
+    "datonster"
+  ],
+  "link": "https://0xforte.com",
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xdA532d0f9EAe513Ad50bf10D45a79D9C00FD7a05"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0xdA532d0f9EAe513Ad50bf10D45a79D9C00FD7a05"
+    }
+  ]
+}
