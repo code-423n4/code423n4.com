@@ -1,0 +1,13 @@
+{
+  "handle": "HaidutiSec",
+  "members": [
+    "lyubo",
+    "Merulez99"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x4959d0Faa3bBDfdEB31e6Fa5C19cb64AF1DFFa09"
+    }
+  ]
+}
