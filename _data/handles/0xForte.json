@@ -1,10 +1,11 @@
 {
   "handle": "0xForte",
+  "link": "https://0xforte.com",
   "members": [
     "Brdjx",
-    "datonster"
+    "datonster",
+    "JackErRip"
   ],
-  "link": "https://0xforte.com",
   "paymentAddresses": [
     {
       "chain": "polygon",
