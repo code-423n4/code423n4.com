@@ -1,0 +1,24 @@
+{
+  "handle": "QuillAudits_Elite",
+  "members": [
+    "QuillAudits_Team",
+    "turvy_fuzz",
+    "CallMeAgent",
+    "aga7hokakological"
+  ],
+  "link": "https://x.com/quillaudits_ai",
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x7443291afd5aef25b8129ba34811a4ebbf88613f"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x7443291afd5aef25b8129ba34811a4ebbf88613f"
+    },
+    {
+      "chain": "optimism",
+      "address": "0x7443291afd5aef25b8129ba34811a4ebbf88613f"
+    }
+  ]
+}
