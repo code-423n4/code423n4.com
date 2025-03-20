@@ -1,0 +1,13 @@
+{
+  "handle": "HashNodeLabs",
+  "members": [
+    "mahadev",
+    "Tigerfrake"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x84923671Fb20CEAf331646fC032D8430cF1660E0"
+    }
+  ]
+}
