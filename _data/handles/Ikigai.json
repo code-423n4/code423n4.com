@@ -1,0 +1,13 @@
+{
+  "handle": "Ikigai",
+  "members": [
+    "arturtoros",
+    "Nvalkov"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x465bc4BB3d371b71f03Be70997C7C6eC2bc44aEe"
+    }
+  ]
+}
