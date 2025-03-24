@@ -1,0 +1,25 @@
+{
+  "handle": "Ledger_Patrol",
+  "members": [
+    "ExtraCaterpillar",
+    "Xmannuel"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x680d429D47Ee8f648F22A04C3E695604f6F5a7CD"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x680d429D47Ee8f648F22A04C3E695604f6F5a7CD"
+    },
+    {
+      "chain": "arbitrum",
+      "address": "0x680d429D47Ee8f648F22A04C3E695604f6F5a7CD"
+    },
+    {
+      "chain": "optimism",
+      "address": "0x680d429D47Ee8f648F22A04C3E695604f6F5a7CD"
+    }
+  ]
+}
