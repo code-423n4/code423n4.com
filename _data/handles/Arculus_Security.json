@@ -1,0 +1,13 @@
+{
+  "handle": "Arculus_Security",
+  "members": [
+    "0xabhay",
+    "LonelyWolfDemon"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xA745760527d9087B4eC01a334a235bD635136E2C"
+    }
+  ]
+}
