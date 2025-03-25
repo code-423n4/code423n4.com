@@ -1,0 +1,13 @@
+{
+  "handle": "ASTRA",
+  "members": [
+    "psb01",
+    "AshutoshSB"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xB6A302Ec872D2Ede35fd3C375b9a295Fb23c9D07"
+    }
+  ]
+}
