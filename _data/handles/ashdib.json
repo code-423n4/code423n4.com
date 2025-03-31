@@ -1,0 +1,17 @@
+{
+  "handle": "ashdib",
+  "members": [
+    "dibakar",
+    "Ashmeetsingh987"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x3771CA7a637b119ED55ec79C32b5e156AB1e4573"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x3771CA7a637b119ED55ec79C32b5e156AB1e4573"
+    }
+  ]
+}
