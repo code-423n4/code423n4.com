@@ -1,0 +1,17 @@
+{
+  "handle": "VulnSeekers",
+  "members": [
+    "LeoGold",
+    "Ephraim"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x8dBdB1C7eFF1255D771D3C5a63FA39f111Cb4327"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x8dBdB1C7eFF1255D771D3C5a63FA39f111Cb4327"
+    }
+  ]
+}
