@@ -1,0 +1,13 @@
+{
+  "handle": "momentum",
+  "members": [
+    "volifoet",
+    "nslavchev"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xcAD1001642E5a4C4C1258aAeD60DDcbd0bBD906f"
+    }
+  ]
+}
