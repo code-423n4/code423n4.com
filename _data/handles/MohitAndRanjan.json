@@ -1,0 +1,13 @@
+{
+  "handle": "MohitAndRanjan",
+  "members": [
+    "mohit_codes",
+    "RanjanSharma"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x6718eb5484894593601355f4159eDb480EA6DaBC"
+    }
+  ]
+}
