@@ -1,0 +1,13 @@
+{
+  "handle": "Web3Husaria",
+  "members": [
+    "hakunamatata",
+    "0xShitgem"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x0b6aF9995653a073cD71564950e3745F28c431CD"
+    }
+  ]
+}
