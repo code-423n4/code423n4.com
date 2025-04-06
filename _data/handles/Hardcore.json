@@ -2,11 +2,16 @@
   "handle": "Hardcore",
   "members": [
     "hanz",
-    "Nordrljos"
+    "Nordrljos",
+    "kiseki"
   ],
   "paymentAddresses": [
     {
       "chain": "polygon",
+      "address": "0x7582766DCE283C899ae96D0A45CDE5E249C76645"
+    },
+    {
+      "chain": "ethereum",
       "address": "0x7582766DCE283C899ae96D0A45CDE5E249C76645"
     },
     {
