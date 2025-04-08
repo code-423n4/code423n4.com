@@ -1,0 +1,25 @@
+{
+  "handle": "Duality404",
+  "members": [
+    "blutorque",
+    "Flare"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x441dfeE53af5eAd35C61694EB0ED01ddB9Cf2cFC"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x441dfeE53af5eAd35C61694EB0ED01ddB9Cf2cFC"
+    },
+    {
+      "chain": "arbitrum",
+      "address": "0x441dfeE53af5eAd35C61694EB0ED01ddB9Cf2cFC"
+    },
+    {
+      "chain": "optimism",
+      "address": "0x441dfeE53af5eAd35C61694EB0ED01ddB9Cf2cFC"
+    }
+  ]
+}
