@@ -1,0 +1,13 @@
+{
+  "handle": "Kodo_Warriors",
+  "members": [
+    "frantzbrown",
+    "AnimeConsumer"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xfDf8e20CD9a54B75e6284809C190E28B8fB6a130"
+    }
+  ]
+}
