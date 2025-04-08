@@ -7,11 +7,11 @@
   "paymentAddresses": [
     {
       "chain": "polygon",
-      "address": "0x2BeAE531d1712828E132703b71e989cc9bBA951E"
+      "address": "0x39D0CF77eE730fE4DA7131e87E481cadd6204a66"
     },
     {
       "chain": "ethereum",
-      "address": "0x2BeAE531d1712828E132703b71e989cc9bBA951E"
+      "address": "0x39D0CF77eE730fE4DA7131e87E481cadd6204a66"
     },
     {
       "chain": "arbitrum",
