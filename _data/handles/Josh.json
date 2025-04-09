@@ -1,0 +1,25 @@
+{
+  "handle": "Josh",
+  "members": [
+    "Josh4324",
+    "Joshuajee"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x169f4B5f29aE1aC63bdFadD9e8f26de2fac3F83F"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x169f4B5f29aE1aC63bdFadD9e8f26de2fac3F83F"
+    },
+    {
+      "chain": "arbitrum",
+      "address": "0x169f4B5f29aE1aC63bdFadD9e8f26de2fac3F83F"
+    },
+    {
+      "chain": "optimism",
+      "address": "0x169f4B5f29aE1aC63bdFadD9e8f26de2fac3F83F"
+    }
+  ]
+}
