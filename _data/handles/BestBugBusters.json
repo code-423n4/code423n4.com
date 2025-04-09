@@ -1,0 +1,26 @@
+{
+  "handle": "BestBugBusters",
+  "members": [
+    "lilendian",
+    "ayechanst",
+    "gooseman"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x3DC95467E2Be53256F37f7538fCBA6d8f3B69b96"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x3DC95467E2Be53256F37f7538fCBA6d8f3B69b96"
+    },
+    {
+      "chain": "arbitrum",
+      "address": "0x3DC95467E2Be53256F37f7538fCBA6d8f3B69b96"
+    },
+    {
+      "chain": "optimism",
+      "address": "0x3DC95467E2Be53256F37f7538fCBA6d8f3B69b96"
+    }
+  ]
+}
