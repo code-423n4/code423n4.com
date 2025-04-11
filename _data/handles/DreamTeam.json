@@ -1,0 +1,13 @@
+{
+  "handle": "DreamTeam",
+  "members": [
+    "stacey",
+    "elmawhat"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xB13235A17a2622F4Fb484DdEFaD647c6A625Bad5"
+    }
+  ]
+}
