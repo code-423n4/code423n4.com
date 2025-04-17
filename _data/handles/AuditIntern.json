@@ -1,0 +1,17 @@
+{
+  "handle": "AuditIntern",
+  "members": [
+    "lihwy",
+    "ducanh2706"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xd4B8aA727F7006E717A6597Cc09b59c7c2e65716"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0xd4B8aA727F7006E717A6597Cc09b59c7c2e65716"
+    }
+  ]
+}
