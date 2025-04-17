@@ -1,0 +1,17 @@
+{
+  "handle": "LeonCode4rena",
+  "members": [
+    "stevewilliam",
+    "0xNot0rious"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xCE186dDcB9FFF6451DFAC22Bc9f9990C20806a1D"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0xCE186dDcB9FFF6451DFAC22Bc9f9990C20806a1D"
+    }
+  ]
+}
