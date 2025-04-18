@@ -1,0 +1,17 @@
+{
+  "handle": "TeamEmminence",
+  "members": [
+    "Enilenz",
+    "Nicholas_Niklaus"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x149e33789c1E6d82b81cb324A12D851B37e23d73"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x149e33789c1E6d82b81cb324A12D851B37e23d73"
+    }
+  ]
+}
