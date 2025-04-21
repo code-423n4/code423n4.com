@@ -1,0 +1,25 @@
+{
+  "handle": "Doogle",
+  "members": [
+    "Bingo",
+    "stevewilliam"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x2fc347d9cf4478e9cf38d1bcf0d862ff4f36e821"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x2fc347d9cf4478e9cf38d1bcf0d862ff4f36e821"
+    },
+    {
+      "chain": "arbitrum",
+      "address": "0x2fc347d9cf4478e9cf38d1bcf0d862ff4f36e821"
+    },
+    {
+      "chain": "optimism",
+      "address": "0x2fc347d9cf4478e9cf38d1bcf0d862ff4f36e821"
+    }
+  ]
+}
