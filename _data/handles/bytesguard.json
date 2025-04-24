@@ -1,0 +1,13 @@
+{
+  "handle": "bytesguard",
+  "members": [
+    "Viraz",
+    "thisvishalsingh"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xf88b0247e611ee5af8cf98f5303769cba8e7177c"
+    }
+  ]
+}
