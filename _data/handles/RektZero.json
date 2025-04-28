@@ -1,0 +1,17 @@
+{
+  "handle": "RektZero",
+  "members": [
+    "fromeo_016",
+    "OxPrincexyz"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x7935fb0753372E1aAc6FCC1691E672f8171c0C65"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x7935fb0753372E1aAc6FCC1691E672f8171c0C65"
+    }
+  ]
+}
