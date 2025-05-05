@@ -1,0 +1,14 @@
+{
+  "handle": "theraiders",
+  "members": [
+    "theseerr",
+    "Mahmud"
+  ],
+  "link": "https://twitter.com/mevyy",
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x862393af6617bb86091446ee520d8c9e0e1c500f"
+    }
+  ]
+}
