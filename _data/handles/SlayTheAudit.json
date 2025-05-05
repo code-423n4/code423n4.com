@@ -1,0 +1,13 @@
+{
+  "handle": "SlayTheAudit",
+  "members": [
+    "CompetSlayer",
+    "Babilosaure"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x9c8efe3BCcf21807c5f70638Efb74b9113DE266C"
+    }
+  ]
+}
