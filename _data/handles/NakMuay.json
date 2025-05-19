@@ -1,0 +1,13 @@
+{
+  "handle": "NakMuay",
+  "members": [
+    "0xGondar",
+    "BlockChomper"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x13f0aAA00394b93dc460Ddd8462f2Aec8F44F5cd"
+    }
+  ]
+}
