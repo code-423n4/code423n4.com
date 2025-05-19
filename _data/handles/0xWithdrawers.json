@@ -1,0 +1,14 @@
+{
+  "handle": "0xWithdrawers",
+  "members": [
+    "reptou",
+    "Jomar"
+  ],
+  "link": "https://github.com/0xWithdrawers",
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x90B5f5b0Baac6b00f096b2F486518Eea98Cbb877"
+    }
+  ]
+}
