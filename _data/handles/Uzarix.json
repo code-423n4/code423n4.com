@@ -1,0 +1,13 @@
+{
+  "handle": "Uzarix",
+  "members": [
+    "0xjarix",
+    "JustUzair"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xd95ea3d35D5B4AB1DecAA33610192dc7F459cdcf"
+    }
+  ]
+}
