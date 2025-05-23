@@ -1,0 +1,13 @@
+{
+  "handle": "SlaapLekker",
+  "members": [
+    "SmoothEntropy",
+    "divyaranjan"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xbBf3f1F776Be02d7f319C739699b44673Cc9E7DE"
+    }
+  ]
+}
