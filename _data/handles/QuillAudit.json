@@ -1,0 +1,14 @@
+{
+  "handle": "QuillAudit",
+  "members": [
+    "QuillAudits_Team",
+    "turvy_fuzz"
+  ],
+  "link": "https://x.com/quillaudits_ai",
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x7550981d3494634268375a335d7754734643C7Ec"
+    }
+  ]
+}
