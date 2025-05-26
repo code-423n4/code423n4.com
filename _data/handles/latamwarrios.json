@@ -1,0 +1,21 @@
+{
+  "handle": "latamwarrios",
+  "members": [
+    "wispy",
+    "Einarmig"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0xf059d4B912F82DF200AE58A80aAFD872F06a4281"
+    },
+    {
+      "chain": "arbitrum",
+      "address": "0xf059d4B912F82DF200AE58A80aAFD872F06a4281"
+    },
+    {
+      "chain": "optimism",
+      "address": "0xf059d4B912F82DF200AE58A80aAFD872F06a4281"
+    }
+  ]
+}
