@@ -1,0 +1,25 @@
+{
+  "handle": "Yandry_labs",
+  "members": [
+    "Drynooo",
+    "Yanx"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x4500007edeaca125b07fafa9d5050776f9ea1c27"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x4500007edeaca125b07fafa9d5050776f9ea1c27"
+    },
+    {
+      "chain": "arbitrum",
+      "address": "0x4500007edeaca125b07fafa9d5050776f9ea1c27"
+    },
+    {
+      "chain": "optimism",
+      "address": "0x4500007edeaca125b07fafa9d5050776f9ea1c27"
+    }
+  ]
+}
