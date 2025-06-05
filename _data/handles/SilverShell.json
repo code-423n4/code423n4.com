@@ -1,0 +1,13 @@
+{
+  "handle": "SilverShell",
+  "members": [
+    "Silverwind",
+    "seashell258"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x12d2159ca78523A04CA83A8121116c53de455374"
+    }
+  ]
+}
