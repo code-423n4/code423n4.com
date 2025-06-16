@@ -1,0 +1,25 @@
+{
+  "handle": "calldata",
+  "members": [
+    "owanemi",
+    "Olami978355"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x876eba154da898c22db1831d75dbb668decc67a8"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x876eba154da898c22db1831d75dbb668decc67a8"
+    },
+    {
+      "chain": "arbitrum",
+      "address": "0x876eba154da898c22db1831d75dbb668decc67a8"
+    },
+    {
+      "chain": "optimism",
+      "address": "0x876eba154da898c22db1831d75dbb668decc67a8"
+    }
+  ]
+}
