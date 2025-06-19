@@ -1,0 +1,13 @@
+{
+  "handle": "redByte",
+  "members": [
+    "0xredtrama",
+    "hezze"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x3fbB2ff8d4E022B99f308e95026A4d7631C536d8"
+    }
+  ]
+}
