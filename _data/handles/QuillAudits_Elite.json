@@ -1,12 +1,13 @@
 {
   "handle": "QuillAudits_Elite",
+  "link": "https://x.com/quillaudits_ai",
   "members": [
     "QuillAudits_Team",
     "turvy_fuzz",
     "CallMeAgent",
-    "aga7hokakological"
+    "aga7hokakological",
+    "slowbugmayor"
   ],
-  "link": "https://x.com/quillaudits_ai",
   "paymentAddresses": [
     {
       "chain": "polygon",
