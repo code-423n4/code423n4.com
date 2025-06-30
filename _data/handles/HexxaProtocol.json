@@ -1,0 +1,25 @@
+{
+  "handle": "HexxaProtocol",
+  "members": [
+    "skipper",
+    "GaurangBrdv"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x5873c7f79145A812A8fbda3097A3d3e2A3fF76dd"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x5873c7f79145A812A8fbda3097A3d3e2A3fF76dd"
+    },
+    {
+      "chain": "arbitrum",
+      "address": "0x6ab2263396305b257acdd8eb548B7f280A699a11"
+    },
+    {
+      "chain": "optimism",
+      "address": "0x6ab2263396305b257acdd8eb548B7f280A699a11"
+    }
+  ]
+}
