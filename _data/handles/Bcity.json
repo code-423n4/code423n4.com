@@ -1,0 +1,13 @@
+{
+  "handle": "Bcity",
+  "members": [
+    "0x60scs",
+    "croncut"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x8f18afb7e0c4ea4ed42a6cc7b7922b7bbf8f3d65"
+    }
+  ]
+}
