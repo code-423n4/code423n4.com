@@ -1,0 +1,25 @@
+{
+  "handle": "xX_360_NoScOpE_Xx",
+  "members": [
+    "bronze_pickaxe",
+    "mxuse"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "polygon",
+      "address": "0x166D0D94F4e3a5Afd1D2b9671A2199eD4F6094B0"
+    },
+    {
+      "chain": "ethereum",
+      "address": "0x166D0D94F4e3a5Afd1D2b9671A2199eD4F6094B0"
+    },
+    {
+      "chain": "arbitrum",
+      "address": "0x166D0D94F4e3a5Afd1D2b9671A2199eD4F6094B0"
+    },
+    {
+      "chain": "optimism",
+      "address": "0x166D0D94F4e3a5Afd1D2b9671A2199eD4F6094B0"
+    }
+  ]
+}
