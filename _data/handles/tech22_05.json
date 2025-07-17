@@ -1,0 +1,13 @@
+{
+  "handle": "tech22_05",
+  "members": [
+    "sakshi_722",
+    "sakshi"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0x7a34052Ed704F904a0ECa2667910ee044fE04393"
+    }
+  ]
+}
