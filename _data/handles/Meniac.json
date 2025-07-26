@@ -1,0 +1,17 @@
+{
+  "handle": "Meniac",
+  "members": [
+    "Aristos",
+    "Avalance"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0x25cB6CEa27B7F3E2AA6E51D711d0bB27aCD753FD"
+    },
+    {
+      "chain": "polygon",
+      "address": "0x25cB6CEa27B7F3E2AA6E51D711d0bB27aCD753FD"
+    }
+  ]
+}
