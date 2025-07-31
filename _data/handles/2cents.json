@@ -1,0 +1,25 @@
+{
+  "handle": "2cents",
+  "members": [
+    "mahadev",
+    "Shubham"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0x7B712445747A43ec7d52C2E02cAb70a42384a991"
+    },
+    {
+      "chain": "polygon",
+      "address": "0x7B712445747A43ec7d52C2E02cAb70a42384a991"
+    },
+    {
+      "chain": "arbitrum",
+      "address": "0x7B712445747A43ec7d52C2E02cAb70a42384a991"
+    },
+    {
+      "chain": "optimism",
+      "address": "0x7B712445747A43ec7d52C2E02cAb70a42384a991"
+    }
+  ]
+}
