@@ -1,0 +1,26 @@
+{
+  "handle": "Web3Hunters",
+  "members": [
+    "Lamsy",
+    "roccomania",
+    "BlackAdam"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0xE8CBA294608b3F903b7B7A3b0c9437f703b1c2e3"
+    },
+    {
+      "chain": "polygon",
+      "address": "0xE8CBA294608b3F903b7B7A3b0c9437f703b1c2e3"
+    },
+    {
+      "chain": "arbitrum",
+      "address": "0xE8CBA294608b3F903b7B7A3b0c9437f703b1c2e3"
+    },
+    {
+      "chain": "optimism",
+      "address": "0xE8CBA294608b3F903b7B7A3b0c9437f703b1c2e3"
+    }
+  ]
+}
