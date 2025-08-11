@@ -2,9 +2,23 @@
   "handle": "SeveritySquad",
   "members": [
     "shealtielanz",
-    "0xchimoski"
+    "droopyman",
+    "willycode20",
+    "oxtheanzrider",
+    "b1n4ry",
+    "player-01",
+    "0xTonraq",
+    "0xpetern",
+    "Chapo",
+    "0xHarryBarz",
+    "KINGWEST",
+    "0xdice91"
   ],
   "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0x86b8fb59ea9dab7a7de10b6dc9d8aad93ce24049"
+    },
     {
       "chain": "polygon",
       "address": "0x86b8fb59ea9dab7a7de10b6dc9d8aad93ce24049"
