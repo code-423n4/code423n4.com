@@ -1,0 +1,13 @@
+{
+  "handle": "io",
+  "members": [
+    "uid_zer0",
+    "uid_zer02"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0x84903E6044AE01F360A36BdCe526b4d43d00B852"
+    }
+  ]
+}
