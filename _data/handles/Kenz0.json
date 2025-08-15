@@ -1,0 +1,13 @@
+{
+  "handle": "Kenz0",
+  "members": [
+    "caesar49",
+    "raichu"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0x14650D0420cFf23c5d9300Db8483aDD0D6feb2a1"
+    }
+  ]
+}
