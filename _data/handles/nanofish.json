@@ -1,0 +1,13 @@
+{
+  "handle": "nanofish",
+  "members": [
+    "milnail",
+    "chiffoncake"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0xd95014D888fffA492B9bCBf1Cc532fd85BE1bD67"
+    }
+  ]
+}
