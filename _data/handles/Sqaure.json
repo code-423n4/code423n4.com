@@ -1,0 +1,14 @@
+{
+  "handle": "Sqaure",
+  "members": [
+    "unique",
+    "caesar49"
+  ],
+  "link": "https://x.com/unique0x0",
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0x59Fa664F7a183737e05Af11bD64AA4B22F5614A3"
+    }
+  ]
+}
