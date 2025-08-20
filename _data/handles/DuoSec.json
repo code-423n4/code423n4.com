@@ -1,0 +1,21 @@
+{
+  "handle": "DuoSec",
+  "members": [
+    "dobrevaleri",
+    "Silvermist"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0x4f11E87Ef877D0Fbfbc98E563482243376fd71CB"
+    },
+    {
+      "chain": "polygon",
+      "address": "0x4f11E87Ef877D0Fbfbc98E563482243376fd71CB"
+    },
+    {
+      "chain": "arbitrum",
+      "address": "0x4f11E87Ef877D0Fbfbc98E563482243376fd71CB"
+    }
+  ]
+}
