@@ -1,0 +1,13 @@
+{
+  "handle": "EvoGeek",
+  "members": [
+    "Evo",
+    "SUPERMAN_I4G"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0x9f3daF13268168724DD72485748594C63c0f1D98"
+    }
+  ]
+}
