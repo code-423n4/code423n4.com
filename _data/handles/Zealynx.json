@@ -1,20 +1,19 @@
 {
   "handle": "Zealynx",
+  "link": "https://x.com/ZealynxSecurity",
   "members": [
     "Bloqarl",
     "GcuellarmDev",
     "DappScout",
-    "secoalba",
     "m3dython"
   ],
-  "link": "https://x.com/ZealynxSecurity",
   "paymentAddresses": [
     {
-      "chain": "polygon",
+      "chain": "ethereum",
       "address": "0x92d0ebaf7eb707f0650f9471e61348f4656c29bc"
     },
     {
-      "chain": "ethereum",
+      "chain": "polygon",
       "address": "0x92d0ebaf7eb707f0650f9471e61348f4656c29bc"
     },
     {
