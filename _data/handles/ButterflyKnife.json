@@ -1,0 +1,13 @@
+{
+  "handle": "ButterflyKnife",
+  "members": [
+    "thekmj",
+    "milnail"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0x4aCAeaD5249770F268F18284Ef7e71039DC127Fb"
+    }
+  ]
+}
