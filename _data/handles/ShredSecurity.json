@@ -1,0 +1,17 @@
+{
+  "handle": "ShredSecurity",
+  "members": [
+    "kenzowhitehat",
+    "yashar"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0x5dE68DB4668aF5824000d735d1391F99b4762184"
+    },
+    {
+      "chain": "polygon",
+      "address": "0x5dE68DB4668aF5824000d735d1391F99b4762184"
+    }
+  ]
+}
