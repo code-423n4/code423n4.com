@@ -1,0 +1,13 @@
+{
+  "handle": "VinciGearHead",
+  "members": [
+    "TheWeb3Mechanic",
+    "dan__vinci"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0xFA3d316795C726994dbc6318133BE7AA72aB56F1"
+    }
+  ]
+}
