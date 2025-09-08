@@ -1,0 +1,13 @@
+{
+  "handle": "Hanni",
+  "members": [
+    "onirique",
+    "PepeCat"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0xF806C7Fb97733f6a1eb53abc6f6a13b7d872b9Ee"
+    }
+  ]
+}
