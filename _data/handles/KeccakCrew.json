@@ -1,0 +1,13 @@
+{
+  "handle": "KeccakCrew",
+  "members": [
+    "sahuang",
+    "VIELITE"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0xa2430c1fa1988f4b658983ff39ded737e5710c0b"
+    }
+  ]
+}
