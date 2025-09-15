@@ -1,0 +1,13 @@
+{
+  "handle": "Sweepers",
+  "members": [
+    "chinepun",
+    "avowed"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0xd67725712637ce9d36914d74e0e2f557a6f15976"
+    }
+  ]
+}
