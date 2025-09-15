@@ -3,9 +3,14 @@
   "members": [
     "Mylifechangefast_eth",
     "Aristos",
-    "TheWeb3Mechanic"
+    "TheWeb3Mechanic",
+    "Avalance"
   ],
   "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0x2177aA278f55c42b57892C8b592e574c0B39e2A2"
+    },
     {
       "chain": "polygon",
       "address": "0xa6D3FF5C22e1bB3B3951c9d243d67e797caB862E"
