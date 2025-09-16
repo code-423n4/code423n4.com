@@ -1,0 +1,27 @@
+{
+  "handle": "NamG",
+  "members": [
+    "Namg3636",
+    "0xManishTech",
+    "0xRajeev"
+  ],
+  "link": "https://x.com/namg3636/status/1967920742626103654?s=46",
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0xa48C015819Cf349E10Cd2e85D2e29BbAf98a918c"
+    },
+    {
+      "chain": "polygon",
+      "address": "0xa48C015819Cf349E10Cd2e85D2e29BbAf98a918c"
+    },
+    {
+      "chain": "arbitrum",
+      "address": "0xa48C015819Cf349E10Cd2e85D2e29BbAf98a918c"
+    },
+    {
+      "chain": "optimism",
+      "address": "0xa48C015819Cf349E10Cd2e85D2e29BbAf98a918c"
+    }
+  ]
+}
