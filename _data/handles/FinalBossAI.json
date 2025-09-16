@@ -1,0 +1,14 @@
+{
+  "handle": "FinalBossAI",
+  "members": [
+    "0xriptide",
+    "gregom"
+  ],
+  "link": "https://x.com/final_bossai",
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0xc124446dcfB0E99846a7DBcEaeA2862fbeA08b51"
+    }
+  ]
+}
