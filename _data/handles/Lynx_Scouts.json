@@ -1,0 +1,14 @@
+{
+  "handle": "Lynx_Scouts",
+  "members": [
+    "DappScout",
+    "m3dython",
+    "Ekomzy"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0x7C599f4EC3302ED155F39F7E2c9c5413c5799672"
+    }
+  ]
+}
