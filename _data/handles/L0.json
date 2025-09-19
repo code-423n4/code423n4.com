@@ -1,0 +1,14 @@
+{
+  "handle": "L0",
+  "members": [
+    "owanemi",
+    "andreas15",
+    "Olami978355"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0x9042ab60549274d17153c63501a7ca90d1f5be13"
+    }
+  ]
+}
