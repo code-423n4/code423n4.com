@@ -1,22 +1,25 @@
 {
   "handle": "Web3Vikings",
-  "link": "https://twitter.com/shealtielanz",
+  "link": "https://twitter.com/Severity_Squad",
   "members": [
-    "shealtielanz",
-    "Petrus",
-    "willycode20",
-    "0xHarryBarz",
-    "0xpetern",
-    "droopyman"
+    "0xdice91",
+    "0xTonraq",
+    "oxchsyston",
+    "oxtheanzrider",
+    "player-01",
+    "KINGWEST",
+    "Chapo",
+    "Bulletprime",
+    "b1n4ry"
   ],
   "paymentAddresses": [
     {
       "chain": "ethereum",
-      "address": "0x86b8fb59ea9dab7a7de10b6dc9d8aad93ce24049"
+      "address": "0xa1611d0370dcfe8b6fcb8d8bb1b5338faf0dd76f"
     },
     {
       "chain": "polygon",
-      "address": "0x86b8fb59ea9dab7a7de10b6dc9d8aad93ce24049"
+      "address": "0xa1611d0370dcfe8b6fcb8d8bb1b5338faf0dd76f"
     }
   ]
 }
