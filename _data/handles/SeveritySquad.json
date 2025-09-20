@@ -1,23 +1,22 @@
 {
   "handle": "SeveritySquad",
+  "link": "https://x.com/Severity_Squad",
   "members": [
-    "oxtheanzrider",
-    "b1n4ry",
-    "player-01",
-    "0xTonraq",
-    "Chapo",
-    "KINGWEST",
-    "0xdice91",
-    "shealtielanz"
+    "willycode20",
+    "Petrus",
+    "0xpetern",
+    "0xHarryBarz",
+    "droopyman",
+    "Summer"
   ],
   "paymentAddresses": [
     {
       "chain": "ethereum",
-      "address": "0x86b8fb59ea9dab7a7de10b6dc9d8aad93ce24049"
+      "address": "0xa1611d0370dcfe8b6fcb8d8bb1b5338faf0dd76f"
     },
     {
       "chain": "polygon",
-      "address": "0x86b8fb59ea9dab7a7de10b6dc9d8aad93ce24049"
+      "address": "0xa1611d0370dcfe8b6fcb8d8bb1b5338faf0dd76f"
     }
   ]
 }
