@@ -1,0 +1,28 @@
+{
+  "handle": "MKH",
+  "members": [
+    "mh0011",
+    "0xManishTech",
+    "0xNezha",
+    "0xMirim"
+  ],
+  "link": "https://x.com/penchansuki02",
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0xca9A26c69D8d0699d6AD2d668B2280704616bC35"
+    },
+    {
+      "chain": "polygon",
+      "address": "0xca9A26c69D8d0699d6AD2d668B2280704616bC35"
+    },
+    {
+      "chain": "arbitrum",
+      "address": "0xca9A26c69D8d0699d6AD2d668B2280704616bC35"
+    },
+    {
+      "chain": "optimism",
+      "address": "0xca9A26c69D8d0699d6AD2d668B2280704616bC35"
+    }
+  ]
+}
