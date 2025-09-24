@@ -1,0 +1,25 @@
+{
+  "handle": "0xCartel",
+  "members": [
+    "yashar",
+    "pwnforce"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0x19A0EB3137Fd4Bc9C9C4f2493E1eb2898f7B6f8d"
+    },
+    {
+      "chain": "polygon",
+      "address": "0x19A0EB3137Fd4Bc9C9C4f2493E1eb2898f7B6f8d"
+    },
+    {
+      "chain": "arbitrum",
+      "address": "0x19A0EB3137Fd4Bc9C9C4f2493E1eb2898f7B6f8d"
+    },
+    {
+      "chain": "optimism",
+      "address": "0x19A0EB3137Fd4Bc9C9C4f2493E1eb2898f7B6f8d"
+    }
+  ]
+}
