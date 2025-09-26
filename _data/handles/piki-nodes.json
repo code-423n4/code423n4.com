@@ -1,0 +1,13 @@
+{
+  "handle": "piki-nodes",
+  "members": [
+    "piki",
+    "rage"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0xF0Bd88Df704E681813842DC059Dc0Dbff3A52f17"
+    }
+  ]
+}
