@@ -1,0 +1,15 @@
+{
+  "handle": "SmartCiphers",
+  "members": [
+    "TactfulCipher",
+    "Brams",
+    "smarttee"
+  ],
+  "link": "https://x.com/TactfulCipher",
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0x16f45d310a222e187403c5eaf9ee2ddf99f7937e"
+    }
+  ]
+}
