@@ -1,0 +1,25 @@
+{
+  "handle": "Bastion",
+  "members": [
+    "khaye26",
+    "caesar49"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0x20aB5Be89d2480dA7509278D961b442f65C7875a"
+    },
+    {
+      "chain": "polygon",
+      "address": "0x20aB5Be89d2480dA7509278D961b442f65C7875a"
+    },
+    {
+      "chain": "arbitrum",
+      "address": "0x20aB5Be89d2480dA7509278D961b442f65C7875a"
+    },
+    {
+      "chain": "optimism",
+      "address": "0x20aB5Be89d2480dA7509278D961b442f65C7875a"
+    }
+  ]
+}
