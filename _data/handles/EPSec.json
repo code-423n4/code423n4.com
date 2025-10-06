@@ -1,18 +1,18 @@
 {
   "handle": "EPSec",
-  "link": "https://x.com/ChDefendersEth",
+  "link": "https://x.com/DefendersAudits",
   "members": [
     "1337web3",
     "petarP1998"
   ],
   "paymentAddresses": [
     {
-      "chain": "polygon",
-      "address": "0x0c9d68e31E9B6f1262Af8967E678f3009dCc8873"
-    },
-    {
       "chain": "ethereum",
       "address": "0xa7b675E242Aba3D40863bA18F1b4dC68e2e5C669"
+    },
+    {
+      "chain": "polygon",
+      "address": "0x0c9d68e31E9B6f1262Af8967E678f3009dCc8873"
     },
     {
       "chain": "arbitrum",
