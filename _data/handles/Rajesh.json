@@ -1,0 +1,13 @@
+{
+  "handle": "Rajesh",
+  "members": [
+    "rudhra",
+    "Rajeshkotaru"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0x51060Ecc85024a1F82a47190d769a5849C889b50"
+    }
+  ]
+}
