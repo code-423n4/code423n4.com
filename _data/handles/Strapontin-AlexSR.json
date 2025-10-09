@@ -1,0 +1,25 @@
+{
+  "handle": "Strapontin-AlexSR",
+  "members": [
+    "Strapontin",
+    "Alekso"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0xA5083E447B562a71Cc2ab47C8Ae25469B68728c5"
+    },
+    {
+      "chain": "polygon",
+      "address": "0xA5083E447B562a71Cc2ab47C8Ae25469B68728c5"
+    },
+    {
+      "chain": "arbitrum",
+      "address": "0xA5083E447B562a71Cc2ab47C8Ae25469B68728c5"
+    },
+    {
+      "chain": "optimism",
+      "address": "0xA5083E447B562a71Cc2ab47C8Ae25469B68728c5"
+    }
+  ]
+}
