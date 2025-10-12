@@ -1,0 +1,21 @@
+{
+  "handle": "OnyxAudits",
+  "members": [
+    "Tigerfrake",
+    "omeiza"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0xE5acEdD9edAb85ed242e4ee2576E0f1f274281Fe"
+    },
+    {
+      "chain": "polygon",
+      "address": "0xE5acEdD9edAb85ed242e4ee2576E0f1f274281Fe"
+    },
+    {
+      "chain": "arbitrum",
+      "address": "0xE5acEdD9edAb85ed242e4ee2576E0f1f274281Fe"
+    }
+  ]
+}
