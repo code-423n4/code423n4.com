@@ -1,0 +1,21 @@
+{
+  "handle": "ELITE-",
+  "members": [
+    "0xHarryBarz",
+    "0xpetern"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0xb954F6776bc2C047caD151456DEcf976c382B0b0"
+    },
+    {
+      "chain": "polygon",
+      "address": "0xb954F6776bc2C047caD151456DEcf976c382B0b0"
+    },
+    {
+      "chain": "optimism",
+      "address": "0xb954F6776bc2C047caD151456DEcf976c382B0b0"
+    }
+  ]
+}
