@@ -2,13 +2,17 @@
   "handle": "InterOp",
   "members": [
     "somasine",
-    "pandaman",
-    "Preshow9275"
+    "Preshow9275",
+    "pandaman"
   ],
   "paymentAddresses": [
     {
+      "chain": "ethereum",
+      "address": "0xa5cad0e9d07Cd4d911bdE3c50615C6f1343Fd17f"
+    },
+    {
       "chain": "polygon",
-      "address": "0x1115a263b583d55c8779FAA1F6f0Eb9F1B1Cc639"
+      "address": "0xa5cad0e9d07Cd4d911bdE3c50615C6f1343Fd17f"
     }
   ]
 }
