@@ -1,0 +1,18 @@
+{
+  "handle": "LaboonRSCH",
+  "members": [
+    "firmanregar",
+    "royrakun87"
+  ],
+  "link": "https://x.com/0xfirmanregar",
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0xE35D382F0Ad029983228aCf39F71056d0DDcdcdb"
+    },
+    {
+      "chain": "polygon",
+      "address": "0xE35D382F0Ad029983228aCf39F71056d0DDcdcdb"
+    }
+  ]
+}
