@@ -1,0 +1,13 @@
+{
+  "handle": "Willy_Petrus",
+  "members": [
+    "willycode20",
+    "Petrus"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0x012aa5d09d4ea48b578e83a5953fc1cd678a1b6d"
+    }
+  ]
+}
