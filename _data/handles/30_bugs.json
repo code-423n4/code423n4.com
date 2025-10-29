@@ -1,0 +1,15 @@
+{
+  "handle": "30_bugs",
+  "members": [
+    "Chapo",
+    "player-01",
+    "b1n4ry",
+    "0xNot0rious"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0x85dAa2Dc09508E0F2C4b33A2042F3AdfC02e0aa2"
+    }
+  ]
+}
