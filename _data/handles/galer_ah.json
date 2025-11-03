@@ -1,0 +1,13 @@
+{
+  "handle": "galer_ah",
+  "members": [
+    "0xshdax",
+    "zzkiel"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0x8ceaac836111830785673d8930edc65bd3be9cd5"
+    }
+  ]
+}
