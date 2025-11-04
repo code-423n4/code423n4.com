@@ -1,0 +1,26 @@
+{
+  "handle": "deadLock",
+  "members": [
+    "BengalCatBalu",
+    "bobbyaudit"
+  ],
+  "link": "https://x.com/BengalCatBalu",
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0x495cfa748ebf17A1B612a6fEe78D1c3558e73076"
+    },
+    {
+      "chain": "polygon",
+      "address": "0x495cfa748ebf17A1B612a6fEe78D1c3558e73076"
+    },
+    {
+      "chain": "arbitrum",
+      "address": "0x495cfa748ebf17A1B612a6fEe78D1c3558e73076"
+    },
+    {
+      "chain": "optimism",
+      "address": "0x495cfa748ebf17A1B612a6fEe78D1c3558e73076"
+    }
+  ]
+}
