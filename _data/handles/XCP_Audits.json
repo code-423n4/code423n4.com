@@ -1,0 +1,13 @@
+{
+  "handle": "XCP_Audits",
+  "members": [
+    "MrX",
+    "AquaOcean"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0x8c96d2262383266388c16e8735045f3441fab8e3"
+    }
+  ]
+}
