@@ -1,0 +1,26 @@
+{
+  "handle": "0xFar5eer_Research_Team",
+  "members": [
+    "far5eer",
+    "valarislife"
+  ],
+  "link": "https://t.me/far5eer",
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0x40385F27D90eb7A7FCa6F521176C6eBADBE57632"
+    },
+    {
+      "chain": "polygon",
+      "address": "0x40385F27D90eb7A7FCa6F521176C6eBADBE57632"
+    },
+    {
+      "chain": "arbitrum",
+      "address": "0x40385F27D90eb7A7FCa6F521176C6eBADBE57632"
+    },
+    {
+      "chain": "optimism",
+      "address": "0x40385F27D90eb7A7FCa6F521176C6eBADBE57632"
+    }
+  ]
+}
