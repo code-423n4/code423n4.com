@@ -1,0 +1,14 @@
+{
+  "handle": "AstarAudit_Rocket",
+  "members": [
+    "Zinzin",
+    "Tona",
+    "tunah"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0xE6a65E9A6A360DbF081f220DBFB70A1A028d5E94"
+    }
+  ]
+}
