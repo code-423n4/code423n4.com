@@ -2,12 +2,12 @@
   "handle": "Centaur",
   "members": [
     "Mylifechangefast_eth",
-    "Avalance"
+    "codertjay"
   ],
   "paymentAddresses": [
     {
       "chain": "ethereum",
-      "address": "0x2177aA278f55c42b57892C8b592e574c0B39e2A2"
+      "address": "0x3c7bcad93f0e024b0ef8470305c79d0d73e07f26"
     },
     {
       "chain": "polygon",
