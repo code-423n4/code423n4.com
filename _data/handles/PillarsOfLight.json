@@ -1,0 +1,26 @@
+{
+  "handle": "PillarsOfLight",
+  "members": [
+    "ChaseTheLight",
+    "Auditor_Nate",
+    "Alekso"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0xbc82D9654283289fb48729968f804ab822DcC144"
+    },
+    {
+      "chain": "polygon",
+      "address": "0xbc82D9654283289fb48729968f804ab822DcC144"
+    },
+    {
+      "chain": "arbitrum",
+      "address": "0xbc82D9654283289fb48729968f804ab822DcC144"
+    },
+    {
+      "chain": "optimism",
+      "address": "0xbc82D9654283289fb48729968f804ab822DcC144"
+    }
+  ]
+}
