@@ -1,0 +1,16 @@
+{
+  "handle": "Secure-Labs-Armicrus",
+  "members": [
+    "Icarus",
+    "calc1f4r",
+    "Mikb",
+    "Le_Rems",
+    "Sabble"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0x33755b2aad06af8cdcf9727cbb47b60654babf16"
+    }
+  ]
+}
