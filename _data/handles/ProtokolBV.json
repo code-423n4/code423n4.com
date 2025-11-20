@@ -1,0 +1,14 @@
+{
+  "handle": "ProtokolBV",
+  "members": [
+    "protokol",
+    "HarishGunjalli",
+    "Meriadoc"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0x6C4bA7f8A364041A935e0dBbB31B2269f825E4c7"
+    }
+  ]
+}
