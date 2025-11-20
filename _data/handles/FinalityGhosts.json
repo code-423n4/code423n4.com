@@ -1,0 +1,25 @@
+{
+  "handle": "FinalityGhosts",
+  "members": [
+    "aliabouzeid",
+    "CyberNerd"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0xde8775553d4fafcf6a3a3937fede4b4ac8dea18e"
+    },
+    {
+      "chain": "polygon",
+      "address": "0xde8775553d4fafcf6a3a3937fede4b4ac8dea18e"
+    },
+    {
+      "chain": "arbitrum",
+      "address": "0xde8775553d4fafcf6a3a3937fede4b4ac8dea18e"
+    },
+    {
+      "chain": "optimism",
+      "address": "0xde8775553d4fafcf6a3a3937fede4b4ac8dea18e"
+    }
+  ]
+}
