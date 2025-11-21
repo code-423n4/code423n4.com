@@ -1,0 +1,13 @@
+{
+  "handle": "Chrys-Dice",
+  "members": [
+    "0xdice91",
+    "oxchsyston"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0x2f2fd5d96f0fded3e69d3a99c36cc5c69684f7bd"
+    }
+  ]
+}
