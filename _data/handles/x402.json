@@ -1,0 +1,21 @@
+{
+  "handle": "x402",
+  "members": [
+    "hark017",
+    "anon1one"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0x3375766a00eb0d6940dd124c3018764d4718100c"
+    },
+    {
+      "chain": "arbitrum",
+      "address": "0x3375766a00eb0d6940dd124c3018764d4718100c"
+    },
+    {
+      "chain": "optimism",
+      "address": "0x3375766a00eb0d6940dd124c3018764d4718100c"
+    }
+  ]
+}
