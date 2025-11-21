@@ -1,0 +1,17 @@
+{
+  "handle": "YAMSEC_Audits",
+  "members": [
+    "Mahi_Vasisth",
+    "yash_ether"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0xbcf9f9f65d956dd5a1c049bd4e9fc81fb6f885ef"
+    },
+    {
+      "chain": "polygon",
+      "address": "0xbcf9f9f65d956dd5a1c049bd4e9fc81fb6f885ef"
+    }
+  ]
+}
