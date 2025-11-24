@@ -2,9 +2,13 @@
   "handle": "ShadowBytes",
   "members": [
     "Mylifechangefast_eth",
-    "Avalance"
+    "Aristos"
   ],
   "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0x3c7bcad93f0e024b0ef8470305c79d0d73e07f26"
+    },
     {
       "chain": "polygon",
       "address": "0x3c7BCAD93f0e024B0eF8470305C79d0d73E07f26"
