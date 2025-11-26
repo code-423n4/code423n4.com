@@ -1,0 +1,18 @@
+{
+  "handle": "Valves",
+  "members": [
+    "vesko210",
+    "Merulez99"
+  ],
+  "link": "https://x.com/Vesko_210",
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0x324E7b27967b88f711A1cBeC5c01eBf3cA8dafda"
+    },
+    {
+      "chain": "polygon",
+      "address": "0x324E7b27967b88f711A1cBeC5c01eBf3cA8dafda"
+    }
+  ]
+}
