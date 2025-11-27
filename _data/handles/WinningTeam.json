@@ -1,0 +1,13 @@
+{
+  "handle": "WinningTeam",
+  "members": [
+    "willycode20",
+    "Kingdavid"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0x212f56877d60d8d422d1f7926d374298ee9e2dc3"
+    }
+  ]
+}
