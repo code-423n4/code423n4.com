@@ -1,0 +1,13 @@
+{
+  "handle": "BugNet",
+  "members": [
+    "Volleyking",
+    "Razkky"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0xbfb94a49044d65f71ae7d4aa42abe37a67bf24c3"
+    }
+  ]
+}
