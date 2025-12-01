@@ -1,0 +1,13 @@
+{
+  "handle": "Aramki",
+  "members": [
+    "0x97",
+    "maze"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0x97e590c39749a2A1c55A1C91A9bDa7C158BB5158"
+    }
+  ]
+}
