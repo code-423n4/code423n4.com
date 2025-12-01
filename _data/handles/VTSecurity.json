@@ -1,0 +1,13 @@
+{
+  "handle": "VTSecurity",
+  "members": [
+    "TopStar",
+    "0xVox"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0x9A1EAFF1B1353463CDc4D40de1764685E0707A6B"
+    }
+  ]
+}
