@@ -1,0 +1,25 @@
+{
+  "handle": "azus",
+  "members": [
+    "fl0wizy",
+    "vivalD"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0xAadB068EF51511A67e146dd474d7efb2b538147D"
+    },
+    {
+      "chain": "polygon",
+      "address": "0xAadB068EF51511A67e146dd474d7efb2b538147D"
+    },
+    {
+      "chain": "arbitrum",
+      "address": "0xAadB068EF51511A67e146dd474d7efb2b538147D"
+    },
+    {
+      "chain": "optimism",
+      "address": "0xAadB068EF51511A67e146dd474d7efb2b538147D"
+    }
+  ]
+}
