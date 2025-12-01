@@ -3,12 +3,15 @@
   "members": [
     "m4k2",
     "Greed",
-    "Icarus"
+    "Icarus",
+    "Mikb",
+    "Le_Rems",
+    "Sabble"
   ],
   "paymentAddresses": [
     {
-      "chain": "polygon",
-      "address": "0x9dFfC1C946e22A1d5792B89C18157b7c1cB4D06b"
+      "chain": "ethereum",
+      "address": "0x33755b2aad06af8cdcf9727cbb47b60654babf16"
     }
   ]
 }
