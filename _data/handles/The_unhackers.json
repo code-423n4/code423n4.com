@@ -1,0 +1,14 @@
+{
+  "handle": "The_unhackers",
+  "members": [
+    "deeney",
+    "kolade"
+  ],
+  "link": "https://code4rena.com/@deeney",
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0x641a35c940db260e95182d5dc4c37ffff1bf85af"
+    }
+  ]
+}
