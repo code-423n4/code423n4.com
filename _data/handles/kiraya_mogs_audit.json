@@ -1,0 +1,13 @@
+{
+  "handle": "kiraya_mogs_audit",
+  "members": [
+    "YouCrossTheLineAlfie",
+    "aestheticbhai"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0x5282c7BED562DD449D413C678c59c78cb36D0a94"
+    }
+  ]
+}
