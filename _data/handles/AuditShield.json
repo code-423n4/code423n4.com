@@ -1,0 +1,14 @@
+{
+  "handle": "AuditShield",
+  "members": [
+    "igdbase",
+    "totdking",
+    "princekay"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0xfce4af1a67d4e7a3df97428ab91dfaac9c367555"
+    }
+  ]
+}
