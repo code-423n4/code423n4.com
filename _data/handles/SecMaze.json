@@ -1,0 +1,13 @@
+{
+  "handle": "SecMaze",
+  "members": [
+    "secprog",
+    "maze"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0xA5534A348C3FF1092C9CBC71B6eA4190b4aADaF4"
+    }
+  ]
+}
