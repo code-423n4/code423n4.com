@@ -1,0 +1,14 @@
+{
+  "handle": "Inversive_Labs",
+  "members": [
+    "secoalba",
+    "ulexec"
+  ],
+  "link": "https://inversive.xyz/",
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0x52A9AA08113FE9BafBC7e88CA44310c644bbc930"
+    }
+  ]
+}
