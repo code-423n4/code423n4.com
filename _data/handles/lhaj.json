@@ -1,0 +1,13 @@
+{
+  "handle": "lhaj",
+  "members": [
+    "lhajman",
+    "maze"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0x18766354424092889c0ee40c9CBf8621892B20F5"
+    }
+  ]
+}
