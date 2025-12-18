@@ -1,26 +1,26 @@
 {
   "handle": "Franky022",
+  "link": "https://linktr.ee/franky022",
   "members": [
     "Franky02",
     "Franfran"
   ],
-  "link": "https://linktr.ee/franky022",
   "paymentAddresses": [
     {
       "chain": "ethereum",
-      "address": "0xeA322c4F5C6B346b55d0259DaD6858Ff36D94aED"
+      "address": "0x700D8c89bcC2AC85A3D011Ee4F031A4FD6403a67"
     },
     {
       "chain": "polygon",
-      "address": "0xeA322c4F5C6B346b55d0259DaD6858Ff36D94aED"
+      "address": "0x700D8c89bcC2AC85A3D011Ee4F031A4FD6403a67"
     },
     {
       "chain": "arbitrum",
-      "address": "0xeA322c4F5C6B346b55d0259DaD6858Ff36D94aED"
+      "address": "0x700D8c89bcC2AC85A3D011Ee4F031A4FD6403a67"
     },
     {
       "chain": "optimism",
-      "address": "0xeA322c4F5C6B346b55d0259DaD6858Ff36D94aED"
+      "address": "0x700D8c89bcC2AC85A3D011Ee4F031A4FD6403a67"
     }
   ]
 }
