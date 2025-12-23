@@ -1,0 +1,25 @@
+{
+  "handle": "Ironclad",
+  "members": [
+    "BioMatriX",
+    "Mahi_Vasisth"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0x20283829d71A534Fc58C26F1b60a50FC40A67575"
+    },
+    {
+      "chain": "polygon",
+      "address": "0x20283829d71A534Fc58C26F1b60a50FC40A67575"
+    },
+    {
+      "chain": "arbitrum",
+      "address": "0x20283829d71A534Fc58C26F1b60a50FC40A67575"
+    },
+    {
+      "chain": "optimism",
+      "address": "0x20283829d71A534Fc58C26F1b60a50FC40A67575"
+    }
+  ]
+}
