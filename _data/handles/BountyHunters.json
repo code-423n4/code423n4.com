@@ -1,0 +1,14 @@
+{
+  "handle": "BountyHunters",
+  "members": [
+    "muhammadAliyan",
+    "hashirabdullah",
+    "zeeshier"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0x98bC85AB0170554A6b24df39449E0FDfD41471C5"
+    }
+  ]
+}
