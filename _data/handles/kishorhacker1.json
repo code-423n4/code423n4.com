@@ -1,0 +1,27 @@
+{
+  "handle": "kishorhacker1",
+  "members": [
+    "kishorsinghpatel",
+    "0xManishTech",
+    "0xNezha"
+  ],
+  "link": "https://discord.gg/NvUAAdPB",
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0x90e45ACF427c10445Fa1E02857DFF48d2235E4B8"
+    },
+    {
+      "chain": "polygon",
+      "address": "0x90e45ACF427c10445Fa1E02857DFF48d2235E4B8"
+    },
+    {
+      "chain": "arbitrum",
+      "address": "0x90e45ACF427c10445Fa1E02857DFF48d2235E4B8"
+    },
+    {
+      "chain": "optimism",
+      "address": "0x90e45ACF427c10445Fa1E02857DFF48d2235E4B8"
+    }
+  ]
+}
