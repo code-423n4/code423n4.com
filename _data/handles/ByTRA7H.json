@@ -1,0 +1,17 @@
+{
+  "handle": "ByTRA7H",
+  "members": [
+    "mgv",
+    "dfd3s"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0xb1292868C90C80A2b40d50b8010F797Fce90e28d"
+    },
+    {
+      "chain": "polygon",
+      "address": "0xb1292868C90C80A2b40d50b8010F797Fce90e28d"
+    }
+  ]
+}
