@@ -3,16 +3,15 @@
   "members": [
     "SunSec",
     "ret2basic",
-    "IceBear",
-    "Usagi"
+    "IceBear"
   ],
   "paymentAddresses": [
     {
-      "chain": "polygon",
+      "chain": "ethereum",
       "address": "0x4276BF06Aebd8A1F3D89a1fd5BF84bFa1B7D03Ce"
     },
     {
-      "chain": "ethereum",
+      "chain": "polygon",
       "address": "0x4276BF06Aebd8A1F3D89a1fd5BF84bFa1B7D03Ce"
     }
   ]
