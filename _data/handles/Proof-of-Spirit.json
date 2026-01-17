@@ -1,0 +1,17 @@
+{
+  "handle": "Proof-of-Spirit",
+  "members": [
+    "Ziusz",
+    "ke1caM"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0x7dCcbBf68Cd8448e28413f7aF804108596041c90"
+    },
+    {
+      "chain": "polygon",
+      "address": "0x7dCcbBf68Cd8448e28413f7aF804108596041c90"
+    }
+  ]
+}
