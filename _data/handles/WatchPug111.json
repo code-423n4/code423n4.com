@@ -1,0 +1,26 @@
+{
+  "handle": "WatchPug111",
+  "members": [
+    "richardo",
+    "pashap999_"
+  ],
+  "link": "https://code4rena.com/register/team",
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0x2c595dD5fe654ccB1a817A410957F704909c4983"
+    },
+    {
+      "chain": "polygon",
+      "address": "0x2c595dD5fe654ccB1a817A410957F704909c4983"
+    },
+    {
+      "chain": "arbitrum",
+      "address": "0x2c595dD5fe654ccB1a817A410957F704909c4983"
+    },
+    {
+      "chain": "optimism",
+      "address": "0x2c595dD5fe654ccB1a817A410957F704909c4983"
+    }
+  ]
+}
