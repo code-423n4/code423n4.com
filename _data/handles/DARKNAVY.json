@@ -1,0 +1,13 @@
+{
+  "handle": "DARKNAVY",
+  "members": [
+    "tkmk",
+    "shuo"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0xE1970CDc489131548bb61ce49E4cAd4177a2F45f"
+    }
+  ]
+}
