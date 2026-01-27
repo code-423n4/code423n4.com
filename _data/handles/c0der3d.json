@@ -1,0 +1,13 @@
+{
+  "handle": "c0der3d",
+  "members": [
+    "0x18a6",
+    "j3x"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0xee52dfd3cb128a541d373117f9a3c494001e5af1"
+    }
+  ]
+}
