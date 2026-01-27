@@ -1,0 +1,13 @@
+{
+  "handle": "PlayboiEvokid",
+  "members": [
+    "demonhat",
+    "Evo"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0xd3d8aa4e9a99a9fe656b522acdcc3c124e14f00c"
+    }
+  ]
+}
