@@ -1,0 +1,13 @@
+{
+  "handle": "TitanSecurity",
+  "members": [
+    "PotEater",
+    "pro_king"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0xbD1e9d9Cc0e8fd9e74c92289b0a511Ba3E637BC7"
+    }
+  ]
+}
