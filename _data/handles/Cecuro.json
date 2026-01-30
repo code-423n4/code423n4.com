@@ -1,0 +1,13 @@
+{
+  "handle": "Cecuro",
+  "members": [
+    "CecuroAI",
+    "danielcecuro"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0x2521eB10cde8c846591556a5EFAD1A48083CC31C"
+    }
+  ]
+}
