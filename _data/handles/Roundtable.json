@@ -1,0 +1,13 @@
+{
+  "handle": "Roundtable",
+  "members": [
+    "x0t0wt1w",
+    "Tarnished"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0x44AE5b06871852d2be72f97E45723dEF4dB1ACc1"
+    }
+  ]
+}
