@@ -1,0 +1,26 @@
+{
+  "handle": "bug_hunters",
+  "members": [
+    "4lifemen",
+    "toastedsteaksandwich"
+  ],
+  "link": "https://x.com/4lifemen",
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0xf3D71265b9B972aC46454022E931A5eD290dd8d3"
+    },
+    {
+      "chain": "polygon",
+      "address": "0xf3D71265b9B972aC46454022E931A5eD290dd8d3"
+    },
+    {
+      "chain": "arbitrum",
+      "address": "0xf3D71265b9B972aC46454022E931A5eD290dd8d3"
+    },
+    {
+      "chain": "optimism",
+      "address": "0xf3D71265b9B972aC46454022E931A5eD290dd8d3"
+    }
+  ]
+}
