@@ -1,0 +1,18 @@
+{
+  "handle": "JI4",
+  "members": [
+    "Icarus",
+    "4B",
+    "kamauthesecond"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0x33755b2AaD06af8CdCF9727Cbb47B60654BaBf16"
+    },
+    {
+      "chain": "polygon",
+      "address": "0x33755b2AaD06af8CdCF9727Cbb47B60654BaBf16"
+    }
+  ]
+}
