@@ -1,0 +1,14 @@
+{
+  "handle": "MySuperTestTeam",
+  "members": [
+    "b4dg0d",
+    "b4dg0d"
+  ],
+  "link": "https://x.com/testteam",
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0xcca5571498bE77320FD9be7913781D84784D6D71"
+    }
+  ]
+}
