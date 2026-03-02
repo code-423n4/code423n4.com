@@ -1,0 +1,17 @@
+{
+  "handle": "Invalidatoors",
+  "members": [
+    "0xAlipede",
+    "4Nescient"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0xc0612974D8851E6D34f4FCA00CFb50A37a7Fd580"
+    },
+    {
+      "chain": "polygon",
+      "address": "0xc0612974D8851E6D34f4FCA00CFb50A37a7Fd580"
+    }
+  ]
+}
