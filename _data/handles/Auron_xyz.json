@@ -1,0 +1,26 @@
+{
+  "handle": "Auron_xyz",
+  "members": [
+    "0xastronatey",
+    "auron"
+  ],
+  "link": "https://x.com/auron_xyz",
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0x5d9c826aCC348cc4cA9f372757B38a8118b524B7"
+    },
+    {
+      "chain": "polygon",
+      "address": "0x5d9c826aCC348cc4cA9f372757B38a8118b524B7"
+    },
+    {
+      "chain": "arbitrum",
+      "address": "0x5d9c826aCC348cc4cA9f372757B38a8118b524B7"
+    },
+    {
+      "chain": "optimism",
+      "address": "0x5d9c826aCC348cc4cA9f372757B38a8118b524B7"
+    }
+  ]
+}
