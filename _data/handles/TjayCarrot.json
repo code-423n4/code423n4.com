@@ -1,0 +1,25 @@
+{
+  "handle": "TjayCarrot",
+  "members": [
+    "codertjay",
+    "TheCarrot"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0xfebcc514f0062f3a9d62f884774573efb6cce6f6"
+    },
+    {
+      "chain": "polygon",
+      "address": "0xfebcc514f0062f3a9d62f884774573efb6cce6f6"
+    },
+    {
+      "chain": "arbitrum",
+      "address": "0xfebcc514f0062f3a9d62f884774573efb6cce6f6"
+    },
+    {
+      "chain": "optimism",
+      "address": "0xfebcc514f0062f3a9d62f884774573efb6cce6f6"
+    }
+  ]
+}
