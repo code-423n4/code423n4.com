@@ -4,15 +4,16 @@
   "members": [
     "desaperh",
     "PedroDowsers",
-    "n0kto"
+    "n0kto",
+    "MiniGlome"
   ],
   "paymentAddresses": [
     {
-      "chain": "polygon",
+      "chain": "ethereum",
       "address": "0x91AC4E69515C404985D969D6F7AcB1616be43Cd7"
     },
     {
-      "chain": "ethereum",
+      "chain": "polygon",
       "address": "0x91AC4E69515C404985D969D6F7AcB1616be43Cd7"
     },
     {
