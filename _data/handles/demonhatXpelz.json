@@ -1,0 +1,13 @@
+{
+  "handle": "demonhatXpelz",
+  "members": [
+    "Pelz",
+    "demonhat"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0x601eBA6fbb42B0EC20D821d5eB3f6a6EA7f35267"
+    }
+  ]
+}
