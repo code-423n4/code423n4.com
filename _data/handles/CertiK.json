@@ -1,18 +1,18 @@
 {
   "handle": "CertiK",
+  "link": "https://x.com/CertiK",
   "members": [
     "cerweb10",
     "codegpt"
   ],
-  "link": "https://x.com/CertiK",
   "paymentAddresses": [
     {
       "chain": "ethereum",
-      "address": "0x799d0Db297Dc1b5D114F3562c1EC30c9F7FDae39"
+      "address": "0x249bdb4d6c2a6c442c734abb6696455e278cb2df"
     },
     {
       "chain": "polygon",
-      "address": "0x799d0Db297Dc1b5D114F3562c1EC30c9F7FDae39"
+      "address": "0x249bdb4d6c2a6c442c734abb6696455e278cb2df"
     }
   ]
 }
