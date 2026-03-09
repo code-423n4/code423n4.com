@@ -1,0 +1,13 @@
+{
+  "handle": "Business_Logic",
+  "members": [
+    "BoyD",
+    "Bobai23"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0x1d2b4876510838912Ab0c032c0e2e80Fae1E1f75"
+    }
+  ]
+}
