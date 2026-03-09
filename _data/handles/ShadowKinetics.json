@@ -1,0 +1,25 @@
+{
+  "handle": "ShadowKinetics",
+  "members": [
+    "KineticsOfWeb3",
+    "InvisibleKT"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0xbB98ab8EC233fa51dd022d1113E6700cd84f1154"
+    },
+    {
+      "chain": "polygon",
+      "address": "0xbB98ab8EC233fa51dd022d1113E6700cd84f1154"
+    },
+    {
+      "chain": "arbitrum",
+      "address": "0xbB98ab8EC233fa51dd022d1113E6700cd84f1154"
+    },
+    {
+      "chain": "optimism",
+      "address": "0xbB98ab8EC233fa51dd022d1113E6700cd84f1154"
+    }
+  ]
+}
