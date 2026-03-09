@@ -1,10 +1,10 @@
 {
   "handle": "Auron_xyz",
+  "link": "https://x.com/auron_xyz",
   "members": [
     "0xastronatey",
     "auron"
   ],
-  "link": "https://x.com/auron_xyz",
   "paymentAddresses": [
     {
       "chain": "ethereum",
