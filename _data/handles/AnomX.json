@@ -1,0 +1,26 @@
+{
+  "handle": "AnomX",
+  "members": [
+    "BlackAnon",
+    "OTI"
+  ],
+  "link": "https://audits.sherlock.xyz/watson/AnomX",
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0x8088210c8a48b3c8f13b221c63983d91a714cbda"
+    },
+    {
+      "chain": "polygon",
+      "address": "0x8088210c8a48b3c8f13b221c63983d91a714cbda"
+    },
+    {
+      "chain": "arbitrum",
+      "address": "0x8088210c8a48b3c8f13b221c63983d91a714cbda"
+    },
+    {
+      "chain": "optimism",
+      "address": "0x8088210c8a48b3c8f13b221c63983d91a714cbda"
+    }
+  ]
+}
