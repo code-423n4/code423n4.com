@@ -1,0 +1,25 @@
+{
+  "handle": "FireMan",
+  "members": [
+    "BrandonTeng",
+    "0xManishTech"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0x7E4390a82A71F37fFA41eB30cEf4eA07C2A1DEAc"
+    },
+    {
+      "chain": "polygon",
+      "address": "0x7E4390a82A71F37fFA41eB30cEf4eA07C2A1DEAc"
+    },
+    {
+      "chain": "arbitrum",
+      "address": "0x7E4390a82A71F37fFA41eB30cEf4eA07C2A1DEAc"
+    },
+    {
+      "chain": "optimism",
+      "address": "0x7E4390a82A71F37fFA41eB30cEf4eA07C2A1DEAc"
+    }
+  ]
+}
