@@ -1,0 +1,14 @@
+{
+  "handle": "hackhack",
+  "members": [
+    "r0bre",
+    "henrye"
+  ],
+  "link": "x.com/hackhackai",
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0xb4369558C74CB701D9cAA9a7Cf68b3FA18c23c60"
+    }
+  ]
+}
