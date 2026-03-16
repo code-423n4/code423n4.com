@@ -1,0 +1,13 @@
+{
+  "handle": "basekay",
+  "members": [
+    "igdbase",
+    "princekay"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0xFCe4AF1a67D4E7a3DF97428aB91DfAaC9C367555"
+    }
+  ]
+}
