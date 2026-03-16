@@ -1,0 +1,17 @@
+{
+  "handle": "bug_hunters_OP",
+  "members": [
+    "0xMosh",
+    "Saiful"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0x3688b7b020e42c86fc8c0294f9e45a80981c5b4b"
+    },
+    {
+      "chain": "polygon",
+      "address": "0x3688b7b020e42c86fc8c0294f9e45a80981c5b4b"
+    }
+  ]
+}
