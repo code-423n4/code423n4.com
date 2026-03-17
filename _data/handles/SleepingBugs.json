@@ -1,20 +1,17 @@
 {
   "handle": "SleepingBugs",
-  "moralisId": null,
-  "image": "./avatars/SleepingBugs.jpeg",
-  "showOnLeaderboard": true,
   "members": [
     "Deivitto",
     "0xLovesleep"
   ],
   "paymentAddresses": [
     {
-      "chain": "polygon",
-      "address": "0x5356275AbD8BB26188eEe5B23277660BdCbC0477"
+      "chain": "ethereum",
+      "address": "0x45293F7318786A8D0b66Ca6e106A42a76413baad"
     },
     {
-      "chain": "ethereum",
-      "address": "0x5356275AbD8BB26188eEe5B23277660BdCbC0477"
+      "chain": "polygon",
+      "address": "0x45293F7318786A8D0b66Ca6e106A42a76413baad"
     }
   ]
 }
