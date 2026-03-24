@@ -1,0 +1,14 @@
+{
+  "handle": "STEMASK",
+  "members": [
+    "hirorogo",
+    "komeniki",
+    "saitogo"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0x86333BA0849BC584c067a199f94454f79Aa0131E"
+    }
+  ]
+}
