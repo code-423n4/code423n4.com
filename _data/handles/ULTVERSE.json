@@ -1,0 +1,14 @@
+{
+  "handle": "ULTVERSE",
+  "members": [
+    "hirorogo",
+    "komeniki"
+  ],
+  "link": "https://github.com/hirorogo",
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0x86333BA0849BC584c067a199f94454f79Aa0131E"
+    }
+  ]
+}
