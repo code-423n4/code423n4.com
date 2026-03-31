@@ -1,16 +1,16 @@
 {
   "handle": "BugPull",
   "members": [
-    "IlIlHunterlIlI",
-    "rzizah"
+    "rzizah",
+    "Huntoor"
   ],
   "paymentAddresses": [
     {
-      "chain": "polygon",
+      "chain": "ethereum",
       "address": "0x723BAf4C0B7A6951b2BCCeFb1d197cE722a22C95"
     },
     {
-      "chain": "ethereum",
+      "chain": "polygon",
       "address": "0x723BAf4C0B7A6951b2BCCeFb1d197cE722a22C95"
     },
     {
