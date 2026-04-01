@@ -1,0 +1,14 @@
+{
+  "handle": "Adraca-AI-Security",
+  "members": [
+    "adraca",
+    "abhishek"
+  ],
+  "link": "https://adraca.io/",
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0x7e4F20e9eef75854BCb9772aec31E3967008EeDe"
+    }
+  ]
+}
