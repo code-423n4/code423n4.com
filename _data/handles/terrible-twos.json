@@ -1,0 +1,13 @@
+{
+  "handle": "terrible-twos",
+  "members": [
+    "totdking",
+    "Pherm007"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0x981DC6E0FD31654BEf4921f66B122C23E00996c7"
+    }
+  ]
+}
