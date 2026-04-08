@@ -1,0 +1,14 @@
+{
+  "handle": "TestMachine-Azimuth",
+  "members": [
+    "tmachine1",
+    "azimuth"
+  ],
+  "link": "https://x.com/testmachine_ai",
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0xac9a2fB17241510BCdC26CC6afa7a077E313c8b7"
+    }
+  ]
+}
