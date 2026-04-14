@@ -1,0 +1,14 @@
+{
+  "handle": "sumasec",
+  "members": [
+    "Audinarey",
+    "Krainium"
+  ],
+  "link": "https://x.com/sumasec",
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0x3561A6F9443435c1c369014625E6B8Ef1B75a2B2"
+    }
+  ]
+}
