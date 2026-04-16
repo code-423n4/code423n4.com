@@ -1,0 +1,25 @@
+{
+  "handle": "audithor",
+  "members": [
+    "darksnow",
+    "Krumil"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0x0562EeE4Bb648E1c32D026b5612f918299F81129"
+    },
+    {
+      "chain": "polygon",
+      "address": "0x0562EeE4Bb648E1c32D026b5612f918299F81129"
+    },
+    {
+      "chain": "arbitrum",
+      "address": "0x0562EeE4Bb648E1c32D026b5612f918299F81129"
+    },
+    {
+      "chain": "optimism",
+      "address": "0x0562EeE4Bb648E1c32D026b5612f918299F81129"
+    }
+  ]
+}
