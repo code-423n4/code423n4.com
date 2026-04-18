@@ -1,0 +1,13 @@
+{
+  "handle": "WINNERS",
+  "members": [
+    "Pherm007",
+    "osebanjo1"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0xF5d7F1Bcb596efb5aB62d91Cba2639A06bCD580f"
+    }
+  ]
+}
