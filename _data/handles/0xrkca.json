@@ -1,0 +1,13 @@
+{
+  "handle": "0xrkca",
+  "members": [
+    "Nerca",
+    "Rklip"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0xeb96bcc39c04a025c8ec280a50fcbe5887d1dcaa"
+    }
+  ]
+}
