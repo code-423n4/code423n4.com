@@ -1,0 +1,21 @@
+{
+  "handle": "BlockGuard",
+  "members": [
+    "Oxhsn",
+    "aura"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0x90F8619Ec99cBEc64Da55384dc309f01740C305D"
+    },
+    {
+      "chain": "polygon",
+      "address": "0x90F8619Ec99cBEc64Da55384dc309f01740C305D"
+    },
+    {
+      "chain": "arbitrum",
+      "address": "0x90F8619Ec99cBEc64Da55384dc309f01740C305D"
+    }
+  ]
+}
