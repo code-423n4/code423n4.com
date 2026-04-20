@@ -1,0 +1,13 @@
+{
+  "handle": "OnlyValid",
+  "members": [
+    "Redteamer",
+    "Kingdavid"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0xAbE2f5BE812F2166a57bf31c4aA47FEa37EF2f20"
+    }
+  ]
+}
