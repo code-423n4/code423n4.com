@@ -1,0 +1,13 @@
+{
+  "handle": "0xYBA",
+  "members": [
+    "0xBabsAudits",
+    "Yahaya_Salisu"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0xFb53a008C1df2a0000B187dFCF6fC1da18306935"
+    }
+  ]
+}
