@@ -1,0 +1,13 @@
+{
+  "handle": "addresszero",
+  "members": [
+    "payab1e",
+    "Pocas"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0x831Ff53C24E494f23e51e84b019F612F17294F7F"
+    }
+  ]
+}
