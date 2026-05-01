@@ -1,0 +1,13 @@
+{
+  "handle": "Nirvana",
+  "members": [
+    "ephraimvvs",
+    "DevMukhtar"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0x010B117c3E98803A28CFD8c81665F26a1213e077"
+    }
+  ]
+}
