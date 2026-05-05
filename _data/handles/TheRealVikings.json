@@ -1,13 +1,13 @@
 {
   "handle": "TheRealVikings",
   "members": [
-    "marcioj",
-    "Katiana"
+    "Katiana",
+    "marcioj"
   ],
   "paymentAddresses": [
     {
       "chain": "ethereum",
-      "address": "0x5f5A9b439d435AaA3a09f9161E0BF1C9d3A5070d"
+      "address": "0xbA0a5b83EAE89a814C0A6DBf64A6157c1451AacF"
     }
   ]
 }
