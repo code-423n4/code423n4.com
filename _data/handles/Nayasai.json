@@ -1,0 +1,13 @@
+{
+  "handle": "Nayasai",
+  "members": [
+    "0xsai",
+    "Ibrahim"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0x1EA1f2672aCC336F2c3ECc9BB9bD97fDD3B16f3b"
+    }
+  ]
+}
