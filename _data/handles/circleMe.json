@@ -1,0 +1,25 @@
+{
+  "handle": "circleMe",
+  "members": [
+    "TheWitchDoctor",
+    "tofunmi"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0xF0AF6F6e222d9ab9629cF0AD894C740FA3010A53"
+    },
+    {
+      "chain": "polygon",
+      "address": "0xF0AF6F6e222d9ab9629cF0AD894C740FA3010A53"
+    },
+    {
+      "chain": "arbitrum",
+      "address": "0xF0AF6F6e222d9ab9629cF0AD894C740FA3010A53"
+    },
+    {
+      "chain": "optimism",
+      "address": "0xF0AF6F6e222d9ab9629cF0AD894C740FA3010A53"
+    }
+  ]
+}
