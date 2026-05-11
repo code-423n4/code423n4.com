@@ -1,0 +1,17 @@
+{
+  "handle": "GillSec",
+  "members": [
+    "derastephh",
+    "Fishy"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0x2Af0dF2AFE12d58848Da8fAb3Cd3F25a4eE46Ce4"
+    },
+    {
+      "chain": "polygon",
+      "address": "0x2Af0dF2AFE12d58848Da8fAb3Cd3F25a4eE46Ce4"
+    }
+  ]
+}
