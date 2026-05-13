@@ -1,0 +1,13 @@
+{
+  "handle": "joeza",
+  "members": [
+    "jayx",
+    "rishiRich"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0xF6Dd2C8266e8B449741d6eC89429300A7f1270E5"
+    }
+  ]
+}
