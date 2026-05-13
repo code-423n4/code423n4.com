@@ -1,0 +1,13 @@
+{
+  "handle": "rsquared",
+  "members": [
+    "rare_one",
+    "roccomania"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0xa2F9022B2cb22aC6802965ae349dE5B296b56850"
+    }
+  ]
+}
