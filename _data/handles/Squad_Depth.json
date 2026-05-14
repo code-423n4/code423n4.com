@@ -1,0 +1,13 @@
+{
+  "handle": "Squad_Depth",
+  "members": [
+    "Kingdavid",
+    "neme"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0x07C252c9a8357cBb31662D841C6188eB225F4088"
+    }
+  ]
+}
