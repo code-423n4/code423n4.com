@@ -1,0 +1,25 @@
+{
+  "handle": "InvisibleDieMinute",
+  "members": [
+    "InvisibleKT",
+    "DieMinuteKt"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0x9B5fb4ad225918EEe1F00D4fCa750d5Ec9d98551"
+    },
+    {
+      "chain": "polygon",
+      "address": "0x9B5fb4ad225918EEe1F00D4fCa750d5Ec9d98551"
+    },
+    {
+      "chain": "arbitrum",
+      "address": "0x9B5fb4ad225918EEe1F00D4fCa750d5Ec9d98551"
+    },
+    {
+      "chain": "optimism",
+      "address": "0x9B5fb4ad225918EEe1F00D4fCa750d5Ec9d98551"
+    }
+  ]
+}
