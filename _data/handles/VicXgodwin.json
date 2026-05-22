@@ -1,0 +1,21 @@
+{
+  "handle": "VicXgodwin",
+  "members": [
+    "udogodwin",
+    "victortheoracle"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0x03eAB50f733c4DbeaE6B120755776eE7c931243C"
+    },
+    {
+      "chain": "polygon",
+      "address": "0x03eAB50f733c4DbeaE6B120755776eE7c931243C"
+    },
+    {
+      "chain": "arbitrum",
+      "address": "0x03eAB50f733c4DbeaE6B120755776eE7c931243C"
+    }
+  ]
+}
