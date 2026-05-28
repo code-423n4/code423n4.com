@@ -1,0 +1,13 @@
+{
+  "handle": "pawp2",
+  "members": [
+    "0xsh",
+    "pawps"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0x0513236C645A826fA6b9e759e32cEBb33a87ae28"
+    }
+  ]
+}
