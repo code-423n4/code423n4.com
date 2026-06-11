@@ -3,16 +3,17 @@
   "link": "https://linktr.ee/franky022",
   "members": [
     "Franky02",
-    "Franfran"
+    "Franz_Kafk4",
+    "0xManishTech"
   ],
   "paymentAddresses": [
     {
       "chain": "ethereum",
-      "address": "0x700D8c89bcC2AC85A3D011Ee4F031A4FD6403a67"
+      "address": "0xcd2636550392235fed90063886e23a9b9845cced"
     },
     {
       "chain": "polygon",
-      "address": "0x700D8c89bcC2AC85A3D011Ee4F031A4FD6403a67"
+      "address": "0xcd2636550392235fed90063886e23a9b9845cced"
     },
     {
       "chain": "arbitrum",
