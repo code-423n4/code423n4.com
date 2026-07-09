@@ -1,0 +1,14 @@
+{
+  "handle": "AlphaHunters",
+  "members": [
+    "gwumex",
+    "niffylord",
+    "Habiolar"
+  ],
+  "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0x05c3663AF4C94070C9376a80410F5C961bfd99D2"
+    }
+  ]
+}
