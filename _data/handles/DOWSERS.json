@@ -3,26 +3,26 @@
   "link": "https://x.com/DowsersFinance",
   "members": [
     "desaperh",
-    "PedroDowsers",
+    "MiniGlome",
     "n0kto",
-    "MiniGlome"
+    "PedroDowsers"
   ],
   "paymentAddresses": [
     {
       "chain": "ethereum",
-      "address": "0x91AC4E69515C404985D969D6F7AcB1616be43Cd7"
+      "address": "0x6ea2c866a62ff27e89f0ace51cbb5efed56e2b0b"
     },
     {
       "chain": "polygon",
-      "address": "0x91AC4E69515C404985D969D6F7AcB1616be43Cd7"
+      "address": "0x6ea2c866a62ff27e89f0ace51cbb5efed56e2b0b"
     },
     {
       "chain": "arbitrum",
-      "address": "0x91AC4E69515C404985D969D6F7AcB1616be43Cd7"
+      "address": "0x6ea2c866a62ff27e89f0ace51cbb5efed56e2b0b"
     },
     {
       "chain": "optimism",
-      "address": "0x91AC4E69515C404985D969D6F7AcB1616be43Cd7"
+      "address": "0x6ea2c866a62ff27e89f0ace51cbb5efed56e2b0b"
     }
   ]
 }
