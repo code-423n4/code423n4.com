@@ -1,13 +1,13 @@
 {
   "handle": "InvisibleDieMinute",
   "members": [
-    "InvisibleKT",
-    "DieMinuteKt"
+    "DieMinuteKt",
+    "InvisibleKT"
   ],
   "paymentAddresses": [
     {
       "chain": "ethereum",
-      "address": "0x9B5fb4ad225918EEe1F00D4fCa750d5Ec9d98551"
+      "address": "0xbB98ab8EC233fa51dd022d1113E6700cd84f1154"
     },
     {
       "chain": "polygon",
