@@ -1,17 +1,21 @@
 {
   "handle": "TECHFUND",
-  "link": "https://twitter.com/Techfund_inc",
+  "link": "https://hiaudit.io/",
   "members": [
-    "piyushshukla",
-    "Gowtham_Ponnana",
     "alternato7368",
-    "engineer",
-    "ravikiranweb3",
     "dev0cloo",
+    "engineer",
+    "Gowtham_Ponnana",
     "Ikkun",
+    "piyushshukla",
+    "ravikiranweb3",
     "TECHFUND-inc"
   ],
   "paymentAddresses": [
+    {
+      "chain": "ethereum",
+      "address": "0x14Ff0a5A17C5282Ec9fc1c3c910f6F70Db543C98"
+    },
     {
       "chain": "polygon",
       "address": "0x14Ff0a5A17C5282Ec9fc1c3c910f6F70Db543C98"
